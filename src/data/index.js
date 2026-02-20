@@ -1,0 +1,10 @@
+export { default as CATS } from './categories';
+export { default as VENDORS } from './vendors';
+export { default as P } from './products';
+export { default as COUPONS } from './coupons';
+export { default as NOTIFS } from './notifications';
+export { default as REVIEWS } from './reviews';
+export { default as ADDRS } from './addresses';
+export { default as CHATS } from './chats';
+export { V_ORDERS, V_PRODUCTS, V_WALLET, V_REVIEWS, V_PROMOS, V_STATS, V_NOTIFS } from './vendorData';
+export { D_DELIVERIES, D_HISTORY, D_STATS, D_NOTIFS } from './driverData';
