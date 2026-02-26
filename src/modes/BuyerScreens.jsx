@@ -1,7 +1,8 @@
 /**
  * BuyerScreens — Chunk acheteur (lazy loaded)
- * Contient tous les écrans du mode acheteur
+ * Utilise useApp() au lieu de props
  */
+import { useApp } from "../context/AppContext";
 import {
   HomeScr, SearchScr, DetailScr, GalleryScr, CompareScr, ReviewsScr,
   RestoListScr, AllProductsScr, CategoriesScr, FlashScr, NearbyScr,
@@ -13,21 +14,29 @@ import {
 } from "../screens/buyer";
 import { SettingsScr, HelpScr, AboutScr, TermsScr, PrivacyScr } from "../screens/common";
 
-export default function BuyerScreens({ screen, tab, setTab, go, pop, goHome, cart, setCart, addCart, favs, toggleFav, isFav, userRole, vendorPlan, vendorStatus, driverStatus, onLogout, onRoleApproved, hasVendor, hasDriver, switchTo, setScreen, setHistory }) {
-  // Tab screens (no deep screen)
+export default function BuyerScreens() {
+  const {
+    screen, tab, setTab, setScreen, setHistory,
+    go, pop, goHome, switchTo,
+    cart, setCart, addToCart, updateCartQty,
+    favs, toggleFav, isFav,
+    userRole, vendorPlan, vendorStatus, driverStatus,
+    logout, onRoleApproved, hasVendor, hasDriver,
+  } = useApp();
+
   if (!screen) {
     if (tab === 0) return <HomeScr go={go} favs={favs} toggleFav={toggleFav} isFav={isFav} />;
     if (tab === 1) return <SearchScr go={go} fromTab favs={favs} toggleFav={toggleFav} isFav={isFav} />;
-    if (tab === 2) return <CartScr cart={cart} setCart={setCart} go={go} />;
+    if (tab === 2) return <CartScr cart={cart} setCart={setCart} updateCartQty={updateCartQty} go={go} />;
     if (tab === 3) return <OrdersScr go={go} />;
-    return <ProfileScr go={go} userRole={userRole} vendorPlan={vendorPlan} vendorStatus={vendorStatus} driverStatus={driverStatus} onLogout={onLogout} />;
+    return <ProfileScr go={go} userRole={userRole} vendorPlan={vendorPlan} vendorStatus={vendorStatus} driverStatus={driverStatus} onLogout={logout} />;
   }
 
   const { type, data } = screen;
   const back = pop;
 
   switch (type) {
-    case "detail": return <DetailScr product={data} onBack={back} onAddCart={addCart} go={go} favs={favs} toggleFav={toggleFav} isFav={isFav} />;
+    case "detail": return <DetailScr product={data} onBack={back} onAddCart={addToCart} go={go} favs={favs} toggleFav={toggleFav} isFav={isFav} />;
     case "gallery": return <GalleryScr product={data} onClose={back} />;
     case "compare": return <CompareScr product={data} onBack={back} />;
     case "reviews": return <ReviewsScr product={data} onBack={back} />;

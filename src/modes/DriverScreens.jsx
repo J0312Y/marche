@@ -1,7 +1,8 @@
 /**
  * DriverScreens — Chunk livreur (lazy loaded)
- * Contient tous les écrans du mode livreur
+ * Utilise useApp() au lieu de props
  */
+import { useApp } from "../context/AppContext";
 import {
   DrDashboardScr, DrDeliveryScr, DrConfirmScr, DrNavigationScr,
   DrChatVendorScr, DrChatClientScr, DrHistoryScr, DrWalletScr,
@@ -9,14 +10,17 @@ import {
   DrStatsScr, DrSettingsScr, DrHelpScr
 } from "../screens/driver";
 import { WithdrawScr } from "../screens/buyer";
+import { SettingsScr, HelpScr, AboutScr, TermsScr, PrivacyScr } from "../screens/common";
 
-export default function DriverScreens({ screen, dTab, setDTab, go, pop, switchTo, onLogout, setScreen, setHistory }) {
+export default function DriverScreens() {
+  const { screen, dTab, setDTab, go, pop, switchTo, logout, setScreen, setHistory } = useApp();
+
   if (!screen) {
     if (dTab === 0) return <DrDashboardScr go={go} />;
     if (dTab === 1) return <DrHistoryScr onBack={() => setDTab(0)} />;
     if (dTab === 2) return <DrWalletScr go={go} onBack={() => setDTab(0)} />;
     if (dTab === 3) return <DrNotifScr onBack={() => setDTab(0)} />;
-    return <DrProfileScr go={go} onSwitch={() => switchTo("buyer")} onLogout={onLogout} />;
+    return <DrProfileScr go={go} onSwitch={() => switchTo("buyer")} onLogout={logout} />;
   }
 
   const { type, data } = screen;
@@ -37,6 +41,10 @@ export default function DriverScreens({ screen, dTab, setDTab, go, pop, switchTo
     case "drStats": return <DrStatsScr onBack={back} />;
     case "drSettings": return <DrSettingsScr onBack={back} go={go} />;
     case "drHelp": return <DrHelpScr onBack={back} />;
+    case "terms": return <TermsScr onBack={back} />;
+    case "privacy": return <PrivacyScr onBack={back} />;
+    case "help": return <HelpScr onBack={back} />;
+    case "about": return <AboutScr onBack={back} />;
     default: return null;
   }
 }

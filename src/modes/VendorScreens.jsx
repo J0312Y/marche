@@ -1,7 +1,8 @@
 /**
  * VendorScreens — Chunk vendeur (lazy loaded)
- * Contient tous les écrans du mode vendeur
+ * Utilise useApp() au lieu de props
  */
+import { useApp } from "../context/AppContext";
 import {
   VDashboardScr, VOrdersScr, VOrderDetailScr, VProductsScr, VProductFormScr,
   VWalletScr, VStatsScr, VMessagesScr, VChatScr, VReviewsScr,
@@ -12,14 +13,17 @@ import {
   VApiScr, VDocScr, VUpgradePlanScr
 } from "../screens/vendor";
 import { WithdrawScr } from "../screens/buyer";
+import { SettingsScr, HelpScr, AboutScr, TermsScr, PrivacyScr } from "../screens/common";
 
-export default function VendorScreens({ screen, vTab, setVTab, go, pop, vendorPlan, setVendorPlan, switchTo, onLogout }) {
+export default function VendorScreens() {
+  const { screen, vTab, setVTab, go, pop, switchTo, vendorPlan, setVendorPlan, logout } = useApp();
+
   if (!screen) {
     if (vTab === 0) return <VDashboardScr go={go} />;
     if (vTab === 1) return <VOrdersScr go={go} />;
     if (vTab === 2) return <VProductFormScr onBack={() => setVTab(0)} />;
     if (vTab === 3) return <VMessagesScr go={go} />;
-    return <VProfileScr go={go} onSwitch={() => switchTo("buyer")} vendorPlan={vendorPlan} onLogout={onLogout} />;
+    return <VProfileScr go={go} onSwitch={() => switchTo("buyer")} vendorPlan={vendorPlan} onLogout={logout} />;
   }
 
   const { type, data } = screen;
@@ -54,6 +58,10 @@ export default function VendorScreens({ screen, vTab, setVTab, go, pop, vendorPl
     case "vAddShop": return <VAddShopScr onBack={back} />;
     case "vApi": return <VApiScr go={go} onBack={back} />;
     case "vDoc": return <VDocScr docKey={data} onBack={back} />;
+    case "terms": return <TermsScr onBack={back} />;
+    case "privacy": return <PrivacyScr onBack={back} />;
+    case "help": return <HelpScr onBack={back} />;
+    case "about": return <AboutScr onBack={back} />;
     default: return null;
   }
 }
