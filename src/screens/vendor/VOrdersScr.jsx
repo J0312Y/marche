@@ -1,4 +1,5 @@
 import { useState } from "react";
+import Img from "../../components/Img";
 import { V_ORDERS } from "../../data/vendorData";
 import { fmt } from "../../utils/helpers";
 
@@ -13,7 +14,7 @@ function VOrdersScr({go,onBack}){
     <div style={{padding:"0 20px 100px"}}>{filtered.map(o=><div key={o.id} className="vo-card" onClick={()=>go("vOrderDetail",o)}>
       <div className="vo-head"><h4>{o.ref}</h4><span className={`vo-status ${o.status}`}>{statusMap[o.status]}</span></div>
       <div className="vo-client">👤 {o.client}</div><div className="vo-date">{o.date} · {o.payment}</div>
-      <div className="vo-items">{o.items.map((it,i)=><span key={i} className="vo-item">{it.img} {it.name} x{it.qty}</span>)}</div>
+      <div className="vo-items">{o.items.map((it,i)=><span key={i} className="vo-item"><Img src={it.photo} emoji={it.img} style={{width:20,height:20,borderRadius:4,display:"inline-block",verticalAlign:"middle",marginRight:4}} fit="cover"/> {it.name} x{it.qty}</span>)}</div>
       <div className="vo-foot"><span className="vo-total">{fmt(o.total)}</span><span className="vo-pay">{o.payment}</span></div>
     </div>)}</div>
   </div>);

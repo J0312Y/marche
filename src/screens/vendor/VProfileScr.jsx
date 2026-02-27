@@ -11,6 +11,10 @@ function VProfileScr({go,onSwitch,vendorPlan,onLogout}){
       <div style={{fontSize:13,fontWeight:700,color:"#6366F1"}}>⬆️ Passer au plan Pro</div>
       <div style={{fontSize:11,color:"#5E5B53",marginTop:4}}>Débloquez les analytics, promotions, rapports et le badge vérifié.</div>
     </div>}
+    {vendorPlan==="pro"&&<div style={{margin:"0 20px 14px",padding:14,background:"rgba(245,158,11,0.04)",border:"1px solid rgba(245,158,11,0.15)",borderRadius:14,cursor:"pointer"}} onClick={()=>go("vUpgradePlan")}>
+      <div style={{fontSize:13,fontWeight:700,color:"#F59E0B"}}>⬆️ Passer au plan Enterprise</div>
+      <div style={{fontSize:11,color:"#5E5B53",marginTop:4}}>Multi-établissements, API complète, manager dédié, 2% commission.</div>
+    </div>}
     <div className="vendor-cta" style={{background:"linear-gradient(135deg,#3B82F6,#1D4ED8)"}} onClick={onSwitch}><span style={{fontSize:28}}>🛍️</span><div style={{flex:1}}><div style={{fontSize:15,fontWeight:700}}>Passer en mode Acheteur</div><div style={{fontSize:12,opacity:.8,marginTop:2}}>Retourner au marketplace</div></div><span style={{fontSize:18}}>→</span></div>
     <button style={{margin:"0 20px 80px",width:"calc(100% - 40px)",padding:14,borderRadius:14,border:"1px solid rgba(239,68,68,0.3)",background:"transparent",color:"#EF4444",fontSize:14,fontWeight:600,cursor:"pointer",fontFamily:"inherit"}} onClick={onLogout}>🚪 Déconnexion</button>
   </div>);

@@ -1,4 +1,5 @@
 import { useState } from "react";
+import Img from "../../components/Img";
 import { P, CATS } from "../../data";
 import { fmt, disc } from "../../utils/helpers";
 
@@ -49,7 +50,7 @@ function SearchScr({go,onBack,fromTab,favs,toggleFav,isFav}){
         ↕️ {sortOpts.find(s=>s.k===sortBy)?.l}
       </button>
     </div>
-    <div className="pgrid">{f.map(p=><div key={p.id} className="pcard" onClick={()=>go("detail",p)}><div className="pimg"><span className="pe">{p.img}</span>{disc(p)>0&&<span className="badge">-{disc(p)}%</span>}{p.tags[0]&&<span className="tag" onClick={e=>{e.stopPropagation();go("reviews",p)}}>{p.tags[0]}</span>}</div><div className="pbody"><h4>{p.name}</h4><div className="pv">{p.va} {p.vendor}</div><div className="pp">{fmt(p.price)}{p.old&&<span className="po">{fmt(p.old)}</span>}</div><div className="pr" onClick={e=>{e.stopPropagation();go("reviews",p)}}>⭐ {p.rating}</div></div></div>)}</div>
+    <div className="pgrid">{f.map(p=><div key={p.id} className="pcard" onClick={()=>go("detail",p)}><div className="pimg"><Img src={p.photo} emoji={p.img} style={{width:"100%",height:"100%"}} fit="cover"/>{disc(p)>0&&<span className="badge">-{disc(p)}%</span>}{p.tags[0]&&<span className="tag" onClick={e=>{e.stopPropagation();go("reviews",p)}}>{p.tags[0]}</span>}</div><div className="pbody"><h4>{p.name}</h4><div className="pv">{p.va} {p.vendor}</div><div className="pp">{fmt(p.price)}{p.old&&<span className="po">{fmt(p.old)}</span>}</div><div className="pr" onClick={e=>{e.stopPropagation();go("reviews",p)}}>⭐ {p.rating}</div></div></div>)}</div>
   </div>);
 }
 

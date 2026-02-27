@@ -22,7 +22,7 @@ function DrConfirmScr({delivery:dl,go,onBack}){
     </div>
   </div>);
 
-  return(<div style={{display:"flex",flexDirection:"column",height:"100%"}}>
+  return(<>
     <div className="appbar"><button onClick={onBack}>←</button><h2>Confirmer livraison</h2><div style={{width:38}}/></div>
     <div className="scr" style={{padding:20}}>
       <div style={{textAlign:"center",marginBottom:20}}>
@@ -70,11 +70,12 @@ function DrConfirmScr({delivery:dl,go,onBack}){
       </div>}
 
       {!method&&<div className="info-box yellow" style={{marginTop:14}}><span>💡</span><span>Choisissez une méthode de confirmation pour valider la livraison</span></div>}
+
+      <div style={{paddingTop:24,paddingBottom:16}}>
+        <button className="btn-primary" style={{background:method?"#10B981":"#E8E6E1",color:method?"#fff":"#908C82"}} onClick={()=>method&&setDone(true)} disabled={!method}>✅ Valider la livraison</button>
+      </div>
     </div>
-    <div style={{padding:"14px 20px",borderTop:"1px solid #E8E6E1",background:"#fff",flexShrink:0}}>
-      <button className="btn-primary" style={{background:method?"#10B981":"#E8E6E1",color:method?"#fff":"#908C82"}} onClick={()=>method&&setDone(true)} disabled={!method}>✅ Valider la livraison</button>
-    </div>
-  </div>);
+  </>);
 }
 
 /* D4 ── GPS NAVIGATION ── */

@@ -1,4 +1,5 @@
 import { useState } from "react";
+import Img from "../../components/Img";
 import { CATS } from "../../data";
 
 function VProductFormScr({product:p,onBack}){
@@ -7,7 +8,7 @@ function VProductFormScr({product:p,onBack}){
   const [showDelete,setShowDelete]=useState(false);
   return(<div className="scr" style={{padding:20}}><div className="appbar" style={{padding:0,marginBottom:16}}><button onClick={onBack}>←</button><h2>{isEdit?"Modifier":"Ajouter"} un article</h2><div style={{width:38}}/></div>
     <div style={{fontSize:14,fontWeight:700,marginBottom:10}}>Photos</div>
-    <div className="pf-photos">{isEdit&&<div className="pf-photo">{p.img}<div className="pf-del">✕</div></div>}<div className="pf-photo add">+</div></div>
+    <div className="pf-photos">{isEdit&&<div className="pf-photo"><Img src={p.photo} emoji={p.img} style={{width:"100%",height:"100%",borderRadius:8}} fit="cover"/><div className="pf-del">✕</div></div>}<div className="pf-photo add">+</div></div>
     <div className="field"><label>Nom de l'article</label><input defaultValue={isEdit?p.name:""} placeholder="Ex: Poulet DG, Robe Wax, Doliprane..."/></div>
     <div className="field"><label>Description</label><textarea rows={3} defaultValue={isEdit?"Robe en wax africain, coupe moderne, tailles S-XL":""} placeholder="Décrivez votre article..."/></div>
     <div className="field-row"><div className="field"><label>Prix (FCFA)</label><input type="number" defaultValue={isEdit?p.price:""} placeholder="25000"/></div><div className="field"><label>Prix barré</label><input type="number" placeholder="Optionnel"/></div></div>

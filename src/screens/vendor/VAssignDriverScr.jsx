@@ -30,7 +30,7 @@ function VAssignDriverScr({order:o,onBack,go}){
     </div>
   </div>);
 
-  return(<div style={{display:"flex",flexDirection:"column",height:"100%"}}>
+  return(<>
     <div className="appbar"><button onClick={onBack}>←</button><h2>Assigner un livreur</h2><div style={{width:38}}/></div>
     <div className="scr" style={{padding:20}}>
 
@@ -78,12 +78,13 @@ function VAssignDriverScr({order:o,onBack,go}){
         <div className="info-box green"><span>📱</span><span>Le livreur recevra une notification avec les détails de la commande et l'adresse du client.</span></div>
       </>}
 
+      {/* ── Button inside scroll ── */}
+      <div style={{paddingTop:24,paddingBottom:16}}>
+        {step===0&&<button className="btn-primary" style={{opacity:selected?1:0.5}} onClick={()=>selected&&setStep(1)} disabled={!selected}>Continuer{chosen?` avec ${chosen.name}`:""}</button>}
+        {step===1&&<div style={{display:"flex",gap:10}}><button className="btn-outline" style={{flex:1}} onClick={()=>setStep(0)}>← Changer</button><button className="btn-primary" style={{flex:2}} onClick={()=>setStep(2)}>✅ Confirmer l'assignation</button></div>}
+      </div>
     </div>
-    <div style={{padding:"14px 20px",borderTop:"1px solid #E8E6E1",background:"#fff",flexShrink:0}}>
-      {step===0&&<button className="btn-primary" style={{opacity:selected?1:0.5}} onClick={()=>selected&&setStep(1)} disabled={!selected}>Continuer{chosen?` avec ${chosen.name}`:""}</button>}
-      {step===1&&<div style={{display:"flex",gap:10}}><button className="btn-outline" style={{flex:1}} onClick={()=>setStep(0)}>← Changer</button><button className="btn-primary" style={{flex:2}} onClick={()=>setStep(2)}>✅ Confirmer l'assignation</button></div>}
-    </div>
-  </div>);
+  </>);
 }
 
 export default VAssignDriverScr;

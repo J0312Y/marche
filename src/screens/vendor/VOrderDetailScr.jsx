@@ -1,4 +1,5 @@
 import { useState } from "react";
+import Img from "../../components/Img";
 import { fmt } from "../../utils/helpers";
 
 function VOrderDetailScr({order:o,onBack,go}){
@@ -25,7 +26,7 @@ function VOrderDetailScr({order:o,onBack,go}){
     </div>
     <div style={{padding:16,background:"#fff",border:"1px solid #E8E6E1",borderRadius:16,marginBottom:14}}>
       <div style={{fontSize:14,fontWeight:700,marginBottom:10}}>📦 Articles</div>
-      {o.items.map((it,i)=><div key={i} style={{display:"flex",alignItems:"center",gap:10,padding:"8px 0",borderBottom:"1px solid #F5F4F1"}}><span style={{fontSize:24}}>{it.img}</span><div style={{flex:1}}><div style={{fontSize:13,fontWeight:600}}>{it.name}</div><div style={{fontSize:11,color:"#908C82"}}>x{it.qty}</div></div><div style={{fontSize:13,fontWeight:700,color:"#6366F1"}}>{fmt(it.price*it.qty)}</div></div>)}
+      {o.items.map((it,i)=><div key={i} style={{display:"flex",alignItems:"center",gap:10,padding:"8px 0",borderBottom:"1px solid #F5F4F1"}}><Img src={it.photo} emoji={it.img} style={{width:44,height:44,borderRadius:8,flexShrink:0}} fit="cover"/><div style={{flex:1}}><div style={{fontSize:13,fontWeight:600}}>{it.name}</div><div style={{fontSize:11,color:"#908C82"}}>x{it.qty}</div></div><div style={{fontSize:13,fontWeight:700,color:"#6366F1"}}>{fmt(it.price*it.qty)}</div></div>)}
       <div style={{display:"flex",justifyContent:"space-between",paddingTop:10,fontSize:16,fontWeight:700}}><span>Total</span><span style={{color:"#6366F1"}}>{fmt(o.total)}</span></div>
     </div>
 

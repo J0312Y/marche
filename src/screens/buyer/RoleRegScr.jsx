@@ -5,7 +5,7 @@ function RoleRegScr({onBack,onDone,forceRole}){
   const [role,setRole]=useState(forceRole||null); // "vendor" | "driver"
   const [step,setStep]=useState(forceRole?0:-1);
   const [plan,setPlan]=useState("starter");
-  const [selCats,setSC]=useState(["Mode"]);
+  const [selCats,setSC]=useState([]);
   const [docs,setDocs]=useState({});
   const [ok,setOk]=useState(false);
   const toggleCat=c=>setSC(p=>p.includes(c)?p.filter(x=>x!==c):[...p,c]);
@@ -46,7 +46,7 @@ function RoleRegScr({onBack,onDone,forceRole}){
   // Multi-step form
   const color=role==="vendor"?"#6366F1":"#10B981";
 
-  return(<div style={{display:"flex",flexDirection:"column",height:"100%"}}>
+  return(<>
     <div className="appbar"><button onClick={()=>step>0?setStep(step-1):forceRole?onBack():setStep(-1)}>←</button><h2>{role==="vendor"?"Devenir Commerçant":"Devenir Livreur"}</h2><div style={{width:38}}/></div>
     <div className="vr-steps">{steps.map((s,i)=><div key={s} style={{display:"contents"}}>{i>0&&<div className={`vr-line ${step>=i?"on":""}`} style={step>=i?{background:color}:{}}/>}<div className="step-col"><div className={`vr-dot ${step>i?"done":step>=i?"on":""}`} style={step>=i?{background:color,color:"#fff"}:{}}>{step>i?"✓":i+1}</div><div className={`vr-lbl ${step>=i?"on":""}`}>{s}</div></div></div>)}</div>
     <div className="scr" style={{padding:20}}>
@@ -61,12 +61,13 @@ function RoleRegScr({onBack,onDone,forceRole}){
 
       {/* STEP 1 VENDOR: Établissement */}
       {step===1&&role==="vendor"&&<><h3 style={{fontSize:16,fontWeight:700,marginBottom:14}}>Votre Établissement</h3>
-        <label style={{display:"block",fontSize:12,fontWeight:600,color:"#5E5B53",marginBottom:8}}>Type de commerce</label>
+        <label style={{display:"block",fontSize:12,fontWeight:600,color:"#5E5B53",marginBottom:8}}>Type de commerce <span style={{color:"#EF4444"}}>*</span></label>
         <div style={{display:"grid",gridTemplateColumns:"1fr 1fr 1fr",gap:8,marginBottom:14}}>
-          {[["🏪","Boutique"],["🍽️","Restaurant"],["🧁","Pâtisserie"],["🛒","Supermarché"],["💊","Pharmacie"],["🔧","Service"]].map(([i,t])=><div key={t} onClick={()=>setSelCats(p=>p.includes(t)?p.filter(x=>x!==t):[...p.filter(x=>!["Boutique","Restaurant","Pâtisserie","Supermarché","Pharmacie","Service"].includes(x)),t])} style={{padding:10,borderRadius:12,border:selCats.includes(t)?"2px solid #6366F1":"1px solid #E8E6E1",background:selCats.includes(t)?"rgba(99,102,241,0.04)":"#fff",cursor:"pointer",textAlign:"center",transition:"all .2s"}}>
-            <div style={{fontSize:20}}>{i}</div>
-            <div style={{fontSize:10,fontWeight:600,color:selCats.includes(t)?"#6366F1":"#908C82",marginTop:2}}>{t}</div>
-          </div>)}
+          {[["🏪","Boutique","boutique"],["🍽️","Restaurant","restaurant"],["🧁","Pâtisserie","patisserie"],["🛒","Supermarché","supermarche"],["💊","Pharmacie","pharmacie"],["🔧","Service","service"]].map(([icon,label,val])=>{const sel=selCats.includes(val);return<div key={val} onClick={(e)=>{e.stopPropagation();setSC(p=>{const types=["boutique","restaurant","patisserie","supermarche","pharmacie","service"];const filtered=p.filter(x=>!types.includes(x));return sel?filtered:[...filtered,val]});}} style={{padding:"12px 8px",borderRadius:12,border:sel?"2px solid #6366F1":"2px solid #E8E6E1",background:sel?"rgba(99,102,241,0.08)":"#fff",cursor:"pointer",textAlign:"center",transition:"all .15s",position:"relative",WebkitTapHighlightColor:"transparent",userSelect:"none"}}>
+            {sel&&<div style={{position:"absolute",top:4,right:4,width:16,height:16,borderRadius:"50%",background:"#6366F1",display:"flex",alignItems:"center",justifyContent:"center",fontSize:9,color:"#fff"}}>✓</div>}
+            <div style={{fontSize:22,marginBottom:2}}>{icon}</div>
+            <div style={{fontSize:11,fontWeight:700,color:sel?"#6366F1":"#5E5B53"}}>{label}</div>
+          </div>})}
         </div>
         <div className="vr-upload"><div className="vu-icon">🖼️</div><b>Logo / Photo</b><p>PNG, JPG · Max 2MB</p></div>
         <div className="field"><label>Nom de l'établissement</label><input placeholder="Ex: Chez Mama Ngudi, Congo Tech..."/></div>
@@ -111,18 +112,20 @@ function RoleRegScr({onBack,onDone,forceRole}){
         <div style={{padding:16,background:"#fff",border:"1px solid #E8E6E1",borderRadius:16,marginBottom:14}}>
           {[["Rôle",role==="vendor"?"🏪 Commerçant":"🛵 Livreur"],
             ["Nom","Joeldy Tsina"],
-            ...(role==="vendor"?[["Établissement","Mon Commerce"],["Type & Catégories",selCats.join(", ")||"—"]]:[["Véhicule","🛵 Honda PCX"],["Plaque","BZ-4521"]]),
+            ...(role==="vendor"?[["Établissement","Mon Commerce"],["Type",{boutique:"Boutique",restaurant:"Restaurant",patisserie:"Pâtisserie",supermarche:"Supermarché",pharmacie:"Pharmacie",service:"Service"}[selCats.find(c=>["boutique","restaurant","patisserie","supermarche","pharmacie","service"].includes(c))]||"—"]]:[["Véhicule","🛵 Honda PCX"],["Plaque","BZ-4521"]]),
             ["Documents",`${Object.values(docs).filter(Boolean).length}/${Object.keys(docs).length}`],
             ...(role==="vendor"?[["Plan",plan==="starter"?"Starter (Gratuit)":plan==="pro"?"Pro (15k/mois)":"Enterprise (45k/mois)"]]:[])]
           .map(([l,v])=><div key={l} className="vs-row"><span>{l}</span><b>{v}</b></div>)}
         </div>
         <div className="info-box green"><span>✅</span><span>{role==="vendor"?"En soumettant, vous acceptez les CGV de Lamuka Marketplace.":"Votre demande sera vérifiée sous 24-48h. Vous serez notifié par SMS, email et notification."}</span></div>
       </>}
+
+      {/* ── Button inside scroll ── */}
+      <div style={{paddingTop:24,paddingBottom:16}}>
+        <button className="btn-primary" style={{background:color}} onClick={()=>step<maxStep?setStep(step+1):setOk(true)}>{step===maxStep?"🚀 Soumettre la demande":"Continuer"}</button>
+      </div>
     </div>
-    <div style={{padding:"14px 20px",borderTop:"1px solid #E8E6E1",background:"#fff",flexShrink:0}}>
-      <button className="btn-primary" style={{background:color}} onClick={()=>step<maxStep?setStep(step+1):setOk(true)}>{step===maxStep?"🚀 Soumettre la demande":"Continuer"}</button>
-    </div>
-  </div>);
+  </>);
 }
 
 /* ═══════════════════════════════

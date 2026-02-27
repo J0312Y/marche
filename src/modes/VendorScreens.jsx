@@ -45,7 +45,7 @@ export default function VendorScreens() {
     case "vDelivery": return <VDeliveryScr go={go} onBack={back} />;
     case "vAssignDriver": return <VAssignDriverScr order={data} onBack={back} go={go} />;
     case "vAddDriver": return <VAddDriverScr onBack={back} />;
-    case "vUpgradePlan": return <VUpgradePlanScr onBack={back} onUpgrade={(p) => setVendorPlan(p)} />;
+    case "vUpgradePlan": return <VUpgradePlanScr onBack={back} onUpgrade={(p) => setVendorPlan(p)} currentPlan={vendorPlan} />;
     case "vDriverProfile": return <VDriverProfileScr driver={data} go={go} onBack={back} />;
     case "vTrackDelivery": return <VTrackDeliveryScr delivery={data} go={go} onBack={back} />;
     case "vDriverChat": return <VDriverChatScr delivery={data} onBack={back} />;

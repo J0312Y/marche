@@ -1,11 +1,12 @@
 import { useState } from "react";
+import Img from "../../components/Img";
 import { fmt } from "../../utils/helpers";
 
 function DrDeliveryScr({delivery:dl,go,onBack}){
   const [step,setStep]=useState(dl.status==="active"?2:0); // 0=accepted,1=atPickup,2=inTransit,3=arriving
   const stepLabels=["Accepté","Au retrait","En route","Arrivé"];
   const stepActions=["🚀 En route vers le vendeur","📦 Colis récupéré","🏠 Arrivé chez le client","✅ Confirmer livraison"];
-  return(<div style={{display:"flex",flexDirection:"column",height:"100%"}}>
+  return(<>
     {/* Map */}
     <div className="dr-nav-map">
       <div className="map-grid"/><div className="dr-nav-road"/><div className="dr-nav-road2"/><div className="dr-nav-route"/>
@@ -45,7 +46,7 @@ function DrDeliveryScr({delivery:dl,go,onBack}){
 
       {/* Vendor contact - always visible */}
       {step>=2&&<div style={{padding:14,background:"rgba(99,102,241,0.04)",border:"1px solid rgba(99,102,241,0.1)",borderRadius:14,marginBottom:14,display:"flex",alignItems:"center",gap:12}}>
-        <div style={{width:40,height:40,borderRadius:12,background:"linear-gradient(135deg,#6366F1,#A855F7)",display:"flex",alignItems:"center",justifyContent:"center",fontSize:18,flexShrink:0}}>{dl.vendor.avatar}</div>
+        <div style={{width:40,height:40,borderRadius:12,overflow:"hidden",background:"linear-gradient(135deg,#6366F1,#A855F7)",display:"flex",alignItems:"center",justifyContent:"center",fontSize:18,flexShrink:0}}>{dl.vendor.logo?<img src={dl.vendor.logo} style={{width:"100%",height:"100%",objectFit:"cover"}} alt=""/>:dl.vendor.avatar}</div>
         <div style={{flex:1}}><div style={{fontSize:13,fontWeight:600}}>{dl.vendor.name}</div><div style={{fontSize:11,color:"#908C82"}}>Commerce · {dl.pickup}</div></div>
         <button style={{padding:"8px 14px",borderRadius:10,border:"none",background:"#6366F1",color:"#fff",fontSize:11,fontWeight:600,cursor:"pointer",fontFamily:"inherit"}} onClick={()=>go("drChatVendor",dl)}>💬</button>
         <button style={{padding:"8px 10px",borderRadius:10,border:"1px solid #E8E6E1",background:"#fff",fontSize:14,cursor:"pointer"}} onClick={()=>alert("📞 "+dl.vendor.name)}>📞</button>
@@ -54,7 +55,7 @@ function DrDeliveryScr({delivery:dl,go,onBack}){
       {/* Order info */}
       <div style={{padding:14,background:"#fff",border:"1px solid #E8E6E1",borderRadius:14,marginBottom:14}}>
         <div style={{fontSize:13,fontWeight:700,marginBottom:8}}>📦 Commande {dl.ref}</div>
-        {dl.items.map((it,i)=><div key={i} style={{display:"flex",alignItems:"center",gap:8,padding:"4px 0",fontSize:12}}><span>{it.img}</span><span style={{flex:1}}>{it.name} x{it.qty}</span></div>)}
+        {dl.items.map((it,i)=><div key={i} style={{display:"flex",alignItems:"center",gap:8,padding:"4px 0",fontSize:12}}><Img src={it.photo} emoji={it.img} style={{width:24,height:24,borderRadius:4,flexShrink:0}} fit="cover"/><span style={{flex:1}}>{it.name} x{it.qty}</span></div>)}
         <div style={{display:"flex",justifyContent:"space-between",paddingTop:8,borderTop:"1px solid #F5F4F1",marginTop:6,fontSize:13}}><span style={{color:"#908C82"}}>Total commande</span><b style={{color:"#6366F1"}}>{fmt(dl.total)}</b></div>
         <div style={{display:"flex",justifyContent:"space-between",paddingTop:4,fontSize:12}}><span style={{color:"#908C82"}}>Votre gain</span><b style={{color:"#10B981"}}>{fmt(dl.fee+dl.tip)}{dl.tip>0?` (dont ${fmt(dl.tip)} pourboire)`:""}</b></div>
       </div>
@@ -63,14 +64,14 @@ function DrDeliveryScr({delivery:dl,go,onBack}){
       <div style={{display:"flex",gap:10,marginBottom:14}}>
         {[["📏",dl.distance],["⏱️",dl.eta],["💰",fmt(dl.fee)]].map(([i,v])=><div key={i} style={{flex:1,padding:12,background:"#F5F4F1",borderRadius:12,textAlign:"center"}}><div style={{fontSize:16}}>{i}</div><div style={{fontSize:12,fontWeight:700,marginTop:2}}>{v}</div></div>)}
       </div>
-    </div>
 
-    {/* Bottom action */}
-    <div style={{padding:"14px 20px",borderTop:"1px solid #E8E6E1",background:"#fff",flexShrink:0}}>
-      {step<3?<button style={{width:"100%",padding:14,borderRadius:14,border:"none",background:step<2?"#6366F1":"#10B981",color:"#fff",fontSize:15,fontWeight:700,cursor:"pointer",fontFamily:"inherit"}} onClick={()=>setStep(step+1)}>{stepActions[step]}</button>
-      :<button style={{width:"100%",padding:14,borderRadius:14,border:"none",background:"#10B981",color:"#fff",fontSize:15,fontWeight:700,cursor:"pointer",fontFamily:"inherit"}} onClick={()=>go("drConfirm",dl)}>✅ Confirmer la livraison</button>}
+      {/* Bottom action - inside scroll */}
+      <div style={{paddingTop:20,paddingBottom:16}}>
+        {step<3?<button style={{width:"100%",padding:14,borderRadius:14,border:"none",background:step<2?"#6366F1":"#10B981",color:"#fff",fontSize:15,fontWeight:700,cursor:"pointer",fontFamily:"inherit"}} onClick={()=>setStep(step+1)}>{stepActions[step]}</button>
+        :<button style={{width:"100%",padding:14,borderRadius:14,border:"none",background:"#10B981",color:"#fff",fontSize:15,fontWeight:700,cursor:"pointer",fontFamily:"inherit"}} onClick={()=>go("drConfirm",dl)}>✅ Confirmer la livraison</button>}
+      </div>
     </div>
-  </div>);
+  </>);
 }
 
 /* D3 ── DELIVERY CONFIRMATION ── */

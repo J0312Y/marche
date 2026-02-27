@@ -1,6 +1,15 @@
+const PHOTOS={
+  "Robe Wax Moderne":"https://images.unsplash.com/photo-1590735213920-68192a487bc2?w=200&h=200&fit=crop",
+  "Sac à Main Cuir":"https://images.unsplash.com/photo-1548036328-c9fa89d128fa?w=200&h=200&fit=crop",
+  "Chemise Bogolan":"https://images.unsplash.com/photo-1596755094514-f87e34085b2c?w=200&h=200&fit=crop",
+};
+const LOGOS={
+  "Mode Afrique":"https://images.unsplash.com/photo-1445205170230-053b83016050?w=100&h=100&fit=crop",
+  "Tech Congo":"https://images.unsplash.com/photo-1531297484001-80022131f5a1?w=100&h=100&fit=crop",
+};
 const D_DELIVERIES=[
-  {id:"dl1",ref:"#CMD-0891",vendor:{name:"Mode Afrique",avatar:"👔",phone:"+242 06X XXX"},client:{name:"Marie Koumba",phone:"+242 06X XXX",addr:"Quartier Bacongo, Rue 14, N°42",lat:-4.277,lng:15.283},items:[{name:"Robe Wax Moderne",qty:2,img:"👗"},{name:"Sac à Main Cuir",qty:1,img:"👜"}],total:92000,pickup:"Marché Total, Stand 42",status:"active",distance:"3.2 km",eta:"12 min",fee:2500,tip:500},
-  {id:"dl2",ref:"#CMD-0890",vendor:{name:"Tech Congo",avatar:"🏪",phone:"+242 06X XXX"},client:{name:"Patrick Mbemba",phone:"+242 06X XXX",addr:"Poto-Poto, Avenue de la Paix, N°8",lat:-4.269,lng:15.289},items:[{name:"Chemise Bogolan",qty:1,img:"👔"}],total:18000,pickup:"Marché Total, Stand 15",status:"pending",distance:"4.8 km",eta:"20 min",fee:2500,tip:0},
+  {id:"dl1",ref:"#CMD-0891",vendor:{name:"Mode Afrique",avatar:"👔",phone:"+242 06X XXX",logo:LOGOS["Mode Afrique"]},client:{name:"Marie Koumba",phone:"+242 06X XXX",addr:"Quartier Bacongo, Rue 14, N°42",lat:-4.277,lng:15.283},items:[{name:"Robe Wax Moderne",qty:2,img:"👗",photo:PHOTOS["Robe Wax Moderne"]},{name:"Sac à Main Cuir",qty:1,img:"👜",photo:PHOTOS["Sac à Main Cuir"]}],total:92000,pickup:"Marché Total, Stand 42",status:"active",distance:"3.2 km",eta:"12 min",fee:2500,tip:500},
+  {id:"dl2",ref:"#CMD-0890",vendor:{name:"Tech Congo",avatar:"🏪",phone:"+242 06X XXX",logo:LOGOS["Tech Congo"]},client:{name:"Patrick Mbemba",phone:"+242 06X XXX",addr:"Poto-Poto, Avenue de la Paix, N°8",lat:-4.269,lng:15.289},items:[{name:"Chemise Bogolan",qty:1,img:"👔",photo:PHOTOS["Chemise Bogolan"]}],total:18000,pickup:"Marché Total, Stand 15",status:"pending",distance:"4.8 km",eta:"20 min",fee:2500,tip:0},
 ];
 const D_HISTORY=[
   {id:"dh1",ref:"#CMD-0885",client:"David Tsaty",vendor:"Mode Afrique",date:"12 Fév",duration:"32 min",distance:"2.8 km",fee:2500,tip:300,rating:5},

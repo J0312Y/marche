@@ -1,11 +1,12 @@
 import { useState } from "react";
+import Img from "../../components/Img";
 import { fmt, disc } from "../../utils/helpers";
 
 function DetailScr({product:p,onBack,onAddCart,go,favs,toggleFav,isFav}){
   const [qty,setQty]=useState(1);
   return(<>
     <div className="scr">
-      <div className="det-img" onClick={()=>go("gallery",p)}><span className="pe">{p.img}</span><div className="det-top"><button onClick={e=>{e.stopPropagation();onBack()}}>←</button><button onClick={e=>{e.stopPropagation();toggleFav(p.id)}} style={{color:isFav(p.id)?"#EF4444":"inherit"}}>{isFav(p.id)?"❤️":"♡"}</button></div>{disc(p)>0&&<span className="badge" style={{position:"absolute",bottom:14,left:14}}>-{disc(p)}%</span>}<div style={{position:"absolute",bottom:14,right:14,background:"rgba(0,0,0,.4)",color:"#fff",padding:"4px 10px",borderRadius:8,fontSize:11,fontWeight:600}}>{p.imgs?.length||1} photos</div></div>
+      <div className="det-img" onClick={()=>go("gallery",p)}><Img src={p.photos?.[0]||p.photo} emoji={p.img} style={{width:"100%",height:"100%"}} fit="cover"/><div className="det-top"><button onClick={e=>{e.stopPropagation();onBack()}}>←</button><button onClick={e=>{e.stopPropagation();toggleFav(p.id)}} style={{color:isFav(p.id)?"#EF4444":"inherit"}}>{isFav(p.id)?"❤️":"♡"}</button></div>{disc(p)>0&&<span className="badge" style={{position:"absolute",bottom:14,left:14,zIndex:5}}>-{disc(p)}%</span>}<div style={{position:"absolute",bottom:14,right:14,background:"rgba(0,0,0,.4)",color:"#fff",padding:"4px 10px",borderRadius:8,fontSize:11,fontWeight:600,zIndex:5}}>{p.photos?.length||1} photos</div></div>
       <div className="det-body">
         <div className="det-vendor"><span>{p.va}</span>{p.vendor} ✓</div>
         <h2>{p.name}</h2>

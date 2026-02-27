@@ -3,7 +3,7 @@ import { useState } from "react";
 function CheckoutScr({onDone}){
   const [step,setStep]=useState(0);const [momo,setMomo]=useState("airtel");const [ok,setOk]=useState(false);
   const momos=[{k:"airtel",n:"Airtel Money",e:"🔴"},{k:"mtn",n:"MTN MoMo",e:"🟡"},{k:"kolo",n:"Kolo Pay",e:"🟣"}];
-  return(<div style={{display:"flex",flexDirection:"column",height:"100%",position:"relative"}}>
+  return(<>
     <div className="appbar"><button onClick={()=>step>0?setStep(step-1):null}>←</button><h2>Paiement</h2><div style={{width:38}}/></div>
     <div className="steps">{["Adresse","Paiement","Confirmer"].map((s,i)=><div key={s} style={{display:"contents"}}>{i>0&&<div className={`sline ${step>=i?"on":""}`}/>}<div className="step-col"><div className={`sdot ${step>i?"on":step>=i?"on":""}`}>{step>i?"✓":i+1}</div><div className={`slbl ${step>=i?"on":""}`}>{s}</div></div></div>)}</div>
     <div className="scr" style={{padding:20}}>
@@ -19,10 +19,10 @@ function CheckoutScr({onDone}){
         <div className="confirm-card" style={{cursor:"pointer"}} onClick={()=>setStep(0)}><span className="cci">📍</span><div className="ccb"><small>Livraison</small><p>Brazzaville, Congo 🇨🇬</p></div><span className="cce" style={{color:"#6366F1",fontWeight:600}}>✏️ Modifier</span></div>
         <div className="confirm-card" style={{cursor:"pointer"}} onClick={()=>setStep(1)}><span className="cci">📱</span><div className="ccb"><small>Paiement</small><p>{momos.find(m=>m.k===momo)?.n}</p></div><span className="cce" style={{color:"#6366F1",fontWeight:600}}>✏️ Modifier</span></div>
         <div style={{marginTop:16}}><div className="cs-row"><span>Sous-total</span><b>228 500 FCFA</b></div><div className="cs-row"><span>Livraison</span><b>2 500 FCFA</b></div><div className="cs-row tot"><span>Total</span><span className="ctp">231 500 FCFA</span></div></div></>}
+      <div style={{paddingTop:24,paddingBottom:16}}><button className="btn-primary" onClick={()=>step<2?setStep(step+1):setOk(true)}>{step===2?"Confirmer le paiement":"Continuer"}</button></div>
     </div>
-    <div style={{padding:"14px 20px",borderTop:"1px solid #E8E6E1",background:"#fff",flexShrink:0}}><button className="btn-primary" onClick={()=>step<2?setStep(step+1):setOk(true)}>{step===2?"Confirmer le paiement":"Continuer"}</button></div>
     {ok&&<div className="success-modal"><div className="success-box"><div className="si">✅</div><h2>Commande confirmée !</h2><p>Vérifiez votre téléphone pour le paiement.</p><div className="ref">#LMK-2026-0214</div><button className="btn-primary" onClick={onDone}>Retour à l'accueil</button></div></div>}
-  </div>);
+  </>);
 }
 
 /* 17 ── ORDERS ── */
