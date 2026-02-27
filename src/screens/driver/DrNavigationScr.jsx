@@ -1,42 +1,57 @@
-
+import { useState, useEffect } from "react";
+import MapView from "../../components/MapView";
 
 function DrNavigationScr({delivery:dl,go,onBack}){
+  const client=dl.client?.lat?{lat:dl.client.lat,lng:dl.client.lng}:{lat:-4.277,lng:15.283};
+  const [driverPos,setDriverPos]=useState({lat:-4.265,lng:15.280});
+
+  // Simulate movement toward client
+  useEffect(()=>{
+    const iv=setInterval(()=>{
+      setDriverPos(p=>({
+        lat:p.lat+(client.lat-p.lat)*0.03+(Math.random()-0.5)*0.0001,
+        lng:p.lng+(client.lng-p.lng)*0.03+(Math.random()-0.5)*0.0001,
+      }));
+    },2500);
+    return ()=>clearInterval(iv);
+  },[]);
+
+  const markers=[
+    {lat:client.lat,lng:client.lng,emoji:"🏠"},
+  ];
+
   return(<div style={{display:"flex",flexDirection:"column",height:"100%"}}>
-    <div className="dr-nav-map" style={{flex:1}}>
-      <div className="map-grid"/>
-      {/* Roads */}
-      <div style={{position:"absolute",top:"35%",left:0,right:0,height:8,background:"rgba(255,255,255,.6)",borderRadius:4}}/>
-      <div style={{position:"absolute",top:"55%",left:"5%",right:"20%",height:8,background:"rgba(255,255,255,.6)",borderRadius:4,transform:"rotate(3deg)"}}/>
-      <div style={{position:"absolute",top:"20%",left:"30%",width:8,height:"60%",background:"rgba(255,255,255,.6)",borderRadius:4}}/>
-      {/* Route */}
-      <div style={{position:"absolute",top:"35%",left:"20%",width:"30%",height:4,background:"repeating-linear-gradient(90deg,#10B981 0,#10B981 8px,transparent 8px,transparent 14px)",borderRadius:2,animation:"rpulse 2s infinite"}}/>
-      <div style={{position:"absolute",top:"35%",left:"50%",width:4,height:"20%",background:"repeating-linear-gradient(180deg,#10B981 0,#10B981 8px,transparent 8px,transparent 14px)",borderRadius:2}}/>
-      {/* Me */}
-      <div className="dr-nav-me" style={{top:"calc(35% - 22px)",left:"18%"}}>🛵</div>
-      {/* Destination */}
-      <div style={{position:"absolute",top:"48%",left:"48%",fontSize:32,filter:"drop-shadow(0 2px 6px rgba(0,0,0,.2))"}}>🏠</div>
+    <MapView
+      center={[driverPos.lat,driverPos.lng]}
+      zoom={16}
+      markers={markers}
+      driverPos={driverPos}
+      route={[driverPos,client]}
+      routeColor="#10B981"
+      style={{flex:1}}
+    >
       {/* Turn direction */}
-      <div className="dr-nav-dir">↗ Tourner à droite · 200m</div>
+      <div style={{position:"absolute",top:16,left:"50%",transform:"translateX(-50%)",zIndex:1000,background:"#10B981",color:"#fff",padding:"8px 18px",borderRadius:12,fontSize:13,fontWeight:700,boxShadow:"0 4px 12px rgba(16,185,129,.3)",display:"flex",alignItems:"center",gap:6,whiteSpace:"nowrap"}}>
+        ↗ Tourner à droite · 200m
+      </div>
       {/* Top bar */}
-      <div style={{position:"absolute",top:12,left:12,right:12,display:"flex",justifyContent:"space-between"}}>
+      <div style={{position:"absolute",top:12,left:12,right:12,display:"flex",justifyContent:"space-between",zIndex:1000}}>
         <button onClick={onBack} style={{width:38,height:38,borderRadius:12,background:"#fff",border:"none",cursor:"pointer",fontSize:16,boxShadow:"0 2px 8px rgba(0,0,0,.1)",display:"flex",alignItems:"center",justifyContent:"center"}}>←</button>
         <div style={{padding:"8px 14px",borderRadius:12,background:"#fff",boxShadow:"0 2px 8px rgba(0,0,0,.1)",fontSize:12,fontWeight:600,display:"flex",alignItems:"center",gap:6}}>⏱️ {dl.eta} · {dl.distance}</div>
       </div>
       {/* Bottom info */}
-      <div className="dr-nav-info">
+      <div style={{position:"absolute",bottom:16,left:16,right:16,zIndex:1000,background:"#fff",padding:14,borderRadius:16,boxShadow:"0 4px 20px rgba(0,0,0,.12)"}}>
         <div style={{display:"flex",alignItems:"center",gap:12}}>
           <div style={{width:44,height:44,borderRadius:12,background:"rgba(16,185,129,0.1)",display:"flex",alignItems:"center",justifyContent:"center",fontSize:20,flexShrink:0}}>🏠</div>
-          <div style={{flex:1}}><h3>{dl.client.name}</h3><p>{dl.client.addr}</p></div>
+          <div style={{flex:1}}><h3 style={{fontSize:15,fontWeight:700,marginBottom:2}}>{dl.client.name}</h3><p style={{fontSize:12,color:"#908C82",margin:0}}>{dl.client.addr}</p></div>
           <div style={{display:"flex",gap:6}}>
             <button style={{width:38,height:38,borderRadius:10,border:"none",background:"#10B981",color:"#fff",cursor:"pointer",fontSize:16,display:"flex",alignItems:"center",justifyContent:"center"}} onClick={()=>alert("📞 Appel")}>📞</button>
             <button style={{width:38,height:38,borderRadius:10,border:"none",background:"#6366F1",color:"#fff",cursor:"pointer",fontSize:16,display:"flex",alignItems:"center",justifyContent:"center"}} onClick={()=>go("drChatClient",dl)}>💬</button>
           </div>
         </div>
       </div>
-    </div>
+    </MapView>
   </div>);
 }
-
-/* D5 ── DRIVER → VENDOR CHAT ── */
 
 export default DrNavigationScr;

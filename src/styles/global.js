@@ -485,6 +485,11 @@ const CSS=`
 @keyframes shimmer{0%{transform:translateX(-100%)}100%{transform:translateX(100%)}}
 .typing-dots{display:inline-flex;gap:3px;font-size:14px;color:#908C82;padding:2px 0}
 .img-shimmer{position:absolute;inset:0;background:#F0EFEC;overflow:hidden}.img-shimmer::after{content:'';position:absolute;inset:0;background:linear-gradient(90deg,transparent,rgba(255,255,255,.5),transparent);animation:shimmer 1.4s infinite}
+.real-map .leaflet-container{width:100%;height:100%;font-family:inherit}
+.map-tooltip{background:#fff !important;border:none !important;border-radius:8px !important;padding:4px 10px !important;font-size:11px !important;font-weight:600 !important;box-shadow:0 2px 8px rgba(0,0,0,.12) !important;color:#191815 !important}
+.map-tooltip::before{border-top-color:#fff !important}
+.map-overlay{position:absolute;z-index:1000;pointer-events:auto}
+.map-overlay button{pointer-events:auto}
 .app-img img{transition:transform .3s ease}.pcard:hover .app-img img{transform:scale(1.05)}
 .dr-req-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:10px}
 .dr-req-head h4{font-size:16px;font-weight:700;display:flex;align-items:center;gap:6px}.dr-req-head .dr-new{padding:3px 8px;border-radius:6px;background:#10B981;color:#fff;font-size:10px;font-weight:700}

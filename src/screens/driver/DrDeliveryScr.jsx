@@ -1,20 +1,28 @@
 import { useState } from "react";
 import Img from "../../components/Img";
+import MapView from "../../components/MapView";
 import { fmt } from "../../utils/helpers";
 
 function DrDeliveryScr({delivery:dl,go,onBack}){
-  const [step,setStep]=useState(dl.status==="active"?2:0); // 0=accepted,1=atPickup,2=inTransit,3=arriving
+  const [step,setStep]=useState(dl.status==="active"?2:0);
   const stepLabels=["Accepté","Au retrait","En route","Arrivé"];
   const stepActions=["🚀 En route vers le vendeur","📦 Colis récupéré","🏠 Arrivé chez le client","✅ Confirmer livraison"];
+  const pickup={lat:-4.262,lng:15.278};
+  const client=dl.client?.lat?{lat:dl.client.lat,lng:dl.client.lng}:{lat:-4.277,lng:15.283};
+  const driverPos=step<2?{lat:-4.265,lng:15.280}:{lat:(pickup.lat+client.lat)/2,lng:(pickup.lng+client.lng)/2};
+  const markers=[
+    {lat:pickup.lat,lng:pickup.lng,emoji:"🏪",label:step<2?"Retrait":undefined},
+    {lat:client.lat,lng:client.lng,emoji:"🏠",label:step>=2?"Client":undefined},
+  ];
   return(<>
     {/* Map */}
-    <div className="dr-nav-map">
-      <div className="map-grid"/><div className="dr-nav-road"/><div className="dr-nav-road2"/><div className="dr-nav-route"/>
-      <div className="dr-nav-me">🛵</div>
-      <div className="dr-nav-dest" style={{top:"28%",left:step<2?"65%":"75%"}}>{step<2?"🏪":"🏠"}</div>
-      <div className="dr-nav-dir">{step<2?"↗ Tourner à droite · 200m":"↗ Tout droit · 450m"}</div>
-      <div style={{position:"absolute",top:12,left:12}}><button onClick={onBack} style={{width:38,height:38,borderRadius:12,background:"#fff",border:"none",cursor:"pointer",fontSize:16,boxShadow:"0 2px 8px rgba(0,0,0,.1)",display:"flex",alignItems:"center",justifyContent:"center"}}>←</button></div>
-    </div>
+    <MapView center={[driverPos.lat,driverPos.lng]} zoom={15} markers={markers} driverPos={driverPos}
+      route={[pickup,driverPos,client]} routeColor="#10B981" style={{height:280}}>
+      <div style={{position:"absolute",top:16,left:"50%",transform:"translateX(-50%)",zIndex:1000,background:"#10B981",color:"#fff",padding:"8px 18px",borderRadius:12,fontSize:13,fontWeight:700,boxShadow:"0 4px 12px rgba(16,185,129,.3)",display:"flex",alignItems:"center",gap:6,whiteSpace:"nowrap"}}>
+        {step<2?"↗ Vers le commerce · 200m":"↗ Vers le client · 450m"}
+      </div>
+      <div style={{position:"absolute",top:12,left:12,zIndex:1000}}><button onClick={onBack} style={{width:38,height:38,borderRadius:12,background:"#fff",border:"none",cursor:"pointer",fontSize:16,boxShadow:"0 2px 8px rgba(0,0,0,.1)",display:"flex",alignItems:"center",justifyContent:"center"}}>←</button></div>
+    </MapView>
 
     <div className="scr" style={{padding:20}}>
       {/* Step bar */}
