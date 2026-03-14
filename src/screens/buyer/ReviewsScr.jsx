@@ -5,7 +5,7 @@ import { social } from "../../services";
 function ReviewsScr({product:p,onBack}){
   const { data: reviewData } = useLoad(() => social.getArticleReviews(p.id));
   const REVIEWS = reviewData?.reviews || reviewData || [];
-  const avg=p.rating;const dist=[60,25,10,3,2];
+  
   const [writing,setWriting]=useState(false);
   const [userRating,setUserRating]=useState(0);
   const [userText,setUserText]=useState("");
@@ -37,13 +37,22 @@ function ReviewsScr({product:p,onBack}){
 
   const allReviews=[...userReviews,...REVIEWS];
 
+  // Dynamic avg and distribution — recalculates when user adds a review
+  const allRatings=allReviews.map(r=>r.rating);
+  const totalCount=Math.max(allRatings.length, p.reviews||0)+userReviews.length-(allRatings.length>0?allRatings.length:0);
+  const avg=allRatings.length>0?+(allRatings.reduce((s,r)=>s+r,0)/allRatings.length).toFixed(1):p.rating;
+  const dist=[5,4,3,2,1].map(star=>{
+    const count=allRatings.filter(r=>Math.round(r)===star).length;
+    return allRatings.length>0?Math.round((count/allRatings.length)*100):(star===5?60:star===4?25:star===3?10:star===2?3:2);
+  });
+
   return(<div className="scr" style={{padding:20}}><div className="appbar" style={{padding:0,marginBottom:16}}><button onClick={onBack}>←</button><h2>Avis ({p.reviews+userReviews.length})</h2><div style={{width:38}}/></div>
     <div style={{textAlign:"center",marginBottom:20}}>
       <div style={{fontSize:40,fontWeight:700,color:"#191815"}}>{avg}</div>
       <div style={{fontSize:16,color:"#F59E0B",marginBottom:4}}>{"★".repeat(Math.floor(avg))}{"☆".repeat(5-Math.floor(avg))}</div>
       <div style={{fontSize:12,color:"#908C82"}}>{p.reviews+userReviews.length} avis vérifiés</div>
     </div>
-    <div style={{marginBottom:20}}>{dist.map((d,i)=><div key={i} style={{display:"flex",alignItems:"center",gap:8,marginBottom:4}}><span style={{fontSize:12,width:12}}>{5-i}</span><span style={{fontSize:12}}>⭐</span><div style={{flex:1,height:6,background:"#E8E6E1",borderRadius:3,overflow:"hidden"}}><div style={{width:`${d}%`,height:"100%",background:i===0?"#F59E0B":"#E8E6E1",borderRadius:3}}/></div><span style={{fontSize:11,color:"#908C82",width:30,textAlign:"right"}}>{d}%</span></div>)}</div>
+    <div style={{marginBottom:20}}>{dist.map((d,i)=><div key={i} style={{display:"flex",alignItems:"center",gap:8,marginBottom:4}}><span style={{fontSize:12,width:12}}>{5-i}</span><span style={{fontSize:12}}>⭐</span><div style={{flex:1,height:6,background:"#E8E6E1",borderRadius:3,overflow:"hidden"}}><div style={{width:`${d}%`,height:"100%",background:d>0?"#F59E0B":"#E8E6E1",borderRadius:3,transition:"width .3s"}}/></div><span style={{fontSize:11,color:"#908C82",width:30,textAlign:"right"}}>{d}%</span></div>)}</div>
 
     {/* Write review button / form */}
     {!writing?<button onClick={()=>setWriting(true)} style={{width:"100%",padding:"14px 0",borderRadius:14,border:"2px solid #6366F1",background:"rgba(99,102,241,0.04)",cursor:"pointer",fontSize:14,fontWeight:700,color:"#6366F1",fontFamily:"inherit",marginBottom:20,display:"flex",alignItems:"center",justifyContent:"center",gap:8}}>✏️ Écrire un avis</button>

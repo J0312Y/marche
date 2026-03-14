@@ -1,10 +1,12 @@
 import { useState } from "react";
 import Img from "../../components/Img";
 import { useData } from "../../hooks";
+import { useApp } from "../../context/AppContext";
 import { fmt, disc, getVendorPromo, totalDisc, effectivePrice } from "../../utils/helpers";
 
 function HomeScr({go,favs,toggleFav,isFav}){
   const { P, VENDORS, CATS } = useData();
+  const { cartCount } = useApp();
   const [selCat,setSC]=useState(0);
   const [selType,setSelType]=useState("all");
   const [homeQ,setHomeQ]=useState("");
@@ -36,7 +38,7 @@ function HomeScr({go,favs,toggleFav,isFav}){
     <div className="scr">
       {/* Header - only show when not in search */}
       {!inSearchMode&&<div className="hdr"><div><div className="hdr-t">Bonjour 👋</div><div className="hdr-h">Lamuka Market</div></div>
-        <div className="hdr-r"><div className="hdr-btn" onClick={()=>go("notif")}>🔔<div className="notif-badge"/></div><div className="hdr-btn" onClick={()=>go("cart")}>🛍️</div></div></div>}
+        <div className="hdr-r"><div className="hdr-btn" onClick={()=>go("notif")}>🔔<div className="notif-badge"/></div><div className="hdr-btn" onClick={()=>go("cart")} style={{position:"relative"}}>🛍️{cartCount>0&&<span style={{position:"absolute",top:-4,right:-4,background:"#EF4444",color:"#fff",fontSize:9,fontWeight:700,borderRadius:10,padding:"1px 5px",minWidth:16,textAlign:"center"}}>{cartCount}</span>}</div></div></div>}
 
       {/* Search bar */}
       <div style={{display:"flex",alignItems:"center",gap:8,padding:inSearchMode?"14px 16px 10px":"0 16px 12px",marginTop:inSearchMode?0:10}}>

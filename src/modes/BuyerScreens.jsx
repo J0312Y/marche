@@ -65,7 +65,7 @@ export default function BuyerScreens() {
     case "chatVendor": return <ChatVendorScr vendor={data} onBack={back} />;
     case "chatList": return <ChatListScr go={go} onBack={back} />;
     case "wishlist": return <WishlistScr go={go} onBack={back} favs={favs} toggleFav={toggleFav} />;
-    case "notif": return <NotifScr onBack={back} />;
+    case "notif": return <NotifScr onBack={back} go={go} />;
     case "editProfile": return <EditProfileScr onBack={back} />;
     case "addresses": return <AddressesScr onBack={back} />;
     case "settings": return <SettingsScr onBack={back} go={go} />;
