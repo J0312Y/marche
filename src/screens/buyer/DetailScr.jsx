@@ -150,7 +150,7 @@ function DetailScr({product:p,onBack,onAddCart,go,favs,toggleFav,isFav}){
             <span className="dii">📱</span>
             <div className="dit">
               <h4>Paiement Mobile Money</h4>
-              <p>Airtel Money, MTN MoMo, Orange Money, Kolo Pay</p>
+              <p>Airtel Money, MTN MoMo, Kolo Pay</p>
             </div>
           </div>
           <div className="det-info" style={{marginBottom:8}}>

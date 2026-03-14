@@ -22,7 +22,7 @@ function ChatVendorScr({onBack,vendorName,vendorAvatar,vendor}){
     "Horaires d'ouverture ?":"Nous sommes ouverts de 8h à 22h, 7j/7 ! ⏰",
     "Vous livrez où ?":"Nous livrons dans tout Brazzaville ! Bacongo, Poto-Poto, Moungali, Ouenzé... 🚚",
     "Un produit est disponible ?":"Bien sûr ! Quel produit cherchez-vous ? 🔍",
-    "Modes de paiement ?":"Nous acceptons Airtel Money, MTN MoMo, Orange Money et paiement à la livraison 💳",
+    "Modes de paiement ?":"Nous acceptons Airtel Money, MTN MoMo et paiement à la livraison 💳",
   };
 
   const fallbackResponses=[

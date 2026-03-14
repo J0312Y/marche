@@ -4,7 +4,7 @@ import { useData } from "../../hooks";
 
 function CheckoutScr({onBack,onDone,cart=[],appliedCoupon,setAppliedCoupon}){
   const [step,setStep]=useState(0);const [momo,setMomo]=useState("airtel");const [ok,setOk]=useState(false);
-  const momos=[{k:"airtel",n:"Airtel Money",e:"🔴"},{k:"mtn",n:"MTN MoMo",e:"🟡"},{k:"orange",n:"Orange Money",e:"🟠"},{k:"kolo",n:"Kolo Pay",e:"🟣"}];
+  const momos=[{k:"airtel",n:"Airtel Money",e:"🔴"},{k:"mtn",n:"MTN MoMo",e:"🟡"},{k:"kolo",n:"Kolo Pay",e:"🟣"}];
   const { VENDORS } = useData();
 
   const getItem=(c)=>c.product||c;
