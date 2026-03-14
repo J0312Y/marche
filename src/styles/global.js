@@ -1,7 +1,9 @@
 const CSS=`
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
 *{margin:0;padding:0;box-sizing:border-box}
-.phone{width:393px;height:852px;background:#FAF9F6;border-radius:55px;overflow:hidden;position:relative;font-family:'Inter',sans-serif;color:#191815;display:flex;flex-direction:column;box-shadow:0 50px 100px rgba(0,0,0,.25),0 0 0 .5px rgba(255,255,255,.15) inset;border:6px solid #2c2c2e}
+html,body,#root{width:100%;height:100%;overflow:hidden;background:#000;-webkit-tap-highlight-color:transparent;-webkit-text-size-adjust:100%}
+body{position:fixed;top:0;left:0;right:0;bottom:0;overscroll-behavior:none}
+.phone{width:100%;height:100dvh;height:100vh;background:#FAF9F6;overflow:hidden;position:relative;font-family:'Inter',sans-serif;color:#191815;display:flex;flex-direction:column;max-width:100%;padding-top:env(safe-area-inset-top);padding-bottom:env(safe-area-inset-bottom)}
 .scr{flex:1;overflow-y:auto;overflow-x:hidden;-webkit-overflow-scrolling:touch}.scr::-webkit-scrollbar{display:none}
 .bnav{display:flex;align-items:flex-end;justify-content:space-around;padding:6px 8px 22px;background:#fff;border-top:1px solid #E8E6E1;flex-shrink:0;position:relative}
 .bni{display:flex;flex-direction:column;align-items:center;gap:3px;padding:8px 14px;border-radius:14px;border:none;background:transparent;cursor:pointer;font-family:inherit;transition:all .2s;font-size:10px;color:#908C82;font-weight:500}
