@@ -193,7 +193,7 @@ function OnboardingScr({onDone}){
         {/* Button */}
         {s<2?(
           <button onClick={()=>goToSlide(s+1)} style={{
-            width:"100%",padding:"16px 0",borderRadius:16,border:"none",
+            width:"100%",padding:"16px 0",borderRadius:16,
             background:"rgba(255,255,255,.15)",backdropFilter:"blur(12px)",
             border:"1px solid rgba(255,255,255,.25)",
             color:"#fff",fontSize:16,fontWeight:700,cursor:"pointer",fontFamily:"inherit",

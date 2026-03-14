@@ -1,4 +1,5 @@
 import { useState } from "react";
+import toast from "../../utils/toast";
 
 function LanguageScr({onBack}){
   const [lang,setLang]=useState("fr");

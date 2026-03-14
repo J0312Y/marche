@@ -1,3 +1,4 @@
+import toast from "../../utils/toast";
 import { useState } from "react";
 import { fmt } from "../../utils/helpers";
 
@@ -128,7 +129,7 @@ function VDeliveryScr({go,onBack}){
         <div style={{display:"flex",gap:8}}>
           <button style={{flex:1,padding:10,borderRadius:10,border:"none",background:"#6366F1",color:"#fff",fontSize:12,fontWeight:600,cursor:"pointer",fontFamily:"inherit",display:"flex",alignItems:"center",justifyContent:"center",gap:4}} onClick={()=>go("vTrackDelivery",d)}>📍 Suivre</button>
           <button style={{flex:1,padding:10,borderRadius:10,border:"1px solid #E8E6E1",background:"#fff",fontSize:12,fontWeight:600,cursor:"pointer",fontFamily:"inherit",display:"flex",alignItems:"center",justifyContent:"center",gap:4}} onClick={()=>go("vDriverChat",d)}>💬 Contacter</button>
-          <button style={{width:42,padding:10,borderRadius:10,border:"none",background:"#10B981",color:"#fff",fontSize:14,cursor:"pointer",display:"flex",alignItems:"center",justifyContent:"center"}} onClick={()=>alert("📞 Appel vers "+d.driver)}>📞</button>
+          <button style={{width:42,padding:10,borderRadius:10,border:"none",background:"#10B981",color:"#fff",fontSize:14,cursor:"pointer",display:"flex",alignItems:"center",justifyContent:"center"}} onClick={()=>toast.info("📞 Appel vers "+d.driver)}>📞</button>
         </div>
       </div>)}
     </div>}

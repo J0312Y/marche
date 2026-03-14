@@ -1,3 +1,4 @@
+import toast from "../../utils/toast";
 import { useState } from "react";
 import { useLoad } from "../../hooks";
 import { user as userSvc } from "../../services";
@@ -9,7 +10,7 @@ function AddressesScr({onBack}){
   const list = addrs || (loadedAddrs || []).map(a=>({...a}));
   const setList = (fn) => setAddrs(typeof fn === 'function' ? fn(list) : fn);
   const [adding,setAdding]=useState(false);
-  const remove=id=>setList(prev=>prev.filter(a=>a.id!==id));
+  const remove=id=>toast.success("Adresse supprimée");setList(prev=>prev.filter(a=>a.id!==id));
   const setDefault=id=>setList(prev=>prev.map(a=>({...a,def:a.id===id})));
   if(loading) return <div className="scr" style={{padding:16}}><div className="appbar" style={{padding:0,marginBottom:12}}><button onClick={onBack}>←</button><h2>Mes adresses</h2><div style={{width:38}}/></div><Loading/></div>;
   return(<div className="scr" style={{padding:16}}><div className="appbar" style={{padding:0,marginBottom:12}}><button onClick={onBack}>←</button><h2>Mes adresses</h2><div style={{width:38}}/></div>

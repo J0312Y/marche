@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { fmt } from "../../utils/helpers";
+import toast from "../../utils/toast";
 
 function DrConfirmScr({delivery:dl,go,onBack}){
   const [method,setMethod]=useState(null);
@@ -72,7 +73,7 @@ function DrConfirmScr({delivery:dl,go,onBack}){
       {!method&&<div className="info-box yellow" style={{marginTop:14}}><span>💡</span><span>Choisissez une méthode de confirmation pour valider la livraison</span></div>}
 
       <div style={{paddingTop:24,paddingBottom:16}}>
-        <button className="btn-primary" style={{background:method?"#10B981":"#E8E6E1",color:method?"#fff":"#908C82"}} onClick={()=>method&&setDone(true)} disabled={!method}>✅ Valider la livraison</button>
+        <button className="btn-primary" style={{background:method?"#10B981":"#E8E6E1",color:method?"#fff":"#908C82"}} onClick={()=>{if(method){setDone(true);toast.success("Livraison confirmée 🎉")}}} disabled={!method}>✅ Valider la livraison</button>
       </div>
     </div>
   </>);

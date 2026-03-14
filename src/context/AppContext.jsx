@@ -5,6 +5,7 @@
 import { createContext, useContext, useState, useEffect, useCallback } from 'react';
 import { setToken, getToken, isAuthenticated, onAuthExpired } from '../api/client';
 import { auth, cart as cartSvc, social as socialSvc } from '../services';
+import { setToastListener } from '../utils/toast';
 
 const AppContext = createContext(null);
 
@@ -46,6 +47,9 @@ export function AppProvider({ children }) {
     setToast({ message, type });
     setTimeout(() => setToast(null), 2500);
   }, []);
+
+  // Wire global toast utility
+  useEffect(() => { setToastListener(showToast); }, [showToast]);
 
   // ══════════════════════════════════
   //  BOOT — Restaurer session
@@ -192,6 +196,7 @@ export function AppProvider({ children }) {
   const toggleFav = useCallback(async (articleId) => {
     try {
       const result = await socialSvc.toggleFavorite(articleId);
+      showToast(result.is_favorite ? 'Ajouté aux favoris ❤️' : 'Retiré des favoris');
       setFavs(prev => result.is_favorite
         ? [...prev, articleId]
         : prev.filter(id => id !== articleId)

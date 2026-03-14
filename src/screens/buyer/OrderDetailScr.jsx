@@ -1,4 +1,5 @@
 import { useState } from "react";
+import toast from "../../utils/toast";
 
 const STEPS=["Confirmée","En préparation","En livraison","Livrée"];
 
@@ -81,7 +82,7 @@ function OrderDetailScr({order:o,onBack,go}){
         <p style={{fontSize:12,color:"#908C82",marginBottom:14}}>Le remboursement sera effectué sous 24-48h sur votre Mobile Money.</p>
         <div style={{display:"flex",gap:10}}>
           <button onClick={()=>setShowCancel(false)} style={{flex:1,padding:12,borderRadius:12,border:"1px solid #E8E6E1",background:"#fff",fontSize:13,fontWeight:600,cursor:"pointer",fontFamily:"inherit"}}>Non</button>
-          <button onClick={()=>{setCancelled(true);setShowCancel(false)}} style={{flex:1,padding:12,borderRadius:12,border:"none",background:"#EF4444",color:"#fff",fontSize:13,fontWeight:700,cursor:"pointer",fontFamily:"inherit"}}>Oui, annuler</button>
+          <button onClick={()=>{setCancelled(true);setShowCancel(false);toast.success("Commande annulée avec succès 📦")}} style={{flex:1,padding:12,borderRadius:12,border:"none",background:"#EF4444",color:"#fff",fontSize:13,fontWeight:700,cursor:"pointer",fontFamily:"inherit"}}>Oui, annuler</button>
         </div>
       </div>
     </div>}

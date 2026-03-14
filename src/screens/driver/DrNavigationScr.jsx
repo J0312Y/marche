@@ -1,3 +1,4 @@
+import toast from "../../utils/toast";
 import { useState, useEffect } from "react";
 import MapView from "../../components/MapView";
 
@@ -45,7 +46,7 @@ function DrNavigationScr({delivery:dl,go,onBack}){
           <div style={{width:44,height:44,borderRadius:12,background:"rgba(16,185,129,0.1)",display:"flex",alignItems:"center",justifyContent:"center",fontSize:20,flexShrink:0}}>🏠</div>
           <div style={{flex:1}}><h3 style={{fontSize:15,fontWeight:700,marginBottom:2}}>{dl.client.name}</h3><p style={{fontSize:12,color:"#908C82",margin:0}}>{dl.client.addr}</p></div>
           <div style={{display:"flex",gap:6}}>
-            <button style={{width:38,height:38,borderRadius:10,border:"none",background:"#10B981",color:"#fff",cursor:"pointer",fontSize:16,display:"flex",alignItems:"center",justifyContent:"center"}} onClick={()=>alert("📞 Appel")}>📞</button>
+            <button style={{width:38,height:38,borderRadius:10,border:"none",background:"#10B981",color:"#fff",cursor:"pointer",fontSize:16,display:"flex",alignItems:"center",justifyContent:"center"}} onClick={()=>toast.info("📞 Appel")}>📞</button>
             <button style={{width:38,height:38,borderRadius:10,border:"none",background:"#6366F1",color:"#fff",cursor:"pointer",fontSize:16,display:"flex",alignItems:"center",justifyContent:"center"}} onClick={()=>go("drChatClient",dl)}>💬</button>
           </div>
         </div>

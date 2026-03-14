@@ -1,4 +1,5 @@
 import { useState } from "react";
+import toast from "../../utils/toast";
 
 function DrSettingsScr({onBack,go}){
   const [pushN,setPushN]=useState(true);const [sound,setSound]=useState(true);const [autoAccept,setAutoAccept]=useState(false);const [lang,setLang]=useState("fr");
@@ -8,11 +9,11 @@ function DrSettingsScr({onBack,go}){
         <div className="setting-item"><span className="si-i">🌐</span><span className="si-t">Langue</span><select value={lang} onChange={e=>setLang(e.target.value)} style={{padding:"6px 10px",borderRadius:8,border:"1px solid #E8E6E1",fontSize:12,fontFamily:"inherit",background:"#fff"}}><option value="fr">Français</option><option value="en">English</option><option value="ln">Lingala</option></select></div>
       </div>
       <div className="setting-group"><div className="setting-label">Notifications</div>
-        <div className="setting-item"><span className="si-i">🔔</span><span className="si-t">Notifications push</span><div className={`toggle ${pushN?"on":""}`} onClick={()=>setPushN(!pushN)}/></div>
-        <div className="setting-item"><span className="si-i">🔊</span><span className="si-t">Son nouvelles commandes</span><div className={`toggle ${sound?"on":""}`} onClick={()=>setSound(!sound)}/></div>
+        <div className="setting-item"><span className="si-i">🔔</span><span className="si-t">Notifications push</span><div className={`toggle ${pushN?"on":""}`} onClick={()=>{setPushN(!pushN);toast.success(!pushN?'Notifications activées 🔔':'Notifications désactivées')}}/></div>
+        <div className="setting-item"><span className="si-i">🔊</span><span className="si-t">Son nouvelles commandes</span><div className={`toggle ${sound?"on":""}`} onClick={()=>{setSound(!sound);toast.success(!sound?'Son activé 🔊':'Son désactivé')}}/></div>
       </div>
       <div className="setting-group"><div className="setting-label">Livraison</div>
-        <div className="setting-item"><span className="si-i">⚡</span><span className="si-t">Acceptation automatique</span><div className={`toggle ${autoAccept?"on":""}`} onClick={()=>setAutoAccept(!autoAccept)}/></div>
+        <div className="setting-item"><span className="si-i">⚡</span><span className="si-t">Acceptation automatique</span><div className={`toggle ${autoAccept?"on":""}`} onClick={()=>{setAutoAccept(!autoAccept);toast.success(!autoAccept?'Acceptation auto activée ⚡':'Désactivée')}}/></div>
         <div className="info-box yellow" style={{margin:"8px 0"}}><span>💡</span><span>Si activé, les livraisons proches seront acceptées automatiquement.</span></div>
       </div>
       <div className="setting-group"><div className="setting-label">Sécurité</div>

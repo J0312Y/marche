@@ -1,3 +1,4 @@
+import toast from "../../utils/toast";
 import { useState } from "react";
 import Img from "../../components/Img";
 import MapView from "../../components/MapView";
@@ -39,7 +40,7 @@ function DrDeliveryScr({delivery:dl,go,onBack}){
           <div style={{fontSize:13,color:"#908C82"}}>{dl.vendor.name} · {dl.ref}</div>
           <div style={{display:"flex",gap:8,marginTop:10}}>
             <button style={{flex:1,padding:10,borderRadius:10,border:"none",background:"#6366F1",color:"#fff",fontSize:12,fontWeight:600,cursor:"pointer",fontFamily:"inherit"}} onClick={()=>go("drChatVendor",dl)}>💬 Commerce</button>
-            <button style={{width:42,padding:10,borderRadius:10,border:"none",background:"#10B981",color:"#fff",fontSize:14,cursor:"pointer",display:"flex",alignItems:"center",justifyContent:"center"}} onClick={()=>alert("📞 "+dl.vendor.name)}>📞</button>
+            <button style={{width:42,padding:10,borderRadius:10,border:"none",background:"#10B981",color:"#fff",fontSize:14,cursor:"pointer",display:"flex",alignItems:"center",justifyContent:"center"}} onClick={()=>toast.info("📞 "+dl.vendor.name)}>📞</button>
           </div>
         </>:<>
           <div style={{fontSize:15,fontWeight:700,marginBottom:2}}>{dl.client.name}</div>
@@ -47,7 +48,7 @@ function DrDeliveryScr({delivery:dl,go,onBack}){
           <div style={{display:"flex",gap:8,marginTop:10}}>
             <button style={{flex:1,padding:10,borderRadius:10,border:"none",background:"#10B981",color:"#fff",fontSize:12,fontWeight:600,cursor:"pointer",fontFamily:"inherit"}} onClick={()=>go("drChatClient",dl)}>💬 Client</button>
             <button style={{width:42,padding:10,borderRadius:10,border:"none",background:"#3B82F6",color:"#fff",fontSize:14,cursor:"pointer",display:"flex",alignItems:"center",justifyContent:"center"}} onClick={()=>go("drNavigation",dl)}>🗺️</button>
-            <button style={{width:42,padding:10,borderRadius:10,border:"none",background:"#10B981",color:"#fff",fontSize:14,cursor:"pointer",display:"flex",alignItems:"center",justifyContent:"center"}} onClick={()=>alert("📞 "+dl.client.name)}>📞</button>
+            <button style={{width:42,padding:10,borderRadius:10,border:"none",background:"#10B981",color:"#fff",fontSize:14,cursor:"pointer",display:"flex",alignItems:"center",justifyContent:"center"}} onClick={()=>toast.info("📞 "+dl.client.name)}>📞</button>
           </div>
         </>}
       </div>
@@ -57,7 +58,7 @@ function DrDeliveryScr({delivery:dl,go,onBack}){
         <div style={{width:40,height:40,borderRadius:12,overflow:"hidden",background:"linear-gradient(135deg,#6366F1,#A855F7)",display:"flex",alignItems:"center",justifyContent:"center",fontSize:18,flexShrink:0}}>{dl.vendor.logo?<img src={dl.vendor.logo} style={{width:"100%",height:"100%",objectFit:"cover"}} alt=""/>:dl.vendor.avatar}</div>
         <div style={{flex:1}}><div style={{fontSize:13,fontWeight:600}}>{dl.vendor.name}</div><div style={{fontSize:11,color:"#908C82"}}>Commerce · {dl.pickup}</div></div>
         <button style={{padding:"8px 14px",borderRadius:10,border:"none",background:"#6366F1",color:"#fff",fontSize:11,fontWeight:600,cursor:"pointer",fontFamily:"inherit"}} onClick={()=>go("drChatVendor",dl)}>💬</button>
-        <button style={{padding:"8px 10px",borderRadius:10,border:"1px solid #E8E6E1",background:"#fff",fontSize:14,cursor:"pointer"}} onClick={()=>alert("📞 "+dl.vendor.name)}>📞</button>
+        <button style={{padding:"8px 10px",borderRadius:10,border:"1px solid #E8E6E1",background:"#fff",fontSize:14,cursor:"pointer"}} onClick={()=>toast.info("📞 "+dl.vendor.name)}>📞</button>
       </div>}
 
       {/* Order info */}

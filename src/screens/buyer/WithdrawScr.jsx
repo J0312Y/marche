@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { fmt } from "../../utils/helpers";
+import toast from "../../utils/toast";
 
 function WithdrawScr({onBack,mode}){
   const [method,setMethod]=useState(null);const [amount,setAmount]=useState("");const [done,setDone]=useState(false);
@@ -11,7 +12,7 @@ function WithdrawScr({onBack,mode}){
       <div style={{display:"flex",gap:8,marginBottom:12}}>{[10000,25000,50000,100000].map(v=><button key={v} style={{flex:1,padding:10,borderRadius:10,border:amount===String(v)?`2px solid ${color}`:"1px solid #E8E6E1",background:amount===String(v)?`${color}08`:"#fff",fontSize:11,fontWeight:600,cursor:"pointer",fontFamily:"inherit"}} onClick={()=>setAmount(String(v))}>{fmt(v)}</button>)}</div>
       <div style={{fontSize:14,fontWeight:700,marginBottom:10}}>Retirer vers</div>
       {[["airtel","📱","Airtel Money","06X XXX XXX"],["mtn","📱","MTN MoMo","06X XXX XXX"],["kolo","🟣","Kolo Pay","06X XXX XXX"]].map(([k,i,n,p])=><div key={k} className="setting-item" style={{cursor:"pointer",border:method===k?`2px solid ${color}`:"1px solid #E8E6E1",marginBottom:6}} onClick={()=>setMethod(k)}><span style={{fontSize:20}}>{i}</span><div style={{flex:1}}><div style={{fontSize:14,fontWeight:500}}>{n}</div><div style={{fontSize:11,color:"#908C82"}}>{p}</div></div>{method===k&&<span style={{color,fontWeight:700}}>✓</span>}</div>)}
-      <div style={{paddingTop:24,paddingBottom:16}}><button className="btn-primary" style={{background:amount&&method?color:"#E8E6E1",color:amount&&method?"#fff":"#908C82"}} onClick={()=>amount&&method&&setDone(true)}>Retirer {amount?fmt(parseInt(amount)):""}</button></div>
+      <div style={{paddingTop:24,paddingBottom:16}}><button className="btn-primary" style={{background:amount&&method?color:"#E8E6E1",color:amount&&method?"#fff":"#908C82"}} onClick={()=>{if(amount&&method){setDone(true);toast.success("Retrait effectué 💸")}}}>Retirer {amount?fmt(parseInt(amount)):""}</button></div>
     </div>
   </>);
 }

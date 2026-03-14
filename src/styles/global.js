@@ -497,6 +497,7 @@ const CSS=`
 @keyframes dr-pulse{0%,100%{opacity:1}50%{opacity:.4}}
 @keyframes blink{0%,100%{opacity:.2}50%{opacity:1}}
 @keyframes fadeIn{from{opacity:0;transform:translateY(4px)}to{opacity:1;transform:translateY(0)}}
+@keyframes toast-in{from{opacity:0;transform:translateY(20px) scale(.95)}to{opacity:1;transform:translateY(0) scale(1)}}
 @keyframes imgFadeIn{from{opacity:0}to{opacity:1}}
 @keyframes shimmer{0%{transform:translateX(-100%)}100%{transform:translateX(100%)}}
 .typing-dots{display:inline-flex;gap:3px;font-size:14px;color:#908C82;padding:2px 0}

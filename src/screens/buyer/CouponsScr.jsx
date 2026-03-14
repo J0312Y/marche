@@ -1,4 +1,5 @@
 import { useState } from "react";
+import toast from "../../utils/toast";
 import { useLoad, useData } from "../../hooks";
 import { user as userSvc } from "../../services";
 import { fmt, getVendorPromo } from "../../utils/helpers";
@@ -19,7 +20,7 @@ function CouponsScr({onBack,cart=[],appliedCoupon,onApply}){
     setError("");setVerifying(coupon.code);
     try{
       await userSvc.verifyCoupon(coupon.code,subtotal);
-      onApply(coupon);
+      onApply(coupon);toast.success("Code promo appliqué 🏷️");
     }catch(err){
       setError(err.message||"Code invalide");
     }finally{setVerifying(null)}
@@ -31,13 +32,13 @@ function CouponsScr({onBack,cart=[],appliedCoupon,onApply}){
     try{
       const result=await userSvc.verifyCoupon(manualCode.trim().toUpperCase(),subtotal);
       const coupon=(COUPONS||[]).find(c=>c.code===manualCode.trim().toUpperCase())||{code:manualCode.trim().toUpperCase(),discount:result.discount,free:result.free_delivery,desc:`${result.discount}% de réduction`};
-      onApply(coupon);
+      onApply(coupon);toast.success("Code promo appliqué 🏷️");
     }catch(err){
       setError(err.message||"Code invalide");
     }finally{setVerifying(null)}
   };
 
-  const removeCoupon=()=>{onApply(null)};
+  const removeCoupon=()=>{onApply(null);toast.success("Code promo retiré")};
 
   return(<div className="scr" style={{padding:16}}>
     <div className="appbar" style={{padding:0,marginBottom:12}}><button onClick={onBack}>←</button><h2>🏷️ Codes Promo</h2><div style={{width:38}}/></div>

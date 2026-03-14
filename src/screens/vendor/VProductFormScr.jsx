@@ -5,6 +5,7 @@ import VariantEditor from "../../components/VariantEditor";
 import { analyzeImage, enhanceImage, cropImage, generateVariants } from "../../utils/imageProcessor";
 import { CATS } from "../../data";
 import { vendor } from "../../services";
+import toast from "../../utils/toast";
 
 function VProductFormScr({product:p,onBack,shopType="boutique"}){
   const isEdit=!!p;
@@ -104,7 +105,7 @@ function VProductFormScr({product:p,onBack,shopType="boutique"}){
       }
 
       setSubmitting(false);
-      setSuccess(true);
+      setSuccess(true);toast.success(isEdit?"Article modifié avec succès ✏️":"Article ajouté avec succès 📦");
       setTimeout(()=>onBack(),1500);
     }catch(err){
       setSubmitting(false);
@@ -117,7 +118,7 @@ function VProductFormScr({product:p,onBack,shopType="boutique"}){
     const file=e.target.files?.[0];
     if(!file) return;
     e.target.value="";
-    if(photos.length>=6){alert("Maximum 6 photos");return;}
+    if(photos.length>=6){toast.error("Maximum 6 photos 📸");return;}
     setProcessing(true);
     if(errors.photos) setErrors(prev=>{const n={...prev};delete n.photos;return n;});
     try{
@@ -135,7 +136,7 @@ function VProductFormScr({product:p,onBack,shopType="boutique"}){
       const imgVariants=await generateVariants(croppedFile);
       setPhotos(prev=>[...prev,{url:finalUrl,file:croppedFile,analysis,variants:imgVariants,enhanced,status:"ready"}]);
       setEditingIdx(photos.length);
-    }catch(err){alert("Erreur: "+err.message);}
+    ;toast.success(product?"Article modifié ✅":"Article créé ✅")}catch(err){toast.error("Erreur: "+err.message);}
     setProcessing(false);
   };
 

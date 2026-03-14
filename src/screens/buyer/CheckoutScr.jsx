@@ -1,4 +1,5 @@
 import { useState } from "react";
+import toast from "../../utils/toast";
 import { fmt, getVendorPromo } from "../../utils/helpers";
 import { useData } from "../../hooks";
 
@@ -17,7 +18,7 @@ function CheckoutScr({onBack,onDone,cart=[],appliedCoupon,setAppliedCoupon}){
   const total=sub-discountAmount+finalDelivery;
 
   const handleConfirm=()=>{
-    setOk(true);
+    setOk(true);toast.success("Commande confirmée ! 🎉");
     if(setAppliedCoupon) setAppliedCoupon(null);
   };
 

@@ -1,3 +1,4 @@
+import toast from "../../utils/toast";
 import { useState, useEffect, useRef } from "react";
 
 function ChatScr({onBack}){
@@ -46,7 +47,7 @@ function ChatScr({onBack}){
   const handleFileUpload=(e)=>{
     const file=e.target.files?.[0];
     if(!file)return;
-    if(file.size>5*1024*1024){alert("Max 5 Mo");return;}
+    if(file.size>5*1024*1024){toast.error("Fichier trop volumineux (max 5 Mo) ⚠️");return;}
     const reader=new FileReader();
     reader.onload=()=>{
       const isImage=file.type.startsWith("image/");

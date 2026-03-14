@@ -2,6 +2,7 @@ import { useState } from "react";
 import { useLoad } from "../../hooks";
 import { social } from "../../services";
 import Loading from "../../components/Loading";
+import toast from "../../utils/toast";
 
 const DETAILS = {
   n1: { full: "Votre commande #LMK-0214 est en cours de livraison.\n\nLivreur : Patrick Moukala\nVéhicule : 🛵 Honda PCX\nEstimation : 15-20 min\n\nArticles :\n• 📱 Galaxy A54 × 1\n• 🥬 Panier Bio × 3\n\nTotal : 231 500 FCFA", action: "tracking", actionLabel: "📍 Suivre la livraison" },
@@ -32,7 +33,7 @@ function NotifScr({ onBack, go }) {
   };
 
   const markAllRead = () => {
-    setNotifs((notifs || raw).map(n => ({ ...n, read: true })));
+    setNotifs((notifs || raw).map(n => ({ ...n, read: true })));toast.success('Toutes les notifications lues ✅');
   };
 
   const handleClick = (n) => {

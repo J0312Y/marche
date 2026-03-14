@@ -1,4 +1,5 @@
 import { useState } from "react";
+import toast from "../../utils/toast";
 
 function VAddShopScr({onBack}){
   const [step,setStep]=useState(0);const [docs,setDocs]=useState({id:false,rccm:false,photo:false});const [done,setDone]=useState(false);
@@ -9,7 +10,7 @@ function VAddShopScr({onBack}){
   const maxStep=steps.length-1;
   const toggleCat=c=>setSelCats(p=>p.includes(c)?p.filter(x=>x!==c):[...p,c]);
   const canNext=step===0?!!shopType:true;
-  const advance=()=>{if(!canNext)return;step<maxStep?setStep(step+1):setDone(true)};
+  const advance=()=>{if(!canNext)return;step<maxStep?setStep(step+1):setDone(true);toast.success("Boutique créée avec succès 🏪")};
 
   const shopTypes=[
     {id:"boutique",icon:"🏪",name:"Boutique",desc:"Mode, électronique, artisanat, accessoires..."},

@@ -1,6 +1,7 @@
 import { useState } from "react";
 import Img from "../../components/Img";
 import { fmt } from "../../utils/helpers";
+import toast from "../../utils/toast";
 
 function VOrderDetailScr({order:o,onBack,go}){
   const [status,setStatus]=useState(o.status);
@@ -36,7 +37,7 @@ function VOrderDetailScr({order:o,onBack,go}){
       <p style={{fontSize:12,color:"#5E5B53",marginBottom:12}}>Le client sera notifié et remboursé automatiquement. Cette action est irréversible.</p>
       <div style={{display:"flex",gap:10}}>
         <button style={{flex:1,padding:12,borderRadius:12,border:"1px solid #E8E6E1",background:"#fff",fontSize:13,fontWeight:600,cursor:"pointer",fontFamily:"inherit"}} onClick={()=>setShowRefuse(false)}>Annuler</button>
-        <button style={{flex:1,padding:12,borderRadius:12,border:"none",background:"#EF4444",color:"#fff",fontSize:13,fontWeight:600,cursor:"pointer",fontFamily:"inherit"}} onClick={()=>setStatus("refused")}>✕ Confirmer le refus</button>
+        <button style={{flex:1,padding:12,borderRadius:12,border:"none",background:"#EF4444",color:"#fff",fontSize:13,fontWeight:600,cursor:"pointer",fontFamily:"inherit"}} onClick={()=>{setStatus("refused");toast.success("Commande refusée ❌")}}>✕ Confirmer le refus</button>
       </div>
     </div>}
 

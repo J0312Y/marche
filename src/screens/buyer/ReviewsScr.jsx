@@ -1,4 +1,5 @@
 import { useState, useRef } from "react";
+import toast from "../../utils/toast";
 import { useLoad } from "../../hooks";
 import { social } from "../../services";
 
@@ -31,7 +32,7 @@ function ReviewsScr({product:p,onBack}){
   const submitReview=()=>{
     if(userRating===0)return;
     setUserReviews(r=>[{name:"Moi",rating:userRating,text:userText,date:"Aujourd'hui",avatar:"😊",photos:userPhotos.map(p=>p.url)},...r]);
-    setWriting(false);setUserRating(0);setUserText("");setUserPhotos([]);setSubmitted(true);
+    setWriting(false);setUserRating(0);setUserText("");setUserPhotos([]);setSubmitted(true);toast.success("Avis publié avec succès ⭐");
     setTimeout(()=>setSubmitted(false),3000);
   };
 

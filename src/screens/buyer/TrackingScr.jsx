@@ -1,3 +1,4 @@
+import toast from "../../utils/toast";
 import { useState, useEffect } from "react";
 import MapView from "../../components/MapView";
 
@@ -39,7 +40,7 @@ function TrackingScr({onBack,go}){
     </MapView>
     <div className="scr" style={{padding:16}}>
       <div className="track-driver"><div className="td-av">🧑</div><div className="td-info"><h4>Patrick Moukala</h4><p>🛵 Honda PCX · BZ-4521</p><div className="td-r">⭐ 4.8 · 342 livraisons</div></div></div>
-      <div className="track-actions"><button className="ta-call" onClick={()=>alert("📞 Appel...")}>📞 Appeler</button><button className="ta-chat" onClick={()=>go("chatDriver")}>💬 Discuter</button></div>
+      <div className="track-actions"><button className="ta-call" onClick={()=>toast.info("📞 Appel en cours...")}>📞 Appeler</button><button className="ta-chat" onClick={()=>go("chatDriver")}>💬 Discuter</button></div>
       <div className="eta-box"><h4>Livraison en cours</h4><div className="eta-bar"><div className="eta-fill" style={{width:"65%"}}/></div><div className="eta-info"><span>Départ: <b>Marché Total</b></span><span>Arrivée: <b>~12 min</b></span></div></div>
       <div className="track-detail"><span className="tdi">📦</span><div className="tdt"><h5>#LMK-2026-0214</h5><p>3 articles · 231 500 FCFA</p></div></div>
       <div className="track-detail"><span className="tdi">📍</span><div className="tdt"><h5>Retrait</h5><p>Marché Total, Brazzaville</p></div></div>

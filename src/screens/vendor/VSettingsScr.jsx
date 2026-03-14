@@ -1,4 +1,5 @@
 import { useState } from "react";
+import toast from "../../utils/toast";
 
 function VSettingsScr({onBack,go}){
   const [pushOrder,setPushOrder]=useState(true);

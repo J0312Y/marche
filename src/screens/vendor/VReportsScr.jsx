@@ -1,4 +1,5 @@
 import { useState } from "react";
+import toast from "../../utils/toast";
 
 function VReportsScr({onBack}){
   const [month,setMonth]=useState("Février");
@@ -16,7 +17,7 @@ function VReportsScr({onBack}){
     {id:"invoice",icon:"🧾",title:"Factures Lamuka",desc:"Commissions et frais de plateforme",format:"PDF"},
     {id:"perf",icon:"📈",title:"Performance boutique",desc:"Taux de conversion, visites, panier moyen",format:"PDF"},
   ];
-  const doExport=(id)=>{setExported(e=>({...e,[id]:"loading"}));setTimeout(()=>setExported(e=>({...e,[id]:"done"})),1500);setTimeout(()=>setExported(e=>{const n={...e};delete n[id];return n}),4000)};
+  const doExport=(id)=>{setExported(e=>({...e,[id]:"loading"}));setTimeout(()=>{setExported(e=>({...e,[id]:"done"}));toast.success("Export prêt ! 📄")},1500);setTimeout(()=>setExported(e=>{const n={...e};delete n[id];return n}),4000)};
   return(<div className="scr" style={{padding:16}}><div className="appbar" style={{padding:0,marginBottom:12}}><button onClick={onBack}>←</button><h2>Rapports & Exports</h2><div style={{width:38}}/></div>
     <div className="vd-period">{["Janvier","Février","Mars"].map(m=><button key={m} className={month===m?"on":""} onClick={()=>setMonth(m)}>{m}</button>)}</div>
     <div style={{padding:16,background:"#fff",border:"1px solid #E8E6E1",borderRadius:16,marginBottom:12}}>

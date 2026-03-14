@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { fmt } from "../../utils/helpers";
+import toast from "../../utils/toast";
 
 function RechargeScr({onBack}){
   const [method,setMethod]=useState(null);const [amount,setAmount]=useState("");const [done,setDone]=useState(false);
@@ -10,7 +11,7 @@ function RechargeScr({onBack}){
       <div style={{display:"flex",gap:8,marginBottom:12}}>{[5000,10000,25000,50000].map(v=><button key={v} style={{flex:1,padding:10,borderRadius:10,border:amount===String(v)?"2px solid #6366F1":"1px solid #E8E6E1",background:amount===String(v)?"rgba(99,102,241,0.04)":"#fff",fontSize:12,fontWeight:600,cursor:"pointer",fontFamily:"inherit"}} onClick={()=>setAmount(String(v))}>{fmt(v)}</button>)}</div>
       <div style={{fontSize:14,fontWeight:700,marginBottom:10}}>Moyen de paiement</div>
       {[["airtel","📱","Airtel Money"],["mtn","📱","MTN MoMo"],["kolo","🟣","Kolo Pay"]].map(([k,i,n])=><div key={k} className="setting-item" style={{cursor:"pointer",border:method===k?"2px solid #6366F1":"1px solid #E8E6E1",marginBottom:6}} onClick={()=>setMethod(k)}><span style={{fontSize:20}}>{i}</span><span className="si-t">{n}</span>{method===k&&<span style={{color:"#6366F1",fontWeight:700}}>✓</span>}</div>)}
-      <div style={{paddingTop:24,paddingBottom:16}}><button className="btn-primary" style={{background:amount&&method?"#6366F1":"#E8E6E1",color:amount&&method?"#fff":"#908C82"}} onClick={()=>amount&&method&&setDone(true)}>Recharger {amount?fmt(parseInt(amount)):""}</button></div>
+      <div style={{paddingTop:24,paddingBottom:16}}><button className="btn-primary" style={{background:amount&&method?"#6366F1":"#E8E6E1",color:amount&&method?"#fff":"#908C82"}} onClick={()=>{if(amount&&method){setDone(true);toast.success("Recharge effectuée 💰")}}}>Recharger {amount?fmt(parseInt(amount)):""}</button></div>
     </div>
   </>);
 }

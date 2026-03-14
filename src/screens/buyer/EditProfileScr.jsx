@@ -1,3 +1,4 @@
+import toast from "../../utils/toast";
 
 
 function EditProfileScr({onBack}){
@@ -8,7 +9,7 @@ function EditProfileScr({onBack}){
     <div className="field"><label>Téléphone</label><input defaultValue="+242 064 663 469"/></div>
     <div className="field-row"><div className="field"><label>Ville</label><input defaultValue="Brazzaville"/></div><div className="field"><label>Pays</label><input defaultValue="Congo 🇨🇬"/></div></div>
     <div className="field"><label>Bio</label><textarea rows={3} defaultValue="Fondateur de Lamuka Tech 🇨🇬"/></div>
-    <button className="btn-primary">Enregistrer</button>
+    <button className="btn-primary" onClick={()=>{toast.success("Profil sauvegardé ✅");setTimeout(onBack,800)}}>Enregistrer</button>
   </div>);
 }
 

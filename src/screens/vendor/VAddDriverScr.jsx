@@ -1,4 +1,5 @@
 import { useState } from "react";
+import toast from "../../utils/toast";
 
 function VAddDriverScr({onBack}){
   const [done,setDone]=useState(false);
@@ -12,7 +13,7 @@ function VAddDriverScr({onBack}){
       <div className="field"><label>Type de véhicule</label><select><option value="moto">🛵 Moto / Scooter</option><option value="voiture">🚗 Voiture</option><option value="velo">🚲 Vélo</option></select></div>
       <div className="field"><label>Zone de livraison</label><select><option>Brazzaville Sud</option><option>Brazzaville Centre</option><option>Brazzaville Nord</option><option>Pointe-Noire</option></select></div>
       <div className="info-box blue" style={{marginTop:10}}><span>📱</span><span>Le livreur recevra un SMS d'invitation avec un lien pour créer son compte Lamuka.</span></div>
-      <div style={{paddingTop:24,paddingBottom:16}}><button className="btn-primary" onClick={()=>setDone(true)}>📤 Envoyer l'invitation</button></div>
+      <div style={{paddingTop:24,paddingBottom:16}}><button className="btn-primary" onClick={()=>{setDone(true);toast.success("Invitation envoyée au livreur 🛵")}}>📤 Envoyer l'invitation</button></div>
     </div>
   </>);
 }

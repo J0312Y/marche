@@ -1,4 +1,5 @@
 import { useState } from "react";
+import toast from "../../utils/toast";
 
 function OrdersScr({go}){
   const [orders,setOrders]=useState([
@@ -10,8 +11,8 @@ function OrdersScr({go}){
   const [cancelConfirm,setCancelConfirm]=useState(null);
 
   const cancelOrder=(ref)=>{
-    setOrders(prev=>prev.map(o=>o.ref===ref?{...o,status:"Annulée",sc:"cancel"}:o));
-    setCancelConfirm(null);
+    setOrders(prev=>prev.map(o=>o.ref===ref?{...o,status:"Annulée",sc:"cancel"}:o));toast.success("Commande annulée. Remboursement sous 24-48h 💸");
+    setCancelConfirm(null);toast.success("Commande annulée — Remboursement sous 24-48h 💸");
   };
 
   return(<div className="scr" style={{padding:16}}>

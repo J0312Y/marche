@@ -1,12 +1,13 @@
 import { useState } from "react";
 import { D_NOTIFS } from "../../data/driverData";
+import toast from "../../utils/toast";
 
 function DrNotifScr({onBack}){
   const [notifs,setNotifs]=useState(D_NOTIFS.map((n,i)=>({...n,id:i})));
   const [expanded,setExpanded]=useState(null);
 
   const markRead=(id)=>setNotifs(prev=>prev.map(n=>n.id===id?{...n,read:true}:n));
-  const markAllRead=()=>setNotifs(prev=>prev.map(n=>({...n,read:true})));
+  const markAllRead=()=>setNotifs(prev=>prev.map(n=>({...n,read:true})));toast.success('Toutes les notifications lues ✅');
   const unreadCount=notifs.filter(n=>!n.read).length;
 
   const details={

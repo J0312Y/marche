@@ -1,4 +1,5 @@
 import { useState } from "react";
+import toast from "../../utils/toast";
 import { useData } from "../../hooks";
 import Img from "../../components/Img";
 import BackButton from "../../components/BackButton";
@@ -31,7 +32,7 @@ function VendorScr({vendor:vProp,go,onBack}){
   const [tab,setTab]=useState("products");
   const [viewImg,setViewImg]=useState(null);
   const vp=P.filter(p=>p.vendor===v.name);
-  const toggleFollow=()=>{setFollowing(f=>!f);setFC(c=>following?c-1:c+1)};
+  const toggleFollow=()=>{setFollowing(f=>!f);setFC(c=>following?c-1:c+1);toast.success(following?"Désabonné":"Abonné ✅")};
 
   const avgRating=MOCK_REVIEWS.reduce((s,r)=>s+r.rating,0)/MOCK_REVIEWS.length;
 

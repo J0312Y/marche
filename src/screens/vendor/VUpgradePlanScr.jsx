@@ -1,4 +1,5 @@
 import { useState } from "react";
+import toast from "../../utils/toast";
 
 function VUpgradePlanScr({onBack,onUpgrade,currentPlan="starter"}){
   const plans=[

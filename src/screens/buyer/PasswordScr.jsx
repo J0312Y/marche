@@ -1,4 +1,5 @@
 import { useState } from "react";
+import toast from "../../utils/toast";
 
 function PasswordScr({onBack}){
   const [done,setDone]=useState(false);
@@ -9,7 +10,7 @@ function PasswordScr({onBack}){
     <div className="field"><label>Mot de passe actuel</label><input type="password" placeholder="••••••••"/></div>
     <div className="field"><label>Nouveau mot de passe</label><input type="password" placeholder="Min. 8 caractères"/></div>
     <div className="field"><label>Confirmer</label><input type="password" placeholder="Répéter le mot de passe"/></div>
-    <button className="btn-primary" style={{marginTop:10}} onClick={()=>setDone(true)}>Modifier le mot de passe</button>
+    <button className="btn-primary" style={{marginTop:10}} onClick={()=>{setDone(true);toast.success("Mot de passe modifié 🔒")}}>Modifier le mot de passe</button>
   </div>);
 }
 

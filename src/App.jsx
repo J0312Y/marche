@@ -95,7 +95,7 @@ function AppInner() {
             </>}
 
           {/* Toast */}
-          {toast && <div style={{ position: "absolute", bottom: 80, left: 20, right: 20, padding: "12px 16px", borderRadius: 12, background: toast.type === 'error' ? '#EF4444' : '#10B981', color: "#fff", fontSize: 13, fontWeight: 600, textAlign: "center", zIndex: 999, boxShadow: "0 4px 12px rgba(0,0,0,.15)", animation: "fadeIn .2s" }}>{toast.message}</div>}
+          {toast && <div style={{ position: "absolute", bottom: 80, left: 16, right: 16, padding: "14px 18px", borderRadius: 16, background: toast.type === 'error' ? '#EF4444' : toast.type === 'info' ? '#6366F1' : '#10B981', color: "#fff", fontSize: 13, fontWeight: 600, textAlign: "center", zIndex: 999, boxShadow: "0 8px 30px rgba(0,0,0,.2)", display: "flex", alignItems: "center", justifyContent: "center", gap: 8, animation: "toast-in .3s ease" }}><span style={{ fontSize: 16 }}>{toast.type === 'error' ? '❌' : toast.type === 'info' ? 'ℹ️' : '✅'}</span>{toast.message}</div>}
 
           {/* Home Indicator */}
           <div style={{ flexShrink: 0, display: "flex", justifyContent: "center", paddingBottom: 4, paddingTop: 2, background: "transparent" }}>

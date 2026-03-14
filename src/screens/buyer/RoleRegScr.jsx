@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { useData } from "../../hooks";
+import toast from "../../utils/toast";
 
 function RoleRegScr({onBack,onDone,forceRole}){
   const { CATS } = useData();
@@ -24,7 +25,7 @@ function RoleRegScr({onBack,onDone,forceRole}){
     <p style={{fontSize:13,color:"#908C82",marginTop:4}}>Vous recevrez : notification, message in-app, et email de confirmation.</p>
     <div style={{fontSize:13,color:"#6366F1",fontWeight:600,margin:"16px 0"}}>#{role==="vendor"?"VND":"DRV"}-2026-{String(Math.floor(Math.random()*9000+1000))}</div>
     {role==="vendor"&&<div style={{padding:10,background:"rgba(99,102,241,0.04)",borderRadius:12,fontSize:12,color:"#6366F1",fontWeight:600,marginBottom:10}}>Plan {plan==="starter"?"Starter (Gratuit)":plan==="pro"?"Pro (15k/mois)":"Enterprise (45k/mois)"}</div>}
-    <button className="btn-primary" style={{maxWidth:300,margin:"0 auto"}} onClick={()=>onDone(role,role==="vendor"?plan:null)}>✅ Compris</button>
+    <button className="btn-primary" style={{maxWidth:300,margin:"0 auto"}} onClick={()=>{toast.success("Inscription réussie ! 🎉");onDone(role,role==="vendor"?plan:null)}}>✅ Compris</button>
   </div></div>);
 
   // Role selection
