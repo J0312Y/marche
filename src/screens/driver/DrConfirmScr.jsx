@@ -24,8 +24,8 @@ function DrConfirmScr({delivery:dl,go,onBack}){
 
   return(<>
     <div className="appbar"><button onClick={onBack}>←</button><h2>Confirmer livraison</h2><div style={{width:38}}/></div>
-    <div className="scr" style={{padding:20}}>
-      <div style={{textAlign:"center",marginBottom:20}}>
+    <div className="scr" style={{padding:16}}>
+      <div style={{textAlign:"center",marginBottom:14}}>
         <div style={{fontSize:48,marginBottom:8}}>📦</div>
         <h3 style={{fontSize:18,fontWeight:700}}>Livraison à {dl.client.name}</h3>
         <p style={{fontSize:13,color:"#908C82"}}>{dl.client.addr}</p>

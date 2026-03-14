@@ -17,8 +17,8 @@ function CartScr({cart,setCart,go,appliedCoupon,setAppliedCoupon}){
 
   const updQty=(i,d)=>{const n=[...cart];n[i].qty=(n[i].qty||1)+d;if(n[i].qty<1)n.splice(i,1);setCart(n)};
 
-  return(<><div className="scr" style={{padding:20}}>
-    <div className="appbar" style={{padding:0,marginBottom:16}}><h2>Panier ({cart.length})</h2></div>
+  return(<><div className="scr" style={{padding:16}}>
+    <div className="appbar" style={{padding:0,marginBottom:12}}><h2>Panier ({cart.length})</h2></div>
     {cart.length===0?<div style={{textAlign:"center",padding:"60px 0"}}><div style={{fontSize:56}}>🛒</div><h3 style={{marginTop:14,fontSize:18,fontWeight:700}}>Votre panier est vide</h3><p style={{fontSize:13,color:"#908C82",marginTop:6}}>Découvrez nos produits</p></div>
     :cart.map((c,i)=>{const p=getItem(c);const vp=getVendorPromo(p,VENDORS);const price=vp?vp.promoPrice:(p.price||0);return(
       <div key={i} className="cart-item">

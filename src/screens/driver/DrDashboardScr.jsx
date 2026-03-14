@@ -46,7 +46,7 @@ function DrDashboardScr({go}){
 
     {/* Quick stats */}
     <div className="sec" style={{marginTop:6}}><h3>Dernières livraisons</h3><span onClick={()=>go("drHistory")}>Voir tout</span></div>
-    <div style={{padding:"0 20px 100px"}}>{D_HISTORY.slice(0,3).map(h=><div key={h.id} style={{display:"flex",alignItems:"center",gap:12,padding:"12px 0",borderBottom:"1px solid #F5F4F1"}}>
+    <div style={{padding:"0 16px 80px"}}>{D_HISTORY.slice(0,3).map(h=><div key={h.id} style={{display:"flex",alignItems:"center",gap:12,padding:"12px 0",borderBottom:"1px solid #F5F4F1"}}>
       <div style={{width:36,height:36,borderRadius:10,background:"rgba(16,185,129,0.1)",display:"flex",alignItems:"center",justifyContent:"center",fontSize:16}}>✅</div>
       <div style={{flex:1}}><div style={{fontSize:13,fontWeight:600}}>{h.vendor} → {h.client}</div><div style={{fontSize:11,color:"#908C82"}}>{h.date} · {h.duration} · {h.distance}</div></div>
       <div style={{textAlign:"right"}}><div style={{fontSize:13,fontWeight:700,color:"#10B981"}}>+{fmt(h.fee+h.tip)}</div><div style={{fontSize:11,color:"#F59E0B"}}>{"★".repeat(h.rating)}</div></div>

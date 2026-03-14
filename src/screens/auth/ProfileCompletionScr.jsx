@@ -4,11 +4,11 @@ function ProfileCompletionScr({onDone,provider}){
   const [step,setStep]=useState(0);
   return(
     <div className="auth" style={{justifyContent:"flex-start",paddingTop:40}}>
-      {provider&&<div style={{textAlign:"center",marginBottom:16}}>
+      {provider&&<div style={{textAlign:"center",marginBottom:12}}>
         <div style={{display:"inline-flex",padding:"6px 16px",borderRadius:10,background:"rgba(16,185,129,0.06)",border:"1px solid rgba(16,185,129,0.15)",fontSize:12,color:"#10B981",fontWeight:600}}>✅ Connecté via {provider==="google"?"Google":provider==="apple"?"Apple":"Facebook"}</div>
       </div>}
       <h2>Complétez votre profil</h2>
-      <div className="sub" style={{marginBottom:20}}>Pour vous offrir la meilleure expérience</div>
+      <div className="sub" style={{marginBottom:14}}>Pour vous offrir la meilleure expérience</div>
 
       {step===0&&<>
         <div className="field"><label>Prénom</label><input placeholder="Joeldy"/></div>

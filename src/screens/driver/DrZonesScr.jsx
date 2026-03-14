@@ -27,7 +27,7 @@ function DrZonesScr({onBack}){
   const doSave=()=>{setSaved(true);setTimeout(()=>setSaved(false),2500)};
 
   return(<div className="scr"><div className="appbar"><button onClick={onBack}>←</button><h2>Mes zones de livraison</h2><div style={{width:38}}/></div>
-    <div style={{padding:"0 20px 80px"}}>
+    <div style={{padding:"0 16px 80px"}}>
       <div className="info-box blue" style={{marginBottom:14}}><span>📍</span><span style={{fontSize:11}}>Activez/désactivez les zones où vous acceptez des livraisons. Ajoutez de nouvelles zones selon votre couverture.</span></div>
 
       <div style={{fontSize:12,color:"#908C82",marginBottom:8}}>{zones.filter(z=>z.active).length} zone{zones.filter(z=>z.active).length>1?"s":""} active{zones.filter(z=>z.active).length>1?"s":""} sur {zones.length}</div>

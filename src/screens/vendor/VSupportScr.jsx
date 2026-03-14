@@ -143,7 +143,7 @@ function VSupportScr({go,onBack,vendorPlan}){
       </div>
 
       {/* Tab 0: Guides */}
-      {tab===0&&<div style={{padding:"0 20px 80px"}}>
+      {tab===0&&<div style={{padding:"0 16px 80px"}}>
         {guides.map(g=><div key={g.id}>
           <div style={{padding:14,background:"#fff",border:guideOpen===g.id?"2px solid #6366F1":"1px solid #E8E6E1",borderRadius:14,marginBottom:10,cursor:"pointer"}} onClick={()=>setGuideOpen(guideOpen===g.id?null:g.id)}>
             <div style={{display:"flex",alignItems:"center",gap:10}}>
@@ -173,8 +173,8 @@ function VSupportScr({go,onBack,vendorPlan}){
       </div>}
 
       {/* Tab 1: FAQ */}
-      {tab===1&&<div style={{padding:"0 20px 80px"}}>
-        {faqCats.map((cat,ci)=><div key={cat.cat} style={{marginBottom:16}}>
+      {tab===1&&<div style={{padding:"0 16px 80px"}}>
+        {faqCats.map((cat,ci)=><div key={cat.cat} style={{marginBottom:12}}>
           <div style={{display:"flex",alignItems:"center",gap:6,marginBottom:8}}><span style={{fontSize:16}}>{cat.icon}</span><h4 style={{fontSize:14,fontWeight:700}}>{cat.cat}</h4><span style={{fontSize:11,color:"#908C82"}}>({cat.items.length})</span></div>
           {cat.items.map((f,fi)=>{const k=`${ci}-${fi}`;return(<div key={k} style={{padding:12,background:"#fff",border:open===k?"1px solid #6366F1":"1px solid #E8E6E1",borderRadius:12,marginBottom:6,cursor:"pointer"}} onClick={()=>setOpen(open===k?null:k)}>
             <div style={{display:"flex",alignItems:"center",justifyContent:"space-between"}}>
@@ -187,7 +187,7 @@ function VSupportScr({go,onBack,vendorPlan}){
       </div>}
 
       {/* Tab 2: Contact */}
-      {tab===2&&<div style={{padding:"0 20px 80px"}}>
+      {tab===2&&<div style={{padding:"0 16px 80px"}}>
         {isEnt&&<div style={{padding:16,background:"linear-gradient(135deg,#6366F1,#A855F7)",borderRadius:16,marginBottom:14,color:"#fff"}}>
           <h4 style={{fontSize:15,fontWeight:700,marginBottom:6}}>👤 Votre manager dédié</h4>
           <div style={{fontSize:13,marginBottom:4}}>Sophie Mabika</div>
@@ -221,7 +221,7 @@ function VSupportScr({go,onBack,vendorPlan}){
               <div className="field"><label>Catégorie</label><select><option>Problème technique</option><option>Paiement / Facturation</option><option>Commande spécifique</option><option>Livreur / Livraison</option><option>Suggestion / Feedback</option>{isEnt&&<option>API / Intégration</option>}{isEnt&&<option>Multi-boutiques</option>}</select></div>
               <div className="field"><label>Sujet</label><input placeholder="Décrivez brièvement le problème"/></div>
               <div className="field"><label>Message</label><textarea rows={3} value={ticketMsg} onChange={e=>setTicketMsg(e.target.value)} placeholder="Donnez-nous tous les détails pour vous aider au mieux..."/></div>
-              <div className="field"><label>Pièce jointe (optionnel)</label><div style={{padding:20,border:"1px dashed #E8E6E1",borderRadius:12,textAlign:"center",color:"#908C82",fontSize:12,cursor:"pointer"}}>📎 Cliquez pour joindre un fichier (capture d'écran, document...)</div></div>
+              <div className="field"><label>Pièce jointe (optionnel)</label><div style={{padding:16,border:"1px dashed #E8E6E1",borderRadius:12,textAlign:"center",color:"#908C82",fontSize:12,cursor:"pointer"}}>📎 Cliquez pour joindre un fichier (capture d'écran, document...)</div></div>
               <button className="btn-primary" style={{background:ticketMsg?"#6366F1":"#E8E6E1",color:ticketMsg?"#fff":"#908C82"}} onClick={()=>{if(ticketMsg)setContactDone(true)}}>📤 Envoyer le ticket{isEnt?" (prioritaire)":""}</button>
             </>
           }

@@ -29,14 +29,14 @@ function RoleRegScr({onBack,onDone,forceRole}){
 
   // Role selection
   if(step===-1)return(<div style={{display:"flex",flexDirection:"column",height:"100%"}}><div className="appbar"><button onClick={onBack}>←</button><h2>Rejoindre Lamuka</h2><div style={{width:38}}/></div>
-    <div className="scr" style={{padding:20}}>
-      <p style={{fontSize:14,color:"#5E5B53",marginBottom:20,lineHeight:1.6}}>Choisissez le rôle que vous souhaitez ajouter à votre compte :</p>
-      <div onClick={()=>{setRole("vendor");setStep(0);setDocs({id:false,rccm:false,photo:false})}} style={{padding:20,background:"#fff",border:"2px solid #E8E6E1",borderRadius:20,marginBottom:14,cursor:"pointer",transition:"all .2s"}}>
+    <div className="scr" style={{padding:16}}>
+      <p style={{fontSize:14,color:"#5E5B53",marginBottom:14,lineHeight:1.6}}>Choisissez le rôle que vous souhaitez ajouter à votre compte :</p>
+      <div onClick={()=>{setRole("vendor");setStep(0);setDocs({id:false,rccm:false,photo:false})}} style={{padding:16,background:"#fff",border:"2px solid #E8E6E1",borderRadius:20,marginBottom:14,cursor:"pointer",transition:"all .2s"}}>
         <div style={{display:"flex",alignItems:"center",gap:14,marginBottom:10}}><div style={{width:56,height:56,borderRadius:16,background:"linear-gradient(135deg,#6366F1,#A855F7)",display:"flex",alignItems:"center",justifyContent:"center",fontSize:28}}>🏪</div><div><h3 style={{fontSize:18,fontWeight:700}}>Commerçant</h3><p style={{fontSize:12,color:"#908C82"}}>Ouvrez votre commerce sur Lamuka</p></div></div>
         <div style={{fontSize:12,color:"#5E5B53",lineHeight:1.6}}>Restaurant, boutique, pâtisserie, supermarché, pharmacie ou service — vendez et recevez des commandes.</div>
         <div style={{display:"flex",gap:6,marginTop:10,flexWrap:"wrap"}}>{["🍽️ Resto","🏪 Boutique","🧁 Pâtisserie","🛒 Supermarché","💊 Pharma","🔧 Service"].map(f=><span key={f} style={{padding:"4px 10px",borderRadius:8,background:"rgba(99,102,241,0.06)",color:"#6366F1",fontSize:10,fontWeight:600}}>{f}</span>)}</div>
       </div>
-      <div onClick={()=>{setRole("driver");setStep(0);setDocs({id:false,permit:false,vehicle:false})}} style={{padding:20,background:"#fff",border:"2px solid #E8E6E1",borderRadius:20,cursor:"pointer",transition:"all .2s"}}>
+      <div onClick={()=>{setRole("driver");setStep(0);setDocs({id:false,permit:false,vehicle:false})}} style={{padding:16,background:"#fff",border:"2px solid #E8E6E1",borderRadius:20,cursor:"pointer",transition:"all .2s"}}>
         <div style={{display:"flex",alignItems:"center",gap:14,marginBottom:10}}><div style={{width:56,height:56,borderRadius:16,background:"linear-gradient(135deg,#10B981,#059669)",display:"flex",alignItems:"center",justifyContent:"center",fontSize:28}}>🛵</div><div><h3 style={{fontSize:18,fontWeight:700}}>Livreur</h3><p style={{fontSize:12,color:"#908C82"}}>Livrez et gagnez de l'argent</p></div></div>
         <div style={{fontSize:12,color:"#5E5B53",lineHeight:1.6}}>Effectuez des livraisons dans votre zone. Choisissez vos horaires, suivez vos gains en temps réel.</div>
         <div style={{display:"flex",gap:6,marginTop:10,flexWrap:"wrap"}}>{["Horaires flexibles","Gains en temps réel","GPS intégré","Pourboires"].map(f=><span key={f} style={{padding:"4px 10px",borderRadius:8,background:"rgba(16,185,129,0.06)",color:"#10B981",fontSize:10,fontWeight:600}}>{f}</span>)}</div>
@@ -50,7 +50,7 @@ function RoleRegScr({onBack,onDone,forceRole}){
   return(<>
     <div className="appbar"><button onClick={()=>step>0?setStep(step-1):forceRole?onBack():setStep(-1)}>←</button><h2>{role==="vendor"?"Devenir Commerçant":"Devenir Livreur"}</h2><div style={{width:38}}/></div>
     <div className="vr-steps">{steps.map((s,i)=><div key={s} style={{display:"contents"}}>{i>0&&<div className={`vr-line ${step>=i?"on":""}`} style={step>=i?{background:color}:{}}/>}<div className="step-col"><div className={`vr-dot ${step>i?"done":step>=i?"on":""}`} style={step>=i?{background:color,color:"#fff"}:{}}>{step>i?"✓":i+1}</div><div className={`vr-lbl ${step>=i?"on":""}`}>{s}</div></div></div>)}</div>
-    <div className="scr" style={{padding:20}}>
+    <div className="scr" style={{padding:16}}>
 
       {/* STEP 0: Infos personnelles (both) */}
       {step===0&&<><h3 style={{fontSize:16,fontWeight:700,marginBottom:14}}>Informations personnelles</h3>

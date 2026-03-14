@@ -9,10 +9,10 @@ function VApiScr({go,onBack}){
   const apiKey="lmk_live_ent_7f3a9b2c1d4e5f6g8h9i0j";
   const [regen,setRegen]=useState(false);
 
-  return(<div className="scr" style={{padding:20}}>
-    <div className="appbar" style={{padding:0,marginBottom:16}}><button onClick={onBack}>←</button><h2>API & Intégrations</h2><div style={{width:38}}/></div>
+  return(<div className="scr" style={{padding:16}}>
+    <div className="appbar" style={{padding:0,marginBottom:12}}><button onClick={onBack}>←</button><h2>API & Intégrations</h2><div style={{width:38}}/></div>
 
-    <div style={{padding:16,background:"linear-gradient(135deg,#6366F1,#A855F7)",borderRadius:16,marginBottom:16,color:"#fff"}}>
+    <div style={{padding:16,background:"linear-gradient(135deg,#6366F1,#A855F7)",borderRadius:16,marginBottom:12,color:"#fff"}}>
       <div style={{fontSize:11,opacity:.7}}>Plan Enterprise</div>
       <div style={{fontSize:18,fontWeight:700,margin:"4px 0"}}>API Lamuka v2.0</div>
       <div style={{display:"flex",gap:12,marginTop:6}}>
@@ -32,7 +32,7 @@ function VApiScr({go,onBack}){
         <button style={{flex:1,padding:8,borderRadius:8,border:"none",background:"#6366F1",color:"#fff",fontSize:11,fontWeight:600,cursor:"pointer",fontFamily:"inherit"}} onClick={()=>{setCopied(true);setTimeout(()=>setCopied(false),2000)}}>{copied?"✅ Copié !":"📋 Copier"}</button>
       </div>
     </div>
-    <button style={{width:"100%",padding:8,borderRadius:8,border:"1px solid rgba(239,68,68,0.2)",background:"#fff",color:"#EF4444",fontSize:11,fontWeight:600,cursor:"pointer",fontFamily:"inherit",marginBottom:16}} onClick={()=>{setRegen(true);setTimeout(()=>setRegen(false),2500)}}>{regen?"✅ Nouvelle clé générée":"🔄 Régénérer la clé"}</button>
+    <button style={{width:"100%",padding:8,borderRadius:8,border:"1px solid rgba(239,68,68,0.2)",background:"#fff",color:"#EF4444",fontSize:11,fontWeight:600,cursor:"pointer",fontFamily:"inherit",marginBottom:12}} onClick={()=>{setRegen(true);setTimeout(()=>setRegen(false),2500)}}>{regen?"✅ Nouvelle clé générée":"🔄 Régénérer la clé"}</button>
 
     {/* Webhooks */}
     <div style={{fontSize:14,fontWeight:700,marginBottom:10}}>Webhooks</div>

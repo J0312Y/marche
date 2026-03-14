@@ -59,7 +59,7 @@ function VDeliveryScr({go,onBack}){
     </div>
 
     {/* Tab 0: Livreurs - split platform/manual */}
-    {tab===0&&<div style={{padding:"0 20px 80px"}}>
+    {tab===0&&<div style={{padding:"0 16px 80px"}}>
 
       {/* Section 1: Platform drivers (auto-listed) */}
       <div style={{display:"flex",justifyContent:"space-between",alignItems:"center",marginBottom:10}}>
@@ -115,7 +115,7 @@ function VDeliveryScr({go,onBack}){
     </div>}
 
     {/* Tab 1: En cours */}
-    {tab===1&&<div style={{padding:"0 20px 80px"}}>
+    {tab===1&&<div style={{padding:"0 16px 80px"}}>
       {activeDeliveries.length===0?<div style={{textAlign:"center",padding:"40px 0"}}><div style={{fontSize:48}}>📭</div><h3 style={{marginTop:10,fontSize:16,fontWeight:700}}>Aucune livraison en cours</h3><p style={{fontSize:13,color:"#908C82",marginTop:4}}>Les livraisons actives apparaîtront ici</p></div>
       :activeDeliveries.map((d,i)=><div key={i} style={{padding:16,background:"#fff",border:"1px solid #E8E6E1",borderRadius:18,marginBottom:12}}>
         <div style={{display:"flex",justifyContent:"space-between",alignItems:"center",marginBottom:8}}><span style={{fontSize:14,fontWeight:700}}>{d.ref}</span><span className="vo-status shipped">{d.status}</span></div>
@@ -134,7 +134,7 @@ function VDeliveryScr({go,onBack}){
     </div>}
 
     {/* Tab 2: Historique */}
-    {tab===2&&<div style={{padding:"0 20px 80px"}}>
+    {tab===2&&<div style={{padding:"0 16px 80px"}}>
       <div style={{fontSize:14,fontWeight:700,marginBottom:12}}>{pastDeliveries.length} livraisons terminées</div>
       {pastDeliveries.map((d,i)=><div key={i} style={{padding:14,background:"#fff",border:"1px solid #E8E6E1",borderRadius:14,marginBottom:8,display:"flex",alignItems:"center",gap:12}}>
         <div style={{width:40,height:40,borderRadius:12,background:"rgba(16,185,129,0.1)",display:"flex",alignItems:"center",justifyContent:"center",fontSize:18,flexShrink:0}}>✅</div>
@@ -144,7 +144,7 @@ function VDeliveryScr({go,onBack}){
     </div>}
 
     {/* Tab 3: Zones */}
-    {tab===3&&<div style={{padding:"0 20px 80px"}}>
+    {tab===3&&<div style={{padding:"0 16px 80px"}}>
       <div className="info-box blue" style={{marginBottom:14}}><span>ℹ️</span><span style={{fontSize:11}}>Définissez vos zones de livraison et tarifs. Les livreurs disponibles dans ces zones seront proposés pour vos commandes.</span></div>
       <div style={{fontSize:12,color:"#908C82",marginBottom:10}}>{zones.filter(z=>z.active).length} zone{zones.filter(z=>z.active).length>1?"s":""} active{zones.filter(z=>z.active).length>1?"s":""} sur {zones.length}</div>
 

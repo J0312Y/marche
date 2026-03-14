@@ -46,18 +46,18 @@ function ReviewsScr({product:p,onBack}){
     return allRatings.length>0?Math.round((count/allRatings.length)*100):(star===5?60:star===4?25:star===3?10:star===2?3:2);
   });
 
-  return(<div className="scr" style={{padding:20}}><div className="appbar" style={{padding:0,marginBottom:16}}><button onClick={onBack}>←</button><h2>Avis ({p.reviews+userReviews.length})</h2><div style={{width:38}}/></div>
-    <div style={{textAlign:"center",marginBottom:20}}>
+  return(<div className="scr" style={{padding:16}}><div className="appbar" style={{padding:0,marginBottom:12}}><button onClick={onBack}>←</button><h2>Avis ({p.reviews+userReviews.length})</h2><div style={{width:38}}/></div>
+    <div style={{textAlign:"center",marginBottom:14}}>
       <div style={{fontSize:40,fontWeight:700,color:"#191815"}}>{avg}</div>
       <div style={{fontSize:16,color:"#F59E0B",marginBottom:4}}>{"★".repeat(Math.floor(avg))}{"☆".repeat(5-Math.floor(avg))}</div>
       <div style={{fontSize:12,color:"#908C82"}}>{p.reviews+userReviews.length} avis vérifiés</div>
     </div>
-    <div style={{marginBottom:20}}>{dist.map((d,i)=><div key={i} style={{display:"flex",alignItems:"center",gap:8,marginBottom:4}}><span style={{fontSize:12,width:12}}>{5-i}</span><span style={{fontSize:12}}>⭐</span><div style={{flex:1,height:6,background:"#E8E6E1",borderRadius:3,overflow:"hidden"}}><div style={{width:`${d}%`,height:"100%",background:d>0?"#F59E0B":"#E8E6E1",borderRadius:3,transition:"width .3s"}}/></div><span style={{fontSize:11,color:"#908C82",width:30,textAlign:"right"}}>{d}%</span></div>)}</div>
+    <div style={{marginBottom:14}}>{dist.map((d,i)=><div key={i} style={{display:"flex",alignItems:"center",gap:8,marginBottom:4}}><span style={{fontSize:12,width:12}}>{5-i}</span><span style={{fontSize:12}}>⭐</span><div style={{flex:1,height:6,background:"#E8E6E1",borderRadius:3,overflow:"hidden"}}><div style={{width:`${d}%`,height:"100%",background:d>0?"#F59E0B":"#E8E6E1",borderRadius:3,transition:"width .3s"}}/></div><span style={{fontSize:11,color:"#908C82",width:30,textAlign:"right"}}>{d}%</span></div>)}</div>
 
     {/* Write review button / form */}
-    {!writing?<button onClick={()=>setWriting(true)} style={{width:"100%",padding:"14px 0",borderRadius:14,border:"2px solid #6366F1",background:"rgba(99,102,241,0.04)",cursor:"pointer",fontSize:14,fontWeight:700,color:"#6366F1",fontFamily:"inherit",marginBottom:20,display:"flex",alignItems:"center",justifyContent:"center",gap:8}}>✏️ Écrire un avis</button>
+    {!writing?<button onClick={()=>setWriting(true)} style={{width:"100%",padding:"14px 0",borderRadius:14,border:"2px solid #6366F1",background:"rgba(99,102,241,0.04)",cursor:"pointer",fontSize:14,fontWeight:700,color:"#6366F1",fontFamily:"inherit",marginBottom:14,display:"flex",alignItems:"center",justifyContent:"center",gap:8}}>✏️ Écrire un avis</button>
 
-    :<div style={{padding:16,background:"#fff",borderRadius:18,border:"1px solid #E8E6E1",marginBottom:20,boxShadow:"0 2px 10px rgba(0,0,0,.04)"}}>
+    :<div style={{padding:16,background:"#fff",borderRadius:18,border:"1px solid #E8E6E1",marginBottom:14,boxShadow:"0 2px 10px rgba(0,0,0,.04)"}}>
       <div style={{display:"flex",justifyContent:"space-between",alignItems:"center",marginBottom:14}}>
         <h4 style={{fontSize:15,fontWeight:700}}>Votre avis</h4>
         <span style={{fontSize:12,color:"#908C82",cursor:"pointer"}} onClick={()=>{setWriting(false);setUserRating(0);setUserText("");setUserPhotos([])}}>✕ Annuler</span>

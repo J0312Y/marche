@@ -19,7 +19,7 @@ const fmtChart=(v)=>{
 function VStatsScr({onBack}){
   const [period,setPeriod]=useState("week");
   const { data: V_STATS, loading } = useLoad(() => vendor.getReports(period), [period]);
-  if(loading||!V_STATS) return <div className="scr" style={{padding:20}}><div className="appbar" style={{padding:0,marginBottom:16}}><button onClick={onBack}>←</button><h2>Statistiques</h2><div style={{width:38}}/></div><Loading/></div>;
+  if(loading||!V_STATS) return <div className="scr" style={{padding:16}}><div className="appbar" style={{padding:0,marginBottom:12}}><button onClick={onBack}>←</button><h2>Statistiques</h2><div style={{width:38}}/></div><Loading/></div>;
 
   const s=V_STATS[period]||V_STATS.week||V_STATS;
   const chart=period==="month"?(V_STATS.chartMonth||V_STATS.chartWeek||[]):(V_STATS.chartWeek||[]);
@@ -28,8 +28,8 @@ function VStatsScr({onBack}){
   const tp=V_STATS.topProducts||[];
   const chartTotal=chart.reduce((a,b)=>a+b,0);
 
-  return(<div className="scr" style={{padding:20,paddingBottom:80}}>
-    <div className="appbar" style={{padding:0,marginBottom:16}}><button onClick={onBack}>←</button><h2>📈 Statistiques</h2><div style={{width:38}}/></div>
+  return(<div className="scr" style={{padding:16,paddingBottom:80}}>
+    <div className="appbar" style={{padding:0,marginBottom:12}}><button onClick={onBack}>←</button><h2>📈 Statistiques</h2><div style={{width:38}}/></div>
 
     <div className="vo-filter" style={{padding:0,marginBottom:14}}>{[["today","Aujourd'hui"],["week","Semaine"],["month","Mois"]].map(([k,l])=><button key={k} className={period===k?"on":""} onClick={()=>setPeriod(k)}>{l}</button>)}</div>
 

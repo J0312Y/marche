@@ -9,7 +9,7 @@ function HelpScr({onBack}){
       <div className="faq-q">{f.q}<span className={open===i?"open":""}>+</span></div>
       {open===i&&<div className="faq-a">{f.a}</div>}
     </div>)}
-    <div style={{padding:20}}><div className="info-box blue"><span>💬</span><span>Besoin d'aide ? Contactez-nous sur WhatsApp au +242 064 663 469</span></div></div>
+    <div style={{padding:16}}><div className="info-box blue"><span>💬</span><span>Besoin d'aide ? Contactez-nous sur WhatsApp au +242 064 663 469</span></div></div>
   </div>);
 }
 

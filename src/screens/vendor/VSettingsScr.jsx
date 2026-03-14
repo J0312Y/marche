@@ -10,7 +10,7 @@ function VSettingsScr({onBack,go}){
   const [lang,setLang]=useState("fr");
   return(<div className="scr" style={{paddingBottom:80}}><div className="appbar"><button onClick={onBack}>←</button><h2>Paramètres boutique</h2><div style={{width:38}}/></div>
     <div className="vs-header"><div className="vs-logo">👔</div><h3 style={{fontSize:18,fontWeight:700}}>Mon Commerce</h3><p style={{fontSize:12,color:"#908C82"}}>Mode & Accessoires africains</p><div className="edit-logo">📸 Changer le logo</div></div>
-    <div style={{padding:"0 20px"}}>
+    <div style={{padding:"0 16px"}}>
       <div className="field"><label>Nom de l'établissement</label><input defaultValue="Mon Commerce"/></div>
       <div className="field"><label>Description</label><textarea rows={3} defaultValue="Vêtements et accessoires africains modernes. Wax, Bogolan, Cuir artisanal."/></div>
       <div className="field-row"><div className="field"><label>Téléphone</label><input defaultValue="+242 064 663 469"/></div><div className="field"><label>Email</label><input defaultValue="joeldytsina94@gmail.com"/></div></div>

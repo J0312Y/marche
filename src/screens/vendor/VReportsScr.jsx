@@ -17,9 +17,9 @@ function VReportsScr({onBack}){
     {id:"perf",icon:"📈",title:"Performance boutique",desc:"Taux de conversion, visites, panier moyen",format:"PDF"},
   ];
   const doExport=(id)=>{setExported(e=>({...e,[id]:"loading"}));setTimeout(()=>setExported(e=>({...e,[id]:"done"})),1500);setTimeout(()=>setExported(e=>{const n={...e};delete n[id];return n}),4000)};
-  return(<div className="scr" style={{padding:20}}><div className="appbar" style={{padding:0,marginBottom:16}}><button onClick={onBack}>←</button><h2>Rapports & Exports</h2><div style={{width:38}}/></div>
+  return(<div className="scr" style={{padding:16}}><div className="appbar" style={{padding:0,marginBottom:12}}><button onClick={onBack}>←</button><h2>Rapports & Exports</h2><div style={{width:38}}/></div>
     <div className="vd-period">{["Janvier","Février","Mars"].map(m=><button key={m} className={month===m?"on":""} onClick={()=>setMonth(m)}>{m}</button>)}</div>
-    <div style={{padding:16,background:"#fff",border:"1px solid #E8E6E1",borderRadius:16,marginBottom:16}}>
+    <div style={{padding:16,background:"#fff",border:"1px solid #E8E6E1",borderRadius:16,marginBottom:12}}>
       <div style={{fontSize:14,fontWeight:700,marginBottom:10}}>📋 Résumé {month}</div>
       {[["Revenus bruts",d.brut+" FCFA"],["Commissions (4%)",d.comm+" FCFA"],["Revenus nets",d.net+" FCFA"],["Nombre de commandes",d.orders],["Panier moyen",d.avg+" FCFA"]].map(([l,v],i)=><div key={l} style={{display:"flex",justifyContent:"space-between",padding:"8px 0",borderBottom:i<4?"1px solid #F5F4F1":"none",fontSize:13,...(i===2?{fontWeight:700,color:"#10B981"}:{})}}><span style={{color:i===2?"#10B981":"#908C82"}}>{l}</span><b>{v}</b></div>)}
     </div>

@@ -160,7 +160,7 @@ function VProductFormScr({product:p,onBack,shopType="boutique"}){
   // ═══ SUCCESS SCREEN ═══
   if(success) return(
     <div className="scr" style={{display:"flex",flexDirection:"column",alignItems:"center",justifyContent:"center",padding:40,textAlign:"center"}}>
-      <div style={{width:80,height:80,borderRadius:40,background:"rgba(16,185,129,0.1)",display:"flex",alignItems:"center",justifyContent:"center",marginBottom:20,animation:"fadeIn .3s ease"}}>
+      <div style={{width:80,height:80,borderRadius:40,background:"rgba(16,185,129,0.1)",display:"flex",alignItems:"center",justifyContent:"center",marginBottom:14,animation:"fadeIn .3s ease"}}>
         <span style={{fontSize:40}}>✅</span>
       </div>
       <h2 style={{fontSize:20,fontWeight:700,marginBottom:8}}>{isEdit?"Article modifié !":"Article ajouté !"}</h2>
@@ -174,8 +174,8 @@ function VProductFormScr({product:p,onBack,shopType="boutique"}){
     </div>
   );
 
-  return(<div className="scr" style={{padding:20}}>
-    <div className="appbar" style={{padding:0,marginBottom:16}}><button onClick={onBack}>←</button><h2>{isEdit?"Modifier":"Ajouter"} un article</h2><div style={{width:38}}/></div>
+  return(<div className="scr" style={{padding:16}}>
+    <div className="appbar" style={{padding:0,marginBottom:12}}><button onClick={onBack}>←</button><h2>{isEdit?"Modifier":"Ajouter"} un article</h2><div style={{width:38}}/></div>
 
     {/* ═══ PHOTOS ═══ */}
     <div style={{display:"flex",alignItems:"center",justifyContent:"space-between",marginBottom:10}}>
@@ -202,7 +202,7 @@ function VProductFormScr({product:p,onBack,shopType="boutique"}){
     <input ref={fileRef} type="file" accept="image/*" onChange={handleFile} style={{display:"none"}}/>
 
     {/* Photo editor */}
-    {editPhoto&&<div style={{marginBottom:16,padding:14,background:"#FAFAF8",borderRadius:16,border:"1px solid #E8E6E1"}}>
+    {editPhoto&&<div style={{marginBottom:12,padding:14,background:"#FAFAF8",borderRadius:16,border:"1px solid #E8E6E1"}}>
       <div style={{position:"relative",borderRadius:12,overflow:"hidden",marginBottom:12,aspectRatio:"1/1",background:"#fff"}}>
         <img src={editPhoto.url} style={{width:"100%",height:"100%",objectFit:"cover"}} alt=""/>
         {editPhoto.enhanced&&<div style={{position:"absolute",top:8,left:8,padding:"3px 8px",borderRadius:6,background:"rgba(16,185,129,0.9)",color:"#fff",fontSize:10,fontWeight:600}}>✨ Améliorée</div>}
@@ -250,7 +250,7 @@ function VProductFormScr({product:p,onBack,shopType="boutique"}){
         <div><div style={{fontSize:13,fontWeight:700,color:"#6366F1"}}>Ajoutez de belles photos</div><div style={{fontSize:11,color:"#5E5B53",marginTop:2}}>Consultez notre guide →</div></div>
       </div>
     </div>}
-    {photos.length===0&&<div onClick={()=>fileRef.current?.click()} style={{padding:24,borderRadius:16,border:errors.photos?"2px dashed #EF4444":"2px dashed rgba(99,102,241,0.3)",background:errors.photos?"rgba(239,68,68,0.02)":"rgba(99,102,241,0.02)",textAlign:"center",cursor:"pointer",marginBottom:16}}>
+    {photos.length===0&&<div onClick={()=>fileRef.current?.click()} style={{padding:24,borderRadius:16,border:errors.photos?"2px dashed #EF4444":"2px dashed rgba(99,102,241,0.3)",background:errors.photos?"rgba(239,68,68,0.02)":"rgba(99,102,241,0.02)",textAlign:"center",cursor:"pointer",marginBottom:12}}>
       <div style={{fontSize:36,marginBottom:6}}>📷</div>
       <div style={{fontSize:14,fontWeight:600,color:errors.photos?"#EF4444":"#6366F1"}}>Prendre ou choisir une photo</div>
       <div style={{fontSize:11,color:"#908C82",marginTop:4}}>JPEG, PNG · Min 500×500px · Max 10 MB</div>

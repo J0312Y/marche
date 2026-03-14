@@ -163,7 +163,7 @@ function OnboardingScr({onDone}){
           background:"rgba(255,255,255,.15)",backdropFilter:"blur(12px)",
           border:"1px solid rgba(255,255,255,.2)",
           display:"flex",alignItems:"center",justifyContent:"center",
-          fontSize:28,marginBottom:16,
+          fontSize:28,marginBottom:12,
           boxShadow:"0 8px 32px rgba(0,0,0,.2)",
         }}>
           {slide.icon}
@@ -180,7 +180,7 @@ function OnboardingScr({onDone}){
         </p>
 
         {/* Dots */}
-        <div style={{display:"flex",gap:8,marginBottom:20}}>
+        <div style={{display:"flex",gap:8,marginBottom:14}}>
           {SLIDES.map((_,i)=>(
             <div key={i} onClick={()=>goToSlide(i)} style={{
               width:i===s?24:8,height:8,borderRadius:4,

@@ -40,7 +40,7 @@ function VAddShopScr({onBack}){
   return(<>
     <div className="appbar"><button onClick={()=>step>0?setStep(step-1):onBack()}>←</button><h2>Nouvelle boutique</h2><div style={{width:38}}/></div>
     <div className="vr-steps">{steps.map((s,i)=><div key={s} style={{display:"contents"}}>{i>0&&<div className={`vr-line ${step>=i?"on":""}`}/>}<div className="step-col"><div className={`vr-dot ${step>i?"done":step>=i?"on":""}`}>{step>i?"✓":i+1}</div><div className={`vr-lbl ${step>=i?"on":""}`}>{s}</div></div></div>)}</div>
-    <div className="scr" style={{padding:20}}>
+    <div className="scr" style={{padding:16}}>
 
       {/* Step 0: Shop type */}
       {step===0&&<>

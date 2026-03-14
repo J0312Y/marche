@@ -1,8 +1,8 @@
 
 
 function DrVehicleScr({onBack}){
-  return(<div className="scr" style={{padding:20}}><div className="appbar" style={{padding:0,marginBottom:16}}><button onClick={onBack}>←</button><h2>Mon véhicule</h2><div style={{width:38}}/></div>
-    <div style={{textAlign:"center",marginBottom:20}}><div style={{fontSize:64,marginBottom:8}}>🛵</div><h3 style={{fontSize:20,fontWeight:700}}>Honda PCX</h3><p style={{fontSize:13,color:"#908C82"}}>Plaque : BZ-4521</p></div>
+  return(<div className="scr" style={{padding:16}}><div className="appbar" style={{padding:0,marginBottom:12}}><button onClick={onBack}>←</button><h2>Mon véhicule</h2><div style={{width:38}}/></div>
+    <div style={{textAlign:"center",marginBottom:14}}><div style={{fontSize:64,marginBottom:8}}>🛵</div><h3 style={{fontSize:20,fontWeight:700}}>Honda PCX</h3><p style={{fontSize:13,color:"#908C82"}}>Plaque : BZ-4521</p></div>
     <div className="field"><label>Type de véhicule</label><select defaultValue="moto"><option value="moto">🛵 Moto / Scooter</option><option value="voiture">🚗 Voiture</option><option value="velo">🚲 Vélo</option></select></div>
     <div className="field-row"><div className="field"><label>Marque</label><input defaultValue="Honda PCX"/></div><div className="field"><label>Année</label><input defaultValue="2022"/></div></div>
     <div className="field-row"><div className="field"><label>Plaque</label><input defaultValue="BZ-4521"/></div><div className="field"><label>Couleur</label><input defaultValue="Noir"/></div></div>

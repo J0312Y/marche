@@ -32,10 +32,10 @@ function VAssignDriverScr({order:o,onBack,go}){
 
   return(<>
     <div className="appbar"><button onClick={onBack}>←</button><h2>Assigner un livreur</h2><div style={{width:38}}/></div>
-    <div className="scr" style={{padding:20}}>
+    <div className="scr" style={{padding:16}}>
 
       {/* Order summary */}
-      <div style={{padding:14,background:"#fff",border:"1px solid #E8E6E1",borderRadius:16,marginBottom:16,display:"flex",alignItems:"center",gap:12}}>
+      <div style={{padding:14,background:"#fff",border:"1px solid #E8E6E1",borderRadius:16,marginBottom:12,display:"flex",alignItems:"center",gap:12}}>
         <div style={{width:44,height:44,borderRadius:12,background:"rgba(99,102,241,0.1)",display:"flex",alignItems:"center",justifyContent:"center",fontSize:20,flexShrink:0}}>📦</div>
         <div style={{flex:1,minWidth:0}}><div style={{fontSize:14,fontWeight:700}}>{o.ref}</div><div style={{fontSize:12,color:"#908C82"}}>{o.client} · {o.addr}</div><div style={{fontSize:12,color:"#908C82"}}>{o.items?.map(it=>it.name).join(", ")}</div></div>
         <div style={{fontSize:14,fontWeight:700,color:"#6366F1",flexShrink:0}}>{fmt(o.total)}</div>
@@ -65,7 +65,7 @@ function VAssignDriverScr({order:o,onBack,go}){
 
       {step===1&&<>
         <div style={{fontSize:16,fontWeight:700,marginBottom:4}}>Confirmer l'assignation</div>
-        <p style={{fontSize:12,color:"#908C82",marginBottom:16}}>Vérifiez les détails avant de confirmer</p>
+        <p style={{fontSize:12,color:"#908C82",marginBottom:12}}>Vérifiez les détails avant de confirmer</p>
 
         <div style={{padding:16,background:"#fff",border:"1px solid #E8E6E1",borderRadius:16,marginBottom:14}}>
           <div style={{display:"flex",alignItems:"center",gap:12,marginBottom:14}}>

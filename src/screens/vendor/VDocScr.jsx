@@ -81,17 +81,17 @@ function VDocScr({docKey,onBack}){
   };
 
   const doc=docs[docKey];
-  if(!doc)return(<div className="scr" style={{padding:20}}><div className="appbar" style={{padding:0}}><button onClick={onBack}>←</button><h2>Documentation</h2><div style={{width:38}}/></div><p>Document introuvable.</p></div>);
+  if(!doc)return(<div className="scr" style={{padding:16}}><div className="appbar" style={{padding:0}}><button onClick={onBack}>←</button><h2>Documentation</h2><div style={{width:38}}/></div><p>Document introuvable.</p></div>);
 
-  return(<div className="scr" style={{padding:20}}>
-    <div className="appbar" style={{padding:0,marginBottom:16}}><button onClick={onBack}>←</button><h2 style={{fontSize:15}}>{doc.icon} {doc.title}</h2><div style={{width:38}}/></div>
+  return(<div className="scr" style={{padding:16}}>
+    <div className="appbar" style={{padding:0,marginBottom:12}}><button onClick={onBack}>←</button><h2 style={{fontSize:15}}>{doc.icon} {doc.title}</h2><div style={{width:38}}/></div>
 
-    <div style={{padding:12,background:`${doc.color}08`,border:`1px solid ${doc.color}20`,borderRadius:14,marginBottom:16}}>
+    <div style={{padding:12,background:`${doc.color}08`,border:`1px solid ${doc.color}20`,borderRadius:14,marginBottom:12}}>
       <div style={{fontSize:13,fontWeight:700,color:doc.color}}>API Lamuka v2.0 — {doc.title}</div>
       <div style={{fontSize:11,color:"#908C82",marginTop:4}}>Base URL : https://api.lamuka.cg/v2</div>
     </div>
 
-    {doc.sections.map((s,i)=><div key={i} style={{marginBottom:16}}>
+    {doc.sections.map((s,i)=><div key={i} style={{marginBottom:12}}>
       <h4 style={{fontSize:14,fontWeight:700,marginBottom:8,display:"flex",alignItems:"center",gap:6}}>
         <span style={{width:22,height:22,borderRadius:7,background:doc.color,color:"#fff",display:"inline-flex",alignItems:"center",justifyContent:"center",fontSize:11,fontWeight:700,flexShrink:0}}>{i+1}</span>
         {s.title}

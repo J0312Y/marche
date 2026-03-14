@@ -1,7 +1,7 @@
 
 
 function AboutScr({onBack}){
-  return(<div className="scr" style={{padding:20}}><div className="appbar" style={{padding:0,marginBottom:16}}><button onClick={onBack}>←</button><h2>À propos</h2><div style={{width:38}}/></div>
+  return(<div className="scr" style={{padding:16}}><div className="appbar" style={{padding:0,marginBottom:12}}><button onClick={onBack}>←</button><h2>À propos</h2><div style={{width:38}}/></div>
     <div style={{textAlign:"center",marginBottom:24}}><div style={{fontSize:56,marginBottom:8}}>🛒</div><h2 style={{fontSize:22,fontWeight:700}}>Lamuka Marketplace</h2><p style={{fontSize:13,color:"#908C82"}}>Version 1.0.0</p></div>
     <div style={{padding:16,background:"#fff",border:"1px solid #E8E6E1",borderRadius:16,marginBottom:14}}><p style={{fontSize:14,color:"#5E5B53",lineHeight:1.7}}>Lamuka est une plateforme multi-commerce congolaise développée par <b>Lamuka Tech</b>. Notre mission : connecter les commerces locaux — restaurants, boutiques, pharmacies, pâtisseries, supermarchés et services — aux consommateurs avec livraison rapide et paiement Mobile Money.</p></div>
     <div style={{padding:16,background:"#fff",border:"1px solid #E8E6E1",borderRadius:16,marginBottom:14}}>

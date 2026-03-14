@@ -39,11 +39,11 @@ function CouponsScr({onBack,cart=[],appliedCoupon,onApply}){
 
   const removeCoupon=()=>{onApply(null)};
 
-  return(<div className="scr" style={{padding:20}}>
-    <div className="appbar" style={{padding:0,marginBottom:16}}><button onClick={onBack}>←</button><h2>🏷️ Codes Promo</h2><div style={{width:38}}/></div>
+  return(<div className="scr" style={{padding:16}}>
+    <div className="appbar" style={{padding:0,marginBottom:12}}><button onClick={onBack}>←</button><h2>🏷️ Codes Promo</h2><div style={{width:38}}/></div>
 
     {/* Applied coupon banner */}
-    {appliedCoupon&&<div style={{padding:14,background:"rgba(16,185,129,0.06)",border:"1px solid rgba(16,185,129,0.15)",borderRadius:14,marginBottom:16,display:"flex",alignItems:"center",justifyContent:"space-between"}}>
+    {appliedCoupon&&<div style={{padding:14,background:"rgba(16,185,129,0.06)",border:"1px solid rgba(16,185,129,0.15)",borderRadius:14,marginBottom:12,display:"flex",alignItems:"center",justifyContent:"space-between"}}>
       <div style={{display:"flex",alignItems:"center",gap:10}}>
         <span style={{fontSize:22}}>✅</span>
         <div>
@@ -55,7 +55,7 @@ function CouponsScr({onBack,cart=[],appliedCoupon,onApply}){
     </div>}
 
     {/* Manual code input */}
-    <div style={{display:"flex",gap:8,marginBottom:20}}>
+    <div style={{display:"flex",gap:8,marginBottom:14}}>
       <input value={manualCode} onChange={e=>setManualCode(e.target.value.toUpperCase())} placeholder="Entrer un code promo..." onKeyDown={e=>e.key==="Enter"&&applyManual()} style={{flex:1,padding:"12px 14px",borderRadius:12,border:"1px solid #E8E6E1",fontSize:13,fontFamily:"inherit",outline:"none"}}/>
       <button onClick={applyManual} disabled={!manualCode.trim()||!!verifying} style={{padding:"12px 20px",borderRadius:12,border:"none",background:manualCode.trim()?"#6366F1":"#E8E6E1",color:manualCode.trim()?"#fff":"#908C82",fontSize:13,fontWeight:700,cursor:manualCode.trim()?"pointer":"not-allowed",fontFamily:"inherit"}}>
         {verifying===manualCode?"⏳":"Appliquer"}

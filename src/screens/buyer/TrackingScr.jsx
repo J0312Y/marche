@@ -37,7 +37,7 @@ function TrackingScr({onBack,go}){
       </div>
       <div style={{position:"absolute",bottom:12,left:"50%",transform:"translateX(-50%)",zIndex:1000,background:"#fff",padding:"8px 16px",borderRadius:12,boxShadow:"0 2px 12px rgba(0,0,0,.1)",fontSize:12,fontWeight:600,display:"flex",alignItems:"center",gap:6,whiteSpace:"nowrap"}}>🟢 En route · 12 min</div>
     </MapView>
-    <div className="scr" style={{padding:20}}>
+    <div className="scr" style={{padding:16}}>
       <div className="track-driver"><div className="td-av">🧑</div><div className="td-info"><h4>Patrick Moukala</h4><p>🛵 Honda PCX · BZ-4521</p><div className="td-r">⭐ 4.8 · 342 livraisons</div></div></div>
       <div className="track-actions"><button className="ta-call" onClick={()=>alert("📞 Appel...")}>📞 Appeler</button><button className="ta-chat" onClick={()=>go("chatDriver")}>💬 Discuter</button></div>
       <div className="eta-box"><h4>Livraison en cours</h4><div className="eta-bar"><div className="eta-fill" style={{width:"65%"}}/></div><div className="eta-info"><span>Départ: <b>Marché Total</b></span><span>Arrivée: <b>~12 min</b></span></div></div>

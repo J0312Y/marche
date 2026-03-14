@@ -13,7 +13,7 @@ const CHART_LABELS={
 function VDashboardScr({go}){
   const [period,setPeriod]=useState("week");
   const { data, loading } = useLoad(() => vendor.getDashboard(period), [period]);
-  if(loading||!data) return <div className="scr" style={{padding:20}}><h2 style={{marginBottom:16}}>📊 Tableau de bord</h2><Loading/></div>;
+  if(loading||!data) return <div className="scr" style={{padding:16}}><h2 style={{marginBottom:12}}>📊 Tableau de bord</h2><Loading/></div>;
   const { stats:s, new_orders:newOrders, chart=[], top_products:topProducts=[] } = data;
   const maxBar=Math.max(...chart,1);
   const labels=CHART_LABELS[period]||CHART_LABELS.week;
@@ -25,7 +25,7 @@ function VDashboardScr({go}){
     return String(v);
   };
 
-  return(<div className="scr" style={{padding:20,paddingBottom:100}}>
+  return(<div className="scr" style={{padding:16,paddingBottom:100}}>
     <div className="appbar" style={{padding:0,marginBottom:10}}><h2>📊 Tableau de bord</h2><button onClick={()=>go("vNotif")}>🔔</button></div>
     <div className="vo-filter" style={{padding:0,marginBottom:14}}>{[["today","Aujourd'hui"],["week","Semaine"],["month","Mois"]].map(([k,l])=><button key={k} className={period===k?"on":""} onClick={()=>setPeriod(k)}>{l}</button>)}</div>
 

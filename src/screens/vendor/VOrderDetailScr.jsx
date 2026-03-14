@@ -9,7 +9,7 @@ function VOrderDetailScr({order:o,onBack,go}){
   const next={new:"preparing",preparing:"shipped",shipped:"delivered"};
   const nextLabel={new:"✅ Accepter",preparing:"📦 Marquer prête",shipped:"🚚 Confirmer livraison"};
 
-  if(status==="refused")return(<div className="scr" style={{padding:20}}><div className="appbar" style={{padding:0,marginBottom:16}}><button onClick={onBack}>←</button><h2>{o.ref}</h2><div style={{width:38}}/></div>
+  if(status==="refused")return(<div className="scr" style={{padding:16}}><div className="appbar" style={{padding:0,marginBottom:12}}><button onClick={onBack}>←</button><h2>{o.ref}</h2><div style={{width:38}}/></div>
     <div style={{textAlign:"center",padding:"40px 0"}}><div style={{width:70,height:70,borderRadius:"50%",background:"rgba(239,68,68,0.1)",display:"flex",alignItems:"center",justifyContent:"center",margin:"0 auto 14px",fontSize:32}}>✕</div>
       <h3 style={{fontSize:18,fontWeight:700,color:"#EF4444"}}>Commande refusée</h3>
       <p style={{fontSize:13,color:"#908C82",marginTop:6}}>{o.ref} · {o.client}</p>
@@ -18,8 +18,8 @@ function VOrderDetailScr({order:o,onBack,go}){
     </div>
   </div>);
 
-  return(<div className="scr" style={{padding:20}}><div className="appbar" style={{padding:0,marginBottom:16}}><button onClick={onBack}>←</button><h2>{o.ref}</h2><div style={{width:38}}/></div>
-    <div style={{display:"flex",justifyContent:"space-between",alignItems:"center",marginBottom:16}}><span className={`vo-status ${status}`} style={{fontSize:13}}>{statusMap[status]}</span><span style={{fontSize:12,color:"#908C82"}}>{o.date}</span></div>
+  return(<div className="scr" style={{padding:16}}><div className="appbar" style={{padding:0,marginBottom:12}}><button onClick={onBack}>←</button><h2>{o.ref}</h2><div style={{width:38}}/></div>
+    <div style={{display:"flex",justifyContent:"space-between",alignItems:"center",marginBottom:12}}><span className={`vo-status ${status}`} style={{fontSize:13}}>{statusMap[status]}</span><span style={{fontSize:12,color:"#908C82"}}>{o.date}</span></div>
     <div style={{padding:16,background:"#fff",border:"1px solid #E8E6E1",borderRadius:16,marginBottom:14}}>
       <div style={{fontSize:14,fontWeight:700,marginBottom:10}}>👤 Client</div>
       {[["Nom",o.client],["Téléphone",o.phone],["Adresse",o.addr],["Paiement",o.payment]].map(([l,v])=><div key={l} style={{display:"flex",justifyContent:"space-between",padding:"6px 0",borderBottom:"1px solid #F5F4F1",fontSize:13}}><span style={{color:"#908C82"}}>{l}</span><b>{v}</b></div>)}

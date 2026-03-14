@@ -72,7 +72,7 @@ function VShopsScr({go,onBack}){
     </div>}
 
     {/* Shop list */}
-    <div style={{padding:"0 20px"}}>
+    <div style={{padding:"0 16px"}}>
       {shops.map(sh=><div key={sh.id} style={{padding:16,background:"#fff",border:"1px solid #E8E6E1",borderRadius:16,marginBottom:12,cursor:"pointer"}} onClick={()=>go("vShopDetail",sh)}>
         <div style={{display:"flex",alignItems:"center",gap:12,marginBottom:12}}>
           <div style={{width:48,height:48,borderRadius:14,background:sh.status==="active"?"linear-gradient(135deg,#6366F1,#A855F7)":"linear-gradient(135deg,#F59E0B,#D97706)",display:"flex",alignItems:"center",justifyContent:"center",fontSize:22}}>{sh.logo}</div>
@@ -94,7 +94,7 @@ function VShopsScr({go,onBack}){
       </div>)}
     </div>
 
-    <div style={{padding:"0 20px 80px"}}><button className="btn-primary" onClick={()=>go("vAddShop")}>+ Créer un nouvel établissement</button></div>
+    <div style={{padding:"0 16px 80px"}}><button className="btn-primary" onClick={()=>go("vAddShop")}>+ Créer un nouvel établissement</button></div>
   </div>);
 }
 

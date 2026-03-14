@@ -11,17 +11,17 @@ function OrderDetailScr({order:o,onBack,go}){
   const currentStep=o.prog?o.prog.filter(x=>x===1).length:0;
   const canCancel=!cancelled&&(sc==="ship"||sc==="prep");
 
-  return(<div className="scr" style={{padding:20,paddingBottom:100}}>
-    <div className="appbar" style={{padding:0,marginBottom:16}}><button onClick={onBack}>←</button><h2>{o.ref}</h2><div style={{width:38}}/></div>
+  return(<div className="scr" style={{padding:16,paddingBottom:100}}>
+    <div className="appbar" style={{padding:0,marginBottom:12}}><button onClick={onBack}>←</button><h2>{o.ref}</h2><div style={{width:38}}/></div>
 
     {/* Status + date */}
-    <div style={{display:"flex",justifyContent:"space-between",alignItems:"center",marginBottom:20}}>
+    <div style={{display:"flex",justifyContent:"space-between",alignItems:"center",marginBottom:14}}>
       <span className={`ost ${sc}`} style={{fontSize:13}}>{status}</span>
       <span style={{fontSize:12,color:"#908C82"}}>{o.date}</span>
     </div>
 
     {/* Timeline */}
-    {!cancelled&&<div style={{padding:16,background:"#fff",border:"1px solid #E8E6E1",borderRadius:16,marginBottom:16}}>
+    {!cancelled&&<div style={{padding:16,background:"#fff",border:"1px solid #E8E6E1",borderRadius:16,marginBottom:12}}>
       {STEPS.map((s,i)=>{
         const done=i<currentStep;const active=i===currentStep-1;
         return(<div key={s} style={{display:"flex",gap:12,marginBottom:i<3?4:0}}>
@@ -39,7 +39,7 @@ function OrderDetailScr({order:o,onBack,go}){
     </div>}
 
     {/* Cancelled banner */}
-    {cancelled&&<div style={{padding:16,background:"rgba(239,68,68,0.06)",border:"1px solid rgba(239,68,68,0.15)",borderRadius:16,marginBottom:16,display:"flex",alignItems:"center",gap:12}}>
+    {cancelled&&<div style={{padding:16,background:"rgba(239,68,68,0.06)",border:"1px solid rgba(239,68,68,0.15)",borderRadius:16,marginBottom:12,display:"flex",alignItems:"center",gap:12}}>
       <span style={{fontSize:24}}>❌</span>
       <div>
         <div style={{fontSize:14,fontWeight:700,color:"#EF4444"}}>Commande annulée</div>
@@ -48,7 +48,7 @@ function OrderDetailScr({order:o,onBack,go}){
     </div>}
 
     {/* Items */}
-    <div style={{marginBottom:16}}>
+    <div style={{marginBottom:12}}>
       <div style={{fontSize:14,fontWeight:700,marginBottom:10}}>Articles</div>
       {o.items.map((item,i)=><div key={i} style={{padding:12,background:"#fff",border:"1px solid #E8E6E1",borderRadius:14,marginBottom:8,fontSize:14,fontWeight:500,display:"flex",alignItems:"center",gap:10}}>
         <span style={{fontSize:20}}>{item.split(" ")[0]}</span>
@@ -57,7 +57,7 @@ function OrderDetailScr({order:o,onBack,go}){
     </div>
 
     {/* Summary */}
-    <div style={{padding:16,background:"#fff",border:"1px solid #E8E6E1",borderRadius:16,marginBottom:16}}>
+    <div style={{padding:16,background:"#fff",border:"1px solid #E8E6E1",borderRadius:16,marginBottom:12}}>
       <div className="cs-row"><span>Sous-total</span><b>{o.total} FCFA</b></div>
       <div className="cs-row"><span>Livraison</span><b>2 500 FCFA</b></div>
       <div className="cs-row tot"><span>Total</span><span className="ctp">{parseInt(o.total.replace(/\s/g,""))+2500} FCFA</span></div>
@@ -78,7 +78,7 @@ function OrderDetailScr({order:o,onBack,go}){
         <p style={{fontSize:13,color:"#908C82",marginBottom:6,lineHeight:1.5}}>
           {o.ref} — {o.total} FCFA
         </p>
-        <p style={{fontSize:12,color:"#908C82",marginBottom:20}}>Le remboursement sera effectué sous 24-48h sur votre Mobile Money.</p>
+        <p style={{fontSize:12,color:"#908C82",marginBottom:14}}>Le remboursement sera effectué sous 24-48h sur votre Mobile Money.</p>
         <div style={{display:"flex",gap:10}}>
           <button onClick={()=>setShowCancel(false)} style={{flex:1,padding:12,borderRadius:12,border:"1px solid #E8E6E1",background:"#fff",fontSize:13,fontWeight:600,cursor:"pointer",fontFamily:"inherit"}}>Non</button>
           <button onClick={()=>{setCancelled(true);setShowCancel(false)}} style={{flex:1,padding:12,borderRadius:12,border:"none",background:"#EF4444",color:"#fff",fontSize:13,fontWeight:700,cursor:"pointer",fontFamily:"inherit"}}>Oui, annuler</button>

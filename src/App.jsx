@@ -36,11 +36,11 @@ function AppInner() {
   };
 
   return (
-    <div style={{ display: "flex", justifyContent: "center", alignItems: "center", minHeight: "100vh", background: "linear-gradient(160deg,#e0ddd8 0%,#c9c5bf 100%)", padding: 24 }}>
+    <div style={{ display: "flex", justifyContent: "center", alignItems: "center", minHeight: "100vh", background: "linear-gradient(160deg,#e0ddd8 0%,#c9c5bf 100%)", padding: 16 }}>
       <style>{CSS}</style>
 
-      <div style={{ position: "relative", borderRadius: 61 }}>
-        <div style={{ position: "absolute", inset: -2, borderRadius: 61, background: "linear-gradient(180deg,#8a8985 0%,#6b6966 20%,#4a4845 50%,#6b6966 80%,#8a8985 100%)", boxShadow: "0 50px 100px rgba(0,0,0,.3),0 0 0 1px rgba(255,255,255,.08) inset", zIndex: -1 }} />
+      <div style={{ position: "relative", borderRadius: 51 }}>
+        <div style={{ position: "absolute", inset: -2, borderRadius: 51, background: "linear-gradient(180deg,#8a8985 0%,#6b6966 20%,#4a4845 50%,#6b6966 80%,#8a8985 100%)", boxShadow: "0 50px 100px rgba(0,0,0,.3),0 0 0 1px rgba(255,255,255,.08) inset", zIndex: -1 }} />
         <div style={{ position: "absolute", left: -3, top: 130, width: 4, height: 28, background: "linear-gradient(180deg,#7a7874,#5a5855,#7a7874)", borderRadius: "3px 0 0 3px", boxShadow: "-1px 0 2px rgba(0,0,0,.3)" }} />
         <div style={{ position: "absolute", left: -3, top: 178, width: 4, height: 38, background: "linear-gradient(180deg,#7a7874,#5a5855,#7a7874)", borderRadius: "3px 0 0 3px", boxShadow: "-1px 0 2px rgba(0,0,0,.3)" }} />
         <div style={{ position: "absolute", left: -3, top: 226, width: 4, height: 38, background: "linear-gradient(180deg,#7a7874,#5a5855,#7a7874)", borderRadius: "3px 0 0 3px", boxShadow: "-1px 0 2px rgba(0,0,0,.3)" }} />
@@ -48,7 +48,7 @@ function AppInner() {
 
         <div className="phone">
           {/* Status Bar + Dynamic Island */}
-          <div style={{ position: "relative", padding: "14px 28px 8px", flexShrink: 0, background: "transparent", zIndex: 20 }}>
+          <div style={{ position: "relative", padding: "10px 22px 4px", flexShrink: 0, background: "transparent", zIndex: 20 }}>
             <div style={{ position: "absolute", top: 12, left: "50%", transform: "translateX(-50%)", width: 124, height: 36, background: "#000", borderRadius: 20, zIndex: 30, display: "flex", alignItems: "center", justifyContent: "center", boxShadow: "0 1px 3px rgba(0,0,0,.15) inset" }}>
               <div style={{ width: 12, height: 12, borderRadius: "50%", background: "radial-gradient(circle at 40% 35%,#1c1c3a,#0a0a14)", border: "1.5px solid #1a1a2e", marginLeft: 36 }} />
             </div>
@@ -98,7 +98,7 @@ function AppInner() {
           {toast && <div style={{ position: "absolute", bottom: 80, left: 20, right: 20, padding: "12px 16px", borderRadius: 12, background: toast.type === 'error' ? '#EF4444' : '#10B981', color: "#fff", fontSize: 13, fontWeight: 600, textAlign: "center", zIndex: 999, boxShadow: "0 4px 12px rgba(0,0,0,.15)", animation: "fadeIn .2s" }}>{toast.message}</div>}
 
           {/* Home Indicator */}
-          <div style={{ flexShrink: 0, display: "flex", justifyContent: "center", paddingBottom: 8, paddingTop: 4, background: "transparent" }}>
+          <div style={{ flexShrink: 0, display: "flex", justifyContent: "center", paddingBottom: 4, paddingTop: 2, background: "transparent" }}>
             <div style={{ width: 134, height: 5, borderRadius: 100, background: "#191815", opacity: .2 }} />
           </div>
         </div>

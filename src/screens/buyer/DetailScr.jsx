@@ -90,7 +90,7 @@ function DetailScr({product:p,onBack,onAddCart,go,favs,toggleFav,isFav}){
         </div>
 
         {/* Vendor promo banner */}
-        {vp&&<div style={{display:"flex",alignItems:"center",gap:10,padding:"10px 14px",background:"rgba(16,185,129,0.06)",borderRadius:12,marginBottom:16,border:"1px solid rgba(16,185,129,0.12)"}}>
+        {vp&&<div style={{display:"flex",alignItems:"center",gap:10,padding:"10px 14px",background:"rgba(16,185,129,0.06)",borderRadius:12,marginBottom:12,border:"1px solid rgba(16,185,129,0.12)"}}>
           <span style={{fontSize:20}}>🏷️</span>
           <div style={{flex:1}}>
             <div style={{fontSize:13,fontWeight:700,color:"#10B981"}}>{vp.promoName}</div>
@@ -102,13 +102,13 @@ function DetailScr({product:p,onBack,onAddCart,go,favs,toggleFav,isFav}){
         {p.tags.length>0&&<div className="det-tags">{p.tags.map(t=><span key={t}>{t}</span>)}</div>}
 
         {/* ETA for food */}
-        {p.eta&&<div style={{display:"flex",alignItems:"center",gap:8,padding:"10px 14px",background:"rgba(16,185,129,0.06)",borderRadius:12,marginBottom:16,border:"1px solid rgba(16,185,129,0.12)"}}>
+        {p.eta&&<div style={{display:"flex",alignItems:"center",gap:8,padding:"10px 14px",background:"rgba(16,185,129,0.06)",borderRadius:12,marginBottom:12,border:"1px solid rgba(16,185,129,0.12)"}}>
           <span style={{fontSize:20}}>🕐</span>
           <div><div style={{fontSize:13,fontWeight:700,color:"#10B981"}}>Livraison estimée : {p.eta}</div><div style={{fontSize:11,color:"#908C82"}}>Temps de préparation inclus</div></div>
         </div>}
 
         {/* Tab bar: Description / Caractéristiques */}
-        <div style={{display:"flex",gap:0,marginBottom:16,background:"#F5F4F1",borderRadius:12,padding:3}}>
+        <div style={{display:"flex",gap:0,marginBottom:12,background:"#F5F4F1",borderRadius:12,padding:3}}>
           {[["desc","Description"],["specs","Caractéristiques"],["info","Infos"]].map(([k,l])=>(
             <button key={k} onClick={()=>setActiveTab(k)} style={{flex:1,padding:"9px 0",borderRadius:10,border:"none",background:activeTab===k?"#fff":"transparent",color:activeTab===k?"#191815":"#908C82",fontSize:12,fontWeight:activeTab===k?700:500,cursor:"pointer",fontFamily:"inherit",boxShadow:activeTab===k?"0 1px 4px rgba(0,0,0,.06)":"none",transition:"all .2s"}}>{l}</button>
           ))}
@@ -116,17 +116,17 @@ function DetailScr({product:p,onBack,onAddCart,go,favs,toggleFav,isFav}){
 
         {/* Description tab */}
         {activeTab==="desc"&&<>
-          <p style={{fontSize:14,color:"#5E5B53",lineHeight:1.7,marginBottom:16}}>{p.desc}</p>
-          {p.type==="restaurant"&&<p style={{fontSize:13,color:"#908C82",lineHeight:1.6,marginBottom:16}}>
+          <p style={{fontSize:14,color:"#5E5B53",lineHeight:1.7,marginBottom:12}}>{p.desc}</p>
+          {p.type==="restaurant"&&<p style={{fontSize:13,color:"#908C82",lineHeight:1.6,marginBottom:12}}>
             Plat préparé à la commande avec des ingrédients frais du marché. Servi chaud avec accompagnements traditionnels. Idéal pour un déjeuner ou dîner en famille.
           </p>}
-          {p.type==="boutique"&&<p style={{fontSize:13,color:"#908C82",lineHeight:1.6,marginBottom:16}}>
+          {p.type==="boutique"&&<p style={{fontSize:13,color:"#908C82",lineHeight:1.6,marginBottom:12}}>
             Produit vérifié et garanti authentique par le vendeur. Emballage soigné pour la livraison. Retour possible sous 7 jours si le produit ne correspond pas.
           </p>}
         </>}
 
         {/* Specs tab */}
-        {activeTab==="specs"&&<div style={{marginBottom:16}}>
+        {activeTab==="specs"&&<div style={{marginBottom:12}}>
           {specs.map(([icon,label,value],i)=>(
             <div key={i} style={{display:"flex",alignItems:"center",gap:12,padding:"12px 0",borderBottom:i<specs.length-1?"1px solid #F5F4F1":"none"}}>
               <span style={{fontSize:16,width:24,textAlign:"center"}}>{icon}</span>
@@ -137,7 +137,7 @@ function DetailScr({product:p,onBack,onAddCart,go,favs,toggleFav,isFav}){
         </div>}
 
         {/* Info tab */}
-        {activeTab==="info"&&<div style={{marginBottom:16}}>
+        {activeTab==="info"&&<div style={{marginBottom:12}}>
           <div className="det-info" style={{marginBottom:8}}>
             <span className="dii">🚚</span>
             <div className="dit">
@@ -179,7 +179,7 @@ function DetailScr({product:p,onBack,onAddCart,go,favs,toggleFav,isFav}){
         </div>}
 
         {/* Vendor card */}
-        <div onClick={()=>go("vendor",{id:p.vendorId,name:p.vendor})} style={{display:"flex",alignItems:"center",gap:12,padding:14,background:"#fff",borderRadius:14,border:"1px solid #E8E6E1",marginBottom:16,cursor:"pointer"}}>
+        <div onClick={()=>go("vendor",{id:p.vendorId,name:p.vendor})} style={{display:"flex",alignItems:"center",gap:12,padding:14,background:"#fff",borderRadius:14,border:"1px solid #E8E6E1",marginBottom:12,cursor:"pointer"}}>
           <div style={{width:44,height:44,borderRadius:12,background:"linear-gradient(135deg,#6366F1,#A855F7)",display:"flex",alignItems:"center",justifyContent:"center",fontSize:20,color:"#fff"}}>{p.va}</div>
           <div style={{flex:1}}>
             <div style={{fontSize:14,fontWeight:700}}>{p.vendor} <span style={{color:"#6366F1"}}>✓</span></div>

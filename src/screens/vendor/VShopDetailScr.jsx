@@ -33,8 +33,8 @@ function VShopDetailScr({shop:sh,go,onBack}){
       </div>
 
       {/* Tab 0: Dashboard */}
-      {tab===0&&<div style={{padding:"0 20px 80px"}}>
-        <div style={{display:"grid",gridTemplateColumns:"1fr 1fr",gap:10,marginBottom:16}}>
+      {tab===0&&<div style={{padding:"0 16px 80px"}}>
+        <div style={{display:"grid",gridTemplateColumns:"1fr 1fr",gap:10,marginBottom:12}}>
           {[["💰","Chiffre d'affaires",fmt(sh.revenue),"↑ 18%","#10B981"],["📦","Commandes",sh.orders,"↑ 12%","#6366F1"],["👁️","Visiteurs",sh.views,"↑ 24%","#F59E0B"],["⭐","Note moyenne",sh.rating,"↑ 0.3","#10B981"]].map(([i,l,v,t,c])=><div key={l} style={{padding:14,background:"#fff",border:"1px solid #E8E6E1",borderRadius:14}}>
             <div style={{fontSize:18,marginBottom:6}}>{i}</div>
             <div style={{fontSize:18,fontWeight:700}}>{v}</div>
@@ -55,7 +55,7 @@ function VShopDetailScr({shop:sh,go,onBack}){
       </div>}
 
       {/* Tab 1: Modifier */}
-      {tab===1&&<div style={{padding:"0 20px 80px"}}>
+      {tab===1&&<div style={{padding:"0 16px 80px"}}>
         <div className="field"><label>Nom de l'établissement</label><input defaultValue={sh.name}/></div>
         <div className="field"><label>Description</label><textarea rows={3} defaultValue="Commerce de mode et accessoires africains authentiques."/></div>
         <div className="field-row"><div className="field"><label>Ville</label><input defaultValue={sh.location.split(",")[0]}/></div><div className="field"><label>Quartier</label><input defaultValue={sh.location.split(",")[1]?.trim()}/></div></div>
@@ -84,7 +84,7 @@ function VShopDetailScr({shop:sh,go,onBack}){
     </>}
 
     {/* Pending shop */}
-    {!isActive&&<div style={{padding:"0 20px"}}>
+    {!isActive&&<div style={{padding:"0 16px"}}>
       <div style={{textAlign:"center",padding:"30px 20px",background:"#fff",border:"1px solid #E8E6E1",borderRadius:16}}>
         <div style={{fontSize:48,marginBottom:10}}>⏳</div>
         <h3 style={{fontSize:16,fontWeight:700,marginBottom:6}}>Vérification en cours</h3>

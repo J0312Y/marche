@@ -14,8 +14,8 @@ function OrdersScr({go}){
     setCancelConfirm(null);
   };
 
-  return(<div className="scr" style={{padding:20}}>
-    <div className="appbar" style={{padding:0,marginBottom:16}}><h2>Mes commandes</h2></div>
+  return(<div className="scr" style={{padding:16}}>
+    <div className="appbar" style={{padding:0,marginBottom:12}}><h2>Mes commandes</h2></div>
     {orders.map(o=><div key={o.ref} className="ocard" onClick={()=>go("orderDetail",o)}>
       <div className="ocard-h"><h4>{o.ref}</h4><span className={`ost ${o.sc}`}>{o.status}</span></div>
       <div className="odate">{o.date}</div>
@@ -34,7 +34,7 @@ function OrdersScr({go}){
       <div style={{background:"#fff",borderRadius:20,padding:24,maxWidth:340,width:"100%",textAlign:"center"}} onClick={e=>e.stopPropagation()}>
         <div style={{fontSize:40,marginBottom:10}}>⚠️</div>
         <h3 style={{fontSize:17,fontWeight:700,marginBottom:6}}>Annuler la commande ?</h3>
-        <p style={{fontSize:13,color:"#908C82",marginBottom:20,lineHeight:1.5}}>
+        <p style={{fontSize:13,color:"#908C82",marginBottom:14,lineHeight:1.5}}>
           La commande {cancelConfirm.ref} sera annulée. Le remboursement sera effectué sous 24-48h.
         </p>
         <div style={{display:"flex",gap:10}}>

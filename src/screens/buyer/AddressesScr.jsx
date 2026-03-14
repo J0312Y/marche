@@ -11,8 +11,8 @@ function AddressesScr({onBack}){
   const [adding,setAdding]=useState(false);
   const remove=id=>setList(prev=>prev.filter(a=>a.id!==id));
   const setDefault=id=>setList(prev=>prev.map(a=>({...a,def:a.id===id})));
-  if(loading) return <div className="scr" style={{padding:20}}><div className="appbar" style={{padding:0,marginBottom:16}}><button onClick={onBack}>←</button><h2>Mes adresses</h2><div style={{width:38}}/></div><Loading/></div>;
-  return(<div className="scr" style={{padding:20}}><div className="appbar" style={{padding:0,marginBottom:16}}><button onClick={onBack}>←</button><h2>Mes adresses</h2><div style={{width:38}}/></div>
+  if(loading) return <div className="scr" style={{padding:16}}><div className="appbar" style={{padding:0,marginBottom:12}}><button onClick={onBack}>←</button><h2>Mes adresses</h2><div style={{width:38}}/></div><Loading/></div>;
+  return(<div className="scr" style={{padding:16}}><div className="appbar" style={{padding:0,marginBottom:12}}><button onClick={onBack}>←</button><h2>Mes adresses</h2><div style={{width:38}}/></div>
     {list.map(a=><div key={a.id} className={`addr-card ${a.def?"def":""}`}>
       <div className="ai">{a.def?"🏠":"🏢"}</div>
       <div className="ab"><h4>{a.label}{a.def&&<span className="def-badge">Par défaut</span>}</h4><p>{a.addr}<br/>{a.city}, Congo</p></div>
