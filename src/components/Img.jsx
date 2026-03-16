@@ -9,20 +9,23 @@ import { useState, useRef, useEffect } from "react";
  * - object-fit: cover/contain support
  * - White background for product shots
  */
-function Img({ src, alt="", emoji, fit="cover", bg="#F5F4F1", style={}, className="", onClick }){
+function Img({ src, alt="", emoji, fit="cover", bg, style={}, className="", onClick }){
   const [status, setStatus] = useState("idle"); // idle | loading | loaded | error
   const [visible, setVisible] = useState(false);
   const ref = useRef(null);
+  const bgColor = bg || "var(--light, #F5F4F1)";
 
   // Lazy load via IntersectionObserver
   useEffect(()=>{
     if(!ref.current) return;
+    // If src exists, start loading immediately (don't wait for observer in case it's already visible)
+    if(src) { setVisible(true); return; }
     const obs = new IntersectionObserver(([e])=>{
       if(e.isIntersecting){ setVisible(true); obs.disconnect(); }
     }, { rootMargin:"200px" });
     obs.observe(ref.current);
     return ()=>obs.disconnect();
-  },[]);
+  },[src]);
 
   // When visible, start loading
   useEffect(()=>{
@@ -34,7 +37,8 @@ function Img({ src, alt="", emoji, fit="cover", bg="#F5F4F1", style={}, classNam
     img.src = src;
   },[visible, src]);
 
-  const showEmoji = !src || status==="error" || status==="idle";
+  const showEmoji = !src || status==="error";
+  const showShimmer = src && (status==="idle" || status==="loading");
 
   return(
     <div
@@ -42,7 +46,7 @@ function Img({ src, alt="", emoji, fit="cover", bg="#F5F4F1", style={}, classNam
       className={`app-img ${className}`}
       onClick={onClick}
       style={{
-        background: bg,
+        background: bgColor,
         position:"relative",
         overflow:"hidden",
         display:"flex",
@@ -53,7 +57,7 @@ function Img({ src, alt="", emoji, fit="cover", bg="#F5F4F1", style={}, classNam
       }}
     >
       {/* Shimmer while loading */}
-      {status==="loading"&&<div className="img-shimmer"/>}
+      {showShimmer&&<div className="img-shimmer"/>}
 
       {/* Real image */}
       {(status==="loaded")&&<img

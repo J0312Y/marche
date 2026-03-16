@@ -22,6 +22,8 @@ function SettingsScr({onBack,go}){
     <div className="setting-group"><h4>Légal</h4>
       <div className="setting-item" onClick={()=>go("terms")} style={{cursor:"pointer"}}><span className="si-i">📄</span><span className="si-t">Conditions générales</span><span style={{color:"var(--muted)"}}>›</span></div>
       <div className="setting-item" onClick={()=>go("privacy")} style={{cursor:"pointer"}}><span className="si-i">🔐</span><span className="si-t">Politique de confidentialité</span><span style={{color:"var(--muted)"}}>›</span></div>
+      <div className="setting-item" onClick={()=>go("help")} style={{cursor:"pointer"}}><span className="si-i">❓</span><span className="si-t">Centre d'aide</span><span style={{color:"var(--muted)"}}>›</span></div>
+      <div className="setting-item" onClick={()=>go("about")} style={{cursor:"pointer"}}><span className="si-i">ℹ️</span><span className="si-t">À propos</span><span style={{color:"var(--muted)"}}>›</span></div>
     </div>
   </div>);
 }

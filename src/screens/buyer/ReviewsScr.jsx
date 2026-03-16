@@ -54,7 +54,7 @@ function ReviewsScr({product:p,onBack}){
       <div style={{fontSize:16,color:"#F59E0B",marginBottom:4}}>{"★".repeat(Math.floor(avg))}{"☆".repeat(5-Math.floor(avg))}</div>
       <div style={{fontSize:12,color:"var(--muted)"}}>{p.reviews+userReviews.length} avis vérifiés</div>
     </div>
-    <div style={{marginBottom:14}}>{dist.map((d,i)=><div key={i} style={{display:"flex",alignItems:"center",gap:8,marginBottom:4}}><span style={{fontSize:12,width:12}}>{5-i}</span><span style={{fontSize:12}}>⭐</span><div style={{flex:1,height:6,background:"var(--border)",borderRadius:3,overflow:"hidden"}}><div style={{width:`${d}%`,height:"100%",background:d>0?"#F59E0B":"#E8E6E1",borderRadius:3,transition:"width .3s"}}/></div><span style={{fontSize:11,color:"var(--muted)",width:30,textAlign:"right"}}>{d}%</span></div>)}</div>
+    <div style={{marginBottom:14}}>{dist.map((d,i)=><div key={i} style={{display:"flex",alignItems:"center",gap:8,marginBottom:4}}><span style={{fontSize:12,width:12}}>{5-i}</span><span style={{fontSize:12}}>⭐</span><div style={{flex:1,height:6,background:"var(--border)",borderRadius:3,overflow:"hidden"}}><div style={{width:`${d}%`,height:"100%",background:d>0?"#F59E0B":"var(--border)",borderRadius:3,transition:"width .3s"}}/></div><span style={{fontSize:11,color:"var(--muted)",width:30,textAlign:"right"}}>{d}%</span></div>)}</div>
 
     {/* Write review button / form */}
     {!writing?<button onClick={()=>setWriting(true)} style={{width:"100%",padding:"14px 0",borderRadius:14,border:"2px solid #6366F1",background:"rgba(99,102,241,0.04)",cursor:"pointer",fontSize:14,fontWeight:700,color:"#6366F1",fontFamily:"inherit",marginBottom:14,display:"flex",alignItems:"center",justifyContent:"center",gap:8}}>✏️ Écrire un avis</button>
@@ -69,7 +69,7 @@ function ReviewsScr({product:p,onBack}){
       <div style={{marginBottom:14}}>
         <div style={{fontSize:12,fontWeight:600,color:"var(--muted)",marginBottom:8}}>Note *</div>
         <div style={{display:"flex",gap:6}}>
-          {[1,2,3,4,5].map(s=><button key={s} onClick={()=>setUserRating(s)} style={{width:44,height:44,borderRadius:12,border:userRating>=s?"2px solid #F59E0B":"1px solid #E8E6E1",background:userRating>=s?"rgba(245,158,11,0.08)":"#fff",cursor:"pointer",fontSize:20,display:"flex",alignItems:"center",justifyContent:"center",transition:"all .15s"}}>{userRating>=s?"★":"☆"}</button>)}
+          {[1,2,3,4,5].map(s=><button key={s} onClick={()=>setUserRating(s)} style={{width:44,height:44,borderRadius:12,border:userRating>=s?"2px solid #F59E0B":"1px solid var(--border)",background:userRating>=s?"rgba(245,158,11,0.08)":"#fff",cursor:"pointer",fontSize:20,display:"flex",alignItems:"center",justifyContent:"center",transition:"all .15s"}}>{userRating>=s?"★":"☆"}</button>)}
         </div>
         {userRating>0&&<div style={{fontSize:12,color:"#F59E0B",fontWeight:600,marginTop:6}}>{["","Mauvais","Passable","Bien","Très bien","Excellent"][userRating]}</div>}
       </div>
@@ -102,7 +102,7 @@ function ReviewsScr({product:p,onBack}){
       </div>
 
       {/* Submit */}
-      <button onClick={submitReview} disabled={userRating===0} style={{width:"100%",padding:"12px 0",borderRadius:12,border:"none",background:userRating>0?"#6366F1":"#E8E6E1",color:userRating>0?"var(--card)":"#908C82",fontSize:14,fontWeight:700,cursor:userRating>0?"pointer":"not-allowed",fontFamily:"inherit",transition:"all .2s"}}>
+      <button onClick={submitReview} disabled={userRating===0} style={{width:"100%",padding:"12px 0",borderRadius:12,border:"none",background:userRating>0?"#6366F1":"var(--border)",color:userRating>0?"var(--card)":"var(--muted)",fontSize:14,fontWeight:700,cursor:userRating>0?"pointer":"not-allowed",fontFamily:"inherit",transition:"all .2s"}}>
         {userRating===0?"Sélectionnez une note":"Publier mon avis ⭐"}
       </button>
     </div>}

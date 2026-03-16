@@ -26,7 +26,7 @@ function ShopTeamTab(){
   return(<div style={{padding:"0 16px 80px"}}>
     <div className="info-box blue" style={{marginBottom:14}}><span>👥</span><span style={{fontSize:11}}>Gérez les collaborateurs de cette boutique</span></div>
 
-    {members.map(m=><div key={m.id} style={{padding:14,background:showRemove===m.id?"rgba(239,68,68,0.02)":"#fff",border:showRemove===m.id?"1px solid rgba(239,68,68,0.3)":"1px solid #E8E6E1",borderRadius:14,marginBottom:10,transition:"all .2s"}}>
+    {members.map(m=><div key={m.id} style={{padding:14,background:showRemove===m.id?"rgba(239,68,68,0.02)":"#fff",border:showRemove===m.id?"1px solid rgba(239,68,68,0.3)":"1px solid var(--border)",borderRadius:14,marginBottom:10,transition:"all .2s"}}>
       <div style={{display:"flex",alignItems:"center",gap:12}}>
         <div style={{width:42,height:42,borderRadius:12,background:m.color,color:"#fff",display:"flex",alignItems:"center",justifyContent:"center",fontSize:16,fontWeight:700,flexShrink:0}}>m.photo?<img src={m.photo} style={{width:"100%",height:"100%",objectFit:"cover",borderRadius:"inherit"}} alt=""/>:m.avatar</div>
         <div style={{flex:1}}>
@@ -56,13 +56,13 @@ function ShopTeamTab(){
       <div className="field"><label>Email</label><input value={invEmail} onChange={e=>setInvEmail(e.target.value)} placeholder="sarah@email.com" type="email"/></div>
       <div className="field"><label>Rôle</label>
         <div style={{display:"flex",gap:8}}>
-          {["Manager","Employé"].map(r=><button key={r} onClick={()=>setInvRole(r)} style={{flex:1,padding:10,borderRadius:10,border:invRole===r?"2px solid #6366F1":"1px solid #E8E6E1",background:invRole===r?"rgba(99,102,241,0.04)":"#fff",fontSize:12,fontWeight:600,cursor:"pointer",fontFamily:"inherit",color:invRole===r?"#6366F1":"#908C82"}}>{r}</button>)}
+          {["Manager","Employé"].map(r=><button key={r} onClick={()=>setInvRole(r)} style={{flex:1,padding:10,borderRadius:10,border:invRole===r?"2px solid #6366F1":"1px solid var(--border)",background:invRole===r?"rgba(99,102,241,0.04)":"#fff",fontSize:12,fontWeight:600,cursor:"pointer",fontFamily:"inherit",color:invRole===r?"#6366F1":"var(--muted)"}}>{r}</button>)}
         </div>
       </div>
       <div className="info-box blue" style={{marginBottom:10,padding:"6px 10px"}}><span>📧</span><span style={{fontSize:11}}>Un email d'invitation sera envoyé à cette adresse</span></div>
       <div style={{display:"flex",gap:8}}>
         <button style={{flex:1,padding:12,borderRadius:12,border:"1px solid var(--border)",background:"var(--card)",fontSize:13,fontWeight:600,cursor:"pointer",fontFamily:"inherit"}} onClick={()=>{setShowInvite(false);setInvName("");setInvEmail("")}}>Annuler</button>
-        <button className="btn-primary" style={{flex:2,background:invited?"#10B981":(invName&&invEmail)?"#6366F1":"#E8E6E1",color:(invName&&invEmail)||invited?"var(--card)":"#908C82"}} onClick={doInvite}>{invited?"✅ Invitation envoyée !":"📤 Envoyer l'invitation"}</button>
+        <button className="btn-primary" style={{flex:2,background:invited?"#10B981":(invName&&invEmail)?"#6366F1":"var(--border)",color:(invName&&invEmail)||invited?"var(--card)":"var(--muted)"}} onClick={doInvite}>{invited?"✅ Invitation envoyée !":"📤 Envoyer l'invitation"}</button>
       </div>
     </div>
     :<button className="btn-primary" onClick={()=>setShowInvite(true)}>+ Inviter un collaborateur</button>}

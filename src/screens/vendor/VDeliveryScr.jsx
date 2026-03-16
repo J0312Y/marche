@@ -57,7 +57,7 @@ function VDeliveryScr({go,onBack}){
 
     {/* Tabs */}
     <div style={{display:"flex",gap:0,margin:"0 20px 14px",background:"var(--light)",borderRadius:14,padding:4,border:"1px solid var(--border)"}}>
-      {["Livreurs","En cours","Historique","Zones"].map((t,i)=><button key={t} onClick={()=>setTab(i)} style={{flex:1,padding:"10px 4px",borderRadius:11,border:"none",fontSize:11,fontWeight:600,cursor:"pointer",fontFamily:"inherit",background:tab===i?"#6366F1":"transparent",color:tab===i?"var(--card)":"#908C82",transition:"all .2s"}}>{t}</button>)}
+      {["Livreurs","En cours","Historique","Zones"].map((t,i)=><button key={t} onClick={()=>setTab(i)} style={{flex:1,padding:"10px 4px",borderRadius:11,border:"none",fontSize:11,fontWeight:600,cursor:"pointer",fontFamily:"inherit",background:tab===i?"#6366F1":"transparent",color:tab===i?"var(--card)":"var(--muted)",transition:"all .2s"}}>{t}</button>)}
     </div>
 
     {/* Tab 0: Livreurs - split platform/manual */}
@@ -106,12 +106,12 @@ function VDeliveryScr({go,onBack}){
         <div className="field"><label>Nom complet</label><input value={addName} onChange={e=>setAddName(e.target.value)} placeholder="Ex: Patrick Moukala"/></div>
         <div className="field"><label>Téléphone</label><input value={addPhone} onChange={e=>setAddPhone(e.target.value)} placeholder="+242 06X XXX XXX" type="tel"/></div>
         <div className="field"><label>Véhicule</label>
-          <div style={{display:"flex",gap:6}}>{[["moto","🛵 Moto"],["voiture","🚗 Voiture"],["velo","🚲 Vélo"]].map(([k,l])=><button key={k} onClick={()=>setAddVehicle(k)} style={{flex:1,padding:8,borderRadius:8,border:addVehicle===k?"2px solid #6366F1":"1px solid #E8E6E1",background:addVehicle===k?"rgba(99,102,241,0.04)":"#fff",fontSize:11,fontWeight:600,cursor:"pointer",fontFamily:"inherit"}}>{l}</button>)}</div>
+          <div style={{display:"flex",gap:6}}>{[["moto","🛵 Moto"],["voiture","🚗 Voiture"],["velo","🚲 Vélo"]].map(([k,l])=><button key={k} onClick={()=>setAddVehicle(k)} style={{flex:1,padding:8,borderRadius:8,border:addVehicle===k?"2px solid #6366F1":"1px solid var(--border)",background:addVehicle===k?"rgba(99,102,241,0.04)":"#fff",fontSize:11,fontWeight:600,cursor:"pointer",fontFamily:"inherit"}}>{l}</button>)}</div>
         </div>
         <div className="info-box yellow" style={{marginBottom:10,padding:"6px 10px"}}><span>📱</span><span style={{fontSize:11}}>Un SMS sera envoyé pour l'inviter à créer un compte Lamuka</span></div>
         <div style={{display:"flex",gap:8}}>
           <button style={{flex:1,padding:10,borderRadius:10,border:"1px solid var(--border)",background:"var(--card)",fontSize:12,fontWeight:600,cursor:"pointer",fontFamily:"inherit"}} onClick={()=>{setShowAdd(false);setAddName("");setAddPhone("")}}>Annuler</button>
-          <button className="btn-primary" style={{flex:2,background:addName&&addPhone?"#6366F1":"#E8E6E1",color:addName&&addPhone?"var(--card)":"#908C82"}} onClick={doAddManual}>Ajouter</button>
+          <button className="btn-primary" style={{flex:2,background:addName&&addPhone?"#6366F1":"var(--border)",color:addName&&addPhone?"var(--card)":"var(--muted)"}} onClick={doAddManual}>Ajouter</button>
         </div>
       </div>}
     </div>}
@@ -150,7 +150,7 @@ function VDeliveryScr({go,onBack}){
       <div className="info-box blue" style={{marginBottom:14}}><span>ℹ️</span><span style={{fontSize:11}}>Définissez vos zones de livraison et tarifs. Les livreurs disponibles dans ces zones seront proposés pour vos commandes.</span></div>
       <div style={{fontSize:12,color:"var(--muted)",marginBottom:10}}>{zones.filter(z=>z.active).length} zone{zones.filter(z=>z.active).length>1?"s":""} active{zones.filter(z=>z.active).length>1?"s":""} sur {zones.length}</div>
 
-      {zones.map(z=><div key={z.id} style={{padding:14,background:"var(--card)",border:editZone===z.id?"2px solid #6366F1":z.active?"1px solid rgba(16,185,129,0.3)":"1px solid #E8E6E1",borderRadius:16,marginBottom:10}}>
+      {zones.map(z=><div key={z.id} style={{padding:14,background:"var(--card)",border:editZone===z.id?"2px solid #6366F1":z.active?"1px solid rgba(16,185,129,0.3)":"1px solid var(--border)",borderRadius:16,marginBottom:10}}>
         <div style={{display:"flex",justifyContent:"space-between",alignItems:"center",marginBottom:6}}>
           <div style={{display:"flex",alignItems:"center",gap:6}}><h4 style={{fontSize:14,fontWeight:700}}>{z.name}</h4>{z.active&&<span style={{width:8,height:8,borderRadius:4,background:"#10B981"}}/>}</div>
           <div className={`toggle ${z.active?"on":""}`} onClick={()=>toggleZone(z.id)}/>
@@ -179,14 +179,14 @@ function VDeliveryScr({go,onBack}){
         <h4 style={{fontSize:14,fontWeight:700,marginBottom:12}}>➕ Ajouter une zone</h4>
         {zoneSuggestions.length>0&&<>
           <div style={{fontSize:11,fontWeight:600,color:"var(--muted)",marginBottom:6}}>Suggestions</div>
-          <div style={{display:"flex",gap:6,flexWrap:"wrap",marginBottom:12}}>{zoneSuggestions.map(n=><span key={n} onClick={()=>setAzName(n)} style={{padding:"6px 12px",borderRadius:8,border:azName===n?"2px solid #6366F1":"1px solid #E8E6E1",background:azName===n?"rgba(99,102,241,0.04)":"#fff",fontSize:11,fontWeight:600,cursor:"pointer",color:azName===n?"#6366F1":"#5E5B53"}}>{azName===n?"✓ ":""}{n}</span>)}</div>
+          <div style={{display:"flex",gap:6,flexWrap:"wrap",marginBottom:12}}>{zoneSuggestions.map(n=><span key={n} onClick={()=>setAzName(n)} style={{padding:"6px 12px",borderRadius:8,border:azName===n?"2px solid #6366F1":"1px solid var(--border)",background:azName===n?"rgba(99,102,241,0.04)":"#fff",fontSize:11,fontWeight:600,cursor:"pointer",color:azName===n?"#6366F1":"var(--sub)"}}>{azName===n?"✓ ":""}{n}</span>)}</div>
         </>}
         <div className="field"><label>Nom de la zone</label><input value={azName} onChange={e=>setAzName(e.target.value)} placeholder="Ex: Dolisie Centre"/></div>
         <div className="field"><label>Quartiers</label><input value={azAreas} onChange={e=>setAzAreas(e.target.value)} placeholder="Ex: Centre-ville, Loubomo"/></div>
         <div className="field"><label>Frais de livraison (FCFA)</label><input type="number" value={azPrice} onChange={e=>setAzPrice(e.target.value)}/></div>
         <div style={{display:"flex",gap:8}}>
           <button style={{flex:1,padding:10,borderRadius:10,border:"1px solid var(--border)",background:"var(--card)",fontSize:12,fontWeight:600,cursor:"pointer",fontFamily:"inherit"}} onClick={()=>{setShowAddZone(false);setAzName("");setAzAreas("")}}>Annuler</button>
-          <button className="btn-primary" style={{flex:2,background:azName?"#6366F1":"#E8E6E1",color:azName?"var(--card)":"#908C82"}} onClick={addZone}>Ajouter la zone</button>
+          <button className="btn-primary" style={{flex:2,background:azName?"#6366F1":"var(--border)",color:azName?"var(--card)":"var(--muted)"}} onClick={addZone}>Ajouter la zone</button>
         </div>
       </div>
       :<button style={{width:"100%",padding:14,borderRadius:14,border:"2px dashed #6366F1",background:"rgba(99,102,241,0.02)",color:"#6366F1",fontSize:13,fontWeight:600,cursor:"pointer",fontFamily:"inherit"}} onClick={()=>setShowAddZone(true)}>+ Ajouter une zone</button>}

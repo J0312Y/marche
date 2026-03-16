@@ -80,7 +80,7 @@ function VDashboardScr({go}){
     {/* Top Products */}
     <div style={{padding:16,background:"var(--card)",border:"1px solid var(--border)",borderRadius:18,marginBottom:14}}>
       <h4 style={{fontSize:15,fontWeight:700,marginBottom:14}}>Top Produits</h4>
-      {topProducts.map((p,i)=><div key={i} style={{display:"flex",alignItems:"center",gap:12,padding:"10px 0",borderTop:i?"1px solid #F5F4F1":"none"}}>
+      {topProducts.map((p,i)=><div key={i} style={{display:"flex",alignItems:"center",gap:12,padding:"10px 0",borderTop:i?"1px solid var(--border)":"none"}}>
         <div style={{width:28,height:28,borderRadius:8,background:i===0?"linear-gradient(135deg,#F59E0B,#D97706)":i===1?"linear-gradient(135deg,#94A3B8,#64748B)":"linear-gradient(135deg,#D97706,#B45309)",display:"flex",alignItems:"center",justifyContent:"center",color:"#fff",fontSize:12,fontWeight:800,flexShrink:0}}>{i+1}</div>
         <div style={{flex:1}}>
           <div style={{fontSize:14,fontWeight:600}}>{p.name}</div>

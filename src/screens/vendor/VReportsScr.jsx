@@ -22,7 +22,7 @@ function VReportsScr({onBack}){
     <div className="vd-period">{["Janvier","Février","Mars"].map(m=><button key={m} className={month===m?"on":""} onClick={()=>setMonth(m)}>{m}</button>)}</div>
     <div style={{padding:16,background:"var(--card)",border:"1px solid var(--border)",borderRadius:16,marginBottom:12}}>
       <div style={{fontSize:14,fontWeight:700,marginBottom:10}}>📋 Résumé {month}</div>
-      {[["Revenus bruts",d.brut+" FCFA"],["Commissions (4%)",d.comm+" FCFA"],["Revenus nets",d.net+" FCFA"],["Nombre de commandes",d.orders],["Panier moyen",d.avg+" FCFA"]].map(([l,v],i)=><div key={l} style={{display:"flex",justifyContent:"space-between",padding:"8px 0",borderBottom:i<4?"1px solid #F5F4F1":"none",fontSize:13,...(i===2?{fontWeight:700,color:"#10B981"}:{})}}><span style={{color:i===2?"#10B981":"#908C82"}}>{l}</span><b>{v}</b></div>)}
+      {[["Revenus bruts",d.brut+" FCFA"],["Commissions (4%)",d.comm+" FCFA"],["Revenus nets",d.net+" FCFA"],["Nombre de commandes",d.orders],["Panier moyen",d.avg+" FCFA"]].map(([l,v],i)=><div key={l} style={{display:"flex",justifyContent:"space-between",padding:"8px 0",borderBottom:i<4?"1px solid var(--border)":"none",fontSize:13,...(i===2?{fontWeight:700,color:"#10B981"}:{})}}><span style={{color:i===2?"#10B981":"var(--muted)"}}>{l}</span><b>{v}</b></div>)}
     </div>
     {reports.map(r=><div key={r.id} className="rpt-card">
       <div className="rpt-icon">{r.icon}</div>

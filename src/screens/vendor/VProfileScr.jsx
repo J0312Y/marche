@@ -30,7 +30,7 @@ function VProfileScr({go,onSwitch,vendorPlan,onLogout}){
     <div className="vs-header">
       <div className="vs-logo" style={{overflow:"hidden",padding:0}}><img src={VENDOR_LOGO_DEFAULT} style={{width:"100%",height:"100%",objectFit:"cover"}} alt=""/></div>
       <h3 style={{fontSize:18,fontWeight:700}}>Mon Commerce</h3>
-      <div style={{display:"inline-flex",alignItems:"center",gap:6,padding:"4px 12px",borderRadius:20,background:vendorPlan==="enterprise"?"rgba(245,158,11,0.08)":vendorPlan==="pro"?"rgba(99,102,241,0.08)":"#F5F4F1",marginTop:6}}>
+      <div style={{display:"inline-flex",alignItems:"center",gap:6,padding:"4px 12px",borderRadius:20,background:vendorPlan==="enterprise"?"rgba(245,158,11,0.08)":vendorPlan==="pro"?"rgba(99,102,241,0.08)":"var(--light)",marginTop:6}}>
         <span style={{fontSize:12}}>{planInfo.icon}</span>
         <span style={{fontSize:12,fontWeight:700,color:planInfo.color}}>Plan {planInfo.badge}</span>
       </div>

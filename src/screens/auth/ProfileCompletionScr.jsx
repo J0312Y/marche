@@ -38,7 +38,7 @@ function ProfileCompletionScr({onDone,provider}){
         <button className="btn-outline" style={{marginTop:8}} onClick={onDone}>Passer pour l'instant</button>
       </>}
 
-      <div style={{display:"flex",justifyContent:"center",gap:6,marginTop:20}}>{[0,1].map(i=><div key={i} style={{width:step===i?24:8,height:8,borderRadius:4,background:step>=i?"#6366F1":"#E8E6E1",transition:"all .3s"}}/>)}</div>
+      <div style={{display:"flex",justifyContent:"center",gap:6,marginTop:20}}>{[0,1].map(i=><div key={i} style={{width:step===i?24:8,height:8,borderRadius:4,background:step>=i?"#6366F1":"var(--border)",transition:"all .3s"}}/>)}</div>
     </div>
   );
 }

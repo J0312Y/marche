@@ -45,7 +45,7 @@ function VReviewsScr({onBack}){
       {/* Filter */}
       <div style={{display:"flex",gap:6,marginBottom:12}}>
         {[["all","Tous"],["unreplied","Sans réponse"],["replied","Répondus"]].map(([k,l])=>(
-          <button key={k} onClick={()=>setFilter(k)} style={{padding:"6px 14px",borderRadius:20,border:filter===k?"1px solid #6366F1":"1px solid #E8E6E1",background:filter===k?"rgba(99,102,241,0.06)":"#fff",color:filter===k?"#6366F1":"#5E5B53",fontSize:11,fontWeight:600,cursor:"pointer",fontFamily:"inherit"}}>{l}</button>
+          <button key={k} onClick={()=>setFilter(k)} style={{padding:"6px 14px",borderRadius:20,border:filter===k?"1px solid #6366F1":"1px solid var(--border)",background:filter===k?"rgba(99,102,241,0.06)":"#fff",color:filter===k?"#6366F1":"var(--sub)",fontSize:11,fontWeight:600,cursor:"pointer",fontFamily:"inherit"}}>{l}</button>
         ))}
       </div>
 
@@ -53,7 +53,7 @@ function VReviewsScr({onBack}){
       {filtered.map((r,i)=>{
         const realIdx=(reviews||raw).indexOf(r);
         return(
-        <div key={i} style={{padding:14,background:"var(--card)",border:replyingTo===realIdx?"2px solid #6366F1":"1px solid #E8E6E1",borderRadius:16,marginBottom:10}}>
+        <div key={i} style={{padding:14,background:"var(--card)",border:replyingTo===realIdx?"2px solid #6366F1":"1px solid var(--border)",borderRadius:16,marginBottom:10}}>
           {/* Header */}
           <div style={{display:"flex",alignItems:"center",justifyContent:"space-between",marginBottom:8}}>
             <div style={{display:"flex",alignItems:"center",gap:8}}>
@@ -84,7 +84,7 @@ function VReviewsScr({onBack}){
               <textarea value={replyText} onChange={e=>setReplyText(e.target.value)} placeholder="Votre réponse au client..." rows={3} style={{width:"100%",padding:10,borderRadius:12,border:"1px solid var(--border)",fontSize:12,fontFamily:"inherit",resize:"vertical",outline:"none",boxSizing:"border-box"}}/>
               <div style={{display:"flex",gap:8,marginTop:8}}>
                 <button onClick={()=>{setReplyingTo(null);setReplyText("")}} style={{flex:1,padding:8,borderRadius:10,border:"1px solid var(--border)",background:"var(--card)",fontSize:11,fontWeight:600,cursor:"pointer",fontFamily:"inherit"}}>Annuler</button>
-                <button onClick={()=>submitReply(realIdx)} disabled={!replyText.trim()} style={{flex:1,padding:8,borderRadius:10,border:"none",background:replyText.trim()?"#6366F1":"#E8E6E1",color:replyText.trim()?"var(--card)":"#908C82",fontSize:11,fontWeight:700,cursor:replyText.trim()?"pointer":"not-allowed",fontFamily:"inherit"}}>Publier ↩️</button>
+                <button onClick={()=>submitReply(realIdx)} disabled={!replyText.trim()} style={{flex:1,padding:8,borderRadius:10,border:"none",background:replyText.trim()?"#6366F1":"var(--border)",color:replyText.trim()?"var(--card)":"var(--muted)",fontSize:11,fontWeight:700,cursor:replyText.trim()?"pointer":"not-allowed",fontFamily:"inherit"}}>Publier ↩️</button>
               </div>
             </div>
           ):(

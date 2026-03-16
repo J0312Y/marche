@@ -98,13 +98,13 @@ function TrackingScr({onBack,go}){
         {STEPS.map((s,i)=>(
           <div key={i} style={{display:"flex",gap:10,marginBottom:i<STEPS.length-1?0:0}}>
             <div style={{display:"flex",flexDirection:"column",alignItems:"center"}}>
-              <div style={{width:28,height:28,borderRadius:8,background:s.done?"#10B981":s.active?"#6366F1":"#E8E6E1",display:"flex",alignItems:"center",justifyContent:"center",fontSize:12,color:s.done||s.active?"var(--card)":"#908C82",flexShrink:0,boxShadow:s.active?"0 0 0 4px rgba(99,102,241,.15)":"none"}}>
+              <div style={{width:28,height:28,borderRadius:8,background:s.done?"#10B981":s.active?"#6366F1":"var(--border)",display:"flex",alignItems:"center",justifyContent:"center",fontSize:12,color:s.done||s.active?"var(--card)":"var(--muted)",flexShrink:0,boxShadow:s.active?"0 0 0 4px rgba(99,102,241,.15)":"none"}}>
                 {s.done?"✓":s.icon}
               </div>
-              {i<STEPS.length-1&&<div style={{width:2,height:18,background:s.done?"#10B981":"#E8E6E1"}}/>}
+              {i<STEPS.length-1&&<div style={{width:2,height:18,background:s.done?"#10B981":"var(--border)"}}/>}
             </div>
             <div style={{paddingTop:4,paddingBottom:i<STEPS.length-1?8:0}}>
-              <div style={{fontSize:12,fontWeight:s.active?700:s.done?600:400,color:s.done||s.active?"#191815":"#908C82"}}>{s.label}</div>
+              <div style={{fontSize:12,fontWeight:s.active?700:s.done?600:400,color:s.done||s.active?"#191815":"var(--muted)"}}>{s.label}</div>
               <div style={{fontSize:10,color:"var(--muted)",marginTop:1}}>{s.time}</div>
             </div>
           </div>
@@ -118,7 +118,7 @@ function TrackingScr({onBack,go}){
           <span style={{fontSize:12,fontWeight:600,fontFamily:"monospace",color:"var(--muted)"}}>#LMK-2026-0214</span>
         </div>
         {ITEMS.map((item,i)=>(
-          <div key={i} style={{display:"flex",alignItems:"center",gap:10,padding:"8px 0",borderTop:i?"1px solid #F5F4F1":"none"}}>
+          <div key={i} style={{display:"flex",alignItems:"center",gap:10,padding:"8px 0",borderTop:i?"1px solid var(--border)":"none"}}>
             <div style={{width:36,height:36,borderRadius:10,background:"var(--light)",display:"flex",alignItems:"center",justifyContent:"center",fontSize:18,flexShrink:0}}>{item.emoji}</div>
             <div style={{flex:1}}>
               <div style={{fontSize:12,fontWeight:600}}>{item.qty > 1 ? `${item.qty}× ` : ""}{item.name}</div>

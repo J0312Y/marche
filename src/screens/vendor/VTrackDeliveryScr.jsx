@@ -33,11 +33,11 @@ function VTrackDeliveryScr({delivery:d,go,onBack}){
         <div style={{fontSize:14,fontWeight:700,marginBottom:14}}>Suivi étapes</div>
         {steps.map((s,i)=><div key={i} style={{display:"flex",gap:12}}>
           <div style={{display:"flex",flexDirection:"column",alignItems:"center"}}>
-            <div style={{width:22,height:22,borderRadius:"50%",background:s.done?"#10B981":"#E8E6E1",display:"flex",alignItems:"center",justifyContent:"center",fontSize:10,color:"#fff",fontWeight:700,flexShrink:0}}>{s.done?"✓":i+1}</div>
-            {i<steps.length-1&&<div style={{width:2,height:28,background:s.done?"#10B981":"#E8E6E1",margin:"4px 0"}}/>}
+            <div style={{width:22,height:22,borderRadius:"50%",background:s.done?"#10B981":"var(--border)",display:"flex",alignItems:"center",justifyContent:"center",fontSize:10,color:"#fff",fontWeight:700,flexShrink:0}}>{s.done?"✓":i+1}</div>
+            {i<steps.length-1&&<div style={{width:2,height:28,background:s.done?"#10B981":"var(--border)",margin:"4px 0"}}/>}
           </div>
           <div style={{paddingBottom:i<steps.length-1?16:0}}>
-            <div style={{fontSize:13,fontWeight:600,color:s.done?"#191815":"#908C82"}}>{s.label}</div>
+            <div style={{fontSize:13,fontWeight:600,color:s.done?"#191815":"var(--muted)"}}>{s.label}</div>
             <div style={{fontSize:11,color:"var(--muted)"}}>{s.time}</div>
           </div>
         </div>)}

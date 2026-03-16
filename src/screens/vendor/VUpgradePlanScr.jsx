@@ -21,7 +21,7 @@ function VUpgradePlanScr({onBack,onUpgrade,currentPlan="starter"}){
         <div style={{display:"flex",justifyContent:"space-between",alignItems:"center"}}><h4 style={{fontSize:16,fontWeight:700}}>{currentInfo[1]}</h4><span style={{fontSize:13,color:"var(--muted)"}}>Plan actuel</span></div>
         <p style={{fontSize:12,color:"var(--muted)",marginTop:4}}>{currentInfo[4].join(" · ")}</p>
       </div>}
-      {upgradeable.map(([k,n,pr,tag,f])=><div key={k} onClick={()=>setPlan(k)} style={{padding:16,background:"var(--card)",border:plan===k?"2px solid "+(k==="enterprise"?"#F59E0B":"#6366F1"):"2px solid #E8E6E1",borderRadius:16,marginBottom:14,cursor:"pointer",position:"relative"}}>
+      {upgradeable.map(([k,n,pr,tag,f])=><div key={k} onClick={()=>setPlan(k)} style={{padding:16,background:"var(--card)",border:plan===k?"2px solid "+(k==="enterprise"?"#F59E0B":"#6366F1"):"2px solid var(--border)",borderRadius:16,marginBottom:14,cursor:"pointer",position:"relative"}}>
         {k==="pro"&&currentPlan==="starter"&&<span style={{position:"absolute",top:-10,right:16,padding:"3px 10px",borderRadius:8,background:"#6366F1",color:"#fff",fontSize:10,fontWeight:700}}>⭐ Recommandé</span>}
         {k==="enterprise"&&currentPlan==="pro"&&<span style={{position:"absolute",top:-10,right:16,padding:"3px 10px",borderRadius:8,background:"#F59E0B",color:"#fff",fontSize:10,fontWeight:700}}>🚀 Recommandé</span>}
         <div style={{display:"flex",justifyContent:"space-between",alignItems:"center"}}><h4 style={{fontSize:16,fontWeight:700}}>{n}</h4><span style={{fontSize:14,fontWeight:700,color:k==="enterprise"?"#F59E0B":"#6366F1"}}>{pr}</span></div>

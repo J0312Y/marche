@@ -99,7 +99,7 @@ function VStatsScr({onBack}){
     {/* Top Products */}
     <div style={{padding:16,background:"var(--card)",border:"1px solid var(--border)",borderRadius:18,marginBottom:14}}>
       <h4 style={{fontSize:14,fontWeight:700,marginBottom:14}}>🏆 Top Produits</h4>
-      {tp.map((p,i)=><div key={i} style={{display:"flex",alignItems:"center",gap:12,padding:"10px 0",borderTop:i?"1px solid #F5F4F1":"none"}}>
+      {tp.map((p,i)=><div key={i} style={{display:"flex",alignItems:"center",gap:12,padding:"10px 0",borderTop:i?"1px solid var(--border)":"none"}}>
         <div style={{width:28,height:28,borderRadius:8,background:i===0?"linear-gradient(135deg,#F59E0B,#D97706)":i===1?"linear-gradient(135deg,#94A3B8,#64748B)":"linear-gradient(135deg,#D97706,#B45309)",display:"flex",alignItems:"center",justifyContent:"center",color:"#fff",fontSize:12,fontWeight:800,flexShrink:0}}>{i+1}</div>
         <div style={{flex:1}}>
           <div style={{fontSize:14,fontWeight:600}}>{p.name}</div>
@@ -117,8 +117,8 @@ function VStatsScr({onBack}){
         ["Commission Lamuka (4%)","-"+fmt(Math.round((s?.revenue||0)*0.04)),"#EF4444"],
         ["Frais de livraison","Inclus","#908C82"],
         ["Revenus nets",fmt(Math.round((s?.revenue||0)*0.96)),"#10B981"],
-      ].map(([l,v,c],i)=><div key={l} style={{display:"flex",justifyContent:"space-between",padding:"8px 0",borderTop:i?"1px solid #F5F4F1":"none",fontSize:13,...(i===3?{fontWeight:700}:{})}}>
-        <span style={{color:i===3?c:"#5E5B53"}}>{l}</span>
+      ].map(([l,v,c],i)=><div key={l} style={{display:"flex",justifyContent:"space-between",padding:"8px 0",borderTop:i?"1px solid var(--border)":"none",fontSize:13,...(i===3?{fontWeight:700}:{})}}>
+        <span style={{color:i===3?c:"var(--sub)"}}>{l}</span>
         <b style={{color:c}}>{v}</b>
       </div>)}
     </div>

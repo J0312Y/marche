@@ -37,7 +37,7 @@ function PaymentHistoryScr({onBack}){
           <div style={{fontSize:13,fontWeight:600}}>{p.label}</div>
           <div style={{fontSize:11,color:"var(--muted)",marginTop:1}}>{p.date} · {p.status}</div>
         </div>
-        <div style={{fontSize:14,fontWeight:700,color:p.type==="+"?"#10B981":"#191815"}}>{p.type}{fmt(p.amount)}</div>
+        <div style={{fontSize:14,fontWeight:700,color:p.type==="+"?"#10B981":"var(--text)"}}>{p.type}{fmt(p.amount)}</div>
       </div>
     ))}
   </div>);

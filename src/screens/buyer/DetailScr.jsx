@@ -111,7 +111,7 @@ function DetailScr({product:p,onBack,onAddCart,go,favs,toggleFav,isFav}){
         {/* Tab bar: Description / Caractéristiques */}
         <div style={{display:"flex",gap:0,marginBottom:12,background:"var(--light)",borderRadius:12,padding:3}}>
           {[["desc","Description"],["specs","Caractéristiques"],["info","Infos"]].map(([k,l])=>(
-            <button key={k} onClick={()=>setActiveTab(k)} style={{flex:1,padding:"9px 0",borderRadius:10,border:"none",background:activeTab===k?"var(--card)":"transparent",color:activeTab===k?"#191815":"#908C82",fontSize:12,fontWeight:activeTab===k?700:500,cursor:"pointer",fontFamily:"inherit",boxShadow:activeTab===k?"0 1px 4px rgba(0,0,0,.06)":"none",transition:"all .2s"}}>{l}</button>
+            <button key={k} onClick={()=>setActiveTab(k)} style={{flex:1,padding:"9px 0",borderRadius:10,border:"none",background:activeTab===k?"var(--card)":"transparent",color:activeTab===k?"#191815":"var(--muted)",fontSize:12,fontWeight:activeTab===k?700:500,cursor:"pointer",fontFamily:"inherit",boxShadow:activeTab===k?"0 1px 4px rgba(0,0,0,.06)":"none",transition:"all .2s"}}>{l}</button>
           ))}
         </div>
 
@@ -129,7 +129,7 @@ function DetailScr({product:p,onBack,onAddCart,go,favs,toggleFav,isFav}){
         {/* Specs tab */}
         {activeTab==="specs"&&<div style={{marginBottom:12}}>
           {specs.map(([icon,label,value],i)=>(
-            <div key={i} style={{display:"flex",alignItems:"center",gap:12,padding:"12px 0",borderBottom:i<specs.length-1?"1px solid #F5F4F1":"none"}}>
+            <div key={i} style={{display:"flex",alignItems:"center",gap:12,padding:"12px 0",borderBottom:i<specs.length-1?"1px solid var(--border)":"none"}}>
               <span style={{fontSize:16,width:24,textAlign:"center"}}>{icon}</span>
               <span style={{flex:1,fontSize:13,color:"var(--muted)"}}>{label}</span>
               <span style={{fontSize:13,fontWeight:600,color:"var(--text)"}}>{value}</span>

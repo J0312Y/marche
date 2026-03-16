@@ -39,7 +39,7 @@ function RateDriverScr({onBack,onDone,driver={}}){
       <div style={{fontSize:14,fontWeight:600,marginBottom:10}}>Comment était la livraison ?</div>
       <div style={{display:"flex",justifyContent:"center",gap:8}}>
         {[1,2,3,4,5].map(s=>(
-          <button key={s} onClick={()=>setRating(s)} style={{width:48,height:48,borderRadius:14,border:rating>=s?"2px solid #F59E0B":"1px solid #E8E6E1",background:rating>=s?"rgba(245,158,11,0.08)":"#fff",cursor:"pointer",fontSize:22,display:"flex",alignItems:"center",justifyContent:"center",transition:"all .15s"}}>{rating>=s?"★":"☆"}</button>
+          <button key={s} onClick={()=>setRating(s)} style={{width:48,height:48,borderRadius:14,border:rating>=s?"2px solid #F59E0B":"1px solid var(--border)",background:rating>=s?"rgba(245,158,11,0.08)":"#fff",cursor:"pointer",fontSize:22,display:"flex",alignItems:"center",justifyContent:"center",transition:"all .15s"}}>{rating>=s?"★":"☆"}</button>
         ))}
       </div>
       {rating>0&&<div style={{fontSize:13,color:"#F59E0B",fontWeight:600,marginTop:8}}>{["","Mauvais 😞","Passable 😐","Bien 🙂","Très bien 😊","Excellent 🤩"][rating]}</div>}
@@ -50,7 +50,7 @@ function RateDriverScr({onBack,onDone,driver={}}){
       <div style={{fontSize:13,fontWeight:600,marginBottom:8}}>🎁 Laisser un pourboire (optionnel)</div>
       <div style={{display:"flex",gap:8}}>
         {[0,200,500,1000].map(t=>(
-          <button key={t} onClick={()=>setTip(t)} style={{flex:1,padding:"10px 0",borderRadius:12,border:tip===t?"2px solid #10B981":"1px solid #E8E6E1",background:tip===t?"rgba(16,185,129,0.06)":"#fff",color:tip===t?"#10B981":"#5E5B53",fontSize:12,fontWeight:700,cursor:"pointer",fontFamily:"inherit"}}>{t===0?"Aucun":`${t} F`}</button>
+          <button key={t} onClick={()=>setTip(t)} style={{flex:1,padding:"10px 0",borderRadius:12,border:tip===t?"2px solid #10B981":"1px solid var(--border)",background:tip===t?"rgba(16,185,129,0.06)":"#fff",color:tip===t?"#10B981":"var(--sub)",fontSize:12,fontWeight:700,cursor:"pointer",fontFamily:"inherit"}}>{t===0?"Aucun":`${t} F`}</button>
         ))}
       </div>
     </div>
@@ -61,7 +61,7 @@ function RateDriverScr({onBack,onDone,driver={}}){
       <textarea value={comment} onChange={e=>setComment(e.target.value)} placeholder="Le livreur était ponctuel et sympa..." rows={3} style={{width:"100%",padding:12,borderRadius:12,border:"1px solid var(--border)",background:"var(--light)",fontSize:13,fontFamily:"inherit",outline:"none",resize:"vertical",boxSizing:"border-box"}}/>
     </div>
 
-    <button onClick={submit} disabled={rating===0} style={{width:"100%",padding:14,borderRadius:14,border:"none",background:rating>0?"#6366F1":"#E8E6E1",color:rating>0?"var(--card)":"#908C82",fontSize:15,fontWeight:700,cursor:rating>0?"pointer":"not-allowed",fontFamily:"inherit"}}>
+    <button onClick={submit} disabled={rating===0} style={{width:"100%",padding:14,borderRadius:14,border:"none",background:rating>0?"#6366F1":"var(--border)",color:rating>0?"var(--card)":"var(--muted)",fontSize:15,fontWeight:700,cursor:rating>0?"pointer":"not-allowed",fontFamily:"inherit"}}>
       {rating===0?"Sélectionnez une note":"Envoyer l'évaluation ⭐"}
     </button>
   </div>);

@@ -180,14 +180,14 @@ function VProductFormScr({product:p,onBack,shopType="boutique"}){
 
     {/* ═══ PHOTOS ═══ */}
     <div style={{display:"flex",alignItems:"center",justifyContent:"space-between",marginBottom:10}}>
-      <div style={{fontSize:14,fontWeight:700}}>Photos <span style={{fontSize:11,fontWeight:500,color:errors.photos?"#EF4444":"#908C82"}}>({photos.length}/6){errors.photos?" *":""}</span></div>
+      <div style={{fontSize:14,fontWeight:700}}>Photos <span style={{fontSize:11,fontWeight:500,color:errors.photos?"#EF4444":"var(--muted)"}}>({photos.length}/6){errors.photos?" *":""}</span></div>
       <button onClick={()=>setShowGuide(true)} style={{padding:"4px 10px",borderRadius:8,border:"1px solid rgba(99,102,241,0.2)",background:"rgba(99,102,241,0.04)",color:"#6366F1",fontSize:11,fontWeight:600,cursor:"pointer",fontFamily:"inherit",display:"flex",alignItems:"center",gap:4}}>📸 Guide photo</button>
     </div>
     {errMsg("photos")}
 
     <div style={{display:"flex",gap:10,marginBottom:12,overflowX:"auto",paddingBottom:4}}>
       {photos.map((ph,i)=>(
-        <div key={i} onClick={()=>setEditingIdx(editingIdx===i?null:i)} style={{width:80,height:80,borderRadius:14,overflow:"hidden",position:"relative",flexShrink:0,cursor:"pointer",border:editingIdx===i?"2px solid #6366F1":"1px solid #E8E6E1",boxShadow:editingIdx===i?"0 0 0 3px rgba(99,102,241,0.15)":"none"}}>
+        <div key={i} onClick={()=>setEditingIdx(editingIdx===i?null:i)} style={{width:80,height:80,borderRadius:14,overflow:"hidden",position:"relative",flexShrink:0,cursor:"pointer",border:editingIdx===i?"2px solid #6366F1":"1px solid var(--border)",boxShadow:editingIdx===i?"0 0 0 3px rgba(99,102,241,0.15)":"none"}}>
           {ph.url?<img src={ph.url} style={{width:"100%",height:"100%",objectFit:"cover"}} alt=""/>:<Img emoji={ph.emoji} style={{width:"100%",height:"100%"}} fit="cover"/>}
           <button onClick={e=>{e.stopPropagation();removePhoto(i)}} style={{position:"absolute",top:-2,right:-2,width:20,height:20,borderRadius:"50%",background:"#EF4444",color:"#fff",border:"none",fontSize:10,cursor:"pointer",display:"flex",alignItems:"center",justifyContent:"center"}}>✕</button>
           {ph.analysis&&<div style={{position:"absolute",bottom:4,left:4,width:8,height:8,borderRadius:4,background:ph.analysis.color,boxShadow:`0 0 4px ${ph.analysis.color}`}}/>}

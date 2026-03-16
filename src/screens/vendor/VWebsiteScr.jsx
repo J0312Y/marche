@@ -27,10 +27,10 @@ function VWebsiteScr({onBack}){
     <div className="appbar" style={{padding:0,marginBottom:10}}><button onClick={onBack}>←</button><h2>🌐 Mon site web</h2><div style={{width:38}}/></div>
 
     {/* Status card */}
-    <div style={{padding:16,background:site.enabled?"linear-gradient(135deg,rgba(16,185,129,0.06),rgba(16,185,129,0.02))":"#F5F4F1",border:site.enabled?"1px solid rgba(16,185,129,0.15)":"1px solid #E8E6E1",borderRadius:16,marginBottom:14}}>
+    <div style={{padding:16,background:site.enabled?"linear-gradient(135deg,rgba(16,185,129,0.06),rgba(16,185,129,0.02))":"var(--light)",border:site.enabled?"1px solid rgba(16,185,129,0.15)":"1px solid var(--border)",borderRadius:16,marginBottom:14}}>
       <div style={{display:"flex",alignItems:"center",justifyContent:"space-between",marginBottom:10}}>
         <div style={{display:"flex",alignItems:"center",gap:10}}>
-          <div style={{width:40,height:40,borderRadius:12,background:site.enabled?"#10B981":"#908C82",display:"flex",alignItems:"center",justifyContent:"center",fontSize:18,color:"#fff"}}>🌐</div>
+          <div style={{width:40,height:40,borderRadius:12,background:site.enabled?"#10B981":"var(--muted)",display:"flex",alignItems:"center",justifyContent:"center",fontSize:18,color:"#fff"}}>🌐</div>
           <div>
             <div style={{fontSize:14,fontWeight:700}}>{site.enabled?"En ligne":"Hors ligne"}</div>
             <div style={{fontSize:11,color:"var(--muted)"}}>{site.subdomain}.lamuka.market</div>

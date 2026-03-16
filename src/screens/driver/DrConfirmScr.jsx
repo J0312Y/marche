@@ -42,7 +42,7 @@ function DrConfirmScr({delivery:dl,go,onBack}){
 
       {method==="code"&&<div style={{marginTop:14}}>
         <p style={{fontSize:13,color:"var(--muted)",marginBottom:10}}>Demandez le code à 4 chiffres au client</p>
-        <div className="otp-inputs">{[0,1,2,3].map(i=><input key={i} className="otp-box" maxLength={1} onChange={e=>{const v=code.split("");v[i]=e.target.value;setCode(v.join(""))}} style={{width:52,height:58,borderColor:code.length>=4?"#10B981":"#E8E6E1"}}/>)}</div>
+        <div className="otp-inputs">{[0,1,2,3].map(i=><input key={i} className="otp-box" maxLength={1} onChange={e=>{const v=code.split("");v[i]=e.target.value;setCode(v.join(""))}} style={{width:52,height:58,borderColor:code.length>=4?"#10B981":"var(--border)"}}/>)}</div>
       </div>}
 
       {method==="photo"&&<div style={{marginTop:14}}>
@@ -79,7 +79,7 @@ function DrConfirmScr({delivery:dl,go,onBack}){
       {!method&&<div className="info-box yellow" style={{marginTop:14}}><span>💡</span><span>Choisissez une méthode de confirmation pour valider la livraison</span></div>}
 
       <div style={{paddingTop:24,paddingBottom:16}}>
-        <button className="btn-primary" style={{background:method?"#10B981":"#E8E6E1",color:method?"var(--card)":"#908C82"}} onClick={()=>{if(method){setDone(true);toast.success("Livraison confirmée 🎉")}}} disabled={!method}>✅ Valider la livraison</button>
+        <button className="btn-primary" style={{background:method?"#10B981":"var(--border)",color:method?"var(--card)":"var(--muted)"}} onClick={()=>{if(method){setDone(true);toast.success("Livraison confirmée 🎉")}}} disabled={!method}>✅ Valider la livraison</button>
       </div>
     </div>
   </>);

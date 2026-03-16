@@ -43,7 +43,7 @@ function HomeScr({go,favs,toggleFav,isFav}){
     <PullToRefresh onRefresh={reload}><div className="scr">
       {/* Header - only show when not in search */}
       {!inSearchMode&&<div className="hdr"><div><div className="hdr-t">Bonjour 👋</div><div className="hdr-h">Lamuka Market</div></div>
-        <div className="hdr-r"><div className="hdr-btn" onClick={()=>go("notif")}>🔔<div className="notif-badge"/></div><div className="hdr-btn" onClick={()=>go("cart")} style={{position:"relative"}}>🛍️{cartCount>0&&<span style={{position:"absolute",top:-4,right:-4,background:"#EF4444",color:"#fff",fontSize:9,fontWeight:700,borderRadius:10,padding:"1px 5px",minWidth:16,textAlign:"center"}}>{cartCount}</span>}</div></div></div>}
+        <div className="hdr-r"><div className="hdr-btn" onClick={()=>go("notif")}>🔔<div className="notif-badge"/></div><div className="hdr-btn" onClick={()=>go("cart")} style={{position:"relative"}}>🛍️{cartCount>0&&<span style={{position:"absolute",top:-4,right:-4,background:"#EF4444",color:"var(--card)",fontSize:9,fontWeight:700,borderRadius:10,padding:"1px 5px",minWidth:16,textAlign:"center"}}>{cartCount}</span>}</div></div></div>}
 
       {/* Search bar */}
       <div style={{display:"flex",alignItems:"center",gap:8,padding:inSearchMode?"14px 16px 10px":"0 16px 12px",marginTop:inSearchMode?0:10}}>
@@ -53,7 +53,7 @@ function HomeScr({go,favs,toggleFav,isFav}){
           <input value={homeQ} onChange={e=>setHomeQ(e.target.value)} onFocus={()=>setSearchFocused(true)} placeholder="Rechercher produits, restos..." style={{flex:1,border:"none",background:"transparent",outline:"none",fontSize:13,fontFamily:"inherit",color:"var(--text)"}}/>
           {homeQ&&<span style={{cursor:"pointer",color:"var(--muted)",fontSize:12,flexShrink:0}} onClick={()=>setHomeQ("")}>✕</span>}
         </div>
-        <button onClick={()=>setShowFilter(!showFilter)} style={{width:38,height:38,borderRadius:12,border:"none",background:showFilter?"#6366F1":"#F0EFEC",cursor:"pointer",fontSize:15,display:"flex",alignItems:"center",justifyContent:"center",flexShrink:0,transition:"all .2s"}}>
+        <button onClick={()=>setShowFilter(!showFilter)} style={{width:38,height:38,borderRadius:12,border:"none",background:showFilter?"#6366F1":"var(--light)",cursor:"pointer",fontSize:15,display:"flex",alignItems:"center",justifyContent:"center",flexShrink:0,transition:"all .2s"}}>
           <span style={{filter:showFilter?"brightness(10)":"none"}}>⚙️</span>
         </button>
       </div>
@@ -66,11 +66,11 @@ function HomeScr({go,favs,toggleFav,isFav}){
         </div>
         <div style={{fontSize:12,fontWeight:600,color:"var(--muted)",marginBottom:8}}>Type de commerce</div>
         <div style={{display:"flex",gap:6,flexWrap:"wrap",marginBottom:14}}>
-          {types.map(t=><div key={t.id} onClick={()=>setFilterType(t.id)} style={{padding:"6px 12px",borderRadius:20,border:filterType===t.id?"2px solid #6366F1":"1px solid #E8E6E1",background:filterType===t.id?"rgba(99,102,241,0.06)":"#fff",cursor:"pointer",fontSize:11,fontWeight:600,color:filterType===t.id?"#6366F1":"#5E5B53"}}>{t.icon} {t.name}</div>)}
+          {types.map(t=><div key={t.id} onClick={()=>setFilterType(t.id)} style={{padding:"6px 12px",borderRadius:20,border:filterType===t.id?"2px solid #6366F1":"1px solid var(--border)",background:filterType===t.id?"rgba(99,102,241,0.06)":"var(--card)",cursor:"pointer",fontSize:11,fontWeight:600,color:filterType===t.id?"#6366F1":"var(--sub)"}}>{t.icon} {t.name}</div>)}
         </div>
         <div style={{fontSize:12,fontWeight:600,color:"var(--muted)",marginBottom:8}}>Trier par</div>
         <div style={{display:"flex",gap:6}}>
-          {[["popular","🔥 Populaires"],["rating","⭐ Mieux notés"],["price","💰 Prix ↑"]].map(([k,l])=><div key={k} onClick={()=>setFilterSort(k)} style={{padding:"6px 12px",borderRadius:20,border:filterSort===k?"2px solid #6366F1":"1px solid #E8E6E1",background:filterSort===k?"rgba(99,102,241,0.06)":"#fff",cursor:"pointer",fontSize:11,fontWeight:600,color:filterSort===k?"#6366F1":"#5E5B53"}}>{l}</div>)}
+          {[["popular","🔥 Populaires"],["rating","⭐ Mieux notés"],["price","💰 Prix ↑"]].map(([k,l])=><div key={k} onClick={()=>setFilterSort(k)} style={{padding:"6px 12px",borderRadius:20,border:filterSort===k?"2px solid #6366F1":"1px solid var(--border)",background:filterSort===k?"rgba(99,102,241,0.06)":"var(--card)",cursor:"pointer",fontSize:11,fontWeight:600,color:filterSort===k?"#6366F1":"var(--sub)"}}>{l}</div>)}
         </div>
       </div>}
 
@@ -101,7 +101,7 @@ function HomeScr({go,favs,toggleFav,isFav}){
         <div style={{marginBottom:24}}>
           <h3 style={{fontSize:17,fontWeight:700,letterSpacing:-.3,color:"var(--text)",paddingBottom:12}}>Catégories populaires</h3>
           <div style={{background:"var(--card)",borderRadius:18,overflow:"hidden",boxShadow:"0 2px 10px rgba(0,0,0,.04)"}}>
-            {CATS.map((c,i)=><div key={c.id} onClick={()=>doSearch(c.name)} style={{display:"flex",alignItems:"center",gap:14,padding:"12px 16px",cursor:"pointer",borderBottom:i<CATS.length-1?"1px solid #F5F4F1":"none",transition:"background .12s"}}>
+            {CATS.map((c,i)=><div key={c.id} onClick={()=>doSearch(c.name)} style={{display:"flex",alignItems:"center",gap:14,padding:"12px 16px",cursor:"pointer",borderBottom:i<CATS.length-1?"1px solid var(--border)":"none",transition:"background .12s"}}>
               <div style={{width:48,height:48,borderRadius:12,overflow:"hidden",flexShrink:0,background:"var(--border)"}}>
                 {c.photo?<img src={c.photo} alt={c.name} style={{width:"100%",height:"100%",objectFit:"cover"}}/>:<div style={{width:"100%",height:"100%",display:"flex",alignItems:"center",justifyContent:"center",fontSize:22}}>{c.icon}</div>}
               </div>
@@ -130,9 +130,9 @@ function HomeScr({go,favs,toggleFav,isFav}){
 
       {/* Commerce types */}
       <div style={{display:"flex",gap:6,padding:"0 20px 14px",overflowX:"auto",WebkitOverflowScrolling:"touch",scrollbarWidth:"none"}}>
-        {types.map(t=><div key={t.id} onClick={()=>setSelType(t.id)} style={{padding:"8px 10px",borderRadius:12,border:selType===t.id?"2px solid #6366F1":"1px solid #E8E6E1",background:selType===t.id?"rgba(99,102,241,0.04)":"#fff",cursor:"pointer",flexShrink:0,textAlign:"center",minWidth:54,transition:"all .2s"}}>
+        {types.map(t=><div key={t.id} onClick={()=>setSelType(t.id)} style={{padding:"8px 10px",borderRadius:12,border:selType===t.id?"2px solid #6366F1":"1px solid var(--border)",background:selType===t.id?"rgba(99,102,241,0.08)":"var(--card)",cursor:"pointer",flexShrink:0,textAlign:"center",minWidth:54,transition:"all .2s"}}>
           <div style={{fontSize:18}}>{t.icon}</div>
-          <div style={{fontSize:9,fontWeight:600,color:selType===t.id?"#6366F1":"#908C82",marginTop:2}}>{t.name}</div>
+          <div style={{fontSize:9,fontWeight:600,color:selType===t.id?"#6366F1":"var(--muted)",marginTop:2}}>{t.name}</div>
         </div>)}
       </div>
 
@@ -158,18 +158,18 @@ function HomeScr({go,favs,toggleFav,isFav}){
           const idx=i%CATS.length;
           return(<div key={c.id+"-"+i} onClick={()=>{setSC(idx);doSearch(c.name)}} style={{
             flexShrink:0,width:110,borderRadius:16,overflow:"hidden",cursor:"pointer",
-            border:idx===selCat?"2px solid #6366F1":"1px solid #E8E6E1",
+            border:idx===selCat?"2px solid #6366F1":"1px solid var(--border)",
             background:"var(--card)",transition:"border .2s",
           }}>
             <div style={{width:"100%",height:80,position:"relative",overflow:"hidden",background:"var(--border)"}}>
               {c.photo&&<img src={c.photo} alt={c.name} style={{width:"100%",height:"100%",objectFit:"cover",display:"block"}}/>}
               <div style={{position:"absolute",inset:0,background:"linear-gradient(transparent 40%,rgba(0,0,0,0.4))"}}/>
               <div style={{position:"absolute",bottom:0,left:0,right:0,padding:"4px 8px",textAlign:"center"}}>
-                <div style={{fontSize:11,fontWeight:700,color:"#fff",textShadow:"0 1px 3px rgba(0,0,0,.5)"}}>{c.name}</div>
+                <div style={{fontSize:11,fontWeight:700,color:"var(--card)",textShadow:"0 1px 3px rgba(0,0,0,.5)"}}>{c.name}</div>
               </div>
             </div>
             <div style={{padding:"5px 8px",textAlign:"center"}}>
-              <div style={{fontSize:10,color:idx===selCat?"#6366F1":"#908C82",fontWeight:600}}>{c.count} articles</div>
+              <div style={{fontSize:10,color:idx===selCat?"#6366F1":"var(--muted)",fontWeight:600}}>{c.count} articles</div>
             </div>
           </div>);
         })}
@@ -179,7 +179,7 @@ function HomeScr({go,favs,toggleFav,isFav}){
       <div className="vlist">{filteredV.slice(0,4).map(v=><div key={v.id} className="vcard" onClick={()=>go("vendor",v)}><div className="vav" style={v.logo?{overflow:"hidden",padding:0}:{}}>{v.logo?<img src={v.logo} style={{width:"100%",height:"100%",objectFit:"cover"}} alt=""/>:v.avatar}</div><div className="vi"><h4>{v.name}{v.verified&&<span className="vf">✓</span>}</h4><div className="vloc">📍 {v.loc}{v.eta&&<span style={{marginLeft:8,color:"#10B981",fontWeight:600}}>🕐 {v.eta}</span>}</div><div className="vst">⭐ <b>{v.rating}</b> · {v.products} {v.type==="restaurant"?"plats":v.type==="service"?"services":"produits"}</div></div><span style={{color:"var(--muted)"}}>›</span></div>)}</div>
 
       <div className="sec"><h3>{selType==="all"?"Populaires":"Populaires en "+types.find(t=>t.id===selType)?.name}</h3><span onClick={()=>go("allProducts")}>Voir tout</span></div>
-      <div className="pgrid">{filteredP.map(p=>{const vp=getVendorPromo(p,VENDORS);const td=totalDisc(p,VENDORS);return(<div key={p.id} className="pcard" onClick={()=>go("detail",p)}><div className="pimg"><Img src={p.photo} emoji={p.img} style={{width:"100%",height:"100%"}} fit="cover"/>{td>0&&<span className="badge">-{td}%</span>}{vp&&<span className="tag" style={{background:"#10B981",color:"#fff"}}>🏷️ {vp.promoName}</span>}{!vp&&p.tags[0]&&<span className="tag">{p.tags[0]}</span>}<span className="fav" onClick={e=>{e.stopPropagation();toggleFav(p.id)}} style={{color:isFav(p.id)?"#EF4444":"inherit",fontSize:isFav(p.id)?16:14}}>{isFav(p.id)?"❤️":"♡"}</span></div><div className="pbody"><h4>{p.name}</h4><div className="pv">{p.va} {p.vendor}{p.eta&&<span style={{marginLeft:4,color:"#10B981",fontSize:10}}>🕐 {p.eta}</span>}</div><div className="pp">{vp?<><span style={{color:"#10B981"}}>{fmt(vp.promoPrice)}</span><span className="po">{fmt(p.price)}</span></>:<>{fmt(p.price)}{p.old&&<span className="po">{fmt(p.old)}</span>}</>}</div><div className="pr" onClick={e=>{e.stopPropagation();go("reviews",p)}}>⭐ {p.rating} ({p.reviews})</div></div></div>)})}</div>
+      <div className="pgrid">{filteredP.map(p=>{const vp=getVendorPromo(p,VENDORS);const td=totalDisc(p,VENDORS);return(<div key={p.id} className="pcard" onClick={()=>go("detail",p)}><div className="pimg"><Img src={p.photo} emoji={p.img} style={{width:"100%",height:"100%"}} fit="cover"/>{td>0&&<span className="badge">-{td}%</span>}{vp&&<span className="tag" style={{background:"#10B981",color:"var(--card)"}}>🏷️ {vp.promoName}</span>}{!vp&&p.tags[0]&&<span className="tag">{p.tags[0]}</span>}<span className="fav" onClick={e=>{e.stopPropagation();toggleFav(p.id)}} style={{color:isFav(p.id)?"#EF4444":"inherit",fontSize:isFav(p.id)?16:14}}>{isFav(p.id)?"❤️":"♡"}</span></div><div className="pbody"><h4>{p.name}</h4><div className="pv">{p.va} {p.vendor}{p.eta&&<span style={{marginLeft:4,color:"#10B981",fontSize:10}}>🕐 {p.eta}</span>}</div><div className="pp">{vp?<><span style={{color:"#10B981"}}>{fmt(vp.promoPrice)}</span><span className="po">{fmt(p.price)}</span></>:<>{fmt(p.price)}{p.old&&<span className="po">{fmt(p.old)}</span>}</>}</div><div className="pr" onClick={e=>{e.stopPropagation();go("reviews",p)}}>⭐ {p.rating} ({p.reviews})</div></div></div>)})}</div>
       </>}
     </div></PullToRefresh>
   );

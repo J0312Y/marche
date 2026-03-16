@@ -30,7 +30,7 @@ function FlashScr({go,onBack}){
         const stock=stocks[idx%stocks.length];
         const pct=Math.round((stock/maxStock)*100);
         const urgent=stock<=5;
-        return(<div key={p.id} onClick={()=>go("detail",p)} style={{display:"flex",gap:12,padding:12,background:"var(--card)",border:urgent?"2px solid rgba(239,68,68,0.3)":"1px solid #E8E6E1",borderRadius:16,marginBottom:10,cursor:"pointer",position:"relative"}}>
+        return(<div key={p.id} onClick={()=>go("detail",p)} style={{display:"flex",gap:12,padding:12,background:"var(--card)",border:urgent?"2px solid rgba(239,68,68,0.3)":"1px solid var(--border)",borderRadius:16,marginBottom:10,cursor:"pointer",position:"relative"}}>
           {urgent&&<div style={{position:"absolute",top:-6,right:12,padding:"2px 8px",borderRadius:6,background:"#EF4444",color:"#fff",fontSize:9,fontWeight:700}}>🔥 Dernières pièces</div>}
           <div style={{width:80,height:80,borderRadius:12,overflow:"hidden",flexShrink:0,position:"relative",background:"var(--light)"}}>
             <Img src={p.photo} emoji={p.img} style={{width:"100%",height:"100%"}} fit="cover"/>
@@ -46,7 +46,7 @@ function FlashScr({go,onBack}){
             {/* Stock bar */}
             <div>
               <div style={{display:"flex",justifyContent:"space-between",fontSize:10,marginBottom:2}}>
-                <span style={{color:urgent?"#EF4444":"#908C82",fontWeight:600}}>{stock} restants</span>
+                <span style={{color:urgent?"#EF4444":"var(--muted)",fontWeight:600}}>{stock} restants</span>
                 <span style={{color:"var(--muted)"}}>{maxStock-stock} vendus</span>
               </div>
               <div style={{height:4,background:"var(--border)",borderRadius:2,overflow:"hidden"}}>

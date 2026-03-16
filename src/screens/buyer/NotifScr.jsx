@@ -78,7 +78,7 @@ function NotifScr({ onBack, go }) {
             const detail = DETAILS[n.id];
             return (
               <div key={n.id} onClick={() => handleClick(n)} style={{
-                padding: "14px 20px", borderBottom: "1px solid #F5F4F1", cursor: "pointer",
+                padding: "14px 20px", borderBottom: "1px solid var(--border)", cursor: "pointer",
                 background: !n.read ? "rgba(99,102,241,0.03)" : "transparent",
                 transition: "background .15s",
               }}>
@@ -111,7 +111,7 @@ function NotifScr({ onBack, go }) {
                 {isOpen && detail && (
                   <div style={{
                     marginTop: 12, marginLeft: !n.read ? 20 : 0, padding: 14,
-                    background: "#F9F8F6", borderRadius: 14, border: "1px solid #E8E6E1",
+                    background: "#F9F8F6", borderRadius: 14, border: "1px solid var(--border)",
                   }}>
                     <div style={{ fontSize: 13, color: "#5E5B53", lineHeight: 1.7, whiteSpace: "pre-line" }}>
                       {detail.full}

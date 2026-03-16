@@ -25,7 +25,7 @@ function DrNotifScr({onBack}){
         const isOpen=expanded===n.id;
         return(<div key={n.id} onClick={()=>{setExpanded(isOpen?null:n.id);if(!n.read)markRead(n.id)}} style={{padding:"14px 20px",borderBottom:"1px solid var(--border)",cursor:"pointer",background:!n.read?"rgba(99,102,241,0.03)":"transparent",transition:"background .2s"}}>
           <div style={{display:"flex",alignItems:"flex-start",gap:12}}>
-            <div style={{width:40,height:40,borderRadius:12,background:!n.read?"rgba(99,102,241,0.08)":"#F5F4F1",display:"flex",alignItems:"center",justifyContent:"center",fontSize:18,flexShrink:0}}>{n.icon}</div>
+            <div style={{width:40,height:40,borderRadius:12,background:!n.read?"rgba(99,102,241,0.08)":"var(--light)",display:"flex",alignItems:"center",justifyContent:"center",fontSize:18,flexShrink:0}}>{n.icon}</div>
             <div style={{flex:1,minWidth:0}}>
               <div style={{display:"flex",justifyContent:"space-between",alignItems:"flex-start"}}>
                 <h4 style={{fontSize:14,fontWeight:!n.read?700:600,color:"var(--text)",margin:0}}>{n.title}</h4>

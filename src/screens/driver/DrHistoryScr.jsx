@@ -15,7 +15,7 @@ function DrHistoryScr({onBack}){
 
     <div style={{padding:"0 16px 80px"}}>{D_HISTORY.map(h=>{
       const isOpen=expanded===h.id;
-      return(<div key={h.id} style={{background:"var(--card)",border:isOpen?"2px solid #6366F1":"1px solid #E8E6E1",borderRadius:16,marginBottom:10,overflow:"hidden",transition:"all .2s"}}>
+      return(<div key={h.id} style={{background:"var(--card)",border:isOpen?"2px solid #6366F1":"1px solid var(--border)",borderRadius:16,marginBottom:10,overflow:"hidden",transition:"all .2s"}}>
         {/* Summary — always visible */}
         <div onClick={()=>setExpanded(isOpen?null:h.id)} style={{padding:14,cursor:"pointer"}}>
           <div style={{display:"flex",justifyContent:"space-between",alignItems:"center",marginBottom:6}}>
@@ -37,9 +37,9 @@ function DrHistoryScr({onBack}){
               <div style={{fontSize:10,color:"var(--muted)",marginBottom:2}}>Course</div>
               <div style={{fontSize:13,fontWeight:600}}>{fmt(h.fee)}</div>
             </div>
-            <div style={{padding:10,background:h.tip>0?"rgba(245,158,11,0.06)":"#F5F4F1",borderRadius:10}}>
+            <div style={{padding:10,background:h.tip>0?"rgba(245,158,11,0.06)":"var(--light)",borderRadius:10}}>
               <div style={{fontSize:10,color:"var(--muted)",marginBottom:2}}>Pourboire</div>
-              <div style={{fontSize:13,fontWeight:600,color:h.tip>0?"#F59E0B":"#908C82"}}>{h.tip>0?fmt(h.tip):"—"}</div>
+              <div style={{fontSize:13,fontWeight:600,color:h.tip>0?"#F59E0B":"var(--muted)"}}>{h.tip>0?fmt(h.tip):"—"}</div>
             </div>
           </div>
 

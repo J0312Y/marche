@@ -22,7 +22,7 @@ const MOCK_REVIEWS=[
   {name:"Patrick M.",avatar:"https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=80&h=80&fit=crop&crop=face",rating:4,text:"Bon rapport qualité-prix. L'emballage pourrait être meilleur.",date:"8 Fév 2026",product:"Chemise Bogolan",photos:[]},
   {name:"Celine N.",avatar:"https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=80&h=80&fit=crop&crop=face",rating:5,text:"Deuxième achat, toujours satisfaite. Commerce très réactif et produits de qualité.",date:"3 Fév 2026",product:"Sac à Main Cuir",photos:["https://images.unsplash.com/photo-1548036328-c9fa89d128fa?w=100&h=100&fit=crop"]},
   {name:"David T.",avatar:"https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=80&h=80&fit=crop&crop=face",rating:3,text:"Produit conforme mais livraison un peu lente (4 jours).",date:"28 Jan 2026",product:"Sandales Cuir",photos:[]},
-  {name:"Grace M.",avatar:"👩‍🦳",rating:5,text:"Le sac est magnifique ! Cuir de très bonne qualité, je suis ravie.",date:"20 Jan 2026",product:"Sac à Main Cuir",photos:["https://images.unsplash.com/photo-1584917865442-de89df76afd3?w=100&h=100&fit=crop","https://images.unsplash.com/photo-1548036328-c9fa89d128fa?w=100&h=100&fit=crop"]},
+  {name:"Grace M.",avatar:"https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=80&h=80&fit=crop&crop=face",rating:5,text:"Le sac est magnifique ! Cuir de très bonne qualité, je suis ravie.",date:"20 Jan 2026",product:"Sac à Main Cuir",photos:["https://images.unsplash.com/photo-1584917865442-de89df76afd3?w=100&h=100&fit=crop","https://images.unsplash.com/photo-1548036328-c9fa89d128fa?w=100&h=100&fit=crop"]},
 ];
 
 function VendorScr({vendor:vProp,go,onBack}){
@@ -82,7 +82,7 @@ function VendorScr({vendor:vProp,go,onBack}){
     {/* Tab bar */}
     <div style={{display:"flex",borderBottom:"1px solid var(--border)",margin:"0 20px 14px"}}>
       {[["products","🛍️ Produits"],["reviews","⭐ Avis"],["followers","👥 Abonnés"]].map(([k,l])=>(
-        <button key={k} onClick={()=>setTab(k)} style={{flex:1,padding:"10px 0",border:"none",borderBottom:tab===k?"2px solid #6366F1":"2px solid transparent",background:"transparent",fontSize:12,fontWeight:tab===k?700:500,color:tab===k?"#6366F1":"#908C82",cursor:"pointer",fontFamily:"inherit",transition:"all .2s"}}>{l}</button>
+        <button key={k} onClick={()=>setTab(k)} style={{flex:1,padding:"10px 0",border:"none",borderBottom:tab===k?"2px solid #6366F1":"2px solid transparent",background:"transparent",fontSize:12,fontWeight:tab===k?700:500,color:tab===k?"#6366F1":"var(--muted)",cursor:"pointer",fontFamily:"inherit",transition:"all .2s"}}>{l}</button>
       ))}
     </div>
 
@@ -104,7 +104,7 @@ function VendorScr({vendor:vProp,go,onBack}){
 
       {MOCK_REVIEWS.map((r,i)=><div key={i} style={{padding:14,background:"var(--card)",border:"1px solid var(--border)",borderRadius:16,marginBottom:10}}>
         <div style={{display:"flex",alignItems:"center",gap:10,marginBottom:8}}>
-          <div style={{width:36,height:36,borderRadius:10,background:"var(--light)",display:"flex",alignItems:"center",justifyContent:"center",fontSize:18}}>{r.avatar}</div>
+          <div style={{width:36,height:36,borderRadius:10,overflow:"hidden",flexShrink:0}}>{r.avatar?.startsWith("http")?<img src={r.avatar} style={{width:"100%",height:"100%",objectFit:"cover"}} alt=""/>:<div style={{width:"100%",height:"100%",background:"var(--light)",display:"flex",alignItems:"center",justifyContent:"center",fontSize:18}}>{r.avatar}</div>}</div>
           <div style={{flex:1}}>
             <div style={{fontSize:13,fontWeight:700}}>{r.name}</div>
             <div style={{fontSize:11,color:"var(--muted)"}}>{r.date} · {r.product}</div>
@@ -121,14 +121,20 @@ function VendorScr({vendor:vProp,go,onBack}){
     {/* ═══ FOLLOWERS TAB ═══ */}
     {tab==="followers"&&<div style={{padding:"0 16px 80px"}}>
       <div style={{fontSize:12,color:"var(--muted)",marginBottom:14}}>{fCount} abonnés</div>
-      {MOCK_FOLLOWERS.map((f,i)=><div key={i} style={{display:"flex",alignItems:"center",gap:12,padding:"12px 0",borderBottom:i<MOCK_FOLLOWERS.length-1?"1px solid #F5F4F1":"none"}}>
-        <div style={{width:42,height:42,borderRadius:12,background:"var(--light)",display:"flex",alignItems:"center",justifyContent:"center",fontSize:20,flexShrink:0}}><img src={f.avatar} style={{width:"100%",height:"100%",objectFit:"cover"}} alt=""/></div>
-        <div style={{flex:1}}>
-          <div style={{fontSize:14,fontWeight:600}}>{f.name}</div>
-          <div style={{fontSize:11,color:"var(--muted)"}}>📍 {f.zone} · Depuis {f.since}</div>
-        </div>
-        <div style={{width:8,height:8,borderRadius:"50%",background:"#10B981",flexShrink:0}} title="En ligne"/>
-      </div>)}
+      <div style={{display:"grid",gridTemplateColumns:"1fr 1fr",gap:8}}>
+        {MOCK_FOLLOWERS.map((f,i)=><div key={i} style={{padding:12,background:"var(--card)",border:"1px solid var(--border)",borderRadius:16,textAlign:"center"}}>
+          <div style={{width:52,height:52,borderRadius:16,overflow:"hidden",margin:"0 auto 8px",border:"2px solid var(--border)"}}>
+            <img src={f.avatar} style={{width:"100%",height:"100%",objectFit:"cover"}} alt=""/>
+          </div>
+          <div style={{fontSize:13,fontWeight:700}}>{f.name}</div>
+          <div style={{fontSize:10,color:"var(--muted)",marginTop:2}}>📍 {f.zone}</div>
+          <div style={{fontSize:10,color:"var(--muted)",marginTop:1}}>Depuis {f.since}</div>
+          <div style={{display:"flex",alignItems:"center",justifyContent:"center",gap:4,marginTop:6}}>
+            <div style={{width:6,height:6,borderRadius:"50%",background:"#10B981"}}/>
+            <span style={{fontSize:10,color:"#10B981",fontWeight:600}}>En ligne</span>
+          </div>
+        </div>)}
+      </div>
     </div>}
 
     {/* Image fullscreen viewer */}

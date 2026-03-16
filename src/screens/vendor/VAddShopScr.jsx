@@ -48,7 +48,7 @@ function VAddShopScr({onBack}){
         <h3 style={{fontSize:16,fontWeight:700,marginBottom:6}}>Type d'établissement</h3>
         <p style={{fontSize:12,color:"var(--muted)",marginBottom:14}}>Choisissez le type qui correspond le mieux à votre activité</p>
         <div style={{display:"grid",gridTemplateColumns:"1fr 1fr",gap:10}}>
-          {shopTypes.map(t=><div key={t.id} onClick={()=>setShopType(t.id)} style={{padding:16,background:shopType===t.id?"rgba(99,102,241,0.06)":"#fff",border:shopType===t.id?"2px solid #6366F1":"2px solid #E8E6E1",borderRadius:16,cursor:"pointer",textAlign:"center",transition:"all .15s",position:"relative"}}>
+          {shopTypes.map(t=><div key={t.id} onClick={()=>setShopType(t.id)} style={{padding:16,background:shopType===t.id?"rgba(99,102,241,0.06)":"#fff",border:shopType===t.id?"2px solid #6366F1":"2px solid var(--border)",borderRadius:16,cursor:"pointer",textAlign:"center",transition:"all .15s",position:"relative"}}>
             {shopType===t.id&&<div style={{position:"absolute",top:6,right:6,width:18,height:18,borderRadius:"50%",background:"#6366F1",display:"flex",alignItems:"center",justifyContent:"center",fontSize:10,color:"#fff"}}>✓</div>}
             <div style={{fontSize:32,marginBottom:6}}>{t.icon}</div>
             <div style={{fontSize:13,fontWeight:700}}>{t.name}</div>
@@ -71,7 +71,7 @@ function VAddShopScr({onBack}){
         {shopType==="restaurant"&&<div className="field"><label>Temps de préparation moyen</label><input placeholder="Ex: 30-45 min"/></div>}
         <label style={{display:"block",fontSize:12,fontWeight:600,color:"var(--sub)",margin:"14px 0 8px"}}>Catégories <span style={{color:"var(--muted)",fontWeight:400}}>({selCats.length} sélectionnée{selCats.length>1?"s":""})</span></label>
         <div style={{display:"flex",gap:6,flexWrap:"wrap"}}>
-          {(catsByType[shopType]||catsByType.boutique).map(c=><span key={c} onClick={()=>toggleCat(c)} style={{padding:"8px 14px",borderRadius:10,background:selCats.includes(c)?"rgba(99,102,241,0.08)":"#fff",border:selCats.includes(c)?"2px solid #6366F1":"2px solid #E8E6E1",color:selCats.includes(c)?"#6366F1":"#5E5B53",fontSize:12,fontWeight:600,cursor:"pointer",transition:"all .15s"}}>{selCats.includes(c)?"✓ ":""}{c}</span>)}
+          {(catsByType[shopType]||catsByType.boutique).map(c=><span key={c} onClick={()=>toggleCat(c)} style={{padding:"8px 14px",borderRadius:10,background:selCats.includes(c)?"rgba(99,102,241,0.08)":"#fff",border:selCats.includes(c)?"2px solid #6366F1":"2px solid var(--border)",color:selCats.includes(c)?"#6366F1":"var(--sub)",fontSize:12,fontWeight:600,cursor:"pointer",transition:"all .15s"}}>{selCats.includes(c)?"✓ ":""}{c}</span>)}
         </div>
       </>}
 

@@ -49,7 +49,7 @@ function VNotifScr({onBack,go}){
             }}>
               <div style={{display:"flex",gap:12,alignItems:"flex-start"}}>
                 {!n.read&&<div style={{width:8,height:8,borderRadius:"50%",background:"#6366F1",flexShrink:0,marginTop:8}}/>}
-                <div style={{width:42,height:42,borderRadius:12,background:!n.read?"rgba(99,102,241,0.08)":"#F5F4F1",display:"flex",alignItems:"center",justifyContent:"center",fontSize:18,flexShrink:0}}>{n.icon}</div>
+                <div style={{width:42,height:42,borderRadius:12,background:!n.read?"rgba(99,102,241,0.08)":"var(--light)",display:"flex",alignItems:"center",justifyContent:"center",fontSize:18,flexShrink:0}}>{n.icon}</div>
                 <div style={{flex:1,minWidth:0}}>
                   <div style={{display:"flex",justifyContent:"space-between",alignItems:"flex-start"}}>
                     <h4 style={{fontSize:13,fontWeight:!n.read?700:600,color:"var(--text)",margin:0}}>{n.title}</h4>

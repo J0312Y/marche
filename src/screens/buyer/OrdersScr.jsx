@@ -40,7 +40,7 @@ function OrdersScr({go}){
     {/* Tabs */}
     <div style={{display:"flex",gap:0,marginBottom:12,background:"var(--light)",borderRadius:12,padding:3}}>
       {[["active","En cours",active.length],["done","Livrées",done.length],["cancelled","Annulées",cancelled.length]].map(([k,l,c])=>(
-        <button key={k} onClick={()=>setTab(k)} style={{flex:1,padding:"8px 0",borderRadius:10,border:"none",background:tab===k?"var(--card)":"transparent",color:tab===k?"#191815":"#908C82",fontSize:11,fontWeight:tab===k?700:500,cursor:"pointer",fontFamily:"inherit",boxShadow:tab===k?"0 1px 4px rgba(0,0,0,.06)":"none"}}>{l} ({c})</button>
+        <button key={k} onClick={()=>setTab(k)} style={{flex:1,padding:"8px 0",borderRadius:10,border:"none",background:tab===k?"var(--card)":"transparent",color:tab===k?"#191815":"var(--muted)",fontSize:11,fontWeight:tab===k?700:500,cursor:"pointer",fontFamily:"inherit",boxShadow:tab===k?"0 1px 4px rgba(0,0,0,.06)":"none"}}>{l} ({c})</button>
       ))}
     </div>
 
@@ -81,7 +81,7 @@ function OrdersScr({go}){
         <h3 style={{fontSize:17,fontWeight:700,marginBottom:6}}>Recommander ?</h3>
         <p style={{fontSize:13,color:"var(--muted)",marginBottom:8}}>Les mêmes articles seront ajoutés :</p>
         <div style={{textAlign:"left",marginBottom:14}}>
-          {reorderConfirm.items.map((item,i)=><div key={i} style={{padding:"6px 0",fontSize:13,borderBottom:i<reorderConfirm.items.length-1?"1px solid #F5F4F1":"none"}}>{item}</div>)}
+          {reorderConfirm.items.map((item,i)=><div key={i} style={{padding:"6px 0",fontSize:13,borderBottom:i<reorderConfirm.items.length-1?"1px solid var(--border)":"none"}}>{item}</div>)}
           <div style={{display:"flex",justifyContent:"space-between",paddingTop:8,fontWeight:700,fontSize:14}}>
             <span>Total</span><span style={{color:"#6366F1"}}>{reorderConfirm.total} FCFA</span>
           </div>

@@ -52,8 +52,8 @@ function VPromosScr({go,onBack}){
     {loading?<SkeletonCards count={2}/>:<>
       {/* Tabs */}
       <div style={{display:"flex",gap:0,marginBottom:12,background:"var(--light)",borderRadius:12,padding:3}}>
-        <button onClick={()=>setTab("active")} style={{flex:1,padding:"8px 0",borderRadius:10,border:"none",background:tab==="active"?"var(--card)":"transparent",color:tab==="active"?"#10B981":"#908C82",fontSize:11,fontWeight:tab==="active"?700:500,cursor:"pointer",fontFamily:"inherit",boxShadow:tab==="active"?"0 1px 4px rgba(0,0,0,.06)":"none"}}>🟢 En cours ({activePromos.length})</button>
-        <button onClick={()=>setTab("inactive")} style={{flex:1,padding:"8px 0",borderRadius:10,border:"none",background:tab==="inactive"?"var(--card)":"transparent",color:tab==="inactive"?"#908C82":"#908C82",fontSize:11,fontWeight:tab==="inactive"?700:500,cursor:"pointer",fontFamily:"inherit",boxShadow:tab==="inactive"?"0 1px 4px rgba(0,0,0,.06)":"none"}}>⏸️ Terminées ({inactivePromos.length})</button>
+        <button onClick={()=>setTab("active")} style={{flex:1,padding:"8px 0",borderRadius:10,border:"none",background:tab==="active"?"var(--card)":"transparent",color:tab==="active"?"#10B981":"var(--muted)",fontSize:11,fontWeight:tab==="active"?700:500,cursor:"pointer",fontFamily:"inherit",boxShadow:tab==="active"?"0 1px 4px rgba(0,0,0,.06)":"none"}}>🟢 En cours ({activePromos.length})</button>
+        <button onClick={()=>setTab("inactive")} style={{flex:1,padding:"8px 0",borderRadius:10,border:"none",background:tab==="inactive"?"var(--card)":"transparent",color:tab==="inactive"?"#908C82":"var(--muted)",fontSize:11,fontWeight:tab==="inactive"?700:500,cursor:"pointer",fontFamily:"inherit",boxShadow:tab==="inactive"?"0 1px 4px rgba(0,0,0,.06)":"none"}}>⏸️ Terminées ({inactivePromos.length})</button>
       </div>
 
       {shown.length===0&&<div style={{textAlign:"center",padding:"40px 0"}}><div style={{fontSize:36,marginBottom:8}}>🏷️</div><div style={{fontSize:13,color:"var(--muted)"}}>{tab==="active"?"Aucune promotion active":"Aucune promotion terminée"}</div></div>}
@@ -63,7 +63,7 @@ function VPromosScr({go,onBack}){
           {/* Header */}
           <div style={{display:"flex",alignItems:"center",justifyContent:"space-between",marginBottom:8}}>
             <div style={{display:"flex",alignItems:"center",gap:10}}>
-              <div style={{width:40,height:40,borderRadius:12,background:p.active?"linear-gradient(135deg,#10B981,#059669)":"#E8E6E1",display:"flex",alignItems:"center",justifyContent:"center",color:"#fff",fontSize:16,fontWeight:800,flexShrink:0}}>
+              <div style={{width:40,height:40,borderRadius:12,background:p.active?"linear-gradient(135deg,#10B981,#059669)":"var(--border)",display:"flex",alignItems:"center",justifyContent:"center",color:"#fff",fontSize:16,fontWeight:800,flexShrink:0}}>
                 {p.discount}{p.type}
               </div>
               <div>
@@ -117,7 +117,7 @@ function VPromosScr({go,onBack}){
           <div className={`toggle ${editPromo.active?"on":""}`} onClick={()=>setEditPromo({...editPromo,active:!editPromo.active})}/>
         </div>
 
-        <button onClick={saveEdit} disabled={!editPromo.name} style={{width:"100%",padding:14,borderRadius:14,border:"none",background:editPromo.name?"#6366F1":"#E8E6E1",color:editPromo.name?"var(--card)":"#908C82",fontSize:14,fontWeight:700,cursor:editPromo.name?"pointer":"not-allowed",fontFamily:"inherit"}}>
+        <button onClick={saveEdit} disabled={!editPromo.name} style={{width:"100%",padding:14,borderRadius:14,border:"none",background:editPromo.name?"#6366F1":"var(--border)",color:editPromo.name?"var(--card)":"var(--muted)",fontSize:14,fontWeight:700,cursor:editPromo.name?"pointer":"not-allowed",fontFamily:"inherit"}}>
           {editPromo.id?"💾 Enregistrer les modifications":"🏷️ Créer la promotion"}
         </button>
       </div>
