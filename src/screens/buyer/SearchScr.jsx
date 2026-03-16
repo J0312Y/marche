@@ -29,12 +29,12 @@ function SearchScr({go,onBack,fromTab,favs,toggleFav,isFav}){
     {/* Tabs: Products / Vendors */}
     <div style={{display:"flex",margin:"0 16px 8px",background:"var(--light)",borderRadius:10,padding:2}}>
       {[["products","🛍️ Produits",fp.length],["vendors","🏪 Boutiques",fv.length]].map(([k,l,c])=>(
-        <button key={k} onClick={()=>setTab(k)} style={{flex:1,padding:"7px 0",borderRadius:8,border:"none",background:tab===k?"var(--card)":"transparent",color:tab===k?"#191815":"var(--muted)",fontSize:11,fontWeight:tab===k?700:500,cursor:"pointer",fontFamily:"inherit",boxShadow:tab===k?"0 1px 3px rgba(0,0,0,.06)":"none"}}>{l} ({c})</button>
+        <button key={k} onClick={()=>setTab(k)} style={{flex:1,padding:"7px 0",borderRadius:8,border:"none",background:tab===k?"var(--card)":"transparent",color:tab===k?"var(--text)":"var(--muted)",fontSize:11,fontWeight:tab===k?700:500,cursor:"pointer",fontFamily:"inherit",boxShadow:tab===k?"0 1px 3px rgba(0,0,0,.06)":"none"}}>{l} ({c})</button>
       ))}
     </div>
     {tab==="products"&&<>
       {/* Category chips */}
-      <div style={{display:"flex",gap:6,padding:"0 16px 8px",overflowX:"auto",scrollbarWidth:"none"}}>{cats.map(c=><button key={c} onClick={()=>setSC(c)} style={{padding:"5px 12px",borderRadius:20,border:sc===c?"1px solid #6366F1":"1px solid var(--border)",background:sc===c?"rgba(99,102,241,0.06)":"#fff",color:sc===c?"#6366F1":"var(--sub)",fontSize:10,fontWeight:600,cursor:"pointer",fontFamily:"inherit",whiteSpace:"nowrap",flexShrink:0}}>{c}</button>)}</div>
+      <div style={{display:"flex",gap:6,padding:"0 16px 8px",overflowX:"auto",scrollbarWidth:"none"}}>{cats.map(c=><button key={c} onClick={()=>setSC(c)} style={{padding:"5px 12px",borderRadius:20,border:sc===c?"1px solid #6366F1":"1px solid var(--border)",background:sc===c?"rgba(99,102,241,0.06)":"var(--card)",color:sc===c?"#6366F1":"var(--sub)",fontSize:10,fontWeight:600,cursor:"pointer",fontFamily:"inherit",whiteSpace:"nowrap",flexShrink:0}}>{c}</button>)}</div>
       {/* Sort */}
       <div style={{display:"flex",gap:6,padding:"0 16px 8px"}}>
         {[["popular","🔥 Populaires"],["rating","⭐ Notés"],["priceAsc","💰 Prix ↑"],["priceDesc","💰 Prix ↓"]].map(([k,l])=><button key={k} onClick={()=>setSortBy(k)} style={{padding:"4px 10px",borderRadius:8,border:"none",background:sortBy===k?"#6366F1":"var(--light)",color:sortBy===k?"var(--card)":"var(--muted)",fontSize:9,fontWeight:600,cursor:"pointer",fontFamily:"inherit"}}>{l}</button>)}
