@@ -101,7 +101,7 @@ function RoleRegScr({onBack,onDone,forceRole}){
       {step===3&&role==="vendor"&&<><h3 style={{fontSize:16,fontWeight:700,marginBottom:14}}>Choisir un plan</h3>
         {[["starter","Starter","Gratuit","Pour démarrer",["10 articles max","8% commission","Support email","Stats basiques"]],
           ["pro","Pro","15 000 FCFA/mois","Articles illimités",["Articles illimités","4% commission","Analytics avancés","Badge vérifié ✓","Support prioritaire"]],
-          ["enterprise","Enterprise","45 000 FCFA/mois","Multi-établissements",["Multi-établissements","2% commission","API complète","Manager dédié","Dashboard personnalisé"]]
+          ["enterprise","Enterprise","45 000 FCFA/mois","Multi-établissements",["Multi-établissements","2% commission","API complète","🌐 Site web personnalisé","Manager dédié","Dashboard personnalisé"]]
         ].map(([k,n,pr,d,f])=><div key={k} className={`vr-plan ${plan===k?"on":""}`} onClick={()=>setPlan(k)} style={plan===k?{borderColor:color}:{}}>
           <h4>{n}<span>{pr}</span></h4><p>{d}</p>
           <div className="vrf">{f.map(x=><span key={x}>✓ {x}</span>)}</div>

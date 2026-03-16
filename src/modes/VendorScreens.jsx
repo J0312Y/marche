@@ -10,7 +10,7 @@ import {
   VAddDriverScr, VDriverProfileScr, VTrackDeliveryScr, VDriverChatScr,
   VNotifScr, VSettingsScr, VReportsScr, VSupportScr, VProfileScr,
   VShopsScr, ShopTeamTab, VShopDetailScr, VAddShopScr,
-  VApiScr, VDocScr, VUpgradePlanScr
+  VApiScr, VDocScr, VUpgradePlanScr, VWebsiteScr
 } from "../screens/vendor";
 import { WithdrawScr } from "../screens/buyer";
 import { SettingsScr, HelpScr, AboutScr, TermsScr, PrivacyScr } from "../screens/common";
@@ -57,6 +57,7 @@ export default function VendorScreens() {
     case "vShopDetail": return <VShopDetailScr shop={data} go={go} onBack={back} />;
     case "vAddShop": return <VAddShopScr onBack={back} />;
     case "vApi": return <VApiScr go={go} onBack={back} />;
+    case "vWebsite": return <VWebsiteScr onBack={back} />;
     case "vDoc": return <VDocScr docKey={data} onBack={back} />;
     case "terms": return <TermsScr onBack={back} />;
     case "privacy": return <PrivacyScr onBack={back} />;

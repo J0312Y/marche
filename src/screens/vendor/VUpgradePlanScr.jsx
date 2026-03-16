@@ -5,7 +5,7 @@ function VUpgradePlanScr({onBack,onUpgrade,currentPlan="starter"}){
   const plans=[
     ["starter","Starter","Gratuit","Pour démarrer",["10 articles max","8% commission","Support email","Stats basiques"]],
     ["pro","Pro","15 000 FCFA/mois","Le plus populaire",["Articles illimités","4% commission","Analytics avancés","Badge vérifié ✓","Support prioritaire","Promotions"]],
-    ["enterprise","Enterprise","45 000 FCFA/mois","Pour les grandes boutiques",["Multi-établissements","2% commission","API complète","Manager dédié","Dashboard personnalisé","Rapports avancés"]]
+    ["enterprise","Enterprise","45 000 FCFA/mois","Pour les grandes boutiques",["Multi-établissements","2% commission","API complète","🌐 Site web personnalisé","Manager dédié","Dashboard personnalisé","Rapports avancés"]]
   ];
   const planOrder={starter:0,pro:1,enterprise:2};
   const upgradeable=plans.filter(([k])=>planOrder[k]>planOrder[currentPlan]);

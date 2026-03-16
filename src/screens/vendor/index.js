@@ -26,5 +26,6 @@ export { default as ShopTeamTab } from './ShopTeamTab';
 export { default as VShopDetailScr } from './VShopDetailScr';
 export { default as VAddShopScr } from './VAddShopScr';
 export { default as VApiScr } from './VApiScr';
+export { default as VWebsiteScr } from './VWebsiteScr';
 export { default as VDocScr } from './VDocScr';
 export { default as VUpgradePlanScr } from './VUpgradePlanScr';
