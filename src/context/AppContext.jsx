@@ -43,6 +43,8 @@ export function AppProvider({ children }) {
 
   // ── Toast ──
   const [toast, setToast] = useState(null);
+  const [darkMode, setDarkMode] = useState(() => localStorage.getItem('lamuka_dark') === '1');
+  const toggleDark = useCallback(() => { setDarkMode(d => { const n = !d; localStorage.setItem('lamuka_dark', n ? '1' : '0'); return n; }); }, []);
   const showToast = useCallback((message, type = 'success') => {
     setToast({ message, type });
     setTimeout(() => setToast(null), 2500);
@@ -241,6 +243,7 @@ export function AppProvider({ children }) {
     onRoleApproved, hasVendor, hasDriver,
     unreadCount, setUnreadCount,
     toast, showToast,
+    darkMode, toggleDark,
   };
 
   return <AppContext.Provider value={value}>{children}</AppContext.Provider>;

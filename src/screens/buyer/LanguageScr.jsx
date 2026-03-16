@@ -6,7 +6,7 @@ function LanguageScr({onBack}){
   const langs=[["fr","🇫🇷","Français"],["en","🇬🇧","English"],["ln","🇨🇬","Lingala"],["kg","🇨🇬","Kikongo"]];
   return(<div className="scr" style={{padding:16}}><div className="appbar" style={{padding:0,marginBottom:12}}><button onClick={onBack}>←</button><h2>Langue</h2><div style={{width:38}}/></div>
     {langs.map(([k,f,n])=><div key={k} className="setting-item" style={{cursor:"pointer",border:lang===k?"2px solid #6366F1":"1px solid #E8E6E1"}} onClick={()=>setLang(k)}><span style={{fontSize:22}}>{f}</span><span className="si-t">{n}</span>{lang===k&&<span style={{color:"#6366F1",fontWeight:700}}>✓</span>}</div>)}
-    <button className="btn-primary" style={{marginTop:14}} onClick={onBack}>Enregistrer</button>
+    <button className="btn-primary" style={{marginTop:14}} onClick={()=>{toast.success(lang==="fr"?"Langue mise à jour : Français 🇫🇷":lang==="en"?"Language updated: English 🇬🇧":lang==="ln"?"Monoko ebongwani: Lingala 🇨🇬":"Ndinga ebaluki: Kikongo 🇨🇬");onBack()}}>Enregistrer</button>
   </div>);
 }
 

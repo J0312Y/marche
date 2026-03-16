@@ -1,60 +1,64 @@
 import { useState } from "react";
 import Img from "../../components/Img";
 import { useData } from "../../hooks";
-import { fmt, disc } from "../../utils/helpers";
+import { fmt, disc, getVendorPromo, totalDisc } from "../../utils/helpers";
 
 function SearchScr({go,onBack,fromTab,favs,toggleFav,isFav}){
-  const { P, CATS } = useData();
+  const { P, VENDORS, CATS } = useData();
   const [q,setQ]=useState("");const [sc,setSC]=useState("Tous");
-  const [showFilter,setShowFilter]=useState(false);
+  const [tab,setTab]=useState("products");
   const [sortBy,setSortBy]=useState("popular");
-  const sortOpts=[{k:"popular",l:"🔥 Populaires"},{k:"rating",l:"⭐ Mieux notés"},{k:"priceAsc",l:"💰 Prix ↑"},{k:"priceDesc",l:"💰 Prix ↓"}];
   const cats=["Tous",...CATS.map(c=>c.name)];
-  const f=P.filter(p=>{
-    if(q){const ql=q.toLowerCase();if(!p.name.toLowerCase().includes(ql)&&!p.cat.toLowerCase().includes(ql)&&!p.vendor.toLowerCase().includes(ql))return false}
+  const ql=q.toLowerCase();
+  const fp=P.filter(p=>{
+    if(q&&!p.name.toLowerCase().includes(ql)&&!p.cat.toLowerCase().includes(ql)&&!p.vendor.toLowerCase().includes(ql))return false;
     if(sc!=="Tous"&&p.cat!==sc)return false;return true;
   }).sort((a,b)=>sortBy==="priceAsc"?a.price-b.price:sortBy==="priceDesc"?b.price-a.price:sortBy==="rating"?b.rating-a.rating:b.reviews-a.reviews);
+  const fv=VENDORS.filter(v=>{
+    if(!q)return true;return v.name.toLowerCase().includes(ql)||v.desc?.toLowerCase().includes(ql)||v.type?.toLowerCase().includes(ql);
+  });
   return(<div className="scr">
-    {!fromTab&&<div className="appbar"><button onClick={onBack}>←</button><h2>Rechercher</h2><div style={{width:38}}/></div>}
-    {fromTab&&<div className="appbar"><h2>Rechercher</h2></div>}
-    <div style={{display:"flex",alignItems:"center",gap:8,padding:"0 16px 10px"}}>
-      <div style={{flex:1,display:"flex",alignItems:"center",gap:8,padding:"9px 14px",background:"#F5F4F1",borderRadius:14,border:"1px solid #E8E6E1"}}>
+    {fromTab?<div className="appbar"><h2>Rechercher</h2></div>:<div className="appbar"><button onClick={onBack}>←</button><h2>Rechercher</h2><div style={{width:38}}/></div>}
+    <div style={{padding:"0 16px 8px"}}>
+      <div style={{display:"flex",alignItems:"center",gap:8,padding:"9px 14px",background:"#F5F4F1",borderRadius:14,border:"1px solid #E8E6E1"}}>
         <span style={{fontSize:13}}>🔍</span>
-        <input placeholder="Restos, produits, pharmacies..." value={q} onChange={e=>setQ(e.target.value)} style={{flex:1,border:"none",background:"transparent",outline:"none",fontSize:13,fontFamily:"inherit",color:"#191815"}}/>
+        <input placeholder="Produits, boutiques, restos..." value={q} onChange={e=>setQ(e.target.value)} style={{flex:1,border:"none",background:"transparent",outline:"none",fontSize:13,fontFamily:"inherit",color:"#191815"}}/>
         {q&&<span style={{cursor:"pointer",color:"#908C82",fontSize:12}} onClick={()=>setQ("")}>✕</span>}
       </div>
-      <button onClick={()=>setShowFilter(!showFilter)} style={{width:36,height:36,borderRadius:12,border:"none",background:showFilter?"#6366F1":"#F0EFEC",cursor:"pointer",fontSize:14,display:"flex",alignItems:"center",justifyContent:"center",flexShrink:0,transition:"all .2s"}}>
-        <span style={{filter:showFilter?"brightness(10)":"none"}}>⚙️</span>
-      </button>
     </div>
-
-    {/* Filter panel */}
-    {showFilter&&<div style={{margin:"0 16px 10px",padding:14,background:"#fff",borderRadius:16,border:"1px solid #E8E6E1",boxShadow:"0 4px 16px rgba(0,0,0,.06)"}}>
-      <div style={{display:"flex",justifyContent:"space-between",alignItems:"center",marginBottom:10}}>
-        <h4 style={{fontSize:13,fontWeight:700}}>Filtres & Tri</h4>
-        <span style={{fontSize:11,color:"#6366F1",fontWeight:600,cursor:"pointer"}} onClick={()=>{setSC("Tous");setSortBy("popular")}}>Réinitialiser</span>
+    {/* Tabs: Products / Vendors */}
+    <div style={{display:"flex",margin:"0 16px 8px",background:"#F5F4F1",borderRadius:10,padding:2}}>
+      {[["products","🛍️ Produits",fp.length],["vendors","🏪 Boutiques",fv.length]].map(([k,l,c])=>(
+        <button key={k} onClick={()=>setTab(k)} style={{flex:1,padding:"7px 0",borderRadius:8,border:"none",background:tab===k?"#fff":"transparent",color:tab===k?"#191815":"#908C82",fontSize:11,fontWeight:tab===k?700:500,cursor:"pointer",fontFamily:"inherit",boxShadow:tab===k?"0 1px 3px rgba(0,0,0,.06)":"none"}}>{l} ({c})</button>
+      ))}
+    </div>
+    {tab==="products"&&<>
+      {/* Category chips */}
+      <div style={{display:"flex",gap:6,padding:"0 16px 8px",overflowX:"auto",scrollbarWidth:"none"}}>{cats.map(c=><button key={c} onClick={()=>setSC(c)} style={{padding:"5px 12px",borderRadius:20,border:sc===c?"1px solid #6366F1":"1px solid #E8E6E1",background:sc===c?"rgba(99,102,241,0.06)":"#fff",color:sc===c?"#6366F1":"#5E5B53",fontSize:10,fontWeight:600,cursor:"pointer",fontFamily:"inherit",whiteSpace:"nowrap",flexShrink:0}}>{c}</button>)}</div>
+      {/* Sort */}
+      <div style={{display:"flex",gap:6,padding:"0 16px 8px"}}>
+        {[["popular","🔥 Populaires"],["rating","⭐ Notés"],["priceAsc","💰 Prix ↑"],["priceDesc","💰 Prix ↓"]].map(([k,l])=><button key={k} onClick={()=>setSortBy(k)} style={{padding:"4px 10px",borderRadius:8,border:"none",background:sortBy===k?"#6366F1":"#F5F4F1",color:sortBy===k?"#fff":"#908C82",fontSize:9,fontWeight:600,cursor:"pointer",fontFamily:"inherit"}}>{l}</button>)}
       </div>
-      <div style={{fontSize:11,fontWeight:600,color:"#908C82",marginBottom:6}}>Catégorie</div>
-      <div style={{display:"flex",gap:6,flexWrap:"wrap",marginBottom:12}}>
-        {cats.map(c=><div key={c} onClick={()=>setSC(c)} style={{padding:"5px 12px",borderRadius:20,border:sc===c?"2px solid #6366F1":"1px solid #E8E6E1",background:sc===c?"rgba(99,102,241,0.06)":"#fff",cursor:"pointer",fontSize:11,fontWeight:600,color:sc===c?"#6366F1":"#5E5B53"}}>{c}</div>)}
-      </div>
-      <div style={{fontSize:11,fontWeight:600,color:"#908C82",marginBottom:6}}>Trier par</div>
-      <div style={{display:"flex",gap:6,flexWrap:"wrap"}}>
-        {sortOpts.map(s=><div key={s.k} onClick={()=>setSortBy(s.k)} style={{padding:"5px 12px",borderRadius:20,border:sortBy===s.k?"2px solid #6366F1":"1px solid #E8E6E1",background:sortBy===s.k?"rgba(99,102,241,0.06)":"#fff",cursor:"pointer",fontSize:11,fontWeight:600,color:sortBy===s.k?"#6366F1":"#5E5B53"}}>{s.l}</div>)}
-      </div>
+      <div className="pgrid">{fp.map(p=>{const td=totalDisc(p,VENDORS);const vp=getVendorPromo(p,VENDORS);return(<div key={p.id} className="pcard" onClick={()=>go("detail",p)}><div className="pimg"><Img src={p.photo} emoji={p.img} style={{width:"100%",height:"100%"}} fit="cover"/>{td>0&&<span className="badge">-{td}%</span>}</div><div className="pbody"><h4>{p.name}</h4><div className="pv">{p.va} {p.vendor}</div><div className="pp">{vp?<><span style={{color:"#10B981"}}>{fmt(vp.promoPrice)}</span><span className="po">{fmt(p.price)}</span></>:<>{fmt(p.price)}{p.old&&<span className="po">{fmt(p.old)}</span>}</>}</div><div className="pr" onClick={e=>{e.stopPropagation();go("reviews",p)}}>⭐ {p.rating}</div></div></div>)})}</div>
+      {fp.length===0&&<div style={{textAlign:"center",padding:"40px 0"}}><div style={{fontSize:36}}>🔍</div><div style={{fontSize:13,color:"#908C82",marginTop:6}}>Aucun produit trouvé</div></div>}
+    </>}
+    {tab==="vendors"&&<div style={{padding:"0 16px 80px"}}>
+      {fv.map(v=><div key={v.id} onClick={()=>go("vendor",v)} style={{display:"flex",alignItems:"center",gap:12,padding:12,background:"#fff",border:"1px solid #E8E6E1",borderRadius:14,marginBottom:8,cursor:"pointer"}}>
+        <div style={{width:50,height:50,borderRadius:14,overflow:"hidden",background:"#F5F4F1",flexShrink:0,display:"flex",alignItems:"center",justifyContent:"center",fontSize:24}}>{v.logo?<img src={v.logo} style={{width:"100%",height:"100%",objectFit:"cover"}} alt=""/>:v.avatar}</div>
+        <div style={{flex:1,minWidth:0}}>
+          <div style={{fontSize:14,fontWeight:700}}>{v.name} {v.verified&&<span style={{color:"#6366F1",fontSize:11}}>✓</span>}</div>
+          <div style={{fontSize:11,color:"#908C82",marginTop:1}}>📍 {v.loc} · {v.type}</div>
+          <div style={{display:"flex",gap:10,marginTop:3,fontSize:11}}>
+            <span style={{color:"#F59E0B"}}>⭐ {v.rating}</span>
+            <span style={{color:"#908C82"}}>{v.products} articles</span>
+            <span style={{color:"#908C82"}}>{v.followers} abonnés</span>
+          </div>
+          {v.promo&&<div style={{marginTop:4,padding:"2px 8px",borderRadius:6,background:"rgba(16,185,129,0.06)",color:"#10B981",fontSize:10,fontWeight:600,display:"inline-block"}}>🏷️ -{v.promo.discount}% {v.promo.name}</div>}
+        </div>
+        <span style={{color:"#C4C1BA",fontSize:18}}>›</span>
+      </div>)}
+      {fv.length===0&&<div style={{textAlign:"center",padding:"40px 0"}}><div style={{fontSize:36}}>🏪</div><div style={{fontSize:13,color:"#908C82",marginTop:6}}>Aucune boutique trouvée</div></div>}
     </div>}
-
-    <div className="sfilters">{cats.map(c=><button key={c} className={`sf ${sc===c?"on":""}`} onClick={()=>setSC(c)}>{c}</button>)}</div>
-    <div style={{display:"flex",justifyContent:"space-between",alignItems:"center",padding:"4px 20px 8px"}}>
-      <span style={{fontSize:12,color:"#908C82"}}>{f.length} résultat{f.length>1?"s":""}</span>
-      <button onClick={()=>{const order=["popular","rating","priceAsc","priceDesc"];const i=order.indexOf(sortBy);setSortBy(order[(i+1)%order.length])}} style={{display:"flex",alignItems:"center",gap:4,padding:"4px 10px",borderRadius:8,border:"1px solid #E8E6E1",background:"#fff",cursor:"pointer",fontSize:11,fontWeight:600,color:"#6366F1",fontFamily:"inherit"}}>
-        ↕️ {sortOpts.find(s=>s.k===sortBy)?.l}
-      </button>
-    </div>
-    <div className="pgrid">{f.map(p=><div key={p.id} className="pcard" onClick={()=>go("detail",p)}><div className="pimg"><Img src={p.photo} emoji={p.img} style={{width:"100%",height:"100%"}} fit="cover"/>{disc(p)>0&&<span className="badge">-{disc(p)}%</span>}{p.tags[0]&&<span className="tag" onClick={e=>{e.stopPropagation();go("reviews",p)}}>{p.tags[0]}</span>}</div><div className="pbody"><h4>{p.name}</h4><div className="pv">{p.va} {p.vendor}</div><div className="pp">{fmt(p.price)}{p.old&&<span className="po">{fmt(p.old)}</span>}</div><div className="pr" onClick={e=>{e.stopPropagation();go("reviews",p)}}>⭐ {p.rating}</div></div></div>)}</div>
   </div>);
 }
-
-/* 8 ── FLASH SALES ── */
-
 export default SearchScr;

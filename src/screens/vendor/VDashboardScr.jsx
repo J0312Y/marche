@@ -2,6 +2,7 @@ import { useState } from "react";
 import { useLoad } from "../../hooks";
 import { vendor } from "../../services";
 import { SkeletonDashboard } from "../../components/Loading";
+import PullToRefresh from "../../components/PullToRefresh";
 import { fmt } from "../../utils/helpers";
 
 const CHART_LABELS={
@@ -12,7 +13,7 @@ const CHART_LABELS={
 
 function VDashboardScr({go}){
   const [period,setPeriod]=useState("week");
-  const { data, loading } = useLoad(() => vendor.getDashboard(period), [period]);
+  const { data, loading, reload } = useLoad(() => vendor.getDashboard(period), [period]);
   if(loading||!data) return <div className="scr" style={{padding:16}}><h2 style={{marginBottom:12}}>📊 Tableau de bord</h2><SkeletonDashboard/></div>;
   const { stats:s, new_orders:newOrders, chart=[], top_products:topProducts=[] } = data;
   const maxBar=Math.max(...chart,1);
@@ -25,7 +26,7 @@ function VDashboardScr({go}){
     return String(v);
   };
 
-  return(<div className="scr" style={{padding:16,paddingBottom:100}}>
+  return(<PullToRefresh onRefresh={reload}><div className="scr" style={{padding:16,paddingBottom:100}}>
     <div className="appbar" style={{padding:0,marginBottom:10}}><h2>📊 Tableau de bord</h2><button onClick={()=>go("vNotif")}>🔔</button></div>
     <div className="vo-filter" style={{padding:0,marginBottom:14}}>{[["today","Aujourd'hui"],["week","Semaine"],["month","Mois"]].map(([k,l])=><button key={k} className={period===k?"on":""} onClick={()=>setPeriod(k)}>{l}</button>)}</div>
 
@@ -99,7 +100,7 @@ function VDashboardScr({go}){
         <div style={{fontSize:12,color:"#F59E0B",fontWeight:600,marginTop:2}}>Réapprovisionner →</div>
       </div>
     </div>}
-  </div>);
+  </div></PullToRefresh>);
 }
 
 export default VDashboardScr;

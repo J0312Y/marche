@@ -30,3 +30,6 @@ export { default as RechargeScr } from './RechargeScr';
 export { default as WithdrawScr } from './WithdrawScr';
 export { default as VendorScr } from './VendorScr';
 export { default as RoleRegScr } from './RoleRegScr';
+
+export { default as PaymentHistoryScr } from './PaymentHistoryScr';
+export { default as RateDriverScr } from './RateDriverScr';

@@ -3,6 +3,7 @@ import Img from "../../components/Img";
 import { BackButton, FavButton } from "../../components/BackButton";
 import { useData } from "../../hooks";
 import { fmt, disc, getVendorPromo } from "../../utils/helpers";
+import { shareProduct } from "../../utils/share";
 
 // Generate specs based on product type
 const getSpecs=(p)=>{
@@ -59,7 +60,7 @@ function DetailScr({product:p,onBack,onAddCart,go,favs,toggleFav,isFav}){
         <Img src={p.photos?.[0]||p.photo} emoji={p.img} style={{width:"100%",height:"100%"}} fit="cover"/>
         <div className="det-top">
           <BackButton onClick={e=>{e.stopPropagation();onBack()}} />
-          <FavButton active={isFav(p.id)} onClick={e=>{e.stopPropagation();toggleFav(p.id)}} />
+          <div style={{display:"flex",gap:8}}><button onClick={e=>{e.stopPropagation();shareProduct(p)}} style={{width:40,height:40,borderRadius:14,background:"rgba(255,255,255,0.85)",backdropFilter:"blur(12px)",border:"1px solid rgba(255,255,255,0.4)",boxShadow:"0 4px 16px rgba(0,0,0,0.12)",cursor:"pointer",display:"flex",alignItems:"center",justifyContent:"center",fontSize:16}}>📤</button><FavButton active={isFav(p.id)} onClick={e=>{e.stopPropagation();toggleFav(p.id)}} /></div>
         </div>
         {disc(p)>0&&<span className="badge" style={{position:"absolute",bottom:14,left:14,zIndex:5}}>-{disc(p)}%</span>}
         <div style={{position:"absolute",bottom:14,right:14,background:"rgba(0,0,0,.4)",color:"#fff",padding:"4px 10px",borderRadius:8,fontSize:11,fontWeight:600,zIndex:5}}>{p.photos?.length||1} photos</div>

@@ -3,10 +3,11 @@ import Img from "../../components/Img";
 import { useData } from "../../hooks";
 import { useApp } from "../../context/AppContext";
 import { SkeletonHome } from "../../components/Loading";
+import PullToRefresh from "../../components/PullToRefresh";
 import { fmt, disc, getVendorPromo, totalDisc, effectivePrice } from "../../utils/helpers";
 
 function HomeScr({go,favs,toggleFav,isFav}){
-  const { P, VENDORS, CATS, loading: dataLoading } = useData();
+  const { P, VENDORS, CATS, loading: dataLoading, reload } = useData();
   const { cartCount } = useApp();
   const [selCat,setSC]=useState(0);
   const [selType,setSelType]=useState("all");
@@ -39,7 +40,7 @@ function HomeScr({go,favs,toggleFav,isFav}){
   const inSearchMode=searchFocused||homeQ.length>0;
 
   return(
-    <div className="scr">
+    <PullToRefresh onRefresh={reload}><div className="scr">
       {/* Header - only show when not in search */}
       {!inSearchMode&&<div className="hdr"><div><div className="hdr-t">Bonjour 👋</div><div className="hdr-h">Lamuka Market</div></div>
         <div className="hdr-r"><div className="hdr-btn" onClick={()=>go("notif")}>🔔<div className="notif-badge"/></div><div className="hdr-btn" onClick={()=>go("cart")} style={{position:"relative"}}>🛍️{cartCount>0&&<span style={{position:"absolute",top:-4,right:-4,background:"#EF4444",color:"#fff",fontSize:9,fontWeight:700,borderRadius:10,padding:"1px 5px",minWidth:16,textAlign:"center"}}>{cartCount}</span>}</div></div></div>}
@@ -180,7 +181,7 @@ function HomeScr({go,favs,toggleFav,isFav}){
       <div className="sec"><h3>{selType==="all"?"Populaires":"Populaires en "+types.find(t=>t.id===selType)?.name}</h3><span onClick={()=>go("allProducts")}>Voir tout</span></div>
       <div className="pgrid">{filteredP.map(p=>{const vp=getVendorPromo(p,VENDORS);const td=totalDisc(p,VENDORS);return(<div key={p.id} className="pcard" onClick={()=>go("detail",p)}><div className="pimg"><Img src={p.photo} emoji={p.img} style={{width:"100%",height:"100%"}} fit="cover"/>{td>0&&<span className="badge">-{td}%</span>}{vp&&<span className="tag" style={{background:"#10B981",color:"#fff"}}>🏷️ {vp.promoName}</span>}{!vp&&p.tags[0]&&<span className="tag">{p.tags[0]}</span>}<span className="fav" onClick={e=>{e.stopPropagation();toggleFav(p.id)}} style={{color:isFav(p.id)?"#EF4444":"inherit",fontSize:isFav(p.id)?16:14}}>{isFav(p.id)?"❤️":"♡"}</span></div><div className="pbody"><h4>{p.name}</h4><div className="pv">{p.va} {p.vendor}{p.eta&&<span style={{marginLeft:4,color:"#10B981",fontSize:10}}>🕐 {p.eta}</span>}</div><div className="pp">{vp?<><span style={{color:"#10B981"}}>{fmt(vp.promoPrice)}</span><span className="po">{fmt(p.price)}</span></>:<>{fmt(p.price)}{p.old&&<span className="po">{fmt(p.old)}</span>}</>}</div><div className="pr" onClick={e=>{e.stopPropagation();go("reviews",p)}}>⭐ {p.rating} ({p.reviews})</div></div></div>)})}</div>
       </>}
-    </div>
+    </div></PullToRefresh>
   );
 }
 

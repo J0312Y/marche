@@ -1,7 +1,9 @@
 import { useState } from "react";
+import { useApp } from "../../context/AppContext";
 import toast from "../../utils/toast";
 
 function VSettingsScr({onBack,go}){
+  const { darkMode, toggleDark } = useApp();
   const [pushOrder,setPushOrder]=useState(true);
   const [pushReview,setPushReview]=useState(true);
   const [pushStock,setPushStock]=useState(true);

@@ -1,5 +1,6 @@
 import { useState } from "react";
 import toast from "../../utils/toast";
+import PullToRefresh from "../../components/PullToRefresh";
 
 function OrdersScr({go}){
   const [orders,setOrders]=useState([
@@ -33,7 +34,7 @@ function OrdersScr({go}){
   const cancelled=orders.filter(o=>o.sc==="cancel");
   const shown=tab==="active"?active:tab==="done"?done:cancelled;
 
-  return(<div className="scr" style={{padding:16}}>
+  return(<><PullToRefresh onRefresh={async()=>{toast.success("Commandes actualisées 📦")}}><div className="scr" style={{padding:16}}>
     <div className="appbar" style={{padding:0,marginBottom:10}}><h2>Mes commandes ({orders.length})</h2></div>
 
     {/* Tabs */}
@@ -57,7 +58,8 @@ function OrdersScr({go}){
           {(o.sc==="ship"||o.sc==="prep")&&<button style={{padding:"6px 12px",borderRadius:8,background:"rgba(239,68,68,0.06)",fontSize:11,fontWeight:600,color:"#EF4444",cursor:"pointer",border:"1px solid rgba(239,68,68,0.15)",fontFamily:"inherit"}} onClick={e=>{e.stopPropagation();setCancelConfirm(o)}}>✕ Annuler</button>}
         </div>
       </div>
-    </div>)}
+    </div>)}</div>
+    </PullToRefresh>
 
     {/* Cancel modal */}
     {cancelConfirm&&<div style={{position:"fixed",inset:0,background:"rgba(0,0,0,.4)",zIndex:100,display:"flex",alignItems:"center",justifyContent:"center",padding:20}} onClick={()=>setCancelConfirm(null)}>
@@ -90,7 +92,7 @@ function OrdersScr({go}){
         </div>
       </div>
     </div>}
-  </div>);
+  </>);
 }
 
 export default OrdersScr;

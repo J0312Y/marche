@@ -4,7 +4,7 @@ import { fmt, getVendorPromo } from "../../utils/helpers";
 import { useData } from "../../hooks";
 
 function CheckoutScr({onBack,onDone,cart=[],appliedCoupon,setAppliedCoupon}){
-  const [step,setStep]=useState(0);const [momo,setMomo]=useState("airtel");const [ok,setOk]=useState(false);
+  const [step,setStep]=useState(0);const [momo,setMomo]=useState("airtel");const [ok,setOk]=useState(false);const [saveAddr,setSaveAddr]=useState(true);
   const momos=[{k:"airtel",n:"Airtel Money",e:"🔴"},{k:"mtn",n:"MTN MoMo",e:"🟡"},{k:"kolo",n:"Kolo Pay",e:"🟣"}];
   const { VENDORS } = useData();
 
@@ -18,7 +18,7 @@ function CheckoutScr({onBack,onDone,cart=[],appliedCoupon,setAppliedCoupon}){
   const total=sub-discountAmount+finalDelivery;
 
   const handleConfirm=()=>{
-    setOk(true);toast.success("Commande confirmée ! 🎉");
+    setOk(true);toast.success("Commande confirmée ! 🎉");if(saveAddr)toast.info("Adresse sauvegardée 📍");
     if(setAppliedCoupon) setAppliedCoupon(null);
   };
 
@@ -30,7 +30,8 @@ function CheckoutScr({onBack,onDone,cart=[],appliedCoupon,setAppliedCoupon}){
         <div className="field"><label>Nom complet</label><input defaultValue="Joeldy Tsina"/></div>
         <div className="field"><label>Téléphone</label><input defaultValue="+242 064 663 469"/></div>
         <div className="field"><label>Adresse</label><input placeholder="Quartier, Rue, N°"/></div>
-        <div className="field-row"><div className="field"><label>Ville</label><input defaultValue="Brazzaville"/></div><div className="field"><label>Pays</label><input defaultValue="Congo 🇨🇬"/></div></div></>}
+        <div className="field-row"><div className="field"><label>Ville</label><input defaultValue="Brazzaville"/></div><div className="field"><label>Pays</label><input defaultValue="Congo 🇨🇬"/></div></div>
+        <div style={{display:"flex",alignItems:"center",gap:8,marginTop:4}}><div className={`toggle ${saveAddr?"on":""}`} onClick={()=>setSaveAddr(!saveAddr)} style={{transform:"scale(.8)"}}/><span style={{fontSize:12,color:"#908C82"}}>Sauvegarder cette adresse</span></div></>}
 
       {step===1&&<><h3 style={{fontSize:18,fontWeight:700,marginBottom:6}}>Mode de paiement</h3><p style={{fontSize:13,color:"#908C82",marginBottom:14}}>Mobile Money</p>
         {momos.map(m=><div key={m.k} className={`momo ${momo===m.k?"on":""}`} onClick={()=>setMomo(m.k)}><span className="me">{m.e}</span><span className="mn">{m.n}</span>{momo===m.k&&<span className="mc">✓</span>}</div>)}

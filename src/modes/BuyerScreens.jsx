@@ -11,7 +11,7 @@ import {
   TrackingScr, ChatScr, ChatListScr, ChatVendorScr, WishlistScr,
   NotifScr, ProfileScr, EditProfileScr, AddressesScr,
   LanguageScr, CurrencyScr, PasswordScr, RechargeScr, WithdrawScr,
-  VendorScr, RoleRegScr
+  VendorScr, RoleRegScr, PaymentHistoryScr, RateDriverScr
 } from "../screens/buyer";
 import { SettingsScr, HelpScr, AboutScr, TermsScr, PrivacyScr } from "../screens/common";
 
@@ -76,6 +76,8 @@ export default function BuyerScreens() {
     case "language": return <LanguageScr onBack={back} />;
     case "currency": return <CurrencyScr onBack={back} />;
     case "password": return <PasswordScr onBack={back} />;
+    case "paymentHistory": return <PaymentHistoryScr onBack={back} />;
+    case "rateDriver": return <RateDriverScr onBack={back} driver={data} onDone={goHome} />;
     case "recharge": return <RechargeScr onBack={back} />;
     case "roleReg": return <RoleRegScr onBack={back} onDone={(role, plan) => { onRoleApproved(role, plan); goHome(); }} />;
     case "vendorReg": return <RoleRegScr onBack={back} onDone={(role, plan) => { onRoleApproved(role, plan); goHome(); }} forceRole="vendor" />;

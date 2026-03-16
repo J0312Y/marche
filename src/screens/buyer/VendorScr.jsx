@@ -4,6 +4,7 @@ import { useData } from "../../hooks";
 import Img from "../../components/Img";
 import BackButton from "../../components/BackButton";
 import { fmt, disc, getVendorPromo } from "../../utils/helpers";
+import { shareVendor } from "../../utils/share";
 
 const MOCK_FOLLOWERS=[
   {name:"Marie Koumba",avatar:"👩",since:"Jan 2026",zone:"Bacongo"},
@@ -65,7 +66,7 @@ function VendorScr({vendor:vProp,go,onBack}){
     {/* Buttons */}
     <div className="vp-btns">
       <button className="vb1" style={following?{background:"#fff",color:"#6366F1",border:"1px solid #6366F1"}:{}} onClick={toggleFollow}>{following?"✓ Suivi":"+ Suivre"}</button>
-      <button className="vb2" onClick={()=>go("chatVendor",v)}>💬 Contacter</button>
+      <button className="vb2" onClick={()=>go("chatVendor",v)}>💬 Contacter</button><button className="vb2" style={{flex:"none",width:44}} onClick={()=>shareVendor(v)}>📤</button>
     </div>
 
     {/* Vendor promo banner */}

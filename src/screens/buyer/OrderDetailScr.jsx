@@ -68,6 +68,7 @@ function OrderDetailScr({order:o,onBack,go}){
     <div style={{display:"flex",flexDirection:"column",gap:10}}>
       {sc==="ship"&&<button className="btn-primary" onClick={()=>go("tracking")}>📍 Suivre ma livraison</button>}
       {sc==="ship"&&<button style={{padding:14,borderRadius:14,border:"1px solid #E8E6E1",background:"#fff",fontSize:14,fontWeight:600,cursor:"pointer",fontFamily:"inherit"}} onClick={()=>go("chatDriver")}>💬 Contacter le livreur</button>}
+      {sc==="done"&&!cancelled&&<button onClick={()=>go("rateDriver",{name:"Patrick Moukala"})} style={{padding:14,borderRadius:14,border:"none",background:"#F59E0B",color:"#fff",fontSize:14,fontWeight:600,cursor:"pointer",fontFamily:"inherit"}}>⭐ Évaluer le livreur</button>}
       {canCancel&&<button onClick={()=>setShowCancel(true)} style={{padding:14,borderRadius:14,border:"1px solid rgba(239,68,68,0.3)",background:"transparent",color:"#EF4444",fontSize:14,fontWeight:600,cursor:"pointer",fontFamily:"inherit"}}>✕ Annuler la commande</button>}
     </div>
 
