@@ -67,15 +67,15 @@ function PhotoGuide({ onClose, shopType="boutique" }){
 
   return(
     <div style={{position:"fixed",inset:0,background:"rgba(0,0,0,.5)",zIndex:50,display:"flex",alignItems:"flex-end",justifyContent:"center"}}>
-      <div style={{background:"#fff",borderRadius:"24px 24px 0 0",width:"100%",maxWidth:420,maxHeight:"88vh",overflow:"auto",animation:"fadeIn .25s ease"}}>
+      <div style={{background:"var(--card)",borderRadius:"24px 24px 0 0",width:"100%",maxWidth:420,maxHeight:"88vh",overflow:"auto",animation:"fadeIn .25s ease"}}>
         {/* Header */}
-        <div style={{padding:"20px 20px 0",display:"flex",alignItems:"center",justifyContent:"space-between",position:"sticky",top:0,background:"#fff",zIndex:2,paddingBottom:16,borderBottom:"1px solid #F5F4F1"}}>
+        <div style={{padding:"20px 20px 0",display:"flex",alignItems:"center",justifyContent:"space-between",position:"sticky",top:0,background:"var(--card)",zIndex:2,paddingBottom:16,borderBottom:"1px solid var(--border)"}}>
           <h3 style={{fontSize:17,fontWeight:700}}>📸 Guide photo vendeur</h3>
-          <button onClick={onClose} style={{width:32,height:32,borderRadius:10,border:"1px solid #E8E6E1",background:"#fff",cursor:"pointer",fontSize:16,display:"flex",alignItems:"center",justifyContent:"center"}}>✕</button>
+          <button onClick={onClose} style={{width:32,height:32,borderRadius:10,border:"1px solid var(--border)",background:"var(--card)",cursor:"pointer",fontSize:16,display:"flex",alignItems:"center",justifyContent:"center"}}>✕</button>
         </div>
 
         {/* Tabs */}
-        <div style={{display:"flex",gap:4,padding:"12px 20px 0",borderBottom:"1px solid #F5F4F1"}}>
+        <div style={{display:"flex",gap:4,padding:"12px 20px 0",borderBottom:"1px solid var(--border)"}}>
           {["Conseils généraux",`${typeRules.icon} ${typeRules.title}`].map((t,i)=>(
             <button key={i} onClick={()=>setTab(i)} style={{
               flex:1,padding:"10px 0",border:"none",background:"none",fontSize:12,fontWeight:600,
@@ -89,7 +89,7 @@ function PhotoGuide({ onClose, shopType="boutique" }){
           {tab===0 ? (
             /* General tips */
             <div>
-              <p style={{fontSize:12,color:"#908C82",marginBottom:16,lineHeight:1.6}}>
+              <p style={{fontSize:12,color:"var(--muted)",marginBottom:16,lineHeight:1.6}}>
                 De bonnes photos augmentent vos ventes de <b style={{color:"#10B981"}}>3x</b>. Suivez ces conseils pour des résultats professionnels.
               </p>
               {TIPS.map((tip,i)=>(
@@ -108,7 +108,7 @@ function PhotoGuide({ onClose, shopType="boutique" }){
                       {tip.bad}
                     </div>
                   </div>
-                  <p style={{fontSize:11,color:"#5E5B53",lineHeight:1.5,margin:0}}>{tip.detail}</p>
+                  <p style={{fontSize:11,color:"var(--sub)",lineHeight:1.5,margin:0}}>{tip.detail}</p>
                 </div>
               ))}
             </div>
@@ -118,7 +118,7 @@ function PhotoGuide({ onClose, shopType="boutique" }){
               <div style={{textAlign:"center",padding:"16px 0",marginBottom:16}}>
                 <div style={{fontSize:48,marginBottom:8}}>{typeRules.icon}</div>
                 <h3 style={{fontSize:16,fontWeight:700}}>{typeRules.title}</h3>
-                <p style={{fontSize:12,color:"#908C82",marginTop:4}}>Règles spécifiques pour vos photos</p>
+                <p style={{fontSize:12,color:"var(--muted)",marginTop:4}}>Règles spécifiques pour vos photos</p>
               </div>
               {typeRules.rules.map((rule,i)=>(
                 <div key={i} style={{display:"flex",alignItems:"center",gap:12,padding:"12px 14px",background:i%2===0?"#FAFAF8":"#fff",borderRadius:12,marginBottom:6}}>
@@ -128,7 +128,7 @@ function PhotoGuide({ onClose, shopType="boutique" }){
               ))}
               <div style={{marginTop:16,padding:14,background:"rgba(99,102,241,0.04)",borderRadius:14,border:"1px solid rgba(99,102,241,0.12)"}}>
                 <div style={{fontSize:12,fontWeight:700,color:"#6366F1",marginBottom:4}}>💡 Astuce Pro</div>
-                <p style={{fontSize:11,color:"#5E5B53",margin:0,lineHeight:1.5}}>
+                <p style={{fontSize:11,color:"var(--sub)",margin:0,lineHeight:1.5}}>
                   {shopType==="restaurant"||shopType==="patisserie"
                     ?"Prenez la photo juste après la préparation quand le plat est encore chaud et appétissant. L'éclairage naturel du matin ou de l'après-midi donne les meilleurs résultats."
                     :"Investissez dans une boîte à lumière (lightbox) à partir de 5 000 FCFA — elle transformera vos photos produit en images professionnelles."}
@@ -139,7 +139,7 @@ function PhotoGuide({ onClose, shopType="boutique" }){
         </div>
 
         {/* CTA */}
-        <div style={{padding:"0 20px 20px",position:"sticky",bottom:0,background:"#fff"}}>
+        <div style={{padding:"0 20px 20px",position:"sticky",bottom:0,background:"var(--card)"}}>
           <button onClick={onClose} style={{width:"100%",padding:14,borderRadius:14,border:"none",background:"#6366F1",color:"#fff",fontSize:14,fontWeight:600,cursor:"pointer",fontFamily:"inherit"}}>
             👍 J'ai compris, ajouter mes photos
           </button>

@@ -30,26 +30,26 @@ function FlashScr({go,onBack}){
         const stock=stocks[idx%stocks.length];
         const pct=Math.round((stock/maxStock)*100);
         const urgent=stock<=5;
-        return(<div key={p.id} onClick={()=>go("detail",p)} style={{display:"flex",gap:12,padding:12,background:"#fff",border:urgent?"2px solid rgba(239,68,68,0.3)":"1px solid #E8E6E1",borderRadius:16,marginBottom:10,cursor:"pointer",position:"relative"}}>
+        return(<div key={p.id} onClick={()=>go("detail",p)} style={{display:"flex",gap:12,padding:12,background:"var(--card)",border:urgent?"2px solid rgba(239,68,68,0.3)":"1px solid #E8E6E1",borderRadius:16,marginBottom:10,cursor:"pointer",position:"relative"}}>
           {urgent&&<div style={{position:"absolute",top:-6,right:12,padding:"2px 8px",borderRadius:6,background:"#EF4444",color:"#fff",fontSize:9,fontWeight:700}}>🔥 Dernières pièces</div>}
-          <div style={{width:80,height:80,borderRadius:12,overflow:"hidden",flexShrink:0,position:"relative",background:"#F5F4F1"}}>
+          <div style={{width:80,height:80,borderRadius:12,overflow:"hidden",flexShrink:0,position:"relative",background:"var(--light)"}}>
             <Img src={p.photo} emoji={p.img} style={{width:"100%",height:"100%"}} fit="cover"/>
             <div style={{position:"absolute",top:4,left:4,padding:"2px 6px",borderRadius:4,background:"#EF4444",color:"#fff",fontSize:9,fontWeight:700}}>-{disc(p)}%</div>
           </div>
           <div style={{flex:1,minWidth:0}}>
             <div style={{fontSize:13,fontWeight:600,marginBottom:3,overflow:"hidden",whiteSpace:"nowrap",textOverflow:"ellipsis"}}>{p.name}</div>
-            <div style={{fontSize:11,color:"#908C82",marginBottom:4}}>{p.vendor}</div>
+            <div style={{fontSize:11,color:"var(--muted)",marginBottom:4}}>{p.vendor}</div>
             <div style={{display:"flex",alignItems:"center",gap:6,marginBottom:6}}>
               <span style={{fontSize:15,fontWeight:700,color:"#EF4444"}}>{fmt(p.price)}</span>
-              <span style={{fontSize:11,color:"#908C82",textDecoration:"line-through"}}>{fmt(p.old)}</span>
+              <span style={{fontSize:11,color:"var(--muted)",textDecoration:"line-through"}}>{fmt(p.old)}</span>
             </div>
             {/* Stock bar */}
             <div>
               <div style={{display:"flex",justifyContent:"space-between",fontSize:10,marginBottom:2}}>
                 <span style={{color:urgent?"#EF4444":"#908C82",fontWeight:600}}>{stock} restants</span>
-                <span style={{color:"#908C82"}}>{maxStock-stock} vendus</span>
+                <span style={{color:"var(--muted)"}}>{maxStock-stock} vendus</span>
               </div>
-              <div style={{height:4,background:"#E8E6E1",borderRadius:2,overflow:"hidden"}}>
+              <div style={{height:4,background:"var(--border)",borderRadius:2,overflow:"hidden"}}>
                 <div style={{width:`${100-pct}%`,height:"100%",background:urgent?"#EF4444":"#F59E0B",borderRadius:2,transition:"width .5s"}}/>
               </div>
             </div>

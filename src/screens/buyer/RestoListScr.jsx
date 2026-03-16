@@ -9,11 +9,11 @@ function RestoListScr({go,onBack,favs,toggleFav,isFav}){
   return(<div className="scr"><div className="appbar"><button onClick={onBack}>←</button><h2>🍽️ Restaurants</h2><div style={{width:38}}/></div>
     <div className="info-box blue" style={{margin:"0 20px 14px"}}><span>🍽️</span><span style={{fontSize:11}}>Commandez à manger et faites-vous livrer rapidement</span></div>
     <div style={{padding:"0 16px"}}>
-      {restos.map(v=><div key={v.id} style={{padding:14,background:"#fff",border:"1px solid #E8E6E1",borderRadius:16,marginBottom:10,cursor:"pointer"}} onClick={()=>go("vendor",v)}>
+      {restos.map(v=><div key={v.id} style={{padding:14,background:"var(--card)",border:"1px solid var(--border)",borderRadius:16,marginBottom:10,cursor:"pointer"}} onClick={()=>go("vendor",v)}>
         <div style={{display:"flex",alignItems:"center",gap:12,marginBottom:8}}>
           <div style={{width:48,height:48,borderRadius:14,overflow:"hidden",background:"linear-gradient(135deg,#F59E0B,#D97706)",display:"flex",alignItems:"center",justifyContent:"center",fontSize:22}}>{v.logo?<img src={v.logo} style={{width:"100%",height:"100%",objectFit:"cover"}} alt=""/>:v.avatar}</div>
           <div style={{flex:1}}><div style={{display:"flex",alignItems:"center",gap:6}}><h4 style={{fontSize:14,fontWeight:700}}>{v.name}</h4>{v.verified&&<span style={{color:"#6366F1",fontSize:10}}>✓</span>}</div>
-            <p style={{fontSize:11,color:"#908C82"}}>📍 {v.loc} · ⭐ {v.rating} · {v.products} plats</p></div>
+            <p style={{fontSize:11,color:"var(--muted)"}}>📍 {v.loc} · ⭐ {v.rating} · {v.products} plats</p></div>
           <div style={{textAlign:"right"}}><div style={{color:"#10B981",fontWeight:700,fontSize:12}}>🕐 {v.eta}</div></div>
         </div>
       </div>)}

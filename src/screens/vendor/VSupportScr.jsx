@@ -127,32 +127,32 @@ function VSupportScr({go,onBack,vendorPlan}){
 
     {/* Search results */}
     {search&&<div style={{padding:"0 20px 14px"}}>
-      <div style={{fontSize:12,color:"#908C82",marginBottom:8}}>{filtered.length} résultat{filtered.length!==1?"s":""}</div>
-      {filtered.length===0&&<div style={{textAlign:"center",padding:"20px 0",color:"#908C82",fontSize:13}}>Aucun résultat pour « {search} »</div>}
-      {filtered.map((f,i)=><div key={i} style={{padding:12,background:"#fff",border:"1px solid #E8E6E1",borderRadius:12,marginBottom:8,cursor:"pointer"}} onClick={()=>{setOpen(open===`s${i}`?null:`s${i}`)}}>
-        <div style={{display:"flex",alignItems:"center",gap:6,marginBottom:4}}><span style={{fontSize:12}}>{f.icon}</span><span style={{fontSize:10,color:"#908C82"}}>{f.cat}</span></div>
+      <div style={{fontSize:12,color:"var(--muted)",marginBottom:8}}>{filtered.length} résultat{filtered.length!==1?"s":""}</div>
+      {filtered.length===0&&<div style={{textAlign:"center",padding:"20px 0",color:"var(--muted)",fontSize:13}}>Aucun résultat pour « {search} »</div>}
+      {filtered.map((f,i)=><div key={i} style={{padding:12,background:"var(--card)",border:"1px solid var(--border)",borderRadius:12,marginBottom:8,cursor:"pointer"}} onClick={()=>{setOpen(open===`s${i}`?null:`s${i}`)}}>
+        <div style={{display:"flex",alignItems:"center",gap:6,marginBottom:4}}><span style={{fontSize:12}}>{f.icon}</span><span style={{fontSize:10,color:"var(--muted)"}}>{f.cat}</span></div>
         <div style={{fontSize:13,fontWeight:600}}>{f.q}</div>
-        {open===`s${i}`&&<div style={{fontSize:12,color:"#5E5B53",marginTop:8,lineHeight:1.6,paddingTop:8,borderTop:"1px solid #F5F4F1",whiteSpace:"pre-line"}}>{f.a}</div>}
+        {open===`s${i}`&&<div style={{fontSize:12,color:"var(--sub)",marginTop:8,lineHeight:1.6,paddingTop:8,borderTop:"1px solid var(--border)",whiteSpace:"pre-line"}}>{f.a}</div>}
       </div>)}
     </div>}
 
     {/* Tabs */}
     {!search&&<>
-      <div style={{display:"flex",gap:0,margin:"0 20px 14px",background:"#F5F4F1",borderRadius:14,padding:4}}>
-        {["📚 Guides","❓ FAQ","📞 Contact"].map((t,i)=><button key={t} onClick={()=>setTab(i)} style={{flex:1,padding:"10px 4px",borderRadius:11,border:"none",fontSize:11,fontWeight:600,cursor:"pointer",fontFamily:"inherit",background:tab===i?"#6366F1":"transparent",color:tab===i?"#fff":"#908C82"}}>{t}</button>)}
+      <div style={{display:"flex",gap:0,margin:"0 20px 14px",background:"var(--light)",borderRadius:14,padding:4}}>
+        {["📚 Guides","❓ FAQ","📞 Contact"].map((t,i)=><button key={t} onClick={()=>setTab(i)} style={{flex:1,padding:"10px 4px",borderRadius:11,border:"none",fontSize:11,fontWeight:600,cursor:"pointer",fontFamily:"inherit",background:tab===i?"#6366F1":"transparent",color:tab===i?"var(--card)":"#908C82"}}>{t}</button>)}
       </div>
 
       {/* Tab 0: Guides */}
       {tab===0&&<div style={{padding:"0 16px 80px"}}>
         {guides.map(g=><div key={g.id}>
-          <div style={{padding:14,background:"#fff",border:guideOpen===g.id?"2px solid #6366F1":"1px solid #E8E6E1",borderRadius:14,marginBottom:10,cursor:"pointer"}} onClick={()=>setGuideOpen(guideOpen===g.id?null:g.id)}>
+          <div style={{padding:14,background:"var(--card)",border:guideOpen===g.id?"2px solid #6366F1":"1px solid #E8E6E1",borderRadius:14,marginBottom:10,cursor:"pointer"}} onClick={()=>setGuideOpen(guideOpen===g.id?null:g.id)}>
             <div style={{display:"flex",alignItems:"center",gap:10}}>
               <span style={{fontSize:22}}>{g.icon}</span>
               <div style={{flex:1}}>
                 <div style={{fontSize:14,fontWeight:700}}>{g.title}</div>
-                <div style={{fontSize:11,color:"#908C82"}}>{g.desc}</div>
+                <div style={{fontSize:11,color:"var(--muted)"}}>{g.desc}</div>
               </div>
-              <span style={{fontSize:14,color:"#908C82",transform:guideOpen===g.id?"rotate(90deg)":"",transition:"transform .2s"}}>›</span>
+              <span style={{fontSize:14,color:"var(--muted)",transform:guideOpen===g.id?"rotate(90deg)":"",transition:"transform .2s"}}>›</span>
             </div>
           </div>
           {guideOpen===g.id&&<div style={{padding:"0 0 10px 0",marginTop:-6}}>
@@ -161,7 +161,7 @@ function VSupportScr({go,onBack,vendorPlan}){
                 <span style={{width:20,height:20,borderRadius:6,background:"#6366F1",color:"#fff",display:"inline-flex",alignItems:"center",justifyContent:"center",fontSize:10,fontWeight:700,flexShrink:0}}>{i+1}</span>
                 <h4 style={{fontSize:13,fontWeight:700}}>{s.title}</h4>
               </div>
-              <p style={{fontSize:12,color:"#5E5B53",lineHeight:1.7,whiteSpace:"pre-line"}}>{s.content}</p>
+              <p style={{fontSize:12,color:"var(--sub)",lineHeight:1.7,whiteSpace:"pre-line"}}>{s.content}</p>
             </div>)}
           </div>}
         </div>)}
@@ -175,13 +175,13 @@ function VSupportScr({go,onBack,vendorPlan}){
       {/* Tab 1: FAQ */}
       {tab===1&&<div style={{padding:"0 16px 80px"}}>
         {faqCats.map((cat,ci)=><div key={cat.cat} style={{marginBottom:12}}>
-          <div style={{display:"flex",alignItems:"center",gap:6,marginBottom:8}}><span style={{fontSize:16}}>{cat.icon}</span><h4 style={{fontSize:14,fontWeight:700}}>{cat.cat}</h4><span style={{fontSize:11,color:"#908C82"}}>({cat.items.length})</span></div>
-          {cat.items.map((f,fi)=>{const k=`${ci}-${fi}`;return(<div key={k} style={{padding:12,background:"#fff",border:open===k?"1px solid #6366F1":"1px solid #E8E6E1",borderRadius:12,marginBottom:6,cursor:"pointer"}} onClick={()=>setOpen(open===k?null:k)}>
+          <div style={{display:"flex",alignItems:"center",gap:6,marginBottom:8}}><span style={{fontSize:16}}>{cat.icon}</span><h4 style={{fontSize:14,fontWeight:700}}>{cat.cat}</h4><span style={{fontSize:11,color:"var(--muted)"}}>({cat.items.length})</span></div>
+          {cat.items.map((f,fi)=>{const k=`${ci}-${fi}`;return(<div key={k} style={{padding:12,background:"var(--card)",border:open===k?"1px solid #6366F1":"1px solid #E8E6E1",borderRadius:12,marginBottom:6,cursor:"pointer"}} onClick={()=>setOpen(open===k?null:k)}>
             <div style={{display:"flex",alignItems:"center",justifyContent:"space-between"}}>
               <span style={{fontSize:13,fontWeight:600,flex:1}}>{f.q}</span>
               <span style={{fontSize:14,color:"#6366F1",transform:open===k?"rotate(45deg)":"",transition:"transform .2s",flexShrink:0,marginLeft:8}}>+</span>
             </div>
-            {open===k&&<div style={{fontSize:12,color:"#5E5B53",marginTop:8,lineHeight:1.7,paddingTop:8,borderTop:"1px solid #F5F4F1",whiteSpace:"pre-line"}}>{f.a}</div>}
+            {open===k&&<div style={{fontSize:12,color:"var(--sub)",marginTop:8,lineHeight:1.7,paddingTop:8,borderTop:"1px solid var(--border)",whiteSpace:"pre-line"}}>{f.a}</div>}
           </div>)})}
         </div>)}
       </div>}
@@ -204,25 +204,25 @@ function VSupportScr({go,onBack,vendorPlan}){
           ["📧","Email","support@lamuka.cg",isEnt?"Sous 4h":"Sous 24h",true],
           ...(isEnt?[["📞","Hotline Enterprise","24/7","Urgences uniquement",true]]:[]),
           ["🐦","Twitter / X","@LamukaSupport","Lun-Ven",true],
-        ].map(([i,t,d,time,active])=><div key={t} style={{display:"flex",alignItems:"center",gap:12,padding:14,background:"#fff",border:"1px solid #E8E6E1",borderRadius:14,marginBottom:10}}>
+        ].map(([i,t,d,time,active])=><div key={t} style={{display:"flex",alignItems:"center",gap:12,padding:14,background:"var(--card)",border:"1px solid var(--border)",borderRadius:14,marginBottom:10}}>
           <span style={{fontSize:22}}>{i}</span>
           <div style={{flex:1}}>
             <div style={{fontSize:14,fontWeight:600}}>{t}</div>
-            <div style={{fontSize:11,color:"#908C82"}}>{d}</div>
+            <div style={{fontSize:11,color:"var(--muted)"}}>{d}</div>
           </div>
           <span style={{padding:"4px 10px",borderRadius:8,background:"rgba(16,185,129,0.08)",color:"#10B981",fontSize:10,fontWeight:600}}>{time}</span>
         </div>)}
 
         <div style={{fontSize:14,fontWeight:700,margin:"16px 0 10px"}}>Envoyer un ticket</div>
-        <div style={{padding:16,background:"#fff",border:"1px solid #E8E6E1",borderRadius:16}}>
+        <div style={{padding:16,background:"var(--card)",border:"1px solid var(--border)",borderRadius:16}}>
           {contactDone
-            ?<div style={{textAlign:"center",padding:"20px 0"}}><div style={{fontSize:36,marginBottom:8}}>✅</div><div style={{fontSize:14,fontWeight:700}}>Ticket envoyé !</div><div style={{fontSize:12,color:"#908C82",marginTop:4}}>Réponse {isEnt?"sous 2h":"sous 24h"} · Réf: #TK-{Math.floor(Math.random()*9000)+1000}</div><button style={{marginTop:12,padding:"8px 20px",borderRadius:8,border:"1px solid #E8E6E1",background:"#fff",fontSize:12,fontWeight:600,cursor:"pointer",fontFamily:"inherit"}} onClick={()=>{setContactDone(false);setTicketMsg("")}}>Nouveau ticket</button></div>
+            ?<div style={{textAlign:"center",padding:"20px 0"}}><div style={{fontSize:36,marginBottom:8}}>✅</div><div style={{fontSize:14,fontWeight:700}}>Ticket envoyé !</div><div style={{fontSize:12,color:"var(--muted)",marginTop:4}}>Réponse {isEnt?"sous 2h":"sous 24h"} · Réf: #TK-{Math.floor(Math.random()*9000)+1000}</div><button style={{marginTop:12,padding:"8px 20px",borderRadius:8,border:"1px solid var(--border)",background:"var(--card)",fontSize:12,fontWeight:600,cursor:"pointer",fontFamily:"inherit"}} onClick={()=>{setContactDone(false);setTicketMsg("")}}>Nouveau ticket</button></div>
             :<>
               <div className="field"><label>Catégorie</label><select><option>Problème technique</option><option>Paiement / Facturation</option><option>Commande spécifique</option><option>Livreur / Livraison</option><option>Suggestion / Feedback</option>{isEnt&&<option>API / Intégration</option>}{isEnt&&<option>Multi-boutiques</option>}</select></div>
               <div className="field"><label>Sujet</label><input placeholder="Décrivez brièvement le problème"/></div>
               <div className="field"><label>Message</label><textarea rows={3} value={ticketMsg} onChange={e=>setTicketMsg(e.target.value)} placeholder="Donnez-nous tous les détails pour vous aider au mieux..."/></div>
-              <div className="field"><label>Pièce jointe (optionnel)</label><div style={{padding:16,border:"1px dashed #E8E6E1",borderRadius:12,textAlign:"center",color:"#908C82",fontSize:12,cursor:"pointer"}}>📎 Cliquez pour joindre un fichier (capture d'écran, document...)</div></div>
-              <button className="btn-primary" style={{background:ticketMsg?"#6366F1":"#E8E6E1",color:ticketMsg?"#fff":"#908C82"}} onClick={()=>{if(ticketMsg)setContactDone(true)}}>📤 Envoyer le ticket{isEnt?" (prioritaire)":""}</button>
+              <div className="field"><label>Pièce jointe (optionnel)</label><div style={{padding:16,border:"1px dashed #E8E6E1",borderRadius:12,textAlign:"center",color:"var(--muted)",fontSize:12,cursor:"pointer"}}>📎 Cliquez pour joindre un fichier (capture d'écran, document...)</div></div>
+              <button className="btn-primary" style={{background:ticketMsg?"#6366F1":"#E8E6E1",color:ticketMsg?"var(--card)":"#908C82"}} onClick={()=>{if(ticketMsg)setContactDone(true)}}>📤 Envoyer le ticket{isEnt?" (prioritaire)":""}</button>
             </>
           }
         </div>

@@ -19,7 +19,7 @@ function VTrackDeliveryScr({delivery:d,go,onBack}){
   return(<>
     <MapView center={[driverPos.lat,driverPos.lng]} zoom={15} markers={markers} driverPos={driverPos}
       route={[pickup,driverPos,dest]} routeColor="#6366F1" style={{height:200}}>
-      <div style={{position:"absolute",bottom:12,left:"50%",transform:"translateX(-50%)",zIndex:1000,background:"#fff",padding:"8px 16px",borderRadius:12,boxShadow:"0 2px 12px rgba(0,0,0,.1)",fontSize:12,fontWeight:600,display:"flex",alignItems:"center",gap:6,whiteSpace:"nowrap"}}>🟢 {d.status} · {d.eta} restantes</div>
+      <div style={{position:"absolute",bottom:12,left:"50%",transform:"translateX(-50%)",zIndex:1000,background:"var(--card)",padding:"8px 16px",borderRadius:12,boxShadow:"0 2px 12px rgba(0,0,0,.1)",fontSize:12,fontWeight:600,display:"flex",alignItems:"center",gap:6,whiteSpace:"nowrap"}}>🟢 {d.status} · {d.eta} restantes</div>
       <div style={{position:"absolute",top:12,left:12,zIndex:1000}}><button onClick={onBack} style={{width:40,height:40,borderRadius:14,background:"rgba(255,255,255,0.85)",backdropFilter:"blur(12px)",WebkitBackdropFilter:"blur(12px)",border:"1px solid rgba(255,255,255,0.4)",boxShadow:"0 4px 16px rgba(0,0,0,0.12)",cursor:"pointer",display:"flex",alignItems:"center",justifyContent:"center"}}><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#191815" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><path d="M19 12H5M12 19l-7-7 7-7"/></svg></button></div>
     </MapView>
     <div className="scr" style={{padding:16}}>
@@ -29,7 +29,7 @@ function VTrackDeliveryScr({delivery:d,go,onBack}){
         <button style={{flex:1,padding:12,borderRadius:12,border:"none",background:"#6366F1",color:"#fff",fontSize:12,fontWeight:600,cursor:"pointer",fontFamily:"inherit",display:"flex",alignItems:"center",justifyContent:"center",gap:6}} onClick={()=>go("vDriverChat",d)}>💬 Message</button>
       </div>
       <div className="eta-box"><h4>Progression</h4><div className="eta-bar"><div className="eta-fill" style={{width:`${d.progress}%`}}/></div><div className="eta-info"><span>Départ</span><span><b>~{d.eta}</b></span></div></div>
-      <div style={{padding:16,background:"#fff",border:"1px solid #E8E6E1",borderRadius:16}}>
+      <div style={{padding:16,background:"var(--card)",border:"1px solid var(--border)",borderRadius:16}}>
         <div style={{fontSize:14,fontWeight:700,marginBottom:14}}>Suivi étapes</div>
         {steps.map((s,i)=><div key={i} style={{display:"flex",gap:12}}>
           <div style={{display:"flex",flexDirection:"column",alignItems:"center"}}>
@@ -38,7 +38,7 @@ function VTrackDeliveryScr({delivery:d,go,onBack}){
           </div>
           <div style={{paddingBottom:i<steps.length-1?16:0}}>
             <div style={{fontSize:13,fontWeight:600,color:s.done?"#191815":"#908C82"}}>{s.label}</div>
-            <div style={{fontSize:11,color:"#908C82"}}>{s.time}</div>
+            <div style={{fontSize:11,color:"var(--muted)"}}>{s.time}</div>
           </div>
         </div>)}
       </div>

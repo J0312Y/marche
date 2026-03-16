@@ -61,12 +61,12 @@ function VDashboardScr({go}){
     </div>
 
     {/* Chart with real amounts */}
-    <div style={{padding:16,background:"#fff",border:"1px solid #E8E6E1",borderRadius:18,marginBottom:14}}>
+    <div style={{padding:16,background:"var(--card)",border:"1px solid var(--border)",borderRadius:18,marginBottom:14}}>
       <h4 style={{fontSize:14,fontWeight:700,marginBottom:4,display:"flex",justifyContent:"space-between",alignItems:"center"}}>
         {period==="today"?"Ventes aujourd'hui":period==="week"?"Ventes de la semaine":"Ventes du mois"}
         <span style={{fontSize:12,color:"#6366F1",fontWeight:600,cursor:"pointer"}} onClick={()=>go("vStats")}>Voir tout →</span>
       </h4>
-      <div style={{fontSize:11,color:"#908C82",marginBottom:12}}>
+      <div style={{fontSize:11,color:"var(--muted)",marginBottom:12}}>
         Total: {fmt(chart.reduce((a,b)=>a+b,0))}
       </div>
       <div className="chart-bars">
@@ -78,13 +78,13 @@ function VDashboardScr({go}){
     </div>
 
     {/* Top Products */}
-    <div style={{padding:16,background:"#fff",border:"1px solid #E8E6E1",borderRadius:18,marginBottom:14}}>
+    <div style={{padding:16,background:"var(--card)",border:"1px solid var(--border)",borderRadius:18,marginBottom:14}}>
       <h4 style={{fontSize:15,fontWeight:700,marginBottom:14}}>Top Produits</h4>
       {topProducts.map((p,i)=><div key={i} style={{display:"flex",alignItems:"center",gap:12,padding:"10px 0",borderTop:i?"1px solid #F5F4F1":"none"}}>
         <div style={{width:28,height:28,borderRadius:8,background:i===0?"linear-gradient(135deg,#F59E0B,#D97706)":i===1?"linear-gradient(135deg,#94A3B8,#64748B)":"linear-gradient(135deg,#D97706,#B45309)",display:"flex",alignItems:"center",justifyContent:"center",color:"#fff",fontSize:12,fontWeight:800,flexShrink:0}}>{i+1}</div>
         <div style={{flex:1}}>
           <div style={{fontSize:14,fontWeight:600}}>{p.name}</div>
-          <div style={{fontSize:12,color:"#908C82"}}>{p.sold} vendus</div>
+          <div style={{fontSize:12,color:"var(--muted)"}}>{p.sold} vendus</div>
         </div>
         <div style={{fontSize:13,fontWeight:700,color:"#6366F1"}}>{fmt(p.revenue)}</div>
       </div>)}

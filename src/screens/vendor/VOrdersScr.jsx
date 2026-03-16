@@ -19,19 +19,19 @@ function VOrdersScr({go,onBack}){
       {loading?<SkeletonCards/>:orders.length===0?<div style={{textAlign:"center",padding:"50px 0"}}><div style={{fontSize:40,marginBottom:8}}>📭</div><div style={{fontSize:14,fontWeight:600}}>Aucune commande</div></div>
       :orders.map(o=>{
         const st=ST[o.status]||ST.new;
-        return(<div key={o.id} onClick={()=>go("vOrderDetail",o)} style={{padding:14,background:"#fff",border:"1px solid #E8E6E1",borderRadius:16,marginBottom:10,cursor:"pointer",transition:"all .15s"}}>
+        return(<div key={o.id} onClick={()=>go("vOrderDetail",o)} style={{padding:14,background:"var(--card)",border:"1px solid var(--border)",borderRadius:16,marginBottom:10,cursor:"pointer",transition:"all .15s"}}>
           {/* Header: ref + status */}
           <div style={{display:"flex",justifyContent:"space-between",alignItems:"center",marginBottom:8}}>
             <span style={{fontSize:13,fontWeight:700,fontFamily:"monospace"}}>{o.ref}</span>
             <span style={{padding:"4px 10px",borderRadius:8,background:st.bg,color:st.color,fontSize:11,fontWeight:600}}>{st.label}</span>
           </div>
           {/* Client + payment */}
-          <div style={{fontSize:12,color:"#5E5B53",marginBottom:8}}>👤 {o.client} · {o.payment}</div>
+          <div style={{fontSize:12,color:"var(--sub)",marginBottom:8}}>👤 {o.client} · {o.payment}</div>
           {/* Items — compact row with small thumbnails */}
           <div style={{display:"flex",gap:6,marginBottom:10,flexWrap:"wrap"}}>
             {o.items.map((it,i)=>(
-              <div key={i} style={{display:"flex",alignItems:"center",gap:6,padding:"4px 8px 4px 4px",background:"#F5F4F1",borderRadius:10,fontSize:11,fontWeight:500}}>
-                <div style={{width:28,height:28,borderRadius:6,overflow:"hidden",flexShrink:0,background:"#E8E6E1"}}>
+              <div key={i} style={{display:"flex",alignItems:"center",gap:6,padding:"4px 8px 4px 4px",background:"var(--light)",borderRadius:10,fontSize:11,fontWeight:500}}>
+                <div style={{width:28,height:28,borderRadius:6,overflow:"hidden",flexShrink:0,background:"var(--border)"}}>
                   <Img src={it.photo} emoji={it.img} style={{width:"100%",height:"100%"}} fit="cover"/>
                 </div>
                 {it.qty}× {it.name.length>16?it.name.substring(0,16)+"…":it.name}
@@ -41,7 +41,7 @@ function VOrdersScr({go,onBack}){
           {/* Footer: total + date */}
           <div style={{display:"flex",justifyContent:"space-between",alignItems:"center"}}>
             <span style={{fontSize:15,fontWeight:700,color:"#6366F1"}}>{fmt(o.total)}</span>
-            <span style={{fontSize:11,color:"#908C82"}}>{o.date}</span>
+            <span style={{fontSize:11,color:"var(--muted)"}}>{o.date}</span>
           </div>
         </div>);
       })}

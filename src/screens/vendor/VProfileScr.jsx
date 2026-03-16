@@ -3,7 +3,7 @@ import toast from "../../utils/toast";
 
 import { VENDOR_LOGO_DEFAULT } from "../../data/images";
 function VProfileScr({go,onSwitch,vendorPlan,onLogout}){
-  const planInfo=vendorPlan==="starter"?{name:"Starter",color:"#908C82",badge:"Gratuit",icon:"🆓"}:vendorPlan==="pro"?{name:"Pro",color:"#6366F1",badge:"Pro ✓",icon:"⭐"}:{name:"Enterprise",color:"#F59E0B",badge:"Enterprise ★",icon:"🚀"};
+  const planInfo=vendorPlan==="starter"?{name:"Starter",color:"var(--muted)",badge:"Gratuit",icon:"🆓"}:vendorPlan==="pro"?{name:"Pro",color:"#6366F1",badge:"Pro ✓",icon:"⭐"}:{name:"Enterprise",color:"#F59E0B",badge:"Enterprise ★",icon:"🚀"};
   const [lockPopup,setLockPopup]=useState(null);
 
   const menu=[
@@ -37,13 +37,13 @@ function VProfileScr({go,onSwitch,vendorPlan,onLogout}){
     </div>
 
     {/* Plan features summary */}
-    <div style={{margin:"0 16px 12px",padding:12,background:"#fff",border:"1px solid #E8E6E1",borderRadius:14}}>
+    <div style={{margin:"0 16px 12px",padding:12,background:"var(--card)",border:"1px solid var(--border)",borderRadius:14}}>
       <div style={{fontSize:12,fontWeight:700,marginBottom:8,display:"flex",justifyContent:"space-between",alignItems:"center"}}>
         <span>Votre plan inclut :</span>
         {vendorPlan!=="enterprise"&&<span style={{fontSize:11,color:"#6366F1",cursor:"pointer",fontWeight:600}} onClick={()=>go("vUpgradePlan")}>Voir les plans →</span>}
       </div>
       <div style={{display:"flex",flexWrap:"wrap",gap:4}}>
-        {vendorPlan==="starter"&&["10 articles","8% commission","Support email","Stats basiques"].map(f=><span key={f} style={{padding:"3px 8px",borderRadius:6,background:"#F5F4F1",fontSize:10,fontWeight:500,color:"#5E5B53"}}>✓ {f}</span>)}
+        {vendorPlan==="starter"&&["10 articles","8% commission","Support email","Stats basiques"].map(f=><span key={f} style={{padding:"3px 8px",borderRadius:6,background:"var(--light)",fontSize:10,fontWeight:500,color:"var(--sub)"}}>✓ {f}</span>)}
         {vendorPlan==="pro"&&["Articles illimités","4% commission","Analytics","Badge ✓","Promos","Rapports"].map(f=><span key={f} style={{padding:"3px 8px",borderRadius:6,background:"rgba(99,102,241,0.06)",fontSize:10,fontWeight:500,color:"#6366F1"}}>✓ {f}</span>)}
         {vendorPlan==="enterprise"&&["Multi-shops","2% commission","API","Site web","Manager","Dashboard","Rapports"].map(f=><span key={f} style={{padding:"3px 8px",borderRadius:6,background:"rgba(245,158,11,0.06)",fontSize:10,fontWeight:500,color:"#F59E0B"}}>✓ {f}</span>)}
       </div>
@@ -70,7 +70,7 @@ function VProfileScr({go,onSwitch,vendorPlan,onLogout}){
         <div style={{width:44,height:44,borderRadius:14,background:"linear-gradient(135deg,#6366F1,#A855F7)",display:"flex",alignItems:"center",justifyContent:"center",fontSize:20,color:"#fff",flexShrink:0}}>⬆️</div>
         <div style={{flex:1}}>
           <div style={{fontSize:14,fontWeight:700,color:"#6366F1"}}>Passer au plan Pro</div>
-          <div style={{fontSize:11,color:"#5E5B53",marginTop:2,lineHeight:1.4}}>Analytics, promotions, rapports, badge vérifié ✓ et plus.</div>
+          <div style={{fontSize:11,color:"var(--sub)",marginTop:2,lineHeight:1.4}}>Analytics, promotions, rapports, badge vérifié ✓ et plus.</div>
           <div style={{fontSize:12,fontWeight:700,color:"#6366F1",marginTop:4}}>15 000 FCFA/mois →</div>
         </div>
       </div>
@@ -81,7 +81,7 @@ function VProfileScr({go,onSwitch,vendorPlan,onLogout}){
         <div style={{width:44,height:44,borderRadius:14,background:"linear-gradient(135deg,#F59E0B,#D97706)",display:"flex",alignItems:"center",justifyContent:"center",fontSize:20,color:"#fff",flexShrink:0}}>🚀</div>
         <div style={{flex:1}}>
           <div style={{fontSize:14,fontWeight:700,color:"#F59E0B"}}>Passer au plan Enterprise</div>
-          <div style={{fontSize:11,color:"#5E5B53",marginTop:2,lineHeight:1.4}}>Multi-shops, site web, API, manager dédié, 2% commission.</div>
+          <div style={{fontSize:11,color:"var(--sub)",marginTop:2,lineHeight:1.4}}>Multi-shops, site web, API, manager dédié, 2% commission.</div>
           <div style={{fontSize:12,fontWeight:700,color:"#F59E0B",marginTop:4}}>45 000 FCFA/mois →</div>
         </div>
       </div>
@@ -100,24 +100,24 @@ function VProfileScr({go,onSwitch,vendorPlan,onLogout}){
 
     {/* Lock popup */}
     {lockPopup&&<div style={{position:"fixed",inset:0,background:"rgba(0,0,0,.4)",zIndex:100,display:"flex",alignItems:"center",justifyContent:"center",padding:20}} onClick={()=>setLockPopup(null)}>
-      <div style={{background:"#fff",borderRadius:20,padding:24,maxWidth:320,width:"100%",textAlign:"center"}} onClick={e=>e.stopPropagation()}>
+      <div style={{background:"var(--card)",borderRadius:20,padding:24,maxWidth:320,width:"100%",textAlign:"center"}} onClick={e=>e.stopPropagation()}>
         <div style={{fontSize:48,marginBottom:10}}>🔒</div>
         <h3 style={{fontSize:17,fontWeight:700,marginBottom:6}}>{lockPopup.title}</h3>
-        <p style={{fontSize:13,color:"#908C82",marginBottom:6,lineHeight:1.5}}>
+        <p style={{fontSize:13,color:"var(--muted)",marginBottom:6,lineHeight:1.5}}>
           Cette fonctionnalité nécessite le plan <b style={{color:lockPopup.requiredPlan==="enterprise"?"#F59E0B":"#6366F1"}}>{lockPopup.requiredPlan==="enterprise"?"Enterprise":"Pro"}</b>.
         </p>
-        <div style={{padding:10,background:"#F5F4F1",borderRadius:12,marginBottom:14}}>
-          <div style={{fontSize:12,fontWeight:600,color:"#5E5B53"}}>
+        <div style={{padding:10,background:"var(--light)",borderRadius:12,marginBottom:14}}>
+          <div style={{fontSize:12,fontWeight:600,color:"var(--sub)"}}>
             {lockPopup.requiredPlan==="enterprise"?"🚀 Enterprise — 45 000 FCFA/mois":"⭐ Pro — 15 000 FCFA/mois"}
           </div>
-          <div style={{fontSize:11,color:"#908C82",marginTop:4}}>
+          <div style={{fontSize:11,color:"var(--muted)",marginTop:4}}>
             {lockPopup.requiredPlan==="enterprise"
               ?"Multi-shops, site web, API, manager dédié, 2% commission"
               :"Articles illimités, analytics, promotions, rapports, badge ✓"}
           </div>
         </div>
         <div style={{display:"flex",gap:10}}>
-          <button onClick={()=>setLockPopup(null)} style={{flex:1,padding:12,borderRadius:12,border:"1px solid #E8E6E1",background:"#fff",fontSize:13,fontWeight:600,cursor:"pointer",fontFamily:"inherit"}}>Plus tard</button>
+          <button onClick={()=>setLockPopup(null)} style={{flex:1,padding:12,borderRadius:12,border:"1px solid var(--border)",background:"var(--card)",fontSize:13,fontWeight:600,cursor:"pointer",fontFamily:"inherit"}}>Plus tard</button>
           <button onClick={()=>{setLockPopup(null);go("vUpgradePlan")}} style={{flex:1,padding:12,borderRadius:12,border:"none",background:lockPopup.requiredPlan==="enterprise"?"linear-gradient(135deg,#F59E0B,#D97706)":"linear-gradient(135deg,#6366F1,#A855F7)",color:"#fff",fontSize:13,fontWeight:700,cursor:"pointer",fontFamily:"inherit"}}>⬆️ Upgrade</button>
         </div>
       </div>

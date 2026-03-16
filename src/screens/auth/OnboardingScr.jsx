@@ -103,7 +103,7 @@ function OnboardingScr({onDone}){
         <div style={{position:"absolute",top:0,left:0,right:0,zIndex:10,display:"flex",gap:4,padding:"10px 14px"}}>
           {SLIDES.map((_,i)=>(
             <div key={i} style={{flex:1,height:3,borderRadius:2,background:"rgba(255,255,255,.3)",overflow:"hidden"}}>
-              <div style={{height:"100%",borderRadius:2,background:"#fff",width:i<s?"100%":i===s?`${progress}%`:"0%",transition:i===s?"none":"width .3s ease"}}/>
+              <div style={{height:"100%",borderRadius:2,background:"var(--card)",width:i<s?"100%":i===s?`${progress}%`:"0%",transition:i===s?"none":"width .3s ease"}}/>
             </div>
           ))}
         </div>
@@ -121,7 +121,7 @@ function OnboardingScr({onDone}){
         {/* Pause indicator */}
         {paused&&s<2&&<div style={{position:"absolute",top:"40%",left:"50%",transform:"translate(-50%,-50%)",zIndex:5,opacity:.5}}>
           <div style={{width:44,height:44,borderRadius:"50%",background:"rgba(0,0,0,.35)",display:"flex",alignItems:"center",justifyContent:"center",backdropFilter:"blur(4px)"}}>
-            <div style={{width:10,height:16,display:"flex",gap:3}}><div style={{width:3,borderRadius:2,background:"#fff",height:"100%"}}/><div style={{width:3,borderRadius:2,background:"#fff",height:"100%"}}/></div>
+            <div style={{width:10,height:16,display:"flex",gap:3}}><div style={{width:3,borderRadius:2,background:"var(--card)",height:"100%"}}/><div style={{width:3,borderRadius:2,background:"var(--card)",height:"100%"}}/></div>
           </div>
         </div>}
 

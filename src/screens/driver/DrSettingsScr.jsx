@@ -8,7 +8,7 @@ function DrSettingsScr({onBack,go}){
   return(<div className="scr" style={{paddingBottom:80}}><div className="appbar"><button onClick={onBack}>←</button><h2>Paramètres</h2><div style={{width:38}}/></div>
     <div style={{padding:"0 16px"}}>
       <div className="setting-group"><div className="setting-label">Général</div>
-        <div className="setting-item"><span className="si-i">🌐</span><span className="si-t">Langue</span><select value={lang} onChange={e=>setLang(e.target.value)} style={{padding:"6px 10px",borderRadius:8,border:"1px solid #E8E6E1",fontSize:12,fontFamily:"inherit",background:"#fff"}}><option value="fr">Français</option><option value="en">English</option><option value="ln">Lingala</option></select></div>
+        <div className="setting-item"><span className="si-i">🌐</span><span className="si-t">Langue</span><select value={lang} onChange={e=>setLang(e.target.value)} style={{padding:"6px 10px",borderRadius:8,border:"1px solid var(--border)",fontSize:12,fontFamily:"inherit",background:"var(--card)"}}><option value="fr">Français</option><option value="en">English</option><option value="ln">Lingala</option></select></div>
         <div className="setting-item"><span className="si-i">🌙</span><span className="si-t">Mode sombre</span><div className={`toggle ${darkMode?"on":""}`} onClick={()=>{toggleDark();toast.success(darkMode?"Mode clair ☀️":"Mode sombre 🌙")}}/></div>
       </div>
       <div className="setting-group"><div className="setting-label">Notifications</div>

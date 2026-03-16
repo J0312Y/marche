@@ -21,7 +21,7 @@ function LoginScr({onDone,onSocial}){
         <button className="social-btn" onClick={()=>doSocial("apple")} style={socialLoading==="apple"?{background:"rgba(0,0,0,0.04)",borderColor:"#333"}:{}}>{socialLoading==="apple"?<span style={{display:"flex",alignItems:"center",gap:6}}><span className="loader" style={{width:14,height:14,borderWidth:2}}/>Connexion...</span>:<><span style={{fontSize:16}}>⚫</span> <span>Apple</span></>}</button>
         <button className="social-btn" onClick={()=>doSocial("facebook")} style={socialLoading==="facebook"?{background:"rgba(24,119,242,0.08)",borderColor:"#1877F2"}:{}}>{socialLoading==="facebook"?<span style={{display:"flex",alignItems:"center",gap:6}}><span className="loader" style={{width:14,height:14,borderWidth:2}}/>Connexion...</span>:<><span style={{fontSize:16}}>🔷</span> <span>Facebook</span></>}</button>
       </div>
-      <p style={{textAlign:"center",fontSize:12,color:"#908C82",marginTop:24}}>En continuant, vous acceptez nos <b style={{color:"#6366F1",cursor:"pointer"}} onClick={()=>setLegal("terms")}>Conditions</b> et <b style={{color:"#6366F1",cursor:"pointer"}} onClick={()=>setLegal("privacy")}>Politique de confidentialité</b></p>
+      <p style={{textAlign:"center",fontSize:12,color:"var(--muted)",marginTop:24}}>En continuant, vous acceptez nos <b style={{color:"#6366F1",cursor:"pointer"}} onClick={()=>setLegal("terms")}>Conditions</b> et <b style={{color:"#6366F1",cursor:"pointer"}} onClick={()=>setLegal("privacy")}>Politique de confidentialité</b></p>
     </div>
   );
 }

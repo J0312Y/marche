@@ -4,7 +4,7 @@ import toast from "../../utils/toast";
 function PasswordScr({onBack}){
   const [done,setDone]=useState(false);
   if(done)return(<div className="scr" style={{padding:16}}><div className="appbar" style={{padding:0,marginBottom:12}}><button onClick={onBack}>←</button><h2>Mot de passe</h2><div style={{width:38}}/></div>
-    <div style={{textAlign:"center",padding:"40px 0"}}><div style={{fontSize:48,marginBottom:10}}>✅</div><h3 style={{fontSize:18,fontWeight:700}}>Mot de passe modifié</h3><p style={{fontSize:13,color:"#908C82",marginTop:6}}>Votre mot de passe a été mis à jour avec succès.</p><button className="btn-primary" style={{marginTop:20}} onClick={onBack}>OK</button></div>
+    <div style={{textAlign:"center",padding:"40px 0"}}><div style={{fontSize:48,marginBottom:10}}>✅</div><h3 style={{fontSize:18,fontWeight:700}}>Mot de passe modifié</h3><p style={{fontSize:13,color:"var(--muted)",marginTop:6}}>Votre mot de passe a été mis à jour avec succès.</p><button className="btn-primary" style={{marginTop:20}} onClick={onBack}>OK</button></div>
   </div>);
   return(<div className="scr" style={{padding:16}}><div className="appbar" style={{padding:0,marginBottom:12}}><button onClick={onBack}>←</button><h2>Mot de passe</h2><div style={{width:38}}/></div>
     <div className="field"><label>Mot de passe actuel</label><input type="password" placeholder="••••••••"/></div>

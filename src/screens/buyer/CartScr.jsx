@@ -19,7 +19,7 @@ function CartScr({cart,setCart,go,appliedCoupon,setAppliedCoupon}){
 
   return(<><div className="scr" style={{padding:16}}>
     <div className="appbar" style={{padding:0,marginBottom:12}}><h2>Panier ({cart.length})</h2></div>
-    {cart.length===0?<div style={{textAlign:"center",padding:"60px 0"}}><div style={{width:72,height:72,borderRadius:20,background:"rgba(99,102,241,0.08)",display:"flex",alignItems:"center",justifyContent:"center"}}><svg width="40" height="40" viewBox="0 0 64 64" fill="none"><path d="M16 16h5l6 26h16l6-20H24" stroke="#6366F1" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round" opacity=".4"/><circle cx="28" cy="50" r="3" fill="#6366F1" opacity=".4"/><circle cx="42" cy="50" r="3" fill="#6366F1" opacity=".4"/></svg></div><h3 style={{marginTop:14,fontSize:18,fontWeight:700}}>Votre panier est vide</h3><p style={{fontSize:13,color:"#908C82",marginTop:6}}>Découvrez nos produits</p></div>
+    {cart.length===0?<div style={{textAlign:"center",padding:"60px 0"}}><div style={{width:72,height:72,borderRadius:20,background:"rgba(99,102,241,0.08)",display:"flex",alignItems:"center",justifyContent:"center"}}><svg width="40" height="40" viewBox="0 0 64 64" fill="none"><path d="M16 16h5l6 26h16l6-20H24" stroke="#6366F1" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round" opacity=".4"/><circle cx="28" cy="50" r="3" fill="#6366F1" opacity=".4"/><circle cx="42" cy="50" r="3" fill="#6366F1" opacity=".4"/></svg></div><h3 style={{marginTop:14,fontSize:18,fontWeight:700}}>Votre panier est vide</h3><p style={{fontSize:13,color:"var(--muted)",marginTop:6}}>Découvrez nos produits</p></div>
     :cart.map((c,i)=>{const p=getItem(c);const vp=getVendorPromo(p,VENDORS);const price=vp?vp.promoPrice:(p.price||0);return(
       <div key={i} className="cart-item">
         <div className="cart-img"><Img src={p.photo} emoji={p.img} style={{width:"100%",height:"100%",borderRadius:12}} fit="cover"/></div>
@@ -27,7 +27,7 @@ function CartScr({cart,setCart,go,appliedCoupon,setAppliedCoupon}){
           <h4>{p.name}</h4>
           <div className="cv">{p.vendor||""}{vp&&<span style={{marginLeft:6,fontSize:10,color:"#10B981",fontWeight:600}}>🏷️ -{vp.promoDiscount}%</span>}</div>
           <div className="cart-bot">
-            <span className="cp">{fmt(price*(c.qty||1))}{vp&&<span style={{marginLeft:4,fontSize:10,color:"#908C82",textDecoration:"line-through"}}>{fmt(p.price*(c.qty||1))}</span>}</span>
+            <span className="cp">{fmt(price*(c.qty||1))}{vp&&<span style={{marginLeft:4,fontSize:10,color:"var(--muted)",textDecoration:"line-through"}}>{fmt(p.price*(c.qty||1))}</span>}</span>
             <div className="qty"><button onClick={()=>updQty(i,-1)}>−</button><span>{c.qty||1}</span><button onClick={()=>updQty(i,1)}>+</button></div>
           </div>
         </div>
@@ -41,13 +41,13 @@ function CartScr({cart,setCart,go,appliedCoupon,setAppliedCoupon}){
             <span style={{fontSize:20}}>🏷️</span>
             <div>
               <div style={{fontSize:13,fontWeight:700,color:"#10B981"}}>{appliedCoupon.code}</div>
-              <div style={{fontSize:11,color:"#908C82"}}>
+              <div style={{fontSize:11,color:"var(--muted)"}}>
                 {appliedCoupon.free?"Livraison gratuite":`-${appliedCoupon.discount}% = -${fmt(discountAmount)}`}
               </div>
             </div>
           </div>
           <div style={{display:"flex",gap:6}}>
-            <button onClick={()=>go("coupons")} style={{padding:"6px 10px",borderRadius:8,border:"1px solid #E8E6E1",background:"#fff",fontSize:11,fontWeight:600,cursor:"pointer",fontFamily:"inherit"}}>Changer</button>
+            <button onClick={()=>go("coupons")} style={{padding:"6px 10px",borderRadius:8,border:"1px solid var(--border)",background:"var(--card)",fontSize:11,fontWeight:600,cursor:"pointer",fontFamily:"inherit"}}>Changer</button>
             <button onClick={()=>setAppliedCoupon(null)} style={{padding:"6px 10px",borderRadius:8,border:"1px solid rgba(239,68,68,0.3)",background:"transparent",color:"#EF4444",fontSize:11,fontWeight:600,cursor:"pointer",fontFamily:"inherit"}}>✕</button>
           </div>
         </div>
@@ -75,7 +75,7 @@ function CartScr({cart,setCart,go,appliedCoupon,setAppliedCoupon}){
 
     <div className="cs-row">
       <span>Livraison</span>
-      <b style={freeDelivery?{textDecoration:"line-through",color:"#908C82"}:{}}>
+      <b style={freeDelivery?{textDecoration:"line-through",color:"var(--muted)"}:{}}>
         {fmt(del)}
       </b>
       {freeDelivery&&<span style={{color:"#10B981",fontWeight:700,fontSize:12,marginLeft:6}}>GRATUIT</span>}

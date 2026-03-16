@@ -31,26 +31,26 @@ function ShopTeamTab(){
         <div style={{width:42,height:42,borderRadius:12,background:m.color,color:"#fff",display:"flex",alignItems:"center",justifyContent:"center",fontSize:16,fontWeight:700,flexShrink:0}}>m.photo?<img src={m.photo} style={{width:"100%",height:"100%",objectFit:"cover",borderRadius:"inherit"}} alt=""/>:m.avatar</div>
         <div style={{flex:1}}>
           <div style={{fontSize:14,fontWeight:600}}>{m.name}</div>
-          <div style={{fontSize:11,color:"#908C82"}}>{m.email}</div>
+          <div style={{fontSize:11,color:"var(--muted)"}}>{m.email}</div>
         </div>
         <span style={{padding:"4px 10px",borderRadius:8,background:`${roleColor(m.role)}12`,color:roleColor(m.role),fontSize:10,fontWeight:700}}>{m.role}</span>
       </div>
-      {m.role!=="Propriétaire"&&<div style={{display:"flex",gap:8,marginTop:10,paddingTop:10,borderTop:"1px solid #F5F4F1"}}>
-        <select defaultValue={m.role} style={{flex:1,padding:8,borderRadius:8,border:"1px solid #E8E6E1",fontSize:11,fontFamily:"inherit",background:"#fff"}}>
+      {m.role!=="Propriétaire"&&<div style={{display:"flex",gap:8,marginTop:10,paddingTop:10,borderTop:"1px solid var(--border)"}}>
+        <select defaultValue={m.role} style={{flex:1,padding:8,borderRadius:8,border:"1px solid var(--border)",fontSize:11,fontFamily:"inherit",background:"var(--card)"}}>
           <option>Manager</option><option>Employé</option>
         </select>
         {showRemove===m.id
           ?<div style={{display:"flex",gap:6}}>
             <button style={{padding:"8px 12px",borderRadius:8,border:"none",background:"#EF4444",color:"#fff",fontSize:11,fontWeight:600,cursor:"pointer",fontFamily:"inherit"}} onClick={()=>removeMember(m.id)}>Confirmer</button>
-            <button style={{padding:"8px 12px",borderRadius:8,border:"1px solid #E8E6E1",background:"#fff",fontSize:11,fontWeight:600,cursor:"pointer",fontFamily:"inherit"}} onClick={()=>setShowRemove(null)}>Annuler</button>
+            <button style={{padding:"8px 12px",borderRadius:8,border:"1px solid var(--border)",background:"var(--card)",fontSize:11,fontWeight:600,cursor:"pointer",fontFamily:"inherit"}} onClick={()=>setShowRemove(null)}>Annuler</button>
           </div>
-          :<button style={{padding:"8px 12px",borderRadius:8,border:"1px solid rgba(239,68,68,0.2)",background:"#fff",color:"#EF4444",fontSize:11,fontWeight:600,cursor:"pointer",fontFamily:"inherit"}} onClick={()=>setShowRemove(m.id)}>Retirer</button>
+          :<button style={{padding:"8px 12px",borderRadius:8,border:"1px solid rgba(239,68,68,0.2)",background:"var(--card)",color:"#EF4444",fontSize:11,fontWeight:600,cursor:"pointer",fontFamily:"inherit"}} onClick={()=>setShowRemove(m.id)}>Retirer</button>
         }
       </div>}
     </div>)}
 
     {/* Invite form */}
-    {showInvite?<div style={{padding:16,background:"#fff",border:"2px solid #6366F1",borderRadius:16,marginBottom:14}}>
+    {showInvite?<div style={{padding:16,background:"var(--card)",border:"2px solid #6366F1",borderRadius:16,marginBottom:14}}>
       <h4 style={{fontSize:14,fontWeight:700,marginBottom:12}}>📩 Inviter un collaborateur</h4>
       <div className="field"><label>Nom complet</label><input value={invName} onChange={e=>setInvName(e.target.value)} placeholder="Ex: Sarah Mouanda"/></div>
       <div className="field"><label>Email</label><input value={invEmail} onChange={e=>setInvEmail(e.target.value)} placeholder="sarah@email.com" type="email"/></div>
@@ -61,16 +61,16 @@ function ShopTeamTab(){
       </div>
       <div className="info-box blue" style={{marginBottom:10,padding:"6px 10px"}}><span>📧</span><span style={{fontSize:11}}>Un email d'invitation sera envoyé à cette adresse</span></div>
       <div style={{display:"flex",gap:8}}>
-        <button style={{flex:1,padding:12,borderRadius:12,border:"1px solid #E8E6E1",background:"#fff",fontSize:13,fontWeight:600,cursor:"pointer",fontFamily:"inherit"}} onClick={()=>{setShowInvite(false);setInvName("");setInvEmail("")}}>Annuler</button>
-        <button className="btn-primary" style={{flex:2,background:invited?"#10B981":(invName&&invEmail)?"#6366F1":"#E8E6E1",color:(invName&&invEmail)||invited?"#fff":"#908C82"}} onClick={doInvite}>{invited?"✅ Invitation envoyée !":"📤 Envoyer l'invitation"}</button>
+        <button style={{flex:1,padding:12,borderRadius:12,border:"1px solid var(--border)",background:"var(--card)",fontSize:13,fontWeight:600,cursor:"pointer",fontFamily:"inherit"}} onClick={()=>{setShowInvite(false);setInvName("");setInvEmail("")}}>Annuler</button>
+        <button className="btn-primary" style={{flex:2,background:invited?"#10B981":(invName&&invEmail)?"#6366F1":"#E8E6E1",color:(invName&&invEmail)||invited?"var(--card)":"#908C82"}} onClick={doInvite}>{invited?"✅ Invitation envoyée !":"📤 Envoyer l'invitation"}</button>
       </div>
     </div>
     :<button className="btn-primary" onClick={()=>setShowInvite(true)}>+ Inviter un collaborateur</button>}
 
     <div style={{fontSize:14,fontWeight:700,margin:"16px 0 10px"}}>Rôles et permissions</div>
-    <div style={{padding:14,background:"#F5F4F1",borderRadius:14}}>
-      {[["Propriétaire","Accès total, facturation, suppression établissement"],["Manager","Articles, commandes, livraisons, analytics, promotions"],["Employé","Commandes et gestion des articles uniquement"]].map(([r,d],i)=><div key={r} style={{display:"flex",gap:8,padding:"8px 0",...(i<2?{borderBottom:"1px solid #E8E6E1"}:{}),fontSize:12}}>
-        <b style={{minWidth:85,color:roleColor(r)}}>{r}</b><span style={{color:"#908C82"}}>{d}</span>
+    <div style={{padding:14,background:"var(--light)",borderRadius:14}}>
+      {[["Propriétaire","Accès total, facturation, suppression établissement"],["Manager","Articles, commandes, livraisons, analytics, promotions"],["Employé","Commandes et gestion des articles uniquement"]].map(([r,d],i)=><div key={r} style={{display:"flex",gap:8,padding:"8px 0",...(i<2?{borderBottom:"1px solid var(--border)"}:{}),fontSize:12}}>
+        <b style={{minWidth:85,color:roleColor(r)}}>{r}</b><span style={{color:"var(--muted)"}}>{d}</span>
       </div>)}
     </div>
   </div>);

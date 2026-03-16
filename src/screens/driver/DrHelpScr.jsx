@@ -16,8 +16,8 @@ function DrHelpScr({onBack}){
     <div style={{padding:16}}>
       <div style={{fontSize:14,fontWeight:700,marginBottom:10}}>Contacter le support</div>
       <div style={{display:"flex",gap:10}}>
-        <div style={{flex:1,padding:16,background:"#fff",border:"1px solid #E8E6E1",borderRadius:16,textAlign:"center",cursor:"pointer"}}><div style={{fontSize:24,marginBottom:4}}>💬</div><div style={{fontSize:12,fontWeight:600}}>WhatsApp</div><div style={{fontSize:11,color:"#908C82"}}>+242 064 663 469</div></div>
-        <div style={{flex:1,padding:16,background:"#fff",border:"1px solid #E8E6E1",borderRadius:16,textAlign:"center",cursor:"pointer"}}><div style={{fontSize:24,marginBottom:4}}>📧</div><div style={{fontSize:12,fontWeight:600}}>Email</div><div style={{fontSize:11,color:"#908C82"}}>joeldytsina94@gmail.com</div></div>
+        <div style={{flex:1,padding:16,background:"var(--card)",border:"1px solid var(--border)",borderRadius:16,textAlign:"center",cursor:"pointer"}}><div style={{fontSize:24,marginBottom:4}}>💬</div><div style={{fontSize:12,fontWeight:600}}>WhatsApp</div><div style={{fontSize:11,color:"var(--muted)"}}>+242 064 663 469</div></div>
+        <div style={{flex:1,padding:16,background:"var(--card)",border:"1px solid var(--border)",borderRadius:16,textAlign:"center",cursor:"pointer"}}><div style={{fontSize:24,marginBottom:4}}>📧</div><div style={{fontSize:12,fontWeight:600}}>Email</div><div style={{fontSize:11,color:"var(--muted)"}}>joeldytsina94@gmail.com</div></div>
       </div>
     </div>
   </div>);

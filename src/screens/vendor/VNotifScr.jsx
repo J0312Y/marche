@@ -36,7 +36,7 @@ function VNotifScr({onBack,go}){
     </div>
 
     {loading?<SkeletonList count={5}/>:items.length===0?(
-      <div style={{textAlign:"center",padding:"60px 16px"}}><div style={{fontSize:48,marginBottom:10}}>🔔</div><h3 style={{fontSize:16,fontWeight:700}}>Aucune notification</h3><p style={{fontSize:13,color:"#908C82"}}>Les nouvelles commandes et mises à jour apparaîtront ici</p></div>
+      <div style={{textAlign:"center",padding:"60px 16px"}}><div style={{fontSize:48,marginBottom:10}}>🔔</div><h3 style={{fontSize:16,fontWeight:700}}>Aucune notification</h3><p style={{fontSize:13,color:"var(--muted)"}}>Les nouvelles commandes et mises à jour apparaîtront ici</p></div>
     ):(
       <div style={{paddingBottom:80}}>
         {items.map((n,idx)=>{
@@ -44,7 +44,7 @@ function VNotifScr({onBack,go}){
           const detail=DETAILS[idx];
           return(
             <div key={idx} onClick={()=>handleClick(n,idx)} style={{
-              padding:"12px 16px",borderBottom:"1px solid #F5F4F1",cursor:"pointer",
+              padding:"12px 16px",borderBottom:"1px solid var(--border)",cursor:"pointer",
               background:!n.read?"rgba(99,102,241,0.03)":"transparent",
             }}>
               <div style={{display:"flex",gap:12,alignItems:"flex-start"}}>
@@ -52,17 +52,17 @@ function VNotifScr({onBack,go}){
                 <div style={{width:42,height:42,borderRadius:12,background:!n.read?"rgba(99,102,241,0.08)":"#F5F4F1",display:"flex",alignItems:"center",justifyContent:"center",fontSize:18,flexShrink:0}}>{n.icon}</div>
                 <div style={{flex:1,minWidth:0}}>
                   <div style={{display:"flex",justifyContent:"space-between",alignItems:"flex-start"}}>
-                    <h4 style={{fontSize:13,fontWeight:!n.read?700:600,color:"#191815",margin:0}}>{n.title}</h4>
-                    <span style={{fontSize:10,color:"#C4C1BA",flexShrink:0,marginLeft:6}}>{isOpen?"▾":"›"}</span>
+                    <h4 style={{fontSize:13,fontWeight:!n.read?700:600,color:"var(--text)",margin:0}}>{n.title}</h4>
+                    <span style={{fontSize:10,color:"var(--muted)",flexShrink:0,marginLeft:6}}>{isOpen?"▾":"›"}</span>
                   </div>
-                  <p style={{fontSize:12,color:"#5E5B53",margin:"2px 0 0",lineHeight:1.4}}>{n.desc}</p>
-                  <div style={{fontSize:11,color:"#C4C1BA",marginTop:3}}>{n.time}</div>
+                  <p style={{fontSize:12,color:"var(--sub)",margin:"2px 0 0",lineHeight:1.4}}>{n.desc}</p>
+                  <div style={{fontSize:11,color:"var(--muted)",marginTop:3}}>{n.time}</div>
                 </div>
               </div>
 
               {isOpen&&detail&&(
-                <div style={{marginTop:10,marginLeft:!n.read?20:0,padding:12,background:"#F9F8F6",borderRadius:12,border:"1px solid #E8E6E1"}}>
-                  <div style={{fontSize:12,color:"#5E5B53",lineHeight:1.7,whiteSpace:"pre-line"}}>{detail.full}</div>
+                <div style={{marginTop:10,marginLeft:!n.read?20:0,padding:12,background:"#F9F8F6",borderRadius:12,border:"1px solid var(--border)"}}>
+                  <div style={{fontSize:12,color:"var(--sub)",lineHeight:1.7,whiteSpace:"pre-line"}}>{detail.full}</div>
                   {detail.action&&go&&(
                     <button onClick={e=>{e.stopPropagation();go(detail.action)}} style={{marginTop:10,width:"100%",padding:"10px 0",borderRadius:10,border:"none",background:"#6366F1",color:"#fff",fontSize:12,fontWeight:700,cursor:"pointer",fontFamily:"inherit"}}>
                       {detail.actionLabel}

@@ -88,7 +88,7 @@ function VDocScr({docKey,onBack}){
 
     <div style={{padding:12,background:`${doc.color}08`,border:`1px solid ${doc.color}20`,borderRadius:14,marginBottom:12}}>
       <div style={{fontSize:13,fontWeight:700,color:doc.color}}>API Lamuka v2.0 — {doc.title}</div>
-      <div style={{fontSize:11,color:"#908C82",marginTop:4}}>Base URL : https://api.lamuka.cg/v2</div>
+      <div style={{fontSize:11,color:"var(--muted)",marginTop:4}}>Base URL : https://api.lamuka.cg/v2</div>
     </div>
 
     {doc.sections.map((s,i)=><div key={i} style={{marginBottom:12}}>
@@ -96,7 +96,7 @@ function VDocScr({docKey,onBack}){
         <span style={{width:22,height:22,borderRadius:7,background:doc.color,color:"#fff",display:"inline-flex",alignItems:"center",justifyContent:"center",fontSize:11,fontWeight:700,flexShrink:0}}>{i+1}</span>
         {s.title}
       </h4>
-      {s.content&&<p style={{fontSize:12,color:"#5E5B53",lineHeight:1.6,marginBottom:s.code?8:0}}>{s.content}</p>}
+      {s.content&&<p style={{fontSize:12,color:"var(--sub)",lineHeight:1.6,marginBottom:s.code?8:0}}>{s.content}</p>}
       {s.code&&<div style={{padding:12,background:"#1a1a2e",borderRadius:12,overflowX:"auto"}}>
         <pre style={{margin:0,fontSize:10,lineHeight:1.5,color:"#e2e8f0",fontFamily:"'SF Mono',Menlo,monospace",whiteSpace:"pre-wrap",wordBreak:"break-word"}}>{s.code}</pre>
       </div>}

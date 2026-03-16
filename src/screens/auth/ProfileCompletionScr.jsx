@@ -16,14 +16,14 @@ function ProfileCompletionScr({onDone,provider}){
         <div className="field"><label>Prénom</label><input placeholder="Joeldy"/></div>
         <div className="field"><label>Nom de famille</label><input placeholder="Tsina"/></div>
         {provider&&<div className="field"><label>Numéro de téléphone</label>
-          <div style={{display:"flex",gap:8}}><div style={{padding:"10px 12px",borderRadius:12,border:"1px solid #E8E6E1",background:"#F5F4F1",fontSize:13,fontWeight:600,flexShrink:0}}>🇨🇬 +242</div><input placeholder="06X XXX XXX" type="tel" style={{flex:1}}/></div>
+          <div style={{display:"flex",gap:8}}><div style={{padding:"10px 12px",borderRadius:12,border:"1px solid var(--border)",background:"var(--light)",fontSize:13,fontWeight:600,flexShrink:0}}>🇨🇬 +242</div><input placeholder="06X XXX XXX" type="tel" style={{flex:1}}/></div>
         </div>}
         <button className="btn-primary" onClick={()=>setStep(1)}>Continuer</button>
       </>}
 
       {step===1&&<>
         <div className="field"><label>Ville</label>
-          <select defaultValue="brazzaville" style={{width:"100%",padding:"12px 14px",borderRadius:12,border:"1px solid #E8E6E1",fontSize:14,fontFamily:"inherit",color:"#191815",background:"#fff"}}>
+          <select defaultValue="brazzaville" style={{width:"100%",padding:"12px 14px",borderRadius:12,border:"1px solid var(--border)",fontSize:14,fontFamily:"inherit",color:"var(--text)",background:"var(--card)"}}>
             <option value="brazzaville">Brazzaville</option>
             <option value="pointe-noire">Pointe-Noire</option>
             <option value="dolisie">Dolisie</option>

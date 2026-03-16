@@ -50,24 +50,24 @@ function ReviewsScr({product:p,onBack}){
 
   return(<div className="scr" style={{padding:16}}><div className="appbar" style={{padding:0,marginBottom:12}}><button onClick={onBack}>←</button><h2>Avis ({p.reviews+userReviews.length})</h2><div style={{width:38}}/></div>
     <div style={{textAlign:"center",marginBottom:14}}>
-      <div style={{fontSize:40,fontWeight:700,color:"#191815"}}>{avg}</div>
+      <div style={{fontSize:40,fontWeight:700,color:"var(--text)"}}>{avg}</div>
       <div style={{fontSize:16,color:"#F59E0B",marginBottom:4}}>{"★".repeat(Math.floor(avg))}{"☆".repeat(5-Math.floor(avg))}</div>
-      <div style={{fontSize:12,color:"#908C82"}}>{p.reviews+userReviews.length} avis vérifiés</div>
+      <div style={{fontSize:12,color:"var(--muted)"}}>{p.reviews+userReviews.length} avis vérifiés</div>
     </div>
-    <div style={{marginBottom:14}}>{dist.map((d,i)=><div key={i} style={{display:"flex",alignItems:"center",gap:8,marginBottom:4}}><span style={{fontSize:12,width:12}}>{5-i}</span><span style={{fontSize:12}}>⭐</span><div style={{flex:1,height:6,background:"#E8E6E1",borderRadius:3,overflow:"hidden"}}><div style={{width:`${d}%`,height:"100%",background:d>0?"#F59E0B":"#E8E6E1",borderRadius:3,transition:"width .3s"}}/></div><span style={{fontSize:11,color:"#908C82",width:30,textAlign:"right"}}>{d}%</span></div>)}</div>
+    <div style={{marginBottom:14}}>{dist.map((d,i)=><div key={i} style={{display:"flex",alignItems:"center",gap:8,marginBottom:4}}><span style={{fontSize:12,width:12}}>{5-i}</span><span style={{fontSize:12}}>⭐</span><div style={{flex:1,height:6,background:"var(--border)",borderRadius:3,overflow:"hidden"}}><div style={{width:`${d}%`,height:"100%",background:d>0?"#F59E0B":"#E8E6E1",borderRadius:3,transition:"width .3s"}}/></div><span style={{fontSize:11,color:"var(--muted)",width:30,textAlign:"right"}}>{d}%</span></div>)}</div>
 
     {/* Write review button / form */}
     {!writing?<button onClick={()=>setWriting(true)} style={{width:"100%",padding:"14px 0",borderRadius:14,border:"2px solid #6366F1",background:"rgba(99,102,241,0.04)",cursor:"pointer",fontSize:14,fontWeight:700,color:"#6366F1",fontFamily:"inherit",marginBottom:14,display:"flex",alignItems:"center",justifyContent:"center",gap:8}}>✏️ Écrire un avis</button>
 
-    :<div style={{padding:16,background:"#fff",borderRadius:18,border:"1px solid #E8E6E1",marginBottom:14,boxShadow:"0 2px 10px rgba(0,0,0,.04)"}}>
+    :<div style={{padding:16,background:"var(--card)",borderRadius:18,border:"1px solid var(--border)",marginBottom:14,boxShadow:"0 2px 10px rgba(0,0,0,.04)"}}>
       <div style={{display:"flex",justifyContent:"space-between",alignItems:"center",marginBottom:14}}>
         <h4 style={{fontSize:15,fontWeight:700}}>Votre avis</h4>
-        <span style={{fontSize:12,color:"#908C82",cursor:"pointer"}} onClick={()=>{setWriting(false);setUserRating(0);setUserText("");setUserPhotos([])}}>✕ Annuler</span>
+        <span style={{fontSize:12,color:"var(--muted)",cursor:"pointer"}} onClick={()=>{setWriting(false);setUserRating(0);setUserText("");setUserPhotos([])}}>✕ Annuler</span>
       </div>
 
       {/* Star selection */}
       <div style={{marginBottom:14}}>
-        <div style={{fontSize:12,fontWeight:600,color:"#908C82",marginBottom:8}}>Note *</div>
+        <div style={{fontSize:12,fontWeight:600,color:"var(--muted)",marginBottom:8}}>Note *</div>
         <div style={{display:"flex",gap:6}}>
           {[1,2,3,4,5].map(s=><button key={s} onClick={()=>setUserRating(s)} style={{width:44,height:44,borderRadius:12,border:userRating>=s?"2px solid #F59E0B":"1px solid #E8E6E1",background:userRating>=s?"rgba(245,158,11,0.08)":"#fff",cursor:"pointer",fontSize:20,display:"flex",alignItems:"center",justifyContent:"center",transition:"all .15s"}}>{userRating>=s?"★":"☆"}</button>)}
         </div>
@@ -76,33 +76,33 @@ function ReviewsScr({product:p,onBack}){
 
       {/* Comment */}
       <div style={{marginBottom:14}}>
-        <div style={{fontSize:12,fontWeight:600,color:"#908C82",marginBottom:8}}>Commentaire (optionnel)</div>
-        <textarea value={userText} onChange={e=>setUserText(e.target.value)} placeholder="Partagez votre expérience..." rows={3} style={{width:"100%",padding:12,borderRadius:12,border:"1px solid #E8E6E1",fontSize:13,fontFamily:"inherit",resize:"vertical",outline:"none",boxSizing:"border-box"}}/>
+        <div style={{fontSize:12,fontWeight:600,color:"var(--muted)",marginBottom:8}}>Commentaire (optionnel)</div>
+        <textarea value={userText} onChange={e=>setUserText(e.target.value)} placeholder="Partagez votre expérience..." rows={3} style={{width:"100%",padding:12,borderRadius:12,border:"1px solid var(--border)",fontSize:13,fontFamily:"inherit",resize:"vertical",outline:"none",boxSizing:"border-box"}}/>
       </div>
 
       {/* Photo upload */}
       <div style={{marginBottom:14}}>
-        <div style={{fontSize:12,fontWeight:600,color:"#908C82",marginBottom:8}}>Photos (optionnel)</div>
+        <div style={{fontSize:12,fontWeight:600,color:"var(--muted)",marginBottom:8}}>Photos (optionnel)</div>
         <div style={{display:"flex",gap:8,flexWrap:"wrap"}}>
           {userPhotos.map((ph,i)=>(
-            <div key={i} style={{position:"relative",width:68,height:68,borderRadius:12,overflow:"hidden",border:"1px solid #E8E6E1"}}>
+            <div key={i} style={{position:"relative",width:68,height:68,borderRadius:12,overflow:"hidden",border:"1px solid var(--border)"}}>
               <img src={ph.url} alt="" style={{width:"100%",height:"100%",objectFit:"cover"}}/>
               <button onClick={()=>removePhoto(i)} style={{position:"absolute",top:2,right:2,width:20,height:20,borderRadius:"50%",background:"rgba(0,0,0,.6)",color:"#fff",border:"none",cursor:"pointer",fontSize:10,display:"flex",alignItems:"center",justifyContent:"center"}}>✕</button>
             </div>
           ))}
           {userPhotos.length<4&&(
-            <button onClick={()=>fileRef.current?.click()} style={{width:68,height:68,borderRadius:12,border:"2px dashed #E8E6E1",background:"transparent",cursor:"pointer",display:"flex",flexDirection:"column",alignItems:"center",justifyContent:"center",gap:2,color:"#908C82",fontSize:10,fontFamily:"inherit"}}>
+            <button onClick={()=>fileRef.current?.click()} style={{width:68,height:68,borderRadius:12,border:"2px dashed #E8E6E1",background:"transparent",cursor:"pointer",display:"flex",flexDirection:"column",alignItems:"center",justifyContent:"center",gap:2,color:"var(--muted)",fontSize:10,fontFamily:"inherit"}}>
               <span style={{fontSize:18}}>📷</span>
               Ajouter
             </button>
           )}
         </div>
         <input ref={fileRef} type="file" accept="image/*" multiple style={{display:"none"}} onChange={handlePhotoUpload}/>
-        <div style={{fontSize:11,color:"#C4C1BA",marginTop:4}}>Max 4 photos · 5 Mo chacune</div>
+        <div style={{fontSize:11,color:"var(--muted)",marginTop:4}}>Max 4 photos · 5 Mo chacune</div>
       </div>
 
       {/* Submit */}
-      <button onClick={submitReview} disabled={userRating===0} style={{width:"100%",padding:"12px 0",borderRadius:12,border:"none",background:userRating>0?"#6366F1":"#E8E6E1",color:userRating>0?"#fff":"#908C82",fontSize:14,fontWeight:700,cursor:userRating>0?"pointer":"not-allowed",fontFamily:"inherit",transition:"all .2s"}}>
+      <button onClick={submitReview} disabled={userRating===0} style={{width:"100%",padding:"12px 0",borderRadius:12,border:"none",background:userRating>0?"#6366F1":"#E8E6E1",color:userRating>0?"var(--card)":"#908C82",fontSize:14,fontWeight:700,cursor:userRating>0?"pointer":"not-allowed",fontFamily:"inherit",transition:"all .2s"}}>
         {userRating===0?"Sélectionnez une note":"Publier mon avis ⭐"}
       </button>
     </div>}
@@ -123,7 +123,7 @@ function ReviewsScr({product:p,onBack}){
       {r.photos&&r.photos.length>0&&(
         <div style={{display:"flex",gap:6,marginTop:8,flexWrap:"wrap"}}>
           {r.photos.map((ph,j)=>(
-            <img key={j} src={ph} alt="" onClick={()=>setViewImg(ph)} style={{width:64,height:64,borderRadius:10,objectFit:"cover",cursor:"pointer",border:"1px solid #E8E6E1"}}/>
+            <img key={j} src={ph} alt="" onClick={()=>setViewImg(ph)} style={{width:64,height:64,borderRadius:10,objectFit:"cover",cursor:"pointer",border:"1px solid var(--border)"}}/>
           ))}
         </div>
       )}

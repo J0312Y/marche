@@ -30,39 +30,39 @@ function DrZonesScr({onBack}){
     <div style={{padding:"0 16px 80px"}}>
       <div className="info-box blue" style={{marginBottom:14}}><span>📍</span><span style={{fontSize:11}}>Activez/désactivez les zones où vous acceptez des livraisons. Ajoutez de nouvelles zones selon votre couverture.</span></div>
 
-      <div style={{fontSize:12,color:"#908C82",marginBottom:8}}>{zones.filter(z=>z.active).length} zone{zones.filter(z=>z.active).length>1?"s":""} active{zones.filter(z=>z.active).length>1?"s":""} sur {zones.length}</div>
+      <div style={{fontSize:12,color:"var(--muted)",marginBottom:8}}>{zones.filter(z=>z.active).length} zone{zones.filter(z=>z.active).length>1?"s":""} active{zones.filter(z=>z.active).length>1?"s":""} sur {zones.length}</div>
 
-      {zones.map((z,i)=><div key={z.id} style={{padding:14,background:"#fff",border:z.active?"1px solid rgba(16,185,129,0.3)":"1px solid #E8E6E1",borderRadius:14,marginBottom:10}}>
+      {zones.map((z,i)=><div key={z.id} style={{padding:14,background:"var(--card)",border:z.active?"1px solid rgba(16,185,129,0.3)":"1px solid #E8E6E1",borderRadius:14,marginBottom:10}}>
         <div style={{display:"flex",alignItems:"center",gap:10}}>
           <div style={{flex:1}}>
             <div style={{display:"flex",alignItems:"center",gap:6}}><h4 style={{fontSize:14,fontWeight:700}}>{z.name}</h4>{z.active&&<span style={{width:8,height:8,borderRadius:4,background:"#10B981"}}/>}</div>
-            <div style={{fontSize:11,color:"#908C82",marginTop:2}}>📍 {z.areas}</div>
+            <div style={{fontSize:11,color:"var(--muted)",marginTop:2}}>📍 {z.areas}</div>
           </div>
           <div className={`toggle ${z.active?"on":""}`} onClick={()=>toggle(i)}/>
         </div>
-        <div style={{display:"flex",gap:8,marginTop:10,paddingTop:10,borderTop:"1px solid #F5F4F1"}}>
+        <div style={{display:"flex",gap:8,marginTop:10,paddingTop:10,borderTop:"1px solid var(--border)"}}>
           <span style={{flex:1,fontSize:11,color:z.active?"#10B981":"#908C82",fontWeight:600}}>{z.active?"✅ Active":"⏸️ Inactive"}</span>
-          <button style={{padding:"4px 12px",borderRadius:6,border:"1px solid rgba(239,68,68,0.2)",background:"#fff",color:"#EF4444",fontSize:10,fontWeight:600,cursor:"pointer",fontFamily:"inherit"}} onClick={()=>remove(z.id)}>Retirer</button>
+          <button style={{padding:"4px 12px",borderRadius:6,border:"1px solid rgba(239,68,68,0.2)",background:"var(--card)",color:"#EF4444",fontSize:10,fontWeight:600,cursor:"pointer",fontFamily:"inherit"}} onClick={()=>remove(z.id)}>Retirer</button>
         </div>
       </div>)}
 
       {/* Add zone */}
-      {showAdd?<div style={{padding:16,background:"#fff",border:"2px solid #10B981",borderRadius:16,marginBottom:14}}>
+      {showAdd?<div style={{padding:16,background:"var(--card)",border:"2px solid #10B981",borderRadius:16,marginBottom:14}}>
         <h4 style={{fontSize:14,fontWeight:700,marginBottom:12}}>➕ Ajouter une zone</h4>
 
         {suggestions.length>0&&<>
-          <div style={{fontSize:12,fontWeight:600,color:"#5E5B53",marginBottom:8}}>Zones suggérées</div>
+          <div style={{fontSize:12,fontWeight:600,color:"var(--sub)",marginBottom:8}}>Zones suggérées</div>
           <div style={{display:"flex",gap:6,flexWrap:"wrap",marginBottom:14}}>
             {suggestions.map(s=><span key={s.name} onClick={()=>{setAddName(s.name);setAddAreas(s.areas)}} style={{padding:"6px 12px",borderRadius:8,border:addName===s.name?"2px solid #10B981":"1px solid #E8E6E1",background:addName===s.name?"rgba(16,185,129,0.04)":"#fff",fontSize:11,fontWeight:600,cursor:"pointer",color:addName===s.name?"#10B981":"#5E5B53"}}>{addName===s.name?"✓ ":""}{s.name}</span>)}
           </div>
         </>}
 
-        <div style={{fontSize:12,fontWeight:600,color:"#5E5B53",marginBottom:8}}>Ou zone personnalisée</div>
+        <div style={{fontSize:12,fontWeight:600,color:"var(--sub)",marginBottom:8}}>Ou zone personnalisée</div>
         <div className="field"><label>Nom de la zone</label><input value={addName} onChange={e=>setAddName(e.target.value)} placeholder="Ex: Ouenzé Nord"/></div>
         <div className="field"><label>Quartiers couverts</label><input value={addAreas} onChange={e=>setAddAreas(e.target.value)} placeholder="Ex: Moukondo, Ngamakosso"/></div>
         <div style={{display:"flex",gap:8}}>
-          <button style={{flex:1,padding:10,borderRadius:10,border:"1px solid #E8E6E1",background:"#fff",fontSize:12,fontWeight:600,cursor:"pointer",fontFamily:"inherit"}} onClick={()=>{setShowAdd(false);setAddName("");setAddAreas("")}}>Annuler</button>
-          <button className="btn-primary" style={{flex:2,background:addName?"#10B981":"#E8E6E1",color:addName?"#fff":"#908C82"}} onClick={doAdd}>Ajouter</button>
+          <button style={{flex:1,padding:10,borderRadius:10,border:"1px solid var(--border)",background:"var(--card)",fontSize:12,fontWeight:600,cursor:"pointer",fontFamily:"inherit"}} onClick={()=>{setShowAdd(false);setAddName("");setAddAreas("")}}>Annuler</button>
+          <button className="btn-primary" style={{flex:2,background:addName?"#10B981":"#E8E6E1",color:addName?"var(--card)":"#908C82"}} onClick={doAdd}>Ajouter</button>
         </div>
       </div>
       :<button style={{width:"100%",padding:14,borderRadius:14,border:"2px dashed #10B981",background:"rgba(16,185,129,0.02)",color:"#10B981",fontSize:13,fontWeight:600,cursor:"pointer",fontFamily:"inherit",marginBottom:14}} onClick={()=>setShowAdd(true)}>+ Ajouter une zone de livraison</button>}

@@ -38,18 +38,18 @@ function OrdersScr({go}){
     <div className="appbar" style={{padding:0,marginBottom:10}}><h2>Mes commandes ({orders.length})</h2></div>
 
     {/* Tabs */}
-    <div style={{display:"flex",gap:0,marginBottom:12,background:"#F5F4F1",borderRadius:12,padding:3}}>
+    <div style={{display:"flex",gap:0,marginBottom:12,background:"var(--light)",borderRadius:12,padding:3}}>
       {[["active","En cours",active.length],["done","Livrées",done.length],["cancelled","Annulées",cancelled.length]].map(([k,l,c])=>(
-        <button key={k} onClick={()=>setTab(k)} style={{flex:1,padding:"8px 0",borderRadius:10,border:"none",background:tab===k?"#fff":"transparent",color:tab===k?"#191815":"#908C82",fontSize:11,fontWeight:tab===k?700:500,cursor:"pointer",fontFamily:"inherit",boxShadow:tab===k?"0 1px 4px rgba(0,0,0,.06)":"none"}}>{l} ({c})</button>
+        <button key={k} onClick={()=>setTab(k)} style={{flex:1,padding:"8px 0",borderRadius:10,border:"none",background:tab===k?"var(--card)":"transparent",color:tab===k?"#191815":"#908C82",fontSize:11,fontWeight:tab===k?700:500,cursor:"pointer",fontFamily:"inherit",boxShadow:tab===k?"0 1px 4px rgba(0,0,0,.06)":"none"}}>{l} ({c})</button>
       ))}
     </div>
 
-    {shown.length===0&&<div style={{textAlign:"center",padding:"40px 0"}}><div style={{fontSize:36,marginBottom:8}}>{tab==="active"?"📦":tab==="done"?"✅":"❌"}</div><div style={{fontSize:13,color:"#908C82"}}>Aucune commande {tab==="active"?"en cours":tab==="done"?"livrée":"annulée"}</div></div>}
+    {shown.length===0&&<div style={{textAlign:"center",padding:"40px 0"}}><div style={{fontSize:36,marginBottom:8}}>{tab==="active"?"📦":tab==="done"?"✅":"❌"}</div><div style={{fontSize:13,color:"var(--muted)"}}>Aucune commande {tab==="active"?"en cours":tab==="done"?"livrée":"annulée"}</div></div>}
 
     {shown.map(o=><div key={o.ref} className="ocard" onClick={()=>go("orderDetail",o)}>
       <div className="ocard-h"><h4>{o.ref}</h4><span className={`ost ${o.sc}`}>{o.status}</span></div>
       <div className="odate">{o.date}</div>
-      <div style={{fontSize:13,color:"#5E5B53",marginBottom:10}}>{o.items.join(" · ")}</div>
+      <div style={{fontSize:13,color:"var(--sub)",marginBottom:10}}>{o.items.join(" · ")}</div>
       <div style={{display:"flex",justifyContent:"space-between",alignItems:"center"}}>
         <span style={{fontSize:15,fontWeight:700,color:"#6366F1"}}>{o.total} FCFA</span>
         <div style={{display:"flex",gap:6}}>
@@ -63,12 +63,12 @@ function OrdersScr({go}){
 
     {/* Cancel modal */}
     {cancelConfirm&&<div style={{position:"fixed",inset:0,background:"rgba(0,0,0,.4)",zIndex:100,display:"flex",alignItems:"center",justifyContent:"center",padding:20}} onClick={()=>setCancelConfirm(null)}>
-      <div style={{background:"#fff",borderRadius:20,padding:24,maxWidth:340,width:"100%",textAlign:"center"}} onClick={e=>e.stopPropagation()}>
+      <div style={{background:"var(--card)",borderRadius:20,padding:24,maxWidth:340,width:"100%",textAlign:"center"}} onClick={e=>e.stopPropagation()}>
         <div style={{fontSize:40,marginBottom:10}}>⚠️</div>
         <h3 style={{fontSize:17,fontWeight:700,marginBottom:6}}>Annuler la commande ?</h3>
-        <p style={{fontSize:13,color:"#908C82",marginBottom:14}}>{cancelConfirm.ref} — {cancelConfirm.total} FCFA<br/>Remboursement sous 24-48h.</p>
+        <p style={{fontSize:13,color:"var(--muted)",marginBottom:14}}>{cancelConfirm.ref} — {cancelConfirm.total} FCFA<br/>Remboursement sous 24-48h.</p>
         <div style={{display:"flex",gap:10}}>
-          <button onClick={()=>setCancelConfirm(null)} style={{flex:1,padding:12,borderRadius:12,border:"1px solid #E8E6E1",background:"#fff",fontSize:13,fontWeight:600,cursor:"pointer",fontFamily:"inherit"}}>Non</button>
+          <button onClick={()=>setCancelConfirm(null)} style={{flex:1,padding:12,borderRadius:12,border:"1px solid var(--border)",background:"var(--card)",fontSize:13,fontWeight:600,cursor:"pointer",fontFamily:"inherit"}}>Non</button>
           <button onClick={()=>cancelOrder(cancelConfirm.ref)} style={{flex:1,padding:12,borderRadius:12,border:"none",background:"#EF4444",color:"#fff",fontSize:13,fontWeight:700,cursor:"pointer",fontFamily:"inherit"}}>Oui, annuler</button>
         </div>
       </div>
@@ -76,10 +76,10 @@ function OrdersScr({go}){
 
     {/* Reorder modal */}
     {reorderConfirm&&<div style={{position:"fixed",inset:0,background:"rgba(0,0,0,.4)",zIndex:100,display:"flex",alignItems:"center",justifyContent:"center",padding:20}} onClick={()=>setReorderConfirm(null)}>
-      <div style={{background:"#fff",borderRadius:20,padding:24,maxWidth:340,width:"100%",textAlign:"center"}} onClick={e=>e.stopPropagation()}>
+      <div style={{background:"var(--card)",borderRadius:20,padding:24,maxWidth:340,width:"100%",textAlign:"center"}} onClick={e=>e.stopPropagation()}>
         <div style={{fontSize:40,marginBottom:10}}>🔄</div>
         <h3 style={{fontSize:17,fontWeight:700,marginBottom:6}}>Recommander ?</h3>
-        <p style={{fontSize:13,color:"#908C82",marginBottom:8}}>Les mêmes articles seront ajoutés :</p>
+        <p style={{fontSize:13,color:"var(--muted)",marginBottom:8}}>Les mêmes articles seront ajoutés :</p>
         <div style={{textAlign:"left",marginBottom:14}}>
           {reorderConfirm.items.map((item,i)=><div key={i} style={{padding:"6px 0",fontSize:13,borderBottom:i<reorderConfirm.items.length-1?"1px solid #F5F4F1":"none"}}>{item}</div>)}
           <div style={{display:"flex",justifyContent:"space-between",paddingTop:8,fontWeight:700,fontSize:14}}>
@@ -87,7 +87,7 @@ function OrdersScr({go}){
           </div>
         </div>
         <div style={{display:"flex",gap:10}}>
-          <button onClick={()=>setReorderConfirm(null)} style={{flex:1,padding:12,borderRadius:12,border:"1px solid #E8E6E1",background:"#fff",fontSize:13,fontWeight:600,cursor:"pointer",fontFamily:"inherit"}}>Annuler</button>
+          <button onClick={()=>setReorderConfirm(null)} style={{flex:1,padding:12,borderRadius:12,border:"1px solid var(--border)",background:"var(--card)",fontSize:13,fontWeight:600,cursor:"pointer",fontFamily:"inherit"}}>Annuler</button>
           <button onClick={()=>reorder(reorderConfirm)} style={{flex:1,padding:12,borderRadius:12,border:"none",background:"#10B981",color:"#fff",fontSize:13,fontWeight:700,cursor:"pointer",fontFamily:"inherit"}}>🛍️ Commander</button>
         </div>
       </div>

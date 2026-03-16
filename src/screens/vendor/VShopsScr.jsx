@@ -19,7 +19,7 @@ function VShopsScr({go,onBack}){
   const [showStats,setShowStats]=useState(false);
 
   return(<div className="scr">
-    <div className="appbar"><button onClick={onBack}>←</button><h2>Mes établissements</h2><button style={{width:38,height:38,borderRadius:12,border:"1px solid #E8E6E1",background:"#fff",cursor:"pointer",fontSize:16,display:"flex",alignItems:"center",justifyContent:"center"}} onClick={()=>go("vAddShop")}>+</button></div>
+    <div className="appbar"><button onClick={onBack}>←</button><h2>Mes établissements</h2><button style={{width:38,height:38,borderRadius:12,border:"1px solid var(--border)",background:"var(--card)",cursor:"pointer",fontSize:16,display:"flex",alignItems:"center",justifyContent:"center"}} onClick={()=>go("vAddShop")}>+</button></div>
 
     {/* Enterprise overall banner */}
     <div style={{margin:"0 20px 14px",padding:16,background:"linear-gradient(135deg,#6366F1,#A855F7)",borderRadius:16,color:"#fff"}}>
@@ -43,29 +43,29 @@ function VShopsScr({go,onBack}){
           ["💳","Commission Lamuka (2%)",fmt(commission),"Déduite automatiquement","#F59E0B"],
           ["👥","Clients uniques",totalClients,"↑ 24%","#6366F1"],
           ["🔄","Retours",totalReturns,totalReturns<5?"Excellent":"À surveiller",totalReturns<5?"#10B981":"#EF4444"],
-        ].map(([i,l,v,t,c])=><div key={l} style={{padding:12,background:"#fff",border:"1px solid #E8E6E1",borderRadius:14}}>
+        ].map(([i,l,v,t,c])=><div key={l} style={{padding:12,background:"var(--card)",border:"1px solid var(--border)",borderRadius:14}}>
           <div style={{fontSize:16,marginBottom:4}}>{i}</div>
           <div style={{fontSize:16,fontWeight:700}}>{v}</div>
-          <div style={{fontSize:10,color:"#908C82"}}>{l}</div>
+          <div style={{fontSize:10,color:"var(--muted)"}}>{l}</div>
           <div style={{fontSize:10,color:c,fontWeight:600,marginTop:4}}>{t}</div>
         </div>)}
       </div>
 
-      <div style={{padding:14,background:"#fff",border:"1px solid #E8E6E1",borderRadius:14,marginBottom:10}}>
+      <div style={{padding:14,background:"var(--card)",border:"1px solid var(--border)",borderRadius:14,marginBottom:10}}>
         <div style={{fontSize:13,fontWeight:700,marginBottom:10}}>Performance par boutique</div>
-        {active.map(sh=><div key={sh.id} style={{display:"flex",alignItems:"center",gap:10,padding:8,borderBottom:"1px solid #F5F4F1"}}>
+        {active.map(sh=><div key={sh.id} style={{display:"flex",alignItems:"center",gap:10,padding:8,borderBottom:"1px solid var(--border)"}}>
           <span style={{fontSize:16}}>{sh.typeIcon}</span>
           <div style={{flex:1}}><div style={{fontSize:12,fontWeight:600}}>{sh.name}</div></div>
-          <div style={{textAlign:"right"}}><div style={{fontSize:12,fontWeight:700,color:"#6366F1"}}>{fmt(sh.revenue)}</div><div style={{fontSize:9,color:"#908C82"}}>{sh.orders} cmd · ⭐ {sh.rating}</div></div>
+          <div style={{textAlign:"right"}}><div style={{fontSize:12,fontWeight:700,color:"#6366F1"}}>{fmt(sh.revenue)}</div><div style={{fontSize:9,color:"var(--muted)"}}>{sh.orders} cmd · ⭐ {sh.rating}</div></div>
         </div>)}
       </div>
 
-      <div style={{padding:14,background:"#fff",border:"1px solid #E8E6E1",borderRadius:14}}>
+      <div style={{padding:14,background:"var(--card)",border:"1px solid var(--border)",borderRadius:14}}>
         <div style={{fontSize:13,fontWeight:700,marginBottom:10}}>Répartition du CA</div>
         {active.map(sh=>{const pct=totalRev>0?Math.round(sh.revenue/totalRev*100):0;return(
           <div key={sh.id} style={{marginBottom:10}}>
-            <div style={{display:"flex",justifyContent:"space-between",fontSize:11,marginBottom:4}}><span style={{fontWeight:600}}>{sh.typeIcon} {sh.name}</span><span style={{color:"#908C82"}}>{pct}%</span></div>
-            <div style={{height:8,background:"#F5F4F1",borderRadius:4,overflow:"hidden"}}><div style={{width:`${pct}%`,height:"100%",background:"linear-gradient(90deg,#6366F1,#A855F7)",borderRadius:4}}/></div>
+            <div style={{display:"flex",justifyContent:"space-between",fontSize:11,marginBottom:4}}><span style={{fontWeight:600}}>{sh.typeIcon} {sh.name}</span><span style={{color:"var(--muted)"}}>{pct}%</span></div>
+            <div style={{height:8,background:"var(--light)",borderRadius:4,overflow:"hidden"}}><div style={{width:`${pct}%`,height:"100%",background:"linear-gradient(90deg,#6366F1,#A855F7)",borderRadius:4}}/></div>
           </div>
         )})}
       </div>
@@ -73,21 +73,21 @@ function VShopsScr({go,onBack}){
 
     {/* Shop list */}
     <div style={{padding:"0 16px"}}>
-      {shops.map(sh=><div key={sh.id} style={{padding:16,background:"#fff",border:"1px solid #E8E6E1",borderRadius:16,marginBottom:12,cursor:"pointer"}} onClick={()=>go("vShopDetail",sh)}>
+      {shops.map(sh=><div key={sh.id} style={{padding:16,background:"var(--card)",border:"1px solid var(--border)",borderRadius:16,marginBottom:12,cursor:"pointer"}} onClick={()=>go("vShopDetail",sh)}>
         <div style={{display:"flex",alignItems:"center",gap:12,marginBottom:12}}>
           <div style={{width:48,height:48,borderRadius:14,background:sh.status==="active"?"linear-gradient(135deg,#6366F1,#A855F7)":"linear-gradient(135deg,#F59E0B,#D97706)",display:"flex",alignItems:"center",justifyContent:"center",fontSize:22}}>{sh.logo}</div>
           <div style={{flex:1}}>
             <div style={{display:"flex",alignItems:"center",gap:6}}><h4 style={{fontSize:15,fontWeight:700}}>{sh.name}</h4>
               <span style={{padding:"2px 8px",borderRadius:6,background:sh.status==="active"?"rgba(16,185,129,0.1)":"rgba(245,158,11,0.1)",color:sh.status==="active"?"#10B981":"#F59E0B",fontSize:10,fontWeight:700}}>{sh.status==="active"?"Active":"En attente"}</span>
             </div>
-            <p style={{fontSize:12,color:"#908C82",marginTop:2}}>{sh.typeIcon} {sh.type==="restaurant"?"Restaurant":"Boutique"} · 📍 {sh.location}</p>
+            <p style={{fontSize:12,color:"var(--muted)",marginTop:2}}>{sh.typeIcon} {sh.type==="restaurant"?"Restaurant":"Boutique"} · 📍 {sh.location}</p>
           </div>
-          <span style={{fontSize:16,color:"#908C82"}}>›</span>
+          <span style={{fontSize:16,color:"var(--muted)"}}>›</span>
         </div>
         {sh.status==="active"&&<div style={{display:"grid",gridTemplateColumns:"1fr 1fr 1fr 1fr",gap:8}}>
-          {[["💰",fmt(sh.revenue),"CA"],["📦",sh.orders,"Cmd"],["🛍️",sh.products,"Prod."],["⭐",sh.rating||"—","Note"]].map(([i,v,l])=><div key={l} style={{textAlign:"center",padding:8,background:"#F5F4F1",borderRadius:10}}>
+          {[["💰",fmt(sh.revenue),"CA"],["📦",sh.orders,"Cmd"],["🛍️",sh.products,"Prod."],["⭐",sh.rating||"—","Note"]].map(([i,v,l])=><div key={l} style={{textAlign:"center",padding:8,background:"var(--light)",borderRadius:10}}>
             <div style={{fontSize:12,fontWeight:700}}>{v}</div>
-            <div style={{fontSize:9,color:"#908C82"}}>{l}</div>
+            <div style={{fontSize:9,color:"var(--muted)"}}>{l}</div>
           </div>)}
         </div>}
         {sh.status==="pending"&&<div className="info-box yellow" style={{margin:0,padding:"8px 12px"}}><span>⏳</span><span style={{fontSize:11}}>En cours de vérification · Documents soumis le {sh.created}</span></div>}

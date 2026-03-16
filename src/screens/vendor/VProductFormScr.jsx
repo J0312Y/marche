@@ -165,13 +165,13 @@ function VProductFormScr({product:p,onBack,shopType="boutique"}){
         <span style={{fontSize:40}}>✅</span>
       </div>
       <h2 style={{fontSize:20,fontWeight:700,marginBottom:8}}>{isEdit?"Article modifié !":"Article ajouté !"}</h2>
-      <p style={{fontSize:13,color:"#908C82"}}>{name} — {Number(price).toLocaleString()} FCFA</p>
+      <p style={{fontSize:13,color:"var(--muted)"}}>{name} — {Number(price).toLocaleString()} FCFA</p>
       {articleVariants.filter(v=>v.values.length>0).length>0&&(
         <p style={{fontSize:12,color:"#6366F1",marginTop:4}}>
           {articleVariants.filter(v=>v.values.length>0).map(v=>`${v.values.length} ${v.label.toLowerCase()}`).join(" · ")}
         </p>
       )}
-      <p style={{fontSize:11,color:"#908C82",marginTop:16}}>Retour à la liste...</p>
+      <p style={{fontSize:11,color:"var(--muted)",marginTop:16}}>Retour à la liste...</p>
     </div>
   );
 
@@ -195,16 +195,16 @@ function VProductFormScr({product:p,onBack,shopType="boutique"}){
         </div>
       ))}
       {photos.length<6&&(
-        <div onClick={()=>fileRef.current?.click()} style={{width:80,height:80,borderRadius:14,border:errors.photos?"2px dashed #EF4444":"2px dashed #E8E6E1",display:"flex",flexDirection:"column",alignItems:"center",justifyContent:"center",cursor:"pointer",flexShrink:0,background:"#FAFAF8"}}>
-          {processing?<div style={{fontSize:11,color:"#6366F1",fontWeight:600}}>⏳</div>:<><div style={{fontSize:22,color:"#908C82",lineHeight:1}}>+</div><div style={{fontSize:9,color:"#908C82",marginTop:2}}>Ajouter</div></>}
+        <div onClick={()=>fileRef.current?.click()} style={{width:80,height:80,borderRadius:14,border:errors.photos?"2px dashed #EF4444":"2px dashed #E8E6E1",display:"flex",flexDirection:"column",alignItems:"center",justifyContent:"center",cursor:"pointer",flexShrink:0,background:"var(--bg)"}}>
+          {processing?<div style={{fontSize:11,color:"#6366F1",fontWeight:600}}>⏳</div>:<><div style={{fontSize:22,color:"var(--muted)",lineHeight:1}}>+</div><div style={{fontSize:9,color:"var(--muted)",marginTop:2}}>Ajouter</div></>}
         </div>
       )}
     </div>
     <input ref={fileRef} type="file" accept="image/*" onChange={handleFile} style={{display:"none"}}/>
 
     {/* Photo editor */}
-    {editPhoto&&<div style={{marginBottom:12,padding:14,background:"#FAFAF8",borderRadius:16,border:"1px solid #E8E6E1"}}>
-      <div style={{position:"relative",borderRadius:12,overflow:"hidden",marginBottom:12,aspectRatio:"1/1",background:"#fff"}}>
+    {editPhoto&&<div style={{marginBottom:12,padding:14,background:"var(--bg)",borderRadius:16,border:"1px solid var(--border)"}}>
+      <div style={{position:"relative",borderRadius:12,overflow:"hidden",marginBottom:12,aspectRatio:"1/1",background:"var(--card)"}}>
         <img src={editPhoto.url} style={{width:"100%",height:"100%",objectFit:"cover"}} alt=""/>
         {editPhoto.enhanced&&<div style={{position:"absolute",top:8,left:8,padding:"3px 8px",borderRadius:6,background:"rgba(16,185,129,0.9)",color:"#fff",fontSize:10,fontWeight:600}}>✨ Améliorée</div>}
       </div>
@@ -213,7 +213,7 @@ function VProductFormScr({product:p,onBack,shopType="boutique"}){
           <span style={{fontSize:12,fontWeight:600}}>Qualité</span>
           <span style={{fontSize:12,fontWeight:700,color:editPhoto.analysis.color}}>{editPhoto.analysis.score}/100 — {editPhoto.analysis.label}</span>
         </div>
-        <div style={{height:6,borderRadius:3,background:"#E8E6E1",overflow:"hidden",marginBottom:8}}>
+        <div style={{height:6,borderRadius:3,background:"var(--border)",overflow:"hidden",marginBottom:8}}>
           <div style={{width:`${editPhoto.analysis.score}%`,height:"100%",borderRadius:3,background:editPhoto.analysis.color,transition:"width .5s ease"}}/>
         </div>
         {editPhoto.analysis.issues.length>0&&<div style={{marginBottom:10}}>
@@ -221,24 +221,24 @@ function VProductFormScr({product:p,onBack,shopType="boutique"}){
         </div>}
       </>}
       <div style={{display:"flex",gap:8}}>
-        <button disabled={enhancing||!editPhoto.file} onClick={()=>doEnhance(editingIdx,{brightness:15})} style={{flex:1,padding:"8px 0",borderRadius:10,border:"1px solid #E8E6E1",background:"#fff",fontSize:11,fontWeight:600,cursor:"pointer",fontFamily:"inherit",opacity:enhancing?.5:1}}>☀️ Éclaircir</button>
-        <button disabled={enhancing||!editPhoto.file} onClick={()=>doEnhance(editingIdx,{contrast:15})} style={{flex:1,padding:"8px 0",borderRadius:10,border:"1px solid #E8E6E1",background:"#fff",fontSize:11,fontWeight:600,cursor:"pointer",fontFamily:"inherit",opacity:enhancing?.5:1}}>🎨 Contraste</button>
+        <button disabled={enhancing||!editPhoto.file} onClick={()=>doEnhance(editingIdx,{brightness:15})} style={{flex:1,padding:"8px 0",borderRadius:10,border:"1px solid var(--border)",background:"var(--card)",fontSize:11,fontWeight:600,cursor:"pointer",fontFamily:"inherit",opacity:enhancing?.5:1}}>☀️ Éclaircir</button>
+        <button disabled={enhancing||!editPhoto.file} onClick={()=>doEnhance(editingIdx,{contrast:15})} style={{flex:1,padding:"8px 0",borderRadius:10,border:"1px solid var(--border)",background:"var(--card)",fontSize:11,fontWeight:600,cursor:"pointer",fontFamily:"inherit",opacity:enhancing?.5:1}}>🎨 Contraste</button>
         <button disabled={enhancing||!editPhoto.file} onClick={()=>doEnhance(editingIdx,{brightness:10,contrast:10,sharpen:true})} style={{flex:1,padding:"8px 0",borderRadius:10,border:"none",background:"#6366F1",color:"#fff",fontSize:11,fontWeight:600,cursor:"pointer",fontFamily:"inherit",opacity:enhancing?.5:1}}>✨ Auto</button>
       </div>
       {/* Live preview */}
-      <div style={{marginTop:14,paddingTop:14,borderTop:"1px solid #E8E6E1"}}>
-        <div style={{fontSize:11,fontWeight:600,color:"#908C82",marginBottom:8}}>👁️ Aperçu client</div>
+      <div style={{marginTop:14,paddingTop:14,borderTop:"1px solid var(--border)"}}>
+        <div style={{fontSize:11,fontWeight:600,color:"var(--muted)",marginBottom:8}}>👁️ Aperçu client</div>
         <div style={{display:"flex",gap:10}}>
-          <div style={{width:120,borderRadius:12,overflow:"hidden",border:"1px solid #E8E6E1",background:"#fff",flexShrink:0}}>
-            <div style={{height:100,background:"#F5F4F1",overflow:"hidden"}}><img src={editPhoto.url} style={{width:"100%",height:"100%",objectFit:"cover"}} alt=""/></div>
+          <div style={{width:120,borderRadius:12,overflow:"hidden",border:"1px solid var(--border)",background:"var(--card)",flexShrink:0}}>
+            <div style={{height:100,background:"var(--light)",overflow:"hidden"}}><img src={editPhoto.url} style={{width:"100%",height:"100%",objectFit:"cover"}} alt=""/></div>
             <div style={{padding:"6px 8px"}}>
               <div style={{fontSize:10,fontWeight:600,overflow:"hidden",textOverflow:"ellipsis",whiteSpace:"nowrap"}}>{name||"Nom du produit"}</div>
               <div style={{fontSize:11,fontWeight:700,color:"#6366F1",marginTop:2}}>{price?`${Number(price).toLocaleString()} F`:"— F"}</div>
             </div>
           </div>
-          <div style={{flex:1,borderRadius:12,overflow:"hidden",border:"1px solid #E8E6E1",background:"#fff"}}>
-            <div style={{height:100,background:"#F5F4F1",overflow:"hidden"}}><img src={editPhoto.url} style={{width:"100%",height:"100%",objectFit:"cover"}} alt=""/></div>
-            <div style={{padding:8,fontSize:9,color:"#908C82"}}>Vue détail</div>
+          <div style={{flex:1,borderRadius:12,overflow:"hidden",border:"1px solid var(--border)",background:"var(--card)"}}>
+            <div style={{height:100,background:"var(--light)",overflow:"hidden"}}><img src={editPhoto.url} style={{width:"100%",height:"100%",objectFit:"cover"}} alt=""/></div>
+            <div style={{padding:8,fontSize:9,color:"var(--muted)"}}>Vue détail</div>
           </div>
         </div>
       </div>
@@ -248,13 +248,13 @@ function VProductFormScr({product:p,onBack,shopType="boutique"}){
     {photos.length===0&&!errors.photos&&<div onClick={()=>setShowGuide(true)} style={{padding:16,background:"rgba(99,102,241,0.04)",border:"1px solid rgba(99,102,241,0.12)",borderRadius:14,marginBottom:14,cursor:"pointer"}}>
       <div style={{display:"flex",alignItems:"center",gap:10}}>
         <span style={{fontSize:28}}>📸</span>
-        <div><div style={{fontSize:13,fontWeight:700,color:"#6366F1"}}>Ajoutez de belles photos</div><div style={{fontSize:11,color:"#5E5B53",marginTop:2}}>Consultez notre guide →</div></div>
+        <div><div style={{fontSize:13,fontWeight:700,color:"#6366F1"}}>Ajoutez de belles photos</div><div style={{fontSize:11,color:"var(--sub)",marginTop:2}}>Consultez notre guide →</div></div>
       </div>
     </div>}
     {photos.length===0&&<div onClick={()=>fileRef.current?.click()} style={{padding:24,borderRadius:16,border:errors.photos?"2px dashed #EF4444":"2px dashed rgba(99,102,241,0.3)",background:errors.photos?"rgba(239,68,68,0.02)":"rgba(99,102,241,0.02)",textAlign:"center",cursor:"pointer",marginBottom:12}}>
       <div style={{width:56,height:56,borderRadius:16,background:"rgba(99,102,241,0.08)",display:"flex",alignItems:"center",justifyContent:"center",fontSize:24,marginBottom:6}}>📷</div>
       <div style={{fontSize:14,fontWeight:600,color:errors.photos?"#EF4444":"#6366F1"}}>Prendre ou choisir une photo</div>
-      <div style={{fontSize:11,color:"#908C82",marginTop:4}}>JPEG, PNG · Min 500×500px · Max 10 MB</div>
+      <div style={{fontSize:11,color:"var(--muted)",marginTop:4}}>JPEG, PNG · Min 500×500px · Max 10 MB</div>
     </div>}
 
     {/* ═══ FORM FIELDS ═══ */}
@@ -280,7 +280,7 @@ function VProductFormScr({product:p,onBack,shopType="boutique"}){
     {/* Error summary */}
     {Object.keys(errors).length>0&&<div style={{padding:10,background:"rgba(239,68,68,0.04)",border:"1px solid rgba(239,68,68,0.12)",borderRadius:12,marginBottom:12}}>
       <div style={{fontSize:12,fontWeight:600,color:"#EF4444"}}>⚠️ Corrigez les erreurs ci-dessus</div>
-      <div style={{fontSize:11,color:"#5E5B53",marginTop:2}}>{Object.values(errors).join(" · ")}</div>
+      <div style={{fontSize:11,color:"var(--sub)",marginTop:2}}>{Object.values(errors).join(" · ")}</div>
     </div>}
 
     {/* ═══ SUBMIT ═══ */}
@@ -292,9 +292,9 @@ function VProductFormScr({product:p,onBack,shopType="boutique"}){
     {isEdit&&!showDelete&&<button className="btn-outline" style={{color:"#EF4444",borderColor:"rgba(239,68,68,.3)"}} onClick={()=>setShowDelete(true)}>🗑️ Supprimer cet article</button>}
     {isEdit&&showDelete&&<div style={{padding:16,background:"rgba(239,68,68,0.04)",border:"1px solid rgba(239,68,68,0.15)",borderRadius:16}}>
       <div style={{fontSize:14,fontWeight:700,color:"#EF4444",marginBottom:6}}>⚠️ Supprimer "{p.name}" ?</div>
-      <p style={{fontSize:12,color:"#5E5B53",marginBottom:12}}>Cette action est irréversible.</p>
+      <p style={{fontSize:12,color:"var(--sub)",marginBottom:12}}>Cette action est irréversible.</p>
       <div style={{display:"flex",gap:10}}>
-        <button style={{flex:1,padding:12,borderRadius:12,border:"1px solid #E8E6E1",background:"#fff",fontSize:13,fontWeight:600,cursor:"pointer",fontFamily:"inherit"}} onClick={()=>setShowDelete(false)}>Annuler</button>
+        <button style={{flex:1,padding:12,borderRadius:12,border:"1px solid var(--border)",background:"var(--card)",fontSize:13,fontWeight:600,cursor:"pointer",fontFamily:"inherit"}} onClick={()=>setShowDelete(false)}>Annuler</button>
         <button style={{flex:1,padding:12,borderRadius:12,border:"none",background:"#EF4444",color:"#fff",fontSize:13,fontWeight:600,cursor:"pointer",fontFamily:"inherit"}} onClick={onBack}>🗑️ Confirmer</button>
       </div>
     </div>}

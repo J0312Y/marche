@@ -51,15 +51,15 @@ function VPromosScr({go,onBack}){
 
     {loading?<SkeletonCards count={2}/>:<>
       {/* Tabs */}
-      <div style={{display:"flex",gap:0,marginBottom:12,background:"#F5F4F1",borderRadius:12,padding:3}}>
-        <button onClick={()=>setTab("active")} style={{flex:1,padding:"8px 0",borderRadius:10,border:"none",background:tab==="active"?"#fff":"transparent",color:tab==="active"?"#10B981":"#908C82",fontSize:11,fontWeight:tab==="active"?700:500,cursor:"pointer",fontFamily:"inherit",boxShadow:tab==="active"?"0 1px 4px rgba(0,0,0,.06)":"none"}}>🟢 En cours ({activePromos.length})</button>
-        <button onClick={()=>setTab("inactive")} style={{flex:1,padding:"8px 0",borderRadius:10,border:"none",background:tab==="inactive"?"#fff":"transparent",color:tab==="inactive"?"#908C82":"#908C82",fontSize:11,fontWeight:tab==="inactive"?700:500,cursor:"pointer",fontFamily:"inherit",boxShadow:tab==="inactive"?"0 1px 4px rgba(0,0,0,.06)":"none"}}>⏸️ Terminées ({inactivePromos.length})</button>
+      <div style={{display:"flex",gap:0,marginBottom:12,background:"var(--light)",borderRadius:12,padding:3}}>
+        <button onClick={()=>setTab("active")} style={{flex:1,padding:"8px 0",borderRadius:10,border:"none",background:tab==="active"?"var(--card)":"transparent",color:tab==="active"?"#10B981":"#908C82",fontSize:11,fontWeight:tab==="active"?700:500,cursor:"pointer",fontFamily:"inherit",boxShadow:tab==="active"?"0 1px 4px rgba(0,0,0,.06)":"none"}}>🟢 En cours ({activePromos.length})</button>
+        <button onClick={()=>setTab("inactive")} style={{flex:1,padding:"8px 0",borderRadius:10,border:"none",background:tab==="inactive"?"var(--card)":"transparent",color:tab==="inactive"?"#908C82":"#908C82",fontSize:11,fontWeight:tab==="inactive"?700:500,cursor:"pointer",fontFamily:"inherit",boxShadow:tab==="inactive"?"0 1px 4px rgba(0,0,0,.06)":"none"}}>⏸️ Terminées ({inactivePromos.length})</button>
       </div>
 
-      {shown.length===0&&<div style={{textAlign:"center",padding:"40px 0"}}><div style={{fontSize:36,marginBottom:8}}>🏷️</div><div style={{fontSize:13,color:"#908C82"}}>{tab==="active"?"Aucune promotion active":"Aucune promotion terminée"}</div></div>}
+      {shown.length===0&&<div style={{textAlign:"center",padding:"40px 0"}}><div style={{fontSize:36,marginBottom:8}}>🏷️</div><div style={{fontSize:13,color:"var(--muted)"}}>{tab==="active"?"Aucune promotion active":"Aucune promotion terminée"}</div></div>}
 
       {shown.map(p=>(
-        <div key={p.id} style={{padding:14,background:"#fff",border:"1px solid #E8E6E1",borderRadius:16,marginBottom:10}}>
+        <div key={p.id} style={{padding:14,background:"var(--card)",border:"1px solid var(--border)",borderRadius:16,marginBottom:10}}>
           {/* Header */}
           <div style={{display:"flex",alignItems:"center",justifyContent:"space-between",marginBottom:8}}>
             <div style={{display:"flex",alignItems:"center",gap:10}}>
@@ -76,12 +76,12 @@ function VPromosScr({go,onBack}){
           </div>
 
           {/* Details */}
-          <div style={{fontSize:12,color:"#5E5B53",marginBottom:4}}>📦 {p.products}</div>
-          <div style={{fontSize:11,color:"#908C82",marginBottom:8}}>📅 Du {p.start} au {p.end} · {p.used} utilisations</div>
+          <div style={{fontSize:12,color:"var(--sub)",marginBottom:4}}>📦 {p.products}</div>
+          <div style={{fontSize:11,color:"var(--muted)",marginBottom:8}}>📅 Du {p.start} au {p.end} · {p.used} utilisations</div>
 
           {/* Actions */}
           <div style={{display:"flex",gap:8}}>
-            <button onClick={()=>setEditPromo({...p})} style={{flex:1,padding:"8px 0",borderRadius:10,border:"1px solid #E8E6E1",background:"#fff",fontSize:11,fontWeight:600,cursor:"pointer",fontFamily:"inherit",display:"flex",alignItems:"center",justifyContent:"center",gap:4}}>✏️ Modifier</button>
+            <button onClick={()=>setEditPromo({...p})} style={{flex:1,padding:"8px 0",borderRadius:10,border:"1px solid var(--border)",background:"var(--card)",fontSize:11,fontWeight:600,cursor:"pointer",fontFamily:"inherit",display:"flex",alignItems:"center",justifyContent:"center",gap:4}}>✏️ Modifier</button>
             <button onClick={()=>setDeleteConfirm(p)} style={{padding:"8px 14px",borderRadius:10,border:"1px solid rgba(239,68,68,0.2)",background:"transparent",color:"#EF4444",fontSize:11,fontWeight:600,cursor:"pointer",fontFamily:"inherit"}}>🗑️</button>
           </div>
         </div>
@@ -90,10 +90,10 @@ function VPromosScr({go,onBack}){
 
     {/* Edit / Create Modal */}
     {editPromo&&<div style={{position:"fixed",inset:0,background:"rgba(0,0,0,.4)",zIndex:100,display:"flex",alignItems:"flex-end",justifyContent:"center"}} onClick={()=>setEditPromo(null)}>
-      <div style={{background:"#fff",borderRadius:"20px 20px 0 0",padding:24,width:"100%",maxWidth:400,maxHeight:"80vh",overflowY:"auto"}} onClick={e=>e.stopPropagation()}>
+      <div style={{background:"var(--card)",borderRadius:"20px 20px 0 0",padding:24,width:"100%",maxWidth:400,maxHeight:"80vh",overflowY:"auto"}} onClick={e=>e.stopPropagation()}>
         <div style={{display:"flex",justifyContent:"space-between",alignItems:"center",marginBottom:16}}>
           <h3 style={{fontSize:17,fontWeight:700}}>{editPromo.id?"✏️ Modifier":"🏷️ Nouvelle promo"}</h3>
-          <button onClick={()=>setEditPromo(null)} style={{background:"none",border:"none",fontSize:18,cursor:"pointer",color:"#908C82"}}>✕</button>
+          <button onClick={()=>setEditPromo(null)} style={{background:"none",border:"none",fontSize:18,cursor:"pointer",color:"var(--muted)"}}>✕</button>
         </div>
 
         <div className="field"><label>Nom</label><input value={editPromo.name} onChange={e=>setEditPromo({...editPromo,name:e.target.value})} placeholder="Soldes de Mars"/></div>
@@ -112,12 +112,12 @@ function VPromosScr({go,onBack}){
         </div>
 
         {/* Active toggle */}
-        <div style={{display:"flex",alignItems:"center",justifyContent:"space-between",padding:"12px 0",marginBottom:12,borderTop:"1px solid #F5F4F1"}}>
+        <div style={{display:"flex",alignItems:"center",justifyContent:"space-between",padding:"12px 0",marginBottom:12,borderTop:"1px solid var(--border)"}}>
           <span style={{fontSize:13,fontWeight:600}}>Promotion active</span>
           <div className={`toggle ${editPromo.active?"on":""}`} onClick={()=>setEditPromo({...editPromo,active:!editPromo.active})}/>
         </div>
 
-        <button onClick={saveEdit} disabled={!editPromo.name} style={{width:"100%",padding:14,borderRadius:14,border:"none",background:editPromo.name?"#6366F1":"#E8E6E1",color:editPromo.name?"#fff":"#908C82",fontSize:14,fontWeight:700,cursor:editPromo.name?"pointer":"not-allowed",fontFamily:"inherit"}}>
+        <button onClick={saveEdit} disabled={!editPromo.name} style={{width:"100%",padding:14,borderRadius:14,border:"none",background:editPromo.name?"#6366F1":"#E8E6E1",color:editPromo.name?"var(--card)":"#908C82",fontSize:14,fontWeight:700,cursor:editPromo.name?"pointer":"not-allowed",fontFamily:"inherit"}}>
           {editPromo.id?"💾 Enregistrer les modifications":"🏷️ Créer la promotion"}
         </button>
       </div>
@@ -125,12 +125,12 @@ function VPromosScr({go,onBack}){
 
     {/* Delete confirm */}
     {deleteConfirm&&<div style={{position:"fixed",inset:0,background:"rgba(0,0,0,.4)",zIndex:100,display:"flex",alignItems:"center",justifyContent:"center",padding:20}} onClick={()=>setDeleteConfirm(null)}>
-      <div style={{background:"#fff",borderRadius:20,padding:24,maxWidth:340,width:"100%",textAlign:"center"}} onClick={e=>e.stopPropagation()}>
+      <div style={{background:"var(--card)",borderRadius:20,padding:24,maxWidth:340,width:"100%",textAlign:"center"}} onClick={e=>e.stopPropagation()}>
         <div style={{fontSize:40,marginBottom:10}}>🗑️</div>
         <h3 style={{fontSize:17,fontWeight:700,marginBottom:6}}>Supprimer la promo ?</h3>
-        <p style={{fontSize:13,color:"#908C82",marginBottom:14}}>"{deleteConfirm.name}" sera supprimée définitivement.</p>
+        <p style={{fontSize:13,color:"var(--muted)",marginBottom:14}}>"{deleteConfirm.name}" sera supprimée définitivement.</p>
         <div style={{display:"flex",gap:10}}>
-          <button onClick={()=>setDeleteConfirm(null)} style={{flex:1,padding:12,borderRadius:12,border:"1px solid #E8E6E1",background:"#fff",fontSize:13,fontWeight:600,cursor:"pointer",fontFamily:"inherit"}}>Annuler</button>
+          <button onClick={()=>setDeleteConfirm(null)} style={{flex:1,padding:12,borderRadius:12,border:"1px solid var(--border)",background:"var(--card)",fontSize:13,fontWeight:600,cursor:"pointer",fontFamily:"inherit"}}>Annuler</button>
           <button onClick={()=>deletePromo(deleteConfirm.id)} style={{flex:1,padding:12,borderRadius:12,border:"none",background:"#EF4444",color:"#fff",fontSize:13,fontWeight:700,cursor:"pointer",fontFamily:"inherit"}}>Supprimer</button>
         </div>
       </div>

@@ -15,9 +15,9 @@ function VWalletScr({go,onBack}){
       <button style={{marginTop:12,padding:"10px 24px",borderRadius:12,border:"2px solid rgba(255,255,255,.3)",background:"transparent",color:"#fff",fontSize:13,fontWeight:700,cursor:"pointer",fontFamily:"inherit"}} onClick={()=>go("vWithdraw")}>💸 Retirer</button>
     </div>
     <h3 style={{fontSize:15,fontWeight:700,marginBottom:12}}>Historique</h3>
-    {transactions.map(t=><div key={t.id} style={{display:"flex",alignItems:"center",gap:12,padding:"12px 0",borderBottom:"1px solid #F5F4F1"}}>
+    {transactions.map(t=><div key={t.id} style={{display:"flex",alignItems:"center",gap:12,padding:"12px 0",borderBottom:"1px solid var(--border)"}}>
       <div style={{width:36,height:36,borderRadius:10,background:t.type==="+"?"rgba(16,185,129,0.08)":"rgba(239,68,68,0.08)",display:"flex",alignItems:"center",justifyContent:"center",fontSize:16,fontWeight:700,color:t.type==="+"?"#10B981":"#EF4444"}}>{t.type}</div>
-      <div style={{flex:1}}><div style={{fontSize:13,fontWeight:600}}>{t.label}</div><div style={{fontSize:11,color:"#908C82"}}>{t.date} · {t.status}</div></div>
+      <div style={{flex:1}}><div style={{fontSize:13,fontWeight:600}}>{t.label}</div><div style={{fontSize:11,color:"var(--muted)"}}>{t.date} · {t.status}</div></div>
       <div style={{fontSize:14,fontWeight:700,color:t.type==="+"?"#10B981":"#EF4444"}}>{t.type}{fmt(t.amount)}</div>
     </div>)}
   </div>);

@@ -23,20 +23,20 @@ function DrNotifScr({onBack}){
     <div style={{padding:"0 0 80px"}}>
       {notifs.map((n)=>{
         const isOpen=expanded===n.id;
-        return(<div key={n.id} onClick={()=>{setExpanded(isOpen?null:n.id);if(!n.read)markRead(n.id)}} style={{padding:"14px 20px",borderBottom:"1px solid #F5F4F1",cursor:"pointer",background:!n.read?"rgba(99,102,241,0.03)":"transparent",transition:"background .2s"}}>
+        return(<div key={n.id} onClick={()=>{setExpanded(isOpen?null:n.id);if(!n.read)markRead(n.id)}} style={{padding:"14px 20px",borderBottom:"1px solid var(--border)",cursor:"pointer",background:!n.read?"rgba(99,102,241,0.03)":"transparent",transition:"background .2s"}}>
           <div style={{display:"flex",alignItems:"flex-start",gap:12}}>
             <div style={{width:40,height:40,borderRadius:12,background:!n.read?"rgba(99,102,241,0.08)":"#F5F4F1",display:"flex",alignItems:"center",justifyContent:"center",fontSize:18,flexShrink:0}}>{n.icon}</div>
             <div style={{flex:1,minWidth:0}}>
               <div style={{display:"flex",justifyContent:"space-between",alignItems:"flex-start"}}>
-                <h4 style={{fontSize:14,fontWeight:!n.read?700:600,color:"#191815",margin:0}}>{n.title}</h4>
+                <h4 style={{fontSize:14,fontWeight:!n.read?700:600,color:"var(--text)",margin:0}}>{n.title}</h4>
                 {!n.read&&<div style={{width:8,height:8,borderRadius:"50%",background:"#6366F1",flexShrink:0,marginTop:5}}/>}
               </div>
-              <p style={{fontSize:12,color:"#5E5B53",margin:"2px 0 0"}}>{n.desc}</p>
-              <div style={{fontSize:11,color:"#908C82",marginTop:3}}>{n.time}</div>
+              <p style={{fontSize:12,color:"var(--sub)",margin:"2px 0 0"}}>{n.desc}</p>
+              <div style={{fontSize:11,color:"var(--muted)",marginTop:3}}>{n.time}</div>
             </div>
           </div>
           {/* Expanded details */}
-          {isOpen&&details[n.id]&&<div style={{marginTop:10,marginLeft:52,padding:12,background:"#F5F4F1",borderRadius:12,fontSize:12,color:"#5E5B53",lineHeight:1.6,whiteSpace:"pre-line"}}>
+          {isOpen&&details[n.id]&&<div style={{marginTop:10,marginLeft:52,padding:12,background:"var(--light)",borderRadius:12,fontSize:12,color:"var(--sub)",lineHeight:1.6,whiteSpace:"pre-line"}}>
             {details[n.id]}
           </div>}
         </div>);

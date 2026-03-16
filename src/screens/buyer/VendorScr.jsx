@@ -61,11 +61,11 @@ function VendorScr({vendor:vProp,go,onBack}){
     </div>
 
     {/* Description */}
-    <div style={{padding:"0 16px",fontSize:14,color:"#5E5B53",marginBottom:14,lineHeight:1.6}}>{v.desc}</div>
+    <div style={{padding:"0 16px",fontSize:14,color:"var(--sub)",marginBottom:14,lineHeight:1.6}}>{v.desc}</div>
 
     {/* Buttons */}
     <div className="vp-btns">
-      <button className="vb1" style={following?{background:"#fff",color:"#6366F1",border:"1px solid #6366F1"}:{}} onClick={toggleFollow}>{following?"✓ Suivi":"+ Suivre"}</button>
+      <button className="vb1" style={following?{background:"var(--card)",color:"#6366F1",border:"1px solid #6366F1"}:{}} onClick={toggleFollow}>{following?"✓ Suivi":"+ Suivre"}</button>
       <button className="vb2" onClick={()=>go("chatVendor",v)}>💬 Contacter</button><button className="vb2" style={{flex:"none",width:44}} onClick={()=>shareVendor(v)}>📤</button>
     </div>
 
@@ -74,13 +74,13 @@ function VendorScr({vendor:vProp,go,onBack}){
       <div style={{width:44,height:44,borderRadius:12,background:"#10B981",display:"flex",alignItems:"center",justifyContent:"center",color:"#fff",fontWeight:800,fontSize:16,flexShrink:0}}>-{v.promo.discount}%</div>
       <div style={{flex:1}}>
         <div style={{fontSize:14,fontWeight:700,color:"#10B981"}}>{v.promo.name}</div>
-        <div style={{fontSize:11,color:"#908C82"}}>Sur tous les articles · Jusqu'au {v.promo.ends}</div>
+        <div style={{fontSize:11,color:"var(--muted)"}}>Sur tous les articles · Jusqu'au {v.promo.ends}</div>
       </div>
       <span style={{fontSize:20}}>🏷️</span>
     </div>}
 
     {/* Tab bar */}
-    <div style={{display:"flex",borderBottom:"1px solid #E8E6E1",margin:"0 20px 14px"}}>
+    <div style={{display:"flex",borderBottom:"1px solid var(--border)",margin:"0 20px 14px"}}>
       {[["products","🛍️ Produits"],["reviews","⭐ Avis"],["followers","👥 Abonnés"]].map(([k,l])=>(
         <button key={k} onClick={()=>setTab(k)} style={{flex:1,padding:"10px 0",border:"none",borderBottom:tab===k?"2px solid #6366F1":"2px solid transparent",background:"transparent",fontSize:12,fontWeight:tab===k?700:500,color:tab===k?"#6366F1":"#908C82",cursor:"pointer",fontFamily:"inherit",transition:"all .2s"}}>{l}</button>
       ))}
@@ -88,9 +88,9 @@ function VendorScr({vendor:vProp,go,onBack}){
 
     {/* ═══ PRODUCTS TAB (default) ═══ */}
     {tab==="products"&&<>
-      <div style={{padding:"0 16px",marginBottom:10}}><div style={{fontSize:12,color:"#908C82"}}>{vp.length} articles disponibles</div></div>
+      <div style={{padding:"0 16px",marginBottom:10}}><div style={{fontSize:12,color:"var(--muted)"}}>{vp.length} articles disponibles</div></div>
       <div className="pgrid">{vp.map(p=>{const vpromo=getVendorPromo(p,VENDORS);return(<div key={p.id} className="pcard" onClick={()=>go("detail",p)}><div className="pimg"><Img src={p.photo} emoji={p.img} style={{width:"100%",height:"100%"}} fit="cover"/>{vpromo&&<span className="badge">-{vpromo.promoDiscount}%</span>}{!vpromo&&disc(p)>0&&<span className="badge">-{disc(p)}%</span>}</div><div className="pbody"><h4>{p.name}</h4><div className="pp">{vpromo?<><span style={{color:"#10B981"}}>{fmt(vpromo.promoPrice)}</span><span className="po">{fmt(p.price)}</span></>:<>{fmt(p.price)}</>}</div><div className="pr">⭐ {p.rating}</div></div></div>)})}</div>
-      {vp.length===0&&<div style={{textAlign:"center",padding:"40px 0"}}><div style={{fontSize:36}}>📦</div><div style={{fontSize:13,color:"#908C82",marginTop:8}}>Aucun article pour le moment</div></div>}
+      {vp.length===0&&<div style={{textAlign:"center",padding:"40px 0"}}><div style={{fontSize:36}}>📦</div><div style={{fontSize:13,color:"var(--muted)",marginTop:8}}>Aucun article pour le moment</div></div>}
     </>}
 
     {/* ═══ REVIEWS TAB ═══ */}
@@ -99,33 +99,33 @@ function VendorScr({vendor:vProp,go,onBack}){
       <div style={{textAlign:"center",marginBottom:14}}>
         <div style={{fontSize:36,fontWeight:700}}>{avgRating.toFixed(1)}</div>
         <div style={{fontSize:16,color:"#F59E0B",marginBottom:2}}>{"★".repeat(Math.floor(avgRating))}{"☆".repeat(5-Math.floor(avgRating))}</div>
-        <div style={{fontSize:12,color:"#908C82"}}>{MOCK_REVIEWS.length} avis vérifiés</div>
+        <div style={{fontSize:12,color:"var(--muted)"}}>{MOCK_REVIEWS.length} avis vérifiés</div>
       </div>
 
-      {MOCK_REVIEWS.map((r,i)=><div key={i} style={{padding:14,background:"#fff",border:"1px solid #E8E6E1",borderRadius:16,marginBottom:10}}>
+      {MOCK_REVIEWS.map((r,i)=><div key={i} style={{padding:14,background:"var(--card)",border:"1px solid var(--border)",borderRadius:16,marginBottom:10}}>
         <div style={{display:"flex",alignItems:"center",gap:10,marginBottom:8}}>
-          <div style={{width:36,height:36,borderRadius:10,background:"#F5F4F1",display:"flex",alignItems:"center",justifyContent:"center",fontSize:18}}>{r.avatar}</div>
+          <div style={{width:36,height:36,borderRadius:10,background:"var(--light)",display:"flex",alignItems:"center",justifyContent:"center",fontSize:18}}>{r.avatar}</div>
           <div style={{flex:1}}>
             <div style={{fontSize:13,fontWeight:700}}>{r.name}</div>
-            <div style={{fontSize:11,color:"#908C82"}}>{r.date} · {r.product}</div>
+            <div style={{fontSize:11,color:"var(--muted)"}}>{r.date} · {r.product}</div>
           </div>
           <div style={{fontSize:12,color:"#F59E0B"}}>{"★".repeat(r.rating)}{"☆".repeat(5-r.rating)}</div>
         </div>
-        <p style={{fontSize:13,color:"#5E5B53",lineHeight:1.5,margin:0}}>{r.text}</p>
+        <p style={{fontSize:13,color:"var(--sub)",lineHeight:1.5,margin:0}}>{r.text}</p>
         {r.photos&&r.photos.length>0&&<div style={{display:"flex",gap:6,marginTop:8}}>
-          {r.photos.map((ph,j)=><img key={j} src={ph} alt="" onClick={()=>setViewImg(ph)} style={{width:56,height:56,borderRadius:10,objectFit:"cover",cursor:"pointer",border:"1px solid #E8E6E1"}}/>)}
+          {r.photos.map((ph,j)=><img key={j} src={ph} alt="" onClick={()=>setViewImg(ph)} style={{width:56,height:56,borderRadius:10,objectFit:"cover",cursor:"pointer",border:"1px solid var(--border)"}}/>)}
         </div>}
       </div>)}
     </div>}
 
     {/* ═══ FOLLOWERS TAB ═══ */}
     {tab==="followers"&&<div style={{padding:"0 16px 80px"}}>
-      <div style={{fontSize:12,color:"#908C82",marginBottom:14}}>{fCount} abonnés</div>
+      <div style={{fontSize:12,color:"var(--muted)",marginBottom:14}}>{fCount} abonnés</div>
       {MOCK_FOLLOWERS.map((f,i)=><div key={i} style={{display:"flex",alignItems:"center",gap:12,padding:"12px 0",borderBottom:i<MOCK_FOLLOWERS.length-1?"1px solid #F5F4F1":"none"}}>
-        <div style={{width:42,height:42,borderRadius:12,background:"#F5F4F1",display:"flex",alignItems:"center",justifyContent:"center",fontSize:20,flexShrink:0}}><img src={f.avatar} style={{width:"100%",height:"100%",objectFit:"cover"}} alt=""/></div>
+        <div style={{width:42,height:42,borderRadius:12,background:"var(--light)",display:"flex",alignItems:"center",justifyContent:"center",fontSize:20,flexShrink:0}}><img src={f.avatar} style={{width:"100%",height:"100%",objectFit:"cover"}} alt=""/></div>
         <div style={{flex:1}}>
           <div style={{fontSize:14,fontWeight:600}}>{f.name}</div>
-          <div style={{fontSize:11,color:"#908C82"}}>📍 {f.zone} · Depuis {f.since}</div>
+          <div style={{fontSize:11,color:"var(--muted)"}}>📍 {f.zone} · Depuis {f.since}</div>
         </div>
         <div style={{width:8,height:8,borderRadius:"50%",background:"#10B981",flexShrink:0}} title="En ligne"/>
       </div>)}

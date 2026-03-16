@@ -49,7 +49,7 @@ function CouponsScr({onBack,cart=[],appliedCoupon,onApply}){
         <span style={{fontSize:22}}>✅</span>
         <div>
           <div style={{fontSize:13,fontWeight:700,color:"#10B981"}}>Code appliqué : {appliedCoupon.code}</div>
-          <div style={{fontSize:12,color:"#908C82"}}>{appliedCoupon.free?"Livraison gratuite":`-${appliedCoupon.discount}% de réduction`}</div>
+          <div style={{fontSize:12,color:"var(--muted)"}}>{appliedCoupon.free?"Livraison gratuite":`-${appliedCoupon.discount}% de réduction`}</div>
         </div>
       </div>
       <button onClick={removeCoupon} style={{padding:"6px 12px",borderRadius:8,border:"1px solid rgba(239,68,68,0.3)",background:"transparent",color:"#EF4444",fontSize:11,fontWeight:600,cursor:"pointer",fontFamily:"inherit"}}>Retirer</button>
@@ -57,8 +57,8 @@ function CouponsScr({onBack,cart=[],appliedCoupon,onApply}){
 
     {/* Manual code input */}
     <div style={{display:"flex",gap:8,marginBottom:14}}>
-      <input value={manualCode} onChange={e=>setManualCode(e.target.value.toUpperCase())} placeholder="Entrer un code promo..." onKeyDown={e=>e.key==="Enter"&&applyManual()} style={{flex:1,padding:"12px 14px",borderRadius:12,border:"1px solid #E8E6E1",fontSize:13,fontFamily:"inherit",outline:"none"}}/>
-      <button onClick={applyManual} disabled={!manualCode.trim()||!!verifying} style={{padding:"12px 20px",borderRadius:12,border:"none",background:manualCode.trim()?"#6366F1":"#E8E6E1",color:manualCode.trim()?"#fff":"#908C82",fontSize:13,fontWeight:700,cursor:manualCode.trim()?"pointer":"not-allowed",fontFamily:"inherit"}}>
+      <input value={manualCode} onChange={e=>setManualCode(e.target.value.toUpperCase())} placeholder="Entrer un code promo..." onKeyDown={e=>e.key==="Enter"&&applyManual()} style={{flex:1,padding:"12px 14px",borderRadius:12,border:"1px solid var(--border)",fontSize:13,fontFamily:"inherit",outline:"none"}}/>
+      <button onClick={applyManual} disabled={!manualCode.trim()||!!verifying} style={{padding:"12px 20px",borderRadius:12,border:"none",background:manualCode.trim()?"#6366F1":"#E8E6E1",color:manualCode.trim()?"var(--card)":"#908C82",fontSize:13,fontWeight:700,cursor:manualCode.trim()?"pointer":"not-allowed",fontFamily:"inherit"}}>
         {verifying===manualCode?"⏳":"Appliquer"}
       </button>
     </div>
@@ -85,11 +85,11 @@ function CouponsScr({onBack,cart=[],appliedCoupon,onApply}){
           {/* Info */}
           <div style={{flex:1}}>
             <div style={{fontSize:14,fontWeight:700,marginBottom:2}}>{c.desc}</div>
-            <div style={{fontSize:11,color:"#908C82",marginBottom:4}}>
+            <div style={{fontSize:11,color:"var(--muted)",marginBottom:4}}>
               Expire le {c.expires}{c.min>0&&` · Min. ${fmt(c.min)}`}
             </div>
             <div style={{display:"flex",alignItems:"center",gap:8}}>
-              <span style={{padding:"3px 10px",borderRadius:6,background:"#F5F4F1",fontSize:12,fontWeight:700,fontFamily:"monospace",color:"#5E5B53",letterSpacing:.5}}>{c.code}</span>
+              <span style={{padding:"3px 10px",borderRadius:6,background:"var(--light)",fontSize:12,fontWeight:700,fontFamily:"monospace",color:"var(--sub)",letterSpacing:.5}}>{c.code}</span>
               {!meetsMin&&c.min>0&&<span style={{fontSize:10,color:"#EF4444"}}>Min. {fmt(c.min)} requis</span>}
             </div>
           </div>
@@ -101,7 +101,7 @@ function CouponsScr({onBack,cart=[],appliedCoupon,onApply}){
             <button onClick={removeCoupon} style={{width:"100%",padding:"10px 0",borderRadius:10,border:"1px solid rgba(239,68,68,0.3)",background:"transparent",color:"#EF4444",fontSize:13,fontWeight:600,cursor:"pointer",fontFamily:"inherit"}}>
               ✕ Retirer ce code
             </button>
-          ):(<button onClick={()=>applyCoupon(c)} disabled={!meetsMin||!!verifying} style={{width:"100%",padding:"10px 0",borderRadius:10,border:"none",background:meetsMin?"#6366F1":"#E8E6E1",color:meetsMin?"#fff":"#908C82",fontSize:13,fontWeight:700,cursor:meetsMin?"pointer":"not-allowed",fontFamily:"inherit",transition:"all .2s"}}>
+          ):(<button onClick={()=>applyCoupon(c)} disabled={!meetsMin||!!verifying} style={{width:"100%",padding:"10px 0",borderRadius:10,border:"none",background:meetsMin?"#6366F1":"#E8E6E1",color:meetsMin?"var(--card)":"#908C82",fontSize:13,fontWeight:700,cursor:meetsMin?"pointer":"not-allowed",fontFamily:"inherit",transition:"all .2s"}}>
             {verifying===c.code?"⏳ Vérification...":meetsMin?"🏷️ Appliquer ce code":`🔒 Minimum ${fmt(c.min)}`}
           </button>)}
         </div>
@@ -109,8 +109,8 @@ function CouponsScr({onBack,cart=[],appliedCoupon,onApply}){
     })}
 
     {/* Info */}
-    <div style={{padding:12,background:"#F5F4F1",borderRadius:12,marginTop:10}}>
-      <div style={{fontSize:11,color:"#908C82",lineHeight:1.5}}>
+    <div style={{padding:12,background:"var(--light)",borderRadius:12,marginTop:10}}>
+      <div style={{fontSize:11,color:"var(--muted)",lineHeight:1.5}}>
         💡 Un seul code promo peut être appliqué par commande. Le sous-total actuel du panier est de <b>{fmt(subtotal)}</b>.
       </div>
     </div>

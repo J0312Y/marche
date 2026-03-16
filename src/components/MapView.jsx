@@ -125,7 +125,7 @@ function MapView({
 
   return(
     <div className={`real-map ${className}`} style={{position:"relative",overflow:"hidden",...style}}>
-      {!ready&&<div style={{width:"100%",height:"100%",background:"#F0EFEC",display:"flex",alignItems:"center",justifyContent:"center",fontSize:13,color:"#908C82",gap:8}}>
+      {!ready&&<div style={{width:"100%",height:"100%",background:"var(--light)",display:"flex",alignItems:"center",justifyContent:"center",fontSize:13,color:"var(--muted)",gap:8}}>
         <div style={{width:20,height:20,border:"3px solid #E8E6E1",borderTopColor:"#6366F1",borderRadius:"50%",animation:"spin 1s linear infinite"}}/>
         Chargement de la carte...
       </div>}

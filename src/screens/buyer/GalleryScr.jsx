@@ -68,7 +68,7 @@ function GalleryScr({product:p,onClose}){
 
     {/* Dots */}
     {photos.length>1&&<div style={{display:"flex",justifyContent:"center",gap:6,paddingBottom:16,flexShrink:0}}>
-      {photos.map((_,i)=><div key={i} onClick={()=>{resetZoom();setIdx(i)}} style={{width:i===idx?20:8,height:8,borderRadius:4,background:i===idx?"#fff":"rgba(255,255,255,.3)",cursor:"pointer",transition:"all .3s"}}/>)}
+      {photos.map((_,i)=><div key={i} onClick={()=>{resetZoom();setIdx(i)}} style={{width:i===idx?20:8,height:8,borderRadius:4,background:i===idx?"var(--card)":"rgba(255,255,255,.3)",cursor:"pointer",transition:"all .3s"}}/>)}
     </div>}
 
     {/* Hint */}

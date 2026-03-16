@@ -28,7 +28,7 @@ function SkeletonGrid({count=4}){
   return(
     <div style={{display:"grid",gridTemplateColumns:"1fr 1fr",gap:8,padding:"0 16px"}}>
       {Array(count).fill(0).map((_,i)=>(
-        <div key={i} style={{background:"#fff",borderRadius:14,overflow:"hidden",border:"1px solid #F5F4F1"}}>
+        <div key={i} style={{background:"var(--card)",borderRadius:14,overflow:"hidden",border:"1px solid #F5F4F1"}}>
           <S w="100%" h={120} r={0} />
           <div style={{padding:"10px"}}>
             <S w="80%" h={12} mb={8}/>
@@ -51,20 +51,20 @@ function SkeletonDashboard(){
       </div>
       <div style={{display:"grid",gridTemplateColumns:"1fr 1fr",gap:8,marginBottom:14}}>
         {[1,2,3,4].map(i=>(
-          <div key={i} style={{padding:12,background:"#fff",borderRadius:14,border:"1px solid #F5F4F1"}}>
+          <div key={i} style={{padding:12,background:"var(--card)",borderRadius:14,border:"1px solid #F5F4F1"}}>
             <SC size={24} mb={8}/>
             <S w="60%" h={20} mb={4}/>
             <S w="40%" h={10}/>
           </div>
         ))}
       </div>
-      <div style={{padding:14,background:"#fff",borderRadius:14,border:"1px solid #F5F4F1",marginBottom:14}}>
+      <div style={{padding:14,background:"var(--card)",borderRadius:14,border:"1px solid #F5F4F1",marginBottom:14}}>
         <S w={160} h={14} mb={12}/>
         <div style={{display:"flex",alignItems:"flex-end",gap:6,height:80}}>
           {[40,65,50,80,70,45,60].map((h,i)=><S key={i} w="100%" h={h} r={4} style={{flex:1}}/>)}
         </div>
       </div>
-      <div style={{padding:14,background:"#fff",borderRadius:14,border:"1px solid #F5F4F1"}}>
+      <div style={{padding:14,background:"var(--card)",borderRadius:14,border:"1px solid #F5F4F1"}}>
         <S w={120} h={14} mb={14}/>
         {[1,2,3].map(i=>(
           <div key={i} style={{display:"flex",alignItems:"center",gap:10,padding:"8px 0",borderTop:i>1?"1px solid #F5F4F1":"none"}}>
@@ -83,7 +83,7 @@ function SkeletonList({count=4,hasImage=false}){
   return(
     <div style={{padding:"0 16px"}}>
       {Array(count).fill(0).map((_,i)=>(
-        <div key={i} style={{display:"flex",alignItems:"center",gap:12,padding:"14px 0",borderBottom:"1px solid #F5F4F1"}}>
+        <div key={i} style={{display:"flex",alignItems:"center",gap:12,padding:"14px 0",borderBottom:"1px solid var(--border)"}}>
           {hasImage?<S w={44} h={44} r={12}/>:<SC size={42}/>}
           <div style={{flex:1}}>
             <S w="70%" h={12} mb={6}/>
@@ -102,7 +102,7 @@ function SkeletonCards({count=3}){
   return(
     <div style={{padding:"0 16px"}}>
       {Array(count).fill(0).map((_,i)=>(
-        <div key={i} style={{padding:14,background:"#fff",border:"1px solid #F5F4F1",borderRadius:14,marginBottom:10}}>
+        <div key={i} style={{padding:14,background:"var(--card)",border:"1px solid #F5F4F1",borderRadius:14,marginBottom:10}}>
           <div style={{display:"flex",justifyContent:"space-between",marginBottom:10}}>
             <S w={100} h={14}/><S w={70} h={22} r={8}/>
           </div>
@@ -123,7 +123,7 @@ function SkeletonCards({count=3}){
 function SkeletonWallet(){
   return(
     <div style={{padding:16}}>
-      <div style={{padding:20,background:"#F5F4F1",borderRadius:18,marginBottom:14,textAlign:"center"}}>
+      <div style={{padding:20,background:"var(--light)",borderRadius:18,marginBottom:14,textAlign:"center"}}>
         <S w={100} h={10} mb={8} style={{margin:"0 auto"}}/>
         <S w={160} h={28} mb={6} style={{margin:"0 auto"}}/>
         <S w={120} h={10} style={{margin:"0 auto"}}/>
@@ -146,14 +146,14 @@ function SkeletonStats(){
       </div>
       <div style={{display:"grid",gridTemplateColumns:"1fr 1fr",gap:8,marginBottom:14}}>
         {[1,2,3,4].map(i=>(
-          <div key={i} style={{padding:12,background:"#fff",borderRadius:14,border:"1px solid #F5F4F1"}}>
+          <div key={i} style={{padding:12,background:"var(--card)",borderRadius:14,border:"1px solid #F5F4F1"}}>
             <S w={24} h={24} r={6} mb={6}/>
             <S w="55%" h={18} mb={4}/>
             <S w="35%" h={10}/>
           </div>
         ))}
       </div>
-      <div style={{padding:14,background:"#fff",borderRadius:14,border:"1px solid #F5F4F1"}}>
+      <div style={{padding:14,background:"var(--card)",borderRadius:14,border:"1px solid #F5F4F1"}}>
         <S w={140} h={14} mb={12}/>
         <div style={{display:"flex",alignItems:"flex-end",gap:6,height:80}}>
           {[50,70,55,85,75,50,65].map((h,i)=><S key={i} w="100%" h={h} r={4} style={{flex:1}}/>)}
