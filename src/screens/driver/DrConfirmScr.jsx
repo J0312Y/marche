@@ -47,14 +47,20 @@ function DrConfirmScr({delivery:dl,go,onBack}){
 
       {method==="photo"&&<div style={{marginTop:14}}>
         <p style={{fontSize:13,color:"#908C82",marginBottom:10}}>Prenez une photo du colis remis au client</p>
-        {!photoTaken?<div onClick={()=>setPhotoTaken(true)} style={{height:160,background:"#F5F4F1",border:"2px dashed #E8E6E1",borderRadius:18,display:"flex",flexDirection:"column",alignItems:"center",justifyContent:"center",cursor:"pointer"}}>
-          <div style={{fontSize:40,marginBottom:6}}>📷</div>
-          <div style={{fontSize:13,fontWeight:600,color:"#908C82"}}>Appuyer pour prendre la photo</div>
+        <input id="dr-photo-confirm" type="file" accept="image/*" capture="environment" style={{display:"none"}} onChange={e=>{
+          const f=e.target.files?.[0];if(!f)return;
+          const reader=new FileReader();
+          reader.onload=()=>{setPhotoTaken(reader.result);toast.success("Photo prise 📸")};
+          reader.readAsDataURL(f);e.target.value="";
+        }}/>
+        {!photoTaken?<div onClick={()=>document.getElementById("dr-photo-confirm")?.click()} style={{height:160,background:"var(--light,#F5F4F1)",border:"2px dashed var(--border,#E8E6E1)",borderRadius:18,display:"flex",flexDirection:"column",alignItems:"center",justifyContent:"center",cursor:"pointer"}}>
+          <div style={{width:56,height:56,borderRadius:16,background:"rgba(16,185,129,0.08)",display:"flex",alignItems:"center",justifyContent:"center",fontSize:24,marginBottom:6}}>📷</div>
+          <div style={{fontSize:13,fontWeight:600,color:"var(--muted,#908C82)"}}>Appuyer pour prendre la photo</div>
         </div>
-        :<div style={{height:160,background:"rgba(16,185,129,0.04)",border:"2px solid #10B981",borderRadius:18,display:"flex",flexDirection:"column",alignItems:"center",justifyContent:"center",position:"relative"}}>
-          <div style={{fontSize:40,marginBottom:6}}>✅</div>
-          <div style={{fontSize:13,fontWeight:600,color:"#10B981"}}>Photo prise avec succès</div>
-          <div onClick={()=>setPhotoTaken(false)} style={{position:"absolute",bottom:8,right:8,fontSize:11,color:"#EF4444",cursor:"pointer",fontWeight:600}}>🗑️ Reprendre</div>
+        :<div style={{height:160,borderRadius:18,overflow:"hidden",position:"relative",border:"2px solid #10B981"}}>
+          <img src={photoTaken} style={{width:"100%",height:"100%",objectFit:"cover"}} alt=""/>
+          <div style={{position:"absolute",top:8,right:8,padding:"4px 10px",borderRadius:8,background:"#10B981",color:"#fff",fontSize:10,fontWeight:700}}>✅ Photo prise</div>
+          <div onClick={()=>setPhotoTaken(false)} style={{position:"absolute",bottom:8,right:8,padding:"4px 10px",borderRadius:8,background:"rgba(239,68,68,.9)",color:"#fff",fontSize:10,fontWeight:600,cursor:"pointer"}}>🗑️ Reprendre</div>
         </div>}
       </div>}
 

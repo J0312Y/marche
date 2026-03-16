@@ -7,21 +7,21 @@ import { fmt, disc, getVendorPromo } from "../../utils/helpers";
 import { shareVendor } from "../../utils/share";
 
 const MOCK_FOLLOWERS=[
-  {name:"Marie Koumba",avatar:"👩",since:"Jan 2026",zone:"Bacongo"},
-  {name:"Patrick Mbemba",avatar:"👨",since:"Déc 2025",zone:"Poto-Poto"},
-  {name:"Celine Nzaba",avatar:"👩‍🦱",since:"Nov 2025",zone:"Moungali"},
-  {name:"David Tsaty",avatar:"🧑",since:"Oct 2025",zone:"Talangaï"},
-  {name:"Grace Mouanda",avatar:"👩‍🦳",since:"Sep 2025",zone:"Ouenzé"},
-  {name:"Paul Nkaya",avatar:"👨‍🦲",since:"Août 2025",zone:"Mfilou"},
-  {name:"Alain Mboumba",avatar:"🧔",since:"Juil 2025",zone:"Bacongo"},
-  {name:"Jeanne Okamba",avatar:"👧",since:"Juin 2025",zone:"Makélékélé"},
+  {name:"Marie Koumba",avatar:"https://images.unsplash.com/photo-1531123897727-8f129e1688ce?w=80&h=80&fit=crop&crop=face",since:"Jan 2026",zone:"Bacongo"},
+  {name:"Patrick Mbemba",avatar:"https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=80&h=80&fit=crop&crop=face",since:"Déc 2025",zone:"Poto-Poto"},
+  {name:"Celine Nzaba",avatar:"https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=80&h=80&fit=crop&crop=face",since:"Nov 2025",zone:"Moungali"},
+  {name:"David Tsaty",avatar:"https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=80&h=80&fit=crop&crop=face",since:"Oct 2025",zone:"Talangaï"},
+  {name:"Grace Mouanda",avatar:"https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=80&h=80&fit=crop&crop=face",since:"Sep 2025",zone:"Ouenzé"},
+  {name:"Paul Nkaya",avatar:"https://images.unsplash.com/photo-1506277886164-e25aa3f4ef7f?w=80&h=80&fit=crop&crop=face",since:"Août 2025",zone:"Mfilou"},
+  {name:"Alain Mboumba",avatar:"https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=80&h=80&fit=crop&crop=face",since:"Juil 2025",zone:"Bacongo"},
+  {name:"Jeanne Okamba",avatar:"https://images.unsplash.com/photo-1580489944761-15a19d654956?w=80&h=80&fit=crop&crop=face",since:"Juin 2025",zone:"Makélékélé"},
 ];
 
 const MOCK_REVIEWS=[
-  {name:"Marie K.",avatar:"👩",rating:5,text:"Excellent produit, livraison rapide ! Je recommande fortement cette boutique.",date:"12 Fév 2026",product:"Robe Wax Moderne",photos:["https://images.unsplash.com/photo-1590735213920-68192a487bc2?w=100&h=100&fit=crop"]},
-  {name:"Patrick M.",avatar:"👨",rating:4,text:"Bon rapport qualité-prix. L'emballage pourrait être meilleur.",date:"8 Fév 2026",product:"Chemise Bogolan",photos:[]},
-  {name:"Celine N.",avatar:"👩‍🦱",rating:5,text:"Deuxième achat, toujours satisfaite. Commerce très réactif et produits de qualité.",date:"3 Fév 2026",product:"Sac à Main Cuir",photos:["https://images.unsplash.com/photo-1548036328-c9fa89d128fa?w=100&h=100&fit=crop"]},
-  {name:"David T.",avatar:"🧑",rating:3,text:"Produit conforme mais livraison un peu lente (4 jours).",date:"28 Jan 2026",product:"Sandales Cuir",photos:[]},
+  {name:"Marie K.",avatar:"https://images.unsplash.com/photo-1531123897727-8f129e1688ce?w=80&h=80&fit=crop&crop=face",rating:5,text:"Excellent produit, livraison rapide ! Je recommande fortement cette boutique.",date:"12 Fév 2026",product:"Robe Wax Moderne",photos:["https://images.unsplash.com/photo-1590735213920-68192a487bc2?w=100&h=100&fit=crop"]},
+  {name:"Patrick M.",avatar:"https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=80&h=80&fit=crop&crop=face",rating:4,text:"Bon rapport qualité-prix. L'emballage pourrait être meilleur.",date:"8 Fév 2026",product:"Chemise Bogolan",photos:[]},
+  {name:"Celine N.",avatar:"https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=80&h=80&fit=crop&crop=face",rating:5,text:"Deuxième achat, toujours satisfaite. Commerce très réactif et produits de qualité.",date:"3 Fév 2026",product:"Sac à Main Cuir",photos:["https://images.unsplash.com/photo-1548036328-c9fa89d128fa?w=100&h=100&fit=crop"]},
+  {name:"David T.",avatar:"https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=80&h=80&fit=crop&crop=face",rating:3,text:"Produit conforme mais livraison un peu lente (4 jours).",date:"28 Jan 2026",product:"Sandales Cuir",photos:[]},
   {name:"Grace M.",avatar:"👩‍🦳",rating:5,text:"Le sac est magnifique ! Cuir de très bonne qualité, je suis ravie.",date:"20 Jan 2026",product:"Sac à Main Cuir",photos:["https://images.unsplash.com/photo-1584917865442-de89df76afd3?w=100&h=100&fit=crop","https://images.unsplash.com/photo-1548036328-c9fa89d128fa?w=100&h=100&fit=crop"]},
 ];
 
@@ -122,7 +122,7 @@ function VendorScr({vendor:vProp,go,onBack}){
     {tab==="followers"&&<div style={{padding:"0 16px 80px"}}>
       <div style={{fontSize:12,color:"#908C82",marginBottom:14}}>{fCount} abonnés</div>
       {MOCK_FOLLOWERS.map((f,i)=><div key={i} style={{display:"flex",alignItems:"center",gap:12,padding:"12px 0",borderBottom:i<MOCK_FOLLOWERS.length-1?"1px solid #F5F4F1":"none"}}>
-        <div style={{width:42,height:42,borderRadius:12,background:"#F5F4F1",display:"flex",alignItems:"center",justifyContent:"center",fontSize:20,flexShrink:0}}>{f.avatar}</div>
+        <div style={{width:42,height:42,borderRadius:12,background:"#F5F4F1",display:"flex",alignItems:"center",justifyContent:"center",fontSize:20,flexShrink:0}}><img src={f.avatar} style={{width:"100%",height:"100%",objectFit:"cover"}} alt=""/></div>
         <div style={{flex:1}}>
           <div style={{fontSize:14,fontWeight:600}}>{f.name}</div>
           <div style={{fontSize:11,color:"#908C82"}}>📍 {f.zone} · Depuis {f.since}</div>

@@ -21,7 +21,7 @@ function SplashScr({onDone}){
         opacity:show?1:0,
         transition:"all .6s cubic-bezier(.34,1.56,.64,1)",
       }}>
-        <div style={{fontSize:52}}>🛒</div>
+        <svg width="52" height="52" viewBox="0 0 64 64" fill="none"><rect width="64" height="64" rx="16" fill="rgba(255,255,255,0.15)"/><path d="M20 20h3l5 22h14l5-16H26" stroke="#fff" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round"/><circle cx="29" cy="48" r="3" fill="#fff"/><circle cx="41" cy="48" r="3" fill="#fff"/></svg>
       </div>
 
       {/* Text */}

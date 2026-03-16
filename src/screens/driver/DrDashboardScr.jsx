@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { D_DELIVERIES, D_HISTORY, D_STATS } from "../../data/driverData";
+import { DRIVER_PHOTO } from "../../data/images";
 import { fmt } from "../../utils/helpers";
 
 function DrDashboardScr({go}){
@@ -11,7 +12,7 @@ function DrDashboardScr({go}){
   const active=D_DELIVERIES.find(x=>x.status==="active");
   return(<div className="scr">
     <div className="dr-hero">
-      <div className="dr-top"><div style={{display:"flex",alignItems:"center",gap:12}}><div className="dr-av">🧑</div><div><div className="dr-name">Patrick Moukala</div><div className="dr-sub">🛵 Honda PCX · BZ-4521</div></div></div><div className="hdr-btn" style={{background:"rgba(255,255,255,.15)",border:"none",color:"#fff"}} onClick={()=>go("drNotif")}>🔔</div></div>
+      <div className="dr-top"><div style={{display:"flex",alignItems:"center",gap:12}}><div className="dr-av" style={{overflow:"hidden",padding:0}}><img src={DRIVER_PHOTO} style={{width:"100%",height:"100%",objectFit:"cover"}} alt=""/></div><div><div className="dr-name">Patrick Moukala</div><div className="dr-sub">🛵 Honda PCX · BZ-4521</div></div></div><div className="hdr-btn" style={{background:"rgba(255,255,255,.15)",border:"none",color:"#fff"}} onClick={()=>go("drNotif")}>🔔</div></div>
       <div className="dr-toggle-bar" onClick={()=>setOnline(!online)}><div className={`dt-dot ${online?"on":"off"}`}/><span>{online?"En ligne — Prêt à livrer":"Hors ligne"}</span><div className={`toggle ${online?"on":""}`}/></div>
       <div className="dr-stats"><div className="dr-stat"><b>{d.deliveries}</b><span>Livraisons</span></div><div className="dr-stat"><b>{fmt(d.earned)}</b><span>Gagné</span></div><div className="dr-stat"><b>{d.distance} km</b><span>Distance</span></div></div>
     </div>

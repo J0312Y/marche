@@ -252,7 +252,7 @@ function VProductFormScr({product:p,onBack,shopType="boutique"}){
       </div>
     </div>}
     {photos.length===0&&<div onClick={()=>fileRef.current?.click()} style={{padding:24,borderRadius:16,border:errors.photos?"2px dashed #EF4444":"2px dashed rgba(99,102,241,0.3)",background:errors.photos?"rgba(239,68,68,0.02)":"rgba(99,102,241,0.02)",textAlign:"center",cursor:"pointer",marginBottom:12}}>
-      <div style={{fontSize:36,marginBottom:6}}>📷</div>
+      <div style={{width:56,height:56,borderRadius:16,background:"rgba(99,102,241,0.08)",display:"flex",alignItems:"center",justifyContent:"center",fontSize:24,marginBottom:6}}>📷</div>
       <div style={{fontSize:14,fontWeight:600,color:errors.photos?"#EF4444":"#6366F1"}}>Prendre ou choisir une photo</div>
       <div style={{fontSize:11,color:"#908C82",marginTop:4}}>JPEG, PNG · Min 500×500px · Max 10 MB</div>
     </div>}

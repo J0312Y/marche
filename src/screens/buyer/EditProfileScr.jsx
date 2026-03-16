@@ -1,9 +1,11 @@
 import toast from "../../utils/toast";
+import { USER_AVATAR } from "../../data/images";
+import { useState, useRef } from "react";
 
 
 function EditProfileScr({onBack}){
   return(<div className="scr" style={{padding:16}}><div className="appbar" style={{padding:0,marginBottom:12}}><button onClick={onBack}>←</button><h2>Modifier profil</h2><div style={{width:38}}/></div>
-    <div style={{textAlign:"center",marginBottom:14}}><div className="prof-av" style={{margin:"0 auto 10px"}}>J</div><span style={{fontSize:13,color:"#6366F1",fontWeight:600,cursor:"pointer"}}>Changer la photo</span></div>
+    <div style={{textAlign:"center",marginBottom:14}}><div className="prof-av" style={{margin:"0 auto 10px",overflow:"hidden",padding:0,cursor:"pointer"}} onClick={()=>document.getElementById("av-upload")?.click()}><img id="av-img" src={USER_AVATAR} style={{width:"100%",height:"100%",objectFit:"cover"}} alt=""/></div><input id="av-upload" type="file" accept="image/*" style={{display:"none"}} onChange={e=>{const f=e.target.files?.[0];if(f){const r=new FileReader();r.onload=()=>{document.getElementById("av-img").src=r.result;toast.success("Photo mise à jour 📸")};r.readAsDataURL(f)}}}/><span style={{fontSize:13,color:"#6366F1",fontWeight:600,cursor:"pointer"}} onClick={()=>document.getElementById("av-upload")?.click()}>Changer la photo</span></div>
     <div className="field"><label>Nom</label><input defaultValue="Joeldy Tsina"/></div>
     <div className="field"><label>Email</label><input defaultValue="joeldytsina94@gmail.com"/></div>
     <div className="field"><label>Téléphone</label><input defaultValue="+242 064 663 469"/></div>

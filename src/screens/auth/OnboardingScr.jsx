@@ -2,22 +2,25 @@ import { useState, useEffect, useRef, useCallback } from "react";
 
 const SLIDES = [
   {
-    photo: "https://images.unsplash.com/photo-1604719312566-8912e9227c6a?w=800&h=1000&fit=crop",
+    photo: "https://images.unsplash.com/photo-1604719312566-8912e9227c6a?w=800&h=1200&fit=crop",
     icon: "🛍️",
     title: "Tout le Congo en une app",
     desc: "Restaurants, boutiques, pharmacies, pâtisseries, supermarchés et services — commandez et faites-vous livrer à Brazzaville et Pointe-Noire.",
+    color: "#6366F1",
   },
   {
-    photo: "https://images.unsplash.com/photo-1414235077428-338989a2e8c0?w=800&h=1000&fit=crop",
+    photo: "https://images.unsplash.com/photo-1414235077428-338989a2e8c0?w=800&h=1200&fit=crop",
     icon: "🍽️",
     title: "Commandez, achetez, réservez",
     desc: "Des milliers de commerces vérifiés : restaurants, boutiques de mode, boulangeries, pressing et plus encore.",
+    color: "#10B981",
   },
   {
-    photo: "https://images.unsplash.com/photo-1556742049-0cfed4f6a45d?w=800&h=1000&fit=crop",
+    photo: "https://images.unsplash.com/photo-1556742049-0cfed4f6a45d?w=800&h=1200&fit=crop",
     icon: "💳",
     title: "Paiement Mobile Money",
     desc: "Payez facilement avec Airtel Money ou MTN MoMo. Sécurisé et instantané via Kolo Pay.",
+    color: "#F59E0B",
   },
 ];
 
@@ -83,83 +86,78 @@ function OnboardingScr({onDone}){
     <div style={{display:"flex",flexDirection:"column",height:"100%",background:"var(--bg, #FAF9F6)"}}
       onTouchStart={onTouchStart} onTouchEnd={onTouchEnd}>
 
-      {/* ── IMAGE SECTION (60%) ── */}
+      {/* ═══ IMAGE SECTION — 60% ═══ */}
       <div style={{flex:"0 0 58%",position:"relative",overflow:"hidden",borderRadius:"0 0 28px 28px"}}>
-        {/* Progress bars on top of image */}
-        <div style={{position:"absolute",top:0,left:0,right:0,zIndex:10,display:"flex",gap:4,padding:"12px 16px"}}>
+        {/* Fallback color */}
+        <div style={{position:"absolute",inset:0,background:slide.color}}/>
+        {/* Photo */}
+        <div style={{
+          position:"absolute",inset:0,
+          backgroundImage:`url(${slide.photo})`,backgroundSize:"cover",backgroundPosition:"center",
+          opacity:animating?0:(imgLoaded[s]?1:0),transition:"opacity .4s ease",
+        }}/>
+        {/* Bottom gradient for smooth transition to white */}
+        <div style={{position:"absolute",bottom:0,left:0,right:0,height:80,background:"linear-gradient(transparent, var(--bg, #FAF9F6))"}}/>
+
+        {/* Progress bars */}
+        <div style={{position:"absolute",top:0,left:0,right:0,zIndex:10,display:"flex",gap:4,padding:"10px 14px"}}>
           {SLIDES.map((_,i)=>(
-            <div key={i} style={{flex:1,height:3,borderRadius:2,background:"rgba(255,255,255,.25)",overflow:"hidden"}}>
+            <div key={i} style={{flex:1,height:3,borderRadius:2,background:"rgba(255,255,255,.3)",overflow:"hidden"}}>
               <div style={{height:"100%",borderRadius:2,background:"#fff",width:i<s?"100%":i===s?`${progress}%`:"0%",transition:i===s?"none":"width .3s ease"}}/>
             </div>
           ))}
         </div>
 
         {/* Counter + Skip */}
-        <div style={{position:"absolute",top:26,left:16,right:16,zIndex:11,display:"flex",justifyContent:"space-between",alignItems:"center"}}>
-          <span style={{fontSize:12,color:"rgba(255,255,255,.6)",fontWeight:600}}>{s+1}/3</span>
-          {s<2&&<button onClick={onDone} style={{padding:"5px 14px",borderRadius:20,background:"rgba(255,255,255,.15)",backdropFilter:"blur(8px)",border:"1px solid rgba(255,255,255,.2)",color:"#fff",fontSize:11,fontWeight:600,cursor:"pointer",fontFamily:"inherit"}}>Passer</button>}
+        <div style={{position:"absolute",top:24,left:14,right:14,zIndex:11,display:"flex",justifyContent:"space-between",alignItems:"center"}}>
+          <span style={{fontSize:12,color:"rgba(255,255,255,.7)",fontWeight:600}}>{s+1}/3</span>
+          {s<2&&<button onClick={onDone} style={{padding:"5px 14px",borderRadius:20,background:"rgba(255,255,255,.2)",backdropFilter:"blur(8px)",border:"1px solid rgba(255,255,255,.25)",color:"#fff",fontSize:11,fontWeight:600,cursor:"pointer",fontFamily:"inherit"}}>Passer</button>}
         </div>
 
-        {/* Fallback color */}
-        <div style={{position:"absolute",inset:0,background:s===0?"#4F46E5":s===1?"#047857":"#B45309"}}/>
-
-        {/* Photo */}
-        <div style={{
-          position:"absolute",inset:0,
-          backgroundImage:`url(${slide.photo})`,
-          backgroundSize:"cover",backgroundPosition:"center",
-          opacity:animating?0:(imgLoaded[s]?1:0),
-          transition:"opacity .4s ease",
-        }}/>
-
-        {/* Bottom gradient for smooth transition to white */}
-        <div style={{position:"absolute",bottom:0,left:0,right:0,height:80,background:"linear-gradient(transparent, var(--bg, #FAF9F6))"}}/>
-
         {/* Tap zones */}
-        <div onClick={()=>s>0&&goToSlide(s-1)} style={{position:"absolute",left:0,top:50,bottom:0,width:"25%",zIndex:3,cursor:s>0?"pointer":"default"}}/>
-        <div onClick={()=>s<2?goToSlide(s+1):null} style={{position:"absolute",right:0,top:50,bottom:0,width:"25%",zIndex:3,cursor:s<2?"pointer":"default"}}/>
+        <div onClick={()=>s>0&&goToSlide(s-1)} style={{position:"absolute",left:0,top:40,bottom:0,width:"25%",zIndex:3,cursor:s>0?"pointer":"default"}}/>
+        <div onClick={()=>s<2?goToSlide(s+1):null} style={{position:"absolute",right:0,top:40,bottom:0,width:"25%",zIndex:3,cursor:s<2?"pointer":"default"}}/>
 
         {/* Pause indicator */}
         {paused&&s<2&&<div style={{position:"absolute",top:"40%",left:"50%",transform:"translate(-50%,-50%)",zIndex:5,opacity:.5}}>
-          <div style={{width:48,height:48,borderRadius:"50%",background:"rgba(0,0,0,.4)",display:"flex",alignItems:"center",justifyContent:"center",backdropFilter:"blur(4px)"}}>
-            <div style={{width:12,height:18,display:"flex",gap:3}}><div style={{width:4,borderRadius:2,background:"#fff",height:"100%"}}/><div style={{width:4,borderRadius:2,background:"#fff",height:"100%"}}/></div>
+          <div style={{width:44,height:44,borderRadius:"50%",background:"rgba(0,0,0,.35)",display:"flex",alignItems:"center",justifyContent:"center",backdropFilter:"blur(4px)"}}>
+            <div style={{width:10,height:16,display:"flex",gap:3}}><div style={{width:3,borderRadius:2,background:"#fff",height:"100%"}}/><div style={{width:3,borderRadius:2,background:"#fff",height:"100%"}}/></div>
           </div>
         </div>}
+
+        {/* Icon floating over the gradient */}
+        <div style={{
+          position:"absolute",bottom:8,left:"50%",transform:"translateX(-50%)",zIndex:5,
+          width:52,height:52,borderRadius:16,
+          background:"var(--card, #fff)",border:"1px solid var(--border, #E8E6E1)",
+          display:"flex",alignItems:"center",justifyContent:"center",fontSize:26,
+          boxShadow:"0 4px 20px rgba(0,0,0,.08)",
+          opacity:animating?0:1,transition:"opacity .2s",
+        }}>{slide.icon}</div>
       </div>
 
-      {/* ── TEXT SECTION (40%) ── */}
+      {/* ═══ TEXT SECTION — 40% on white ═══ */}
       <div style={{
         flex:1,padding:"20px 24px 24px",display:"flex",flexDirection:"column",
-        opacity:animating?0:1,transform:animating?"translateY(10px)":"translateY(0)",
+        opacity:animating?0:1,transform:animating?"translateY(8px)":"translateY(0)",
         transition:"all .3s ease",
       }}>
-        {/* Icon */}
-        <div style={{
-          width:48,height:48,borderRadius:16,
-          background:"rgba(99,102,241,0.08)",
-          border:"1px solid rgba(99,102,241,0.12)",
-          display:"flex",alignItems:"center",justifyContent:"center",
-          fontSize:24,marginBottom:14,
-        }}>
-          {slide.icon}
-        </div>
-
         {/* Title */}
-        <h2 style={{fontSize:22,fontWeight:800,color:"var(--text, #191815)",letterSpacing:-.5,lineHeight:1.2,marginBottom:8}}>
+        <h2 style={{fontSize:22,fontWeight:800,letterSpacing:-.5,color:"var(--text, #191815)",marginBottom:8,lineHeight:1.2,textAlign:"center"}}>
           {slide.title}
         </h2>
 
         {/* Description */}
-        <p style={{fontSize:13,color:"var(--sub, #5E5B53)",lineHeight:1.7,marginBottom:"auto",maxWidth:320}}>
+        <p style={{fontSize:13,color:"var(--sub, #5E5B53)",lineHeight:1.7,textAlign:"center",marginBottom:"auto",maxWidth:320,marginLeft:"auto",marginRight:"auto"}}>
           {slide.desc}
         </p>
 
         {/* Dots */}
-        <div style={{display:"flex",gap:8,marginBottom:16}}>
+        <div style={{display:"flex",justifyContent:"center",gap:8,marginBottom:16,marginTop:16}}>
           {SLIDES.map((_,i)=>(
             <div key={i} onClick={()=>goToSlide(i)} style={{
               width:i===s?24:8,height:8,borderRadius:4,
-              background:i===s?"#6366F1":"var(--border, #E8E6E1)",
+              background:i===s?slide.color:"var(--border, #E8E6E1)",
               cursor:"pointer",transition:"all .3s ease",
             }}/>
           ))}
@@ -169,19 +167,19 @@ function OnboardingScr({onDone}){
         {s<2?(
           <button onClick={()=>goToSlide(s+1)} style={{
             width:"100%",padding:"14px 0",borderRadius:14,border:"none",
-            background:"#6366F1",
-            color:"#fff",fontSize:15,fontWeight:700,cursor:"pointer",fontFamily:"inherit",
-            boxShadow:"0 4px 16px rgba(99,102,241,.25)",
+            background:slide.color,color:"#fff",fontSize:15,fontWeight:700,
+            cursor:"pointer",fontFamily:"inherit",
             display:"flex",alignItems:"center",justifyContent:"center",gap:8,
+            boxShadow:`0 4px 16px ${slide.color}33`,
           }}>
-            Suivant <span style={{fontSize:11,opacity:.6}}>({remaining}s)</span>
+            Suivant <span style={{fontSize:11,opacity:.7}}>({remaining}s)</span>
           </button>
         ):(
           <div>
             <button onClick={onDone} style={{
               width:"100%",padding:"14px 0",borderRadius:14,border:"none",
-              background:"#6366F1",
-              color:"#fff",fontSize:15,fontWeight:700,cursor:"pointer",fontFamily:"inherit",
+              background:"#6366F1",color:"#fff",fontSize:15,fontWeight:700,
+              cursor:"pointer",fontFamily:"inherit",
               boxShadow:"0 4px 16px rgba(99,102,241,.25)",
             }}>
               🚀 Commencer

@@ -1,5 +1,6 @@
 
 
+import { USER_AVATAR } from "../../data/images";
 function ProfileScr({go,userRole,vendorPlan,vendorStatus,driverStatus,onLogout}){
   const hasVendor=(userRole==="vendor"||userRole==="both")&&vendorStatus==="approved";
   const hasDriver=(userRole==="driver"||userRole==="both")&&driverStatus==="approved";
@@ -8,7 +9,7 @@ function ProfileScr({go,userRole,vendorPlan,vendorStatus,driverStatus,onLogout})
   const canRegister=userRole==="client"||(userRole==="vendor"&&!hasDriver)||(userRole==="driver"&&!hasVendor);
   return(<div className="scr">
     <div className="appbar"><h2>Mon Profil</h2><button onClick={()=>go("settings")}>⚙️</button></div>
-    <div className="prof-card"><div className="prof-av">J</div><h3 style={{fontSize:18,fontWeight:700}}>Joeldy Tsina</h3><div style={{fontSize:12,color:"#908C82",marginTop:2}}>+242 064 663 469</div><div style={{fontSize:12,color:"#908C82"}}>joeldytsina94@gmail.com</div><div className="prof-stats"><div className="ps"><b>3</b><span>Commandes</span></div><div className="psd"/><div className="ps"><b>5</b><span>Favoris</span></div><div className="psd"/><div className="ps"><b>2</b><span>Avis</span></div></div></div>
+    <div className="prof-card"><div className="prof-av" style={{overflow:"hidden",padding:0}}><img src={USER_AVATAR} style={{width:"100%",height:"100%",objectFit:"cover"}} alt=""/></div><h3 style={{fontSize:18,fontWeight:700}}>Joeldy Tsina</h3><div style={{fontSize:12,color:"#908C82",marginTop:2}}>+242 064 663 469</div><div style={{fontSize:12,color:"#908C82"}}>joeldytsina94@gmail.com</div><div className="prof-stats"><div className="ps"><b>3</b><span>Commandes</span></div><div className="psd"/><div className="ps"><b>5</b><span>Favoris</span></div><div className="psd"/><div className="ps"><b>2</b><span>Avis</span></div></div></div>
     <div className="wallet"><div><p>Kolo Pay Wallet</p><h3>125 000 FCFA</h3></div><button onClick={()=>go("recharge")}>Recharger</button></div>
 
     {/* Pending status */}

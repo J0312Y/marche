@@ -1,5 +1,6 @@
 import { useState } from "react";
 import toast from "../../utils/toast";
+import { DRIVER_PHOTO } from "../../data/images";
 
 function RateDriverScr({onBack,onDone,driver={}}){
   const [rating,setRating]=useState(0);
@@ -28,7 +29,7 @@ function RateDriverScr({onBack,onDone,driver={}}){
 
     {/* Driver card */}
     <div style={{textAlign:"center",marginBottom:20}}>
-      <div style={{width:64,height:64,borderRadius:20,background:"linear-gradient(135deg,#10B981,#059669)",display:"flex",alignItems:"center",justifyContent:"center",fontSize:30,margin:"0 auto 10px"}}>🧑</div>
+      <div style={{width:64,height:64,borderRadius:20,background:"linear-gradient(135deg,#10B981,#059669)",display:"flex",alignItems:"center",justifyContent:"center",fontSize:30,margin:"0 auto 10px",overflow:"hidden"}}><img src={DRIVER_PHOTO} style={{width:"100%",height:"100%",objectFit:"cover"}} alt=""/></div>
       <h3 style={{fontSize:17,fontWeight:700}}>{driverName}</h3>
       <p style={{fontSize:12,color:"#908C82"}}>🛵 Honda PCX · BZ-4521</p>
     </div>

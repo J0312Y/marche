@@ -2,9 +2,9 @@ import { useState } from "react";
 
 function ShopTeamTab(){
   const initMembers=[
-    {id:"m1",name:"Joeldy Tsina",role:"Propriétaire",email:"joeldytsina94@gmail.com",avatar:"J",color:"#6366F1"},
-    {id:"m2",name:"Marie Loubaki",role:"Manager",email:"marie.l@email.com",avatar:"M",color:"#10B981"},
-    {id:"m3",name:"Paul Nkaya",role:"Employé",email:"paul.n@email.com",avatar:"P",color:"#F59E0B"}
+    {id:"m1",name:"Joeldy Tsina",role:"Propriétaire",email:"joeldytsina94@gmail.com",photo:"https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=80&h=80&fit=crop&crop=face",color:"#6366F1"},
+    {id:"m2",name:"Marie Loubaki",role:"Manager",email:"marie.l@email.com",photo:"https://images.unsplash.com/photo-1531123897727-8f129e1688ce?w=80&h=80&fit=crop&crop=face",color:"#10B981"},
+    {id:"m3",name:"Paul Nkaya",role:"Employé",email:"paul.n@email.com",photo:"https://images.unsplash.com/photo-1506277886164-e25aa3f4ef7f?w=80&h=80&fit=crop&crop=face",color:"#F59E0B"}
   ];
   const [members,setMembers]=useState(initMembers);
   const [showInvite,setShowInvite]=useState(false);
@@ -28,7 +28,7 @@ function ShopTeamTab(){
 
     {members.map(m=><div key={m.id} style={{padding:14,background:showRemove===m.id?"rgba(239,68,68,0.02)":"#fff",border:showRemove===m.id?"1px solid rgba(239,68,68,0.3)":"1px solid #E8E6E1",borderRadius:14,marginBottom:10,transition:"all .2s"}}>
       <div style={{display:"flex",alignItems:"center",gap:12}}>
-        <div style={{width:42,height:42,borderRadius:12,background:m.color,color:"#fff",display:"flex",alignItems:"center",justifyContent:"center",fontSize:16,fontWeight:700,flexShrink:0}}>{m.avatar}</div>
+        <div style={{width:42,height:42,borderRadius:12,background:m.color,color:"#fff",display:"flex",alignItems:"center",justifyContent:"center",fontSize:16,fontWeight:700,flexShrink:0}}>m.photo?<img src={m.photo} style={{width:"100%",height:"100%",objectFit:"cover",borderRadius:"inherit"}} alt=""/>:m.avatar</div>
         <div style={{flex:1}}>
           <div style={{fontSize:14,fontWeight:600}}>{m.name}</div>
           <div style={{fontSize:11,color:"#908C82"}}>{m.email}</div>

@@ -1,11 +1,12 @@
 import { D_HISTORY, D_STATS } from "../../data/driverData";
+import { DRIVER_PHOTO } from "../../data/images";
 import { fmt } from "../../utils/helpers";
 
 function DrProfileScr({go,onSwitch,onLogout}){
   return(<div className="scr">
     <div className="appbar"><h2>Mon Profil</h2><button onClick={()=>go("drNotif")}>🔔</button></div>
     <div style={{textAlign:"center",padding:"10px 20px 20px"}}>
-      <div style={{width:80,height:80,borderRadius:22,background:"linear-gradient(135deg,#10B981,#059669)",display:"flex",alignItems:"center",justifyContent:"center",margin:"0 auto 10px",fontSize:36}}>🧑</div>
+      <div style={{width:80,height:80,borderRadius:22,background:"linear-gradient(135deg,#10B981,#059669)",display:"flex",alignItems:"center",justifyContent:"center",margin:"0 auto 10px",overflow:"hidden"}}><img src={DRIVER_PHOTO} style={{width:"100%",height:"100%",objectFit:"cover"}} alt=""/></div>
       <h2 style={{fontSize:20,fontWeight:700}}>Patrick Moukala</h2>
       <p style={{fontSize:13,color:"#908C82"}}>🛵 Honda PCX · BZ-4521</p>
       <div style={{display:"flex",justifyContent:"center",gap:6,marginTop:8}}><span style={{padding:"4px 12px",borderRadius:8,background:"rgba(16,185,129,0.1)",color:"#10B981",fontSize:12,fontWeight:600}}>⭐ 4.8</span><span style={{padding:"4px 12px",borderRadius:8,background:"rgba(99,102,241,0.1)",color:"#6366F1",fontSize:12,fontWeight:600}}>342 livraisons</span></div>

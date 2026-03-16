@@ -2,6 +2,7 @@ import { useState } from "react";
 import { useLoad } from "../../hooks";
 import { vendor } from "../../services";
 import { SkeletonList } from "../../components/Loading";
+import { CHAT_AVATARS } from "../../data/images";
 import toast from "../../utils/toast";
 
 function VReviewsScr({onBack}){
@@ -56,7 +57,7 @@ function VReviewsScr({onBack}){
           {/* Header */}
           <div style={{display:"flex",alignItems:"center",justifyContent:"space-between",marginBottom:8}}>
             <div style={{display:"flex",alignItems:"center",gap:8}}>
-              <div style={{width:32,height:32,borderRadius:10,background:"#F5F4F1",display:"flex",alignItems:"center",justifyContent:"center",fontSize:16}}>👤</div>
+              <div style={{width:32,height:32,borderRadius:10,overflow:"hidden"}}><img src={CHAT_AVATARS[["client","femme1","homme1","femme2"][i%4]]} style={{width:"100%",height:"100%",objectFit:"cover"}} alt=""/></div>
               <div>
                 <b style={{fontSize:13}}>{r.client}</b>
                 <div style={{fontSize:10,color:"#908C82"}}>{r.date}</div>

@@ -1,26 +1,27 @@
 import toast from "../../utils/toast";
 import { useState } from "react";
 import { fmt } from "../../utils/helpers";
+import { DRIVER_PHOTO, CHAT_AVATARS } from "../../data/images";
 
 function VDeliveryScr({go,onBack}){
   const [tab,setTab]=useState(0);
   // Platform drivers (auto-listed from Lamuka accounts)
   const platformDrivers=[
-    {id:"d1",name:"Patrick Moukala",vehicle:"🛵 Honda PCX",plate:"BZ-4521",phone:"+242 06X XXX",status:"available",rating:4.8,deliveries:342,zone:"Brazzaville Sud",avatar:"🧑",source:"platform"},
-    {id:"d3",name:"Grace Okemba",vehicle:"🛵 Yamaha NMAX",plate:"BZ-2190",phone:"+242 06X XXX",status:"available",rating:4.9,deliveries:267,zone:"Brazzaville Centre",avatar:"👩",source:"platform"},
-    {id:"d5",name:"Alain Mboumba",vehicle:"🚲 Vélo",plate:"—",phone:"+242 06X XXX",status:"available",rating:4.3,deliveries:52,zone:"Brazzaville Sud",avatar:"🧑",source:"platform"},
+    {id:"d1",name:"Patrick Moukala",vehicle:"🛵 Honda PCX",plate:"BZ-4521",phone:"+242 06X XXX",status:"available",rating:4.8,deliveries:342,zone:"Brazzaville Sud",photo:"https://images.unsplash.com/photo-1506277886164-e25aa3f4ef7f?w=80&h=80&fit=crop&crop=face",source:"platform"},
+    {id:"d3",name:"Grace Okemba",vehicle:"🛵 Yamaha NMAX",plate:"BZ-2190",phone:"+242 06X XXX",status:"available",rating:4.9,deliveries:267,zone:"Brazzaville Centre",photo:"https://images.unsplash.com/photo-1531123897727-8f129e1688ce?w=80&h=80&fit=crop&crop=face",source:"platform"},
+    {id:"d5",name:"Alain Mboumba",vehicle:"🚲 Vélo",plate:"—",phone:"+242 06X XXX",status:"available",rating:4.3,deliveries:52,zone:"Brazzaville Sud",photo:"https://images.unsplash.com/photo-1506277886164-e25aa3f4ef7f?w=80&h=80&fit=crop&crop=face",source:"platform"},
   ];
   // Manually added by vendor
   const [manualDrivers,setManualDrivers]=useState([
-    {id:"d2",name:"Jean Mbemba",vehicle:"🚗 Toyota Vitz",plate:"BZ-7803",phone:"+242 06X XXX",status:"busy",rating:4.5,deliveries:128,zone:"Brazzaville Nord",avatar:"👨",source:"manual"},
-    {id:"d4",name:"Michel Ngoma",vehicle:"🚗 Suzuki Alto",plate:"BZ-5541",phone:"+242 06X XXX",status:"offline",rating:4.2,deliveries:89,zone:"Pointe-Noire",avatar:"🧔",source:"manual"},
+    {id:"d2",name:"Jean Mbemba",vehicle:"🚗 Toyota Vitz",plate:"BZ-7803",phone:"+242 06X XXX",status:"busy",rating:4.5,deliveries:128,zone:"Brazzaville Nord",photo:"https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=80&h=80&fit=crop&crop=face",source:"manual"},
+    {id:"d4",name:"Michel Ngoma",vehicle:"🚗 Suzuki Alto",plate:"BZ-5541",phone:"+242 06X XXX",status:"offline",rating:4.2,deliveries:89,zone:"Pointe-Noire",photo:"https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=80&h=80&fit=crop&crop=face",source:"manual"},
   ]);
   const allDrivers=[...platformDrivers,...manualDrivers];
   const [showAdd,setShowAdd]=useState(false);
   const [addName,setAddName]=useState("");const [addPhone,setAddPhone]=useState("");const [addVehicle,setAddVehicle]=useState("moto");
   const doAddManual=()=>{
     if(!addName||!addPhone)return;
-    setManualDrivers([...manualDrivers,{id:"dm"+Date.now(),name:addName,vehicle:addVehicle==="moto"?"🛵 Moto":addVehicle==="voiture"?"🚗 Voiture":"🚲 Vélo",plate:"—",phone:addPhone,status:"offline",rating:0,deliveries:0,zone:"Brazzaville",avatar:addName[0].toUpperCase(),source:"manual"}]);
+    setManualDrivers([...manualDrivers,{id:"dm"+Date.now(),name:addName,vehicle:addVehicle==="moto"?"🛵 Moto":addVehicle==="voiture"?"🚗 Voiture":"🚲 Vélo",plate:"—",phone:addPhone,status:"offline",rating:0,deliveries:0,zone:"Brazzaville",photo:"https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=80&h=80&fit=crop&crop=face",source:"manual"}]);
     setAddName("");setAddPhone("");setShowAdd(false);
   };
   const removeManual=id=>setManualDrivers(manualDrivers.filter(d=>d.id!==id));
@@ -69,7 +70,7 @@ function VDeliveryScr({go,onBack}){
       </div>
       <div className="info-box blue" style={{marginBottom:10,padding:"8px 12px"}}><span>ℹ️</span><span style={{fontSize:11}}>Ces livreurs ont un compte Lamuka actif et sont automatiquement disponibles dans votre zone.</span></div>
       {platformDrivers.map(d=><div key={d.id} className="del-card" onClick={()=>go("vDriverProfile",d)}>
-        <div className="del-av">{d.avatar}</div>
+        <div className="del-av">d.photo?<img src={d.photo} style={{width:"100%",height:"100%",objectFit:"cover"}} alt=""/>:d.avatar</div>
         <div className="del-info">
           <h4>{d.name} <span style={{padding:"2px 6px",borderRadius:4,background:"rgba(16,185,129,0.08)",color:"#10B981",fontSize:9,fontWeight:700,marginLeft:4}}>Lamuka ✓</span></h4>
           <p>{d.vehicle} · {d.plate}</p>
@@ -86,7 +87,7 @@ function VDeliveryScr({go,onBack}){
       {manualDrivers.length===0&&<div style={{textAlign:"center",padding:"20px 0",color:"#908C82",fontSize:12}}>Aucun livreur ajouté manuellement</div>}
       {manualDrivers.map(d=><div key={d.id} style={{padding:14,background:"#fff",border:"1px solid #E8E6E1",borderRadius:16,marginBottom:10}}>
         <div style={{display:"flex",alignItems:"center",gap:10}} onClick={()=>go("vDriverProfile",d)}>
-          <div className="del-av" style={{width:40,height:40,borderRadius:12,background:"linear-gradient(135deg,#F59E0B,#D97706)",display:"flex",alignItems:"center",justifyContent:"center",fontSize:16,flexShrink:0}}>{d.avatar}</div>
+          <div className="del-av" style={{width:40,height:40,borderRadius:12,background:"linear-gradient(135deg,#F59E0B,#D97706)",display:"flex",alignItems:"center",justifyContent:"center",fontSize:16,flexShrink:0}}>d.photo?<img src={d.photo} style={{width:"100%",height:"100%",objectFit:"cover"}} alt=""/>:d.avatar</div>
           <div style={{flex:1}}>
             <h4 style={{fontSize:14,fontWeight:600}}>{d.name} <span style={{padding:"2px 6px",borderRadius:4,background:"rgba(245,158,11,0.08)",color:"#F59E0B",fontSize:9,fontWeight:700,marginLeft:4}}>Manuel</span></h4>
             <p style={{fontSize:11,color:"#908C82"}}>{d.vehicle} · 📍 {d.zone}</p>

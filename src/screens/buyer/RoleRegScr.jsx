@@ -71,7 +71,7 @@ function RoleRegScr({onBack,onDone,forceRole}){
             <div style={{fontSize:11,fontWeight:700,color:sel?"#6366F1":"#5E5B53"}}>{label}</div>
           </div>})}
         </div>
-        <div className="vr-upload"><div className="vu-icon">🖼️</div><b>Logo / Photo</b><p>PNG, JPG · Max 2MB</p></div>
+        <div className="vr-upload" onClick={()=>document.getElementById("reg-upload")?.click()} style={{cursor:"pointer"}}><div className="vu-icon" id="vu-preview">🖼️</div><b>Logo / Photo</b><p>PNG, JPG · Max 2MB</p><input id="reg-upload" type="file" accept="image/*" style={{display:"none"}} onChange={e=>{const f=e.target.files?.[0];if(f){const r=new FileReader();r.onload=()=>{const el=document.getElementById("vu-preview");el.textContent="";el.style.overflow="hidden";const img=document.createElement("img");img.src=r.result;img.style.cssText="width:100%;height:100%;object-fit:cover;border-radius:12px";el.appendChild(img)};r.readAsDataURL(f)}}}/></div>
         <div className="field"><label>Nom de l'établissement</label><input placeholder="Ex: Chez Mama Ngudi, Congo Tech..."/></div>
         <div className="field"><label>Description</label><input placeholder="Votre activité, spécialités..."/></div>
         <label style={{display:"block",fontSize:12,fontWeight:600,color:"#5E5B53",margin:"14px 0 8px"}}>Sous-catégories</label>
@@ -83,18 +83,93 @@ function RoleRegScr({onBack,onDone,forceRole}){
         <div className="field"><label>Type de véhicule</label><select><option value="moto">🛵 Moto</option><option value="voiture">🚗 Voiture</option><option value="velo">🚲 Vélo</option></select></div>
         <div className="field-row"><div className="field"><label>Marque</label><input placeholder="Honda PCX"/></div><div className="field"><label>Année</label><input placeholder="2023"/></div></div>
         <div className="field-row"><div className="field"><label>Plaque</label><input placeholder="BZ-4521"/></div><div className="field"><label>Couleur</label><input placeholder="Noir"/></div></div>
-        <div style={{fontSize:14,fontWeight:700,margin:"14px 0 10px"}}>Zones de livraison</div>
+        {/* Vehicle photo */}
+        <div style={{marginTop:10,marginBottom:14}}>
+          <label style={{display:"block",fontSize:12,fontWeight:600,color:"var(--sub,#5E5B53)",marginBottom:6}}>Photo du véhicule</label>
+          <div id="drv-veh-wrap" onClick={()=>document.getElementById("drv-veh-upload")?.click()} style={{width:"100%",height:120,borderRadius:16,border:"2px dashed var(--border,#E8E6E1)",background:"var(--light,#F5F4F1)",display:"flex",flexDirection:"column",alignItems:"center",justifyContent:"center",cursor:"pointer",overflow:"hidden"}}>
+            <div id="drv-veh-preview" style={{fontSize:32,marginBottom:4}}>🛵</div>
+            <span style={{fontSize:11,color:"var(--muted,#908C82)"}}>Cliquez pour ajouter une photo</span>
+          </div>
+          <input id="drv-veh-upload" type="file" accept="image/*" style={{display:"none"}} onChange={e=>{
+            const f=e.target.files?.[0];if(!f)return;
+            const reader=new FileReader();
+            reader.onload=()=>{
+              const wrap=document.getElementById("drv-veh-wrap");
+              wrap.innerHTML="";wrap.style.border="none";wrap.style.padding="0";
+              const img=document.createElement("img");img.src=reader.result;img.style.cssText="width:100%;height:100%;object-fit:cover;border-radius:14px";
+              wrap.appendChild(img);
+              toast.success("Photo véhicule ajoutée 📸");
+            };reader.readAsDataURL(f);e.target.value="";
+          }}/>
+        </div>
+        <div style={{fontSize:14,fontWeight:700,margin:"0 0 10px"}}>Zones de livraison</div>
         <div style={{display:"flex",gap:6,flexWrap:"wrap"}}>{["Brazzaville Sud","Centre-ville","Brazzaville Nord","Pointe-Noire"].map(z=><span key={z} style={{padding:"8px 14px",borderRadius:10,border:"1px solid #E8E6E1",background:"#fff",fontSize:12,cursor:"pointer",fontFamily:"inherit"}}>{z}</span>)}</div>
       </>}
 
       {/* STEP 2: Documents (different per role) */}
-      {step===2&&<><h3 style={{fontSize:16,fontWeight:700,marginBottom:14}}>Documents requis</h3>
-        {role==="vendor"?
-          [["🪪","Pièce d'identité","Carte nationale ou passeport","id"],["📄","RCCM / Patente","Registre de commerce (optionnel)","rccm"],["📸","Photo de l'établissement","Votre espace de vente","photo"]].map(([i,t,d,k])=>
-            <div key={k} className="vr-doc" onClick={()=>setDocs({...docs,[k]:true})}><span className="vdi">{i}</span><div className="vdt"><h5>{t}</h5><p>{d}</p></div><span className={`vds ${docs[k]?"up":"pend"}`}>{docs[k]?"✓ Envoyé":"À envoyer"}</span></div>)
-          :[["🪪","Pièce d'identité","Carte nationale ou passeport","id"],["🪪","Permis de conduire","Obligatoire pour moto/voiture","permit"],["📸","Photo du véhicule","Vue claire du véhicule","vehicle"]].map(([i,t,d,k])=>
-            <div key={k} className="vr-doc" onClick={()=>setDocs({...docs,[k]:true})}><span className="vdi">{i}</span><div className="vdt"><h5>{t}</h5><p>{d}</p></div><span className={`vds ${docs[k]?"up":"pend"}`}>{docs[k]?"✓ Envoyé":"À envoyer"}</span></div>)
-        }
+      {step===2&&<><h3 style={{fontSize:16,fontWeight:700,marginBottom:6}}>Documents requis</h3>
+        <p style={{fontSize:12,color:"#908C82",lineHeight:1.5,marginBottom:14}}>Uploadez vos documents pour vérification. Formats acceptés : JPG, PNG, PDF. Max 5 MB par fichier.</p>
+        {(role==="vendor"?
+          [["🪪","Pièce d'identité","Carte nationale ou passeport","id","image/*,.pdf"],["📄","RCCM / Patente","Registre de commerce (optionnel)","rccm","image/*,.pdf"],["📸","Photo de l'établissement","Votre espace de vente","photo","image/*"]]
+          :[["🪪","Pièce d'identité","Carte nationale ou passeport","id","image/*,.pdf"],["🪪","Permis de conduire","Obligatoire pour moto/voiture","permit","image/*,.pdf"],["📸","Photo du véhicule","Vue claire du véhicule","vehicle","image/*"]]
+        ).map(([icon,title,desc,key,accept])=>(
+          <div key={key} style={{padding:14,background:"var(--card,#fff)",border:docs[key]?"2px solid "+color:"1px solid var(--border,#E8E6E1)",borderRadius:16,marginBottom:10,position:"relative"}}>
+            <input id={`doc-${key}`} type="file" accept={accept} style={{display:"none"}} onChange={e=>{
+              const f=e.target.files?.[0];
+              if(!f)return;
+              if(f.size>5*1024*1024){toast.error("Fichier trop lourd (max 5 MB)");return}
+              const reader=new FileReader();
+              reader.onload=()=>{setDocs(prev=>({...prev,[key]:{name:f.name,size:(f.size/1024).toFixed(0),type:f.type,preview:f.type.startsWith("image/")?reader.result:null}}))};
+              reader.readAsDataURL(f);
+              toast.success("Document uploadé ✅");
+              e.target.value="";
+            }}/>
+
+            {!docs[key]?(
+              <div onClick={()=>document.getElementById(`doc-${key}`)?.click()} style={{cursor:"pointer",display:"flex",alignItems:"center",gap:12}}>
+                <div style={{width:48,height:48,borderRadius:14,background:role==="vendor"?"rgba(99,102,241,0.06)":"rgba(16,185,129,0.06)",display:"flex",alignItems:"center",justifyContent:"center",fontSize:22,flexShrink:0}}>{icon}</div>
+                <div style={{flex:1}}>
+                  <div style={{fontSize:13,fontWeight:700}}>{title}</div>
+                  <div style={{fontSize:11,color:"var(--muted,#908C82)",marginTop:2}}>{desc}</div>
+                </div>
+                <div style={{padding:"8px 14px",borderRadius:10,border:`1px dashed ${color}`,color:color,fontSize:11,fontWeight:600,flexShrink:0}}>📎 Upload</div>
+              </div>
+            ):(
+              <div>
+                <div style={{display:"flex",alignItems:"center",gap:12}}>
+                  {/* Preview thumbnail */}
+                  {docs[key].preview?(
+                    <div style={{width:48,height:48,borderRadius:14,overflow:"hidden",flexShrink:0,border:"1px solid var(--border,#E8E6E1)"}}>
+                      <img src={docs[key].preview} style={{width:"100%",height:"100%",objectFit:"cover"}} alt=""/>
+                    </div>
+                  ):(
+                    <div style={{width:48,height:48,borderRadius:14,background:"rgba(16,185,129,0.06)",display:"flex",alignItems:"center",justifyContent:"center",fontSize:18,flexShrink:0}}>📄</div>
+                  )}
+                  <div style={{flex:1,minWidth:0}}>
+                    <div style={{fontSize:13,fontWeight:700,color:"#10B981",display:"flex",alignItems:"center",gap:4}}>✅ {title}</div>
+                    <div style={{fontSize:11,color:"var(--muted,#908C82)",marginTop:2,overflow:"hidden",whiteSpace:"nowrap",textOverflow:"ellipsis"}}>{docs[key].name} · {docs[key].size} KB</div>
+                  </div>
+                  <div style={{display:"flex",flexDirection:"column",gap:4,flexShrink:0}}>
+                    <button onClick={()=>document.getElementById(`doc-${key}`)?.click()} style={{padding:"5px 10px",borderRadius:8,border:"1px solid var(--border,#E8E6E1)",background:"var(--card,#fff)",fontSize:10,fontWeight:600,cursor:"pointer",fontFamily:"inherit",color:"var(--text,#191815)"}}>🔄 Changer</button>
+                    <button onClick={()=>setDocs(prev=>({...prev,[key]:false}))} style={{padding:"5px 10px",borderRadius:8,border:"1px solid rgba(239,68,68,.15)",background:"transparent",fontSize:10,fontWeight:600,cursor:"pointer",fontFamily:"inherit",color:"#EF4444"}}>✕ Retirer</button>
+                  </div>
+                </div>
+              </div>
+            )}
+          </div>
+        ))}
+        {/* Progress indicator */}
+        <div style={{padding:12,background:"var(--light,#F5F4F1)",borderRadius:12,display:"flex",alignItems:"center",gap:10,marginTop:4}}>
+          <div style={{flex:1}}>
+            <div style={{display:"flex",justifyContent:"space-between",fontSize:11,marginBottom:4}}>
+              <span style={{fontWeight:600}}>Documents uploadés</span>
+              <span style={{color:color,fontWeight:700}}>{Object.values(docs).filter(v=>v&&v!==true&&v!==false).length}/{role==="vendor"?3:3}</span>
+            </div>
+            <div style={{height:4,background:"var(--border,#E8E6E1)",borderRadius:2,overflow:"hidden"}}>
+              <div style={{width:`${(Object.values(docs).filter(v=>v&&v!==true&&v!==false).length/(role==="vendor"?3:3))*100}%`,height:"100%",background:color,borderRadius:2,transition:"width .3s"}}/>
+            </div>
+          </div>
+        </div>
       </>}
 
       {/* STEP 3 VENDOR: Plan (only vendor) */}
@@ -115,7 +190,7 @@ function RoleRegScr({onBack,onDone,forceRole}){
           {[["Rôle",role==="vendor"?"🏪 Commerçant":"🛵 Livreur"],
             ["Nom","Joeldy Tsina"],
             ...(role==="vendor"?[["Établissement","Mon Commerce"],["Type",{boutique:"Boutique",restaurant:"Restaurant",patisserie:"Pâtisserie",supermarche:"Supermarché",pharmacie:"Pharmacie",service:"Service"}[selCats.find(c=>["boutique","restaurant","patisserie","supermarche","pharmacie","service"].includes(c))]||"—"]]:[["Véhicule","🛵 Honda PCX"],["Plaque","BZ-4521"]]),
-            ["Documents",`${Object.values(docs).filter(Boolean).length}/${Object.keys(docs).length}`],
+            ["Documents",`${Object.values(docs).filter(v=>v&&v!==true&&v!==false).length}/${Object.keys(docs).length}`],
             ...(role==="vendor"?[["Plan",plan==="starter"?"Starter (Gratuit)":plan==="pro"?"Pro (15k/mois)":"Enterprise (45k/mois)"]]:[])]
           .map(([l,v])=><div key={l} className="vs-row"><span>{l}</span><b>{v}</b></div>)}
         </div>

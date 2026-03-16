@@ -1,5 +1,6 @@
 import toast from "../../utils/toast";
 import { useState, useEffect, useRef } from "react";
+import { CHAT_AVATARS } from "../../data/images";
 
 function DrChatVendorScr({delivery:dl,onBack}){
   const now=()=>{const t=new Date();return `${t.getHours()}:${String(t.getMinutes()).padStart(2,"0")}`};
@@ -20,7 +21,7 @@ function DrChatVendorScr({delivery:dl,onBack}){
     <div className="chat-head"><button onClick={onBack} style={{width:36,height:36,borderRadius:10,border:"1px solid #E8E6E1",background:"#fff",cursor:"pointer",display:"flex",alignItems:"center",justifyContent:"center"}}><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#191815" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><path d="M19 12H5M12 19l-7-7 7-7"/></svg></button><div style={{position:"relative"}}><div className="ch-av" style={{background:"linear-gradient(135deg,#6366F1,#A855F7)",overflow:"hidden"}}>{dl.vendor.logo?<img src={dl.vendor.logo} style={{width:"100%",height:"100%",objectFit:"cover"}} alt=""/>:dl.vendor.avatar}</div><div style={{position:"absolute",bottom:-1,right:-1,width:10,height:10,borderRadius:"50%",background:"#10B981",border:"2px solid #fff"}}/></div><div className="ch-info"><h4>{dl.vendor.name}</h4><p style={{fontSize:11,color:"#908C82"}}>🟢 En ligne · 📍 Bacongo · {dl.ref}</p></div><button className="ch-call" onClick={()=>toast.info("📞 Appel")}>📞</button></div>
     <div className="chat-body" ref={ref}>
       {msgs.map((m,i)=><div key={i} className={`msg ${m.from==="user"?"user":"bot"}`} style={m.from==="user"?{background:"#10B981"}:{}}>
-        {m.isWelcome&&<div style={{fontSize:24,marginBottom:4}}>{dl.vendor.avatar}</div>}
+        {m.isWelcome&&<div style={{width:24,height:24,borderRadius:6,overflow:"hidden",marginBottom:4}}>{dl.vendor.logo?<img src={dl.vendor.logo} style={{width:"100%",height:"100%",objectFit:"cover"}} alt=""/>:<img src={CHAT_AVATARS.vendor} style={{width:"100%",height:"100%",objectFit:"cover"}} alt=""/>}</div>}
         {m.attachment&&m.attachment.type==="image"&&m.attachment.url&&<img src={m.attachment.url} alt="" onClick={()=>setViewImg(m.attachment.url)} style={{maxWidth:"100%",maxHeight:180,borderRadius:10,marginBottom:4,cursor:"pointer"}}/>}
         {m.attachment&&m.attachment.type==="file"&&<div style={{display:"flex",alignItems:"center",gap:8,padding:"8px 12px",background:"rgba(0,0,0,.05)",borderRadius:10,marginBottom:4}}><span style={{fontSize:20}}>📄</span><div><div style={{fontSize:12,fontWeight:600}}>{m.attachment.name}</div><div style={{fontSize:10,opacity:.7}}>{m.attachment.size}</div></div></div>}
         {m.text&&<span>{m.text}</span>}<div className="msg-time">{m.time}</div>

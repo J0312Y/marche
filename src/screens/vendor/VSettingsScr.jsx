@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { useApp } from "../../context/AppContext";
+import { VENDOR_LOGO_DEFAULT } from "../../data/images";
 import toast from "../../utils/toast";
 
 function VSettingsScr({onBack,go}){
@@ -12,7 +13,7 @@ function VSettingsScr({onBack,go}){
   const [sound,setSound]=useState(true);
   const [lang,setLang]=useState("fr");
   return(<div className="scr" style={{paddingBottom:80}}><div className="appbar"><button onClick={onBack}>←</button><h2>Paramètres boutique</h2><div style={{width:38}}/></div>
-    <div className="vs-header"><div className="vs-logo">👔</div><h3 style={{fontSize:18,fontWeight:700}}>Mon Commerce</h3><p style={{fontSize:12,color:"#908C82"}}>Mode & Accessoires africains</p><div className="edit-logo">📸 Changer le logo</div></div>
+    <div className="vs-header"><div className="vs-logo" style={{overflow:"hidden",padding:0}}><img src={VENDOR_LOGO_DEFAULT} style={{width:"100%",height:"100%",objectFit:"cover"}} alt=""/></div><h3 style={{fontSize:18,fontWeight:700}}>Mon Commerce</h3><p style={{fontSize:12,color:"#908C82"}}>Mode & Accessoires africains</p><div className="edit-logo" onClick={()=>document.getElementById("vset-logo")?.click()}>📸 Changer le logo</div><input id="vset-logo" type="file" accept="image/*" style={{display:"none"}} onChange={e=>{const f=e.target.files?.[0];if(f){toast.success("Logo mis à jour 📸")}}}/></div>
     <div style={{padding:"0 16px"}}>
       <div className="field"><label>Nom de l'établissement</label><input defaultValue="Mon Commerce"/></div>
       <div className="field"><label>Description</label><textarea rows={3} defaultValue="Vêtements et accessoires africains modernes. Wax, Bogolan, Cuir artisanal."/></div>

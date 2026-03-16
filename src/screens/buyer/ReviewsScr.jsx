@@ -1,4 +1,5 @@
 import { useState, useRef } from "react";
+import { CHAT_AVATARS } from "../../data/images";
 import toast from "../../utils/toast";
 import { useLoad } from "../../hooks";
 import { social } from "../../services";
@@ -31,7 +32,7 @@ function ReviewsScr({product:p,onBack}){
 
   const submitReview=()=>{
     if(userRating===0)return;
-    setUserReviews(r=>[{name:"Moi",rating:userRating,text:userText,date:"Aujourd'hui",avatar:"😊",photos:userPhotos.map(p=>p.url)},...r]);
+    setUserReviews(r=>[{name:"Moi",rating:userRating,text:userText,date:"Aujourd'hui",avatar:"https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=80&h=80&fit=crop&crop=face",photos:userPhotos.map(p=>p.url)},...r]);
     setWriting(false);setUserRating(0);setUserText("");setUserPhotos([]);setSubmitted(true);toast.success("Avis publié avec succès ⭐");
     setTimeout(()=>setSubmitted(false),3000);
   };
@@ -112,7 +113,7 @@ function ReviewsScr({product:p,onBack}){
     {/* All reviews */}
     {allReviews.map((r,i)=><div key={i} className="review-card" style={r.name==="Moi"?{border:"2px solid rgba(99,102,241,0.2)",background:"rgba(99,102,241,0.02)"}:{}}>
       <div className="review-top">
-        <div className="rav">{r.avatar}</div>
+        <div className="rav" style={{overflow:"hidden",padding:0}}>{r.avatar?.startsWith("http")?<img src={r.avatar} style={{width:"100%",height:"100%",objectFit:"cover"}} alt=""/>:<img src={CHAT_AVATARS.client} style={{width:"100%",height:"100%",objectFit:"cover"}} alt=""/>}</div>
         <div style={{flex:1}}><h4 style={{fontSize:14,fontWeight:600}}>{r.name}{r.name==="Moi"&&<span style={{fontSize:10,color:"#6366F1",marginLeft:6,fontWeight:700}}>VOUS</span>}</h4></div>
         <span className="rd">{r.date}</span>
       </div>

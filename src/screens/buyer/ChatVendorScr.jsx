@@ -1,5 +1,6 @@
 import toast from "../../utils/toast";
 import { useState, useEffect, useRef } from "react";
+import { VENDOR_LOGO_DEFAULT } from "../../data/images";
 
 function ChatVendorScr({onBack,vendorName,vendorAvatar,vendor}){
   const now=()=>{const t=new Date();return `${t.getHours()}:${String(t.getMinutes()).padStart(2,"0")}`};
@@ -71,7 +72,7 @@ function ChatVendorScr({onBack,vendorName,vendorAvatar,vendor}){
     <div className="chat-head">
       <button onClick={onBack} style={{width:36,height:36,borderRadius:10,border:"1px solid #E8E6E1",background:"#fff",cursor:"pointer",display:"flex",alignItems:"center",justifyContent:"center"}}><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#191815" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><path d="M19 12H5M12 19l-7-7 7-7"/></svg></button>
       <div style={{position:"relative"}}>
-        <div className="ch-av">{vInfo.avatar}</div>
+        <div className="ch-av" style={{overflow:"hidden",padding:0}}><img src={VENDOR_LOGO_DEFAULT} style={{width:"100%",height:"100%",objectFit:"cover"}} alt=""/></div>
         <div style={{position:"absolute",bottom:-1,right:-1,width:10,height:10,borderRadius:"50%",background:vInfo.online?"#10B981":"#908C82",border:"2px solid #fff"}}/>
       </div>
       <div className="ch-info">
@@ -89,7 +90,7 @@ function ChatVendorScr({onBack,vendorName,vendorAvatar,vendor}){
       {msgs.length===0&&<div style={{textAlign:"center",padding:"40px 20px",color:"#C4C1BA"}}><div style={{fontSize:36,marginBottom:8}}>{vInfo.avatar}</div><div style={{fontSize:13}}>Connexion avec {vInfo.name}...</div></div>}
 
       {msgs.map((m,i)=><div key={i} className={`msg ${m.from==="user"?"user":"bot"}`}>
-        {m.isWelcome&&<div style={{fontSize:28,marginBottom:6}}>{vInfo.avatar}</div>}
+        {m.isWelcome&&<div style={{width:28,height:28,borderRadius:8,overflow:"hidden",marginBottom:6}}><img src={VENDOR_LOGO_DEFAULT} style={{width:"100%",height:"100%",objectFit:"cover"}} alt=""/></div>}
         {m.attachment&&m.attachment.type==="image"&&m.attachment.url&&(
           <img src={m.attachment.url} alt="" onClick={()=>setViewImg(m.attachment.url)} style={{maxWidth:"100%",maxHeight:180,borderRadius:10,marginBottom:4,cursor:"pointer"}}/>
         )}

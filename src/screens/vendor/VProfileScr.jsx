@@ -1,6 +1,7 @@
 import { useState } from "react";
 import toast from "../../utils/toast";
 
+import { VENDOR_LOGO_DEFAULT } from "../../data/images";
 function VProfileScr({go,onSwitch,vendorPlan,onLogout}){
   const planInfo=vendorPlan==="starter"?{name:"Starter",color:"#908C82",badge:"Gratuit",icon:"🆓"}:vendorPlan==="pro"?{name:"Pro",color:"#6366F1",badge:"Pro ✓",icon:"⭐"}:{name:"Enterprise",color:"#F59E0B",badge:"Enterprise ★",icon:"🚀"};
   const [lockPopup,setLockPopup]=useState(null);
@@ -27,7 +28,7 @@ function VProfileScr({go,onSwitch,vendorPlan,onLogout}){
 
     {/* Profile + Plan card */}
     <div className="vs-header">
-      <div className="vs-logo">👔</div>
+      <div className="vs-logo" style={{overflow:"hidden",padding:0}}><img src={VENDOR_LOGO_DEFAULT} style={{width:"100%",height:"100%",objectFit:"cover"}} alt=""/></div>
       <h3 style={{fontSize:18,fontWeight:700}}>Mon Commerce</h3>
       <div style={{display:"inline-flex",alignItems:"center",gap:6,padding:"4px 12px",borderRadius:20,background:vendorPlan==="enterprise"?"rgba(245,158,11,0.08)":vendorPlan==="pro"?"rgba(99,102,241,0.08)":"#F5F4F1",marginTop:6}}>
         <span style={{fontSize:12}}>{planInfo.icon}</span>

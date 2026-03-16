@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import toast from "../../utils/toast";
+import { DRIVER_PHOTO } from "../../data/images";
 import MapView from "../../components/MapView";
 
 const STEPS=[
@@ -57,8 +58,8 @@ function TrackingScr({onBack,go}){
     <div className="scr" style={{padding:16}}>
       {/* Driver card */}
       <div style={{display:"flex",alignItems:"center",gap:12,padding:14,background:"#fff",border:"1px solid #E8E6E1",borderRadius:16,marginBottom:12}}>
-        <div style={{width:48,height:48,borderRadius:14,background:"linear-gradient(135deg,#10B981,#059669)",display:"flex",alignItems:"center",justifyContent:"center",fontSize:22,flexShrink:0,position:"relative"}}>
-          🧑
+        <div style={{width:48,height:48,borderRadius:14,background:"linear-gradient(135deg,#10B981,#059669)",display:"flex",alignItems:"center",justifyContent:"center",fontSize:22,flexShrink:0,position:"relative",overflow:"hidden"}}>
+          <img src={DRIVER_PHOTO} style={{width:"100%",height:"100%",objectFit:"cover"}} alt=""/>
           <div style={{position:"absolute",bottom:-2,right:-2,width:14,height:14,borderRadius:"50%",background:"#10B981",border:"2px solid #fff",display:"flex",alignItems:"center",justifyContent:"center"}}>
             <div style={{width:6,height:6,borderRadius:"50%",background:"#fff"}}/>
           </div>
