@@ -7,7 +7,7 @@ function LoginScr({onDone,onSocial}){
   if(legal)return legal==="terms"?<TermsScr onBack={()=>setLegal(null)}/>:<PrivacyScr onBack={()=>setLegal(null)}/>;
   return(
     <div className="auth">
-      <div style={{textAlign:"center",margin:"20px 0 30px"}}><div style={{width:56,height:56,borderRadius:16,background:"linear-gradient(135deg,#6366F1,#A855F7)",display:"flex",alignItems:"center",justifyContent:"center"}}><svg width="32" height="32" viewBox="0 0 64 64" fill="none"><path d="M16 16h5l6 26h16l6-20H24" stroke="#fff" strokeWidth="3.5" strokeLinecap="round" strokeLinejoin="round"/><circle cx="28" cy="50" r="3.5" fill="#fff"/><circle cx="42" cy="50" r="3.5" fill="#fff"/></svg></div></div>
+      <div style={{textAlign:"center",margin:"20px 0 30px"}}><span style={{fontSize:48}}>🛒</span></div>
       <h2>Bienvenue !</h2>
       <div className="sub">Connectez-vous pour accéder au marketplace</div>
       <div className="phone-input">
