@@ -99,20 +99,10 @@ function OnboardingScr({onDone}){
         {/* Bottom gradient for smooth transition to white */}
         <div style={{position:"absolute",bottom:0,left:0,right:0,height:80,background:"linear-gradient(transparent, var(--bg, #FAF9F6))"}}/>
 
-        {/* Progress bars */}
-        <div style={{position:"absolute",top:0,left:0,right:0,zIndex:10,display:"flex",gap:4,padding:"10px 14px"}}>
-          {SLIDES.map((_,i)=>(
-            <div key={i} style={{flex:1,height:3,borderRadius:2,background:"rgba(255,255,255,.3)",overflow:"hidden"}}>
-              <div style={{height:"100%",borderRadius:2,background:"var(--card)",width:i<s?"100%":i===s?`${progress}%`:"0%",transition:i===s?"none":"width .3s ease"}}/>
-            </div>
-          ))}
-        </div>
-
-        {/* Counter + Skip */}
-        <div style={{position:"absolute",top:24,left:14,right:14,zIndex:11,display:"flex",justifyContent:"space-between",alignItems:"center"}}>
-          <span style={{fontSize:12,color:"rgba(255,255,255,.7)",fontWeight:600}}>{s+1}/3</span>
-          {s<2&&<button onClick={onDone} style={{padding:"5px 14px",borderRadius:20,background:"rgba(255,255,255,.2)",backdropFilter:"blur(8px)",border:"1px solid rgba(255,255,255,.25)",color:"#fff",fontSize:11,fontWeight:600,cursor:"pointer",fontFamily:"inherit"}}>Passer</button>}
-        </div>
+        {/* Skip button */}
+        {s<2&&<div style={{position:"absolute",top:14,right:14,zIndex:11}}>
+          <button onClick={onDone} style={{padding:"5px 14px",borderRadius:20,background:"rgba(255,255,255,.2)",backdropFilter:"blur(8px)",border:"1px solid rgba(255,255,255,.25)",color:"#fff",fontSize:11,fontWeight:600,cursor:"pointer",fontFamily:"inherit"}}>Passer</button>
+        </div>}
 
         {/* Tap zones */}
         <div onClick={()=>s>0&&goToSlide(s-1)} style={{position:"absolute",left:0,top:40,bottom:0,width:"25%",zIndex:3,cursor:s>0?"pointer":"default"}}/>
