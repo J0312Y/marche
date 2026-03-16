@@ -2,7 +2,7 @@ import { useState } from "react";
 import Img from "../../components/Img";
 import { useLoad } from "../../hooks";
 import { vendor } from "../../services";
-import Loading from "../../components/Loading";
+import { SkeletonCards } from "../../components/Loading";
 import { fmt } from "../../utils/helpers";
 
 const ST={new:{bg:"rgba(59,130,246,0.08)",color:"#3B82F6",label:"🆕 Nouvelle"},preparing:{bg:"rgba(245,158,11,0.08)",color:"#F59E0B",label:"🔄 Préparation"},shipped:{bg:"rgba(139,92,246,0.08)",color:"#8B5CF6",label:"🚚 Expédiée"},delivered:{bg:"rgba(16,185,129,0.08)",color:"#10B981",label:"✅ Livrée"}};
@@ -16,7 +16,7 @@ function VOrdersScr({go,onBack}){
     <div className="appbar">{onBack&&<button onClick={onBack}>←</button>}<h2>Commandes ({counts.all})</h2><div style={{width:38}}/></div>
     <div className="vo-filter">{[["all","Tous",counts.all],["new","🆕",counts.new],["preparing","🔄",counts.preparing],["shipped","🚚",counts.shipped],["delivered","✅",counts.delivered]].map(([k,l,c])=><button key={k} className={filter===k?"on":""} onClick={()=>setFilter(k)}>{l} {c}</button>)}</div>
     <div style={{padding:"0 16px 80px"}}>
-      {loading?<Loading/>:orders.length===0?<div style={{textAlign:"center",padding:"50px 0"}}><div style={{fontSize:40,marginBottom:8}}>📭</div><div style={{fontSize:14,fontWeight:600}}>Aucune commande</div></div>
+      {loading?<SkeletonCards/>:orders.length===0?<div style={{textAlign:"center",padding:"50px 0"}}><div style={{fontSize:40,marginBottom:8}}>📭</div><div style={{fontSize:14,fontWeight:600}}>Aucune commande</div></div>
       :orders.map(o=>{
         const st=ST[o.status]||ST.new;
         return(<div key={o.id} onClick={()=>go("vOrderDetail",o)} style={{padding:14,background:"#fff",border:"1px solid #E8E6E1",borderRadius:16,marginBottom:10,cursor:"pointer",transition:"all .15s"}}>

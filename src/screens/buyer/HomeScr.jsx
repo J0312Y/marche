@@ -2,10 +2,11 @@ import { useState } from "react";
 import Img from "../../components/Img";
 import { useData } from "../../hooks";
 import { useApp } from "../../context/AppContext";
+import { SkeletonHome } from "../../components/Loading";
 import { fmt, disc, getVendorPromo, totalDisc, effectivePrice } from "../../utils/helpers";
 
 function HomeScr({go,favs,toggleFav,isFav}){
-  const { P, VENDORS, CATS } = useData();
+  const { P, VENDORS, CATS, loading: dataLoading } = useData();
   const { cartCount } = useApp();
   const [selCat,setSC]=useState(0);
   const [selType,setSelType]=useState("all");
@@ -15,6 +16,9 @@ function HomeScr({go,favs,toggleFav,isFav}){
   const [showFilter,setShowFilter]=useState(false);
   const [filterType,setFilterType]=useState("all");
   const [filterSort,setFilterSort]=useState("popular");
+
+  if(dataLoading || P.length===0) return <div className="scr"><SkeletonHome/></div>;
+
   const trending=["iPhone","Samsung","Wax","Pâtisserie","Braisé","Pharmacie","Livraison","Promo"];
   const types=[{id:"all",icon:"🏠",name:"Tout"},{id:"restaurant",icon:"🍽️",name:"Restos"},{id:"patisserie",icon:"🧁",name:"Pâtisseries"},{id:"supermarche",icon:"🛒",name:"Courses"},{id:"pharmacie",icon:"💊",name:"Pharma"},{id:"boutique",icon:"🏪",name:"Boutiques"},{id:"service",icon:"🔧",name:"Services"}];
   const filteredP=selType==="all"?P:P.filter(p=>p.type===selType);

@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { useLoad } from "../../hooks";
 import { vendor } from "../../services";
-import Loading from "../../components/Loading";
+import { SkeletonDashboard } from "../../components/Loading";
 import { fmt } from "../../utils/helpers";
 
 const CHART_LABELS={
@@ -13,7 +13,7 @@ const CHART_LABELS={
 function VDashboardScr({go}){
   const [period,setPeriod]=useState("week");
   const { data, loading } = useLoad(() => vendor.getDashboard(period), [period]);
-  if(loading||!data) return <div className="scr" style={{padding:16}}><h2 style={{marginBottom:12}}>📊 Tableau de bord</h2><Loading/></div>;
+  if(loading||!data) return <div className="scr" style={{padding:16}}><h2 style={{marginBottom:12}}>📊 Tableau de bord</h2><SkeletonDashboard/></div>;
   const { stats:s, new_orders:newOrders, chart=[], top_products:topProducts=[] } = data;
   const maxBar=Math.max(...chart,1);
   const labels=CHART_LABELS[period]||CHART_LABELS.week;

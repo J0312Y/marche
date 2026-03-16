@@ -3,7 +3,7 @@ import toast from "../../utils/toast";
 import { useLoad, useData } from "../../hooks";
 import { user as userSvc } from "../../services";
 import { fmt, getVendorPromo } from "../../utils/helpers";
-import Loading from "../../components/Loading";
+import { SkeletonCards } from "../../components/Loading";
 
 function CouponsScr({onBack,cart=[],appliedCoupon,onApply}){
   const [manualCode,setManualCode]=useState("");
@@ -71,7 +71,7 @@ function CouponsScr({onBack,cart=[],appliedCoupon,onApply}){
     {/* Available coupons */}
     <div style={{fontSize:14,fontWeight:700,marginBottom:12}}>Coupons disponibles</div>
 
-    {loading?<Loading/>:(COUPONS||[]).map(c=>{
+    {loading?<SkeletonCards count={3}/>:(COUPONS||[]).map(c=>{
       const isApplied=appliedCoupon?.code===c.code;
       const meetsMin=subtotal>=c.min;
       return(<div key={c.id} style={{padding:16,background:isApplied?"rgba(16,185,129,0.04)":"#fff",border:isApplied?"2px solid #10B981":"1px solid #E8E6E1",borderRadius:16,marginBottom:10,transition:"all .2s"}}>

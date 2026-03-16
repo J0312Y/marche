@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { useLoad } from "../../hooks";
 import { social } from "../../services";
-import Loading from "../../components/Loading";
+import { SkeletonList } from "../../components/Loading";
 import toast from "../../utils/toast";
 
 const DETAILS = {
@@ -60,7 +60,7 @@ function NotifScr({ onBack, go }) {
         )}
       </div>
 
-      {loading ? <Loading /> : items.length === 0 ? (
+      {loading ? <SkeletonList count={5}/> : items.length === 0 ? (
         <div style={{ textAlign: "center", padding: "60px 20px" }}>
           <div style={{ fontSize: 48, marginBottom: 10 }}>🔔</div>
           <h3 style={{ fontSize: 16, fontWeight: 700, marginBottom: 4 }}>Aucune notification</h3>

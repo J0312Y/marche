@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { useLoad } from "../../hooks";
 import { vendor } from "../../services";
-import Loading from "../../components/Loading";
+import { SkeletonStats } from "../../components/Loading";
 import { fmt } from "../../utils/helpers";
 
 const CHART_LABELS={
@@ -19,7 +19,7 @@ const fmtChart=(v)=>{
 function VStatsScr({onBack}){
   const [period,setPeriod]=useState("week");
   const { data: V_STATS, loading } = useLoad(() => vendor.getReports(period), [period]);
-  if(loading||!V_STATS) return <div className="scr" style={{padding:16}}><div className="appbar" style={{padding:0,marginBottom:12}}><button onClick={onBack}>←</button><h2>Statistiques</h2><div style={{width:38}}/></div><Loading/></div>;
+  if(loading||!V_STATS) return <div className="scr" style={{padding:16}}><div className="appbar" style={{padding:0,marginBottom:12}}><button onClick={onBack}>←</button><h2>Statistiques</h2><div style={{width:38}}/></div><SkeletonStats/></div>;
 
   const s=V_STATS[period]||V_STATS.week||V_STATS;
   const chart=period==="month"?(V_STATS.chartMonth||V_STATS.chartWeek||[]):(V_STATS.chartWeek||[]);

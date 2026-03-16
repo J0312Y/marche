@@ -25,6 +25,8 @@ const CSS=`
 .splash .loader{margin-top:40px;width:36px;height:36px;border:3px solid rgba(255,255,255,.2);border-top-color:#fff;border-radius:50%;animation:spin 1s linear infinite}
 @keyframes spin{to{transform:rotate(360deg)}}
 .spinner{width:16px;height:16px;border:2px solid rgba(255,255,255,.3);border-top-color:#fff;border-radius:50%;animation:spin .6s linear infinite;display:inline-block}
+.sk{background:linear-gradient(90deg,#F5F4F1 25%,#E8E6E1 37%,#F5F4F1 63%);background-size:400% 100%;animation:sk-shimmer 1.4s ease infinite}
+@keyframes sk-shimmer{0%{background-position:100% 50%}100%{background-position:0 50%}}
 @keyframes marquee{0%{transform:translateX(0%)}100%{transform:translateX(-50%)}}
 .marquee-wrap{overflow:hidden;padding:0 0 6px;position:relative}
 .marquee-track{display:inline-flex;gap:8px;white-space:nowrap;animation:marquee 14s linear infinite}

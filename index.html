@@ -10,5 +10,9 @@
   <body>
     <div id="root"></div>
     <script type="module" src="/src/main.jsx"></script>
+    <script>
+      // Clean up any leftover service worker
+      if('serviceWorker' in navigator){navigator.serviceWorker.getRegistrations().then(r=>r.forEach(w=>w.unregister()))}
+    </script>
   </body>
 </html>

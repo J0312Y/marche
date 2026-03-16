@@ -49,7 +49,7 @@ export default function VendorScreens() {
     case "vDriverProfile": return <VDriverProfileScr driver={data} go={go} onBack={back} />;
     case "vTrackDelivery": return <VTrackDeliveryScr delivery={data} go={go} onBack={back} />;
     case "vDriverChat": return <VDriverChatScr delivery={data} onBack={back} />;
-    case "vNotif": return <VNotifScr onBack={back} />;
+    case "vNotif": return <VNotifScr onBack={back} go={go} />;
     case "vSettings": return <VSettingsScr onBack={back} go={go} />;
     case "vReports": return <VReportsScr onBack={back} />;
     case "vSupport": return <VSupportScr go={go} onBack={back} vendorPlan={vendorPlan} />;
