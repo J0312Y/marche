@@ -260,7 +260,7 @@ function HomeScr({go,favs,toggleFav,isFav}){
       const storyVendors=VENDORS.filter(v=>v.verified).slice(0,6);
       const sv=storyViewer.vendor;
       const promoText=sv.promo?`🏷️ ${sv.promo.name} · -${sv.promo.discount}% jusqu'au ${sv.promo.ends}`:`⭐ ${sv.rating}/5 · ${sv.products} articles · ${sv.followers} abonnés`;
-      return(<div style={{position:"fixed",inset:0,background:"#000",zIndex:200,display:"flex",flexDirection:"column"}}>
+      return(<div style={{position:"absolute",inset:0,background:"#000",zIndex:200,display:"flex",flexDirection:"column",borderRadius:"inherit",overflow:"hidden"}}>
         {/* Progress bars */}
         <div style={{display:"flex",gap:3,padding:"8px 12px",zIndex:10}}>
           {storyVendors.map((v,i)=><div key={v.id} style={{flex:1,height:2,borderRadius:1,background:"rgba(255,255,255,.25)",overflow:"hidden"}}>
