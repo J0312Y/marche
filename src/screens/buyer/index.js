@@ -33,3 +33,10 @@ export { default as RoleRegScr } from './RoleRegScr';
 
 export { default as PaymentHistoryScr } from './PaymentHistoryScr';
 export { default as RateDriverScr } from './RateDriverScr';
+export { default as ReferralScr } from './ReferralScr';
+export { default as LoyaltyScr } from './LoyaltyScr';
+export { default as ReturnScr } from './ReturnScr';
+export { default as GiftCardScr } from './GiftCardScr';
+export { default as QRScanScr } from './QRScanScr';
+export { default as PriceAlertScr } from './PriceAlertScr';
+export { default as GroupBuyScr } from "./GroupBuyScr";

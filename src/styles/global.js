@@ -499,6 +499,7 @@ const CSS=`
 .dr-request{margin:0 20px 14px;padding:18px;border-radius:20px;border:2px solid #10B981;background:rgba(16,185,129,0.03);position:relative;overflow:hidden}
 .dr-request::before{content:'';position:absolute;top:0;left:0;right:0;height:4px;background:linear-gradient(90deg,#10B981,#34D399);animation:dr-pulse 2s infinite}
 @keyframes dr-pulse{0%,100%{opacity:1}50%{opacity:.4}}
+@keyframes scanLine{0%,100%{top:10%}50%{top:90%}}
 @keyframes blink{0%,100%{opacity:.2}50%{opacity:1}}
 @keyframes fadeIn{from{opacity:0;transform:translateY(4px)}to{opacity:1;transform:translateY(0)}}
 @keyframes toast-in{from{opacity:0;transform:translateY(20px) scale(.95)}to{opacity:1;transform:translateY(0) scale(1)}}

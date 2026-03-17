@@ -8,7 +8,7 @@ import { fmt, disc, getVendorPromo, totalDisc, effectivePrice } from "../../util
 
 function HomeScr({go,favs,toggleFav,isFav}){
   const { P, VENDORS, CATS, loading: dataLoading, reload } = useData();
-  const { cartCount } = useApp();
+  const { cartCount, recentlyViewed } = useApp();
   const [selCat,setSC]=useState(0);
   const [selType,setSelType]=useState("all");
   const [homeQ,setHomeQ]=useState("");
@@ -136,9 +136,44 @@ function HomeScr({go,favs,toggleFav,isFav}){
         </div>)}
       </div>
 
+
+      {/* ═══ STORIES ═══ */}
+      <div style={{display:"flex",gap:10,padding:"0 16px 10px",overflowX:"auto",scrollbarWidth:"none"}}>
+        {VENDORS.filter(v=>v.verified).slice(0,6).map((v,i)=><div key={"story-"+v.id} onClick={()=>go("vendor",v)} style={{flexShrink:0,textAlign:"center",cursor:"pointer"}}>
+          <div style={{width:56,height:56,borderRadius:18,padding:2,background:i<3?"linear-gradient(135deg,#6366F1,#A855F7)":"linear-gradient(135deg,var(--border),var(--border))",marginBottom:4}}>
+            <div style={{width:"100%",height:"100%",borderRadius:16,overflow:"hidden",border:"2px solid var(--bg)"}}>
+              {v.logo?<img src={v.logo} style={{width:"100%",height:"100%",objectFit:"cover"}} alt=""/>:<div style={{width:"100%",height:"100%",background:"var(--light)",display:"flex",alignItems:"center",justifyContent:"center",fontSize:18}}>{v.avatar}</div>}
+            </div>
+          </div>
+          <div style={{fontSize:9,fontWeight:600,color:"var(--muted)",maxWidth:56,overflow:"hidden",whiteSpace:"nowrap",textOverflow:"ellipsis"}}>{v.name.split(" ")[0]}</div>
+        </div>)}
+      </div>
+
+      {/* Vendor Stories */}
+      <div style={{display:"flex",gap:10,padding:"0 16px 10px",overflowX:"auto",scrollbarWidth:"none"}}>
+        {VENDORS.filter(v=>v.verified).slice(0,6).map((v,i)=>{
+          const hasNew=i<3;
+          return(<div key={"story-"+v.id} onClick={()=>go("vendor",v)} style={{flexShrink:0,textAlign:"center",cursor:"pointer",width:62}}>
+            <div style={{width:56,height:56,borderRadius:18,padding:hasNew?2:0,background:hasNew?"linear-gradient(135deg,#6366F1,#A855F7,#F59E0B)":"transparent",margin:"0 auto 4px"}}>
+              <div style={{width:"100%",height:"100%",borderRadius:16,overflow:"hidden",border:hasNew?"2px solid var(--bg)":"2px solid var(--border)"}}>
+                {v.logo?<img src={v.logo} style={{width:"100%",height:"100%",objectFit:"cover"}} alt=""/>:<div style={{width:"100%",height:"100%",background:"var(--light)",display:"flex",alignItems:"center",justifyContent:"center",fontSize:18}}>{v.avatar}</div>}
+              </div>
+            </div>
+            <div style={{fontSize:9,fontWeight:600,color:"var(--text)",overflow:"hidden",whiteSpace:"nowrap",textOverflow:"ellipsis"}}>{v.name.split(" ")[0]}</div>
+          </div>);
+        })}
+      </div>
+
       <div className="banner"><div className="banner-l"><h3>Soldes de Février</h3><p>Jusqu'à -40% sur tout le marketplace</p><span className="banner-btn" onClick={()=>go("flash")}>Voir les offres</span></div><span style={{fontSize:56}}>🛍️</span></div>
 
-      {/* Restos à la une */}
+      {/* Group Buy promo */}
+      <div onClick={()=>go("groupBuy")} style={{margin:"0 16px 14px",padding:12,background:"linear-gradient(135deg,rgba(99,102,241,0.06),rgba(168,85,247,0.06))",border:"1px solid rgba(99,102,241,0.12)",borderRadius:14,display:"flex",alignItems:"center",gap:10,cursor:"pointer"}}>
+        <div style={{width:38,height:38,borderRadius:12,background:"#6366F1",display:"flex",alignItems:"center",justifyContent:"center",fontSize:18,flexShrink:0}}>🤝</div>
+        <div style={{flex:1}}><div style={{fontSize:13,fontWeight:700}}>Achats groupés — Jusqu'à -30%</div><div style={{fontSize:11,color:"var(--muted)",marginTop:1}}>3 offres en cours · Rejoignez un groupe</div></div>
+        <span style={{color:"#6366F1",fontSize:16}}>›</span>
+      </div>
+
+      {/* Restos à la une */}}
       {(selType==="all"||selType==="restaurant")&&nearbyRestos.length>0&&<>
         <div className="sec"><h3>🍽️ Commander à manger</h3><span onClick={()=>go("restoList")}>Voir tout</span></div>
         <div className="marquee-wrap"><div className="marquee-track-resto">
@@ -198,6 +233,33 @@ function HomeScr({go,favs,toggleFav,isFav}){
 
       <div className="sec"><h3>{selType==="all"?"Établissements proches":types.find(t=>t.id===selType)?.name+" proches"}</h3><span onClick={()=>go("nearby")}>Voir la carte</span></div>
       <div className="vlist">{filteredV.slice(0,4).map(v=><div key={v.id} className="vcard" onClick={()=>go("vendor",v)}><div className="vav" style={v.logo?{overflow:"hidden",padding:0}:{}}>{v.logo?<img src={v.logo} style={{width:"100%",height:"100%",objectFit:"cover"}} alt=""/>:v.avatar}</div><div className="vi"><h4>{v.name}{v.verified&&<span className="vf">✓</span>}</h4><div className="vloc">📍 {v.loc}{v.eta&&<span style={{marginLeft:8,color:"#10B981",fontWeight:600}}>🕐 {v.eta}</span>}</div><div className="vst">⭐ <b>{v.rating}</b> · {v.products} {v.type==="restaurant"?"plats":v.type==="service"?"services":"produits"}</div></div><span style={{color:"var(--muted)"}}>›</span></div>)}</div>
+
+
+      {/* ═══ RECENTLY VIEWED ═══ */}
+      {recentlyViewed.length>0&&<>
+        <div className="sec"><h3>🕐 Récemment consultés</h3></div>
+        <div style={{display:"flex",gap:8,padding:"0 16px 14px",overflowX:"auto",scrollbarWidth:"none"}}>
+          {recentlyViewed.slice(0,6).map(p=><div key={"rv-"+p.id} onClick={()=>go("detail",p)} style={{flexShrink:0,width:100,cursor:"pointer"}}>
+            <div style={{width:100,height:80,borderRadius:12,overflow:"hidden",background:"var(--light)",marginBottom:4}}>
+              <Img src={p.photo} emoji={p.img} style={{width:"100%",height:"100%"}} fit="cover"/>
+            </div>
+            <div style={{fontSize:10,fontWeight:600,overflow:"hidden",whiteSpace:"nowrap",textOverflow:"ellipsis"}}>{p.name}</div>
+            <div style={{fontSize:10,fontWeight:700,color:"#6366F1"}}>{fmt(p.price)}</div>
+          </div>)}
+        </div>
+      </>}
+
+      {/* Recently viewed */}
+      {(()=>{try{const rv=JSON.parse(localStorage.getItem("lamuka_recent")||"[]");const rp=rv.map(id=>P.find(p=>p.id===id)).filter(Boolean).slice(0,6);if(rp.length>0)return(<>
+        <div className="sec"><h3>👁️ Récemment consultés</h3></div>
+        <div style={{display:"flex",gap:8,padding:"0 16px 10px",overflowX:"auto",scrollbarWidth:"none"}}>
+          {rp.map(p=><div key={"rv-"+p.id} onClick={()=>go("detail",p)} style={{flexShrink:0,width:100,cursor:"pointer"}}>
+            <div style={{width:100,height:80,borderRadius:12,overflow:"hidden",background:"var(--light)",marginBottom:4}}><Img src={p.photo} emoji={p.img} style={{width:"100%",height:"100%"}} fit="cover"/></div>
+            <div style={{fontSize:10,fontWeight:600,overflow:"hidden",whiteSpace:"nowrap",textOverflow:"ellipsis"}}>{p.name}</div>
+            <div style={{fontSize:10,fontWeight:700,color:"#6366F1"}}>{fmt(p.price)}</div>
+          </div>)}
+        </div>
+      </>);return null}catch{return null}})()}
 
       <div className="sec"><h3>{selType==="all"?"Populaires":"Populaires en "+types.find(t=>t.id===selType)?.name}</h3><span onClick={()=>go("allProducts")}>Voir tout</span></div>
       <div className="pgrid">{filteredP.map(p=>{const vp=getVendorPromo(p,VENDORS);const td=totalDisc(p,VENDORS);return(<div key={p.id} className="pcard" onClick={()=>go("detail",p)}><div className="pimg"><Img src={p.photo} emoji={p.img} style={{width:"100%",height:"100%"}} fit="cover"/>{p.old&&<span className="badge">-{disc(p)}%</span>}{vp&&<span className="tag" style={{background:"#10B981",color:"#fff"}}>🏷️ {vp.promoName}</span>}{!vp&&p.tags[0]&&<span className="tag">{p.tags[0]}</span>}<span className="fav" onClick={e=>{e.stopPropagation();toggleFav(p.id)}} style={{color:isFav(p.id)?"#EF4444":"inherit",fontSize:isFav(p.id)?16:14}}>{isFav(p.id)?"❤️":"♡"}</span></div><div className="pbody"><h4>{p.name}</h4><div className="pv">{p.va} {p.vendor}{p.eta&&<span style={{marginLeft:4,color:"#10B981",fontSize:10}}>🕐 {p.eta}</span>}</div><div className="pp">{vp?<><span style={{color:"#10B981"}}>{fmt(vp.promoPrice)}</span><span className="po">{fmt(p.price)}</span></>:<>{fmt(p.price)}{p.old&&<span className="po">{fmt(p.old)}</span>}</>}</div><div className="pr" onClick={e=>{e.stopPropagation();go("reviews",p)}}>⭐ {p.rating} ({p.reviews})</div></div></div>)})}</div>

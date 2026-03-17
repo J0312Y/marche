@@ -11,7 +11,8 @@ import {
   TrackingScr, ChatScr, ChatListScr, ChatVendorScr, WishlistScr,
   NotifScr, ProfileScr, EditProfileScr, AddressesScr,
   LanguageScr, CurrencyScr, PasswordScr, RechargeScr, WithdrawScr,
-  VendorScr, RoleRegScr, PaymentHistoryScr, RateDriverScr
+  VendorScr, RoleRegScr, PaymentHistoryScr, RateDriverScr,
+  ReferralScr, LoyaltyScr, ReturnScr, GiftCardScr, QRScanScr, PriceAlertScr, GroupBuyScr
 } from "../screens/buyer";
 import { SettingsScr, HelpScr, AboutScr, TermsScr, PrivacyScr } from "../screens/common";
 
@@ -78,6 +79,13 @@ export default function BuyerScreens() {
     case "password": return <PasswordScr onBack={back} />;
     case "paymentHistory": return <PaymentHistoryScr onBack={back} />;
     case "rateDriver": return <RateDriverScr onBack={back} driver={data} onDone={goHome} />;
+    case "referral": return <ReferralScr onBack={back} />;
+    case "loyalty": return <LoyaltyScr onBack={back} />;
+    case "returnOrder": return <ReturnScr onBack={back} order={data} />;
+    case "giftCard": return <GiftCardScr onBack={back} />;
+    case "qrScan": return <QRScanScr onBack={back} go={go} />;
+    case "groupBuy": return <GroupBuyScr onBack={back} go={go} />;
+    case "priceAlerts": return <PriceAlertScr onBack={back} />;
     case "recharge": return <RechargeScr onBack={back} />;
     case "roleReg": return <RoleRegScr onBack={back} onDone={(role, plan) => { onRoleApproved(role, plan); goHome(); }} />;
     case "vendorReg": return <RoleRegScr onBack={back} onDone={(role, plan) => { onRoleApproved(role, plan); goHome(); }} forceRole="vendor" />;
