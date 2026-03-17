@@ -138,28 +138,16 @@ function HomeScr({go,favs,toggleFav,isFav}){
 
 
       {/* ═══ STORIES ═══ */}
-      <div style={{display:"flex",gap:10,padding:"0 16px 10px",overflowX:"auto",scrollbarWidth:"none"}}>
-        {VENDORS.filter(v=>v.verified).slice(0,6).map((v,i)=><div key={"story-"+v.id} onClick={()=>go("vendor",v)} style={{flexShrink:0,textAlign:"center",cursor:"pointer"}}>
-          <div style={{width:56,height:56,borderRadius:18,padding:2,background:i<3?"linear-gradient(135deg,#6366F1,#A855F7)":"linear-gradient(135deg,var(--border),var(--border))",marginBottom:4}}>
-            <div style={{width:"100%",height:"100%",borderRadius:16,overflow:"hidden",border:"2px solid var(--bg)"}}>
-              {v.logo?<img src={v.logo} style={{width:"100%",height:"100%",objectFit:"cover"}} alt=""/>:<div style={{width:"100%",height:"100%",background:"var(--light)",display:"flex",alignItems:"center",justifyContent:"center",fontSize:18}}>{v.avatar}</div>}
-            </div>
-          </div>
-          <div style={{fontSize:9,fontWeight:600,color:"var(--muted)",maxWidth:56,overflow:"hidden",whiteSpace:"nowrap",textOverflow:"ellipsis"}}>{v.name.split(" ")[0]}</div>
-        </div>)}
-      </div>
-
-      {/* Vendor Stories */}
-      <div style={{display:"flex",gap:10,padding:"0 16px 10px",overflowX:"auto",scrollbarWidth:"none"}}>
+      <div style={{display:"flex",gap:12,padding:"0 16px 10px",overflowX:"auto",scrollbarWidth:"none",WebkitOverflowScrolling:"touch"}}>
         {VENDORS.filter(v=>v.verified).slice(0,6).map((v,i)=>{
           const hasNew=i<3;
-          return(<div key={"story-"+v.id} onClick={()=>go("vendor",v)} style={{flexShrink:0,textAlign:"center",cursor:"pointer",width:62}}>
-            <div style={{width:56,height:56,borderRadius:18,padding:hasNew?2:0,background:hasNew?"linear-gradient(135deg,#6366F1,#A855F7,#F59E0B)":"transparent",margin:"0 auto 4px"}}>
-              <div style={{width:"100%",height:"100%",borderRadius:16,overflow:"hidden",border:hasNew?"2px solid var(--bg)":"2px solid var(--border)"}}>
-                {v.logo?<img src={v.logo} style={{width:"100%",height:"100%",objectFit:"cover"}} alt=""/>:<div style={{width:"100%",height:"100%",background:"var(--light)",display:"flex",alignItems:"center",justifyContent:"center",fontSize:18}}>{v.avatar}</div>}
+          return(<div key={"story-"+v.id} onClick={()=>go("vendor",v)} style={{flexShrink:0,textAlign:"center",cursor:"pointer",width:60}}>
+            <div style={{width:52,height:52,borderRadius:16,padding:hasNew?2:0,background:hasNew?"linear-gradient(135deg,#6366F1,#A855F7,#F59E0B)":"transparent",margin:"0 auto 4px"}}>
+              <div style={{width:"100%",height:"100%",borderRadius:14,overflow:"hidden",border:hasNew?"2px solid var(--bg)":"2px solid var(--border)"}}>
+                {v.logo?<img src={v.logo} style={{width:"100%",height:"100%",objectFit:"cover"}} alt=""/>:<div style={{width:"100%",height:"100%",background:"var(--light)",display:"flex",alignItems:"center",justifyContent:"center",fontSize:16}}>{v.avatar}</div>}
               </div>
             </div>
-            <div style={{fontSize:9,fontWeight:600,color:"var(--text)",overflow:"hidden",whiteSpace:"nowrap",textOverflow:"ellipsis"}}>{v.name.split(" ")[0]}</div>
+            <div style={{fontSize:9,fontWeight:600,color:"var(--muted)",overflow:"hidden",whiteSpace:"nowrap",textOverflow:"ellipsis"}}>{v.name.split(" ")[0]}</div>
           </div>);
         })}
       </div>

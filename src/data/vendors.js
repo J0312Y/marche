@@ -13,7 +13,7 @@ export const V=[
   {id:"v4",name:"Pâtisserie La Congolaise",avatar:"🧁",desc:"Gâteaux, pains frais et viennoiseries",loc:"Brazzaville",rating:4.7,products:35,followers:760,verified:true,lat:-4.258,lng:15.295,type:"patisserie",eta:"20-30 min",
     promo:{name:"-10% Pâtisseries",discount:10,ends:"31 Mars 2026"},
     cover:"https://images.unsplash.com/photo-1517433670267-08bbd4be890f?w=800&h=300&fit=crop",
-    logo:"https://images.unsplash.com/photo-1486427944544-d2c246c4df8e?w=100&h=100&fit=crop"},
+    logo:"https://images.unsplash.com/photo-1509440159596-0249088772ff?w=100&h=100&fit=crop"},
   {id:"v5",name:"Super U Bacongo",avatar:"🛒",desc:"Supermarché — produits du quotidien",loc:"Brazzaville",rating:4.3,products:520,followers:3400,verified:true,lat:-4.274,lng:15.280,type:"supermarche",
     cover:"https://images.unsplash.com/photo-1604719312566-8912e9227c6a?w=800&h=300&fit=crop",
     logo:"https://images.unsplash.com/photo-1542838132-92c53300491e?w=100&h=100&fit=crop"},
