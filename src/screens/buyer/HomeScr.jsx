@@ -11,6 +11,7 @@ function HomeScr({go,favs,toggleFav,isFav}){
   const { cartCount, recentlyViewed } = useApp();
   const [selCat,setSC]=useState(0);
   const [selType,setSelType]=useState("all");
+  const [storyViewer,setStoryViewer]=useState(null);
   const [homeQ,setHomeQ]=useState("");
   const [searchFocused,setSearchFocused]=useState(false);
   const [recentSearches,setRecent]=useState(["Poulet DG","Smartphone","Doliprane","Pressing","Robe Wax","Croissants"]);
@@ -39,7 +40,7 @@ function HomeScr({go,favs,toggleFav,isFav}){
   // Search mode: focused or has query
   const inSearchMode=searchFocused||homeQ.length>0;
 
-  return(
+  return(<>
     <PullToRefresh onRefresh={reload}><div className="scr">
       {/* Header - only show when not in search */}
       {!inSearchMode&&<div className="hdr"><div><div className="hdr-t">Bonjour 👋</div><div className="hdr-h">Lamuka Market</div></div>
@@ -141,7 +142,7 @@ function HomeScr({go,favs,toggleFav,isFav}){
       <div style={{display:"flex",gap:12,padding:"0 16px 10px",overflowX:"auto",scrollbarWidth:"none",WebkitOverflowScrolling:"touch"}}>
         {VENDORS.filter(v=>v.verified).slice(0,6).map((v,i)=>{
           const hasNew=i<3;
-          return(<div key={"story-"+v.id} onClick={()=>go("vendor",v)} style={{flexShrink:0,textAlign:"center",cursor:"pointer",width:60}}>
+          return(<div key={"story-"+v.id} onClick={()=>setStoryViewer({vendor:v,index:i})} style={{flexShrink:0,textAlign:"center",cursor:"pointer",width:60}}>
             <div style={{width:52,height:52,borderRadius:16,padding:hasNew?2:0,background:hasNew?"linear-gradient(135deg,#6366F1,#A855F7,#F59E0B)":"transparent",margin:"0 auto 4px"}}>
               <div style={{width:"100%",height:"100%",borderRadius:14,overflow:"hidden",border:hasNew?"2px solid var(--bg)":"2px solid var(--border)"}}>
                 {v.logo?<img src={v.logo} style={{width:"100%",height:"100%",objectFit:"cover"}} alt=""/>:<div style={{width:"100%",height:"100%",background:"var(--light)",display:"flex",alignItems:"center",justifyContent:"center",fontSize:16}}>{v.avatar}</div>}
@@ -253,7 +254,52 @@ function HomeScr({go,favs,toggleFav,isFav}){
       <div className="pgrid">{filteredP.map(p=>{const vp=getVendorPromo(p,VENDORS);const td=totalDisc(p,VENDORS);return(<div key={p.id} className="pcard" onClick={()=>go("detail",p)}><div className="pimg"><Img src={p.photo} emoji={p.img} style={{width:"100%",height:"100%"}} fit="cover"/>{p.old&&<span className="badge">-{disc(p)}%</span>}{vp&&<span className="tag" style={{background:"#10B981",color:"#fff"}}>🏷️ {vp.promoName}</span>}{!vp&&p.tags[0]&&<span className="tag">{p.tags[0]}</span>}<span className="fav" onClick={e=>{e.stopPropagation();toggleFav(p.id)}} style={{color:isFav(p.id)?"#EF4444":"inherit",fontSize:isFav(p.id)?16:14}}>{isFav(p.id)?"❤️":"♡"}</span></div><div className="pbody"><h4>{p.name}</h4><div className="pv">{p.va} {p.vendor}{p.eta&&<span style={{marginLeft:4,color:"#10B981",fontSize:10}}>🕐 {p.eta}</span>}</div><div className="pp">{vp?<><span style={{color:"#10B981"}}>{fmt(vp.promoPrice)}</span><span className="po">{fmt(p.price)}</span></>:<>{fmt(p.price)}{p.old&&<span className="po">{fmt(p.old)}</span>}</>}</div><div className="pr" onClick={e=>{e.stopPropagation();go("reviews",p)}}>⭐ {p.rating} ({p.reviews})</div></div></div>)})}</div>
       </>}
     </div></PullToRefresh>
-  );
+
+    {/* ═══ STORY VIEWER ═══ */}
+    {storyViewer&&(()=>{
+      const storyVendors=VENDORS.filter(v=>v.verified).slice(0,6);
+      const sv=storyViewer.vendor;
+      const promoText=sv.promo?`🏷️ ${sv.promo.name} · -${sv.promo.discount}% jusqu'au ${sv.promo.ends}`:`⭐ ${sv.rating}/5 · ${sv.products} articles · ${sv.followers} abonnés`;
+      return(<div style={{position:"fixed",inset:0,background:"#000",zIndex:200,display:"flex",flexDirection:"column"}}>
+        {/* Progress bars */}
+        <div style={{display:"flex",gap:3,padding:"8px 12px",zIndex:10}}>
+          {storyVendors.map((v,i)=><div key={v.id} style={{flex:1,height:2,borderRadius:1,background:"rgba(255,255,255,.25)",overflow:"hidden"}}>
+            <div style={{height:"100%",background:"#fff",width:i<storyViewer.index?"100%":i===storyViewer.index?"100%":"0%",borderRadius:1}}/>
+          </div>)}
+        </div>
+        {/* Header */}
+        <div style={{display:"flex",alignItems:"center",gap:10,padding:"4px 14px 10px",zIndex:10}}>
+          <div style={{width:36,height:36,borderRadius:12,overflow:"hidden",border:"2px solid #fff"}}>
+            {sv.logo?<img src={sv.logo} style={{width:"100%",height:"100%",objectFit:"cover"}} alt=""/>:<div style={{width:"100%",height:"100%",background:"#333",display:"flex",alignItems:"center",justifyContent:"center",fontSize:14}}>{sv.avatar}</div>}
+          </div>
+          <div style={{flex:1}}>
+            <div style={{fontSize:13,fontWeight:700,color:"#fff"}}>{sv.name} {sv.verified&&<span style={{color:"#6366F1"}}>✓</span>}</div>
+            <div style={{fontSize:10,color:"rgba(255,255,255,.6)"}}>Il y a {storyViewer.index+1}h · 📍 {sv.loc}</div>
+          </div>
+          <button onClick={()=>setStoryViewer(null)} style={{width:32,height:32,borderRadius:10,background:"rgba(255,255,255,.15)",border:"none",color:"#fff",fontSize:16,cursor:"pointer",display:"flex",alignItems:"center",justifyContent:"center"}}>✕</button>
+        </div>
+        {/* Image */}
+        <div style={{flex:1,position:"relative",overflow:"hidden"}}>
+          {sv.cover?<img src={sv.cover} style={{width:"100%",height:"100%",objectFit:"cover"}} alt=""/>:<div style={{width:"100%",height:"100%",background:"linear-gradient(135deg,#6366F1,#A855F7)"}}/>}
+          <div style={{position:"absolute",inset:0,background:"linear-gradient(transparent 50%,rgba(0,0,0,.7))"}}/>
+          {/* Text overlay */}
+          <div style={{position:"absolute",bottom:0,left:0,right:0,padding:20}}>
+            <div style={{fontSize:18,fontWeight:800,color:"#fff",marginBottom:6}}>{sv.name}</div>
+            <div style={{fontSize:13,color:"rgba(255,255,255,.85)",lineHeight:1.5,marginBottom:4}}>{sv.desc}</div>
+            <div style={{fontSize:12,color:"#F59E0B",fontWeight:600}}>{promoText}</div>
+          </div>
+          {/* Tap zones */}
+          <div onClick={()=>{const idx=storyViewer.index-1;if(idx>=0)setStoryViewer({vendor:storyVendors[idx],index:idx});else setStoryViewer(null)}} style={{position:"absolute",left:0,top:0,bottom:0,width:"30%",cursor:"pointer"}}/>
+          <div onClick={()=>{const idx=storyViewer.index+1;if(idx<storyVendors.length)setStoryViewer({vendor:storyVendors[idx],index:idx});else setStoryViewer(null)}} style={{position:"absolute",right:0,top:0,bottom:0,width:"30%",cursor:"pointer"}}/>
+        </div>
+        {/* Bottom button */}
+        <div style={{padding:"12px 16px 20px",display:"flex",gap:10}}>
+          <button onClick={()=>{setStoryViewer(null);go("vendor",sv)}} style={{flex:1,padding:14,borderRadius:14,border:"none",background:"#6366F1",color:"#fff",fontSize:14,fontWeight:700,cursor:"pointer",fontFamily:"inherit"}}>🏪 Voir la boutique</button>
+          <button onClick={()=>{setStoryViewer(null);go("chatVendor",sv)}} style={{width:50,borderRadius:14,border:"1px solid rgba(255,255,255,.2)",background:"transparent",color:"#fff",fontSize:18,cursor:"pointer",display:"flex",alignItems:"center",justifyContent:"center"}}>💬</button>
+        </div>
+      </div>);
+    })()}
+  </>);
 }
 
 /* 5b ── RESTAURANT LIST ── */
