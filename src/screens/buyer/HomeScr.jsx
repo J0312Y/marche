@@ -176,10 +176,10 @@ function HomeScr({go,favs,toggleFav,isFav}){
       </div></div>
 
       {/* ═══ BOUTIQUES EN VEDETTE (Sponsored) ═══ */}
-      <div className="sec"><h3>⭐ Boutiques en vedette</h3><span style={{fontSize:9,padding:"2px 8px",borderRadius:6,background:"rgba(245,158,11,0.08)",color:"#F59E0B",fontWeight:700}}>Sponsorisé</span></div>
+      <div className="sec"><h3>⭐ Recommandés pour vous</h3><span onClick={()=>go("allProducts")}>Voir tout</span></div>
       <div style={{display:"flex",gap:10,padding:"0 16px 14px",overflowX:"auto",scrollbarWidth:"none"}}>
-        {VENDORS.filter(v=>v.verified).slice(0,4).map(v=><div key={"feat-"+v.id} onClick={()=>go("vendor",v)} style={{flexShrink:0,width:150,borderRadius:16,overflow:"hidden",cursor:"pointer",border:"2px solid rgba(245,158,11,0.2)",background:"var(--card)",position:"relative"}}>
-          <div style={{position:"absolute",top:6,left:6,padding:"2px 6px",borderRadius:5,background:"#F59E0B",color:"#fff",fontSize:8,fontWeight:700,zIndex:2}}>⭐ EN VEDETTE</div>
+        {VENDORS.filter(v=>v.verified).slice(0,4).map(v=><div key={"feat-"+v.id} onClick={()=>go("vendor",v)} style={{flexShrink:0,width:150,borderRadius:16,overflow:"hidden",cursor:"pointer",border:"1px solid var(--border)",background:"var(--card)",position:"relative"}}>
+          <div style={{position:"absolute",top:6,left:6,padding:"2px 6px",borderRadius:5,background:"rgba(0,0,0,0.5)",backdropFilter:"blur(4px)",color:"#F59E0B",fontSize:8,fontWeight:700,zIndex:2}}>⭐ Top</div>
           <div style={{height:80,overflow:"hidden",position:"relative"}}>
             {v.cover?<img src={v.cover} style={{width:"100%",height:"100%",objectFit:"cover"}} alt=""/>:<div style={{width:"100%",height:"100%",background:"linear-gradient(135deg,#6366F1,#A855F7)"}}/>}
             <div style={{position:"absolute",inset:0,background:"linear-gradient(transparent 40%,rgba(0,0,0,0.5))"}}/>
