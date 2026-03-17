@@ -175,6 +175,27 @@ function HomeScr({go,favs,toggleFav,isFav}){
         })}
       </div></div>
 
+      {/* ═══ BOUTIQUES EN VEDETTE (Sponsored) ═══ */}
+      <div className="sec"><h3>⭐ Boutiques en vedette</h3><span style={{fontSize:9,padding:"2px 8px",borderRadius:6,background:"rgba(245,158,11,0.08)",color:"#F59E0B",fontWeight:700}}>Sponsorisé</span></div>
+      <div style={{display:"flex",gap:10,padding:"0 16px 14px",overflowX:"auto",scrollbarWidth:"none"}}>
+        {VENDORS.filter(v=>v.verified).slice(0,4).map(v=><div key={"feat-"+v.id} onClick={()=>go("vendor",v)} style={{flexShrink:0,width:150,borderRadius:16,overflow:"hidden",cursor:"pointer",border:"2px solid rgba(245,158,11,0.2)",background:"var(--card)",position:"relative"}}>
+          <div style={{position:"absolute",top:6,left:6,padding:"2px 6px",borderRadius:5,background:"#F59E0B",color:"#fff",fontSize:8,fontWeight:700,zIndex:2}}>⭐ EN VEDETTE</div>
+          <div style={{height:80,overflow:"hidden",position:"relative"}}>
+            {v.cover?<img src={v.cover} style={{width:"100%",height:"100%",objectFit:"cover"}} alt=""/>:<div style={{width:"100%",height:"100%",background:"linear-gradient(135deg,#6366F1,#A855F7)"}}/>}
+            <div style={{position:"absolute",inset:0,background:"linear-gradient(transparent 40%,rgba(0,0,0,0.5))"}}/>
+          </div>
+          <div style={{padding:10,display:"flex",alignItems:"center",gap:8}}>
+            <div style={{width:32,height:32,borderRadius:10,overflow:"hidden",flexShrink:0,border:"2px solid var(--border)"}}>
+              {v.logo?<img src={v.logo} style={{width:"100%",height:"100%",objectFit:"cover"}} alt=""/>:<div style={{width:"100%",height:"100%",display:"flex",alignItems:"center",justifyContent:"center",fontSize:14,background:"var(--light)"}}>{v.avatar}</div>}
+            </div>
+            <div style={{flex:1,minWidth:0}}>
+              <div style={{fontSize:11,fontWeight:700,overflow:"hidden",whiteSpace:"nowrap",textOverflow:"ellipsis"}}>{v.name}{v.verified&&<span style={{color:"#6366F1"}}> ✓</span>}</div>
+              <div style={{fontSize:9,color:"var(--muted)"}}>⭐ {v.rating} · {v.products} articles</div>
+            </div>
+          </div>
+        </div>)}
+      </div>
+
       <div className="sec"><h3>{selType==="all"?"Établissements proches":types.find(t=>t.id===selType)?.name+" proches"}</h3><span onClick={()=>go("nearby")}>Voir la carte</span></div>
       <div className="vlist">{filteredV.slice(0,4).map(v=><div key={v.id} className="vcard" onClick={()=>go("vendor",v)}><div className="vav" style={v.logo?{overflow:"hidden",padding:0}:{}}>{v.logo?<img src={v.logo} style={{width:"100%",height:"100%",objectFit:"cover"}} alt=""/>:v.avatar}</div><div className="vi"><h4>{v.name}{v.verified&&<span className="vf">✓</span>}</h4><div className="vloc">📍 {v.loc}{v.eta&&<span style={{marginLeft:8,color:"#10B981",fontWeight:600}}>🕐 {v.eta}</span>}</div><div className="vst">⭐ <b>{v.rating}</b> · {v.products} {v.type==="restaurant"?"plats":v.type==="service"?"services":"produits"}</div></div><span style={{color:"var(--muted)"}}>›</span></div>)}</div>
 

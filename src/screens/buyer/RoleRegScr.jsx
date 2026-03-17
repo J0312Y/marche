@@ -13,7 +13,7 @@ function RoleRegScr({onBack,onDone,forceRole}){
   const toggleCat=c=>setSC(p=>p.includes(c)?p.filter(x=>x!==c):[...p,c]);
 
   const vendorSteps=["Infos","Établissement","Documents","Plan","Résumé"];
-  const driverSteps=["Infos","Véhicule","Documents","Résumé"];
+  const driverSteps=["Infos","Véhicule","Documents","Tarifs","Résumé"];
   const steps=role==="vendor"?vendorSteps:driverSteps;
   const maxStep=steps.length-1;
 
@@ -172,6 +172,44 @@ function RoleRegScr({onBack,onDone,forceRole}){
         </div>
       </>}
 
+      {/* STEP 3 DRIVER: Tarifs & Commission */}
+      {step===3&&role==="driver"&&<><h3 style={{fontSize:16,fontWeight:700,marginBottom:14}}>Tarifs & Commission</h3>
+        {/* Registration fee */}
+        <div style={{padding:16,background:"linear-gradient(135deg,rgba(16,185,129,0.06),rgba(16,185,129,0.02))",border:"1px solid rgba(16,185,129,0.15)",borderRadius:16,marginBottom:14}}>
+          <div style={{display:"flex",alignItems:"center",gap:10,marginBottom:10}}>
+            <div style={{width:40,height:40,borderRadius:12,background:"#10B981",display:"flex",alignItems:"center",justifyContent:"center",color:"#fff",fontSize:18}}>📋</div>
+            <div><div style={{fontSize:14,fontWeight:700}}>Frais d'inscription</div><div style={{fontSize:11,color:"var(--muted)"}}>Paiement unique — couvre la vérification</div></div>
+          </div>
+          <div style={{fontSize:28,fontWeight:800,color:"#10B981",textAlign:"center",margin:"8px 0"}}>5 000 FCFA</div>
+          <div style={{fontSize:11,color:"var(--sub)",textAlign:"center",lineHeight:1.5}}>Payable par Airtel Money ou MTN MoMo après validation du dossier</div>
+        </div>
+        {/* Commission */}
+        <div style={{padding:16,background:"var(--card)",border:"1px solid var(--border)",borderRadius:16,marginBottom:14}}>
+          <div style={{fontSize:14,fontWeight:700,marginBottom:10}}>Commission par livraison</div>
+          <div style={{display:"flex",justifyContent:"space-between",padding:"10px 0",borderBottom:"1px solid var(--border)"}}>
+            <span style={{fontSize:13}}>Frais de livraison perçu</span><b style={{fontSize:13}}>100%</b>
+          </div>
+          <div style={{display:"flex",justifyContent:"space-between",padding:"10px 0",borderBottom:"1px solid var(--border)"}}>
+            <span style={{fontSize:13,color:"#EF4444"}}>Commission Lamuka</span><b style={{fontSize:13,color:"#EF4444"}}>-15%</b>
+          </div>
+          <div style={{display:"flex",justifyContent:"space-between",padding:"10px 0"}}>
+            <span style={{fontSize:13,fontWeight:700}}>Vous gardez</span><b style={{fontSize:15,color:"#10B981"}}>85%</b>
+          </div>
+          <div style={{marginTop:8,padding:10,background:"var(--light)",borderRadius:10,fontSize:11,color:"var(--sub)",lineHeight:1.5}}>
+            Exemple : Livraison à 2 500 F → Commission 375 F → Vous recevez <b style={{color:"#10B981"}}>2 125 FCFA</b> + pourboire client
+          </div>
+        </div>
+        {/* Boost option */}
+        <div style={{padding:16,background:"var(--card)",border:"1px solid var(--border)",borderRadius:16}}>
+          <div style={{display:"flex",alignItems:"center",gap:10,marginBottom:8}}>
+            <span style={{fontSize:20}}>🚀</span>
+            <div style={{flex:1}}><div style={{fontSize:14,fontWeight:700}}>Boost (Optionnel)</div><div style={{fontSize:11,color:"var(--muted)"}}>Recevez les commandes en priorité</div></div>
+            <div style={{padding:"4px 10px",borderRadius:8,background:"rgba(245,158,11,0.08)",color:"#F59E0B",fontSize:12,fontWeight:700}}>1 000 F/jour</div>
+          </div>
+          <div style={{fontSize:11,color:"var(--sub)",lineHeight:1.5}}>Activable à tout moment depuis votre tableau de bord. Les livreurs boostés reçoivent les commandes avant les autres dans leur zone.</div>
+        </div>
+      </>}
+
       {/* STEP 3 VENDOR: Plan (only vendor) */}
       {step===3&&role==="vendor"&&<><h3 style={{fontSize:16,fontWeight:700,marginBottom:14}}>Choisir un plan</h3>
         {[["starter","Starter","Gratuit","Pour démarrer",["10 articles max","8% commission","Support email","Stats basiques"]],
@@ -189,7 +227,7 @@ function RoleRegScr({onBack,onDone,forceRole}){
         <div style={{padding:16,background:"var(--card)",border:"1px solid var(--border)",borderRadius:16,marginBottom:14}}>
           {[["Rôle",role==="vendor"?"🏪 Commerçant":"🛵 Livreur"],
             ["Nom","Joeldy Tsina"],
-            ...(role==="vendor"?[["Établissement","Mon Commerce"],["Type",{boutique:"Boutique",restaurant:"Restaurant",patisserie:"Pâtisserie",supermarche:"Supermarché",pharmacie:"Pharmacie",service:"Service"}[selCats.find(c=>["boutique","restaurant","patisserie","supermarche","pharmacie","service"].includes(c))]||"—"]]:[["Véhicule","🛵 Honda PCX"],["Plaque","BZ-4521"]]),
+            ...(role==="vendor"?[["Établissement","Mon Commerce"],["Type",{boutique:"Boutique",restaurant:"Restaurant",patisserie:"Pâtisserie",supermarche:"Supermarché",pharmacie:"Pharmacie",service:"Service"}[selCats.find(c=>["boutique","restaurant","patisserie","supermarche","pharmacie","service"].includes(c))]||"—"]]:[["Véhicule","🛵 Honda PCX"],["Plaque","BZ-4521"],["Inscription","5 000 FCFA (unique)"],["Commission","15% par livraison"]]),
             ["Documents",`${Object.values(docs).filter(v=>v&&v!==true&&v!==false).length}/${Object.keys(docs).length}`],
             ...(role==="vendor"?[["Plan",plan==="starter"?"Starter (Gratuit)":plan==="pro"?"Pro (15k/mois)":"Enterprise (45k/mois)"]]:[])]
           .map(([l,v])=><div key={l} className="vs-row"><span>{l}</span><b>{v}</b></div>)}

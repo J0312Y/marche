@@ -2,10 +2,12 @@ import { useState } from "react";
 import { D_DELIVERIES, D_HISTORY, D_STATS } from "../../data/driverData";
 import { DRIVER_PHOTO } from "../../data/images";
 import { fmt } from "../../utils/helpers";
+import toast from "../../utils/toast";
 
 function DrDashboardScr({go}){
   const [online,setOnline]=useState(true);
   const [period,setPeriod]=useState("today");
+  const [boosted,setBoosted]=useState(false);
   const [dismissed,setDismissed]=useState(false);
   const d=D_STATS[period];
   const pending=dismissed?null:D_DELIVERIES.find(x=>x.status==="pending");
@@ -17,6 +19,16 @@ function DrDashboardScr({go}){
       <div className="dr-stats"><div className="dr-stat"><b>{d.deliveries}</b><span>Livraisons</span></div><div className="dr-stat"><b>{fmt(d.earned)}</b><span>Gagné</span></div><div className="dr-stat"><b>{d.distance} km</b><span>Distance</span></div></div>
     </div>
     <div className="vd-period" style={{marginTop:0}}>{[["today","Aujourd'hui"],["week","Semaine"],["month","Mois"]].map(([k,l])=><button key={k} className={period===k?"on":""} onClick={()=>setPeriod(k)}>{l}</button>)}</div>
+
+    {/* Boost card */}
+    <div style={{margin:"0 16px 10px",padding:12,background:boosted?"linear-gradient(135deg,rgba(245,158,11,0.1),rgba(245,158,11,0.03))":"var(--card)",border:boosted?"1px solid rgba(245,158,11,0.25)":"1px solid var(--border)",borderRadius:14,display:"flex",alignItems:"center",gap:10}}>
+      <div style={{width:36,height:36,borderRadius:10,background:boosted?"#F59E0B":"var(--light)",display:"flex",alignItems:"center",justifyContent:"center",fontSize:16}}>{boosted?"🔥":"🚀"}</div>
+      <div style={{flex:1}}>
+        <div style={{fontSize:12,fontWeight:700,color:boosted?"#F59E0B":"var(--text)"}}>{boosted?"Boost actif — Priorité max":"Boost · Commandes prioritaires"}</div>
+        <div style={{fontSize:10,color:"var(--muted)",marginTop:1}}>{boosted?"Expire ce soir à 23h59":"1 000 FCFA/jour"}</div>
+      </div>
+      <button onClick={()=>{setBoosted(!boosted);toast.success(boosted?"Boost désactivé":"Boost activé ! 🔥 Priorité max")}} style={{padding:"6px 12px",borderRadius:10,border:"none",background:boosted?"rgba(239,68,68,0.08)":"#F59E0B",color:boosted?"#EF4444":"#fff",fontSize:11,fontWeight:700,cursor:"pointer",fontFamily:"inherit"}}>{boosted?"Arrêter":"Activer"}</button>
+    </div>
 
     {/* Pending request */}
     {pending&&<><div className="sec" style={{marginTop:10}}><h3>🆕 Nouvelle demande</h3></div>
