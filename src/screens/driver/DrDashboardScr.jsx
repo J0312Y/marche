@@ -14,7 +14,7 @@ function DrDashboardScr({go}){
   const active=D_DELIVERIES.find(x=>x.status==="active");
   return(<div className="scr">
     <div className="dr-hero">
-      <div className="dr-top"><div style={{display:"flex",alignItems:"center",gap:12}}><div className="dr-av" style={{overflow:"hidden",padding:0}}><img src={DRIVER_PHOTO} style={{width:"100%",height:"100%",objectFit:"cover"}} alt=""/></div><div><div className="dr-name">Patrick Moukala</div><div className="dr-sub">🛵 Honda PCX · BZ-4521</div></div></div><div className="hdr-btn" style={{background:"rgba(255,255,255,.15)",border:"none",color:"#fff"}} onClick={()=>go("drNotif")}>🔔</div></div>
+      <div className="dr-top"><div style={{display:"flex",alignItems:"center",gap:12}}><div className="dr-av" style={{overflow:"hidden",padding:0}}><img src={DRIVER_PHOTO} style={{width:"100%",height:"100%",objectFit:"cover"}} alt=""/></div><div><div className="dr-name">Patrick Moukala</div><div className="dr-sub">🛵 Honda PCX · BZ-4521</div></div></div><button onClick={()=>go("drNotif")} style={{width:38,height:38,borderRadius:12,background:"rgba(255,255,255,.15)",border:"none",color:"#fff",cursor:"pointer",fontSize:18,display:"flex",alignItems:"center",justifyContent:"center"}}>🔔</button></div>
       <div className="dr-toggle-bar" onClick={()=>setOnline(!online)}><div className={`dt-dot ${online?"on":"off"}`}/><span>{online?"En ligne — Prêt à livrer":"Hors ligne"}</span><div className={`toggle ${online?"on":""}`}/></div>
       <div className="dr-stats"><div className="dr-stat"><b>{d.deliveries}</b><span>Livraisons</span></div><div className="dr-stat"><b>{fmt(d.earned)}</b><span>Gagné</span></div><div className="dr-stat"><b>{d.distance} km</b><span>Distance</span></div></div>
     </div>

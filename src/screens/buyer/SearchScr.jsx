@@ -3,10 +3,10 @@ import Img from "../../components/Img";
 import { useData } from "../../hooks";
 import { fmt, disc, getVendorPromo, totalDisc } from "../../utils/helpers";
 
-function SearchScr({go,onBack,fromTab,favs,toggleFav,isFav}){
+function SearchScr({go,onBack,fromTab,favs,toggleFav,isFav,defaultTab}){
   const { P, VENDORS, CATS } = useData();
   const [q,setQ]=useState("");const [sc,setSC]=useState("Tous");
-  const [tab,setTab]=useState("products");
+  const [tab,setTab]=useState(defaultTab||"products");
   const [sortBy,setSortBy]=useState("popular");
   const cats=["Tous",...CATS.map(c=>c.name)];
   const ql=q.toLowerCase();

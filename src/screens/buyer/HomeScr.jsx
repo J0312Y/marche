@@ -176,7 +176,7 @@ function HomeScr({go,favs,toggleFav,isFav}){
       </div></div>
 
       {/* ═══ BOUTIQUES EN VEDETTE (Sponsored) ═══ */}
-      <div className="sec"><h3>⭐ Recommandés pour vous</h3><span onClick={()=>go("allProducts")}>Voir tout</span></div>
+      <div className="sec"><h3>⭐ Recommandés pour vous</h3><span onClick={()=>go("search",{tab:"vendors"})}>Voir tout</span></div>
       <div style={{display:"flex",gap:10,padding:"0 16px 14px",overflowX:"auto",scrollbarWidth:"none"}}>
         {VENDORS.filter(v=>v.verified).slice(0,4).map(v=><div key={"feat-"+v.id} onClick={()=>go("vendor",v)} style={{flexShrink:0,width:150,borderRadius:16,overflow:"hidden",cursor:"pointer",border:"1px solid var(--border)",background:"var(--card)",position:"relative"}}>
           <div style={{position:"absolute",top:6,left:6,padding:"2px 6px",borderRadius:5,background:"rgba(0,0,0,0.5)",backdropFilter:"blur(4px)",color:"#F59E0B",fontSize:8,fontWeight:700,zIndex:2}}>⭐ Top</div>

@@ -58,7 +58,7 @@ export default function BuyerScreens() {
     case "checkout": return <CheckoutScr onBack={back} onDone={goHome} cart={cart} appliedCoupon={appliedCoupon} setAppliedCoupon={setAppliedCoupon} />;
     case "cart": return <Redirect action={() => { setTab(2); setScreen(null); }} />;
     case "orders": return <Redirect action={() => { setTab(3); setScreen(null); }} />;
-    case "search": return <Redirect action={() => { setTab(1); setScreen(null); }} />;
+    case "search": return <SearchScr go={go} onBack={back} favs={favs} toggleFav={toggleFav} isFav={isFav} defaultTab={data?.tab} />;
     case "orderDetail": return <OrderDetailScr order={data} onBack={back} go={go} />;
     case "tracking": return <TrackingScr onBack={back} go={go} />;
     case "chatDriver": return <ChatScr onBack={back} />;
