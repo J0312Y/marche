@@ -29,3 +29,8 @@ export { default as VApiScr } from './VApiScr';
 export { default as VWebsiteScr } from './VWebsiteScr';
 export { default as VDocScr } from './VDocScr';
 export { default as VUpgradePlanScr } from './VUpgradePlanScr';
+export { default as VQAScr } from './VQAScr';
+export { default as VReturnsScr } from './VReturnsScr';
+export { default as VStoriesScr } from './VStoriesScr';
+export { default as VGroupBuyScr } from './VGroupBuyScr';
+export { default as VQRCodeScr } from './VQRCodeScr';

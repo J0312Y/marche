@@ -45,6 +45,16 @@ function VProductFormScr({product:p,onBack,shopType="boutique"}){
 
   // ── Photo management ──
   const fileRef=useRef(null);
+
+      {/* Sizes */}
+      <div className="field"><label>Tailles (séparées par virgule)</label><input placeholder="S, M, L, XL" defaultValue={isEdit&&p.sizes?p.sizes.join(", "):""}/></div>
+      {/* Colors */}
+      <div className="field"><label>Couleurs (séparées par virgule)</label><input placeholder="Rouge, Bleu, Noir" defaultValue={isEdit&&p.colors?p.colors.join(", "):""}/></div>
+      {/* Variants */}
+      <div className="field"><label>Variantes (optionnel)</label><input placeholder="Costume, Chemise, Robe..." defaultValue={isEdit&&p.variants?p.variants.join(", "):""}/></div>
+      {/* Delivery time */}
+      <div className="field"><label>Délai de livraison estimé</label><select defaultValue={isEdit&&p.eta?p.eta:"1-2 jours"}><option>30 min</option><option>1h</option><option>20-30 min</option><option>30-45 min</option><option>1-2 jours</option><option>2-3 jours</option><option>3-5 jours</option></select></div>
+
   const [photos,setPhotos]=useState(isEdit&&p.photo?[{url:p.photo,emoji:p.img,status:"existing"}]:[]);
   const [editingIdx,setEditingIdx]=useState(null);
   const [processing,setProcessing]=useState(false);

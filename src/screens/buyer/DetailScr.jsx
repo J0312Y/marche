@@ -252,58 +252,6 @@ function DetailScr({product:p,onBack,onAddCart,go,favs,toggleFav,isFav}){
     </div>
 
     {/* Bottom bar */}
-    
-    {/* ═══ Sizes/Colors/Variants ═══ */}
-    {p.sizes&&<div style={{padding:"0 16px 10px"}}><div style={{fontSize:13,fontWeight:700,marginBottom:6}}>Taille</div><div style={{display:"flex",gap:6,flexWrap:"wrap"}}>{p.sizes.map(s=><button key={s} onClick={()=>setSelSize(s)} style={{padding:"6px 14px",borderRadius:10,border:selSize===s?"2px solid #6366F1":"1px solid var(--border)",background:selSize===s?"rgba(99,102,241,0.06)":"var(--card)",fontSize:12,fontWeight:selSize===s?700:500,color:selSize===s?"#6366F1":"var(--text)",cursor:"pointer",fontFamily:"inherit"}}>{s}</button>)}</div></div>}
-    {p.colors&&<div style={{padding:"0 16px 10px"}}><div style={{fontSize:13,fontWeight:700,marginBottom:6}}>Couleur</div><div style={{display:"flex",gap:6,flexWrap:"wrap"}}>{p.colors.map(cl=><button key={cl} onClick={()=>setSelColor(cl)} style={{padding:"6px 14px",borderRadius:10,border:selColor===cl?"2px solid #6366F1":"1px solid var(--border)",background:selColor===cl?"rgba(99,102,241,0.06)":"var(--card)",fontSize:12,fontWeight:selColor===cl?700:500,color:selColor===cl?"#6366F1":"var(--text)",cursor:"pointer",fontFamily:"inherit"}}>{cl}</button>)}</div></div>}
-    {p.variants&&<div style={{padding:"0 16px 10px"}}><div style={{fontSize:13,fontWeight:700,marginBottom:6}}>Type</div><div style={{display:"flex",gap:6,flexWrap:"wrap"}}>{p.variants.map(v=><button key={v} onClick={()=>setSelVariant(v)} style={{padding:"6px 14px",borderRadius:10,border:selVariant===v?"2px solid #6366F1":"1px solid var(--border)",background:selVariant===v?"rgba(99,102,241,0.06)":"var(--card)",fontSize:12,fontWeight:selVariant===v?700:500,color:selVariant===v?"#6366F1":"var(--text)",cursor:"pointer",fontFamily:"inherit"}}>{v}</button>)}</div></div>}
-
-    {/* ═══ Delivery Estimate ═══ */}
-    <div style={{margin:"0 16px 10px",padding:12,background:"var(--card)",border:"1px solid var(--border)",borderRadius:14,display:"flex",alignItems:"center",gap:10}}>
-      <span style={{fontSize:20}}>🚚</span>
-      <div style={{flex:1}}>
-        <div style={{fontSize:12,fontWeight:700}}>Livraison estimée</div>
-        <div style={{fontSize:11,color:"var(--muted)"}}>{p.eta||"1-3 jours"} · Brazzaville</div>
-      </div>
-      <span style={{fontSize:11,color:"#10B981",fontWeight:600}}>Gratuite dès 15k</span>
-    </div>
-
-    {/* ═══ Group Buy ═══ */}
-    {p.groupBuy&&<div style={{margin:"0 16px 10px",padding:12,background:"linear-gradient(135deg,rgba(99,102,241,0.06),rgba(168,85,247,0.04))",border:"1px solid rgba(99,102,241,0.15)",borderRadius:14}}>
-      <div style={{display:"flex",alignItems:"center",gap:8,marginBottom:8}}>
-        <span style={{fontSize:16}}>👥</span>
-        <div style={{flex:1}}><div style={{fontSize:13,fontWeight:700,color:"#6366F1"}}>Achat groupé — {p.groupBuy.discount}% de réduction</div><div style={{fontSize:11,color:"var(--muted)"}}>{p.groupBuy.current}/{p.groupBuy.min} participants · Expire le {p.groupBuy.ends}</div></div>
-      </div>
-      <div style={{height:6,background:"var(--border)",borderRadius:3,overflow:"hidden",marginBottom:6}}><div style={{width:`${(p.groupBuy.current/p.groupBuy.min)*100}%`,height:"100%",background:"#6366F1",borderRadius:3}}/></div>
-      <button style={{width:"100%",padding:8,borderRadius:10,border:"none",background:"#6366F1",color:"#fff",fontSize:12,fontWeight:700,cursor:"pointer",fontFamily:"inherit"}}>👥 Rejoindre le groupe — Plus que {p.groupBuy.min-p.groupBuy.current} places</button>
-    </div>}
-
-    {/* ═══ Price Alert ═══ */}
-    <div onClick={()=>{toast.success("Alerte de prix activée 🔔")}} style={{margin:"0 16px 10px",padding:10,background:"var(--card)",border:"1px solid var(--border)",borderRadius:12,display:"flex",alignItems:"center",gap:10,cursor:"pointer"}}>
-      <span style={{fontSize:16}}>🔔</span>
-      <span style={{flex:1,fontSize:12,color:"var(--sub)"}}>M'alerter quand le prix baisse</span>
-      <span style={{fontSize:12,color:"#6366F1",fontWeight:600}}>Activer</span>
-    </div>
-
-    {/* ═══ Q&A ═══ */}
-    <div style={{margin:"0 16px 10px"}}>
-      <div onClick={()=>setShowQA(!showQA)} style={{display:"flex",justifyContent:"space-between",alignItems:"center",cursor:"pointer",marginBottom:showQA?8:0}}>
-        <span style={{fontSize:13,fontWeight:700}}>❓ Questions & Réponses ({qas.length})</span>
-        <span style={{fontSize:12,color:"#6366F1"}}>{showQA?"Masquer":"Voir"}</span>
-      </div>
-      {showQA&&<>
-        {qas.map((q,i)=><div key={i} style={{padding:10,background:"var(--card)",border:"1px solid var(--border)",borderRadius:12,marginBottom:6}}>
-          <div style={{fontSize:12,fontWeight:600}}>Q: {q.q}</div>
-          <div style={{fontSize:12,color:"var(--sub)",marginTop:4}}>R: {q.a}</div>
-          <div style={{fontSize:10,color:"var(--muted)",marginTop:3}}>{q.by} · {q.date}</div>
-        </div>)}
-        <div style={{display:"flex",gap:6}}>
-          <input value={qaText} onChange={e=>setQaText(e.target.value)} placeholder="Poser une question..." style={{flex:1,padding:8,borderRadius:10,border:"1px solid var(--border)",background:"var(--light)",fontSize:12,fontFamily:"inherit",outline:"none",color:"var(--text)"}}/>
-          <button onClick={()=>{if(qaText.trim()){setQas(prev=>[...prev,{q:qaText,a:"Réponse en attente...",by:"En attente",date:"Aujourd'hui"}]);setQaText("");toast.success("Question envoyée 📤")}}} style={{padding:"8px 14px",borderRadius:10,border:"none",background:"#6366F1",color:"#fff",fontSize:11,fontWeight:600,cursor:"pointer",fontFamily:"inherit"}}>Envoyer</button>
-        </div>
-      </>}
-    </div>
-
     <div className="det-bar">
       <div className="qty">
         <button onClick={()=>qty>1&&setQty(qty-1)}>−</button>
