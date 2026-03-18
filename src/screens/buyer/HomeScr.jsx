@@ -8,7 +8,7 @@ import { fmt, disc, getVendorPromo, totalDisc, effectivePrice } from "../../util
 
 function HomeScr({go,favs,toggleFav,isFav}){
   const { P, VENDORS, CATS, loading: dataLoading, reload } = useData();
-  const { cartCount, recentlyViewed } = useApp();
+  const { cartCount, recentlyViewed, seenStories, markStorySeen } = useApp();
   const [selCat,setSC]=useState(0);
   const [selType,setSelType]=useState("all");
   const [storyViewer,setStoryViewer]=useState(null);
@@ -140,15 +140,18 @@ function HomeScr({go,favs,toggleFav,isFav}){
 
       {/* ═══ STORIES ═══ */}
       <div style={{display:"flex",gap:12,padding:"0 16px 10px",overflowX:"auto",scrollbarWidth:"none",WebkitOverflowScrolling:"touch"}}>
-        {VENDORS.filter(v=>v.verified).slice(0,6).map((v,i)=>{
-          const hasNew=i<3;
-          return(<div key={"story-"+v.id} onClick={()=>setStoryViewer({vendor:v,index:i})} style={{flexShrink:0,textAlign:"center",cursor:"pointer",width:60}}>
-            <div style={{width:52,height:52,borderRadius:16,padding:hasNew?2:0,background:hasNew?"linear-gradient(135deg,#6366F1,#A855F7,#F59E0B)":"transparent",margin:"0 auto 4px"}}>
-              <div style={{width:"100%",height:"100%",borderRadius:14,overflow:"hidden",border:hasNew?"2px solid var(--bg)":"2px solid var(--border)"}}>
+        {[...VENDORS.filter(v=>v.verified)].sort((a,b)=>{
+          const aSeen=seenStories.includes(a.id);const bSeen=seenStories.includes(b.id);
+          if(aSeen&&!bSeen)return 1;if(!aSeen&&bSeen)return -1;return 0;
+        }).slice(0,6).map((v,i)=>{
+          const seen=seenStories.includes(v.id);
+          return(<div key={"story-"+v.id} onClick={()=>{markStorySeen(v.id);setStoryViewer({vendor:v,index:i})}} style={{flexShrink:0,textAlign:"center",cursor:"pointer",width:60}}>
+            <div style={{width:52,height:52,borderRadius:16,padding:2,background:seen?"var(--border)":"linear-gradient(135deg,#6366F1,#A855F7,#F59E0B)",margin:"0 auto 4px",opacity:seen?.5:1,transition:"opacity .3s"}}>
+              <div style={{width:"100%",height:"100%",borderRadius:14,overflow:"hidden",border:"2px solid var(--bg)"}}>
                 {v.logo?<img src={v.logo} style={{width:"100%",height:"100%",objectFit:"cover"}} alt=""/>:<div style={{width:"100%",height:"100%",background:"var(--light)",display:"flex",alignItems:"center",justifyContent:"center",fontSize:16}}>{v.avatar}</div>}
               </div>
             </div>
-            <div style={{fontSize:9,fontWeight:600,color:"var(--muted)",overflow:"hidden",whiteSpace:"nowrap",textOverflow:"ellipsis"}}>{v.name.split(" ")[0]}</div>
+            <div style={{fontSize:9,fontWeight:seen?500:600,color:seen?"var(--muted)":"var(--text)",overflow:"hidden",whiteSpace:"nowrap",textOverflow:"ellipsis"}}>{v.name.split(" ")[0]}</div>
           </div>);
         })}
       </div>
@@ -162,7 +165,7 @@ function HomeScr({go,favs,toggleFav,isFav}){
         <span style={{color:"#6366F1",fontSize:16}}>›</span>
       </div>
 
-      {/* Restos à la une */}
+      {/* Restos à la une */}}
       {(selType==="all"||selType==="restaurant")&&nearbyRestos.length>0&&<>
         <div className="sec"><h3>🍽️ Commander à manger</h3><span onClick={()=>go("restoList")}>Voir tout</span></div>
         <div className="marquee-wrap"><div className="marquee-track-resto">
@@ -257,7 +260,10 @@ function HomeScr({go,favs,toggleFav,isFav}){
 
     {/* ═══ STORY VIEWER ═══ */}
     {storyViewer&&(()=>{
-      const storyVendors=VENDORS.filter(v=>v.verified).slice(0,6);
+      const storyVendors=[...VENDORS.filter(v=>v.verified)].sort((a,b)=>{
+        const aSeen=seenStories.includes(a.id);const bSeen=seenStories.includes(b.id);
+        if(aSeen&&!bSeen)return 1;if(!aSeen&&bSeen)return -1;return 0;
+      }).slice(0,6);
       const sv=storyViewer.vendor;
       const promoText=sv.promo?`🏷️ ${sv.promo.name} · -${sv.promo.discount}% jusqu'au ${sv.promo.ends}`:`⭐ ${sv.rating}/5 · ${sv.products} articles · ${sv.followers} abonnés`;
       return(<div style={{position:"absolute",inset:0,background:"#000",zIndex:200,display:"flex",flexDirection:"column",borderRadius:"inherit",overflow:"hidden"}}>
@@ -289,8 +295,8 @@ function HomeScr({go,favs,toggleFav,isFav}){
             <div style={{fontSize:12,color:"#F59E0B",fontWeight:600}}>{promoText}</div>
           </div>
           {/* Tap zones */}
-          <div onClick={()=>{const idx=storyViewer.index-1;if(idx>=0)setStoryViewer({vendor:storyVendors[idx],index:idx});else setStoryViewer(null)}} style={{position:"absolute",left:0,top:0,bottom:0,width:"30%",cursor:"pointer"}}/>
-          <div onClick={()=>{const idx=storyViewer.index+1;if(idx<storyVendors.length)setStoryViewer({vendor:storyVendors[idx],index:idx});else setStoryViewer(null)}} style={{position:"absolute",right:0,top:0,bottom:0,width:"30%",cursor:"pointer"}}/>
+          <div onClick={()=>{const idx=storyViewer.index-1;if(idx>=0){markStorySeen(storyVendors[idx].id);setStoryViewer({vendor:storyVendors[idx],index:idx})}else setStoryViewer(null)}} style={{position:"absolute",left:0,top:0,bottom:0,width:"30%",cursor:"pointer"}}/>
+          <div onClick={()=>{const idx=storyViewer.index+1;if(idx<storyVendors.length){markStorySeen(storyVendors[idx].id);setStoryViewer({vendor:storyVendors[idx],index:idx})}else setStoryViewer(null)}} style={{position:"absolute",right:0,top:0,bottom:0,width:"30%",cursor:"pointer"}}/>
         </div>
         {/* Bottom button */}
         <div style={{padding:"12px 16px 20px",display:"flex",gap:10}}>

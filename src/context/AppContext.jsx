@@ -45,6 +45,8 @@ export function AppProvider({ children }) {
   const [toast, setToast] = useState(null);
   const [recentlyViewed, setRecentlyViewed] = useState([]);
   const addRecentlyViewed = useCallback((product) => { setRecentlyViewed(prev => { const filtered = prev.filter(p => p.id !== product.id); return [product, ...filtered].slice(0, 10); }); }, []);
+  const [seenStories, setSeenStories] = useState([]);
+  const markStorySeen = useCallback((vendorId) => { setSeenStories(prev => prev.includes(vendorId) ? prev : [...prev, vendorId]); }, []);
   const [darkMode, setDarkMode] = useState(() => localStorage.getItem('lamuka_dark') === '1');
   const toggleDark = useCallback(() => { setDarkMode(d => { const n = !d; localStorage.setItem('lamuka_dark', n ? '1' : '0'); return n; }); }, []);
   const showToast = useCallback((message, type = 'success') => {
@@ -247,6 +249,7 @@ export function AppProvider({ children }) {
     toast, showToast,
     darkMode, toggleDark,
     recentlyViewed, addRecentlyViewed,
+    seenStories, markStorySeen,
   };
 
   return <AppContext.Provider value={value}>{children}</AppContext.Provider>;
