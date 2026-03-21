@@ -74,7 +74,7 @@ function CouponsScr({onBack,cart=[],appliedCoupon,onApply}){
     {loading?<SkeletonCards count={3}/>:(COUPONS||[]).map(c=>{
       const isApplied=appliedCoupon?.code===c.code;
       const meetsMin=subtotal>=c.min;
-      return(<div key={c.id} style={{padding:16,background:isApplied?"rgba(16,185,129,0.04)":"#fff",border:isApplied?"2px solid #10B981":"1px solid var(--border)",borderRadius:16,marginBottom:10,transition:"all .2s"}}>
+      return(<div key={c.id} style={{padding:16,background:isApplied?"rgba(16,185,129,0.04)":"var(--card)",border:isApplied?"2px solid #10B981":"1px solid var(--border)",borderRadius:16,marginBottom:10,transition:"all .2s"}}>
         <div style={{display:"flex",gap:14,alignItems:"flex-start"}}>
           {/* Left badge */}
           <div style={{width:56,minHeight:56,borderRadius:12,background:c.free?"linear-gradient(135deg,#10B981,#059669)":"linear-gradient(135deg,#6366F1,#A855F7)",display:"flex",flexDirection:"column",alignItems:"center",justifyContent:"center",color:"#fff",flexShrink:0}}>

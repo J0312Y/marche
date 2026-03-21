@@ -45,9 +45,9 @@ function VAssignDriverScr({order:o,onBack,go}){
         <div style={{fontSize:16,fontWeight:700,marginBottom:4}}>Choisir un livreur</div>
         <p style={{fontSize:12,color:"var(--muted)",marginBottom:14}}>Sélectionnez un livreur disponible pour cette commande</p>
 
-        {drivers.map(d=><div key={d.id} onClick={()=>d.status==="available"&&setSelected(d.id)} style={{padding:16,background:selected===d.id?"rgba(99,102,241,0.04)":"#fff",border:selected===d.id?"2px solid #6366F1":"1px solid var(--border)",borderRadius:16,marginBottom:10,cursor:d.status==="available"?"pointer":"default",opacity:d.status==="available"?1:0.5,transition:"all .2s"}}>
+        {drivers.map(d=><div key={d.id} onClick={()=>d.status==="available"&&setSelected(d.id)} style={{padding:16,background:selected===d.id?"rgba(99,102,241,0.04)":"var(--card)",border:selected===d.id?"2px solid #6366F1":"1px solid var(--border)",borderRadius:16,marginBottom:10,cursor:d.status==="available"?"pointer":"default",opacity:d.status==="available"?1:0.5,transition:"all .2s"}}>
           <div style={{display:"flex",alignItems:"center",gap:12}}>
-            <div style={{width:48,height:48,borderRadius:14,background:selected===d.id?"linear-gradient(135deg,#6366F1,#A855F7)":"var(--light)",display:"flex",alignItems:"center",justifyContent:"center",fontSize:24,transition:"all .2s"}}>d.photo?<img src={d.photo} style={{width:"100%",height:"100%",objectFit:"cover"}} alt=""/>:d.avatar</div>
+            <div style={{width:48,height:48,borderRadius:14,overflow:"hidden",background:selected===d.id?"linear-gradient(135deg,#6366F1,#A855F7)":"var(--light)",display:"flex",alignItems:"center",justifyContent:"center",fontSize:24,transition:"all .2s"}}>{d.photo?<img src={d.photo} style={{width:"100%",height:"100%",objectFit:"cover"}} alt=""/>:d.avatar}</div>
             <div style={{flex:1}}>
               <div style={{display:"flex",alignItems:"center",gap:6}}><span style={{fontSize:14,fontWeight:700}}>{d.name}</span><span className={`del-status ${d.status}`} style={d.status==="busy"?{}:{}}>{d.status==="available"?"🟢 Dispo":"🟡 Occupé"}</span></div>
               <div style={{fontSize:12,color:"var(--muted)",marginTop:2}}>{d.vehicle} · {d.plate}</div>

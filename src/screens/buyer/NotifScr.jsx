@@ -64,13 +64,13 @@ function NotifScr({ onBack, go }) {
         <div style={{ textAlign: "center", padding: "60px 20px" }}>
           <div style={{ fontSize: 48, marginBottom: 10 }}>🔔</div>
           <h3 style={{ fontSize: 16, fontWeight: 700, marginBottom: 4 }}>Aucune notification</h3>
-          <p style={{ fontSize: 13, color: "#908C82" }}>Vous serez notifié des mises à jour de vos commandes</p>
+          <p style={{ fontSize: 13, color: "var(--muted)" }}>Vous serez notifié des mises à jour de vos commandes</p>
         </div>
       ) : (
         <div style={{ paddingBottom: 80 }}>
           {/* Today */}
           {items.filter(n => n.time.includes("min") || n.time.includes("h")).length > 0 && (
-            <div style={{ padding: "10px 20px 4px", fontSize: 12, fontWeight: 700, color: "#908C82" }}>Aujourd'hui</div>
+            <div style={{ padding: "10px 20px 4px", fontSize: 12, fontWeight: 700, color: "var(--muted)" }}>Aujourd'hui</div>
           )}
 
           {items.map(n => {
@@ -89,7 +89,7 @@ function NotifScr({ onBack, go }) {
                   {/* Icon */}
                   <div style={{
                     width: 44, height: 44, borderRadius: 14,
-                    background: !n.read ? "rgba(99,102,241,0.08)" : "#F5F4F1",
+                    background: !n.read ? "rgba(99,102,241,0.08)" : "var(--light)",
                     display: "flex", alignItems: "center", justifyContent: "center",
                     fontSize: 20, flexShrink: 0,
                   }}>{n.icon}</div>
@@ -97,7 +97,7 @@ function NotifScr({ onBack, go }) {
                   {/* Content */}
                   <div style={{ flex: 1, minWidth: 0 }}>
                     <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start" }}>
-                      <h4 style={{ fontSize: 14, fontWeight: !n.read ? 700 : 600, color: "#191815", margin: 0 }}>{n.title}</h4>
+                      <h4 style={{ fontSize: 14, fontWeight: !n.read ? 700 : 600, color: "var(--text)", margin: 0 }}>{n.title}</h4>
                       <span style={{ fontSize: 10, color: "#C4C1BA", flexShrink: 0, marginLeft: 8 }}>
                         {isOpen ? "▾" : "›"}
                       </span>
