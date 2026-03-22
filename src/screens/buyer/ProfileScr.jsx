@@ -12,7 +12,14 @@ function ProfileScr({go,userRole,vendorPlan,vendorStatus,driverStatus,onLogout})
   return(<PullToRefresh onRefresh={async()=>{toast.success("Profil actualisé 👤")}}><div className="scr">
     <div className="appbar"><h2>Mon Profil</h2><button onClick={()=>go("settings")}>⚙️</button></div>
     <div className="prof-card"><div className="prof-av" style={{overflow:"hidden",padding:0}}><img src={USER_AVATAR} style={{width:"100%",height:"100%",objectFit:"cover"}} alt=""/></div><h3 style={{fontSize:18,fontWeight:700}}>Joeldy Tsina</h3><div style={{fontSize:12,color:"var(--muted)",marginTop:2}}>+242 064 663 469</div><div style={{fontSize:12,color:"var(--muted)"}}>joeldytsina94@gmail.com</div><div className="prof-stats"><div className="ps"><b>3</b><span>Commandes</span></div><div className="psd"/><div className="ps"><b>5</b><span>Favoris</span></div><div className="psd"/><div className="ps"><b>2</b><span>Avis</span></div></div></div>
-    <div className="wallet"><div><p>Kolo Pay Wallet</p><h3>125 000 FCFA</h3></div><button onClick={()=>go("recharge")}>Recharger</button></div>
+    <div className="wallet-card" onClick={()=>go("recharge")}>
+      <div className="wc-bg"/>
+      <div className="wc-content">
+        <div className="wc-top"><div className="wc-logo">K</div><span className="wc-label">Kolo Pay</span></div>
+        <div className="wc-balance"><span className="wc-amt">125 000</span><span className="wc-cur">FCFA</span></div>
+        <div className="wc-bottom"><span className="wc-num">•••• •••• 4663</span><button className="wc-btn" onClick={e=>{e.stopPropagation();go("recharge")}}>+ Recharger</button></div>
+      </div>
+    </div>
 
     {/* Pending status */}
     {pendingVendor&&<div style={{margin:"0 20px 10px",padding:14,background:"rgba(245,158,11,0.06)",border:"1px solid rgba(245,158,11,0.15)",borderRadius:14}}>
