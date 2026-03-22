@@ -1,9 +1,10 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Img from "../../components/Img";
 import { useData } from "../../hooks";
 import { useApp } from "../../context/AppContext";
 import { SkeletonHome } from "../../components/Loading";
 import PullToRefresh from "../../components/PullToRefresh";
+import { triggerPush } from "../../components/PushBanner";
 import { fmt, disc, getVendorPromo, totalDisc, effectivePrice } from "../../utils/helpers";
 
 function HomeScr({go,favs,toggleFav,isFav,userName}){
@@ -18,6 +19,16 @@ function HomeScr({go,favs,toggleFav,isFav,userName}){
   const [showFilter,setShowFilter]=useState(false);
   const [filterType,setFilterType]=useState("all");
   const [filterSort,setFilterSort]=useState("popular");
+  const [loading,setLoading]=useState(true);
+  const [pushSent,setPushSent]=useState(false);
+  const [promoSlide,setPromoSlide]=useState(0);
+  const promos=[{title:"Soldes de Mars",sub:"Jusqu'à -40% sur tout",bg:"linear-gradient(135deg,#EF4444,#F97316)",icon:"🔥"},{title:"Livraison gratuite",sub:"Dès 15 000 FCFA d'achat",bg:"linear-gradient(135deg,#F97316,#FB923C)",icon:"🚚"},{title:"Nouveau : Mode",sub:"Découvrez les tendances Wax",bg:"linear-gradient(135deg,#EC4899,#F97316)",icon:"👗"}];
+  const [dealTimer,setDealTimer]=useState({h:5,m:12,s:45});
+
+  useEffect(()=>{const t=setTimeout(()=>setLoading(false),800);return()=>clearTimeout(t)},[]);
+  useEffect(()=>{const iv=setInterval(()=>setPromoSlide(p=>(p+1)%3),4000);return()=>clearInterval(iv)},[]);
+  useEffect(()=>{const iv=setInterval(()=>{setDealTimer(p=>{let{h,m,s}=p;s--;if(s<0){s=59;m--}if(m<0){m=59;h--}if(h<0)return{h:0,m:0,s:0};return{h,m,s}})},1000);return()=>clearInterval(iv)},[]);
+  useEffect(()=>{if(!loading&&!pushSent){const t=setTimeout(()=>{triggerPush({icon:'📦',title:'Commande en route !',body:'Votre commande #LMK-2026-0214 est en livraison — Patrick arrive dans 15 min'});setPushSent(true)},5000);return()=>clearTimeout(t)}},[loading,pushSent]);
 
   if(dataLoading || P.length===0) return <div className="scr"><SkeletonHome/></div>;
 
@@ -209,7 +220,7 @@ function HomeScr({go,favs,toggleFav,isFav,userName}){
         <span style={{color:"#F97316",fontSize:16}}>›</span>
       </div>
 
-      {/* Restos à la une */}}
+      {/* Restos à la une */}
       {(selType==="all"||selType==="restaurant")&&nearbyRestos.length>0&&<>
         <div className="sec"><h3>🍽️ Commander à manger</h3><span onClick={()=>go("restoList")}>Voir tout</span></div>
         <div className="marquee-wrap"><div className="marquee-track-resto">
