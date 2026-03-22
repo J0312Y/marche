@@ -2,6 +2,7 @@ import { useState, lazy, Suspense } from "react";
 import CSS from "./styles/global";
 import { AppProvider, useApp } from "./context/AppContext";
 import { SplashScr, OnboardingScr, LoginScr, OTPScr, ProfileCompletionScr } from "./screens/auth";
+import ShareSheet from "./components/ShareSheet";
 import LoadingSpinner from "./components/ui/LoadingSpinner";
 
 const BuyerScreens = lazy(() => import("./modes/BuyerScreens"));
