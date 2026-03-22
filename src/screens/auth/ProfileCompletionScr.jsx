@@ -48,6 +48,7 @@ function ProfileCompletionScr({onDone,provider,setUserName}){
         {provider&&<div className={`field${errors.phone?" err":""}`}><label>Numéro de téléphone <span style={{color:"#EF4444"}}>*</span></label>
           <div style={{display:"flex",gap:8}}><div style={{padding:"10px 12px",borderRadius:12,border:"1px solid var(--border)",background:"var(--light)",fontSize:13,fontWeight:600,flexShrink:0}}>🇨🇬 +242</div><input value={phone} onChange={e=>{const v=e.target.value.replace(/[^0-9]/g,"").slice(0,9);setPhone(v);clr("phone")}} placeholder="06X XXX XXX" type="tel" style={{flex:1}}/></div>
           {errors.phone&&<div className="err-msg">{errors.phone}</div>}
+          <div style={{fontSize:10,color:"var(--muted)",marginTop:4}}>Requis pour Kolo Pay, notifications et livraisons</div>
         </div>}
         <button className="btn-primary" onClick={()=>{if(validate0()){setUserName?.(firstName.trim());setStep(1)}}}>Continuer</button>
         <button className="btn-outline" style={{marginTop:8}} onClick={onDone}>Passer pour l'instant</button>
