@@ -9,6 +9,8 @@ function RoleRegScr({onBack,onDone,forceRole}){
   const [step,setStep]=useState(forceRole?0:-1);
   const [plan,setPlan]=useState("starter");
   const [regErrors,setRegErrors]=useState({});
+  const [hasLogo,setHasLogo]=useState(false);
+  const [hasVehPhoto,setHasVehPhoto]=useState(false);
   const clrR=(k)=>setRegErrors(p=>{const n={...p};delete n[k];return n});
   const validateStep=()=>{
     if(role==="vendor"&&step===0){
@@ -30,6 +32,9 @@ function RoleRegScr({onBack,onDone,forceRole}){
       if(!selCats.some(c=>types.includes(c))) e.type="Choisissez un type de commerce";
       const nameEl=document.querySelector("[placeholder=\"Ex: Chez Mama Ngudi, Congo Tech...\"]");
       if(!nameEl?.value?.trim()) e.shopName="Nom de l'établissement requis";
+      if(!hasLogo) e.logo="Logo / Photo obligatoire";
+      const descEl=document.querySelector("[placeholder=\"Votre activité, spécialités...\"]");
+      if(!descEl?.value?.trim()) e.desc="Description obligatoire";
       setRegErrors(e);
       if(Object.keys(e).length){toast.error(Object.values(e)[0]);return false}
     }
@@ -41,6 +46,7 @@ function RoleRegScr({onBack,onDone,forceRole}){
       if(!marqueEl?.value?.trim()) e.marque="Marque requise";
       if(!anneeEl?.value?.trim()) e.annee="Année requise";
       if(!plaqueEl?.value?.trim()) e.plaque="Plaque requise";
+      if(!hasVehPhoto) e.vehPhoto="Photo du véhicule obligatoire";
       setRegErrors(e);
       if(Object.keys(e).length){toast.error("Remplissez les champs obligatoires");return false}
     }
@@ -125,9 +131,9 @@ function RoleRegScr({onBack,onDone,forceRole}){
             <div style={{fontSize:11,fontWeight:700,color:sel?"#F97316":"var(--sub)"}}>{label}</div>
           </div>})}
         </div>
-        <div className="vr-upload" onClick={()=>document.getElementById("reg-upload")?.click()} style={{cursor:"pointer"}}><div className="vu-icon" id="vu-preview">🖼️</div><b>Logo / Photo</b><p>PNG, JPG · Max 2MB</p><input id="reg-upload" type="file" accept="image/*" style={{display:"none"}} onChange={e=>{const f=e.target.files?.[0];if(f){const r=new FileReader();r.onload=()=>{const el=document.getElementById("vu-preview");el.textContent="";el.style.overflow="hidden";const img=document.createElement("img");img.src=r.result;img.style.cssText="width:100%;height:100%;object-fit:cover;border-radius:12px";el.appendChild(img)};r.readAsDataURL(f)}}}/></div>
+        <div className="vr-upload" onClick={()=>document.getElementById("reg-upload")?.click()} style={{cursor:"pointer"}}><div className="vu-icon" id="vu-preview">🖼️</div><b>Logo / Photo <span style={{color:"#EF4444",fontWeight:400}}>*</span></b><p>PNG, JPG · Max 2MB</p><input id="reg-upload" type="file" accept="image/*" style={{display:"none"}} onChange={e=>{const f=e.target.files?.[0];if(f){const r=new FileReader();r.onload=()=>{const el=document.getElementById("vu-preview");el.textContent="";el.style.overflow="hidden";const img=document.createElement("img");img.src=r.result;img.style.cssText="width:100%;height:100%;object-fit:cover;border-radius:12px";el.appendChild(img);setHasLogo(true)};r.readAsDataURL(f)}}}/></div>
         <div className="field"><label>Nom de l'établissement <span style={{color:"#EF4444"}}>*</span></label><input placeholder="Ex: Chez Mama Ngudi, Congo Tech..."/></div>
-        <div className="field"><label>Description <span style={{color:"var(--muted)",fontWeight:400}}>(optionnel)</span></label><input placeholder="Votre activité, spécialités..."/></div>
+        <div className="field"><label>Description <span style={{color:"#EF4444"}}>*</span></label><input placeholder="Votre activité, spécialités..."/></div>
         <label style={{display:"block",fontSize:12,fontWeight:600,color:"var(--sub)",margin:"14px 0 8px"}}>Sous-catégories</label>
         <div className="vr-cat-grid">{CATS.map(c=><div key={c.id} className={`vr-cat ${selCats.includes(c.name)?"on":""}`} onClick={()=>toggleCat(c.name)}><div className="vci">{c.icon}</div><div className="vcn">{c.name}</div></div>)}</div>
       </>}
@@ -139,7 +145,7 @@ function RoleRegScr({onBack,onDone,forceRole}){
         <div className="field-row"><div className="field"><label>Plaque <span style={{color:"#EF4444"}}>*</span></label><input placeholder="BZ-4521"/></div><div className="field"><label>Couleur <span style={{color:"#EF4444"}}>*</span></label><input placeholder="Noir"/></div></div>
         {/* Vehicle photo */}
         <div style={{marginTop:10,marginBottom:14}}>
-          <label style={{display:"block",fontSize:12,fontWeight:600,color:"var(--sub,#5E5B53)",marginBottom:6}}>Photo du véhicule</label>
+          <label style={{display:"block",fontSize:12,fontWeight:600,color:"var(--sub,#5E5B53)",marginBottom:6}}>Photo du véhicule <span style={{color:"#EF4444"}}>*</span></label>
           <div id="drv-veh-wrap" onClick={()=>document.getElementById("drv-veh-upload")?.click()} style={{width:"100%",height:120,borderRadius:16,border:"2px dashed var(--border,#E8E6E1)",background:"var(--light,#F5F4F1)",display:"flex",flexDirection:"column",alignItems:"center",justifyContent:"center",cursor:"pointer",overflow:"hidden"}}>
             <div id="drv-veh-preview" style={{fontSize:32,marginBottom:4}}>🛵</div>
             <span style={{fontSize:11,color:"var(--muted,#908C82)"}}>Cliquez pour ajouter une photo</span>
@@ -152,7 +158,7 @@ function RoleRegScr({onBack,onDone,forceRole}){
               wrap.innerHTML="";wrap.style.border="none";wrap.style.padding="0";
               const img=document.createElement("img");img.src=reader.result;img.style.cssText="width:100%;height:100%;object-fit:cover;border-radius:14px";
               wrap.appendChild(img);
-              toast.success("Photo véhicule ajoutée 📸");
+              setHasVehPhoto(true);toast.success("Photo véhicule ajoutée 📸");
             };reader.readAsDataURL(f);e.target.value="";
           }}/>
         </div>

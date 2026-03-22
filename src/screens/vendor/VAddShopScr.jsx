@@ -18,6 +18,8 @@ function VAddShopScr({onBack}){
       if(!shopName.trim()) e.name="Nom requis";
       if(!shopCity.trim()) e.city="Ville requise";
       if(!shopArea.trim()) e.area="Quartier requis";
+      const descEl=document.querySelector("textarea[placeholder]");
+      if(!descEl?.value?.trim()) e.desc="Description requise";
       setShopErrors(e);
       if(Object.keys(e).length){toast.error("Remplissez les champs obligatoires");return false}
     }
@@ -83,7 +85,7 @@ function VAddShopScr({onBack}){
         <p style={{fontSize:11,color:"var(--muted)",marginBottom:14}}>{shopTypes.find(t=>t.id===shopType)?.icon} {shopTypes.find(t=>t.id===shopType)?.name}</p>
         <div className="vr-upload"><div className="vu-icon">🖼️</div><b>{shopType==="restaurant"?"Photo du restaurant":shopType==="patisserie"?"Photo de la pâtisserie":"Logo de la boutique"}</b><p>PNG, JPG · Max 2MB</p></div>
         <div className="field"><label>Nom {shopType==="restaurant"?"du restaurant":shopType==="patisserie"?"de la pâtisserie":"de la boutique"} <span style={{color:"#EF4444"}}>*</span></label><input value={shopName} onChange={e=>setShopName(e.target.value)} placeholder={shopType==="restaurant"?"Ex: Chez Mama Ngudi":shopType==="patisserie"?"Ex: Pâtisserie La Congolaise":"Ex: Congo Tech Store"}/></div>
-        <div className="field"><label>Description <span style={{color:"var(--muted)",fontWeight:400}}>(optionnel)</span></label><textarea rows={2} placeholder={shopType==="restaurant"?"Type de cuisine, spécialités, ambiance...":shopType==="patisserie"?"Vos spécialités, horaires de cuisson...":"Décrivez votre activité..."}/></div>
+        <div className="field"><label>Description <span style={{color:"#EF4444"}}>*</span></label><textarea rows={2} placeholder={shopType==="restaurant"?"Type de cuisine, spécialités, ambiance...":shopType==="patisserie"?"Vos spécialités, horaires de cuisson...":"Décrivez votre activité..."}/></div>
         <div className="field-row"><div className="field"><label>Ville <span style={{color:"#EF4444"}}>*</span></label><input value={shopCity} onChange={e=>setShopCity(e.target.value)} placeholder="Brazzaville"/></div><div className="field"><label>Quartier <span style={{color:"#EF4444"}}>*</span></label><input value={shopArea} onChange={e=>setShopArea(e.target.value)} placeholder="Centre-ville"/></div></div>
         <div className="field"><label>Adresse complète <span style={{color:"var(--muted)",fontWeight:400}}>(optionnel)</span></label><input placeholder="N° rue, avenue..."/></div>
         <div className="field"><label>Téléphone <span style={{color:"#EF4444"}}>*</span></label><input placeholder="+242 06X XXX XXX"/></div>
