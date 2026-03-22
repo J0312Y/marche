@@ -24,6 +24,26 @@ function RoleRegScr({onBack,onDone,forceRole}){
       setRegErrors(e);
       if(Object.keys(e).length){toast.error("Remplissez les champs obligatoires");return false}
     }
+    if(role==="vendor"&&step===1){
+      const e={};
+      const types=["boutique","restaurant","patisserie","supermarche","pharmacie","service"];
+      if(!selCats.some(c=>types.includes(c))) e.type="Choisissez un type de commerce";
+      const nameEl=document.querySelector("[placeholder=\"Ex: Chez Mama Ngudi, Congo Tech...\"]");
+      if(!nameEl?.value?.trim()) e.shopName="Nom de l'établissement requis";
+      setRegErrors(e);
+      if(Object.keys(e).length){toast.error(Object.values(e)[0]);return false}
+    }
+    if(role==="driver"&&step===1){
+      const e={};
+      const marqueEl=document.querySelector("[placeholder=\"Honda PCX\"]");
+      const anneeEl=document.querySelector("[placeholder=\"2023\"]");
+      const plaqueEl=document.querySelector("[placeholder=\"BZ-4521\"]");
+      if(!marqueEl?.value?.trim()) e.marque="Marque requise";
+      if(!anneeEl?.value?.trim()) e.annee="Année requise";
+      if(!plaqueEl?.value?.trim()) e.plaque="Plaque requise";
+      setRegErrors(e);
+      if(Object.keys(e).length){toast.error("Remplissez les champs obligatoires");return false}
+    }
     if(step===2){
       if(role==="vendor"){
         const missing=[];
