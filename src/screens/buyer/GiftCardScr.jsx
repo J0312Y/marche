@@ -28,7 +28,7 @@ function GiftCardScr({onBack}){
     <div style={{display:"grid",gridTemplateColumns:"1fr 1fr",gap:8,marginBottom:14}}>
       {amounts.map(a=><div key={a} onClick={()=>setAmount(a)} style={{padding:16,borderRadius:14,border:amount===a?"2px solid #F97316":"1px solid var(--border)",background:amount===a?"rgba(249,115,22,0.06)":"var(--card)",cursor:"pointer",textAlign:"center"}}><div style={{fontSize:18,fontWeight:800,color:amount===a?"#F97316":"var(--text)"}}>{fmt(a)}</div></div>)}
     </div>
-    <div className="field"><label>Numéro du destinataire <span style={{color:"#EF4444"}}>*</span></label><input value={to} onChange={e=>setTo(e.target.value)} placeholder="+242 06X XXX XXX"/></div>
+    <div className="field"><label>Numéro du destinataire <span style={{color:"#EF4444"}}>*</span></label><input value={to} onChange={e=>{const v=e.target.value.replace(/[^0-9]/g,"").slice(0,9);setTo(v)}} placeholder="06X XXX XXX" maxLength={11}/></div>
     <div className="field"><label>Message <span style={{color:"var(--muted)",fontWeight:400}}>(optionnel)</span></label><input value={msg} onChange={e=>setMsg(e.target.value)} placeholder="Joyeux anniversaire ! 🎂"/></div>
     <button className="btn-primary" onClick={send}>🎁 Envoyer la carte — {amount?fmt(amount):"..."}</button>
   </div>);

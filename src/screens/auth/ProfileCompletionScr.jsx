@@ -19,6 +19,7 @@ function ProfileCompletionScr({onDone,provider,setUserName}){
     if(!firstName.trim()) e.firstName="Prénom requis";
     if(!lastName.trim()) e.lastName="Nom requis";
     if(provider&&!phone.trim()) e.phone="Numéro requis";
+    else if(provider&&phone.replace(/\s/g,"").length!==9) e.phone="Le numéro doit contenir 9 chiffres";
     setErrors(e);
     if(Object.keys(e).length){toast.error("Remplissez les champs obligatoires");return false}
     return true;
@@ -45,7 +46,7 @@ function ProfileCompletionScr({onDone,provider,setUserName}){
         <div className={`field${errors.firstName?" err":""}`}><label>Prénom <span style={{color:"#EF4444"}}>*</span></label><input value={firstName} onChange={e=>{setFirstName(e.target.value);clr("firstName")}} placeholder="Joeldy"/>{errors.firstName&&<div className="err-msg">{errors.firstName}</div>}</div>
         <div className={`field${errors.lastName?" err":""}`}><label>Nom de famille <span style={{color:"#EF4444"}}>*</span></label><input value={lastName} onChange={e=>{setLastName(e.target.value);clr("lastName")}} placeholder="Tsina"/>{errors.lastName&&<div className="err-msg">{errors.lastName}</div>}</div>
         {provider&&<div className={`field${errors.phone?" err":""}`}><label>Numéro de téléphone <span style={{color:"#EF4444"}}>*</span></label>
-          <div style={{display:"flex",gap:8}}><div style={{padding:"10px 12px",borderRadius:12,border:"1px solid var(--border)",background:"var(--light)",fontSize:13,fontWeight:600,flexShrink:0}}>🇨🇬 +242</div><input value={phone} onChange={e=>{setPhone(e.target.value);clr("phone")}} placeholder="06X XXX XXX" type="tel" style={{flex:1}}/></div>
+          <div style={{display:"flex",gap:8}}><div style={{padding:"10px 12px",borderRadius:12,border:"1px solid var(--border)",background:"var(--light)",fontSize:13,fontWeight:600,flexShrink:0}}>🇨🇬 +242</div><input value={phone} onChange={e=>{const v=e.target.value.replace(/[^0-9]/g,"").slice(0,9);setPhone(v);clr("phone")}} placeholder="06X XXX XXX" type="tel" style={{flex:1}}/></div>
           {errors.phone&&<div className="err-msg">{errors.phone}</div>}
         </div>}
         <button className="btn-primary" onClick={()=>{if(validate0()){setUserName?.(firstName.trim());setStep(1)}}}>Continuer</button>

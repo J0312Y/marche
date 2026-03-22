@@ -104,7 +104,7 @@ function VDeliveryScr({go,onBack}){
       {showAdd&&<div style={{padding:16,background:"var(--card)",border:"2px solid #F97316",borderRadius:16,marginTop:10}}>
         <h4 style={{fontSize:14,fontWeight:700,marginBottom:12}}>➕ Ajouter un livreur manuellement</h4>
         <div className="field"><label>Nom complet</label><input value={addName} onChange={e=>setAddName(e.target.value)} placeholder="Ex: Patrick Moukala"/></div>
-        <div className="field"><label>Téléphone</label><input value={addPhone} onChange={e=>setAddPhone(e.target.value)} placeholder="+242 06X XXX XXX" type="tel"/></div>
+        <div className="field"><label>Téléphone</label><input value={addPhone} onChange={e=>setAddPhone(e.target.value)} placeholder="06X XXX XXX" maxLength={11} type="tel"/></div>
         <div className="field"><label>Véhicule</label>
           <div style={{display:"flex",gap:6}}>{[["moto","🛵 Moto"],["voiture","🚗 Voiture"],["velo","🚲 Vélo"]].map(([k,l])=><button key={k} onClick={()=>setAddVehicle(k)} style={{flex:1,padding:8,borderRadius:8,border:addVehicle===k?"2px solid #F97316":"1px solid var(--border)",background:addVehicle===k?"rgba(249,115,22,0.04)":"var(--card)",fontSize:11,fontWeight:600,cursor:"pointer",fontFamily:"inherit"}}>{l}</button>)}</div>
         </div>

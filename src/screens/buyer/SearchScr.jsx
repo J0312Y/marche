@@ -1,4 +1,5 @@
 import { useState } from "react";
+import FilterSheet from "../../components/FilterSheet";
 import PullToRefresh from "../../components/PullToRefresh";
 import toast from "../../utils/toast";
 import Img from "../../components/Img";
@@ -8,6 +9,9 @@ import { fmt, disc, getVendorPromo, totalDisc } from "../../utils/helpers";
 function SearchScr({go,onBack,fromTab,favs,toggleFav,isFav,defaultTab}){
   const { P, VENDORS, CATS } = useData();
   const [q,setQ]=useState("");const [sc,setSC]=useState("Tous");
+  const [showFilter,setShowFilter]=useState(false);
+  const [filters,setFilters]=useState({});
+  const activeFilterCount=Object.values(filters).filter(v=>v&&v!==0&&v!=="popular").length;
   const [tab,setTab]=useState(defaultTab||"products");
   const [sortBy,setSortBy]=useState("popular");
   const cats=["Tous",...CATS.map(c=>c.name)];

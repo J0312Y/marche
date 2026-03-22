@@ -117,7 +117,7 @@ function RoleRegScr({onBack,onDone,forceRole}){
       {step===0&&<><h3 style={{fontSize:16,fontWeight:700,marginBottom:14}}>Informations personnelles</h3>
         <div className="field"><label>Nom complet <span style={{color:"#EF4444"}}>*</span></label><input placeholder="Joeldy Tsina"/></div>
         <div className="field"><label>Email <span style={{color:"#EF4444"}}>*</span></label><input placeholder="joeldytsina94@gmail.com"/></div>
-        <div className="field"><label>Téléphone <span style={{color:"#EF4444"}}>*</span></label><input placeholder="+242 064 663 469"/></div>
+        <div className="field"><label>Téléphone <span style={{color:"#EF4444"}}>*</span></label><input placeholder="06X XXX XXX" maxLength={11}/></div>
         <div className="field-row"><div className="field"><label>Ville <span style={{color:"#EF4444"}}>*</span></label><input placeholder="Brazzaville"/></div><div className="field"><label>Quartier <span style={{color:"#EF4444"}}>*</span></label><input placeholder="Bacongo"/></div></div>
       </>}
 

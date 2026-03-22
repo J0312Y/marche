@@ -10,6 +10,7 @@ function VAddDriverScr({onBack}){
     const e={};
     if(!drvName.trim()) e.name="Nom requis";
     if(!drvPhone.trim()) e.phone="Téléphone requis";
+    else if(drvPhone.replace(/\s/g,"").length!==9) e.phone="9 chiffres après +242";
     setDrvErrors(e);
     if(Object.keys(e).length){toast.error("Remplissez les champs obligatoires");return false}
     return true;
@@ -20,7 +21,7 @@ function VAddDriverScr({onBack}){
     <div className="scr" style={{padding:16}}>
       <div style={{textAlign:"center",marginBottom:14}}><div style={{width:64,height:64,borderRadius:18,background:"rgba(16,185,129,0.1)",display:"flex",alignItems:"center",justifyContent:"center",margin:"0 auto 10px",fontSize:32}}>🛵</div><p style={{fontSize:13,color:"var(--muted)"}}>Invitez un livreur à rejoindre votre réseau de livraison</p></div>
       <div className="field"><label>Nom complet <span style={{color:"#EF4444"}}>*</span></label><input value={drvName} onChange={e=>setDrvName(e.target.value)} placeholder="Ex: Patrick Moukala"/>{drvErrors.name&&<div className="err-msg">{drvErrors.name}</div>}</div>
-      <div className="field"><label>Téléphone <span style={{color:"#EF4444"}}>*</span></label><input value={drvPhone} onChange={e=>setDrvPhone(e.target.value)} placeholder="+242 06X XXX XXX" type="tel"/>{drvErrors.phone&&<div className="err-msg">{drvErrors.phone}</div>}</div>
+      <div className="field"><label>Téléphone <span style={{color:"#EF4444"}}>*</span></label><input value={drvPhone} onChange={e=>{const v=e.target.value.replace(/[^0-9]/g,"").slice(0,9);setDrvPhone(v)}} placeholder="06X XXX XXX" maxLength={11} type="tel"/>{drvErrors.phone&&<div className="err-msg">{drvErrors.phone}</div>}</div>
       <div className="field"><label>Email <span style={{color:"var(--muted)",fontWeight:400}}>(optionnel)</span></label><input placeholder="livreur@email.com" type="email"/></div>
       <div className="field"><label>Type de véhicule <span style={{color:"#EF4444"}}>*</span></label><Select value="moto" onChange={()=>{}} options={[{value:"moto",label:"🛵 Moto / Scooter"},{value:"voiture",label:"🚗 Voiture"},{value:"velo",label:"🚲 Vélo"}]}/></div>
       <div className="field"><label>Zone de livraison <span style={{color:"#EF4444"}}>*</span></label><Select value="Brazzaville Sud" onChange={()=>{}} options={["Brazzaville Sud","Brazzaville Centre","Brazzaville Nord","Pointe-Noire"]}/></div>

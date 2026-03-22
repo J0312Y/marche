@@ -1,9 +1,12 @@
+import PermissionSheet from "../../components/PermissionSheet";
 import { useState } from "react";
 import { useData } from "../../hooks";
 import MapView from "../../components/MapView";
 
 function NearbyScr({go,onBack}){
   const { VENDORS } = useData();
+  const [locGranted,setLocGranted]=useState(false);
+  const [showLocPerm,setShowLocPerm]=useState(true);
   const [sel,setSel]=useState(VENDORS[0]);
   const markers=VENDORS.filter(v=>v.lat&&v.lng).map(v=>({
     lat:v.lat,lng:v.lng,

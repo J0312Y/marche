@@ -1,3 +1,4 @@
+import { setLanguage } from "../../utils/i18n";
 import { useState } from "react";
 import Select from "../../components/Select";
 import { useApp } from "../../context/AppContext";
@@ -29,7 +30,7 @@ function VSettingsScr({onBack,go}){
     </div>
     <div>
       <div className="setting-group"><div className="setting-label">Général</div>
-        <div className="setting-item"><span className="si-i">🌐</span><span className="si-t">Langue</span><Select value={lang} onChange={setLang} options={[{value:"fr",label:"🇫🇷 Français"},{value:"en",label:"🇬🇧 English"},{value:"ln",label:"🇨🇬 Lingala"}]}/></div>
+        <div className="setting-item"><span className="si-i">🌐</span><span className="si-t">Langue</span><Select value={lang} onChange={v=>{setLang(v);setLanguage(v)}} options={[{value:"fr",label:"🇫🇷 Français"},{value:"en",label:"🇬🇧 English"},{value:"ln",label:"🇨🇬 Lingala"}]}/></div>
       </div>
       <div className="setting-group"><div className="setting-label">Notifications push</div>
         <div className="setting-item"><span className="si-i">📦</span><span className="si-t">Nouvelles commandes</span><div className={`toggle ${pushOrder?"on":""}`} onClick={()=>setPushOrder(!pushOrder)}/></div>

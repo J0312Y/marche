@@ -1,3 +1,4 @@
+import { setLanguage } from "../../utils/i18n";
 import { useState } from "react";
 import { useApp } from "../../context/AppContext";
 import toast from "../../utils/toast";

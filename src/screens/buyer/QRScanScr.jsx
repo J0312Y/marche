@@ -1,8 +1,10 @@
+import PermissionSheet from "../../components/PermissionSheet";
 import { useState } from "react";
 import toast from "../../utils/toast";
 function QRScanScr({onBack,go}){
   const [scanned,setScanned]=useState(false);
   const mockScan=()=>{setScanned(true);toast.success("Commerce trouvé ! 🏪");setTimeout(()=>go("vendor",{id:"v1",name:"Tech Congo"}),1000)};
+  if(showPerm&&!permGranted) return(<div className="scr"><div className="appbar"><button onClick={onBack}>←</button><h2>Scanner QR</h2><div style={{width:38}}/></div><PermissionSheet type="camera" onAllow={()=>{setPermGranted(true);setShowPerm(false)}} onDeny={onBack}/></div>);
   return(<div className="scr" style={{display:"flex",flexDirection:"column",height:"100%"}}>
     <div className="appbar"><button onClick={onBack}>←</button><h2>Scanner QR</h2><div style={{width:38}}/></div>
     <div style={{flex:1,display:"flex",flexDirection:"column",alignItems:"center",justifyContent:"center",padding:20,textAlign:"center"}}>

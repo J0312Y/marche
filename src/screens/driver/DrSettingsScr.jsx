@@ -1,3 +1,4 @@
+import { setLanguage } from "../../utils/i18n";
 import { useState } from "react";
 import Select from "../../components/Select";
 import { useApp } from "../../context/AppContext";
@@ -9,7 +10,7 @@ function DrSettingsScr({onBack,go}){
   return(<div className="scr" style={{paddingBottom:20}}><div className="appbar"><button onClick={onBack}>←</button><h2>Paramètres</h2><div style={{width:38}}/></div>
     <div style={{padding:"0 16px"}}>
       <div className="setting-group"><div className="setting-label">Général</div>
-        <div className="setting-item"><span className="si-i">🌐</span><span className="si-t">Langue</span><Select value={lang} onChange={setLang} options={[{value:"fr",label:"🇫🇷 Français"},{value:"en",label:"🇬🇧 English"},{value:"ln",label:"🇨🇬 Lingala"}]}/></div>
+        <div className="setting-item"><span className="si-i">🌐</span><span className="si-t">Langue</span><Select value={lang} onChange={v=>{setLang(v);setLanguage(v)}} options={[{value:"fr",label:"🇫🇷 Français"},{value:"en",label:"🇬🇧 English"},{value:"ln",label:"🇨🇬 Lingala"}]}/></div>
         <div className="setting-item"><span className="si-i">🌙</span><span className="si-t">Mode sombre</span><div className={`toggle ${darkMode?"on":""}`} onClick={()=>{toggleDark();toast.success(darkMode?"Mode clair ☀️":"Mode sombre 🌙")}}/></div>
       </div>
       <div className="setting-group"><div className="setting-label">Notifications</div>

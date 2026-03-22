@@ -10,7 +10,7 @@ function OTPScr({onDone}){
       <div className="otp-inputs">
         {[1,2,3,4].map(i=><input key={i} className="otp-box" maxLength={1} defaultValue={i<=2?String(i+2):""}/>)}
       </div>
-      <div className="otp-timer">{timer>0?<>Renvoyer le code dans <b>00:{String(timer).padStart(2,"0")}</b></>:<b style={{color:"#F97316",cursor:"pointer"}}>Renvoyer le code</b>}</div>
+      <div className="otp-timer">{timer>0?<>Renvoyer le code dans <b>00:{String(timer).padStart(2,"0")}</b></>:<b style={{color:"var(--text)",cursor:"pointer",fontWeight:700,textDecoration:"underline"}}>Renvoyer le code</b>}</div>
       <button className="btn-primary" onClick={onDone}>Vérifier</button>
     </div>
   );
