@@ -33,7 +33,7 @@ function OrderDetailScr({order:o,onBack,go}){
             {i<3&&<div style={{width:2,height:20,background:done?"#10B981":"var(--border)"}}/>}
           </div>
           <div style={{paddingTop:3}}>
-            <div style={{fontSize:13,fontWeight:active?700:done?600:400,color:done||active?"#191815":"var(--muted)"}}>{s}</div>
+            <div style={{fontSize:13,fontWeight:active?700:done?600:400,color:done||active?"var(--text)":"var(--muted)"}}>{s}</div>
           </div>
         </div>);
       })}

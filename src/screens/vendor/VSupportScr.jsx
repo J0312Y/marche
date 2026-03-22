@@ -156,7 +156,7 @@ function VSupportScr({go,onBack,vendorPlan}){
             </div>
           </div>
           {guideOpen===g.id&&<div style={{padding:"0 0 10px 0",marginTop:-6}}>
-            {g.sections.map((s,i)=><div key={i} style={{padding:14,marginLeft:20,borderLeft:"2px solid #6366F1",marginBottom:0,background:i%2===0?"#FAFAF8":"#fff"}}>
+            {g.sections.map((s,i)=><div key={i} style={{padding:14,marginLeft:20,borderLeft:"2px solid #6366F1",marginBottom:0,background:i%2===0?"var(--bg)":"var(--card)"}}>
               <div style={{display:"flex",alignItems:"center",gap:6,marginBottom:6}}>
                 <span style={{width:20,height:20,borderRadius:6,background:"#6366F1",color:"#fff",display:"inline-flex",alignItems:"center",justifyContent:"center",fontSize:10,fontWeight:700,flexShrink:0}}>{i+1}</span>
                 <h4 style={{fontSize:13,fontWeight:700}}>{s.title}</h4>

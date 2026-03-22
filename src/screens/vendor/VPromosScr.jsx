@@ -53,7 +53,7 @@ function VPromosScr({go,onBack}){
       {/* Tabs */}
       <div style={{display:"flex",gap:0,marginBottom:12,background:"var(--light)",borderRadius:12,padding:3}}>
         <button onClick={()=>setTab("active")} style={{flex:1,padding:"8px 0",borderRadius:10,border:"none",background:tab==="active"?"var(--card)":"transparent",color:tab==="active"?"#10B981":"var(--muted)",fontSize:11,fontWeight:tab==="active"?700:500,cursor:"pointer",fontFamily:"inherit",boxShadow:tab==="active"?"0 1px 4px rgba(0,0,0,.06)":"none"}}>🟢 En cours ({activePromos.length})</button>
-        <button onClick={()=>setTab("inactive")} style={{flex:1,padding:"8px 0",borderRadius:10,border:"none",background:tab==="inactive"?"var(--card)":"transparent",color:tab==="inactive"?"#908C82":"var(--muted)",fontSize:11,fontWeight:tab==="inactive"?700:500,cursor:"pointer",fontFamily:"inherit",boxShadow:tab==="inactive"?"0 1px 4px rgba(0,0,0,.06)":"none"}}>⏸️ Terminées ({inactivePromos.length})</button>
+        <button onClick={()=>setTab("inactive")} style={{flex:1,padding:"8px 0",borderRadius:10,border:"none",background:tab==="inactive"?"var(--card)":"transparent",color:tab==="inactive"?"var(--muted)":"var(--muted)",fontSize:11,fontWeight:tab==="inactive"?700:500,cursor:"pointer",fontFamily:"inherit",boxShadow:tab==="inactive"?"0 1px 4px rgba(0,0,0,.06)":"none"}}>⏸️ Terminées ({inactivePromos.length})</button>
       </div>
 
       {shown.length===0&&<div style={{textAlign:"center",padding:"40px 0"}}><div style={{fontSize:36,marginBottom:8}}>🏷️</div><div style={{fontSize:13,color:"var(--muted)"}}>{tab==="active"?"Aucune promotion active":"Aucune promotion terminée"}</div></div>}

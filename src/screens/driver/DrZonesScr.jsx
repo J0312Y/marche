@@ -53,7 +53,7 @@ function DrZonesScr({onBack}){
         {suggestions.length>0&&<>
           <div style={{fontSize:12,fontWeight:600,color:"var(--sub)",marginBottom:8}}>Zones suggérées</div>
           <div style={{display:"flex",gap:6,flexWrap:"wrap",marginBottom:14}}>
-            {suggestions.map(s=><span key={s.name} onClick={()=>{setAddName(s.name);setAddAreas(s.areas)}} style={{padding:"6px 12px",borderRadius:8,border:addName===s.name?"2px solid #10B981":"1px solid var(--border)",background:addName===s.name?"rgba(16,185,129,0.04)":"#fff",fontSize:11,fontWeight:600,cursor:"pointer",color:addName===s.name?"#10B981":"var(--sub)"}}>{addName===s.name?"✓ ":""}{s.name}</span>)}
+            {suggestions.map(s=><span key={s.name} onClick={()=>{setAddName(s.name);setAddAreas(s.areas)}} style={{padding:"6px 12px",borderRadius:8,border:addName===s.name?"2px solid #10B981":"1px solid var(--border)",background:addName===s.name?"rgba(16,185,129,0.04)":"var(--card)",fontSize:11,fontWeight:600,cursor:"pointer",color:addName===s.name?"#10B981":"var(--sub)"}}>{addName===s.name?"✓ ":""}{s.name}</span>)}
           </div>
         </>}
 

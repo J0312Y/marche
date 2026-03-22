@@ -16,7 +16,7 @@ function Button({ variant = "primary", full = false, disabled = false, onClick, 
   };
   const variants = {
     primary: { background: "#6366F1", color: "#fff" },
-    secondary: { background: "#F5F4F1", color: "#191815" },
+    secondary: { background: "var(--light)", color: "var(--text)" },
     outline: { background: "transparent", color: "#6366F1", border: "2px solid #6366F1" },
     ghost: { background: "transparent", color: "#6366F1" },
   };

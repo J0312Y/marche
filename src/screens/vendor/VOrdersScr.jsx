@@ -1,4 +1,6 @@
 import { useState } from "react";
+import PullToRefresh from "../../components/PullToRefresh";
+import toast from "../../utils/toast";
 import Img from "../../components/Img";
 import { useLoad } from "../../hooks";
 import { vendor } from "../../services";
@@ -12,7 +14,7 @@ function VOrdersScr({go,onBack}){
   const { data, loading } = useLoad(() => vendor.getOrders(filter), [filter]);
   const orders = data?.orders || [];
   const counts = data?.counts || { all:0, new:0, preparing:0, shipped:0, delivered:0 };
-  return(<div className="scr">
+  return(<PullToRefresh onRefresh={async()=>{toast.success("Commandes actualisées 🛍️")}}><div className="scr">
     <div className="appbar">{onBack&&<button onClick={onBack}>←</button>}<h2>Commandes ({counts.all})</h2><div style={{width:38}}/></div>
     <div className="vo-filter">{[["all","Tous",counts.all],["new","🆕",counts.new],["preparing","🔄",counts.preparing],["shipped","🚚",counts.shipped],["delivered","✅",counts.delivered]].map(([k,l,c])=><button key={k} className={filter===k?"on":""} onClick={()=>setFilter(k)}>{l} {c}</button>)}</div>
     <div style={{padding:"0 16px 80px"}}>
@@ -46,7 +48,7 @@ function VOrdersScr({go,onBack}){
         </div>);
       })}
     </div>
-  </div>);
+  </div></PullToRefresh>);
 }
 
 export default VOrdersScr;

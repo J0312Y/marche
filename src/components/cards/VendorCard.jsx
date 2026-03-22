@@ -16,7 +16,7 @@ function VendorCard({ vendor: v, onPress }) {
         </div>
         <div className="vst">⭐ <b>{v.rating}</b> · {v.products} {typeLabel}</div>
       </div>
-      <span style={{ color: "#908C82" }}>›</span>
+      <span style={{ color: "var(--muted)" }}>›</span>
     </div>
   );
 }

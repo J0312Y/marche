@@ -79,7 +79,7 @@ function PhotoGuide({ onClose, shopType="boutique" }){
           {["Conseils généraux",`${typeRules.icon} ${typeRules.title}`].map((t,i)=>(
             <button key={i} onClick={()=>setTab(i)} style={{
               flex:1,padding:"10px 0",border:"none",background:"none",fontSize:12,fontWeight:600,
-              color:tab===i?"#6366F1":"#908C82",borderBottom:tab===i?"2px solid #6366F1":"2px solid transparent",
+              color:tab===i?"#6366F1":"var(--muted)",borderBottom:tab===i?"2px solid #6366F1":"2px solid transparent",
               cursor:"pointer",fontFamily:"inherit",transition:"all .2s"
             }}>{t}</button>
           ))}
@@ -93,7 +93,7 @@ function PhotoGuide({ onClose, shopType="boutique" }){
                 De bonnes photos augmentent vos ventes de <b style={{color:"#10B981"}}>3x</b>. Suivez ces conseils pour des résultats professionnels.
               </p>
               {TIPS.map((tip,i)=>(
-                <div key={i} style={{marginBottom:16,padding:14,background:"#FAFAF8",borderRadius:14,border:"1px solid #F0EFEC"}}>
+                <div key={i} style={{marginBottom:16,padding:14,background:"var(--bg)",borderRadius:14,border:"1px solid #F0EFEC"}}>
                   <div style={{display:"flex",alignItems:"center",gap:8,marginBottom:8}}>
                     <span style={{fontSize:22}}>{tip.icon}</span>
                     <h4 style={{fontSize:14,fontWeight:700}}>{tip.title}</h4>
@@ -121,7 +121,7 @@ function PhotoGuide({ onClose, shopType="boutique" }){
                 <p style={{fontSize:12,color:"var(--muted)",marginTop:4}}>Règles spécifiques pour vos photos</p>
               </div>
               {typeRules.rules.map((rule,i)=>(
-                <div key={i} style={{display:"flex",alignItems:"center",gap:12,padding:"12px 14px",background:i%2===0?"#FAFAF8":"#fff",borderRadius:12,marginBottom:6}}>
+                <div key={i} style={{display:"flex",alignItems:"center",gap:12,padding:"12px 14px",background:i%2===0?"var(--light)":"var(--card)",borderRadius:12,marginBottom:6}}>
                   <div style={{width:28,height:28,borderRadius:8,background:"rgba(99,102,241,0.08)",display:"flex",alignItems:"center",justifyContent:"center",fontSize:12,fontWeight:700,color:"#6366F1",flexShrink:0}}>{i+1}</div>
                   <span style={{fontSize:13,fontWeight:500}}>{rule}</span>
                 </div>
@@ -140,7 +140,7 @@ function PhotoGuide({ onClose, shopType="boutique" }){
 
         {/* CTA */}
         <div style={{padding:"0 20px 20px",position:"sticky",bottom:0,background:"var(--card)"}}>
-          <button onClick={onClose} style={{width:"100%",padding:14,borderRadius:14,border:"none",background:"#6366F1",color:"#fff",fontSize:14,fontWeight:600,cursor:"pointer",fontFamily:"inherit"}}>
+          <button onClick={onClose} style={{width:"100%",padding:14,borderRadius:14,border:"none",background:"#6366F1",color:"var(--card)",fontSize:14,fontWeight:600,cursor:"pointer",fontFamily:"inherit"}}>
             👍 J'ai compris, ajouter mes photos
           </button>
         </div>

@@ -1,4 +1,6 @@
 import { useState } from "react";
+import PullToRefresh from "../../components/PullToRefresh";
+import toast from "../../utils/toast";
 import Img from "../../components/Img";
 import { useData } from "../../hooks";
 import { fmt, disc, getVendorPromo, totalDisc } from "../../utils/helpers";
@@ -17,7 +19,7 @@ function SearchScr({go,onBack,fromTab,favs,toggleFav,isFav,defaultTab}){
   const fv=VENDORS.filter(v=>{
     if(!q)return true;return v.name.toLowerCase().includes(ql)||v.desc?.toLowerCase().includes(ql)||v.type?.toLowerCase().includes(ql);
   });
-  return(<div className="scr">
+  return(<PullToRefresh onRefresh={async()=>{toast.success("Résultats actualisés 🔍")}}><div className="scr">
     {fromTab?<div className="appbar"><h2>Rechercher</h2></div>:<div className="appbar"><button onClick={onBack}>←</button><h2>Rechercher</h2><div style={{width:38}}/></div>}
     <div style={{padding:"0 16px 8px"}}>
       <div style={{display:"flex",alignItems:"center",gap:8,padding:"9px 14px",background:"var(--light)",borderRadius:14,border:"1px solid var(--border)"}}>
@@ -59,6 +61,6 @@ function SearchScr({go,onBack,fromTab,favs,toggleFav,isFav,defaultTab}){
       </div>)}
       {fv.length===0&&<div style={{textAlign:"center",padding:"40px 0"}}><div style={{fontSize:36}}>🏪</div><div style={{fontSize:13,color:"var(--muted)",marginTop:6}}>Aucune boutique trouvée</div></div>}
     </div>}
-  </div>);
+  </div></PullToRefresh>);
 }
 export default SearchScr;

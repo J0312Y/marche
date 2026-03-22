@@ -24,7 +24,7 @@ function BottomNav({ tabs, activeTab, onTab, mode = "buyer" }) {
               boxShadow: isActive ? "0 6px 20px rgba(99,102,241,.45)" : "0 4px 14px rgba(99,102,241,.3)",
               border: "4px solid #fff", transition: "all .2s"
             }}>🛍️</div>
-            <span style={{ fontSize: 9, fontWeight: 600, color: isActive ? "#6366F1" : "#908C82", marginTop: 1 }}>
+            <span style={{ fontSize: 9, fontWeight: 600, color: isActive ? "#6366F1" : "var(--muted)", marginTop: 1 }}>
               {isActive && t.label}
             </span>
           </button>

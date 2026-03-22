@@ -44,7 +44,7 @@ function TrackingScr({onBack,go}){
     {/* Map */}
     <MapView center={[-4.270,15.281]} zoom={15} markers={markers} route={route} routeColor="#6366F1" driverPos={driverPos} style={{height:220}}>
       <div style={{position:"absolute",top:10,left:10,zIndex:1000}}>
-        <button onClick={onBack} style={{width:40,height:40,borderRadius:14,background:"rgba(255,255,255,0.85)",backdropFilter:"blur(12px)",WebkitBackdropFilter:"blur(12px)",border:"1px solid rgba(255,255,255,0.4)",boxShadow:"0 4px 16px rgba(0,0,0,0.12)",cursor:"pointer",display:"flex",alignItems:"center",justifyContent:"center"}}><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#191815" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><path d="M19 12H5M12 19l-7-7 7-7"/></svg></button>
+        <button onClick={onBack} style={{width:40,height:40,borderRadius:14,background:"rgba(255,255,255,0.85)",backdropFilter:"blur(12px)",WebkitBackdropFilter:"blur(12px)",border:"1px solid rgba(255,255,255,0.4)",boxShadow:"0 4px 16px rgba(0,0,0,0.12)",cursor:"pointer",display:"flex",alignItems:"center",justifyContent:"center"}}><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><path d="M19 12H5M12 19l-7-7 7-7"/></svg></button>
       </div>
       {/* Live ETA badge */}
       <div style={{position:"absolute",bottom:10,left:"50%",transform:"translateX(-50%)",zIndex:1000,background:"var(--card)",padding:"8px 16px",borderRadius:14,boxShadow:"0 4px 16px rgba(0,0,0,.12)",display:"flex",alignItems:"center",gap:8,whiteSpace:"nowrap"}}>
@@ -104,7 +104,7 @@ function TrackingScr({onBack,go}){
               {i<STEPS.length-1&&<div style={{width:2,height:18,background:s.done?"#10B981":"var(--border)"}}/>}
             </div>
             <div style={{paddingTop:4,paddingBottom:i<STEPS.length-1?8:0}}>
-              <div style={{fontSize:12,fontWeight:s.active?700:s.done?600:400,color:s.done||s.active?"#191815":"var(--muted)"}}>{s.label}</div>
+              <div style={{fontSize:12,fontWeight:s.active?700:s.done?600:400,color:s.done||s.active?"var(--text)":"var(--muted)"}}>{s.label}</div>
               <div style={{fontSize:10,color:"var(--muted)",marginTop:1}}>{s.time}</div>
             </div>
           </div>

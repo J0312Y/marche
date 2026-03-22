@@ -64,12 +64,12 @@ function VShopDetailScr({shop:sh,go,onBack}){
 
         <div style={{fontSize:14,fontWeight:700,margin:"16px 0 10px"}}>Catégories</div>
         <div style={{display:"flex",gap:6,flexWrap:"wrap",marginBottom:14}}>
-          {allCats.map(c=><span key={c} onClick={()=>toggleCat(c)} style={{padding:"8px 14px",borderRadius:10,background:selCats.includes(c)?"rgba(99,102,241,0.08)":"#fff",border:selCats.includes(c)?"2px solid #6366F1":"1px solid var(--border)",color:selCats.includes(c)?"#6366F1":"var(--muted)",fontSize:12,fontWeight:600,cursor:"pointer",transition:"all .2s"}}>{selCats.includes(c)?"✓ ":""}{c}</span>)}
+          {allCats.map(c=><span key={c} onClick={()=>toggleCat(c)} style={{padding:"8px 14px",borderRadius:10,background:selCats.includes(c)?"rgba(99,102,241,0.08)":"var(--card)",border:selCats.includes(c)?"2px solid #6366F1":"1px solid var(--border)",color:selCats.includes(c)?"#6366F1":"var(--muted)",fontSize:12,fontWeight:600,cursor:"pointer",transition:"all .2s"}}>{selCats.includes(c)?"✓ ":""}{c}</span>)}
         </div>
 
         <div style={{fontSize:14,fontWeight:700,margin:"10px 0 10px"}}>Visibilité</div>
         <div style={{display:"flex",gap:10,marginBottom:14}}>
-          {[["active","🟢 Active","Visible sur le marketplace"],["pause","⏸️ En pause","Masquée temporairement"],["close","🔴 Fermée","Plus de commandes"]].map(([k,l,d])=><div key={k} onClick={()=>setVisibility(k)} style={{flex:1,padding:12,background:visibility===k?(k==="active"?"rgba(16,185,129,0.04)":k==="pause"?"rgba(245,158,11,0.04)":"rgba(239,68,68,0.04)"):"#fff",border:visibility===k?(k==="active"?"2px solid #10B981":k==="pause"?"2px solid #F59E0B":"2px solid #EF4444"):"1px solid var(--border)",borderRadius:12,cursor:"pointer",textAlign:"center",transition:"all .2s"}}>
+          {[["active","🟢 Active","Visible sur le marketplace"],["pause","⏸️ En pause","Masquée temporairement"],["close","🔴 Fermée","Plus de commandes"]].map(([k,l,d])=><div key={k} onClick={()=>setVisibility(k)} style={{flex:1,padding:12,background:visibility===k?(k==="active"?"rgba(16,185,129,0.04)":k==="pause"?"rgba(245,158,11,0.04)":"rgba(239,68,68,0.04)"):"var(--card)",border:visibility===k?(k==="active"?"2px solid #10B981":k==="pause"?"2px solid #F59E0B":"2px solid #EF4444"):"1px solid var(--border)",borderRadius:12,cursor:"pointer",textAlign:"center",transition:"all .2s"}}>
             <div style={{fontSize:12,fontWeight:700}}>{l}</div>
             <div style={{fontSize:9,color:"var(--muted)",marginTop:4}}>{d}</div>
           </div>)}

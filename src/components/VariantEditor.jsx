@@ -183,9 +183,9 @@ function VariantEditor({ shopType = "boutique", category = "", value = [], onCha
           return (
             <button key={c.key} onClick={() => setExpanded(isActive ? "" : c.key)} style={{
               padding: "6px 12px", borderRadius: 10, border: count > 0 ? "2px solid #6366F1" : "1px solid #E8E6E1",
-              background: isActive ? "rgba(99,102,241,0.06)" : count > 0 ? "rgba(99,102,241,0.02)" : "#fff",
+              background: isActive ? "rgba(99,102,241,0.06)" : count > 0 ? "rgba(99,102,241,0.02)" : "var(--card)",
               fontSize: 12, fontWeight: 600, cursor: "pointer", fontFamily: "inherit", flexShrink: 0,
-              color: count > 0 ? "#6366F1" : "#5E5B53", transition: "all .2s",
+              color: count > 0 ? "#6366F1" : "var(--sub)", transition: "all .2s",
               display: "flex", alignItems: "center", gap: 4,
             }}>
               {c.icon} {c.label}
@@ -202,10 +202,10 @@ function VariantEditor({ shopType = "boutique", category = "", value = [], onCha
         const selectedNames = varGroup.values.map(v => v.name);
 
         return (
-          <div key={c.key} style={{ padding: 14, background: "#FAFAF8", borderRadius: 14, border: "1px solid #E8E6E1", marginBottom: 14 }}>
+          <div key={c.key} style={{ padding: 14, background: "var(--light)", borderRadius: 14, border: "1px solid #E8E6E1", marginBottom: 14 }}>
             <div style={{ fontSize: 13, fontWeight: 700, marginBottom: 10, display: "flex", alignItems: "center", gap: 6 }}>
               {c.icon} {c.label}
-              <span style={{ fontSize: 11, fontWeight: 500, color: "#908C82" }}>— Sélectionnez les options disponibles</span>
+              <span style={{ fontSize: 11, fontWeight: 500, color: "var(--muted)" }}>— Sélectionnez les options disponibles</span>
             </div>
 
             {/* Preset chips */}
@@ -219,10 +219,10 @@ function VariantEditor({ shopType = "boutique", category = "", value = [], onCha
                       padding: colorDot ? "5px 10px 5px 6px" : "5px 12px",
                       borderRadius: 8,
                       border: isSelected ? "2px solid #6366F1" : "1px solid #E8E6E1",
-                      background: isSelected ? "rgba(99,102,241,0.06)" : "#fff",
+                      background: isSelected ? "rgba(99,102,241,0.06)" : "var(--card)",
                       fontSize: 12, fontWeight: isSelected ? 700 : 500,
                       cursor: "pointer", fontFamily: "inherit",
-                      color: isSelected ? "#6366F1" : "#5E5B53",
+                      color: isSelected ? "#6366F1" : "var(--sub)",
                       display: "flex", alignItems: "center", gap: 5, transition: "all .15s",
                     }}>
                       {colorDot && <span style={{
@@ -244,12 +244,12 @@ function VariantEditor({ shopType = "boutique", category = "", value = [], onCha
                 onChange={e => setCustomInputs({ ...customInputs, [c.key]: e.target.value })}
                 onKeyDown={e => e.key === "Enter" && addCustom(c.key)}
                 placeholder={`Ajouter un(e) ${c.label.toLowerCase()} personnalisé(e)...`}
-                style={{ flex: 1, padding: "8px 12px", borderRadius: 10, border: "1px solid #E8E6E1", background: "#fff", fontSize: 12, fontFamily: "inherit", outline: "none" }}
+                style={{ flex: 1, padding: "8px 12px", borderRadius: 10, border: "1px solid #E8E6E1", background: "var(--card)", fontSize: 12, fontFamily: "inherit", outline: "none" }}
               />
               <button onClick={() => addCustom(c.key)} style={{
                 padding: "0 14px", borderRadius: 10, border: "none",
-                background: (customInputs[c.key] || "").trim() ? "#6366F1" : "#E8E6E1",
-                color: (customInputs[c.key] || "").trim() ? "#fff" : "#908C82",
+                background: (customInputs[c.key] || "").trim() ? "#6366F1" : "var(--border)",
+                color: (customInputs[c.key] || "").trim() ? "var(--card)" : "var(--muted)",
                 fontSize: 12, fontWeight: 600, cursor: "pointer", fontFamily: "inherit",
               }}>+</button>
             </div>
@@ -257,13 +257,13 @@ function VariantEditor({ shopType = "boutique", category = "", value = [], onCha
             {/* Selected values with stock & price delta */}
             {varGroup.values.length > 0 && (
               <div>
-                <div style={{ fontSize: 11, fontWeight: 600, color: "#908C82", marginBottom: 6 }}>
+                <div style={{ fontSize: 11, fontWeight: 600, color: "var(--muted)", marginBottom: 6 }}>
                   {varGroup.values.length} option{varGroup.values.length > 1 ? "s" : ""} sélectionnée{varGroup.values.length > 1 ? "s" : ""}
                 </div>
                 {varGroup.values.map(val => (
                   <div key={val.name} style={{
                     display: "flex", alignItems: "center", gap: 8, marginBottom: 6,
-                    padding: "8px 10px", background: "#fff", borderRadius: 10, border: "1px solid #E8E6E1",
+                    padding: "8px 10px", background: "var(--card)", borderRadius: 10, border: "1px solid #E8E6E1",
                   }}>
                     {c.type === "color" && COLOR_MAP[val.name] && (
                       <span style={{ width: 16, height: 16, borderRadius: 8, background: COLOR_MAP[val.name], flexShrink: 0, border: val.name === "Blanc" ? "1px solid #E8E6E1" : "none" }} />
@@ -274,13 +274,13 @@ function VariantEditor({ shopType = "boutique", category = "", value = [], onCha
                       onChange={e => updateValueField(c.key, val.name, "stock", e.target.value)}
                       style={{ width: 60, padding: "5px 8px", borderRadius: 6, border: "1px solid #E8E6E1", fontSize: 11, fontFamily: "inherit", outline: "none", textAlign: "center" }}
                     />
-                    <span style={{ fontSize: 10, color: "#908C82" }}>unités</span>
+                    <span style={{ fontSize: 10, color: "var(--muted)" }}>unités</span>
                     <input
                       type="number" placeholder="± Prix" value={val.price_delta}
                       onChange={e => updateValueField(c.key, val.name, "price_delta", e.target.value)}
                       style={{ width: 70, padding: "5px 8px", borderRadius: 6, border: "1px solid #E8E6E1", fontSize: 11, fontFamily: "inherit", outline: "none", textAlign: "center" }}
                     />
-                    <span style={{ fontSize: 10, color: "#908C82" }}>FCFA</span>
+                    <span style={{ fontSize: 10, color: "var(--muted)" }}>FCFA</span>
                     <button onClick={() => toggleValue(c.key, val.name)} style={{
                       width: 22, height: 22, borderRadius: 6, border: "none",
                       background: "rgba(239,68,68,0.08)", color: "#EF4444",
@@ -314,12 +314,12 @@ function VariantEditor({ shopType = "boutique", category = "", value = [], onCha
               };
               gen(groups, 0, []);
               return combos.map((combo, i) => (
-                <span key={i} style={{ padding: "3px 8px", borderRadius: 6, background: "#fff", border: "1px solid #E8E6E1", fontSize: 10, color: "#5E5B53" }}>
+                <span key={i} style={{ padding: "3px 8px", borderRadius: 6, background: "var(--card)", border: "1px solid #E8E6E1", fontSize: 10, color: "var(--sub)" }}>
                   {combo}
                 </span>
               ));
             })()}
-            {totalCombinations > 8 && <span style={{ fontSize: 10, color: "#908C82", padding: "3px 4px" }}>+{totalCombinations - 8} autres</span>}
+            {totalCombinations > 8 && <span style={{ fontSize: 10, color: "var(--muted)", padding: "3px 4px" }}>+{totalCombinations - 8} autres</span>}
           </div>
         </div>
       )}

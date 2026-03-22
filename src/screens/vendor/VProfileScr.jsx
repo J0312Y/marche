@@ -1,4 +1,5 @@
 import { useState } from "react";
+import PullToRefresh from "../../components/PullToRefresh";
 import toast from "../../utils/toast";
 
 import { VENDOR_LOGO_DEFAULT } from "../../data/images";
@@ -28,7 +29,7 @@ function VProfileScr({go,onSwitch,vendorPlan,onLogout}){
     setLockPopup({icon,title,requiredPlan});
   };
 
-  return(<div className="scr" style={{paddingBottom:80}}>
+  return(<PullToRefresh onRefresh={async()=>{toast.success("Espace actualisé 🏪")}}><div className="scr" style={{paddingBottom:80}}>
     <div className="appbar"><h2>Mon Espace</h2><button onClick={()=>go("vSettings")}>⚙️</button></div>
 
     {/* Profile + Plan card */}
@@ -127,7 +128,7 @@ function VProfileScr({go,onSwitch,vendorPlan,onLogout}){
         </div>
       </div>
     </div>}
-  </div>);
+  </div></PullToRefresh>);
 }
 
 export default VProfileScr;

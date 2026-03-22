@@ -11,7 +11,7 @@ function LoyaltyScr({onBack}){
       <div style={{fontSize:14,opacity:.8}}>Vos points</div>
       <div style={{fontSize:36,fontWeight:800}}>{points.toLocaleString()}</div>
       <div style={{fontSize:13,fontWeight:600}}>Niveau {level} {level==="Gold"?"🥇":level==="Silver"?"🥈":"🥉"}</div>
-      {nextLevel&&<div style={{marginTop:10}}><div style={{display:"flex",justifyContent:"space-between",fontSize:10,opacity:.7,marginBottom:4}}><span>{points}</span><span>{nextLevel.toLocaleString()} pts</span></div><div style={{height:6,background:"rgba(255,255,255,.2)",borderRadius:3,overflow:"hidden"}}><div style={{width:`${pct}%`,height:"100%",background:"#fff",borderRadius:3}}/></div></div>}
+      {nextLevel&&<div style={{marginTop:10}}><div style={{display:"flex",justifyContent:"space-between",fontSize:10,opacity:.7,marginBottom:4}}><span>{points}</span><span>{nextLevel.toLocaleString()} pts</span></div><div style={{height:6,background:"rgba(255,255,255,.2)",borderRadius:3,overflow:"hidden"}}><div style={{width:`${pct}%`,height:"100%",background:"var(--card)",borderRadius:3}}/></div></div>}
     </div>
     <div style={{fontSize:14,fontWeight:700,marginBottom:10}}>Récompenses</div>
     {rewards.map(([pts,label])=><div key={pts} style={{display:"flex",alignItems:"center",gap:12,padding:"10px 0",borderBottom:"1px solid var(--border)"}}><div style={{width:40,textAlign:"center",fontSize:12,fontWeight:700,color:points>=pts?"#10B981":"var(--muted)"}}>{points>=pts?"✅":pts}</div><span style={{flex:1,fontSize:13,color:points>=pts?"var(--text)":"var(--muted)"}}>{label}</span></div>)}

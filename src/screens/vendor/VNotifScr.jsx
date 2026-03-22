@@ -2,6 +2,7 @@ import { useState } from "react";
 import { useLoad } from "../../hooks";
 import { vendor } from "../../services";
 import { SkeletonList } from "../../components/Loading";
+import PullToRefresh from "../../components/PullToRefresh";
 import toast from "../../utils/toast";
 
 const DETAILS = {
@@ -28,7 +29,7 @@ function VNotifScr({onBack,go}){
     setExpanded(expanded===idx?null:idx);
   };
 
-  return(<div className="scr">
+  return(<PullToRefresh onRefresh={async()=>{toast.success("Notifications actualisées 🔔")}}><div className="scr">
     <div className="appbar">
       <button onClick={onBack}>←</button>
       <h2>Notifications {unreadCount>0&&<span style={{fontSize:13,color:"#6366F1",fontWeight:600}}>({unreadCount})</span>}</h2>
@@ -61,7 +62,7 @@ function VNotifScr({onBack,go}){
               </div>
 
               {isOpen&&detail&&(
-                <div style={{marginTop:10,marginLeft:!n.read?20:0,padding:12,background:"#F9F8F6",borderRadius:12,border:"1px solid var(--border)"}}>
+                <div style={{marginTop:10,marginLeft:!n.read?20:0,padding:12,background:"var(--light)",borderRadius:12,border:"1px solid var(--border)"}}>
                   <div style={{fontSize:12,color:"var(--sub)",lineHeight:1.7,whiteSpace:"pre-line"}}>{detail.full}</div>
                   {detail.action&&go&&(
                     <button onClick={e=>{e.stopPropagation();go(detail.action)}} style={{marginTop:10,width:"100%",padding:"10px 0",borderRadius:10,border:"none",background:"#6366F1",color:"#fff",fontSize:12,fontWeight:700,cursor:"pointer",fontFamily:"inherit"}}>
@@ -75,7 +76,7 @@ function VNotifScr({onBack,go}){
         })}
       </div>
     )}
-  </div>);
+  </div></PullToRefresh>);
 }
 
 export default VNotifScr;

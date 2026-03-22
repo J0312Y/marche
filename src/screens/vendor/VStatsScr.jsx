@@ -113,9 +113,9 @@ function VStatsScr({onBack}){
     <div style={{padding:16,background:"var(--card)",border:"1px solid var(--border)",borderRadius:18}}>
       <h4 style={{fontSize:14,fontWeight:700,marginBottom:14}}>💰 Résumé financier</h4>
       {[
-        ["Revenus bruts",fmt(s?.revenue||0),"#191815"],
+        ["Revenus bruts",fmt(s?.revenue||0),"var(--text)"],
         ["Commission Lamuka (4%)","-"+fmt(Math.round((s?.revenue||0)*0.04)),"#EF4444"],
-        ["Frais de livraison","Inclus","#908C82"],
+        ["Frais de livraison","Inclus","var(--muted)"],
         ["Revenus nets",fmt(Math.round((s?.revenue||0)*0.96)),"#10B981"],
       ].map(([l,v,c],i)=><div key={l} style={{display:"flex",justifyContent:"space-between",padding:"8px 0",borderTop:i?"1px solid var(--border)":"none",fontSize:13,...(i===3?{fontWeight:700}:{})}}>
         <span style={{color:i===3?c:"var(--sub)"}}>{l}</span>

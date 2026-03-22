@@ -26,7 +26,7 @@ function VApiScr({go,onBack}){
     {/* API Key */}
     <div style={{fontSize:14,fontWeight:700,marginBottom:10}}>Clé API</div>
     <div style={{padding:14,background:"var(--light)",borderRadius:14,marginBottom:6}}>
-      <div style={{fontFamily:"monospace",fontSize:12,wordBreak:"break-all",color:showKey?"#191815":"var(--muted)",marginBottom:8}}>{showKey?apiKey:"lmk_live_ent_••••••••••••••••"}</div>
+      <div style={{fontFamily:"monospace",fontSize:12,wordBreak:"break-all",color:showKey?"var(--text)":"var(--muted)",marginBottom:8}}>{showKey?apiKey:"lmk_live_ent_••••••••••••••••"}</div>
       <div style={{display:"flex",gap:8}}>
         <button style={{flex:1,padding:8,borderRadius:8,border:"1px solid var(--border)",background:"var(--card)",fontSize:11,fontWeight:600,cursor:"pointer",fontFamily:"inherit"}} onClick={()=>setShowKey(!showKey)}>{showKey?"🙈 Masquer":"👁️ Afficher"}</button>
         <button style={{flex:1,padding:8,borderRadius:8,border:"none",background:"#6366F1",color:"#fff",fontSize:11,fontWeight:600,cursor:"pointer",fontFamily:"inherit"}} onClick={()=>{setCopied(true);setTimeout(()=>setCopied(false),2000)}}>{copied?"✅ Copié !":"📋 Copier"}</button>
@@ -36,7 +36,7 @@ function VApiScr({go,onBack}){
 
     {/* Webhooks */}
     <div style={{fontSize:14,fontWeight:700,marginBottom:10}}>Webhooks</div>
-    {[["orders","Nouvelle commande"],["payments","Paiement reçu"],["stock","Stock bas"]].map(([k,label])=><div key={k} style={{padding:12,background:whTab===k?"var(--card)":"#fff",border:whTab===k?"2px solid #6366F1":"1px solid var(--border)",borderRadius:12,marginBottom:8,cursor:"pointer"}} onClick={()=>setWhTab(whTab===k?null:k)}>
+    {[["orders","Nouvelle commande"],["payments","Paiement reçu"],["stock","Stock bas"]].map(([k,label])=><div key={k} style={{padding:12,background:whTab===k?"var(--card)":"var(--card)",border:whTab===k?"2px solid #6366F1":"1px solid var(--border)",borderRadius:12,marginBottom:8,cursor:"pointer"}} onClick={()=>setWhTab(whTab===k?null:k)}>
       <div style={{display:"flex",alignItems:"center",gap:10}}>
         <div style={{flex:1}}><div style={{fontSize:13,fontWeight:600}}>{label}</div><div style={{fontSize:10,color:"var(--muted)",fontFamily:"monospace"}}>{whUrl[k]||"Non configuré"}</div></div>
         <span style={{fontSize:11,fontWeight:600,color:whUrl[k]?"#10B981":"var(--muted)"}}>{whUrl[k]?"✅ Actif":"⬜"}</span>

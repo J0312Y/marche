@@ -165,7 +165,7 @@ function HomeScr({go,favs,toggleFav,isFav}){
         <span style={{color:"#6366F1",fontSize:16}}>›</span>
       </div>
 
-      {/* Restos à la une */}}
+      {/* Restos à la une */}
       {(selType==="all"||selType==="restaurant")&&nearbyRestos.length>0&&<>
         <div className="sec"><h3>🍽️ Commander à manger</h3><span onClick={()=>go("restoList")}>Voir tout</span></div>
         <div className="marquee-wrap"><div className="marquee-track-resto">
@@ -270,7 +270,7 @@ function HomeScr({go,favs,toggleFav,isFav}){
         {/* Progress bars */}
         <div style={{display:"flex",gap:3,padding:"8px 12px",zIndex:10}}>
           {storyVendors.map((v,i)=><div key={v.id} style={{flex:1,height:2,borderRadius:1,background:"rgba(255,255,255,.25)",overflow:"hidden"}}>
-            <div style={{height:"100%",background:"#fff",width:i<storyViewer.index?"100%":i===storyViewer.index?"100%":"0%",borderRadius:1}}/>
+            <div style={{height:"100%",background:"var(--card)",width:i<storyViewer.index?"100%":i===storyViewer.index?"100%":"0%",borderRadius:1}}/>
           </div>)}
         </div>
         {/* Header */}

@@ -12,7 +12,7 @@ function PhoneFrame({ children }) {
       <div className="phone">
         {children}
         <div style={{ flexShrink: 0, display: "flex", justifyContent: "center", paddingBottom: 8, paddingTop: 4 }}>
-          <div style={{ width: 134, height: 5, borderRadius: 100, background: "#191815", opacity: .2 }} />
+          <div style={{ width: 134, height: 5, borderRadius: 100, background: "var(--text)", opacity: .2 }} />
         </div>
       </div>
     </div>

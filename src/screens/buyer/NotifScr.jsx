@@ -2,6 +2,7 @@ import { useState } from "react";
 import { useLoad } from "../../hooks";
 import { social } from "../../services";
 import { SkeletonList } from "../../components/Loading";
+import PullToRefresh from "../../components/PullToRefresh";
 import toast from "../../utils/toast";
 
 const DETAILS = {
@@ -49,7 +50,7 @@ function NotifScr({ onBack, go }) {
   const unreadCount = items.filter(n => !n.read).length;
 
   return (
-    <div className="scr">
+    <PullToRefresh onRefresh={async()=>{toast.success("Notifications actualisées 🔔")}}><div className="scr">
       <div className="appbar">
         <button onClick={onBack}>←</button>
         <h2>Notifications {unreadCount > 0 && <span style={{ fontSize: 13, color: "#6366F1", fontWeight: 600 }}>({unreadCount})</span>}</h2>
@@ -102,7 +103,7 @@ function NotifScr({ onBack, go }) {
                         {isOpen ? "▾" : "›"}
                       </span>
                     </div>
-                    <p style={{ fontSize: 12, color: "#5E5B53", margin: "3px 0 0", lineHeight: 1.4 }}>{n.desc}</p>
+                    <p style={{ fontSize: 12, color: "var(--sub)", margin: "3px 0 0", lineHeight: 1.4 }}>{n.desc}</p>
                     <div style={{ fontSize: 11, color: "#C4C1BA", marginTop: 4 }}>{n.time}</div>
                   </div>
                 </div>
@@ -111,9 +112,9 @@ function NotifScr({ onBack, go }) {
                 {isOpen && detail && (
                   <div style={{
                     marginTop: 12, marginLeft: !n.read ? 20 : 0, padding: 14,
-                    background: "#F9F8F6", borderRadius: 14, border: "1px solid var(--border)",
+                    background: "var(--light)", borderRadius: 14, border: "1px solid var(--border)",
                   }}>
-                    <div style={{ fontSize: 13, color: "#5E5B53", lineHeight: 1.7, whiteSpace: "pre-line" }}>
+                    <div style={{ fontSize: 13, color: "var(--sub)", lineHeight: 1.7, whiteSpace: "pre-line" }}>
                       {detail.full}
                     </div>
                     {detail.action && go && (
@@ -132,7 +133,7 @@ function NotifScr({ onBack, go }) {
           })}
         </div>
       )}
-    </div>
+    </div></PullToRefresh>
   );
 }
 

@@ -215,7 +215,7 @@ function VStoriesScr({onBack}){
       <div style={{display:"flex",gap:3,padding:"12px 12px 0",zIndex:3}}>
         {stories.map((_,i)=>(
           <div key={i} style={{flex:1,height:3,borderRadius:2,background:"rgba(255,255,255,.25)",overflow:"hidden"}}>
-            <div style={{height:"100%",borderRadius:2,background:"#fff",width:i<viewIdx?"100%":i===viewIdx?`${progress}%`:"0%",transition:i===viewIdx?"none":"width .2s"}}/>
+            <div style={{height:"100%",borderRadius:2,background:"var(--card)",width:i<viewIdx?"100%":i===viewIdx?`${progress}%`:"0%",transition:i===viewIdx?"none":"width .2s"}}/>
           </div>
         ))}
       </div>

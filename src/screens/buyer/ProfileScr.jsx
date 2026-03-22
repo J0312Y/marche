@@ -1,4 +1,6 @@
 
+import PullToRefresh from "../../components/PullToRefresh";
+import toast from "../../utils/toast";
 
 import { USER_AVATAR } from "../../data/images";
 function ProfileScr({go,userRole,vendorPlan,vendorStatus,driverStatus,onLogout}){
@@ -7,7 +9,7 @@ function ProfileScr({go,userRole,vendorPlan,vendorStatus,driverStatus,onLogout})
   const pendingVendor=(userRole==="vendor"||userRole==="both")&&vendorStatus==="pending";
   const pendingDriver=(userRole==="driver"||userRole==="both")&&driverStatus==="pending";
   const canRegister=userRole==="client"||(userRole==="vendor"&&!hasDriver)||(userRole==="driver"&&!hasVendor);
-  return(<div className="scr">
+  return(<PullToRefresh onRefresh={async()=>{toast.success("Profil actualisé 👤")}}><div className="scr">
     <div className="appbar"><h2>Mon Profil</h2><button onClick={()=>go("settings")}>⚙️</button></div>
     <div className="prof-card"><div className="prof-av" style={{overflow:"hidden",padding:0}}><img src={USER_AVATAR} style={{width:"100%",height:"100%",objectFit:"cover"}} alt=""/></div><h3 style={{fontSize:18,fontWeight:700}}>Joeldy Tsina</h3><div style={{fontSize:12,color:"var(--muted)",marginTop:2}}>+242 064 663 469</div><div style={{fontSize:12,color:"var(--muted)"}}>joeldytsina94@gmail.com</div><div className="prof-stats"><div className="ps"><b>3</b><span>Commandes</span></div><div className="psd"/><div className="ps"><b>5</b><span>Favoris</span></div><div className="psd"/><div className="ps"><b>2</b><span>Avis</span></div></div></div>
     <div className="wallet"><div><p>Kolo Pay Wallet</p><h3>125 000 FCFA</h3></div><button onClick={()=>go("recharge")}>Recharger</button></div>
@@ -29,7 +31,7 @@ function ProfileScr({go,userRole,vendorPlan,vendorStatus,driverStatus,onLogout})
 
     {[["🛍️","Mes commandes","3",()=>go("orders")],["💳","Historique paiements","7",()=>go("paymentHistory")],["♡","Mes favoris","5",()=>go("wishlist")],["💬","Messages","2",()=>go("chatList")],["📍","Mes adresses","2",()=>go("addresses")],["✏️","Modifier profil","",()=>go("editProfile")],["🔔","Notifications","3",()=>go("notif")],["🎁","Parrainage","4 000 F gagnés",()=>go("referral")],["⭐","Fidélité","3 450 pts",()=>go("loyalty")],["🎁","Cartes cadeaux","",()=>go("giftCard")],["🔔","Alertes de prix","3",()=>go("priceAlerts")],["📱","Scanner QR","",()=>go("qrScan")],["🤝","Achats groupés","3 offres",()=>go("groupBuy")]].map(([i,t,s,fn])=><div key={t} className="menu-item" onClick={fn}><div className="mi-i">{i}</div><span className="mi-t">{t}</span>{s&&<span className="mi-s">{s}</span>}<span className="mi-c">›</span></div>)}
     <button style={{margin:"16px 20px 80px",width:"calc(100% - 40px)",padding:14,borderRadius:14,border:"1px solid rgba(239,68,68,0.3)",background:"transparent",color:"#EF4444",fontSize:14,fontWeight:600,cursor:"pointer",fontFamily:"inherit"}} onClick={onLogout}>🚪 Déconnexion</button>
-  </div>);
+  </div></PullToRefresh>);
 }
 
 /* 25 ── EDIT PROFILE ── */

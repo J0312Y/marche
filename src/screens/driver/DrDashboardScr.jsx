@@ -2,6 +2,7 @@ import { useState } from "react";
 import { D_DELIVERIES, D_HISTORY, D_STATS } from "../../data/driverData";
 import { DRIVER_PHOTO } from "../../data/images";
 import { fmt } from "../../utils/helpers";
+import PullToRefresh from "../../components/PullToRefresh";
 import toast from "../../utils/toast";
 
 function DrDashboardScr({go}){
@@ -12,7 +13,7 @@ function DrDashboardScr({go}){
   const d=D_STATS[period];
   const pending=dismissed?null:D_DELIVERIES.find(x=>x.status==="pending");
   const active=D_DELIVERIES.find(x=>x.status==="active");
-  return(<div className="scr">
+  return(<PullToRefresh onRefresh={async()=>{toast.success("Dashboard actualisé 🛵")}}><div className="scr">
     <div className="dr-hero">
       <div className="dr-top"><div style={{display:"flex",alignItems:"center",gap:12}}><div className="dr-av" style={{overflow:"hidden",padding:0}}><img src={DRIVER_PHOTO} style={{width:"100%",height:"100%",objectFit:"cover"}} alt=""/></div><div><div className="dr-name">Patrick Moukala</div><div className="dr-sub">🛵 Honda PCX · BZ-4521</div></div></div><button onClick={()=>go("drNotif")} style={{width:38,height:38,borderRadius:12,background:"rgba(255,255,255,.15)",border:"none",color:"#fff",cursor:"pointer",fontSize:18,display:"flex",alignItems:"center",justifyContent:"center"}}>🔔</button></div>
       <div className="dr-toggle-bar" onClick={()=>setOnline(!online)}><div className={`dt-dot ${online?"on":"off"}`}/><span>{online?"En ligne — Prêt à livrer":"Hors ligne"}</span><div className={`toggle ${online?"on":""}`}/></div>
@@ -64,7 +65,7 @@ function DrDashboardScr({go}){
       <div style={{flex:1}}><div style={{fontSize:13,fontWeight:600}}>{h.vendor} → {h.client}</div><div style={{fontSize:11,color:"var(--muted)"}}>{h.date} · {h.duration} · {h.distance}</div></div>
       <div style={{textAlign:"right"}}><div style={{fontSize:13,fontWeight:700,color:"#10B981"}}>+{fmt(h.fee+h.tip)}</div><div style={{fontSize:11,color:"#F59E0B"}}>{"★".repeat(h.rating)}</div></div>
     </div>)}</div>
-  </div>);
+  </div></PullToRefresh>);
 }
 
 /* D2 ── ACTIVE DELIVERY (multi-step) ── */

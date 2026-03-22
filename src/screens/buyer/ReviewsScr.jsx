@@ -69,7 +69,7 @@ function ReviewsScr({product:p,onBack}){
       <div style={{marginBottom:14}}>
         <div style={{fontSize:12,fontWeight:600,color:"var(--muted)",marginBottom:8}}>Note *</div>
         <div style={{display:"flex",gap:6}}>
-          {[1,2,3,4,5].map(s=><button key={s} onClick={()=>setUserRating(s)} style={{width:44,height:44,borderRadius:12,border:userRating>=s?"2px solid #F59E0B":"1px solid var(--border)",background:userRating>=s?"rgba(245,158,11,0.08)":"#fff",cursor:"pointer",fontSize:20,display:"flex",alignItems:"center",justifyContent:"center",transition:"all .15s"}}>{userRating>=s?"★":"☆"}</button>)}
+          {[1,2,3,4,5].map(s=><button key={s} onClick={()=>setUserRating(s)} style={{width:44,height:44,borderRadius:12,border:userRating>=s?"2px solid #F59E0B":"1px solid var(--border)",background:userRating>=s?"rgba(245,158,11,0.08)":"var(--card)",cursor:"pointer",fontSize:20,display:"flex",alignItems:"center",justifyContent:"center",transition:"all .15s"}}>{userRating>=s?"★":"☆"}</button>)}
         </div>
         {userRating>0&&<div style={{fontSize:12,color:"#F59E0B",fontWeight:600,marginTop:6}}>{["","Mauvais","Passable","Bien","Très bien","Excellent"][userRating]}</div>}
       </div>

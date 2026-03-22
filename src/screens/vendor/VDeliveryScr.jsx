@@ -106,7 +106,7 @@ function VDeliveryScr({go,onBack}){
         <div className="field"><label>Nom complet</label><input value={addName} onChange={e=>setAddName(e.target.value)} placeholder="Ex: Patrick Moukala"/></div>
         <div className="field"><label>Téléphone</label><input value={addPhone} onChange={e=>setAddPhone(e.target.value)} placeholder="+242 06X XXX XXX" type="tel"/></div>
         <div className="field"><label>Véhicule</label>
-          <div style={{display:"flex",gap:6}}>{[["moto","🛵 Moto"],["voiture","🚗 Voiture"],["velo","🚲 Vélo"]].map(([k,l])=><button key={k} onClick={()=>setAddVehicle(k)} style={{flex:1,padding:8,borderRadius:8,border:addVehicle===k?"2px solid #6366F1":"1px solid var(--border)",background:addVehicle===k?"rgba(99,102,241,0.04)":"#fff",fontSize:11,fontWeight:600,cursor:"pointer",fontFamily:"inherit"}}>{l}</button>)}</div>
+          <div style={{display:"flex",gap:6}}>{[["moto","🛵 Moto"],["voiture","🚗 Voiture"],["velo","🚲 Vélo"]].map(([k,l])=><button key={k} onClick={()=>setAddVehicle(k)} style={{flex:1,padding:8,borderRadius:8,border:addVehicle===k?"2px solid #6366F1":"1px solid var(--border)",background:addVehicle===k?"rgba(99,102,241,0.04)":"var(--card)",fontSize:11,fontWeight:600,cursor:"pointer",fontFamily:"inherit"}}>{l}</button>)}</div>
         </div>
         <div className="info-box yellow" style={{marginBottom:10,padding:"6px 10px"}}><span>📱</span><span style={{fontSize:11}}>Un SMS sera envoyé pour l'inviter à créer un compte Lamuka</span></div>
         <div style={{display:"flex",gap:8}}>
@@ -179,7 +179,7 @@ function VDeliveryScr({go,onBack}){
         <h4 style={{fontSize:14,fontWeight:700,marginBottom:12}}>➕ Ajouter une zone</h4>
         {zoneSuggestions.length>0&&<>
           <div style={{fontSize:11,fontWeight:600,color:"var(--muted)",marginBottom:6}}>Suggestions</div>
-          <div style={{display:"flex",gap:6,flexWrap:"wrap",marginBottom:12}}>{zoneSuggestions.map(n=><span key={n} onClick={()=>setAzName(n)} style={{padding:"6px 12px",borderRadius:8,border:azName===n?"2px solid #6366F1":"1px solid var(--border)",background:azName===n?"rgba(99,102,241,0.04)":"#fff",fontSize:11,fontWeight:600,cursor:"pointer",color:azName===n?"#6366F1":"var(--sub)"}}>{azName===n?"✓ ":""}{n}</span>)}</div>
+          <div style={{display:"flex",gap:6,flexWrap:"wrap",marginBottom:12}}>{zoneSuggestions.map(n=><span key={n} onClick={()=>setAzName(n)} style={{padding:"6px 12px",borderRadius:8,border:azName===n?"2px solid #6366F1":"1px solid var(--border)",background:azName===n?"rgba(99,102,241,0.04)":"var(--card)",fontSize:11,fontWeight:600,cursor:"pointer",color:azName===n?"#6366F1":"var(--sub)"}}>{azName===n?"✓ ":""}{n}</span>)}</div>
         </>}
         <div className="field"><label>Nom de la zone</label><input value={azName} onChange={e=>setAzName(e.target.value)} placeholder="Ex: Dolisie Centre"/></div>
         <div className="field"><label>Quartiers</label><input value={azAreas} onChange={e=>setAzAreas(e.target.value)} placeholder="Ex: Centre-ville, Loubomo"/></div>

@@ -45,7 +45,7 @@ function VReviewsScr({onBack}){
       {/* Filter */}
       <div style={{display:"flex",gap:6,marginBottom:12}}>
         {[["all","Tous"],["unreplied","Sans réponse"],["replied","Répondus"]].map(([k,l])=>(
-          <button key={k} onClick={()=>setFilter(k)} style={{padding:"6px 14px",borderRadius:20,border:filter===k?"1px solid #6366F1":"1px solid var(--border)",background:filter===k?"rgba(99,102,241,0.06)":"#fff",color:filter===k?"#6366F1":"var(--sub)",fontSize:11,fontWeight:600,cursor:"pointer",fontFamily:"inherit"}}>{l}</button>
+          <button key={k} onClick={()=>setFilter(k)} style={{padding:"6px 14px",borderRadius:20,border:filter===k?"1px solid #6366F1":"1px solid var(--border)",background:filter===k?"rgba(99,102,241,0.06)":"var(--card)",color:filter===k?"#6366F1":"var(--sub)",fontSize:11,fontWeight:600,cursor:"pointer",fontFamily:"inherit"}}>{l}</button>
         ))}
       </div>
 
