@@ -70,7 +70,7 @@ function VDeliveryScr({go,onBack}){
       </div>
       <div className="info-box blue" style={{marginBottom:10,padding:"8px 12px"}}><span>ℹ️</span><span style={{fontSize:11}}>Ces livreurs ont un compte Lamuka actif et sont automatiquement disponibles dans votre zone.</span></div>
       {platformDrivers.map(d=><div key={d.id} className="del-card" onClick={()=>go("vDriverProfile",d)}>
-        <div className="del-av">d.photo?<img src={d.photo} style={{width:"100%",height:"100%",objectFit:"cover"}} alt=""/>:d.avatar</div>
+        <div className="del-av" style={{overflow:"hidden"}}>{d.photo?<img src={d.photo} style={{width:"100%",height:"100%",objectFit:"cover"}} alt=""/>:d.avatar}</div>
         <div className="del-info">
           <h4>{d.name} <span style={{padding:"2px 6px",borderRadius:4,background:"rgba(16,185,129,0.08)",color:"#10B981",fontSize:9,fontWeight:700,marginLeft:4}}>Lamuka ✓</span></h4>
           <p>{d.vehicle} · {d.plate}</p>
@@ -87,7 +87,7 @@ function VDeliveryScr({go,onBack}){
       {manualDrivers.length===0&&<div style={{textAlign:"center",padding:"20px 0",color:"var(--muted)",fontSize:12}}>Aucun livreur ajouté manuellement</div>}
       {manualDrivers.map(d=><div key={d.id} style={{padding:14,background:"var(--card)",border:"1px solid var(--border)",borderRadius:16,marginBottom:10}}>
         <div style={{display:"flex",alignItems:"center",gap:10}} onClick={()=>go("vDriverProfile",d)}>
-          <div className="del-av" style={{width:40,height:40,borderRadius:12,background:"linear-gradient(135deg,#F59E0B,#D97706)",display:"flex",alignItems:"center",justifyContent:"center",fontSize:16,flexShrink:0}}>d.photo?<img src={d.photo} style={{width:"100%",height:"100%",objectFit:"cover"}} alt=""/>:d.avatar</div>
+          <div className="del-av" style={{width:40,height:40,borderRadius:12,overflow:"hidden",background:"linear-gradient(135deg,#F59E0B,#D97706)",display:"flex",alignItems:"center",justifyContent:"center",fontSize:16,flexShrink:0}}>{d.photo?<img src={d.photo} style={{width:"100%",height:"100%",objectFit:"cover"}} alt=""/>:d.avatar}</div>
           <div style={{flex:1}}>
             <h4 style={{fontSize:14,fontWeight:600}}>{d.name} <span style={{padding:"2px 6px",borderRadius:4,background:"rgba(245,158,11,0.08)",color:"#F59E0B",fontSize:9,fontWeight:700,marginLeft:4}}>Manuel</span></h4>
             <p style={{fontSize:11,color:"var(--muted)"}}>{d.vehicle} · 📍 {d.zone}</p>

@@ -27,7 +27,7 @@ function ProductCard({ product: p, onPress, onReview, toggleFav, isFav }) {
             onClick={e => { e.stopPropagation(); toggleFav(p.id); }}
             style={{ color: fav ? "#EF4444" : "inherit", fontSize: fav ? 16 : 14 }}
           >
-            {fav ? "❤️" : "♡"}
+            {fav ? "♥" : "♡"}
           </span>
         )}
       </div>

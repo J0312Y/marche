@@ -18,7 +18,7 @@ function FavButton({ productId, toggleFav, isFav, size = "md" }) {
         color: active ? "#EF4444" : "inherit"
       }}
     >
-      {active ? "❤️" : "♡"}
+      {active ? "♥" : "♡"}
     </span>
   );
 }

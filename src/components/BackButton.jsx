@@ -38,13 +38,14 @@ function FavButton({ active, onClick, style = {} }) {
         boxShadow: "0 4px 16px rgba(0,0,0,0.12)",
         cursor: "pointer",
         display: "flex", alignItems: "center", justifyContent: "center",
+        color: active ? "#fff" : "var(--muted)",
         fontSize: 17,
         transition: "all .15s",
         flexShrink: 0,
         ...style,
       }}
     >
-      {active ? "❤️" : "♡"}
+      {active ? "♥" : "♡"}
     </button>
   );
 }
