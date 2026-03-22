@@ -99,7 +99,7 @@ function VProfileScr({go,onSwitch,vendorPlan,onLogout}){
     </div>}
 
     {/* Switch mode */}
-    <div className="vendor-cta" style={{background:"var(--card)",border:"1px solid var(--border)",borderLeft:"4px solid #F97316",color:"var(--text)"}} onClick={onSwitch}><span style={{fontSize:28}}>🛍️</span><div style={{flex:1}}><div style={{fontSize:15,fontWeight:700}}>Passer en mode Acheteur</div><div style={{fontSize:12,opacity:.8,marginTop:2}}>Retourner au marketplace</div></div><span style={{fontSize:18}}>→</span></div>
+    <div className="vendor-cta" style={{background:"var(--card)",border:"1px solid var(--border)",borderLeft:"4px solid #F97316",color:"var(--text)"}} onClick={onSwitch}><span style={{fontSize:28}}>🛍️</span><div style={{flex:1}}><div style={{fontSize:15,fontWeight:700}}>Passer en mode Acheteur</div><div style={{fontSize:12,color:"var(--muted)",marginTop:2}}>Retourner au marketplace</div></div><span style={{fontSize:18}}>→</span></div>
 
     {/* Logout */}
     <button style={{margin:"0 16px 20px",width:"calc(100% - 32px)",padding:12,borderRadius:14,border:"1px solid rgba(239,68,68,0.3)",background:"transparent",color:"#EF4444",fontSize:14,fontWeight:600,cursor:"pointer",fontFamily:"inherit"}} onClick={onLogout}>🚪 Déconnexion</button>

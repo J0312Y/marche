@@ -297,7 +297,7 @@ select option{background:var(--card);color:var(--text);padding:10px 14px;font-si
 .menu-item{display:flex;align-items:center;gap:12px;padding:13px 16px;margin:0 20px 6px;background:var(--card);border:1px solid var(--border);border-radius:14px;cursor:pointer;transition:all .15s}.menu-item:hover{border-color:#bbb}
 .menu-item .mi-i{width:36px;height:36px;border-radius:10px;background:var(--light);display:flex;align-items:center;justify-content:center;font-size:16px;flex-shrink:0}
 .menu-item .mi-t{flex:1;font-size:14px;font-weight:500;color:var(--text)}.menu-item .mi-s{font-size:11px;color:var(--muted)}.menu-item .mi-c{color:var(--muted);font-size:14px}
-.vendor-cta{margin:0 20px 16px;padding:18px;border-radius:18px;color:var(--text);cursor:pointer;display:flex;align-items:center;gap:14px}
+.vendor-cta{margin:0 20px 16px;padding:18px;border-radius:18px;background:var(--card);border:1px solid var(--border);color:var(--text);cursor:pointer;display:flex;align-items:center;gap:14px}
 
 /* Vendor profile */
 .vp-head{padding:32px 20px 20px;background:linear-gradient(135deg,#F97316,#FB923C,#FB923C);color:#fff;text-align:center;position:relative}
