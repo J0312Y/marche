@@ -153,8 +153,8 @@ function TrackingScr({onBack,go}){
 
       {/* Help */}
       <div style={{display:"flex",gap:8,paddingBottom:20}}>
-        <button onClick={()=>toast.info("Support contacté")} style={{flex:1,padding:10,borderRadius:12,border:"1px solid var(--border)",background:"var(--card)",fontSize:12,fontWeight:600,cursor:"pointer",fontFamily:"inherit",display:"flex",alignItems:"center",justifyContent:"center",gap:6}}>🆘 Aide</button>
-        <button onClick={()=>toast.info("Partage du suivi...")} style={{flex:1,padding:10,borderRadius:12,border:"1px solid var(--border)",background:"var(--card)",fontSize:12,fontWeight:600,cursor:"pointer",fontFamily:"inherit",display:"flex",alignItems:"center",justifyContent:"center",gap:6}}>📤 Partager</button>
+        <button onClick={()=>go("chatBot")} style={{flex:1,padding:10,borderRadius:12,border:"1px solid var(--border)",background:"var(--card)",fontSize:12,fontWeight:600,cursor:"pointer",fontFamily:"inherit",display:"flex",alignItems:"center",justifyContent:"center",gap:6}}>🆘 Aide</button>
+        <button onClick={()=>{import("../../utils/share").then(m=>m.shareProduct({title:"Suivi de livraison",text:"Suivez ma commande #LMK-2026-0214 sur Lamuka Market !",url:"https://lamuka.market/track/LMK-2026-0214"}))}} style={{flex:1,padding:10,borderRadius:12,border:"1px solid var(--border)",background:"var(--card)",fontSize:12,fontWeight:600,cursor:"pointer",fontFamily:"inherit",display:"flex",alignItems:"center",justifyContent:"center",gap:6}}>📤 Partager</button>
       </div>
     </div>
   </>);

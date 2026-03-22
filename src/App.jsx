@@ -1,4 +1,4 @@
-import { useState, lazy, Suspense } from "react";
+import { useState } from "react";
 import CSS from "./styles/global";
 import { AppProvider, useApp } from "./context/AppContext";
 import { SplashScr, OnboardingScr, LoginScr, OTPScr, ProfileCompletionScr } from "./screens/auth";
@@ -7,9 +7,9 @@ import PushBanner, { triggerPush } from "./components/PushBanner";
 import { NoNetwork, ServerError } from "./components/ErrorStates";
 import LoadingSpinner from "./components/ui/LoadingSpinner";
 
-const BuyerScreens = lazy(() => import("./modes/BuyerScreens"));
-const VendorScreens = lazy(() => import("./modes/VendorScreens"));
-const DriverScreens = lazy(() => import("./modes/DriverScreens"));
+import BuyerScreens from "./modes/BuyerScreens";
+import VendorScreens from "./modes/VendorScreens";
+import DriverScreens from "./modes/DriverScreens";
 
 function AppInner() {
   const {
@@ -75,7 +75,7 @@ function AppInner() {
             : auth === 3 ? <OTPScr onDone={() => setAuthStep('profile')} />
             : auth === 4 ? <ProfileCompletionScr provider={socialProvider} setUserName={setUserName} onDone={() => setAuthStep('ready')} />
             : <>
-              <Suspense fallback={<LoadingSpinner />}>{renderScreen()}</Suspense>
+              {renderScreen()}
 
               {showNav && <div className="bnav">{tabs.map((t, i) => {
                 const isCart = mode === "buyer" && i === 2;

@@ -28,7 +28,7 @@ function HomeScr({go,favs,toggleFav,isFav,userName}){
   useEffect(()=>{const t=setTimeout(()=>setLoading(false),800);return()=>clearTimeout(t)},[]);
   useEffect(()=>{const iv=setInterval(()=>setPromoSlide(p=>(p+1)%3),4000);return()=>clearInterval(iv)},[]);
   useEffect(()=>{const iv=setInterval(()=>{setDealTimer(p=>{let{h,m,s}=p;s--;if(s<0){s=59;m--}if(m<0){m=59;h--}if(h<0)return{h:0,m:0,s:0};return{h,m,s}})},1000);return()=>clearInterval(iv)},[]);
-  useEffect(()=>{if(!loading&&!pushSent){const t=setTimeout(()=>{triggerPush({icon:'📦',title:'Commande en route !',body:'Votre commande #LMK-2026-0214 est en livraison — Patrick arrive dans 15 min'});setPushSent(true)},5000);return()=>clearTimeout(t)}},[loading,pushSent]);
+  useEffect(()=>{if(!loading&&!pushSent){const t=setTimeout(()=>{triggerPush({icon:'📦',title:'Commande en route !',body:'Votre commande #LMK-2026-0214 est en livraison — Patrick arrive dans 15 min',onTap:()=>go('orders')});setPushSent(true)},5000);return()=>clearTimeout(t)}},[loading,pushSent]);
 
   if(dataLoading || P.length===0) return <div className="scr"><SkeletonHome/></div>;
 
@@ -178,7 +178,7 @@ function HomeScr({go,favs,toggleFav,isFav,userName}){
       {/* 🎯 Recommandations personnalisées */}
       <div style={{padding:"0 16px"}}>
         <h3 style={{fontSize:17,fontWeight:700,letterSpacing:-.3,color:"var(--text)",paddingBottom:12}}>🎯 Pour vous</h3>
-        <div style={{display:"flex",gap:8,overflowX:"auto",scrollbarWidth:"none",paddingBottom:14,WebkitOverflowScrolling:"touch"}}>
+        <div style={{display:"flex",gap:8,overflowX:"auto",scrollbarWidth:"none",paddingBottom:14,paddingRight:16,WebkitOverflowScrolling:"touch"}}>
           {P.slice(2,7).map(p=>(
             <div key={p.id} onClick={()=>go("detail",p)} style={{minWidth:130,background:"var(--card)",border:"1px solid var(--border)",borderRadius:14,overflow:"hidden",cursor:"pointer",flexShrink:0}}>
               <div style={{height:100,background:"var(--light)",display:"flex",alignItems:"center",justifyContent:"center"}}><Img src={p.photo} emoji={p.img} style={{width:"100%",height:"100%"}} fit="cover"/></div>
