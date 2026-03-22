@@ -32,13 +32,13 @@ function FavButton({ active, onClick, style = {} }) {
       onClick={onClick}
       style={{
         width: 40, height: 40, borderRadius: 14,
-        background: active ? "rgba(239,68,68,0.9)" : "rgba(255,255,255,0.85)",
+        background: "rgba(255,255,255,0.85)",
         backdropFilter: "blur(12px)", WebkitBackdropFilter: "blur(12px)",
         border: "1px solid rgba(255,255,255,0.4)",
         boxShadow: "0 4px 16px rgba(0,0,0,0.12)",
         cursor: "pointer",
         display: "flex", alignItems: "center", justifyContent: "center",
-        color: active ? "#fff" : "var(--muted)",
+        color: active ? "#EF4444" : "var(--muted)",
         fontSize: 17,
         transition: "all .15s",
         flexShrink: 0,
