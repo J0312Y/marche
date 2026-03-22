@@ -1,4 +1,5 @@
 import { useState, useRef } from "react";
+import Select from "../../components/Select";
 import Img from "../../components/Img";
 import PhotoGuide from "../../components/PhotoGuide";
 import VariantEditor from "../../components/VariantEditor";
@@ -53,7 +54,7 @@ function VProductFormScr({product:p,onBack,shopType="boutique"}){
       {/* Variants */}
       <div className="field"><label>Variantes (optionnel)</label><input placeholder="Costume, Chemise, Robe..." defaultValue={isEdit&&p.variants?p.variants.join(", "):""}/></div>
       {/* Delivery time */}
-      <div className="field"><label>Délai de livraison estimé</label><select defaultValue={isEdit&&p.eta?p.eta:"1-2 jours"}><option>30 min</option><option>1h</option><option>20-30 min</option><option>30-45 min</option><option>1-2 jours</option><option>2-3 jours</option><option>3-5 jours</option></select></div>
+      <div className="field"><label>Délai de livraison estimé</label><Select value={isEdit&&p.eta?p.eta:"1-2 jours"} onChange={()=>{}} options={["30 min","1h","20-30 min","30-45 min","1-2 jours","2-3 jours","3-5 jours"]}/></div>
 
   const [photos,setPhotos]=useState(isEdit&&p.photo?[{url:p.photo,emoji:p.img,status:"existing"}]:[]);
   const [editingIdx,setEditingIdx]=useState(null);

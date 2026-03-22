@@ -1,3 +1,4 @@
+import Select from "../../components/Select";
 import { useState } from "react";
 
 function ShopTeamTab(){
@@ -36,9 +37,7 @@ function ShopTeamTab(){
         <span style={{padding:"4px 10px",borderRadius:8,background:`${roleColor(m.role)}12`,color:roleColor(m.role),fontSize:10,fontWeight:700}}>{m.role}</span>
       </div>
       {m.role!=="Propriétaire"&&<div style={{display:"flex",gap:8,marginTop:10,paddingTop:10,borderTop:"1px solid var(--border)"}}>
-        <select defaultValue={m.role} style={{flex:1,padding:8,borderRadius:8,border:"1px solid var(--border)",fontSize:11,fontFamily:"inherit",background:"var(--card)"}}>
-          <option>Manager</option><option>Employé</option>
-        </select>
+        <Select value={m.role} onChange={()=>{}} options={["Manager","Employé"]}/>
         {showRemove===m.id
           ?<div style={{display:"flex",gap:6}}>
             <button style={{padding:"8px 12px",borderRadius:8,border:"none",background:"#EF4444",color:"#fff",fontSize:11,fontWeight:600,cursor:"pointer",fontFamily:"inherit"}} onClick={()=>removeMember(m.id)}>Confirmer</button>

@@ -1,4 +1,5 @@
 import { useState } from "react";
+import Select from "../../components/Select";
 import toast from "../../utils/toast";
 
 function VAddDriverScr({onBack}){
@@ -10,8 +11,8 @@ function VAddDriverScr({onBack}){
       <div className="field"><label>Nom complet</label><input placeholder="Ex: Patrick Moukala"/></div>
       <div className="field"><label>Téléphone</label><input placeholder="+242 06X XXX XXX" type="tel"/></div>
       <div className="field"><label>Email (optionnel)</label><input placeholder="livreur@email.com" type="email"/></div>
-      <div className="field"><label>Type de véhicule</label><select><option value="moto">🛵 Moto / Scooter</option><option value="voiture">🚗 Voiture</option><option value="velo">🚲 Vélo</option></select></div>
-      <div className="field"><label>Zone de livraison</label><select><option>Brazzaville Sud</option><option>Brazzaville Centre</option><option>Brazzaville Nord</option><option>Pointe-Noire</option></select></div>
+      <div className="field"><label>Type de véhicule</label><Select value="moto" onChange={()=>{}} options={[{value:"moto",label:"🛵 Moto / Scooter"},{value:"voiture",label:"🚗 Voiture"},{value:"velo",label:"🚲 Vélo"}]}/></div>
+      <div className="field"><label>Zone de livraison</label><Select value="Brazzaville Sud" onChange={()=>{}} options={["Brazzaville Sud","Brazzaville Centre","Brazzaville Nord","Pointe-Noire"]}/></div>
       <div className="info-box blue" style={{marginTop:10}}><span>📱</span><span>Le livreur recevra un SMS d'invitation avec un lien pour créer son compte Lamuka.</span></div>
       <div style={{paddingTop:24,paddingBottom:16}}><button className="btn-primary" onClick={()=>{setDone(true);toast.success("Invitation envoyée au livreur 🛵")}}>📤 Envoyer l'invitation</button></div>
     </div>

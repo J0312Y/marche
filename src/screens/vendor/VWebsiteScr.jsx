@@ -1,4 +1,5 @@
 import { useState } from "react";
+import Select from "../../components/Select";
 import toast from "../../utils/toast";
 
 const THEMES=[
@@ -212,10 +213,10 @@ function VWebsiteScr({onBack}){
       {/* Font & Layout */}
       <div style={{fontSize:14,fontWeight:700,marginBottom:10}}>✏️ Personnalisation</div>
       <div className="field"><label>Police de caractère</label>
-        <select defaultValue="Inter"><option>Inter</option><option>Poppins</option><option>Montserrat</option><option>DM Sans</option><option>Playfair Display</option></select>
+        <Select value="Inter" onChange={()=>{}} options={["Inter","Poppins","Montserrat","DM Sans","Playfair Display"]}/>
       </div>
       <div className="field"><label>Style des boutons</label>
-        <select defaultValue="rounded"><option value="rounded">Arrondis</option><option value="pill">Pilule</option><option value="square">Carrés</option></select>
+        <Select value="rounded" onChange={()=>{}} options={[{value:"rounded",label:"Arrondis"},{value:"pill",label:"Pilule"},{value:"square",label:"Carrés"}]}/>
       </div>
       <div className="field"><label>Couleur principale</label>
         <div style={{display:"flex",gap:6,marginTop:4}}>

@@ -4,6 +4,13 @@ const CSS=`
 :root{--bg:#FAF9F6;--card:#fff;--border:#E8E6E1;--text:#191815;--sub:#5E5B53;--muted:#908C82;--light:#F5F4F1;--hover:#F0EFEC}
 .dark{--bg:#111113;--card:#1C1C1E;--border:#2C2C2E;--text:#F5F4F1;--sub:#A1A1A6;--muted:#6B6B70;--light:#2C2C2E;--hover:#3A3A3C}
 .phone{width:393px;height:852px;background:var(--bg);border-radius:47px;overflow:hidden;position:relative;font-family:'Inter',sans-serif;color:var(--text);display:flex;flex-direction:column;box-shadow:0 50px 100px rgba(0,0,0,.25),0 0 0 .5px rgba(255,255,255,.15) inset;border:4px solid #2c2c2e;transform:translateZ(0)}
+
+select{-webkit-appearance:none;-moz-appearance:none;appearance:none;width:100%;padding:12px 36px 12px 14px;border-radius:14px;border:1px solid var(--border);background:var(--light);color:var(--text);font-size:14px;font-family:inherit;font-weight:500;cursor:pointer;outline:none;transition:border .15s;background-image:url("data:image/svg+xml,%3Csvg width='12' height='12' viewBox='0 0 12 12' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M2.5 4.5L6 8L9.5 4.5' stroke='%236B6B80' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round' fill='none'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 12px center}
+select:focus{border-color:#6366F1;box-shadow:0 0 0 3px rgba(99,102,241,0.08)}
+.setting-item select{width:auto;padding:8px 30px 8px 12px;font-size:12px;border-radius:10px}
+select option{background:var(--card);color:var(--text);padding:10px 14px;font-size:14px}
+.dark select{background-image:url("data:image/svg+xml,%3Csvg width='12' height='12' viewBox='0 0 12 12' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M2.5 4.5L6 8L9.5 4.5' stroke='%23A1A1A6' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round' fill='none'/%3E%3C/svg%3E")}
+
 .scr{flex:1;overflow-y:auto;overflow-x:hidden;background:var(--bg);-webkit-overflow-scrolling:touch}.scr::-webkit-scrollbar{display:none}
 .bnav{display:flex;align-items:flex-end;justify-content:space-around;padding:4px 8px 14px;background:var(--card);border-top:1px solid var(--border);flex-shrink:0;position:relative}
 .bni{display:flex;flex-direction:column;align-items:center;gap:3px;padding:8px 14px;border-radius:14px;border:none;background:transparent;cursor:pointer;font-family:inherit;transition:all .2s;font-size:10px;color:var(--muted);font-weight:500}
@@ -499,6 +506,7 @@ const CSS=`
 .dr-request{margin:0 20px 14px;padding:18px;border-radius:20px;border:2px solid #10B981;background:rgba(16,185,129,0.03);position:relative;overflow:hidden}
 .dr-request::before{content:'';position:absolute;top:0;left:0;right:0;height:4px;background:linear-gradient(90deg,#10B981,#34D399);animation:dr-pulse 2s infinite}
 @keyframes dr-pulse{0%,100%{opacity:1}50%{opacity:.4}}
+@keyframes selectFadeIn{from{opacity:0;transform:translateY(-4px)}to{opacity:1;transform:translateY(0)}}
 @keyframes scanLine{0%,100%{top:10%}50%{top:90%}}
 @keyframes blink{0%,100%{opacity:.2}50%{opacity:1}}
 @keyframes fadeIn{from{opacity:0;transform:translateY(4px)}to{opacity:1;transform:translateY(0)}}

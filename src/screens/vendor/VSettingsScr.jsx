@@ -1,4 +1,5 @@
 import { useState } from "react";
+import Select from "../../components/Select";
 import { useApp } from "../../context/AppContext";
 import { VENDOR_LOGO_DEFAULT } from "../../data/images";
 import toast from "../../utils/toast";
@@ -28,7 +29,7 @@ function VSettingsScr({onBack,go}){
     </div>
     <div>
       <div className="setting-group"><div className="setting-label">Général</div>
-        <div className="setting-item"><span className="si-i">🌐</span><span className="si-t">Langue</span><select value={lang} onChange={e=>setLang(e.target.value)} style={{padding:"6px 10px",borderRadius:8,border:"1px solid var(--border)",fontSize:12,fontFamily:"inherit",background:"var(--card)"}}><option value="fr">Français</option><option value="en">English</option><option value="ln">Lingala</option></select></div>
+        <div className="setting-item"><span className="si-i">🌐</span><span className="si-t">Langue</span><Select value={lang} onChange={setLang} options={[{value:"fr",label:"🇫🇷 Français"},{value:"en",label:"🇬🇧 English"},{value:"ln",label:"🇨🇬 Lingala"}]}/></div>
       </div>
       <div className="setting-group"><div className="setting-label">Notifications push</div>
         <div className="setting-item"><span className="si-i">📦</span><span className="si-t">Nouvelles commandes</span><div className={`toggle ${pushOrder?"on":""}`} onClick={()=>setPushOrder(!pushOrder)}/></div>

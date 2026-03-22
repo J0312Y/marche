@@ -1,4 +1,5 @@
 import { useState } from "react";
+import Select from "../../components/Select";
 import toast from "../../utils/toast";
 import { fmt, getVendorPromo } from "../../utils/helpers";
 import { useData } from "../../hooks";
@@ -35,7 +36,7 @@ function CheckoutScr({onBack,onDone,cart=[],appliedCoupon,setAppliedCoupon}){
         <div style={{display:"flex",gap:6,marginBottom:8}}>
           {[["now","🚀 Maintenant"],["later","📅 Programmer"]].map(([k,l])=><button key={k} onClick={()=>setSchedule(k)} style={{flex:1,padding:10,borderRadius:12,border:schedule===k?"2px solid #6366F1":"1px solid var(--border)",background:schedule===k?"rgba(99,102,241,0.06)":"var(--card)",fontSize:12,fontWeight:schedule===k?700:500,color:schedule===k?"#6366F1":"var(--text)",cursor:"pointer",fontFamily:"inherit"}}>{l}</button>)}
         </div>
-        {schedule==="later"&&<div className="field-row"><div className="field"><label>Date</label><input type="date" value={schedDate} onChange={e=>setSchedDate(e.target.value)}/></div><div className="field"><label>Créneau</label><select value={schedTime} onChange={e=>setSchedTime(e.target.value)}><option>08:00-10:00</option><option>10:00-12:00</option><option>12:00-14:00</option><option>14:00-16:00</option><option>16:00-18:00</option><option>18:00-20:00</option></select></div></div>}
+        {schedule==="later"&&<div className="field-row"><div className="field"><label>Date</label><input type="date" value={schedDate} onChange={e=>setSchedDate(e.target.value)}/></div><div className="field"><label>Créneau</label><Select value={schedTime} onChange={setSchedTime} options={["08:00-10:00","10:00-12:00","12:00-14:00","14:00-16:00","16:00-18:00","18:00-20:00"]}/></div></div>}
         <div style={{display:"flex",alignItems:"center",gap:8,marginTop:4}}><div className={`toggle ${saveAddr?"on":""}`} onClick={()=>setSaveAddr(!saveAddr)} style={{transform:"scale(.8)"}}/><span style={{fontSize:12,color:"var(--muted)"}}>Sauvegarder cette adresse</span></div></>}
 
       {step===1&&<><h3 style={{fontSize:18,fontWeight:700,marginBottom:6}}>Mode de paiement</h3><p style={{fontSize:13,color:"var(--muted)",marginBottom:14}}>Mobile Money</p>

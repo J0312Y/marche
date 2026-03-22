@@ -1,8 +1,9 @@
 import { useState } from "react";
+import Select from "../../components/Select";
 import { USER_AVATAR } from "../../data/images";
 
 function ProfileCompletionScr({onDone,provider}){
-  const [step,setStep]=useState(0);
+  const [step,setStep]=useState(0);const [city,setCity]=useState("brazzaville");
   return(
     <div className="auth" style={{justifyContent:"flex-start",paddingTop:40}}>
       {provider&&<div style={{textAlign:"center",marginBottom:12}}>
@@ -19,23 +20,16 @@ function ProfileCompletionScr({onDone,provider}){
           <div style={{display:"flex",gap:8}}><div style={{padding:"10px 12px",borderRadius:12,border:"1px solid var(--border)",background:"var(--light)",fontSize:13,fontWeight:600,flexShrink:0}}>🇨🇬 +242</div><input placeholder="06X XXX XXX" type="tel" style={{flex:1}}/></div>
         </div>}
         <button className="btn-primary" onClick={()=>setStep(1)}>Continuer</button>
+        <button className="btn-outline" style={{marginTop:8}} onClick={onDone}>Passer pour l'instant</button>
       </>}
 
       {step===1&&<>
         <div className="field"><label>Ville</label>
-          <select defaultValue="brazzaville" style={{width:"100%",padding:"12px 14px",borderRadius:12,border:"1px solid var(--border)",fontSize:14,fontFamily:"inherit",color:"var(--text)",background:"var(--card)"}}>
-            <option value="brazzaville">Brazzaville</option>
-            <option value="pointe-noire">Pointe-Noire</option>
-            <option value="dolisie">Dolisie</option>
-            <option value="nkayi">Nkayi</option>
-            <option value="oyo">Oyo</option>
-            <option value="ouesso">Ouesso</option>
-          </select>
+          <Select value={city} onChange={setCity} placeholder="Choisir une ville" options={[{value:"brazzaville",label:"Brazzaville"},{value:"pointe-noire",label:"Pointe-Noire"},{value:"dolisie",label:"Dolisie"},{value:"nkayi",label:"Nkayi"},{value:"oyo",label:"Oyo"},{value:"ouesso",label:"Ouesso"}]}/>
         </div>
         <div className="field"><label>Quartier</label><input placeholder="Ex: Bacongo, Poto-Poto..."/></div>
         <div className="field"><label>Adresse (optionnel)</label><input placeholder="Rue, N°..."/></div>
         <button className="btn-primary" onClick={onDone}>🚀 Commencer</button>
-        <button className="btn-outline" style={{marginTop:8}} onClick={onDone}>Passer pour l'instant</button>
       </>}
 
       <div style={{display:"flex",justifyContent:"center",gap:6,marginTop:20}}>{[0,1].map(i=><div key={i} style={{width:step===i?24:8,height:8,borderRadius:4,background:step>=i?"#6366F1":"var(--border)",transition:"all .3s"}}/>)}</div>

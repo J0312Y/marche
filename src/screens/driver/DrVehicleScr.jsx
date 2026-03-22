@@ -1,10 +1,11 @@
 
+import Select from "../../components/Select";
 
 import { VEHICLE_PHOTO } from "../../data/images";
 function DrVehicleScr({onBack}){
   return(<div className="scr" style={{padding:16}}><div className="appbar" style={{padding:0,marginBottom:12}}><button onClick={onBack}>←</button><h2>Mon véhicule</h2><div style={{width:38}}/></div>
     <div style={{textAlign:"center",marginBottom:14}}><div style={{width:120,height:80,borderRadius:16,overflow:"hidden",margin:"0 auto 8px"}}><img src={VEHICLE_PHOTO} style={{width:"100%",height:"100%",objectFit:"cover"}} alt=""/></div><h3 style={{fontSize:20,fontWeight:700}}>Honda PCX</h3><p style={{fontSize:13,color:"var(--muted)"}}>Plaque : BZ-4521</p></div>
-    <div className="field"><label>Type de véhicule</label><select defaultValue="moto"><option value="moto">🛵 Moto / Scooter</option><option value="voiture">🚗 Voiture</option><option value="velo">🚲 Vélo</option></select></div>
+    <div className="field"><label>Type de véhicule</label><Select value="moto" onChange={()=>{}} options={[{value:"moto",label:"🛵 Moto / Scooter"},{value:"voiture",label:"🚗 Voiture"},{value:"velo",label:"🚲 Vélo"}]}/></div>
     <div className="field-row"><div className="field"><label>Marque</label><input defaultValue="Honda PCX"/></div><div className="field"><label>Année</label><input defaultValue="2022"/></div></div>
     <div className="field-row"><div className="field"><label>Plaque</label><input defaultValue="BZ-4521"/></div><div className="field"><label>Couleur</label><input defaultValue="Noir"/></div></div>
     <div style={{fontSize:14,fontWeight:700,margin:"14px 0 10px"}}>Documents</div>

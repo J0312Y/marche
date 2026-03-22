@@ -1,3 +1,4 @@
+import Select from "../../components/Select";
 import { useState } from "react";
 import { useLoad } from "../../hooks";
 import { vendor } from "../../services";
@@ -102,9 +103,7 @@ function VPromosScr({go,onBack}){
           <div className="field"><label>Code (opt.)</label><input value={editPromo.code||""} onChange={e=>setEditPromo({...editPromo,code:e.target.value.toUpperCase()})} placeholder="PROMO20"/></div>
         </div>
         <div className="field"><label>Produits concernés</label>
-          <select value={editPromo.products} onChange={e=>setEditPromo({...editPromo,products:e.target.value})}>
-            <option>Tous les articles</option><option>Premier achat</option><option>Mode uniquement</option><option>Électronique</option>
-          </select>
+          <Select value={editPromo.products} onChange={v=>setEditPromo({...editPromo,products:v})} options={["Tous les articles","Premier achat","Mode uniquement","Électronique"]}/>
         </div>
         <div className="field-row">
           <div className="field"><label>Date début</label><input type="date" value={editPromo.startDate||""} onChange={e=>setEditPromo({...editPromo,startDate:e.target.value,start:new Date(e.target.value).toLocaleDateString("fr-FR",{day:"numeric",month:"short"})})}/></div>

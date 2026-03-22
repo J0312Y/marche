@@ -1,4 +1,5 @@
 import { useState } from "react";
+import Select from "../../components/Select";
 import { useData } from "../../hooks";
 import toast from "../../utils/toast";
 
@@ -80,7 +81,7 @@ function RoleRegScr({onBack,onDone,forceRole}){
 
       {/* STEP 1 DRIVER: Véhicule */}
       {step===1&&role==="driver"&&<><h3 style={{fontSize:16,fontWeight:700,marginBottom:14}}>Votre Véhicule</h3>
-        <div className="field"><label>Type de véhicule</label><select><option value="moto">🛵 Moto</option><option value="voiture">🚗 Voiture</option><option value="velo">🚲 Vélo</option></select></div>
+        <div className="field"><label>Type de véhicule</label><Select value="moto" onChange={()=>{}} options={[{value:"moto",label:"🛵 Moto"},{value:"voiture",label:"🚗 Voiture"},{value:"velo",label:"🚲 Vélo"}]}/></div>
         <div className="field-row"><div className="field"><label>Marque</label><input placeholder="Honda PCX"/></div><div className="field"><label>Année</label><input placeholder="2023"/></div></div>
         <div className="field-row"><div className="field"><label>Plaque</label><input placeholder="BZ-4521"/></div><div className="field"><label>Couleur</label><input placeholder="Noir"/></div></div>
         {/* Vehicle photo */}
