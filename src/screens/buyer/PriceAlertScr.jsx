@@ -10,7 +10,7 @@ function PriceAlertScr({onBack}){
   const [alertsList,setAlerts]=useState(alerts);
   const toggle=(id)=>{setAlerts(prev=>prev.map(a=>a.id===id?{...a,active:!a.active}:a));toast.success("Alerte mise à jour 🔔")};
   const remove=(id)=>{setAlerts(prev=>prev.filter(a=>a.id!==id));toast.success("Alerte supprimée")};
-  return(<div className="scr" style={{padding:16,paddingBottom:80}}>
+  return(<div className="scr" style={{padding:16,paddingBottom:20}}>
     <div className="appbar" style={{padding:0,marginBottom:10}}><button onClick={onBack}>←</button><h2>🔔 Alertes de prix</h2><div style={{width:38}}/></div>
     <p style={{fontSize:13,color:"var(--muted)",marginBottom:14}}>Recevez une notification quand le prix baisse.</p>
     {alertsList.map(a=><div key={a.id} style={{display:"flex",alignItems:"center",gap:12,padding:12,background:"var(--card)",border:"1px solid var(--border)",borderRadius:14,marginBottom:8}}>

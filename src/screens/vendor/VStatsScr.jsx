@@ -28,7 +28,7 @@ function VStatsScr({onBack}){
   const tp=V_STATS.topProducts||[];
   const chartTotal=chart.reduce((a,b)=>a+b,0);
 
-  return(<div className="scr" style={{padding:16,paddingBottom:80}}>
+  return(<div className="scr" style={{padding:16,paddingBottom:20}}>
     <div className="appbar" style={{padding:0,marginBottom:12}}><button onClick={onBack}>←</button><h2>📈 Statistiques</h2><div style={{width:38}}/></div>
 
     <div className="vo-filter" style={{padding:0,marginBottom:14}}>{[["today","Aujourd'hui"],["week","Semaine"],["month","Mois"]].map(([k,l])=><button key={k} className={period===k?"on":""} onClick={()=>setPeriod(k)}>{l}</button>)}</div>

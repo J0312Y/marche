@@ -29,7 +29,7 @@ function VProfileScr({go,onSwitch,vendorPlan,onLogout}){
     setLockPopup({icon,title,requiredPlan});
   };
 
-  return(<PullToRefresh onRefresh={async()=>{toast.success("Espace actualisé 🏪")}}><div className="scr" style={{paddingBottom:80}}>
+  return(<PullToRefresh onRefresh={async()=>{toast.success("Espace actualisé 🏪")}}><div className="scr" style={{paddingBottom:20}}>
     <div className="appbar"><h2>Mon Espace</h2><button onClick={()=>go("vSettings")}>⚙️</button></div>
 
     {/* Profile + Plan card */}

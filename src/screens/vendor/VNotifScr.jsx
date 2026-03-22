@@ -39,7 +39,7 @@ function VNotifScr({onBack,go}){
     {loading?<SkeletonList count={5}/>:items.length===0?(
       <div style={{textAlign:"center",padding:"60px 16px"}}><div style={{fontSize:48,marginBottom:10}}>🔔</div><h3 style={{fontSize:16,fontWeight:700}}>Aucune notification</h3><p style={{fontSize:13,color:"var(--muted)"}}>Les nouvelles commandes et mises à jour apparaîtront ici</p></div>
     ):(
-      <div style={{paddingBottom:80}}>
+      <div style={{paddingBottom:20}}>
         {items.map((n,idx)=>{
           const isOpen=expanded===idx;
           const detail=DETAILS[idx];

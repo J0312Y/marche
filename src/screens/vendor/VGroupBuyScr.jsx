@@ -10,7 +10,7 @@ function VGroupBuyScr({onBack}){
   const [creating,setCreating]=useState(false);const [newOffer,setNewOffer]=useState({product:"",discount:15,min:5,ends:""});
   const toggle=(id)=>{setOffers(prev=>prev.map(o=>o.id===id?{...o,active:!o.active}:o));toast.success("Offre mise à jour")};
   const create=()=>{if(!newOffer.product){toast.error("Sélectionnez un produit");return}setOffers(prev=>[{id:Date.now(),...newOffer,price:0,current:0,active:true},...prev]);setCreating(false);toast.success("Offre groupée créée 👥")};
-  return(<div className="scr" style={{padding:16,paddingBottom:80}}>
+  return(<div className="scr" style={{padding:16,paddingBottom:20}}>
     <div className="appbar" style={{padding:0,marginBottom:10}}><button onClick={onBack}>←</button><h2>👥 Achats groupés</h2><button onClick={()=>setCreating(true)} style={{fontSize:20,background:"none",border:"none",cursor:"pointer",color:"var(--text)"}}>+</button></div>
     {creating&&<div style={{padding:14,background:"var(--card)",border:"2px solid #6366F1",borderRadius:16,marginBottom:14}}>
       <h4 style={{fontSize:14,fontWeight:700,marginBottom:10}}>Nouvelle offre groupée</h4>

@@ -12,7 +12,7 @@ function VQAScr({onBack}){
   const pending=questions.filter(q=>!q.answered);const answered=questions.filter(q=>q.answered);
   const shown=tab==="pending"?pending:answered;
   const submitReply=(id)=>{if(!replyText.trim())return;setQuestions(prev=>prev.map(q=>q.id===id?{...q,answered:true,a:replyText.trim()}:q));setReplyTo(null);setReplyText("");toast.success("Réponse publiée ✅")};
-  return(<div className="scr" style={{padding:16,paddingBottom:80}}>
+  return(<div className="scr" style={{padding:16,paddingBottom:20}}>
     <div className="appbar" style={{padding:0,marginBottom:10}}><button onClick={onBack}>←</button><h2>❓ Questions ({pending.length} en attente)</h2><div style={{width:38}}/></div>
     <div style={{display:"flex",gap:0,marginBottom:12,background:"var(--light)",borderRadius:12,padding:3}}>
       {[["pending","En attente ("+pending.length+")"],["answered","Répondues ("+answered.length+")"]].map(([k,l])=><button key={k} onClick={()=>setTab(k)} style={{flex:1,padding:"8px 0",borderRadius:10,border:"none",background:tab===k?"var(--card)":"transparent",color:tab===k?"var(--text)":"var(--muted)",fontSize:11,fontWeight:tab===k?700:500,cursor:"pointer",fontFamily:"inherit",boxShadow:tab===k?"0 1px 4px rgba(0,0,0,.06)":"none"}}>{l}</button>)}

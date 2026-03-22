@@ -2,7 +2,7 @@ import toast from "../../utils/toast";
 function VQRCodeScr({onBack}){
   const url="https://lamuka.market/shop/mode-afrique";
   const copy=()=>{try{navigator.clipboard.writeText(url);toast.success("Lien copié 📋")}catch(e){toast.info(url)}};
-  return(<div className="scr" style={{padding:16,paddingBottom:80}}>
+  return(<div className="scr" style={{padding:16,paddingBottom:20}}>
     <div className="appbar" style={{padding:0,marginBottom:10}}><button onClick={onBack}>←</button><h2>📱 QR Code</h2><div style={{width:38}}/></div>
     <div style={{textAlign:"center",padding:20}}>
       <p style={{fontSize:13,color:"var(--muted)",marginBottom:20}}>Les clients scannent ce QR code pour accéder directement à votre boutique.</p>

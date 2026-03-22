@@ -5,7 +5,7 @@ import toast from "../../utils/toast";
 function SettingsScr({onBack,go}){
   const { darkMode, toggleDark } = useApp();
   const [notif,setNotif]=useState(true);const [bio,setBio]=useState(true);const [emailNotif,setEmailNotif]=useState(true);
-  return(<div className="scr" style={{paddingBottom:80}}><div className="appbar"><button onClick={onBack}>←</button><h2>Paramètres</h2><div style={{width:38}}/></div>
+  return(<div className="scr" style={{paddingBottom:20}}><div className="appbar"><button onClick={onBack}>←</button><h2>Paramètres</h2><div style={{width:38}}/></div>
     <div className="setting-group"><h4>Général</h4>
       <div className="setting-item" onClick={()=>go("language")} style={{cursor:"pointer"}}><span className="si-i">🌐</span><span className="si-t">Langue</span><span className="si-v">Français</span><span style={{color:"var(--muted)"}}>›</span></div>
       <div className="setting-item" onClick={()=>go("currency")} style={{cursor:"pointer"}}><span className="si-i">💰</span><span className="si-t">Devise</span><span className="si-v">FCFA</span><span style={{color:"var(--muted)"}}>›</span></div>

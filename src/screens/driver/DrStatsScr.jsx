@@ -7,7 +7,7 @@ function DrStatsScr({onBack}){
   const d=D_STATS[period];
   const chartData=[85,120,95,160,140,110,180];
   const maxBar=Math.max(...chartData);
-  return(<div className="scr" style={{paddingBottom:80}}><div className="appbar"><button onClick={onBack}>←</button><h2>Statistiques</h2><div style={{width:38}}/></div>
+  return(<div className="scr" style={{paddingBottom:20}}><div className="appbar"><button onClick={onBack}>←</button><h2>Statistiques</h2><div style={{width:38}}/></div>
     <div className="vd-period">{[["today","Jour"],["week","Semaine"],["month","Mois"]].map(([k,l])=><button key={k} className={period===k?"on":""} onClick={()=>setPeriod(k)}>{l}</button>)}</div>
     <div className="vd-stats">
       <div className="vd-stat"><div className="vs-icon">📦</div><div className="vs-val">{d.deliveries}</div><div className="vs-lbl">Livraisons</div><div className="vs-trend up">↑ 15%</div></div>

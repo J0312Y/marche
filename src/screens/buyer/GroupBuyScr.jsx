@@ -17,7 +17,7 @@ function GroupBuyScr({ onBack, go }) {
     toast.success("Vous avez rejoint l'achat groupé ! 🎉");
   };
 
-  return (<div className="scr" style={{ padding: 16, paddingBottom: 80 }}>
+  return (<div className="scr" style={{ padding: 16, paddingBottom: 20 }}>
     <div className="appbar" style={{ padding: 0, marginBottom: 10 }}><button onClick={onBack}>←</button><h2>🤝 Achats Groupés</h2><div style={{ width: 38 }} /></div>
 
     <div style={{ padding: 14, background: "linear-gradient(135deg,rgba(99,102,241,0.06),rgba(168,85,247,0.06))", border: "1px solid rgba(99,102,241,0.12)", borderRadius: 16, marginBottom: 14 }}>

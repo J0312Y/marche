@@ -20,7 +20,7 @@ function DrNotifScr({onBack}){
 
   return(<div className="scr"><div className="appbar"><button onClick={onBack}>←</button><h2>Notifications {unreadCount>0&&<span style={{fontSize:12,color:"#6366F1",fontWeight:600}}>({unreadCount})</span>}</h2>
     {unreadCount>0&&<button onClick={markAllRead} style={{fontSize:12,color:"#6366F1",fontWeight:600,background:"none",border:"none",cursor:"pointer",fontFamily:"inherit"}}>Tout lire</button>}</div>
-    <div style={{padding:"0 0 80px"}}>
+    <div style={{padding:"0 0 20px"}}>
       {notifs.map((n)=>{
         const isOpen=expanded===n.id;
         return(<div key={n.id} onClick={()=>{setExpanded(isOpen?null:n.id);if(!n.read)markRead(n.id)}} style={{padding:"14px 20px",borderBottom:"1px solid var(--border)",cursor:"pointer",background:!n.read?"rgba(99,102,241,0.03)":"transparent",transition:"background .2s"}}>

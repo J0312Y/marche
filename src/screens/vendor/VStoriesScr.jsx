@@ -113,7 +113,7 @@ function VStoriesScr({onBack}){
   const activeCount=stories.filter(s=>s.active).length;
   const videoCount=stories.filter(s=>s.type==="video").length;
 
-  return(<div className="scr" style={{padding:16,paddingBottom:80}}>
+  return(<div className="scr" style={{padding:16,paddingBottom:20}}>
     <div className="appbar" style={{padding:0,marginBottom:10}}>
       <button onClick={onBack}>←</button>
       <h2>📸 Stories ({activeCount})</h2>

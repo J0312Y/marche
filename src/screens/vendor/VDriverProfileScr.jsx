@@ -8,7 +8,7 @@ function VDriverProfileScr({driver:d,go,onBack}){
     {ref:"#CMD-0878",client:"Paul Nkaya",date:"8 Fév",duration:"45 min",rating:4},
     {ref:"#CMD-0870",client:"Marie Koumba",date:"5 Fév",duration:"22 min",rating:5},
   ];
-  return(<div className="scr" style={{paddingBottom:80}}>
+  return(<div className="scr" style={{paddingBottom:20}}>
     <div className="appbar"><button onClick={onBack}>←</button><h2>Profil livreur</h2><div style={{width:38}}/></div>
     <div style={{textAlign:"center",padding:"10px 20px 20px"}}>
       <div style={{width:72,height:72,borderRadius:20,background:"linear-gradient(135deg,#6366F1,#A855F7)",display:"flex",alignItems:"center",justifyContent:"center",margin:"0 auto 10px",fontSize:32}}>{d.avatar}</div>

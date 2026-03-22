@@ -92,7 +92,7 @@ const CSS=`
 .vi .vloc{font-size:11px;color:var(--muted);margin:2px 0 5px}.vi .vst{font-size:11px;color:var(--muted);display:flex;gap:10px}.vi .vst b{color:var(--text)}
 
 /* Product grid & cards */
-.pgrid{display:grid;grid-template-columns:1fr 1fr;gap:8px;padding:0 16px 80px}
+.pgrid{display:grid;grid-template-columns:1fr 1fr;gap:8px;padding:0 16px 20px}
 .pcard{background:var(--card);border:1px solid var(--border);border-radius:14px;overflow:hidden;cursor:pointer;transition:all .2s}.pcard:hover{transform:translateY(-2px);box-shadow:0 8px 24px rgba(0,0,0,.06)}
 .pimg{height:120px;background:var(--light);display:flex;align-items:center;justify-content:center;position:relative}.pimg .pe{font-size:52px}
 .pimg .badge{position:absolute;top:8px;left:8px;padding:4px 8px;border-radius:6px;font-size:10px;font-weight:700;color:#fff;background:#EF4444;z-index:3}
@@ -381,7 +381,7 @@ const CSS=`
 .vdt-r{width:28px;height:28px;border-radius:8px;background:linear-gradient(135deg,#6366F1,#A855F7);color:#fff;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:800;flex-shrink:0}
 .vdt-i{flex:1;min-width:0}.vdt-i h4{font-size:13px;font-weight:600;margin:0 0 2px}.vdt-i span{font-size:11px;color:var(--muted)}
 
-.vd-quick{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;padding:0 20px;margin:16px 0 80px}
+.vd-quick{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;padding:0 20px;margin:16px 0 20px}
 .vdq{padding:16px 10px;border-radius:16px;background:var(--card);border:1px solid var(--border);text-align:center;cursor:pointer;transition:all .15s}
 .vdq:hover{border-color:#6366F1;transform:translateY(-2px)}
 .vdq span{font-size:24px;display:block;margin-bottom:6px}

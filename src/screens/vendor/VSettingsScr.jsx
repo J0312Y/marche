@@ -12,7 +12,7 @@ function VSettingsScr({onBack,go}){
   const [emailReport,setEmailReport]=useState(true);
   const [sound,setSound]=useState(true);
   const [lang,setLang]=useState("fr");
-  return(<div className="scr" style={{paddingBottom:80}}><div className="appbar"><button onClick={onBack}>←</button><h2>Paramètres boutique</h2><div style={{width:38}}/></div>
+  return(<div className="scr" style={{paddingBottom:20}}><div className="appbar"><button onClick={onBack}>←</button><h2>Paramètres boutique</h2><div style={{width:38}}/></div>
     <div className="vs-header"><div className="vs-logo" style={{overflow:"hidden",padding:0}}><img src={VENDOR_LOGO_DEFAULT} style={{width:"100%",height:"100%",objectFit:"cover"}} alt=""/></div><h3 style={{fontSize:18,fontWeight:700}}>Mon Commerce</h3><p style={{fontSize:12,color:"var(--muted)"}}>Mode & Accessoires africains</p><div className="edit-logo" onClick={()=>document.getElementById("vset-logo")?.click()}>📸 Changer le logo</div><input id="vset-logo" type="file" accept="image/*" style={{display:"none"}} onChange={e=>{const f=e.target.files?.[0];if(f){toast.success("Logo mis à jour 📸")}}}/></div>
     <div style={{padding:"0 16px"}}>
       <div className="field"><label>Nom de l'établissement</label><input defaultValue="Mon Commerce"/></div>

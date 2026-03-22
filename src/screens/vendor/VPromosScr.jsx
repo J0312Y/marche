@@ -42,7 +42,7 @@ function VPromosScr({go,onBack}){
     setEditPromo(null);
   };
 
-  return(<div className="scr" style={{padding:16,paddingBottom:80}}>
+  return(<div className="scr" style={{padding:16,paddingBottom:20}}>
     <div className="appbar" style={{padding:0,marginBottom:10}}>
       <button onClick={onBack}>←</button>
       <h2>Promotions ({items.length})</h2>

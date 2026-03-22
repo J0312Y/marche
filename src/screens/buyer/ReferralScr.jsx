@@ -6,7 +6,7 @@ function ReferralScr({onBack}){
   const earned=invites.filter(i=>i.bonus>0).reduce((s,i)=>s+i.bonus,0);
   const copyCode=()=>{try{navigator.clipboard.writeText(code);toast.success("Code copié 📋")}catch(e){toast.info(code)}};
   const shareCode=async()=>{if(navigator.share)try{await navigator.share({title:"Lamuka Market",text:`Rejoins Lamuka Market avec mon code ${code} et gagne 2 000 FCFA !`,url:"https://lamuka.market/ref/"+code})}catch(e){}else copyCode()};
-  return(<div className="scr" style={{padding:16,paddingBottom:80}}>
+  return(<div className="scr" style={{padding:16,paddingBottom:20}}>
     <div className="appbar" style={{padding:0,marginBottom:10}}><button onClick={onBack}>←</button><h2>Parrainage</h2><div style={{width:38}}/></div>
     <div style={{textAlign:"center",padding:20,background:"linear-gradient(135deg,#6366F1,#A855F7)",borderRadius:20,color:"#fff",marginBottom:14}}>
       <div style={{fontSize:40,marginBottom:8}}>🎁</div>

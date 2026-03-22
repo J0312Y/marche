@@ -12,7 +12,7 @@ function GiftCardScr({onBack}){
     <h3 style={{fontSize:18,fontWeight:700,marginBottom:4}}>Carte envoyée !</h3><p style={{fontSize:13,color:"var(--muted)"}}>Un SMS a été envoyé à {to}</p>
     <button className="btn-primary" style={{marginTop:20,maxWidth:280}} onClick={onBack}>Retour</button>
   </div>);
-  return(<div className="scr" style={{padding:16,paddingBottom:80}}>
+  return(<div className="scr" style={{padding:16,paddingBottom:20}}>
     <div className="appbar" style={{padding:0,marginBottom:10}}><button onClick={onBack}>←</button><h2>🎁 Carte Cadeau</h2><div style={{width:38}}/></div>
     <div style={{textAlign:"center",marginBottom:14}}><div style={{fontSize:40,marginBottom:8}}>🎁</div><p style={{fontSize:13,color:"var(--muted)"}}>Offrez du shopping à vos proches</p></div>
     <div style={{fontSize:14,fontWeight:700,marginBottom:10}}>Choisir le montant</div>

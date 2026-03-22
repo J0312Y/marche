@@ -6,7 +6,7 @@ function ReturnScr({onBack,order}){
   const submit=()=>{if(!reason){toast.error("Sélectionnez une raison");return}setDone(true);toast.success("Demande envoyée ✅")};
   const addPhoto=(e)=>{const f=e.target.files?.[0];if(!f)return;const r=new FileReader();r.onload=()=>setPhotos(p=>[...p,r.result]);r.readAsDataURL(f);e.target.value=""};
   if(done)return(<div className="scr" style={{padding:16,textAlign:"center",display:"flex",flexDirection:"column",alignItems:"center",justifyContent:"center",height:"100%"}}><div style={{fontSize:56,marginBottom:14}}>✅</div><h2 style={{fontSize:20,fontWeight:700,marginBottom:6}}>Demande envoyée</h2><p style={{fontSize:13,color:"var(--muted)",marginBottom:8}}>Nous traiterons votre demande sous 24-48h. Vous recevrez une notification.</p><p style={{fontSize:12,color:"var(--sub)"}}>Réf: #RET-2026-{Math.floor(Math.random()*9000+1000)}</p><button className="btn-primary" style={{marginTop:20,maxWidth:280}} onClick={onBack}>Retour</button></div>);
-  return(<div className="scr" style={{padding:16,paddingBottom:80}}>
+  return(<div className="scr" style={{padding:16,paddingBottom:20}}>
     <div className="appbar" style={{padding:0,marginBottom:10}}><button onClick={onBack}>←</button><h2>Retour / Remboursement</h2><div style={{width:38}}/></div>
     {order&&<div style={{padding:12,background:"var(--light)",borderRadius:14,marginBottom:14,fontSize:12,color:"var(--sub)"}}><b>Commande {order.ref}</b> · {order.date}</div>}
     <div style={{fontSize:14,fontWeight:700,marginBottom:10}}>Raison du retour</div>

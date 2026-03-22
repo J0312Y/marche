@@ -68,7 +68,7 @@ function NotifScr({ onBack, go }) {
           <p style={{ fontSize: 13, color: "var(--muted)" }}>Vous serez notifié des mises à jour de vos commandes</p>
         </div>
       ) : (
-        <div style={{ paddingBottom: 80 }}>
+        <div style={{ paddingBottom: 20 }}>
           {/* Today */}
           {items.filter(n => n.time.includes("min") || n.time.includes("h")).length > 0 && (
             <div style={{ padding: "10px 20px 4px", fontSize: 12, fontWeight: 700, color: "var(--muted)" }}>Aujourd'hui</div>

@@ -26,7 +26,7 @@ function VDashboardScr({go}){
     return String(v);
   };
 
-  return(<PullToRefresh onRefresh={reload}><div className="scr" style={{padding:16,paddingBottom:100}}>
+  return(<PullToRefresh onRefresh={reload}><div className="scr" style={{padding:16,paddingBottom:20}}>
     <div className="appbar" style={{padding:0,marginBottom:10}}><h2>📊 Tableau de bord</h2><button onClick={()=>go("vNotif")}>🔔</button></div>
     <div className="vo-filter" style={{padding:0,marginBottom:14}}>{[["today","Aujourd'hui"],["week","Semaine"],["month","Mois"]].map(([k,l])=><button key={k} className={period===k?"on":""} onClick={()=>setPeriod(k)}>{l}</button>)}</div>
 

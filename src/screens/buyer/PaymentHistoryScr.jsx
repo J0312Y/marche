@@ -14,7 +14,7 @@ function PaymentHistoryScr({onBack}){
   const income=PAYMENTS.filter(p=>p.type==="+").reduce((s,p)=>s+p.amount,0);
   const spent=PAYMENTS.filter(p=>p.type==="-").reduce((s,p)=>s+p.amount,0);
 
-  return(<div className="scr" style={{padding:16,paddingBottom:80}}>
+  return(<div className="scr" style={{padding:16,paddingBottom:20}}>
     <div className="appbar" style={{padding:0,marginBottom:10}}><button onClick={onBack}>←</button><h2>Historique paiements</h2><div style={{width:38}}/></div>
 
     {/* Summary */}

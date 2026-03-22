@@ -101,7 +101,7 @@ function VWebsiteScr({onBack}){
     toast.success("Page créée ✅");
   };
 
-  return(<div className="scr" style={{paddingBottom:80}}>
+  return(<div className="scr" style={{paddingBottom:20}}>
     <div className="appbar" style={{padding:"0 16px"}}><button onClick={onBack}>←</button><h2>🌐 Mon Site Web</h2>
       <button onClick={()=>setShowPreview(true)} style={{fontSize:12,background:"none",border:"1px solid #6366F1",borderRadius:8,padding:"4px 10px",color:"#6366F1",cursor:"pointer",fontFamily:"inherit",fontWeight:600}}>👁️</button>
     </div>

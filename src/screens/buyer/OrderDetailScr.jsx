@@ -12,7 +12,7 @@ function OrderDetailScr({order:o,onBack,go}){
   const currentStep=o.prog?o.prog.filter(x=>x===1).length:0;
   const canCancel=!cancelled&&(sc==="ship"||sc==="prep");
 
-  return(<div className="scr" style={{padding:16,paddingBottom:100}}>
+  return(<div className="scr" style={{padding:16,paddingBottom:20}}>
     <div className="appbar" style={{padding:0,marginBottom:12}}><button onClick={onBack}>←</button><h2>{o.ref}</h2><div style={{width:38}}/></div>
 
     {/* Status + date */}

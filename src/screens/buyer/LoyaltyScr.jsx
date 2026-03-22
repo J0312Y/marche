@@ -5,7 +5,7 @@ function LoyaltyScr({onBack}){
   const pct=nextLevel?Math.round((points/(nextLevel))*100):100;
   const history=[{label:"Commande #LMK-0214",pts:"+185",date:"14 Fév"},{label:"Avis publié",pts:"+50",date:"12 Fév"},{label:"Coupon utilisé",pts:"-500",date:"10 Fév"},{label:"Commande #LMK-0210",pts:"+42",date:"10 Fév"},{label:"Bonus parrainage",pts:"+200",date:"8 Fév"},{label:"Commande #LMK-0205",pts:"+18",date:"5 Fév"}];
   const rewards=[[500,"Livraison gratuite"],[1000,"500 FCFA de réduction"],[2000,"Badge Silver 🥈"],[3000,"1 500 FCFA de réduction"],[5000,"Badge Gold 🥇 + livraison gratuite x5"]];
-  return(<div className="scr" style={{padding:16,paddingBottom:80}}>
+  return(<div className="scr" style={{padding:16,paddingBottom:20}}>
     <div className="appbar" style={{padding:0,marginBottom:10}}><button onClick={onBack}>←</button><h2>Fidélité</h2><div style={{width:38}}/></div>
     <div style={{padding:20,background:"linear-gradient(135deg,#F59E0B,#D97706)",borderRadius:20,color:"#fff",textAlign:"center",marginBottom:14}}>
       <div style={{fontSize:14,opacity:.8}}>Vos points</div>

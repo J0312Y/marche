@@ -11,7 +11,7 @@ function VReturnsScr({onBack}){
   const tabs={pending:returns.filter(r=>r.status==="pending"),approved:returns.filter(r=>r.status==="approved"),refused:returns.filter(r=>r.status==="refused")};
   const shown=tabs[tab]||[];
   const act=(id,status)=>{setReturns(prev=>prev.map(r=>r.id===id?{...r,status}:r));toast.success(status==="approved"?"Retour approuvé ✅":"Retour refusé ❌")};
-  return(<div className="scr" style={{padding:16,paddingBottom:80}}>
+  return(<div className="scr" style={{padding:16,paddingBottom:20}}>
     <div className="appbar" style={{padding:0,marginBottom:10}}><button onClick={onBack}>←</button><h2>↩️ Retours ({tabs.pending.length})</h2><div style={{width:38}}/></div>
     <div style={{display:"flex",gap:0,marginBottom:12,background:"var(--light)",borderRadius:12,padding:3}}>
       {[["pending","En attente ("+tabs.pending.length+")"],["approved","Approuvés"],["refused","Refusés"]].map(([k,l])=><button key={k} onClick={()=>setTab(k)} style={{flex:1,padding:"8px 0",borderRadius:10,border:"none",background:tab===k?"var(--card)":"transparent",color:tab===k?"var(--text)":"var(--muted)",fontSize:11,fontWeight:tab===k?700:500,cursor:"pointer",fontFamily:"inherit",boxShadow:tab===k?"0 1px 4px rgba(0,0,0,.06)":"none"}}>{l}</button>)}
