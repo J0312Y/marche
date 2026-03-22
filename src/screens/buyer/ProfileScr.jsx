@@ -59,10 +59,10 @@ function ProfileScr({go,userRole,vendorPlan,vendorStatus,driverStatus,onLogout})
       <div style={{display:"flex",alignItems:"center",gap:10}}><span style={{fontSize:24}}>⏳</span><div><div style={{fontSize:14,fontWeight:700,color:"#F59E0B"}}>Demande livreur en cours</div><div style={{fontSize:12,color:"var(--muted)",marginTop:2}}>Vérification sous 24-48h</div></div></div></div>}
 
     {/* ── CTA vendeur/livreur ── */}
-    {userRole==="client"&&<div onClick={()=>go("roleReg")} style={{margin:"0 20px 14px",padding:14,background:"rgba(249,115,22,0.04)",border:"1px solid rgba(249,115,22,0.15)",borderRadius:16,display:"flex",alignItems:"center",gap:12,cursor:"pointer"}}>
-      <span style={{fontSize:24}}>🚀</span>
-      <div style={{flex:1}}><div style={{fontSize:14,fontWeight:700}}>Devenir commerçant ou livreur</div><div style={{fontSize:11,color:"var(--muted)",marginTop:2}}>Ouvrez votre commerce sur Lamuka</div></div>
-      <span style={{color:"var(--muted)"}}>›</span>
+    {userRole==="client"&&<div onClick={()=>go("roleReg")} style={{margin:"0 20px 14px",padding:16,background:"linear-gradient(135deg,#1a1a2e,#16213e)",borderRadius:18,display:"flex",alignItems:"center",gap:14,cursor:"pointer",boxShadow:"0 4px 16px rgba(0,0,0,.12)"}}>
+      <div style={{width:48,height:48,borderRadius:14,background:"linear-gradient(135deg,#F97316,#FB923C)",display:"flex",alignItems:"center",justifyContent:"center",fontSize:24,flexShrink:0}}>🚀</div>
+      <div style={{flex:1}}><div style={{fontSize:15,fontWeight:700,color:"#fff"}}>Devenir commerçant ou livreur</div><div style={{fontSize:11,color:"rgba(255,255,255,.5)",marginTop:3}}>Ouvrez votre restaurant, boutique, pharmacie...</div></div>
+      <span style={{color:"rgba(255,255,255,.3)",fontSize:18}}>›</span>
     </div>}
     {hasVendor&&<div onClick={()=>go("switchVendor")} style={{margin:"0 20px 14px",padding:14,background:"var(--card)",border:"1px solid var(--border)",borderLeft:"4px solid #F97316",borderRadius:16,display:"flex",alignItems:"center",gap:12,cursor:"pointer"}}>
       <span style={{fontSize:24}}>🏪</span>
