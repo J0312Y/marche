@@ -24,7 +24,7 @@ function InvoiceView({ order, onClose }) {
           <h3 style={{ fontSize: 18, fontWeight: 800, color: "#191815" }}>Lamuka Market</h3>
           <p style={{ fontSize: 11, color: "#908C82" }}>Le Marketplace du Congo 🇨🇬</p>
           <div style={{ marginTop: 8, padding: "4px 12px", background: "#F5F4F1", borderRadius: 8, display: "inline-block", fontSize: 11, fontWeight: 700, color: "#F97316" }}>
-            REÇU #{o.id || "LMK-" + String(Math.floor(Math.random() * 9000) + 1000)}
+            REÇU {o.id || "#LMK-" + String(Math.floor(Math.random() * 9000) + 1000)}
           </div>
         </div>
 

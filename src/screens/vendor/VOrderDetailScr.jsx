@@ -19,7 +19,7 @@ function VOrderDetailScr({order:o,onBack,go}){
       <p style={{fontSize:12,color:"var(--muted)",marginTop:4}}>Le client sera notifié et remboursé.</p>
       <button className="btn-primary" style={{marginTop:20}} onClick={onBack}>← Retour</button>
       <button onClick={()=>setShowInvoice(true)} style={{padding:14,borderRadius:14,border:"1px solid var(--border)",background:"var(--card)",fontSize:14,fontWeight:600,cursor:"pointer",fontFamily:"inherit",color:"var(--text)",marginTop:8}}>🧾 Générer le reçu</button>
-      {showInvoice&&<InvoiceView order={{id:o?.ref||"LMK-0891",client:o?.client||"Marie Koumba",vendor:o?.vendor||"Mode Afrique",amount:o?.total||25000,items:[{name:"Article",qty:1,price:o?.total||25000}],delivery:1500,payment:"Airtel Money"}} onClose={()=>setShowInvoice(false)}/>}
+      {showInvoice&&<InvoiceView order={{id:o?.ref||"LMK-0891",client:o?.client||"Marie Koumba",vendor:o?.vendor||"Mode Afrique",amount:o?.total||25000,items:o?.items?.map(it=>({name:it.name,qty:it.qty,price:it.price}))||[{name:"Article",qty:1,price:o?.total||25000}],delivery:1500,payment:o?.payment||"Airtel Money"}} onClose={()=>setShowInvoice(false)}/>}
     </div>
   </div>);
 
