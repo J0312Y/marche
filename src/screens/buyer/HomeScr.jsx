@@ -186,15 +186,6 @@ function HomeScr({go,favs,toggleFav,isFav,userName}){
         </div>
       </div>
 
-      {/* Commerce types */}
-      <div style={{display:"flex",gap:6,padding:"0 20px 14px",overflowX:"auto",WebkitOverflowScrolling:"touch",scrollbarWidth:"none"}}>
-        {types.map(t=><div key={t.id} onClick={()=>setSelType(t.id)} style={{padding:"8px 10px",borderRadius:12,border:selType===t.id?"2px solid #F97316":"1px solid var(--border)",background:selType===t.id?"rgba(249,115,22,0.08)":"var(--card)",cursor:"pointer",flexShrink:0,textAlign:"center",minWidth:54,transition:"all .2s"}}>
-          <div style={{fontSize:18}}>{t.icon}</div>
-          <div style={{fontSize:9,fontWeight:600,color:selType===t.id?"#F97316":"var(--muted)",marginTop:2}}>{t.name}</div>
-        </div>)}
-      </div>
-
-
       {/* ═══ STORIES ═══ */}
       <div style={{display:"flex",gap:12,padding:"0 16px 10px",overflowX:"auto",scrollbarWidth:"none",WebkitOverflowScrolling:"touch"}}>
         {[...VENDORS.filter(v=>v.verified)].sort((a,b)=>{
@@ -213,7 +204,6 @@ function HomeScr({go,favs,toggleFav,isFav,userName}){
         })}
       </div>
 
-      <div className="banner"><div className="banner-l"><h3>Soldes de Février</h3><p>Jusqu'à -40% sur tout le marketplace</p><span className="banner-btn" onClick={()=>go("flash")}>Voir les offres</span></div><span style={{fontSize:56}}>🛍️</span></div>
 
       {/* Group Buy promo */}
       <div onClick={()=>go("groupBuy")} style={{margin:"0 16px 14px",padding:12,background:"linear-gradient(135deg,rgba(249,115,22,0.06),rgba(251,146,60,0.06))",border:"1px solid rgba(249,115,22,0.12)",borderRadius:14,display:"flex",alignItems:"center",gap:10,cursor:"pointer"}}>
@@ -222,7 +212,7 @@ function HomeScr({go,favs,toggleFav,isFav,userName}){
         <span style={{color:"#F97316",fontSize:16}}>›</span>
       </div>
 
-      {/* Restos à la une */}
+      {/* Restos à la une */}}
       {(selType==="all"||selType==="restaurant")&&nearbyRestos.length>0&&<>
         <div className="sec"><h3>🍽️ Commander à manger</h3><span onClick={()=>go("restoList")}>Voir tout</span></div>
         <div className="marquee-wrap"><div className="marquee-track-resto">
@@ -235,50 +225,6 @@ function HomeScr({go,favs,toggleFav,isFav,userName}){
           </div>)}
         </div></div>
       </>}
-
-      <div className="sec"><h3>Catégories</h3><span onClick={()=>go("cats")}>Voir tout</span></div>
-      <div className="marquee-wrap"><div className="marquee-track" style={{gap:10}}>
-        {[...CATS.filter(c=>selType==="all"||c.type===selType).slice(0,8),...CATS.filter(c=>selType==="all"||c.type===selType).slice(0,8)].map((c,i)=>{
-          const idx=i%CATS.length;
-          return(<div key={c.id+"-"+i} onClick={()=>{setSC(idx);doSearch(c.name)}} style={{
-            flexShrink:0,width:110,borderRadius:16,overflow:"hidden",cursor:"pointer",
-            border:idx===selCat?"2px solid #F97316":"1px solid var(--border)",
-            background:"var(--card)",transition:"border .2s",
-          }}>
-            <div style={{width:"100%",height:80,position:"relative",overflow:"hidden",background:"var(--border)"}}>
-              {c.photo&&<img src={c.photo} alt={c.name} style={{width:"100%",height:"100%",objectFit:"cover",display:"block"}}/>}
-              <div style={{position:"absolute",inset:0,background:"linear-gradient(transparent 20%,rgba(0,0,0,0.65))"}}/>
-              <div style={{position:"absolute",bottom:0,left:0,right:0,padding:"6px 8px",textAlign:"center"}}>
-                <div style={{fontSize:11,fontWeight:700,color:"#fff",textShadow:"0 1px 4px rgba(0,0,0,.7)"}}>{c.name}</div>
-              </div>
-            </div>
-            <div style={{padding:"5px 8px",textAlign:"center"}}>
-              <div style={{fontSize:10,color:idx===selCat?"#F97316":"var(--muted)",fontWeight:600}}>{c.count} articles</div>
-            </div>
-          </div>);
-        })}
-      </div></div>
-
-      {/* ═══ BOUTIQUES EN VEDETTE (Sponsored) ═══ */}
-      <div className="sec"><h3>⭐ Recommandés pour vous</h3><span onClick={()=>go("search",{tab:"vendors"})}>Voir tout</span></div>
-      <div style={{display:"flex",gap:10,padding:"0 16px 14px",overflowX:"auto",scrollbarWidth:"none"}}>
-        {VENDORS.filter(v=>v.verified).slice(0,4).map(v=><div key={"feat-"+v.id} onClick={()=>go("vendor",v)} style={{flexShrink:0,width:150,borderRadius:16,overflow:"hidden",cursor:"pointer",border:"1px solid var(--border)",background:"var(--card)",position:"relative"}}>
-          <div style={{position:"absolute",top:6,left:6,padding:"2px 6px",borderRadius:5,background:"rgba(0,0,0,0.5)",backdropFilter:"blur(4px)",color:"#F59E0B",fontSize:8,fontWeight:700,zIndex:2}}>⭐ Top</div>
-          <div style={{height:80,overflow:"hidden",position:"relative"}}>
-            {v.cover?<img src={v.cover} style={{width:"100%",height:"100%",objectFit:"cover"}} alt=""/>:<div style={{width:"100%",height:"100%",background:"linear-gradient(135deg,#F97316,#FB923C)"}}/>}
-            <div style={{position:"absolute",inset:0,background:"linear-gradient(transparent 40%,rgba(0,0,0,0.5))"}}/>
-          </div>
-          <div style={{padding:10,display:"flex",alignItems:"center",gap:8}}>
-            <div style={{width:32,height:32,borderRadius:10,overflow:"hidden",flexShrink:0,border:"2px solid var(--border)"}}>
-              {v.logo?<img src={v.logo} style={{width:"100%",height:"100%",objectFit:"cover"}} alt=""/>:<div style={{width:"100%",height:"100%",display:"flex",alignItems:"center",justifyContent:"center",fontSize:14,background:"var(--light)"}}>{v.avatar}</div>}
-            </div>
-            <div style={{flex:1,minWidth:0}}>
-              <div style={{fontSize:11,fontWeight:700,overflow:"hidden",whiteSpace:"nowrap",textOverflow:"ellipsis"}}>{v.name}{v.verified&&<span style={{color:"#F97316"}}> ✓</span>}</div>
-              <div style={{fontSize:9,color:"var(--muted)"}}>⭐ {v.rating} · {v.products} articles</div>
-            </div>
-          </div>
-        </div>)}
-      </div>
 
       <div className="sec"><h3>{selType==="all"?"Établissements proches":types.find(t=>t.id===selType)?.name+" proches"}</h3><span onClick={()=>go("nearby")}>Voir la carte</span></div>
       <div className="vlist">{filteredV.slice(0,4).map(v=><div key={v.id} className="vcard" onClick={()=>go("vendor",v)}><div className="vav" style={v.logo?{overflow:"hidden",padding:0}:{}}>{v.logo?<img src={v.logo} style={{width:"100%",height:"100%",objectFit:"cover"}} alt=""/>:v.avatar}</div><div className="vi"><h4>{v.name}{v.verified&&<span className="vf">✓</span>}</h4><div className="vloc">📍 {v.loc}{v.eta&&<span style={{marginLeft:8,color:"#F97316",fontWeight:600}}>🕐 {v.eta}</span>}</div><div className="vst">⭐ <b>{v.rating}</b> · {v.products} {v.type==="restaurant"?"plats":v.type==="service"?"services":"produits"}</div></div><span style={{color:"var(--muted)"}}>›</span></div>)}</div>
@@ -298,17 +244,7 @@ function HomeScr({go,favs,toggleFav,isFav,userName}){
         </div>
       </>}
 
-      {/* Recently viewed */}
-      {(()=>{try{const rv=JSON.parse(localStorage.getItem("lamuka_recent")||"[]");const rp=rv.map(id=>P.find(p=>p.id===id)).filter(Boolean).slice(0,6);if(rp.length>0)return(<>
-        <div className="sec"><h3>👁️ Récemment consultés</h3></div>
-        <div style={{display:"flex",gap:8,padding:"0 16px 10px",overflowX:"auto",scrollbarWidth:"none"}}>
-          {rp.map(p=><div key={"rv-"+p.id} onClick={()=>go("detail",p)} style={{flexShrink:0,width:100,cursor:"pointer"}}>
-            <div style={{width:100,height:80,borderRadius:12,overflow:"hidden",background:"var(--light)",marginBottom:4}}><Img src={p.photo} emoji={p.img} style={{width:"100%",height:"100%"}} fit="cover"/></div>
-            <div style={{fontSize:10,fontWeight:600,overflow:"hidden",whiteSpace:"nowrap",textOverflow:"ellipsis"}}>{p.name}</div>
-            <div style={{fontSize:10,fontWeight:700,color:"#F97316"}}>{fmt(p.price)}</div>
-          </div>)}
-        </div>
-      </>);return null}catch{return null}})()}
+
 
       <div className="sec"><h3>{selType==="all"?"Populaires":"Populaires en "+types.find(t=>t.id===selType)?.name}</h3><span onClick={()=>go("allProducts")}>Voir tout</span></div>
       <div className="pgrid">{filteredP.map(p=>{const vp=getVendorPromo(p,VENDORS);const td=totalDisc(p,VENDORS);return(<div key={p.id} className="pcard" onClick={()=>go("detail",p)}><div className="pimg"><Img src={p.photo} emoji={p.img} style={{width:"100%",height:"100%"}} fit="cover"/>{p.old&&<span className="badge">-{disc(p)}%</span>}{vp&&<span className="tag" style={{background:"#F59E0B",color:"#fff"}}>🏷️ {vp.promoName}</span>}{!vp&&p.tags[0]&&<span className="tag">{p.tags[0]}</span>}<span className="fav" onClick={e=>{e.stopPropagation();toggleFav(p.id)}} style={{color:isFav(p.id)?"#EF4444":"var(--muted)",fontSize:14}}>{isFav(p.id)?"♥":"♡"}</span></div><div className="pbody"><h4>{p.name}</h4><div className="pv">{p.va} {p.vendor}{p.eta&&<span style={{marginLeft:4,color:"#F97316",fontSize:10}}>🕐 {p.eta}</span>}</div><div className="pp">{vp?<><span style={{color:"#F97316"}}>{fmt(vp.promoPrice)}</span><span className="po">{fmt(p.price)}</span></>:<>{fmt(p.price)}{p.old&&<span className="po">{fmt(p.old)}</span>}</>}</div><div className="pr" onClick={e=>{e.stopPropagation();go("reviews",p)}}>⭐ {p.rating} ({p.reviews})</div></div></div>)})}</div>
