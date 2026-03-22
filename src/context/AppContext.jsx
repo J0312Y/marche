@@ -34,6 +34,7 @@ export function AppProvider({ children }) {
 
   // ── Roles ──
   const [userRole, setUserRole] = useState('client');
+  const [userName, setUserName] = useState('');
   const [vendorPlan, setVendorPlan] = useState('starter');
   const [vendorStatus, setVendorStatus] = useState('none');
   const [driverStatus, setDriverStatus] = useState('none');
@@ -248,6 +249,7 @@ export function AppProvider({ children }) {
     unreadCount, setUnreadCount,
     toast, showToast,
     darkMode, toggleDark,
+    userName, setUserName,
     recentlyViewed, addRecentlyViewed,
     seenStories, markStorySeen,
   };

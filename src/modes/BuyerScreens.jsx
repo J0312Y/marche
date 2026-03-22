@@ -31,10 +31,11 @@ export default function BuyerScreens() {
     favs, toggleFav, isFav,
     userRole, vendorPlan, vendorStatus, driverStatus,
     logout, onRoleApproved, hasVendor, hasDriver,
+    userName,
   } = useApp();
 
   if (!screen) {
-    if (tab === 0) return <HomeScr go={go} favs={favs} toggleFav={toggleFav} isFav={isFav} />;
+    if (tab === 0) return <HomeScr go={go} favs={favs} toggleFav={toggleFav} isFav={isFav} userName={userName} />;
     if (tab === 1) return <SearchScr go={go} fromTab favs={favs} toggleFav={toggleFav} isFav={isFav} />;
     if (tab === 2) return <CartScr cart={cart} setCart={setCart} updateCartQty={updateCartQty} go={go} appliedCoupon={appliedCoupon} setAppliedCoupon={setAppliedCoupon} />;
     if (tab === 3) return <OrdersScr go={go} />;

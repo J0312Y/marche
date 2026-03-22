@@ -3,7 +3,7 @@ import Select from "../../components/Select";
 import toast from "../../utils/toast";
 import { USER_AVATAR } from "../../data/images";
 
-function ProfileCompletionScr({onDone,provider}){
+function ProfileCompletionScr({onDone,provider,setUserName}){
   const [step,setStep]=useState(0);
   const [firstName,setFirstName]=useState("");
   const [lastName,setLastName]=useState("");
@@ -48,7 +48,7 @@ function ProfileCompletionScr({onDone,provider}){
           <div style={{display:"flex",gap:8}}><div style={{padding:"10px 12px",borderRadius:12,border:"1px solid var(--border)",background:"var(--light)",fontSize:13,fontWeight:600,flexShrink:0}}>🇨🇬 +242</div><input value={phone} onChange={e=>{setPhone(e.target.value);clr("phone")}} placeholder="06X XXX XXX" type="tel" style={{flex:1}}/></div>
           {errors.phone&&<div className="err-msg">{errors.phone}</div>}
         </div>}
-        <button className="btn-primary" onClick={()=>{if(validate0())setStep(1)}}>Continuer</button>
+        <button className="btn-primary" onClick={()=>{if(validate0()){setUserName?.(firstName.trim());setStep(1)}}}>Continuer</button>
         <button className="btn-outline" style={{marginTop:8}} onClick={onDone}>Passer pour l'instant</button>
       </>}
 
@@ -59,7 +59,7 @@ function ProfileCompletionScr({onDone,provider}){
         </div>
         <div className={`field${errors.quartier?" err":""}`}><label>Quartier <span style={{color:"#EF4444"}}>*</span></label><input value={quartier} onChange={e=>{setQuartier(e.target.value);clr("quartier")}} placeholder="Ex: Bacongo, Poto-Poto..."/>{errors.quartier&&<div className="err-msg">{errors.quartier}</div>}</div>
         <div className="field"><label>Adresse <span style={{color:"var(--muted)",fontWeight:400}}>(optionnel)</span></label><input value={address} onChange={e=>setAddress(e.target.value)} placeholder="Rue, N°..."/></div>
-        <button className="btn-primary" onClick={()=>{if(validate1())onDone()}}>🚀 Commencer</button>
+        <button className="btn-primary" onClick={()=>{if(validate1()){setUserName?.(firstName.trim());onDone()}}}>🚀 Commencer</button>
       </>}
 
       <div style={{display:"flex",justifyContent:"center",gap:6,marginTop:20}}>{[0,1].map(i=><div key={i} style={{width:step===i?24:8,height:8,borderRadius:4,background:step>=i?"#F97316":"var(--border)",transition:"all .3s"}}/>)}</div>

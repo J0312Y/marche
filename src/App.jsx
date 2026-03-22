@@ -15,7 +15,7 @@ function AppInner() {
     mode, tab, setTab, vTab, setVTab, dTab, setDTab,
     screen, setScreen, setHistory, go,
     cart, cartCount, hasVendor, hasDriver,
-    login, completeProfile, toast, darkMode,
+    login, completeProfile, toast, darkMode, setUserName,
   } = useApp();
 
   /* ── Auth step mapping: splash=0, onboarding=1, login=2, otp=3, profile=4, ready=5 ── */
@@ -71,7 +71,7 @@ function AppInner() {
             : auth === 1 ? <OnboardingScr onDone={() => setAuthStep('login')} />
             : auth === 2 ? <LoginScr onDone={() => setAuthStep('otp')} onSocial={(p) => { setSocialProvider(p); setAuthStep('otp'); }} />
             : auth === 3 ? <OTPScr onDone={() => setAuthStep('profile')} />
-            : auth === 4 ? <ProfileCompletionScr provider={socialProvider} onDone={() => setAuthStep('ready')} />
+            : auth === 4 ? <ProfileCompletionScr provider={socialProvider} setUserName={setUserName} onDone={() => setAuthStep('ready')} />
             : <>
               <Suspense fallback={<LoadingSpinner />}>{renderScreen()}</Suspense>
 

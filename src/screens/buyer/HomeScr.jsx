@@ -6,7 +6,7 @@ import { SkeletonHome } from "../../components/Loading";
 import PullToRefresh from "../../components/PullToRefresh";
 import { fmt, disc, getVendorPromo, totalDisc, effectivePrice } from "../../utils/helpers";
 
-function HomeScr({go,favs,toggleFav,isFav}){
+function HomeScr({go,favs,toggleFav,isFav,userName}){
   const { P, VENDORS, CATS, loading: dataLoading, reload } = useData();
   const { cartCount, recentlyViewed, seenStories, markStorySeen } = useApp();
   const [selCat,setSC]=useState(0);
@@ -43,7 +43,7 @@ function HomeScr({go,favs,toggleFav,isFav}){
   return(<>
     <PullToRefresh onRefresh={reload}><div className="scr">
       {/* Header - only show when not in search */}
-      {!inSearchMode&&<div className="hdr"><div><div className="hdr-t">Bonjour 👋</div><div className="hdr-h">Lamuka Market</div></div>
+      {!inSearchMode&&<div className="hdr"><div><div className="hdr-t">Bonjour{userName?" "+userName:""} 👋</div><div className="hdr-h">Lamuka Market</div></div>
         <div className="hdr-r"><div className="hdr-btn" onClick={()=>go("notif")}>🔔<div className="notif-badge"/></div><div className="hdr-btn" onClick={()=>go("cart")} style={{position:"relative"}}>🛍️{cartCount>0&&<span style={{position:"absolute",top:-4,right:-4,background:"#EF4444",color:"var(--card)",fontSize:9,fontWeight:700,borderRadius:10,padding:"1px 5px",minWidth:16,textAlign:"center"}}>{cartCount}</span>}</div></div></div>}
 
       {/* Search bar */}
@@ -165,7 +165,7 @@ function HomeScr({go,favs,toggleFav,isFav}){
         <span style={{color:"#F97316",fontSize:16}}>›</span>
       </div>
 
-      {/* Restos à la une */}
+      {/* Restos à la une */}}
       {(selType==="all"||selType==="restaurant")&&nearbyRestos.length>0&&<>
         <div className="sec"><h3>🍽️ Commander à manger</h3><span onClick={()=>go("restoList")}>Voir tout</span></div>
         <div className="marquee-wrap"><div className="marquee-track-resto">
