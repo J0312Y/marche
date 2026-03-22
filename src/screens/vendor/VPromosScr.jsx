@@ -1,4 +1,5 @@
 import Select from "../../components/Select";
+import DatePicker from "../../components/DatePicker";
 import { useState } from "react";
 import { useLoad } from "../../hooks";
 import { vendor } from "../../services";
@@ -106,8 +107,8 @@ function VPromosScr({go,onBack}){
           <Select value={editPromo.products} onChange={v=>setEditPromo({...editPromo,products:v})} options={["Tous les articles","Premier achat","Mode uniquement","Électronique"]}/>
         </div>
         <div className="field-row">
-          <div className="field"><label>Date début</label><input type="date" value={editPromo.startDate||""} onChange={e=>setEditPromo({...editPromo,startDate:e.target.value,start:new Date(e.target.value).toLocaleDateString("fr-FR",{day:"numeric",month:"short"})})}/></div>
-          <div className="field"><label>Date fin</label><input type="date" value={editPromo.endDate||""} onChange={e=>setEditPromo({...editPromo,endDate:e.target.value,end:new Date(e.target.value).toLocaleDateString("fr-FR",{day:"numeric",month:"short"})})}/></div>
+          <div className="field"><label>Date début</label><DatePicker value={editPromo.startDate||""} onChange={v=>setEditPromo({...editPromo,startDate:v,start:new Date(v).toLocaleDateString("fr-FR",{day:"numeric",month:"short"})})}/></div>
+          <div className="field"><label>Date fin</label><DatePicker value={editPromo.endDate||""} onChange={v=>setEditPromo({...editPromo,endDate:v,end:new Date(v).toLocaleDateString("fr-FR",{day:"numeric",month:"short"})})}/></div>
         </div>
 
         {/* Active toggle */}

@@ -12,23 +12,23 @@ function ProfileScr({go,userRole,vendorPlan,vendorStatus,driverStatus,onLogout})
   const Section=({title,children})=>(
     <div style={{margin:"0 20px 14px"}}>
       <div style={{fontSize:11,fontWeight:700,color:"var(--muted)",textTransform:"uppercase",letterSpacing:1,padding:"0 4px 8px"}}>{title}</div>
-      <div style={{background:"var(--card)",border:"1px solid var(--border)",borderRadius:16,overflow:"hidden"}}>
+      <div style={{background:"var(--card)",border:"1px solid var(--border)",borderRadius:16,overflow:"hidden"}} className="prof-section">
         {children}
       </div>
     </div>
   );
 
   const Item=({icon,label,info,onClick})=>(
-    <div onClick={onClick} style={{display:"flex",alignItems:"center",gap:12,padding:"13px 16px",cursor:"pointer",borderBottom:"1px solid var(--border)"}}>
-      <span style={{fontSize:18,width:24,textAlign:"center"}}>{icon}</span>
+    <div onClick={onClick} style={{display:"flex",alignItems:"center",gap:12,padding:"14px 16px",cursor:"pointer",borderBottom:"1px solid var(--border)",transition:"background .12s"}}>
+      <div style={{width:36,height:36,borderRadius:10,background:"var(--light)",display:"flex",alignItems:"center",justifyContent:"center",fontSize:16,flexShrink:0}}>{icon}</div>
       <span style={{flex:1,fontSize:14,fontWeight:500}}>{label}</span>
-      {info&&<span style={{fontSize:12,color:"var(--muted)",fontWeight:500}}>{info}</span>}
-      <span style={{color:"var(--border)",fontSize:14}}>›</span>
+      {info&&<span style={{fontSize:11,fontWeight:600,color:"#F97316",padding:"2px 8px",borderRadius:6,background:"rgba(249,115,22,0.06)"}}>{info}</span>}
+      <span style={{color:"var(--muted)",fontSize:14,fontWeight:300}}>›</span>
     </div>
   );
 
   return(<PullToRefresh onRefresh={async()=>{toast.success("Profil actualisé 👤")}}><div className="scr">
-    <div className="appbar"><h2>Mon Profil</h2><button onClick={()=>go("settings")}>⚙️</button></div>
+    <div className="appbar"><h2>Mon Profil</h2><div style={{width:38}}/></div>
 
     {/* ── Avatar + Name ── */}
     <div onClick={()=>go("editProfile")} style={{margin:"0 20px 16px",display:"flex",alignItems:"center",gap:14,cursor:"pointer"}}>

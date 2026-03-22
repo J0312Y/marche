@@ -293,6 +293,7 @@ select option{background:var(--card);color:var(--text);padding:10px 14px;font-si
 .prof-stats .ps{flex:1;text-align:center}.prof-stats .ps b{display:block;font-size:18px;color:#F97316}.prof-stats .ps span{font-size:11px;color:var(--muted)}
 .prof-stats .psd{width:1px;height:32px;background:var(--border);align-self:center}
 
+.prof-section>div:last-child{border-bottom:none!important}
 .wallet-card{margin:0 20px 16px;height:160px;border-radius:20px;position:relative;overflow:hidden;cursor:pointer;background:linear-gradient(135deg,#1a1a2e 0%,#16213e 50%,#0f3460 100%);box-shadow:0 8px 30px rgba(0,0,0,.2)}
 .wallet-card .wc-bg{position:absolute;inset:0;opacity:.15;background:url("data:image/svg+xml,%3Csvg width='200' height='200' xmlns='http://www.w3.org/2000/svg'%3E%3Ccircle cx='160' cy='40' r='100' fill='%23F97316' opacity='.3'/%3E%3Ccircle cx='40' cy='170' r='80' fill='%23FB923C' opacity='.2'/%3E%3C/svg%3E") no-repeat right top/cover}
 .wallet-card .wc-content{position:relative;z-index:1;padding:20px;height:100%;display:flex;flex-direction:column;justify-content:space-between}

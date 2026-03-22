@@ -1,3 +1,4 @@
+import DatePicker from "../../components/DatePicker";
 import { useState } from "react";
 import Select from "../../components/Select";
 import toast from "../../utils/toast";
@@ -17,7 +18,7 @@ function VGroupBuyScr({onBack}){
       <h4 style={{fontSize:14,fontWeight:700,marginBottom:10}}>Nouvelle offre groupée</h4>
       <div className="field"><label>Produit <span style={{color:"#EF4444"}}>*</span></label><Select value={newOffer.product} onChange={v=>setNewOffer({...newOffer,product:v})} placeholder="— Choisir —" options={["Pack Ménage Complet","Riz Parfumé 25kg","Écouteurs Bluetooth Pro"]}/></div>
       <div className="field-row"><div className="field"><label>Réduction (%) <span style={{color:"#EF4444"}}>*</span></label><input type="number" value={newOffer.discount} onChange={e=>setNewOffer({...newOffer,discount:parseInt(e.target.value)||0})}/></div><div className="field"><label>Min. participants <span style={{color:"#EF4444"}}>*</span></label><input type="number" value={newOffer.min} onChange={e=>setNewOffer({...newOffer,min:parseInt(e.target.value)||0})}/></div></div>
-      <div className="field"><label>Date fin</label><input type="date" value={newOffer.ends} onChange={e=>setNewOffer({...newOffer,ends:e.target.value})}/></div>
+      <div className="field"><label>Date fin</label><DatePicker value={newOffer.ends} onChange={v=>setNewOffer({...newOffer,ends:v})}/></div>
       <div style={{display:"flex",gap:8}}><button onClick={()=>setCreating(false)} style={{flex:1,padding:10,borderRadius:12,border:"1px solid var(--border)",background:"var(--card)",fontSize:12,fontWeight:600,cursor:"pointer",fontFamily:"inherit",color:"var(--text)"}}>Annuler</button><button onClick={create} style={{flex:1,padding:10,borderRadius:12,border:"none",background:"#F97316",color:"#fff",fontSize:12,fontWeight:700,cursor:"pointer",fontFamily:"inherit"}}>Créer</button></div>
     </div>}
     {offers.map(o=><div key={o.id} style={{padding:14,background:"var(--card)",border:"1px solid var(--border)",borderRadius:16,marginBottom:10}}>
