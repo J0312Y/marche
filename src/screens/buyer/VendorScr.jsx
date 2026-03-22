@@ -94,7 +94,7 @@ function VendorScr({vendor:vProp,go,onBack}){
     </>}
 
     {/* ═══ REVIEWS TAB ═══ */}
-    {tab==="reviews"&&<div style={{padding:"0 16px 80px"}}>
+    {tab==="reviews"&&<div style={{padding:"0 16px 20px"}}>
       {/* Rating summary */}
       <div style={{textAlign:"center",marginBottom:14}}>
         <div style={{fontSize:36,fontWeight:700}}>{avgRating.toFixed(1)}</div>
@@ -119,7 +119,7 @@ function VendorScr({vendor:vProp,go,onBack}){
     </div>}
 
     {/* ═══ FOLLOWERS TAB ═══ */}
-    {tab==="followers"&&<div style={{padding:"0 16px 80px"}}>
+    {tab==="followers"&&<div style={{padding:"0 16px 20px"}}>
       <div style={{fontSize:12,color:"var(--muted)",marginBottom:14}}>{fCount} abonnés</div>
       <div style={{display:"grid",gridTemplateColumns:"1fr 1fr",gap:8}}>
         {MOCK_FOLLOWERS.map((f,i)=><div key={i} style={{padding:12,background:"var(--card)",border:"1px solid var(--border)",borderRadius:16,textAlign:"center"}}>

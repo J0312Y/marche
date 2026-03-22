@@ -143,7 +143,7 @@ function VSupportScr({go,onBack,vendorPlan}){
       </div>
 
       {/* Tab 0: Guides */}
-      {tab===0&&<div style={{padding:"0 16px 80px"}}>
+      {tab===0&&<div style={{padding:"0 16px 20px"}}>
         {guides.map(g=><div key={g.id}>
           <div style={{padding:14,background:"var(--card)",border:guideOpen===g.id?"2px solid #6366F1":"1px solid var(--border)",borderRadius:14,marginBottom:10,cursor:"pointer"}} onClick={()=>setGuideOpen(guideOpen===g.id?null:g.id)}>
             <div style={{display:"flex",alignItems:"center",gap:10}}>
@@ -173,7 +173,7 @@ function VSupportScr({go,onBack,vendorPlan}){
       </div>}
 
       {/* Tab 1: FAQ */}
-      {tab===1&&<div style={{padding:"0 16px 80px"}}>
+      {tab===1&&<div style={{padding:"0 16px 20px"}}>
         {faqCats.map((cat,ci)=><div key={cat.cat} style={{marginBottom:12}}>
           <div style={{display:"flex",alignItems:"center",gap:6,marginBottom:8}}><span style={{fontSize:16}}>{cat.icon}</span><h4 style={{fontSize:14,fontWeight:700}}>{cat.cat}</h4><span style={{fontSize:11,color:"var(--muted)"}}>({cat.items.length})</span></div>
           {cat.items.map((f,fi)=>{const k=`${ci}-${fi}`;return(<div key={k} style={{padding:12,background:"var(--card)",border:open===k?"1px solid #6366F1":"1px solid var(--border)",borderRadius:12,marginBottom:6,cursor:"pointer"}} onClick={()=>setOpen(open===k?null:k)}>
@@ -187,7 +187,7 @@ function VSupportScr({go,onBack,vendorPlan}){
       </div>}
 
       {/* Tab 2: Contact */}
-      {tab===2&&<div style={{padding:"0 16px 80px"}}>
+      {tab===2&&<div style={{padding:"0 16px 20px"}}>
         {isEnt&&<div style={{padding:16,background:"linear-gradient(135deg,#6366F1,#A855F7)",borderRadius:16,marginBottom:14,color:"#fff"}}>
           <h4 style={{fontSize:15,fontWeight:700,marginBottom:6}}>👤 Votre manager dédié</h4>
           <div style={{fontSize:13,marginBottom:4}}>Sophie Mabika</div>

@@ -94,7 +94,7 @@ function VShopsScr({go,onBack}){
       </div>)}
     </div>
 
-    <div style={{padding:"0 16px 80px"}}><button className="btn-primary" onClick={()=>go("vAddShop")}>+ Créer un nouvel établissement</button></div>
+    <div style={{padding:"0 16px 20px"}}><button className="btn-primary" onClick={()=>go("vAddShop")}>+ Créer un nouvel établissement</button></div>
   </div>);
 }
 

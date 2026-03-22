@@ -17,7 +17,7 @@ function VOrdersScr({go,onBack}){
   return(<PullToRefresh onRefresh={async()=>{toast.success("Commandes actualisées 🛍️")}}><div className="scr">
     <div className="appbar">{onBack&&<button onClick={onBack}>←</button>}<h2>Commandes ({counts.all})</h2><div style={{width:38}}/></div>
     <div className="vo-filter">{[["all","Tous",counts.all],["new","🆕",counts.new],["preparing","🔄",counts.preparing],["shipped","🚚",counts.shipped],["delivered","✅",counts.delivered]].map(([k,l,c])=><button key={k} className={filter===k?"on":""} onClick={()=>setFilter(k)}>{l} {c}</button>)}</div>
-    <div style={{padding:"0 16px 80px"}}>
+    <div style={{padding:"0 16px 20px"}}>
       {loading?<SkeletonCards/>:orders.length===0?<div style={{textAlign:"center",padding:"50px 0"}}><div style={{fontSize:40,marginBottom:8}}>📭</div><div style={{fontSize:14,fontWeight:600}}>Aucune commande</div></div>
       :orders.map(o=>{
         const st=ST[o.status]||ST.new;

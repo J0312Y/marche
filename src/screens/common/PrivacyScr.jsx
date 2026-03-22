@@ -14,7 +14,7 @@ function PrivacyScr({onBack}){
     {title:"10. Contact DPO",text:"Pour toute question relative à la protection de vos données : joeldytsina94@gmail.com · WhatsApp : +242 064 663 469"},
   ];
   return(<div className="scr"><div className="appbar"><button onClick={onBack}>←</button><h2>Politique de confidentialité</h2><div style={{width:38}}/></div>
-    <div style={{padding:"0 16px 80px"}}>
+    <div style={{padding:"0 16px 20px"}}>
       <div style={{padding:14,background:"rgba(16,185,129,0.04)",border:"1px solid rgba(16,185,129,0.1)",borderRadius:14,marginBottom:12}}><div style={{fontSize:12,color:"#10B981",fontWeight:600}}>🔐 Politique de confidentialité</div><div style={{fontSize:11,color:"var(--muted)",marginTop:4}}>Dernière mise à jour : 1er Février 2026</div></div>
       {sections.map((s,i)=><div key={i} style={{marginBottom:12}}>
         <h4 style={{fontSize:14,fontWeight:700,marginBottom:6}}>{s.title}</h4>

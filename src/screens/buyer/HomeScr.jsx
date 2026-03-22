@@ -76,14 +76,14 @@ function HomeScr({go,favs,toggleFav,isFav}){
       </div>}
 
       {/* ── SEARCH RESULTS MODE ── */}
-      {searchResults?<div style={{padding:"0 16px 100px"}}>
+      {searchResults?<div style={{padding:"0 16px 20px"}}>
         <div style={{fontSize:12,color:"var(--muted)",padding:"4px 0 12px",fontWeight:500}}>{searchResults.length} résultat{searchResults.length!==1?"s":""} pour « {homeQ} »</div>
         {searchResults.length>0?<div className="pgrid" style={{padding:0}}>{searchResults.map(p=><div key={p.id} className="pcard" onClick={()=>go("detail",p)}><div className="pimg"><Img src={p.photo} emoji={p.img} style={{width:"100%",height:"100%"}} fit="cover"/>{disc(p)>0&&<span className="badge">-{disc(p)}%</span>}{p.tags[0]&&<span className="tag">{p.tags[0]}</span>}</div><div className="pbody"><h4>{p.name}</h4><div className="pv">{p.va} {p.vendor}</div><div className="pp">{fmt(p.price)}{p.old&&<span className="po">{fmt(p.old)}</span>}</div><div className="pr" onClick={e=>{e.stopPropagation();go("reviews",p)}}>⭐ {p.rating}</div></div></div>)}</div>
         :<div style={{textAlign:"center",padding:"50px 0"}}><div style={{fontSize:40,marginBottom:10}}>🔍</div><div style={{fontSize:14,fontWeight:600}}>Aucun résultat</div><div style={{fontSize:12,color:"var(--muted)",marginTop:4}}>Essayez un autre terme</div></div>}
       </div>
 
       /* ── DISCOVERY MODE (focused, no query) ── */
-      :searchFocused&&!homeQ?<div style={{padding:"0 16px 100px"}}>
+      :searchFocused&&!homeQ?<div style={{padding:"0 16px 20px"}}>
 
         {/* Recent Searches */}
         {recentSearches.length>0&&<div style={{marginBottom:24}}>
@@ -165,7 +165,7 @@ function HomeScr({go,favs,toggleFav,isFav}){
         <span style={{color:"#6366F1",fontSize:16}}>›</span>
       </div>
 
-      {/* Restos à la une */}
+      {/* Restos à la une */}}
       {(selType==="all"||selType==="restaurant")&&nearbyRestos.length>0&&<>
         <div className="sec"><h3>🍽️ Commander à manger</h3><span onClick={()=>go("restoList")}>Voir tout</span></div>
         <div className="marquee-wrap"><div className="marquee-track-resto">

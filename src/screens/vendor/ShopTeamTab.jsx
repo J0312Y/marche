@@ -24,7 +24,7 @@ function ShopTeamTab(){
   };
   const roleColor=r=>r==="Propriétaire"?"#6366F1":r==="Manager"?"#10B981":"#F59E0B";
 
-  return(<div style={{padding:"0 16px 80px"}}>
+  return(<div style={{padding:"0 16px 20px"}}>
     <div className="info-box blue" style={{marginBottom:14}}><span>👥</span><span style={{fontSize:11}}>Gérez les collaborateurs de cette boutique</span></div>
 
     {members.map(m=><div key={m.id} style={{padding:14,background:showRemove===m.id?"rgba(239,68,68,0.02)":"var(--card)",border:showRemove===m.id?"1px solid rgba(239,68,68,0.3)":"1px solid var(--border)",borderRadius:14,marginBottom:10,transition:"all .2s"}}>

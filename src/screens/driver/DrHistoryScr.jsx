@@ -15,7 +15,7 @@ function DrHistoryScr({onBack}){
       <div style={{flex:1,padding:14,background:"rgba(245,158,11,0.06)",border:"1px solid rgba(245,158,11,0.12)",borderRadius:14,textAlign:"center"}}><div style={{fontSize:18,fontWeight:700,color:"#F59E0B"}}>4.8</div><div style={{fontSize:11,color:"var(--muted)"}}>Note moy.</div></div>
     </div>
 
-    <div style={{padding:"0 16px 80px"}}>{D_HISTORY.map(h=>{
+    <div style={{padding:"0 16px 20px"}}>{D_HISTORY.map(h=>{
       const isOpen=expanded===h.id;
       return(<div key={h.id} style={{background:"var(--card)",border:isOpen?"2px solid #6366F1":"1px solid var(--border)",borderRadius:16,marginBottom:10,overflow:"hidden",transition:"all .2s"}}>
         {/* Summary — always visible */}

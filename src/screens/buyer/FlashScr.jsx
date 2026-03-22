@@ -25,7 +25,7 @@ function FlashScr({go,onBack}){
       </div>
     </div>
     {/* Products with individual timers and stock */}
-    <div style={{padding:"0 16px 80px"}}>
+    <div style={{padding:"0 16px 20px"}}>
       {promos.map((p,idx)=>{
         const stock=stocks[idx%stocks.length];
         const pct=Math.round((stock/maxStock)*100);
