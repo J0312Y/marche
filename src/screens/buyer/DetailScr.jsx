@@ -62,6 +62,7 @@ function DetailScr({product:p,onBack,onAddCart,go,favs,toggleFav,isFav}){
   const [showSpecs,setShowSpecs]=useState(false);
   const { VENDORS } = useData();
   const specs=getSpecs(p);
+  const vendor=VENDORS.find(v=>v.name===p.vendor);
   const vp=getVendorPromo(p,VENDORS);
   const finalPrice=vp?vp.promoPrice:p.price;
 
