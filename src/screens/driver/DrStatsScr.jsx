@@ -15,10 +15,10 @@ function DrStatsScr({onBack}){
       <div className="vd-stat"><div className="vs-icon">📏</div><div className="vs-val">{d.distance} km</div><div className="vs-lbl">Distance</div></div>
       <div className="vd-stat"><div className="vs-icon">⏱️</div><div className="vs-val">{d.hours}h</div><div className="vs-lbl">En ligne</div></div>
     </div>
-    <div className="vd-chart"><h4>Livraisons par jour</h4><div className="chart-bars">{chartData.map((v,i)=><div key={i} className="chart-bar" style={{height:`${(v/maxBar)*100}%`,background:"linear-gradient(180deg,#10B981,#059669)"}}><div className="cb-tip">{v} FCFA</div></div>)}</div><div className="chart-labels">{["Lun","Mar","Mer","Jeu","Ven","Sam","Dim"].map(d=><span key={d}>{d}</span>)}</div></div>
+    <div className="vd-chart"><h4>Livraisons par jour</h4><div className="chart-bars">{chartData.map((v,i)=><div key={i} className="chart-bar" style={{height:`${(v/maxBar)*100}%`,background:"linear-gradient(180deg,#F97316,#EA580C)"}}><div className="cb-tip">{v} FCFA</div></div>)}</div><div className="chart-labels">{["Lun","Mar","Mer","Jeu","Ven","Sam","Dim"].map(d=><span key={d}>{d}</span>)}</div></div>
     <div style={{padding:"0 16px"}}><div style={{padding:16,background:"var(--card)",border:"1px solid var(--border)",borderRadius:16}}>
       <div style={{fontSize:14,fontWeight:700,marginBottom:12}}>Performance</div>
-      {[{label:"Taux d'acceptation",val:"92%",pct:92,color:"#10B981"},{label:"Livraisons à temps",val:"88%",pct:88,color:"#6366F1"},{label:"Satisfaction client",val:"4.8/5",pct:96,color:"#F59E0B"}].map(s=><div key={s.label} style={{marginBottom:12}}>
+      {[{label:"Taux d'acceptation",val:"92%",pct:92,color:"#F97316"},{label:"Livraisons à temps",val:"88%",pct:88,color:"#F97316"},{label:"Satisfaction client",val:"4.8/5",pct:96,color:"#F59E0B"}].map(s=><div key={s.label} style={{marginBottom:12}}>
         <div style={{display:"flex",justifyContent:"space-between",fontSize:12,marginBottom:4}}><span style={{fontWeight:600}}>{s.label}</span><span style={{color:"var(--muted)"}}>{s.val}</span></div>
         <div style={{height:6,background:"var(--border)",borderRadius:3,overflow:"hidden"}}><div style={{width:`${s.pct}%`,height:"100%",background:s.color,borderRadius:3}}/></div>
       </div>)}

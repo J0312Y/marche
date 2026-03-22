@@ -20,7 +20,7 @@ function RateDriverScr({onBack,onDone,driver={}}){
     <h2 style={{fontSize:20,fontWeight:700,marginBottom:6}}>Merci !</h2>
     <p style={{fontSize:14,color:"var(--muted)",marginBottom:8}}>Votre évaluation aide {driverName} et les autres clients.</p>
     <div style={{fontSize:28,color:"#F59E0B",marginBottom:14}}>{"★".repeat(rating)}</div>
-    {tip>0&&<div style={{padding:"8px 16px",borderRadius:10,background:"rgba(99,102,241,0.04)",color:"#10B981",fontSize:13,fontWeight:600,marginBottom:14}}>🎁 Pourboire de {tip.toLocaleString()} FCFA envoyé</div>}
+    {tip>0&&<div style={{padding:"8px 16px",borderRadius:10,background:"rgba(249,115,22,0.04)",color:"#10B981",fontSize:13,fontWeight:600,marginBottom:14}}>🎁 Pourboire de {tip.toLocaleString()} FCFA envoyé</div>}
     <button className="btn-primary" style={{maxWidth:280}} onClick={onDone||onBack}>Retour à l'accueil</button>
   </div>);
 
@@ -61,7 +61,7 @@ function RateDriverScr({onBack,onDone,driver={}}){
       <textarea value={comment} onChange={e=>setComment(e.target.value)} placeholder="Le livreur était ponctuel et sympa..." rows={3} style={{width:"100%",padding:12,borderRadius:12,border:"1px solid var(--border)",background:"var(--light)",fontSize:13,fontFamily:"inherit",outline:"none",resize:"vertical",boxSizing:"border-box"}}/>
     </div>
 
-    <button onClick={submit} disabled={rating===0} style={{width:"100%",padding:14,borderRadius:14,border:"none",background:rating>0?"#6366F1":"var(--border)",color:rating>0?"var(--card)":"var(--muted)",fontSize:15,fontWeight:700,cursor:rating>0?"pointer":"not-allowed",fontFamily:"inherit"}}>
+    <button onClick={submit} disabled={rating===0} style={{width:"100%",padding:14,borderRadius:14,border:"none",background:rating>0?"#F97316":"var(--border)",color:rating>0?"var(--card)":"var(--muted)",fontSize:15,fontWeight:700,cursor:rating>0?"pointer":"not-allowed",fontFamily:"inherit"}}>
       {rating===0?"Sélectionnez une note":"Envoyer l'évaluation ⭐"}
     </button>
   </div>);

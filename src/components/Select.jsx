@@ -41,7 +41,7 @@ function Select({ value, onChange, options = [], placeholder = "Choisir...", dis
         style={{
           display: "flex", alignItems: "center", justifyContent: "space-between",
           padding: "12px 14px", borderRadius: 14,
-          border: open ? "2px solid #6366F1" : "1px solid var(--border)",
+          border: open ? "2px solid #F97316" : "1px solid var(--border)",
           background: "var(--light)", cursor: disabled ? "default" : "pointer",
           opacity: disabled ? 0.5 : 1, transition: "border .15s",
           fontSize: 14, color: selected ? "var(--text)" : "var(--muted)",
@@ -75,18 +75,18 @@ function Select({ value, onChange, options = [], placeholder = "Choisir...", dis
                 style={{
                   display: "flex", alignItems: "center", gap: 8,
                   padding: "11px 14px", cursor: "pointer",
-                  background: isSelected ? "rgba(99,102,241,0.06)" : "transparent",
+                  background: isSelected ? "rgba(249,115,22,0.06)" : "transparent",
                   borderBottom: i < opts.length - 1 ? "1px solid var(--border)" : "none",
                   transition: "background .1s",
                   fontSize: 13, fontWeight: isSelected ? 600 : 400,
-                  color: isSelected ? "#6366F1" : "var(--text)",
+                  color: isSelected ? "#F97316" : "var(--text)",
                 }}
                 onMouseEnter={e => { if (!isSelected) e.currentTarget.style.background = "var(--light)" }}
                 onMouseLeave={e => { if (!isSelected) e.currentTarget.style.background = "transparent" }}
               >
                 {o.icon && <span style={{ fontSize: 16 }}>{o.icon}</span>}
                 <span style={{ flex: 1 }}>{o.label}</span>
-                {isSelected && <span style={{ fontSize: 12, color: "#6366F1" }}>✓</span>}
+                {isSelected && <span style={{ fontSize: 12, color: "#F97316" }}>✓</span>}
               </div>
             );
           })}

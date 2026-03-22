@@ -27,7 +27,7 @@ function AppInner() {
   const driverTabs = [{ icon: "🏠", label: "Accueil" }, { icon: "📦", label: "Livraisons" }, { icon: "💰", label: "Gains" }, { icon: "🔔", label: "Notifs" }, { icon: "👤", label: "Profil" }];
   const tabs = mode === "buyer" ? buyerTabs : mode === "vendor" ? vendorTabs : driverTabs;
   const activeTab = mode === "buyer" ? tab : mode === "vendor" ? vTab : dTab;
-  const modeBadge = mode === "vendor" ? { bg: "#6366F1", label: "MODE VENDEUR" } : mode === "driver" ? { bg: "#10B981", label: "MODE LIVREUR" } : null;
+  const modeBadge = mode === "vendor" ? { bg: "#F97316", label: "MODE VENDEUR" } : mode === "driver" ? { bg: "#10B981", label: "MODE LIVREUR" } : null;
 
   const renderScreen = () => {
     if (mode === "driver") return <DriverScreens />;
@@ -79,11 +79,11 @@ function AppInner() {
                 const isActive = activeTab === i;
                 if (isCart) return (
                   <button key={i} onClick={() => { setTab(i); setScreen(null); setHistory([]); }} style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 2, border: "none", background: "transparent", cursor: "pointer", fontFamily: "inherit", marginTop: -28, position: "relative", zIndex: 10 }}>
-                    <div style={{ width: 56, height: 56, borderRadius: 28, background: isActive ? "linear-gradient(135deg,#6366F1,#4F46E5)" : "linear-gradient(135deg,#6366F1,#818CF8)", display: "flex", alignItems: "center", justifyContent: "center", fontSize: 24, boxShadow: isActive ? "0 6px 20px rgba(99,102,241,.45)" : "0 4px 14px rgba(99,102,241,.3)", border: "4px solid var(--card)", transition: "all .2s", position: "relative" }}>
+                    <div style={{ width: 56, height: 56, borderRadius: 28, background: isActive ? "linear-gradient(135deg,#F97316,#EA580C)" : "linear-gradient(135deg,#F97316,#FDBA74)", display: "flex", alignItems: "center", justifyContent: "center", fontSize: 24, boxShadow: isActive ? "0 6px 20px rgba(249,115,22,.45)" : "0 4px 14px rgba(249,115,22,.3)", border: "4px solid var(--card)", transition: "all .2s", position: "relative" }}>
                       🛍️
                       {cartCount > 0 && <span style={{ position: "absolute", top: -4, right: -4, background: "#EF4444", color: "#fff", fontSize: 9, fontWeight: 700, borderRadius: 10, padding: "1px 5px", minWidth: 16, textAlign: "center" }}>{cartCount}</span>}
                     </div>
-                    <span style={{ fontSize: 9, fontWeight: 600, color: isActive ? "#6366F1" : "var(--muted)", marginTop: 1 }}>{isActive && t.label}</span>
+                    <span style={{ fontSize: 9, fontWeight: 600, color: isActive ? "#F97316" : "var(--muted)", marginTop: 1 }}>{isActive && t.label}</span>
                   </button>
                 );
                 return (
@@ -95,7 +95,7 @@ function AppInner() {
             </>}
 
           {/* Toast */}
-          {toast && <div style={{ position: "absolute", bottom: 80, left: 16, right: 16, padding: "14px 18px", borderRadius: 16, background: toast.type === 'error' ? '#EF4444' : toast.type === 'info' ? '#6366F1' : '#10B981', color: "#fff", fontSize: 13, fontWeight: 600, textAlign: "center", zIndex: 999, boxShadow: "0 8px 30px rgba(0,0,0,.2)", display: "flex", alignItems: "center", justifyContent: "center", gap: 8, animation: "toast-in .3s ease" }}><span style={{ fontSize: 16 }}>{toast.type === 'error' ? '❌' : toast.type === 'info' ? 'ℹ️' : '✅'}</span>{toast.message}</div>}
+          {toast && <div style={{ position: "absolute", bottom: 80, left: 16, right: 16, padding: "14px 18px", borderRadius: 16, background: toast.type === 'error' ? '#EF4444' : toast.type === 'info' ? '#F97316' : '#10B981', color: "#fff", fontSize: 13, fontWeight: 600, textAlign: "center", zIndex: 999, boxShadow: "0 8px 30px rgba(0,0,0,.2)", display: "flex", alignItems: "center", justifyContent: "center", gap: 8, animation: "toast-in .3s ease" }}><span style={{ fontSize: 16 }}>{toast.type === 'error' ? '❌' : toast.type === 'info' ? 'ℹ️' : '✅'}</span>{toast.message}</div>}
 
           {/* Home Indicator */}
           <div style={{ flexShrink: 0, display: "flex", justifyContent: "center", paddingBottom: 4, paddingTop: 2, background: "transparent" }}>

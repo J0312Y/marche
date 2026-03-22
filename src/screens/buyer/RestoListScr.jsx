@@ -12,9 +12,9 @@ function RestoListScr({go,onBack,favs,toggleFav,isFav}){
       {restos.map(v=><div key={v.id} style={{padding:14,background:"var(--card)",border:"1px solid var(--border)",borderRadius:16,marginBottom:10,cursor:"pointer"}} onClick={()=>go("vendor",v)}>
         <div style={{display:"flex",alignItems:"center",gap:12,marginBottom:8}}>
           <div style={{width:48,height:48,borderRadius:14,overflow:"hidden",background:"linear-gradient(135deg,#F59E0B,#D97706)",display:"flex",alignItems:"center",justifyContent:"center",fontSize:22}}>{v.logo?<img src={v.logo} style={{width:"100%",height:"100%",objectFit:"cover"}} alt=""/>:v.avatar}</div>
-          <div style={{flex:1}}><div style={{display:"flex",alignItems:"center",gap:6}}><h4 style={{fontSize:14,fontWeight:700}}>{v.name}</h4>{v.verified&&<span style={{color:"#6366F1",fontSize:10}}>✓</span>}</div>
+          <div style={{flex:1}}><div style={{display:"flex",alignItems:"center",gap:6}}><h4 style={{fontSize:14,fontWeight:700}}>{v.name}</h4>{v.verified&&<span style={{color:"#F97316",fontSize:10}}>✓</span>}</div>
             <p style={{fontSize:11,color:"var(--muted)"}}>📍 {v.loc} · ⭐ {v.rating} · {v.products} plats</p></div>
-          <div style={{textAlign:"right"}}><div style={{color:"#6366F1",fontWeight:700,fontSize:12}}>🕐 {v.eta}</div></div>
+          <div style={{textAlign:"right"}}><div style={{color:"#F97316",fontWeight:700,fontSize:12}}>🕐 {v.eta}</div></div>
         </div>
       </div>)}
     </div>

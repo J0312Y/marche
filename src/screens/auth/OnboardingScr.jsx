@@ -6,14 +6,14 @@ const SLIDES = [
     icon: "🛍️",
     title: "Tout le Congo en une app",
     desc: "Restaurants, boutiques, pharmacies, pâtisseries, supermarchés et services — commandez et faites-vous livrer à Brazzaville et Pointe-Noire.",
-    color: "#6366F1",
+    color: "#F97316",
   },
   {
     photo: "https://images.unsplash.com/photo-1414235077428-338989a2e8c0?w=800&h=1200&fit=crop",
     icon: "🍽️",
     title: "Commandez, achetez, réservez",
     desc: "Des milliers de commerces vérifiés : restaurants, boutiques de mode, boulangeries, pressing et plus encore.",
-    color: "#6366F1",
+    color: "#F97316",
   },
   {
     photo: "https://images.unsplash.com/photo-1556742049-0cfed4f6a45d?w=800&h=1200&fit=crop",
@@ -168,14 +168,14 @@ function OnboardingScr({onDone}){
           <div>
             <button onClick={onDone} style={{
               width:"100%",padding:"14px 0",borderRadius:14,border:"none",
-              background:"#6366F1",color:"#fff",fontSize:15,fontWeight:700,
+              background:"#F97316",color:"#fff",fontSize:15,fontWeight:700,
               cursor:"pointer",fontFamily:"inherit",
-              boxShadow:"0 4px 16px rgba(99,102,241,.25)",
+              boxShadow:"0 4px 16px rgba(249,115,22,.25)",
             }}>
               🚀 Commencer
             </button>
             <div style={{textAlign:"center",marginTop:12,fontSize:12,color:"var(--muted, #908C82)"}}>
-              Déjà un compte ? <span style={{color:"#6366F1",fontWeight:600,cursor:"pointer"}} onClick={onDone}>Se connecter</span>
+              Déjà un compte ? <span style={{color:"#F97316",fontWeight:600,cursor:"pointer"}} onClick={onDone}>Se connecter</span>
             </div>
           </div>
         )}

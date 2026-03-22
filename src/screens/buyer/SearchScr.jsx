@@ -36,26 +36,26 @@ function SearchScr({go,onBack,fromTab,favs,toggleFav,isFav,defaultTab}){
     </div>
     {tab==="products"&&<>
       {/* Category chips */}
-      <div style={{display:"flex",gap:6,padding:"0 16px 8px",overflowX:"auto",scrollbarWidth:"none"}}>{cats.map(c=><button key={c} onClick={()=>setSC(c)} style={{padding:"5px 12px",borderRadius:20,border:sc===c?"1px solid #6366F1":"1px solid var(--border)",background:sc===c?"rgba(99,102,241,0.06)":"var(--card)",color:sc===c?"#6366F1":"var(--sub)",fontSize:10,fontWeight:600,cursor:"pointer",fontFamily:"inherit",whiteSpace:"nowrap",flexShrink:0}}>{c}</button>)}</div>
+      <div style={{display:"flex",gap:6,padding:"0 16px 8px",overflowX:"auto",scrollbarWidth:"none"}}>{cats.map(c=><button key={c} onClick={()=>setSC(c)} style={{padding:"5px 12px",borderRadius:20,border:sc===c?"1px solid #F97316":"1px solid var(--border)",background:sc===c?"rgba(249,115,22,0.06)":"var(--card)",color:sc===c?"#F97316":"var(--sub)",fontSize:10,fontWeight:600,cursor:"pointer",fontFamily:"inherit",whiteSpace:"nowrap",flexShrink:0}}>{c}</button>)}</div>
       {/* Sort */}
       <div style={{display:"flex",gap:6,padding:"0 16px 8px"}}>
-        {[["popular","🔥 Populaires"],["rating","⭐ Notés"],["priceAsc","💰 Prix ↑"],["priceDesc","💰 Prix ↓"]].map(([k,l])=><button key={k} onClick={()=>setSortBy(k)} style={{padding:"4px 10px",borderRadius:8,border:"none",background:sortBy===k?"#6366F1":"var(--light)",color:sortBy===k?"var(--card)":"var(--muted)",fontSize:9,fontWeight:600,cursor:"pointer",fontFamily:"inherit"}}>{l}</button>)}
+        {[["popular","🔥 Populaires"],["rating","⭐ Notés"],["priceAsc","💰 Prix ↑"],["priceDesc","💰 Prix ↓"]].map(([k,l])=><button key={k} onClick={()=>setSortBy(k)} style={{padding:"4px 10px",borderRadius:8,border:"none",background:sortBy===k?"#F97316":"var(--light)",color:sortBy===k?"var(--card)":"var(--muted)",fontSize:9,fontWeight:600,cursor:"pointer",fontFamily:"inherit"}}>{l}</button>)}
       </div>
-      <div className="pgrid">{fp.map(p=>{const td=totalDisc(p,VENDORS);const vp=getVendorPromo(p,VENDORS);return(<div key={p.id} className="pcard" onClick={()=>go("detail",p)}><div className="pimg"><Img src={p.photo} emoji={p.img} style={{width:"100%",height:"100%"}} fit="cover"/>{p.old&&<span className="badge">-{disc(p)}%</span>}</div><div className="pbody"><h4>{p.name}</h4><div className="pv">{p.va} {p.vendor}</div><div className="pp">{vp?<><span style={{color:"#6366F1"}}>{fmt(vp.promoPrice)}</span><span className="po">{fmt(p.price)}</span></>:<>{fmt(p.price)}{p.old&&<span className="po">{fmt(p.old)}</span>}</>}</div><div className="pr" onClick={e=>{e.stopPropagation();go("reviews",p)}}>⭐ {p.rating}</div></div></div>)})}</div>
+      <div className="pgrid">{fp.map(p=>{const td=totalDisc(p,VENDORS);const vp=getVendorPromo(p,VENDORS);return(<div key={p.id} className="pcard" onClick={()=>go("detail",p)}><div className="pimg"><Img src={p.photo} emoji={p.img} style={{width:"100%",height:"100%"}} fit="cover"/>{p.old&&<span className="badge">-{disc(p)}%</span>}</div><div className="pbody"><h4>{p.name}</h4><div className="pv">{p.va} {p.vendor}</div><div className="pp">{vp?<><span style={{color:"#F97316"}}>{fmt(vp.promoPrice)}</span><span className="po">{fmt(p.price)}</span></>:<>{fmt(p.price)}{p.old&&<span className="po">{fmt(p.old)}</span>}</>}</div><div className="pr" onClick={e=>{e.stopPropagation();go("reviews",p)}}>⭐ {p.rating}</div></div></div>)})}</div>
       {fp.length===0&&<div style={{textAlign:"center",padding:"40px 0"}}><div style={{fontSize:36}}>🔍</div><div style={{fontSize:13,color:"var(--muted)",marginTop:6}}>Aucun produit trouvé</div></div>}
     </>}
     {tab==="vendors"&&<div style={{padding:"0 16px 20px"}}>
       {fv.map(v=><div key={v.id} onClick={()=>go("vendor",v)} style={{display:"flex",alignItems:"center",gap:12,padding:12,background:"var(--card)",border:"1px solid var(--border)",borderRadius:14,marginBottom:8,cursor:"pointer"}}>
         <div style={{width:50,height:50,borderRadius:14,overflow:"hidden",background:"var(--light)",flexShrink:0,display:"flex",alignItems:"center",justifyContent:"center",fontSize:24}}>{v.logo?<img src={v.logo} style={{width:"100%",height:"100%",objectFit:"cover"}} alt=""/>:v.avatar}</div>
         <div style={{flex:1,minWidth:0}}>
-          <div style={{fontSize:14,fontWeight:700}}>{v.name} {v.verified&&<span style={{color:"#6366F1",fontSize:11}}>✓</span>}</div>
+          <div style={{fontSize:14,fontWeight:700}}>{v.name} {v.verified&&<span style={{color:"#F97316",fontSize:11}}>✓</span>}</div>
           <div style={{fontSize:11,color:"var(--muted)",marginTop:1}}>📍 {v.loc} · {v.type}</div>
           <div style={{display:"flex",gap:10,marginTop:3,fontSize:11}}>
             <span style={{color:"#F59E0B"}}>⭐ {v.rating}</span>
             <span style={{color:"var(--muted)"}}>{v.products} articles</span>
             <span style={{color:"var(--muted)"}}>{v.followers} abonnés</span>
           </div>
-          {v.promo&&<div style={{marginTop:4,padding:"2px 8px",borderRadius:6,background:"rgba(99,102,241,0.04)",color:"#10B981",fontSize:10,fontWeight:600,display:"inline-block"}}>🏷️ -{v.promo.discount}% {v.promo.name}</div>}
+          {v.promo&&<div style={{marginTop:4,padding:"2px 8px",borderRadius:6,background:"rgba(249,115,22,0.04)",color:"#10B981",fontSize:10,fontWeight:600,display:"inline-block"}}>🏷️ -{v.promo.discount}% {v.promo.name}</div>}
         </div>
         <span style={{color:"var(--muted)",fontSize:18}}>›</span>
       </div>)}

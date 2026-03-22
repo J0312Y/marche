@@ -93,8 +93,8 @@ function getVariantConfig(shopType, category) {
 // Color dot mapping
 const COLOR_MAP = {
   "Noir":"#000","Blanc":"#fff","Rouge":"#EF4444","Bleu":"#3B82F6","Vert":"#10B981",
-  "Jaune":"#F59E0B","Rose":"#EC4899","Orange":"#F97316","Violet":"#8B5CF6",
-  "Marron":"#92400E","Gris":"#6B7280","Beige":"#D2B48C","Multicolore":"linear-gradient(135deg,#EF4444,#F59E0B,#10B981,#3B82F6,#8B5CF6)",
+  "Jaune":"#F59E0B","Rose":"#EC4899","Orange":"#F97316","Violet":"#FB923C",
+  "Marron":"#92400E","Gris":"#6B7280","Beige":"#D2B48C","Multicolore":"linear-gradient(135deg,#EF4444,#F59E0B,#10B981,#3B82F6,#FB923C)",
   "Or":"#FFD700","Argent":"#C0C0C0","Corail":"#FF7F50","Brun":"#8B4513","Nude":"#E3BC9A",
   "Clair":"#FCEBD3","Moyen":"#D4A574","Foncé":"#8B6914",
   "Bois":"#DEB887",
@@ -168,7 +168,7 @@ function VariantEditor({ shopType = "boutique", category = "", value = [], onCha
       <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: 12 }}>
         <div style={{ fontSize: 14, fontWeight: 700 }}>Variantes</div>
         {activeVariants.length > 0 && (
-          <span style={{ fontSize: 11, color: "#6366F1", fontWeight: 600 }}>
+          <span style={{ fontSize: 11, color: "#F97316", fontWeight: 600 }}>
             {activeVariants.map(v => v.values.length).join(" × ")} = {totalCombinations} combinaison{totalCombinations > 1 ? "s" : ""}
           </span>
         )}
@@ -182,14 +182,14 @@ function VariantEditor({ shopType = "boutique", category = "", value = [], onCha
           const isActive = expanded === c.key;
           return (
             <button key={c.key} onClick={() => setExpanded(isActive ? "" : c.key)} style={{
-              padding: "6px 12px", borderRadius: 10, border: count > 0 ? "2px solid #6366F1" : "1px solid #E8E6E1",
-              background: isActive ? "rgba(99,102,241,0.06)" : count > 0 ? "rgba(99,102,241,0.02)" : "var(--card)",
+              padding: "6px 12px", borderRadius: 10, border: count > 0 ? "2px solid #F97316" : "1px solid #E8E6E1",
+              background: isActive ? "rgba(249,115,22,0.06)" : count > 0 ? "rgba(249,115,22,0.02)" : "var(--card)",
               fontSize: 12, fontWeight: 600, cursor: "pointer", fontFamily: "inherit", flexShrink: 0,
-              color: count > 0 ? "#6366F1" : "var(--sub)", transition: "all .2s",
+              color: count > 0 ? "#F97316" : "var(--sub)", transition: "all .2s",
               display: "flex", alignItems: "center", gap: 4,
             }}>
               {c.icon} {c.label}
-              {count > 0 && <span style={{ background: "#6366F1", color: "#fff", borderRadius: 6, padding: "1px 6px", fontSize: 10, fontWeight: 700 }}>{count}</span>}
+              {count > 0 && <span style={{ background: "#F97316", color: "#fff", borderRadius: 6, padding: "1px 6px", fontSize: 10, fontWeight: 700 }}>{count}</span>}
             </button>
           );
         })}
@@ -218,17 +218,17 @@ function VariantEditor({ shopType = "boutique", category = "", value = [], onCha
                     <button key={preset} onClick={() => toggleValue(c.key, preset)} style={{
                       padding: colorDot ? "5px 10px 5px 6px" : "5px 12px",
                       borderRadius: 8,
-                      border: isSelected ? "2px solid #6366F1" : "1px solid #E8E6E1",
-                      background: isSelected ? "rgba(99,102,241,0.06)" : "var(--card)",
+                      border: isSelected ? "2px solid #F97316" : "1px solid #E8E6E1",
+                      background: isSelected ? "rgba(249,115,22,0.06)" : "var(--card)",
                       fontSize: 12, fontWeight: isSelected ? 700 : 500,
                       cursor: "pointer", fontFamily: "inherit",
-                      color: isSelected ? "#6366F1" : "var(--sub)",
+                      color: isSelected ? "#F97316" : "var(--sub)",
                       display: "flex", alignItems: "center", gap: 5, transition: "all .15s",
                     }}>
                       {colorDot && <span style={{
                         width: 14, height: 14, borderRadius: 7, flexShrink: 0,
                         background: colorDot, border: preset === "Blanc" ? "1px solid #E8E6E1" : "none",
-                        boxShadow: isSelected ? "0 0 0 2px rgba(99,102,241,0.3)" : "none",
+                        boxShadow: isSelected ? "0 0 0 2px rgba(249,115,22,0.3)" : "none",
                       }} />}
                       {isSelected && !colorDot && "✓ "}{preset}
                     </button>
@@ -248,7 +248,7 @@ function VariantEditor({ shopType = "boutique", category = "", value = [], onCha
               />
               <button onClick={() => addCustom(c.key)} style={{
                 padding: "0 14px", borderRadius: 10, border: "none",
-                background: (customInputs[c.key] || "").trim() ? "#6366F1" : "var(--border)",
+                background: (customInputs[c.key] || "").trim() ? "#F97316" : "var(--border)",
                 color: (customInputs[c.key] || "").trim() ? "var(--card)" : "var(--muted)",
                 fontSize: 12, fontWeight: 600, cursor: "pointer", fontFamily: "inherit",
               }}>+</button>
@@ -296,8 +296,8 @@ function VariantEditor({ shopType = "boutique", category = "", value = [], onCha
 
       {/* Summary: combinations preview */}
       {activeVariants.length >= 2 && (
-        <div style={{ padding: 12, background: "rgba(99,102,241,0.04)", borderRadius: 12, border: "1px solid rgba(99,102,241,0.12)", marginBottom: 4 }}>
-          <div style={{ fontSize: 11, fontWeight: 700, color: "#6366F1", marginBottom: 6 }}>
+        <div style={{ padding: 12, background: "rgba(249,115,22,0.04)", borderRadius: 12, border: "1px solid rgba(249,115,22,0.12)", marginBottom: 4 }}>
+          <div style={{ fontSize: 11, fontWeight: 700, color: "#F97316", marginBottom: 6 }}>
             📊 {totalCombinations} combinaison{totalCombinations > 1 ? "s" : ""} générée{totalCombinations > 1 ? "s" : ""}
           </div>
           <div style={{ display: "flex", gap: 4, flexWrap: "wrap" }}>

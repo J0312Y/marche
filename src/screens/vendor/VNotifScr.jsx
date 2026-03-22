@@ -32,8 +32,8 @@ function VNotifScr({onBack,go}){
   return(<PullToRefresh onRefresh={async()=>{toast.success("Notifications actualisées 🔔")}}><div className="scr">
     <div className="appbar">
       <button onClick={onBack}>←</button>
-      <h2>Notifications {unreadCount>0&&<span style={{fontSize:13,color:"#6366F1",fontWeight:600}}>({unreadCount})</span>}</h2>
-      {unreadCount>0&&<button onClick={markAllRead} style={{fontSize:11,color:"#6366F1",fontWeight:600,background:"none",border:"none",cursor:"pointer",fontFamily:"inherit",whiteSpace:"nowrap"}}>Tout lire</button>}
+      <h2>Notifications {unreadCount>0&&<span style={{fontSize:13,color:"#F97316",fontWeight:600}}>({unreadCount})</span>}</h2>
+      {unreadCount>0&&<button onClick={markAllRead} style={{fontSize:11,color:"#F97316",fontWeight:600,background:"none",border:"none",cursor:"pointer",fontFamily:"inherit",whiteSpace:"nowrap"}}>Tout lire</button>}
     </div>
 
     {loading?<SkeletonList count={5}/>:items.length===0?(
@@ -46,11 +46,11 @@ function VNotifScr({onBack,go}){
           return(
             <div key={idx} onClick={()=>handleClick(n,idx)} style={{
               padding:"12px 16px",borderBottom:"1px solid var(--border)",cursor:"pointer",
-              background:!n.read?"rgba(99,102,241,0.03)":"transparent",
+              background:!n.read?"rgba(249,115,22,0.03)":"transparent",
             }}>
               <div style={{display:"flex",gap:12,alignItems:"flex-start"}}>
-                {!n.read&&<div style={{width:8,height:8,borderRadius:"50%",background:"#6366F1",flexShrink:0,marginTop:8}}/>}
-                <div style={{width:42,height:42,borderRadius:12,background:!n.read?"rgba(99,102,241,0.08)":"var(--light)",display:"flex",alignItems:"center",justifyContent:"center",fontSize:18,flexShrink:0}}>{n.icon}</div>
+                {!n.read&&<div style={{width:8,height:8,borderRadius:"50%",background:"#F97316",flexShrink:0,marginTop:8}}/>}
+                <div style={{width:42,height:42,borderRadius:12,background:!n.read?"rgba(249,115,22,0.08)":"var(--light)",display:"flex",alignItems:"center",justifyContent:"center",fontSize:18,flexShrink:0}}>{n.icon}</div>
                 <div style={{flex:1,minWidth:0}}>
                   <div style={{display:"flex",justifyContent:"space-between",alignItems:"flex-start"}}>
                     <h4 style={{fontSize:13,fontWeight:!n.read?700:600,color:"var(--text)",margin:0}}>{n.title}</h4>
@@ -65,7 +65,7 @@ function VNotifScr({onBack,go}){
                 <div style={{marginTop:10,marginLeft:!n.read?20:0,padding:12,background:"var(--light)",borderRadius:12,border:"1px solid var(--border)"}}>
                   <div style={{fontSize:12,color:"var(--sub)",lineHeight:1.7,whiteSpace:"pre-line"}}>{detail.full}</div>
                   {detail.action&&go&&(
-                    <button onClick={e=>{e.stopPropagation();go(detail.action)}} style={{marginTop:10,width:"100%",padding:"10px 0",borderRadius:10,border:"none",background:"#6366F1",color:"#fff",fontSize:12,fontWeight:700,cursor:"pointer",fontFamily:"inherit"}}>
+                    <button onClick={e=>{e.stopPropagation();go(detail.action)}} style={{marginTop:10,width:"100%",padding:"10px 0",borderRadius:10,border:"none",background:"#F97316",color:"#fff",fontSize:12,fontWeight:700,cursor:"pointer",fontFamily:"inherit"}}>
                       {detail.actionLabel}
                     </button>
                   )}

@@ -17,7 +17,7 @@ function VShopDetailScr({shop:sh,go,onBack}){
 
     {/* Shop header */}
     <div style={{textAlign:"center",padding:"0 20px 16px"}}>
-      <div style={{width:72,height:72,borderRadius:20,background:"linear-gradient(135deg,#6366F1,#A855F7)",display:"flex",alignItems:"center",justifyContent:"center",margin:"0 auto 10px",fontSize:34}}>{sh.logo}</div>
+      <div style={{width:72,height:72,borderRadius:20,background:"linear-gradient(135deg,#F97316,#FB923C)",display:"flex",alignItems:"center",justifyContent:"center",margin:"0 auto 10px",fontSize:34}}>{sh.logo}</div>
       <h3 style={{fontSize:18,fontWeight:700}}>{sh.name}</h3>
       <p style={{fontSize:12,color:"var(--muted)"}}>📍 {sh.location} · Créée en {sh.created}</p>
       <div style={{display:"flex",justifyContent:"center",gap:6,marginTop:8}}>
@@ -29,13 +29,13 @@ function VShopDetailScr({shop:sh,go,onBack}){
     {/* Tabs */}
     {isActive&&<>
       <div style={{display:"flex",gap:0,margin:"0 20px 14px",background:"var(--light)",borderRadius:14,padding:4}}>
-        {["Dashboard","Modifier","Équipe"].map((t,i)=><button key={t} onClick={()=>setTab(i)} style={{flex:1,padding:"10px 4px",borderRadius:11,border:"none",fontSize:12,fontWeight:600,cursor:"pointer",fontFamily:"inherit",background:tab===i?"#6366F1":"transparent",color:tab===i?"var(--card)":"var(--muted)"}}>{t}</button>)}
+        {["Dashboard","Modifier","Équipe"].map((t,i)=><button key={t} onClick={()=>setTab(i)} style={{flex:1,padding:"10px 4px",borderRadius:11,border:"none",fontSize:12,fontWeight:600,cursor:"pointer",fontFamily:"inherit",background:tab===i?"#F97316":"transparent",color:tab===i?"var(--card)":"var(--muted)"}}>{t}</button>)}
       </div>
 
       {/* Tab 0: Dashboard */}
       {tab===0&&<div style={{padding:"0 16px 20px"}}>
         <div style={{display:"grid",gridTemplateColumns:"1fr 1fr",gap:10,marginBottom:12}}>
-          {[["💰","Chiffre d'affaires",fmt(sh.revenue),"↑ 18%","#10B981"],["📦","Commandes",sh.orders,"↑ 12%","#6366F1"],["👁️","Visiteurs",sh.views,"↑ 24%","#F59E0B"],["⭐","Note moyenne",sh.rating,"↑ 0.3","#10B981"]].map(([i,l,v,t,c])=><div key={l} style={{padding:14,background:"var(--card)",border:"1px solid var(--border)",borderRadius:14}}>
+          {[["💰","Chiffre d'affaires",fmt(sh.revenue),"↑ 18%","#10B981"],["📦","Commandes",sh.orders,"↑ 12%","#F97316"],["👁️","Visiteurs",sh.views,"↑ 24%","#F59E0B"],["⭐","Note moyenne",sh.rating,"↑ 0.3","#10B981"]].map(([i,l,v,t,c])=><div key={l} style={{padding:14,background:"var(--card)",border:"1px solid var(--border)",borderRadius:14}}>
             <div style={{fontSize:18,marginBottom:6}}>{i}</div>
             <div style={{fontSize:18,fontWeight:700}}>{v}</div>
             <div style={{fontSize:11,color:"var(--muted)"}}>{l}</div>
@@ -45,9 +45,9 @@ function VShopDetailScr({shop:sh,go,onBack}){
 
         <div style={{fontSize:14,fontWeight:700,marginBottom:10}}>Top produits</div>
         {[{name:"Robe Wax Ankara",sold:24,rev:360000},{name:"Sac Cuir Artisanal",sold:18,rev:270000},{name:"Bracelet Perles Congo",sold:15,rev:75000}].map((p,i)=><div key={i} style={{display:"flex",alignItems:"center",gap:12,padding:12,background:"var(--card)",border:"1px solid var(--border)",borderRadius:12,marginBottom:8}}>
-          <div style={{width:32,height:32,borderRadius:10,background:["#6366F1","#F59E0B","#10B981"][i],color:"#fff",display:"flex",alignItems:"center",justifyContent:"center",fontSize:14,fontWeight:700,flexShrink:0}}>{i+1}</div>
+          <div style={{width:32,height:32,borderRadius:10,background:["#F97316","#F59E0B","#10B981"][i],color:"#fff",display:"flex",alignItems:"center",justifyContent:"center",fontSize:14,fontWeight:700,flexShrink:0}}>{i+1}</div>
           <div style={{flex:1}}><div style={{fontSize:13,fontWeight:600}}>{p.name}</div><div style={{fontSize:11,color:"var(--muted)"}}>{p.sold} vendus</div></div>
-          <b style={{fontSize:13,color:"#6366F1"}}>{fmt(p.rev)}</b>
+          <b style={{fontSize:13,color:"#F97316"}}>{fmt(p.rev)}</b>
         </div>)}
 
         <div style={{fontSize:14,fontWeight:700,margin:"16px 0 10px"}}>Actions rapides</div>
@@ -64,7 +64,7 @@ function VShopDetailScr({shop:sh,go,onBack}){
 
         <div style={{fontSize:14,fontWeight:700,margin:"16px 0 10px"}}>Catégories</div>
         <div style={{display:"flex",gap:6,flexWrap:"wrap",marginBottom:14}}>
-          {allCats.map(c=><span key={c} onClick={()=>toggleCat(c)} style={{padding:"8px 14px",borderRadius:10,background:selCats.includes(c)?"rgba(99,102,241,0.08)":"var(--card)",border:selCats.includes(c)?"2px solid #6366F1":"1px solid var(--border)",color:selCats.includes(c)?"#6366F1":"var(--muted)",fontSize:12,fontWeight:600,cursor:"pointer",transition:"all .2s"}}>{selCats.includes(c)?"✓ ":""}{c}</span>)}
+          {allCats.map(c=><span key={c} onClick={()=>toggleCat(c)} style={{padding:"8px 14px",borderRadius:10,background:selCats.includes(c)?"rgba(249,115,22,0.08)":"var(--card)",border:selCats.includes(c)?"2px solid #F97316":"1px solid var(--border)",color:selCats.includes(c)?"#F97316":"var(--muted)",fontSize:12,fontWeight:600,cursor:"pointer",transition:"all .2s"}}>{selCats.includes(c)?"✓ ":""}{c}</span>)}
         </div>
 
         <div style={{fontSize:14,fontWeight:700,margin:"10px 0 10px"}}>Visibilité</div>
@@ -76,7 +76,7 @@ function VShopDetailScr({shop:sh,go,onBack}){
         </div>
 
         <div className="info-box yellow" style={{marginBottom:10}}><span>⚠️</span><span style={{fontSize:11}}>Les modifications sont appliquées immédiatement sur le marketplace.</span></div>
-        <button className="btn-primary" style={{background:saved?"#10B981":"#6366F1"}} onClick={doSave}>{saved?"✅ Modifications enregistrées":"💾 Enregistrer les modifications"}</button>
+        <button className="btn-primary" style={{background:saved?"#10B981":"#F97316"}} onClick={doSave}>{saved?"✅ Modifications enregistrées":"💾 Enregistrer les modifications"}</button>
       </div>}
 
       {/* Tab 2: Équipe */}

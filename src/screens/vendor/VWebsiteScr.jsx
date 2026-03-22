@@ -3,10 +3,10 @@ import Select from "../../components/Select";
 import toast from "../../utils/toast";
 
 const THEMES=[
-  {id:"modern",name:"Moderne",colors:["#6366F1","#1E1E2E","#F5F4F1"],preview:"linear-gradient(135deg,#6366F1,#818CF8)"},
+  {id:"modern",name:"Moderne",colors:["#F97316","#1E1E2E","#F5F4F1"],preview:"linear-gradient(135deg,#F97316,#FDBA74)"},
   {id:"warm",name:"Chaleureux",colors:["#F59E0B","#78350F","#FFFBEB"],preview:"linear-gradient(135deg,#F59E0B,#D97706)"},
   {id:"nature",name:"Nature",colors:["#10B981","#064E3B","#ECFDF5"],preview:"linear-gradient(135deg,#10B981,#059669)"},
-  {id:"dark",name:"Sombre",colors:["#A855F7","#111827","#1F2937"],preview:"linear-gradient(135deg,#111827,#374151)"},
+  {id:"dark",name:"Sombre",colors:["#FB923C","#111827","#1F2937"],preview:"linear-gradient(135deg,#111827,#374151)"},
   {id:"afro",name:"Afro",colors:["#EF4444","#7C2D12","#FEF2F2"],preview:"linear-gradient(135deg,#EF4444,#B91C1C)"},
 ];
 
@@ -104,12 +104,12 @@ function VWebsiteScr({onBack}){
 
   return(<div className="scr" style={{paddingBottom:20}}>
     <div className="appbar" style={{padding:"0 16px"}}><button onClick={onBack}>←</button><h2>🌐 Mon Site Web</h2>
-      <button onClick={()=>setShowPreview(true)} style={{fontSize:12,background:"none",border:"1px solid #6366F1",borderRadius:8,padding:"4px 10px",color:"#6366F1",cursor:"pointer",fontFamily:"inherit",fontWeight:600}}>👁️</button>
+      <button onClick={()=>setShowPreview(true)} style={{fontSize:12,background:"none",border:"1px solid #F97316",borderRadius:8,padding:"4px 10px",color:"#F97316",cursor:"pointer",fontFamily:"inherit",fontWeight:600}}>👁️</button>
     </div>
 
     {/* Tabs */}
     <div style={{display:"flex",gap:4,padding:"0 16px 12px",overflowX:"auto",scrollbarWidth:"none"}}>
-      {tabs.map(([k,l])=><button key={k} onClick={()=>setTab(k)} style={{padding:"6px 12px",borderRadius:10,border:tab===k?"1px solid #6366F1":"1px solid var(--border)",background:tab===k?"rgba(99,102,241,0.06)":"var(--card)",fontSize:10,fontWeight:tab===k?700:500,color:tab===k?"#6366F1":"var(--muted)",cursor:"pointer",fontFamily:"inherit",whiteSpace:"nowrap",flexShrink:0}}>{l}</button>)}
+      {tabs.map(([k,l])=><button key={k} onClick={()=>setTab(k)} style={{padding:"6px 12px",borderRadius:10,border:tab===k?"1px solid #F97316":"1px solid var(--border)",background:tab===k?"rgba(249,115,22,0.06)":"var(--card)",fontSize:10,fontWeight:tab===k?700:500,color:tab===k?"#F97316":"var(--muted)",cursor:"pointer",fontFamily:"inherit",whiteSpace:"nowrap",flexShrink:0}}>{l}</button>)}
     </div>
 
     <div style={{padding:"0 16px"}}>
@@ -140,7 +140,7 @@ function VWebsiteScr({onBack}){
       {/* Top pages */}
       <div style={{padding:14,background:"var(--card)",border:"1px solid var(--border)",borderRadius:14,marginBottom:14}}>
         <div style={{fontSize:13,fontWeight:700,marginBottom:8}}>📊 Pages les plus visitées</div>
-        {site.analytics.topPages.map((p,i)=><div key={i} style={{display:"flex",justifyContent:"space-between",padding:"6px 0",borderTop:i?"1px solid var(--border)":"none",fontSize:12}}><span>{i+1}. {p.split(" (")[0]}</span><span style={{color:"#6366F1",fontWeight:600}}>{p.match(/\((.+)\)/)?.[1]}</span></div>)}
+        {site.analytics.topPages.map((p,i)=><div key={i} style={{display:"flex",justifyContent:"space-between",padding:"6px 0",borderTop:i?"1px solid var(--border)":"none",fontSize:12}}><span>{i+1}. {p.split(" (")[0]}</span><span style={{color:"#F97316",fontWeight:600}}>{p.match(/\((.+)\)/)?.[1]}</span></div>)}
       </div>
 
       {/* Quick links */}
@@ -156,7 +156,7 @@ function VWebsiteScr({onBack}){
     {tab==="pages"&&<>
       <div style={{display:"flex",justifyContent:"space-between",alignItems:"center",marginBottom:12}}>
         <span style={{fontSize:14,fontWeight:700}}>Mes pages ({pages.length})</span>
-        <button onClick={addPage} style={{padding:"6px 14px",borderRadius:10,border:"none",background:"#6366F1",color:"#fff",fontSize:11,fontWeight:700,cursor:"pointer",fontFamily:"inherit"}}>+ Ajouter</button>
+        <button onClick={addPage} style={{padding:"6px 14px",borderRadius:10,border:"none",background:"#F97316",color:"#fff",fontSize:11,fontWeight:700,cursor:"pointer",fontFamily:"inherit"}}>+ Ajouter</button>
       </div>
 
       {pages.map(p=><div key={p.id} style={{padding:14,background:"var(--card)",border:"1px solid var(--border)",borderRadius:16,marginBottom:10}}>
@@ -198,7 +198,7 @@ function VWebsiteScr({onBack}){
     {tab==="design"&&<>
       <div style={{fontSize:14,fontWeight:700,marginBottom:10}}>🎨 Thème du site</div>
       <div style={{display:"grid",gridTemplateColumns:"1fr 1fr",gap:8,marginBottom:14}}>
-        {THEMES.map(t=><div key={t.id} onClick={()=>{setSite(s=>({...s,theme:t.id}));toast.success("Thème "+t.name+" appliqué ✅")}} style={{borderRadius:14,overflow:"hidden",border:site.theme===t.id?"3px solid #6366F1":"1px solid var(--border)",cursor:"pointer"}}>
+        {THEMES.map(t=><div key={t.id} onClick={()=>{setSite(s=>({...s,theme:t.id}));toast.success("Thème "+t.name+" appliqué ✅")}} style={{borderRadius:14,overflow:"hidden",border:site.theme===t.id?"3px solid #F97316":"1px solid var(--border)",cursor:"pointer"}}>
           <div style={{height:60,background:t.preview}}/>
           <div style={{padding:"8px 10px",background:"var(--card)"}}>
             <div style={{fontSize:12,fontWeight:700}}>{t.name}</div>
@@ -206,7 +206,7 @@ function VWebsiteScr({onBack}){
               {t.colors.map((c,i)=><div key={i} style={{width:14,height:14,borderRadius:4,background:c,border:"1px solid var(--border)"}}/>)}
             </div>
           </div>
-          {site.theme===t.id&&<div style={{textAlign:"center",padding:"4px 0",background:"#6366F1",color:"#fff",fontSize:10,fontWeight:700}}>✓ Actif</div>}
+          {site.theme===t.id&&<div style={{textAlign:"center",padding:"4px 0",background:"#F97316",color:"#fff",fontSize:10,fontWeight:700}}>✓ Actif</div>}
         </div>)}
       </div>
 
@@ -220,7 +220,7 @@ function VWebsiteScr({onBack}){
       </div>
       <div className="field"><label>Couleur principale</label>
         <div style={{display:"flex",gap:6,marginTop:4}}>
-          {["#6366F1","#10B981","#F59E0B","#EF4444","#A855F7","#EC4899","#000000"].map(c=>
+          {["#F97316","#10B981","#F59E0B","#EF4444","#FB923C","#EC4899","#000000"].map(c=>
             <div key={c} onClick={()=>toast.success("Couleur appliquée")} style={{width:32,height:32,borderRadius:10,background:c,cursor:"pointer",border:c===theme.colors[0]?"3px solid var(--text)":"2px solid var(--border)"}}/>
           )}
         </div>
@@ -237,10 +237,10 @@ function VWebsiteScr({onBack}){
     {tab==="blog"&&<>
       <div style={{display:"flex",justifyContent:"space-between",alignItems:"center",marginBottom:12}}>
         <span style={{fontSize:14,fontWeight:700}}>✍️ Articles ({posts.length})</span>
-        <button onClick={()=>setEditPost("new")} style={{padding:"6px 14px",borderRadius:10,border:"none",background:"#6366F1",color:"#fff",fontSize:11,fontWeight:700,cursor:"pointer",fontFamily:"inherit"}}>+ Nouvel article</button>
+        <button onClick={()=>setEditPost("new")} style={{padding:"6px 14px",borderRadius:10,border:"none",background:"#F97316",color:"#fff",fontSize:11,fontWeight:700,cursor:"pointer",fontFamily:"inherit"}}>+ Nouvel article</button>
       </div>
 
-      {editPost==="new"&&<div style={{padding:14,background:"var(--card)",border:"2px solid #6366F1",borderRadius:16,marginBottom:14}}>
+      {editPost==="new"&&<div style={{padding:14,background:"var(--card)",border:"2px solid #F97316",borderRadius:16,marginBottom:14}}>
         <div className="field"><label>Titre de l'article</label><input value={newPostTitle} onChange={e=>setNewPostTitle(e.target.value)} placeholder="Comment choisir un bon tissu Wax..."/></div>
         <div className="field"><label>Contenu</label><textarea rows={5} placeholder="Rédigez votre article ici... Vous pourrez ajouter des images, des liens et formater le texte." style={{width:"100%",padding:10,borderRadius:12,border:"1px solid var(--border)",background:"var(--light)",fontSize:12,fontFamily:"inherit",outline:"none",resize:"vertical",boxSizing:"border-box",color:"var(--text)"}}/></div>
         <div className="field"><label>Image de couverture</label>
@@ -249,7 +249,7 @@ function VWebsiteScr({onBack}){
         <div style={{display:"flex",gap:8}}>
           <button onClick={()=>{setEditPost(null);setNewPostTitle("")}} style={{flex:1,padding:10,borderRadius:12,border:"1px solid var(--border)",background:"var(--card)",fontSize:12,fontWeight:600,cursor:"pointer",fontFamily:"inherit",color:"var(--text)"}}>Annuler</button>
           <button onClick={()=>{if(newPostTitle.trim()){setPosts(prev=>[{id:Date.now(),title:newPostTitle,status:"draft",date:"Aujourd'hui",views:0},...prev]);setEditPost(null);setNewPostTitle("");toast.success("Brouillon sauvegardé ✅")}else{toast.error("Ajoutez un titre")}}} style={{flex:1,padding:10,borderRadius:12,border:"none",background:"var(--card)",fontSize:12,fontWeight:600,cursor:"pointer",fontFamily:"inherit",color:"var(--text)",border:"1px solid var(--border)"}}>📝 Brouillon</button>
-          <button onClick={()=>{if(newPostTitle.trim()){setPosts(prev=>[{id:Date.now(),title:newPostTitle,status:"published",date:"Aujourd'hui",views:0},...prev]);setEditPost(null);setNewPostTitle("");toast.success("Article publié ✅")}else{toast.error("Ajoutez un titre")}}} style={{flex:1,padding:10,borderRadius:12,border:"none",background:"#6366F1",color:"#fff",fontSize:12,fontWeight:700,cursor:"pointer",fontFamily:"inherit"}}>🚀 Publier</button>
+          <button onClick={()=>{if(newPostTitle.trim()){setPosts(prev=>[{id:Date.now(),title:newPostTitle,status:"published",date:"Aujourd'hui",views:0},...prev]);setEditPost(null);setNewPostTitle("");toast.success("Article publié ✅")}else{toast.error("Ajoutez un titre")}}} style={{flex:1,padding:10,borderRadius:12,border:"none",background:"#F97316",color:"#fff",fontSize:12,fontWeight:700,cursor:"pointer",fontFamily:"inherit"}}>🚀 Publier</button>
         </div>
       </div>}
 
@@ -280,7 +280,7 @@ function VWebsiteScr({onBack}){
       <div className="field"><label>Meta description</label><textarea rows={3} defaultValue={site.seo.desc} onChange={e=>setSite(s=>({...s,seo:{...s.seo,desc:e.target.value}}))} style={{width:"100%",padding:10,borderRadius:12,border:"1px solid var(--border)",background:"var(--light)",fontSize:12,fontFamily:"inherit",outline:"none",resize:"vertical",boxSizing:"border-box",color:"var(--text)"}}/></div>
       <div className="field"><label>Mots-clés</label><input defaultValue={site.seo.keywords} onChange={e=>setSite(s=>({...s,seo:{...s.seo,keywords:e.target.value}}))} placeholder="wax, mode africaine, bogolan..."/></div>
       
-      <button onClick={()=>toast.success("SEO mis à jour ✅")} style={{width:"100%",padding:12,borderRadius:12,border:"none",background:"#6366F1",color:"#fff",fontSize:13,fontWeight:700,cursor:"pointer",fontFamily:"inherit",marginTop:8}}>💾 Sauvegarder le SEO</button>
+      <button onClick={()=>toast.success("SEO mis à jour ✅")} style={{width:"100%",padding:12,borderRadius:12,border:"none",background:"#F97316",color:"#fff",fontSize:13,fontWeight:700,cursor:"pointer",fontFamily:"inherit",marginTop:8}}>💾 Sauvegarder le SEO</button>
 
       {/* SEO checklist */}
       <div style={{marginTop:14,padding:14,background:"var(--light)",borderRadius:14}}>
@@ -314,7 +314,7 @@ function VWebsiteScr({onBack}){
         <span style={{fontSize:10,color:"var(--muted)"}}>→ {n.page}</span>
       </div>)}
 
-      <button onClick={()=>toast.success("Configuration sauvegardée ✅")} style={{width:"100%",padding:12,borderRadius:12,border:"none",background:"#6366F1",color:"#fff",fontSize:13,fontWeight:700,cursor:"pointer",fontFamily:"inherit",marginTop:14}}>💾 Sauvegarder</button>
+      <button onClick={()=>toast.success("Configuration sauvegardée ✅")} style={{width:"100%",padding:12,borderRadius:12,border:"none",background:"#F97316",color:"#fff",fontSize:13,fontWeight:700,cursor:"pointer",fontFamily:"inherit",marginTop:14}}>💾 Sauvegarder</button>
 
       {/* Danger zone */}
       <div style={{marginTop:14,padding:14,border:"1px solid rgba(239,68,68,0.15)",borderRadius:14}}>
@@ -354,7 +354,7 @@ function VWebsiteScr({onBack}){
           </div>
         </div>
       </div>
-      <button onClick={()=>setShowPreview(false)} style={{marginTop:12,padding:"10px 24px",borderRadius:12,border:"none",background:"#6366F1",color:"#fff",fontSize:13,fontWeight:700,cursor:"pointer",fontFamily:"inherit"}}>Fermer la prévisualisation</button>
+      <button onClick={()=>setShowPreview(false)} style={{marginTop:12,padding:"10px 24px",borderRadius:12,border:"none",background:"#F97316",color:"#fff",fontSize:13,fontWeight:700,cursor:"pointer",fontFamily:"inherit"}}>Fermer la prévisualisation</button>
     </div>}
   </div>);
 }

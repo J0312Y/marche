@@ -28,7 +28,7 @@ function DrNavigationScr({delivery:dl,go,onBack}){
       markers={markers}
       driverPos={driverPos}
       route={[driverPos,client]}
-      routeColor="#10B981"
+      routeColor="#F97316"
       style={{flex:1}}
     >
       {/* Turn direction */}
@@ -47,7 +47,7 @@ function DrNavigationScr({delivery:dl,go,onBack}){
           <div style={{flex:1}}><h3 style={{fontSize:15,fontWeight:700,marginBottom:2}}>{dl.client.name}</h3><p style={{fontSize:12,color:"var(--muted)",margin:0}}>{dl.client.addr}</p></div>
           <div style={{display:"flex",gap:6}}>
             <button style={{width:38,height:38,borderRadius:10,border:"none",background:"#F59E0B",color:"#fff",cursor:"pointer",fontSize:16,display:"flex",alignItems:"center",justifyContent:"center"}} onClick={()=>toast.info("📞 Appel")}>📞</button>
-            <button style={{width:38,height:38,borderRadius:10,border:"none",background:"#6366F1",color:"#fff",cursor:"pointer",fontSize:16,display:"flex",alignItems:"center",justifyContent:"center"}} onClick={()=>go("drChatClient",dl)}>💬</button>
+            <button style={{width:38,height:38,borderRadius:10,border:"none",background:"#F97316",color:"#fff",cursor:"pointer",fontSize:16,display:"flex",alignItems:"center",justifyContent:"center"}} onClick={()=>go("drChatClient",dl)}>💬</button>
           </div>
         </div>
       </div>

@@ -53,9 +53,9 @@ function NotifScr({ onBack, go }) {
     <PullToRefresh onRefresh={async()=>{toast.success("Notifications actualisées 🔔")}}><div className="scr">
       <div className="appbar">
         <button onClick={onBack}>←</button>
-        <h2>Notifications {unreadCount > 0 && <span style={{ fontSize: 13, color: "#6366F1", fontWeight: 600 }}>({unreadCount})</span>}</h2>
+        <h2>Notifications {unreadCount > 0 && <span style={{ fontSize: 13, color: "#F97316", fontWeight: 600 }}>({unreadCount})</span>}</h2>
         {unreadCount > 0 && (
-          <button onClick={markAllRead} style={{ fontSize: 11, color: "#6366F1", fontWeight: 600, background: "none", border: "none", cursor: "pointer", fontFamily: "inherit", whiteSpace: "nowrap" }}>
+          <button onClick={markAllRead} style={{ fontSize: 11, color: "#F97316", fontWeight: 600, background: "none", border: "none", cursor: "pointer", fontFamily: "inherit", whiteSpace: "nowrap" }}>
             Tout lire
           </button>
         )}
@@ -80,17 +80,17 @@ function NotifScr({ onBack, go }) {
             return (
               <div key={n.id} onClick={() => handleClick(n)} style={{
                 padding: "14px 20px", borderBottom: "1px solid var(--border)", cursor: "pointer",
-                background: !n.read ? "rgba(99,102,241,0.03)" : "transparent",
+                background: !n.read ? "rgba(249,115,22,0.03)" : "transparent",
                 transition: "background .15s",
               }}>
                 <div style={{ display: "flex", gap: 12, alignItems: "flex-start" }}>
                   {/* Unread dot */}
-                  {!n.read && <div style={{ width: 8, height: 8, borderRadius: "50%", background: "#6366F1", flexShrink: 0, marginTop: 8 }} />}
+                  {!n.read && <div style={{ width: 8, height: 8, borderRadius: "50%", background: "#F97316", flexShrink: 0, marginTop: 8 }} />}
 
                   {/* Icon */}
                   <div style={{
                     width: 44, height: 44, borderRadius: 14,
-                    background: !n.read ? "rgba(99,102,241,0.08)" : "var(--light)",
+                    background: !n.read ? "rgba(249,115,22,0.08)" : "var(--light)",
                     display: "flex", alignItems: "center", justifyContent: "center",
                     fontSize: 20, flexShrink: 0,
                   }}>{n.icon}</div>
@@ -120,7 +120,7 @@ function NotifScr({ onBack, go }) {
                     {detail.action && go && (
                       <button onClick={(e) => { e.stopPropagation(); handleAction(n); }} style={{
                         marginTop: 12, width: "100%", padding: "11px 0", borderRadius: 12,
-                        border: "none", background: "#6366F1", color: "#fff",
+                        border: "none", background: "#F97316", color: "#fff",
                         fontSize: 13, fontWeight: 700, cursor: "pointer", fontFamily: "inherit",
                       }}>
                         {detail.actionLabel}

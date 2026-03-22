@@ -22,7 +22,7 @@ function VShopsScr({go,onBack}){
     <div className="appbar"><button onClick={onBack}>←</button><h2>Mes établissements</h2><button style={{width:38,height:38,borderRadius:12,border:"1px solid var(--border)",background:"var(--card)",cursor:"pointer",fontSize:16,display:"flex",alignItems:"center",justifyContent:"center"}} onClick={()=>go("vAddShop")}>+</button></div>
 
     {/* Enterprise overall banner */}
-    <div style={{margin:"0 20px 14px",padding:16,background:"linear-gradient(135deg,#6366F1,#A855F7)",borderRadius:16,color:"#fff"}}>
+    <div style={{margin:"0 20px 14px",padding:16,background:"linear-gradient(135deg,#F97316,#FB923C)",borderRadius:16,color:"#fff"}}>
       <div style={{display:"flex",justifyContent:"space-between",alignItems:"center",marginBottom:10}}>
         <div><div style={{fontSize:11,opacity:.7}}>Plan Enterprise · Vue globale</div><div style={{fontSize:22,fontWeight:700,marginTop:2}}>{fmt(totalRev)}</div><div style={{fontSize:11,opacity:.7}}>Chiffre d'affaires total</div></div>
         <div style={{textAlign:"right"}}><div style={{fontSize:18,fontWeight:700}}>{shops.length}</div><div style={{fontSize:11,opacity:.7}}>boutiques</div></div>
@@ -41,7 +41,7 @@ function VShopsScr({go,onBack}){
       <div style={{display:"grid",gridTemplateColumns:"1fr 1fr",gap:10,marginBottom:10}}>
         {[["💰","CA net (après commission)",fmt(totalRev-commission),"↑ 18% vs mois dernier","#10B981"],
           ["💳","Commission Lamuka (2%)",fmt(commission),"Déduite automatiquement","#F59E0B"],
-          ["👥","Clients uniques",totalClients,"↑ 24%","#6366F1"],
+          ["👥","Clients uniques",totalClients,"↑ 24%","#F97316"],
           ["🔄","Retours",totalReturns,totalReturns<5?"Excellent":"À surveiller",totalReturns<5?"#10B981":"#EF4444"],
         ].map(([i,l,v,t,c])=><div key={l} style={{padding:12,background:"var(--card)",border:"1px solid var(--border)",borderRadius:14}}>
           <div style={{fontSize:16,marginBottom:4}}>{i}</div>
@@ -56,7 +56,7 @@ function VShopsScr({go,onBack}){
         {active.map(sh=><div key={sh.id} style={{display:"flex",alignItems:"center",gap:10,padding:8,borderBottom:"1px solid var(--border)"}}>
           <span style={{fontSize:16}}>{sh.typeIcon}</span>
           <div style={{flex:1}}><div style={{fontSize:12,fontWeight:600}}>{sh.name}</div></div>
-          <div style={{textAlign:"right"}}><div style={{fontSize:12,fontWeight:700,color:"#6366F1"}}>{fmt(sh.revenue)}</div><div style={{fontSize:9,color:"var(--muted)"}}>{sh.orders} cmd · ⭐ {sh.rating}</div></div>
+          <div style={{textAlign:"right"}}><div style={{fontSize:12,fontWeight:700,color:"#F97316"}}>{fmt(sh.revenue)}</div><div style={{fontSize:9,color:"var(--muted)"}}>{sh.orders} cmd · ⭐ {sh.rating}</div></div>
         </div>)}
       </div>
 
@@ -65,7 +65,7 @@ function VShopsScr({go,onBack}){
         {active.map(sh=>{const pct=totalRev>0?Math.round(sh.revenue/totalRev*100):0;return(
           <div key={sh.id} style={{marginBottom:10}}>
             <div style={{display:"flex",justifyContent:"space-between",fontSize:11,marginBottom:4}}><span style={{fontWeight:600}}>{sh.typeIcon} {sh.name}</span><span style={{color:"var(--muted)"}}>{pct}%</span></div>
-            <div style={{height:8,background:"var(--light)",borderRadius:4,overflow:"hidden"}}><div style={{width:`${pct}%`,height:"100%",background:"linear-gradient(90deg,#6366F1,#A855F7)",borderRadius:4}}/></div>
+            <div style={{height:8,background:"var(--light)",borderRadius:4,overflow:"hidden"}}><div style={{width:`${pct}%`,height:"100%",background:"linear-gradient(90deg,#F97316,#FB923C)",borderRadius:4}}/></div>
           </div>
         )})}
       </div>
@@ -75,7 +75,7 @@ function VShopsScr({go,onBack}){
     <div style={{padding:"0 16px"}}>
       {shops.map(sh=><div key={sh.id} style={{padding:16,background:"var(--card)",border:"1px solid var(--border)",borderRadius:16,marginBottom:12,cursor:"pointer"}} onClick={()=>go("vShopDetail",sh)}>
         <div style={{display:"flex",alignItems:"center",gap:12,marginBottom:12}}>
-          <div style={{width:48,height:48,borderRadius:14,background:sh.status==="active"?"linear-gradient(135deg,#6366F1,#A855F7)":"linear-gradient(135deg,#F59E0B,#D97706)",display:"flex",alignItems:"center",justifyContent:"center",fontSize:22}}>{sh.logo}</div>
+          <div style={{width:48,height:48,borderRadius:14,background:sh.status==="active"?"linear-gradient(135deg,#F97316,#FB923C)":"linear-gradient(135deg,#F59E0B,#D97706)",display:"flex",alignItems:"center",justifyContent:"center",fontSize:22}}>{sh.logo}</div>
           <div style={{flex:1}}>
             <div style={{display:"flex",alignItems:"center",gap:6}}><h4 style={{fontSize:15,fontWeight:700}}>{sh.name}</h4>
               <span style={{padding:"2px 8px",borderRadius:6,background:sh.status==="active"?"rgba(16,185,129,0.1)":"rgba(245,158,11,0.1)",color:sh.status==="active"?"#10B981":"#F59E0B",fontSize:10,fontWeight:700}}>{sh.status==="active"?"Active":"En attente"}</span>

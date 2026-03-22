@@ -4,7 +4,7 @@ import toast from "../../utils/toast";
 
 function WithdrawScr({onBack,mode}){
   const [method,setMethod]=useState(null);const [amount,setAmount]=useState("");const [done,setDone]=useState(false);
-  const color=mode==="driver"?"#10B981":"#6366F1";
+  const color=mode==="driver"?"#10B981":"#F97316";
   if(done)return(<div className="scr" style={{padding:16,textAlign:"center"}}><div style={{padding:"40px 0"}}><div style={{fontSize:48,marginBottom:10}}>✅</div><h3 style={{fontSize:18,fontWeight:700}}>Demande envoyée</h3><p style={{fontSize:14,color,fontWeight:700,marginTop:8}}>{fmt(parseInt(amount)||0)}</p><p style={{fontSize:13,color:"var(--muted)",marginTop:6}}>Versement sous 24-48h sur votre compte.</p><button className="btn-primary" style={{marginTop:20,background:color}} onClick={onBack}>OK</button></div></div>);
   return(<><div className="appbar"><button onClick={onBack}>←</button><h2>Retrait</h2><div style={{width:38}}/></div>
     <div className="scr" style={{padding:16}}>

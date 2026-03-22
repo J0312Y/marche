@@ -57,7 +57,7 @@ function ReviewsScr({product:p,onBack}){
     <div style={{marginBottom:14}}>{dist.map((d,i)=><div key={i} style={{display:"flex",alignItems:"center",gap:8,marginBottom:4}}><span style={{fontSize:12,width:12}}>{5-i}</span><span style={{fontSize:12}}>⭐</span><div style={{flex:1,height:6,background:"var(--border)",borderRadius:3,overflow:"hidden"}}><div style={{width:`${d}%`,height:"100%",background:d>0?"#F59E0B":"var(--border)",borderRadius:3,transition:"width .3s"}}/></div><span style={{fontSize:11,color:"var(--muted)",width:30,textAlign:"right"}}>{d}%</span></div>)}</div>
 
     {/* Write review button / form */}
-    {!writing?<button onClick={()=>setWriting(true)} style={{width:"100%",padding:"14px 0",borderRadius:14,border:"2px solid #6366F1",background:"rgba(99,102,241,0.04)",cursor:"pointer",fontSize:14,fontWeight:700,color:"#6366F1",fontFamily:"inherit",marginBottom:14,display:"flex",alignItems:"center",justifyContent:"center",gap:8}}>✏️ Écrire un avis</button>
+    {!writing?<button onClick={()=>setWriting(true)} style={{width:"100%",padding:"14px 0",borderRadius:14,border:"2px solid #F97316",background:"rgba(249,115,22,0.04)",cursor:"pointer",fontSize:14,fontWeight:700,color:"#F97316",fontFamily:"inherit",marginBottom:14,display:"flex",alignItems:"center",justifyContent:"center",gap:8}}>✏️ Écrire un avis</button>
 
     :<div style={{padding:16,background:"var(--card)",borderRadius:18,border:"1px solid var(--border)",marginBottom:14,boxShadow:"0 2px 10px rgba(0,0,0,.04)"}}>
       <div style={{display:"flex",justifyContent:"space-between",alignItems:"center",marginBottom:14}}>
@@ -102,7 +102,7 @@ function ReviewsScr({product:p,onBack}){
       </div>
 
       {/* Submit */}
-      <button onClick={submitReview} disabled={userRating===0} style={{width:"100%",padding:"12px 0",borderRadius:12,border:"none",background:userRating>0?"#6366F1":"var(--border)",color:userRating>0?"var(--card)":"var(--muted)",fontSize:14,fontWeight:700,cursor:userRating>0?"pointer":"not-allowed",fontFamily:"inherit",transition:"all .2s"}}>
+      <button onClick={submitReview} disabled={userRating===0} style={{width:"100%",padding:"12px 0",borderRadius:12,border:"none",background:userRating>0?"#F97316":"var(--border)",color:userRating>0?"var(--card)":"var(--muted)",fontSize:14,fontWeight:700,cursor:userRating>0?"pointer":"not-allowed",fontFamily:"inherit",transition:"all .2s"}}>
         {userRating===0?"Sélectionnez une note":"Publier mon avis ⭐"}
       </button>
     </div>}
@@ -111,10 +111,10 @@ function ReviewsScr({product:p,onBack}){
     {submitted&&<div style={{padding:12,background:"rgba(16,185,129,0.08)",border:"1px solid rgba(16,185,129,0.2)",borderRadius:12,marginBottom:14,display:"flex",alignItems:"center",gap:8,fontSize:13,fontWeight:600,color:"#10B981"}}>✅ Avis publié avec succès !</div>}
 
     {/* All reviews */}
-    {allReviews.map((r,i)=><div key={i} className="review-card" style={r.name==="Moi"?{border:"2px solid rgba(99,102,241,0.2)",background:"rgba(99,102,241,0.02)"}:{}}>
+    {allReviews.map((r,i)=><div key={i} className="review-card" style={r.name==="Moi"?{border:"2px solid rgba(249,115,22,0.2)",background:"rgba(249,115,22,0.02)"}:{}}>
       <div className="review-top">
         <div className="rav" style={{overflow:"hidden",padding:0}}>{r.avatar?.startsWith("http")?<img src={r.avatar} style={{width:"100%",height:"100%",objectFit:"cover"}} alt=""/>:<img src={CHAT_AVATARS.client} style={{width:"100%",height:"100%",objectFit:"cover"}} alt=""/>}</div>
-        <div style={{flex:1}}><h4 style={{fontSize:14,fontWeight:600}}>{r.name}{r.name==="Moi"&&<span style={{fontSize:10,color:"#6366F1",marginLeft:6,fontWeight:700}}>VOUS</span>}</h4></div>
+        <div style={{flex:1}}><h4 style={{fontSize:14,fontWeight:600}}>{r.name}{r.name==="Moi"&&<span style={{fontSize:10,color:"#F97316",marginLeft:6,fontWeight:700}}>VOUS</span>}</h4></div>
         <span className="rd">{r.date}</span>
       </div>
       <div className="review-stars">{"★".repeat(r.rating)}{"☆".repeat(5-r.rating)}</div>

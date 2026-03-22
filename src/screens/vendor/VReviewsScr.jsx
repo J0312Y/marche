@@ -45,7 +45,7 @@ function VReviewsScr({onBack}){
       {/* Filter */}
       <div style={{display:"flex",gap:6,marginBottom:12}}>
         {[["all","Tous"],["unreplied","Sans réponse"],["replied","Répondus"]].map(([k,l])=>(
-          <button key={k} onClick={()=>setFilter(k)} style={{padding:"6px 14px",borderRadius:20,border:filter===k?"1px solid #6366F1":"1px solid var(--border)",background:filter===k?"rgba(99,102,241,0.06)":"var(--card)",color:filter===k?"#6366F1":"var(--sub)",fontSize:11,fontWeight:600,cursor:"pointer",fontFamily:"inherit"}}>{l}</button>
+          <button key={k} onClick={()=>setFilter(k)} style={{padding:"6px 14px",borderRadius:20,border:filter===k?"1px solid #F97316":"1px solid var(--border)",background:filter===k?"rgba(249,115,22,0.06)":"var(--card)",color:filter===k?"#F97316":"var(--sub)",fontSize:11,fontWeight:600,cursor:"pointer",fontFamily:"inherit"}}>{l}</button>
         ))}
       </div>
 
@@ -53,7 +53,7 @@ function VReviewsScr({onBack}){
       {filtered.map((r,i)=>{
         const realIdx=(reviews||raw).indexOf(r);
         return(
-        <div key={i} style={{padding:14,background:"var(--card)",border:replyingTo===realIdx?"2px solid #6366F1":"1px solid var(--border)",borderRadius:16,marginBottom:10}}>
+        <div key={i} style={{padding:14,background:"var(--card)",border:replyingTo===realIdx?"2px solid #F97316":"1px solid var(--border)",borderRadius:16,marginBottom:10}}>
           {/* Header */}
           <div style={{display:"flex",alignItems:"center",justifyContent:"space-between",marginBottom:8}}>
             <div style={{display:"flex",alignItems:"center",gap:8}}>
@@ -72,8 +72,8 @@ function VReviewsScr({onBack}){
 
           {/* Existing reply */}
           {r.replied&&r.reply&&(
-            <div style={{marginTop:10,padding:10,background:"rgba(99,102,241,0.04)",border:"1px solid rgba(99,102,241,0.1)",borderRadius:12}}>
-              <div style={{fontSize:10,fontWeight:700,color:"#6366F1",marginBottom:4}}>↩️ Votre réponse</div>
+            <div style={{marginTop:10,padding:10,background:"rgba(249,115,22,0.04)",border:"1px solid rgba(249,115,22,0.1)",borderRadius:12}}>
+              <div style={{fontSize:10,fontWeight:700,color:"#F97316",marginBottom:4}}>↩️ Votre réponse</div>
               <div style={{fontSize:12,color:"var(--sub)",lineHeight:1.5}}>{r.reply}</div>
             </div>
           )}
@@ -84,11 +84,11 @@ function VReviewsScr({onBack}){
               <textarea value={replyText} onChange={e=>setReplyText(e.target.value)} placeholder="Votre réponse au client..." rows={3} style={{width:"100%",padding:10,borderRadius:12,border:"1px solid var(--border)",fontSize:12,fontFamily:"inherit",resize:"vertical",outline:"none",boxSizing:"border-box"}}/>
               <div style={{display:"flex",gap:8,marginTop:8}}>
                 <button onClick={()=>{setReplyingTo(null);setReplyText("")}} style={{flex:1,padding:8,borderRadius:10,border:"1px solid var(--border)",background:"var(--card)",fontSize:11,fontWeight:600,cursor:"pointer",fontFamily:"inherit"}}>Annuler</button>
-                <button onClick={()=>submitReply(realIdx)} disabled={!replyText.trim()} style={{flex:1,padding:8,borderRadius:10,border:"none",background:replyText.trim()?"#6366F1":"var(--border)",color:replyText.trim()?"var(--card)":"var(--muted)",fontSize:11,fontWeight:700,cursor:replyText.trim()?"pointer":"not-allowed",fontFamily:"inherit"}}>Publier ↩️</button>
+                <button onClick={()=>submitReply(realIdx)} disabled={!replyText.trim()} style={{flex:1,padding:8,borderRadius:10,border:"none",background:replyText.trim()?"#F97316":"var(--border)",color:replyText.trim()?"var(--card)":"var(--muted)",fontSize:11,fontWeight:700,cursor:replyText.trim()?"pointer":"not-allowed",fontFamily:"inherit"}}>Publier ↩️</button>
               </div>
             </div>
           ):(
-            !r.replied&&<button onClick={()=>{setReplyingTo(realIdx);setReplyText("")}} style={{marginTop:8,padding:"7px 14px",borderRadius:10,border:"1px solid #6366F1",background:"transparent",color:"#6366F1",fontSize:11,fontWeight:600,cursor:"pointer",fontFamily:"inherit",display:"flex",alignItems:"center",gap:4}}>↩️ Répondre</button>
+            !r.replied&&<button onClick={()=>{setReplyingTo(realIdx);setReplyText("")}} style={{marginTop:8,padding:"7px 14px",borderRadius:10,border:"1px solid #F97316",background:"transparent",color:"#F97316",fontSize:11,fontWeight:600,cursor:"pointer",fontFamily:"inherit",display:"flex",alignItems:"center",gap:4}}>↩️ Répondre</button>
           )}
         </div>);
       })}

@@ -7,7 +7,7 @@ import { vendor } from "../../services";
 import { SkeletonCards } from "../../components/Loading";
 import { fmt } from "../../utils/helpers";
 
-const ST={new:{bg:"rgba(59,130,246,0.08)",color:"#3B82F6",label:"🆕 Nouvelle"},preparing:{bg:"rgba(245,158,11,0.08)",color:"#F59E0B",label:"🔄 Préparation"},shipped:{bg:"rgba(139,92,246,0.08)",color:"#8B5CF6",label:"🚚 Expédiée"},delivered:{bg:"rgba(16,185,129,0.08)",color:"#10B981",label:"✅ Livrée"}};
+const ST={new:{bg:"rgba(59,130,246,0.08)",color:"#3B82F6",label:"🆕 Nouvelle"},preparing:{bg:"rgba(245,158,11,0.08)",color:"#F59E0B",label:"🔄 Préparation"},shipped:{bg:"rgba(139,92,246,0.08)",color:"#FB923C",label:"🚚 Expédiée"},delivered:{bg:"rgba(16,185,129,0.08)",color:"#10B981",label:"✅ Livrée"}};
 
 function VOrdersScr({go,onBack}){
   const [filter,setFilter]=useState("all");
@@ -42,7 +42,7 @@ function VOrdersScr({go,onBack}){
           </div>
           {/* Footer: total + date */}
           <div style={{display:"flex",justifyContent:"space-between",alignItems:"center"}}>
-            <span style={{fontSize:15,fontWeight:700,color:"#6366F1"}}>{fmt(o.total)}</span>
+            <span style={{fontSize:15,fontWeight:700,color:"#F97316"}}>{fmt(o.total)}</span>
             <span style={{fontSize:11,color:"var(--muted)"}}>{o.date}</span>
           </div>
         </div>);

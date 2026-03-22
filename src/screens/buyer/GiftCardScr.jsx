@@ -6,7 +6,7 @@ function GiftCardScr({onBack}){
   const amounts=[5000,10000,25000,50000];
   const send=()=>{if(!amount||!to){toast.error("Montant et destinataire requis");return}setDone(true);toast.success("Carte cadeau envoyée ! 🎁")};
   if(done)return(<div className="scr" style={{padding:16,textAlign:"center",display:"flex",flexDirection:"column",alignItems:"center",justifyContent:"center",height:"100%"}}>
-    <div style={{width:200,padding:24,background:"linear-gradient(135deg,#6366F1,#A855F7)",borderRadius:20,color:"#fff",marginBottom:20}}>
+    <div style={{width:200,padding:24,background:"linear-gradient(135deg,#F97316,#FB923C)",borderRadius:20,color:"#fff",marginBottom:20}}>
       <div style={{fontSize:28,marginBottom:4}}>🎁</div><div style={{fontSize:10,opacity:.7}}>Carte Cadeau Lamuka</div><div style={{fontSize:24,fontWeight:800,margin:"8px 0"}}>{fmt(amount)}</div><div style={{fontSize:11,opacity:.7}}>Pour: {to}</div>
     </div>
     <h3 style={{fontSize:18,fontWeight:700,marginBottom:4}}>Carte envoyée !</h3><p style={{fontSize:13,color:"var(--muted)"}}>Un SMS a été envoyé à {to}</p>
@@ -17,7 +17,7 @@ function GiftCardScr({onBack}){
     <div style={{textAlign:"center",marginBottom:14}}><div style={{fontSize:40,marginBottom:8}}>🎁</div><p style={{fontSize:13,color:"var(--muted)"}}>Offrez du shopping à vos proches</p></div>
     <div style={{fontSize:14,fontWeight:700,marginBottom:10}}>Choisir le montant</div>
     <div style={{display:"grid",gridTemplateColumns:"1fr 1fr",gap:8,marginBottom:14}}>
-      {amounts.map(a=><div key={a} onClick={()=>setAmount(a)} style={{padding:16,borderRadius:14,border:amount===a?"2px solid #6366F1":"1px solid var(--border)",background:amount===a?"rgba(99,102,241,0.06)":"var(--card)",cursor:"pointer",textAlign:"center"}}><div style={{fontSize:18,fontWeight:800,color:amount===a?"#6366F1":"var(--text)"}}>{fmt(a)}</div></div>)}
+      {amounts.map(a=><div key={a} onClick={()=>setAmount(a)} style={{padding:16,borderRadius:14,border:amount===a?"2px solid #F97316":"1px solid var(--border)",background:amount===a?"rgba(249,115,22,0.06)":"var(--card)",cursor:"pointer",textAlign:"center"}}><div style={{fontSize:18,fontWeight:800,color:amount===a?"#F97316":"var(--text)"}}>{fmt(a)}</div></div>)}
     </div>
     <div className="field"><label>Numéro du destinataire</label><input value={to} onChange={e=>setTo(e.target.value)} placeholder="+242 06X XXX XXX"/></div>
     <div className="field"><label>Message (optionnel)</label><input value={msg} onChange={e=>setMsg(e.target.value)} placeholder="Joyeux anniversaire ! 🎂"/></div>

@@ -79,7 +79,7 @@ function PhotoGuide({ onClose, shopType="boutique" }){
           {["Conseils généraux",`${typeRules.icon} ${typeRules.title}`].map((t,i)=>(
             <button key={i} onClick={()=>setTab(i)} style={{
               flex:1,padding:"10px 0",border:"none",background:"none",fontSize:12,fontWeight:600,
-              color:tab===i?"#6366F1":"var(--muted)",borderBottom:tab===i?"2px solid #6366F1":"2px solid transparent",
+              color:tab===i?"#F97316":"var(--muted)",borderBottom:tab===i?"2px solid #F97316":"2px solid transparent",
               cursor:"pointer",fontFamily:"inherit",transition:"all .2s"
             }}>{t}</button>
           ))}
@@ -122,12 +122,12 @@ function PhotoGuide({ onClose, shopType="boutique" }){
               </div>
               {typeRules.rules.map((rule,i)=>(
                 <div key={i} style={{display:"flex",alignItems:"center",gap:12,padding:"12px 14px",background:i%2===0?"var(--light)":"var(--card)",borderRadius:12,marginBottom:6}}>
-                  <div style={{width:28,height:28,borderRadius:8,background:"rgba(99,102,241,0.08)",display:"flex",alignItems:"center",justifyContent:"center",fontSize:12,fontWeight:700,color:"#6366F1",flexShrink:0}}>{i+1}</div>
+                  <div style={{width:28,height:28,borderRadius:8,background:"rgba(249,115,22,0.08)",display:"flex",alignItems:"center",justifyContent:"center",fontSize:12,fontWeight:700,color:"#F97316",flexShrink:0}}>{i+1}</div>
                   <span style={{fontSize:13,fontWeight:500}}>{rule}</span>
                 </div>
               ))}
-              <div style={{marginTop:16,padding:14,background:"rgba(99,102,241,0.04)",borderRadius:14,border:"1px solid rgba(99,102,241,0.12)"}}>
-                <div style={{fontSize:12,fontWeight:700,color:"#6366F1",marginBottom:4}}>💡 Astuce Pro</div>
+              <div style={{marginTop:16,padding:14,background:"rgba(249,115,22,0.04)",borderRadius:14,border:"1px solid rgba(249,115,22,0.12)"}}>
+                <div style={{fontSize:12,fontWeight:700,color:"#F97316",marginBottom:4}}>💡 Astuce Pro</div>
                 <p style={{fontSize:11,color:"var(--sub)",margin:0,lineHeight:1.5}}>
                   {shopType==="restaurant"||shopType==="patisserie"
                     ?"Prenez la photo juste après la préparation quand le plat est encore chaud et appétissant. L'éclairage naturel du matin ou de l'après-midi donne les meilleurs résultats."
@@ -140,7 +140,7 @@ function PhotoGuide({ onClose, shopType="boutique" }){
 
         {/* CTA */}
         <div style={{padding:"0 20px 20px",position:"sticky",bottom:0,background:"var(--card)"}}>
-          <button onClick={onClose} style={{width:"100%",padding:14,borderRadius:14,border:"none",background:"#6366F1",color:"var(--card)",fontSize:14,fontWeight:600,cursor:"pointer",fontFamily:"inherit"}}>
+          <button onClick={onClose} style={{width:"100%",padding:14,borderRadius:14,border:"none",background:"#F97316",color:"var(--card)",fontSize:14,fontWeight:600,cursor:"pointer",fontFamily:"inherit"}}>
             👍 J'ai compris, ajouter mes photos
           </button>
         </div>

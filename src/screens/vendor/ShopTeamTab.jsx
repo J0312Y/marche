@@ -3,7 +3,7 @@ import { useState } from "react";
 
 function ShopTeamTab(){
   const initMembers=[
-    {id:"m1",name:"Joeldy Tsina",role:"Propriétaire",email:"joeldytsina94@gmail.com",photo:"https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=80&h=80&fit=crop&crop=face",color:"#6366F1"},
+    {id:"m1",name:"Joeldy Tsina",role:"Propriétaire",email:"joeldytsina94@gmail.com",photo:"https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=80&h=80&fit=crop&crop=face",color:"#F97316"},
     {id:"m2",name:"Marie Loubaki",role:"Manager",email:"marie.l@email.com",photo:"https://images.unsplash.com/photo-1531123897727-8f129e1688ce?w=80&h=80&fit=crop&crop=face",color:"#10B981"},
     {id:"m3",name:"Paul Nkaya",role:"Employé",email:"paul.n@email.com",photo:"https://images.unsplash.com/photo-1506277886164-e25aa3f4ef7f?w=80&h=80&fit=crop&crop=face",color:"#F59E0B"}
   ];
@@ -22,7 +22,7 @@ function ShopTeamTab(){
     setInvName("");setInvEmail("");setInvRole("Employé");setInvited(true);
     setTimeout(()=>{setInvited(false);setShowInvite(false)},2000);
   };
-  const roleColor=r=>r==="Propriétaire"?"#6366F1":r==="Manager"?"#10B981":"#F59E0B";
+  const roleColor=r=>r==="Propriétaire"?"#F97316":r==="Manager"?"#10B981":"#F59E0B";
 
   return(<div style={{padding:"0 16px 20px"}}>
     <div className="info-box blue" style={{marginBottom:14}}><span>👥</span><span style={{fontSize:11}}>Gérez les collaborateurs de cette boutique</span></div>
@@ -49,19 +49,19 @@ function ShopTeamTab(){
     </div>)}
 
     {/* Invite form */}
-    {showInvite?<div style={{padding:16,background:"var(--card)",border:"2px solid #6366F1",borderRadius:16,marginBottom:14}}>
+    {showInvite?<div style={{padding:16,background:"var(--card)",border:"2px solid #F97316",borderRadius:16,marginBottom:14}}>
       <h4 style={{fontSize:14,fontWeight:700,marginBottom:12}}>📩 Inviter un collaborateur</h4>
       <div className="field"><label>Nom complet</label><input value={invName} onChange={e=>setInvName(e.target.value)} placeholder="Ex: Sarah Mouanda"/></div>
       <div className="field"><label>Email</label><input value={invEmail} onChange={e=>setInvEmail(e.target.value)} placeholder="sarah@email.com" type="email"/></div>
       <div className="field"><label>Rôle</label>
         <div style={{display:"flex",gap:8}}>
-          {["Manager","Employé"].map(r=><button key={r} onClick={()=>setInvRole(r)} style={{flex:1,padding:10,borderRadius:10,border:invRole===r?"2px solid #6366F1":"1px solid var(--border)",background:invRole===r?"rgba(99,102,241,0.04)":"var(--card)",fontSize:12,fontWeight:600,cursor:"pointer",fontFamily:"inherit",color:invRole===r?"#6366F1":"var(--muted)"}}>{r}</button>)}
+          {["Manager","Employé"].map(r=><button key={r} onClick={()=>setInvRole(r)} style={{flex:1,padding:10,borderRadius:10,border:invRole===r?"2px solid #F97316":"1px solid var(--border)",background:invRole===r?"rgba(249,115,22,0.04)":"var(--card)",fontSize:12,fontWeight:600,cursor:"pointer",fontFamily:"inherit",color:invRole===r?"#F97316":"var(--muted)"}}>{r}</button>)}
         </div>
       </div>
       <div className="info-box blue" style={{marginBottom:10,padding:"6px 10px"}}><span>📧</span><span style={{fontSize:11}}>Un email d'invitation sera envoyé à cette adresse</span></div>
       <div style={{display:"flex",gap:8}}>
         <button style={{flex:1,padding:12,borderRadius:12,border:"1px solid var(--border)",background:"var(--card)",fontSize:13,fontWeight:600,cursor:"pointer",fontFamily:"inherit"}} onClick={()=>{setShowInvite(false);setInvName("");setInvEmail("")}}>Annuler</button>
-        <button className="btn-primary" style={{flex:2,background:invited?"#10B981":(invName&&invEmail)?"#6366F1":"var(--border)",color:(invName&&invEmail)||invited?"var(--card)":"var(--muted)"}} onClick={doInvite}>{invited?"✅ Invitation envoyée !":"📤 Envoyer l'invitation"}</button>
+        <button className="btn-primary" style={{flex:2,background:invited?"#10B981":(invName&&invEmail)?"#F97316":"var(--border)",color:(invName&&invEmail)||invited?"var(--card)":"var(--muted)"}} onClick={doInvite}>{invited?"✅ Invitation envoyée !":"📤 Envoyer l'invitation"}</button>
       </div>
     </div>
     :<button className="btn-primary" onClick={()=>setShowInvite(true)}>+ Inviter un collaborateur</button>}

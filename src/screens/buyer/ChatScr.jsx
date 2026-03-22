@@ -115,7 +115,7 @@ function ChatScr({onBack}){
       </span></div>}
 
       {msgs.length===1&&msgs[0].isWelcome&&<div style={{display:"flex",gap:6,flexWrap:"wrap",padding:"8px 0"}}>
-        {quickReplies.map(q=><button key={q} onClick={()=>send(q)} style={{padding:"8px 14px",borderRadius:20,border:"1px solid #10B981",background:"rgba(99,102,241,0.04)",color:"#10B981",fontSize:12,fontWeight:600,cursor:"pointer",fontFamily:"inherit"}}>{q}</button>)}
+        {quickReplies.map(q=><button key={q} onClick={()=>send(q)} style={{padding:"8px 14px",borderRadius:20,border:"1px solid #10B981",background:"rgba(249,115,22,0.04)",color:"#10B981",fontSize:12,fontWeight:600,cursor:"pointer",fontFamily:"inherit"}}>{q}</button>)}
       </div>}
     </div>
 

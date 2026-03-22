@@ -16,13 +16,13 @@ function VQRCodeScr({onBack}){
             return isFilled?<rect key={r+"-"+c} x={c*13+2} y={r*13+2} width={11} height={11} rx={2} fill="var(--text)" opacity={isCorner?1:.7}/>:null;
           }))}
         </svg>
-        <div style={{position:"absolute",width:40,height:40,borderRadius:10,background:"#6366F1",display:"flex",alignItems:"center",justifyContent:"center",color:"#fff",fontSize:18,fontWeight:800}}>LM</div>
+        <div style={{position:"absolute",width:40,height:40,borderRadius:10,background:"#F97316",display:"flex",alignItems:"center",justifyContent:"center",color:"#fff",fontSize:18,fontWeight:800}}>LM</div>
       </div>
       <h3 style={{fontSize:16,fontWeight:700,marginBottom:4}}>Mode Afrique</h3>
       <p style={{fontSize:12,color:"var(--muted)",marginBottom:16}}>{url}</p>
       <div style={{display:"flex",gap:8,maxWidth:280,margin:"0 auto"}}>
         <button onClick={copy} style={{flex:1,padding:12,borderRadius:12,border:"1px solid var(--border)",background:"var(--card)",fontSize:12,fontWeight:600,cursor:"pointer",fontFamily:"inherit",color:"var(--text)"}}>📋 Copier le lien</button>
-        <button onClick={()=>toast.success("QR téléchargé 📥")} style={{flex:1,padding:12,borderRadius:12,border:"none",background:"#6366F1",color:"#fff",fontSize:12,fontWeight:700,cursor:"pointer",fontFamily:"inherit"}}>📥 Télécharger</button>
+        <button onClick={()=>toast.success("QR téléchargé 📥")} style={{flex:1,padding:12,borderRadius:12,border:"none",background:"#F97316",color:"#fff",fontSize:12,fontWeight:700,cursor:"pointer",fontFamily:"inherit"}}>📥 Télécharger</button>
       </div>
     </div>
     <div style={{padding:14,background:"var(--light)",borderRadius:14,margin:"10px 0"}}>

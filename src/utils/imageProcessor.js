@@ -82,7 +82,7 @@ export function analyzeImage(file){
         score,
         issues,
         label: score>=80?"Excellente":score>=60?"Bonne":score>=40?"Acceptable":"À améliorer",
-        color: score>=80?"#10B981":score>=60?"#6366F1":score>=40?"#F59E0B":"#EF4444",
+        color: score>=80?"#10B981":score>=60?"#F97316":score>=40?"#F59E0B":"#EF4444",
       });
     };
     img.src = URL.createObjectURL(file);

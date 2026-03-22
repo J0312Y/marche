@@ -16,7 +16,7 @@ function TermsScr({onBack}){
   ];
   return(<div className="scr"><div className="appbar"><button onClick={onBack}>←</button><h2>Conditions générales</h2><div style={{width:38}}/></div>
     <div style={{padding:"0 16px 20px"}}>
-      <div style={{padding:14,background:"rgba(99,102,241,0.04)",border:"1px solid rgba(99,102,241,0.1)",borderRadius:14,marginBottom:12}}><div style={{fontSize:12,color:"#6366F1",fontWeight:600}}>📋 Conditions Générales d'Utilisation</div><div style={{fontSize:11,color:"var(--muted)",marginTop:4}}>Dernière mise à jour : 1er Février 2026</div></div>
+      <div style={{padding:14,background:"rgba(249,115,22,0.04)",border:"1px solid rgba(249,115,22,0.1)",borderRadius:14,marginBottom:12}}><div style={{fontSize:12,color:"#F97316",fontWeight:600}}>📋 Conditions Générales d'Utilisation</div><div style={{fontSize:11,color:"var(--muted)",marginTop:4}}>Dernière mise à jour : 1er Février 2026</div></div>
       {sections.map((s,i)=><div key={i} style={{marginBottom:12}}>
         <h4 style={{fontSize:14,fontWeight:700,marginBottom:6}}>{s.title}</h4>
         <p style={{fontSize:13,color:"var(--sub)",lineHeight:1.7}}>{s.text}</p>

@@ -42,7 +42,7 @@ function TrackingScr({onBack,go}){
 
   return(<>
     {/* Map */}
-    <MapView center={[-4.270,15.281]} zoom={15} markers={markers} route={route} routeColor="#6366F1" driverPos={driverPos} style={{height:220}}>
+    <MapView center={[-4.270,15.281]} zoom={15} markers={markers} route={route} routeColor="#F97316" driverPos={driverPos} style={{height:220}}>
       <div style={{position:"absolute",top:10,left:10,zIndex:1000}}>
         <button onClick={onBack} style={{width:40,height:40,borderRadius:14,background:"rgba(255,255,255,0.85)",backdropFilter:"blur(12px)",WebkitBackdropFilter:"blur(12px)",border:"1px solid rgba(255,255,255,0.4)",boxShadow:"0 4px 16px rgba(0,0,0,0.12)",cursor:"pointer",display:"flex",alignItems:"center",justifyContent:"center"}}><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><path d="M19 12H5M12 19l-7-7 7-7"/></svg></button>
       </div>
@@ -51,7 +51,7 @@ function TrackingScr({onBack,go}){
         <div style={{width:10,height:10,borderRadius:"50%",background:"#10B981",animation:"blink 1.5s infinite"}}/>
         <span style={{fontSize:13,fontWeight:700}}>En route</span>
         <span style={{fontSize:12,color:"var(--muted)"}}>·</span>
-        <span style={{fontSize:13,fontWeight:700,color:"#6366F1"}}>{Math.ceil(eta)} min</span>
+        <span style={{fontSize:13,fontWeight:700,color:"#F97316"}}>{Math.ceil(eta)} min</span>
       </div>
     </MapView>
 
@@ -73,7 +73,7 @@ function TrackingScr({onBack,go}){
         </div>
         <div style={{display:"flex",gap:6}}>
           <button onClick={()=>toast.info("📞 Appel en cours...")} style={{width:40,height:40,borderRadius:12,border:"none",background:"#F59E0B",color:"#fff",cursor:"pointer",fontSize:16,display:"flex",alignItems:"center",justifyContent:"center"}}>📞</button>
-          <button onClick={()=>go("chatDriver")} style={{width:40,height:40,borderRadius:12,border:"none",background:"#6366F1",color:"#fff",cursor:"pointer",fontSize:16,display:"flex",alignItems:"center",justifyContent:"center"}}>💬</button>
+          <button onClick={()=>go("chatDriver")} style={{width:40,height:40,borderRadius:12,border:"none",background:"#F97316",color:"#fff",cursor:"pointer",fontSize:16,display:"flex",alignItems:"center",justifyContent:"center"}}>💬</button>
         </div>
       </div>
 
@@ -81,10 +81,10 @@ function TrackingScr({onBack,go}){
       <div style={{padding:14,background:"var(--card)",border:"1px solid var(--border)",borderRadius:16,marginBottom:12}}>
         <div style={{display:"flex",justifyContent:"space-between",alignItems:"center",marginBottom:8}}>
           <span style={{fontSize:13,fontWeight:700}}>Progression</span>
-          <span style={{fontSize:12,fontWeight:700,color:"#6366F1"}}>{Math.round(progress)}%</span>
+          <span style={{fontSize:12,fontWeight:700,color:"#F97316"}}>{Math.round(progress)}%</span>
         </div>
         <div style={{height:6,background:"var(--border)",borderRadius:3,overflow:"hidden",marginBottom:8}}>
-          <div style={{width:`${progress}%`,height:"100%",background:"linear-gradient(90deg,#6366F1,#A855F7)",borderRadius:3,transition:"width 1s ease"}}/>
+          <div style={{width:`${progress}%`,height:"100%",background:"linear-gradient(90deg,#F97316,#FB923C)",borderRadius:3,transition:"width 1s ease"}}/>
         </div>
         <div style={{display:"flex",justifyContent:"space-between",fontSize:11,color:"var(--muted)"}}>
           <span>📍 Marché Total</span>
@@ -98,7 +98,7 @@ function TrackingScr({onBack,go}){
         {STEPS.map((s,i)=>(
           <div key={i} style={{display:"flex",gap:10,marginBottom:i<STEPS.length-1?0:0}}>
             <div style={{display:"flex",flexDirection:"column",alignItems:"center"}}>
-              <div style={{width:28,height:28,borderRadius:8,background:s.done?"#10B981":s.active?"#6366F1":"var(--border)",display:"flex",alignItems:"center",justifyContent:"center",fontSize:12,color:s.done||s.active?"var(--card)":"var(--muted)",flexShrink:0,boxShadow:s.active?"0 0 0 4px rgba(99,102,241,.15)":"none"}}>
+              <div style={{width:28,height:28,borderRadius:8,background:s.done?"#10B981":s.active?"#F97316":"var(--border)",display:"flex",alignItems:"center",justifyContent:"center",fontSize:12,color:s.done||s.active?"var(--card)":"var(--muted)",flexShrink:0,boxShadow:s.active?"0 0 0 4px rgba(249,115,22,.15)":"none"}}>
                 {s.done?"✓":s.icon}
               </div>
               {i<STEPS.length-1&&<div style={{width:2,height:18,background:s.done?"#10B981":"var(--border)"}}/>}
@@ -123,7 +123,7 @@ function TrackingScr({onBack,go}){
             <div style={{flex:1}}>
               <div style={{fontSize:12,fontWeight:600}}>{item.qty > 1 ? `${item.qty}× ` : ""}{item.name}</div>
             </div>
-            <div style={{fontSize:12,fontWeight:700,color:"#6366F1"}}>{(item.price*item.qty).toLocaleString()} F</div>
+            <div style={{fontSize:12,fontWeight:700,color:"#F97316"}}>{(item.price*item.qty).toLocaleString()} F</div>
           </div>
         ))}
         <div style={{display:"flex",justifyContent:"space-between",paddingTop:8,borderTop:"1px solid var(--border)",marginTop:8}}>
@@ -132,7 +132,7 @@ function TrackingScr({onBack,go}){
         </div>
         <div style={{display:"flex",justifyContent:"space-between",paddingTop:6}}>
           <span style={{fontSize:14,fontWeight:700}}>Total</span>
-          <span style={{fontSize:14,fontWeight:700,color:"#6366F1"}}>{(sub+2500).toLocaleString()} FCFA</span>
+          <span style={{fontSize:14,fontWeight:700,color:"#F97316"}}>{(sub+2500).toLocaleString()} FCFA</span>
         </div>
       </div>
 

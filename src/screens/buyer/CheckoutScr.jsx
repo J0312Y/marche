@@ -34,7 +34,7 @@ function CheckoutScr({onBack,onDone,cart=[],appliedCoupon,setAppliedCoupon}){
         <div className="field-row"><div className="field"><label>Ville</label><input defaultValue="Brazzaville"/></div><div className="field"><label>Pays</label><input defaultValue="Congo 🇨🇬"/></div></div>
         <div style={{marginTop:12,fontSize:13,fontWeight:700,marginBottom:8}}>📅 Quand livrer ?</div>
         <div style={{display:"flex",gap:6,marginBottom:8}}>
-          {[["now","🚀 Maintenant"],["later","📅 Programmer"]].map(([k,l])=><button key={k} onClick={()=>setSchedule(k)} style={{flex:1,padding:10,borderRadius:12,border:schedule===k?"2px solid #6366F1":"1px solid var(--border)",background:schedule===k?"rgba(99,102,241,0.06)":"var(--card)",fontSize:12,fontWeight:schedule===k?700:500,color:schedule===k?"#6366F1":"var(--text)",cursor:"pointer",fontFamily:"inherit"}}>{l}</button>)}
+          {[["now","🚀 Maintenant"],["later","📅 Programmer"]].map(([k,l])=><button key={k} onClick={()=>setSchedule(k)} style={{flex:1,padding:10,borderRadius:12,border:schedule===k?"2px solid #F97316":"1px solid var(--border)",background:schedule===k?"rgba(249,115,22,0.06)":"var(--card)",fontSize:12,fontWeight:schedule===k?700:500,color:schedule===k?"#F97316":"var(--text)",cursor:"pointer",fontFamily:"inherit"}}>{l}</button>)}
         </div>
         {schedule==="later"&&<div className="field-row"><div className="field"><label>Date</label><input type="date" value={schedDate} onChange={e=>setSchedDate(e.target.value)}/></div><div className="field"><label>Créneau</label><Select value={schedTime} onChange={setSchedTime} options={["08:00-10:00","10:00-12:00","12:00-14:00","14:00-16:00","16:00-18:00","18:00-20:00"]}/></div></div>}
         <div style={{display:"flex",alignItems:"center",gap:8,marginTop:4}}><div className={`toggle ${saveAddr?"on":""}`} onClick={()=>setSaveAddr(!saveAddr)} style={{transform:"scale(.8)"}}/><span style={{fontSize:12,color:"var(--muted)"}}>Sauvegarder cette adresse</span></div></>}
@@ -44,11 +44,11 @@ function CheckoutScr({onBack,onDone,cart=[],appliedCoupon,setAppliedCoupon}){
         <div className="field" style={{marginTop:18}}><label>Numéro</label><input placeholder="+242 06X XXX XXX"/></div></>}
 
       {step===2&&<><h3 style={{fontSize:18,fontWeight:700,marginBottom:14}}>Résumé</h3>
-        <div className="confirm-card" style={{cursor:"pointer"}} onClick={()=>setStep(0)}><span className="cci">📍</span><div className="ccb"><small>Livraison {schedule==="later"?`· ${schedDate} ${schedTime}`:""}</small><p>Brazzaville, Congo 🇨🇬</p></div><span className="cce" style={{color:"#6366F1",fontWeight:600}}>✏️</span></div>
-        <div className="confirm-card" style={{cursor:"pointer"}} onClick={()=>setStep(1)}><span className="cci">📱</span><div className="ccb"><small>Paiement</small><p>{momos.find(m=>m.k===momo)?.n}</p></div><span className="cce" style={{color:"#6366F1",fontWeight:600}}>✏️</span></div>
+        <div className="confirm-card" style={{cursor:"pointer"}} onClick={()=>setStep(0)}><span className="cci">📍</span><div className="ccb"><small>Livraison {schedule==="later"?`· ${schedDate} ${schedTime}`:""}</small><p>Brazzaville, Congo 🇨🇬</p></div><span className="cce" style={{color:"#F97316",fontWeight:600}}>✏️</span></div>
+        <div className="confirm-card" style={{cursor:"pointer"}} onClick={()=>setStep(1)}><span className="cci">📱</span><div className="ccb"><small>Paiement</small><p>{momos.find(m=>m.k===momo)?.n}</p></div><span className="cce" style={{color:"#F97316",fontWeight:600}}>✏️</span></div>
 
         {/* Applied coupon */}
-        {appliedCoupon&&<div className="confirm-card" style={{background:"rgba(99,102,241,0.04)",border:"1px solid rgba(99,102,241,0.15)"}}><span className="cci">🏷️</span><div className="ccb"><small>Code promo</small><p style={{color:"#6366F1",fontWeight:600}}>{appliedCoupon.code} — {appliedCoupon.free?"Livraison gratuite":`-${appliedCoupon.discount}%`}</p></div></div>}
+        {appliedCoupon&&<div className="confirm-card" style={{background:"rgba(249,115,22,0.04)",border:"1px solid rgba(249,115,22,0.15)"}}><span className="cci">🏷️</span><div className="ccb"><small>Code promo</small><p style={{color:"#F97316",fontWeight:600}}>{appliedCoupon.code} — {appliedCoupon.free?"Livraison gratuite":`-${appliedCoupon.discount}%`}</p></div></div>}
 
         <div style={{marginTop:16}}>
           <div className="cs-row"><span>Sous-total</span><b>{fmt(sub)}</b></div>
@@ -65,7 +65,7 @@ function CheckoutScr({onBack,onDone,cart=[],appliedCoupon,setAppliedCoupon}){
     </div>
 
     {ok&&<div className="success-modal"><div className="success-box"><div className="si">✅</div><h2>Commande confirmée !</h2><p>Vérifiez votre téléphone pour le paiement.</p><div className="ref">#LMK-2026-0214</div>
-      {appliedCoupon&&<div style={{fontSize:12,color:"#6366F1",fontWeight:600,marginTop:8}}>🏷️ Code {appliedCoupon.code} appliqué</div>}
+      {appliedCoupon&&<div style={{fontSize:12,color:"#F97316",fontWeight:600,marginTop:8}}>🏷️ Code {appliedCoupon.code} appliqué</div>}
       <button className="btn-primary" onClick={onDone}>Retour à l'accueil</button></div></div>}
   </>);
 }

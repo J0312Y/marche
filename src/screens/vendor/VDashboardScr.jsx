@@ -64,7 +64,7 @@ function VDashboardScr({go}){
     <div style={{padding:16,background:"var(--card)",border:"1px solid var(--border)",borderRadius:18,marginBottom:14}}>
       <h4 style={{fontSize:14,fontWeight:700,marginBottom:4,display:"flex",justifyContent:"space-between",alignItems:"center"}}>
         {period==="today"?"Ventes aujourd'hui":period==="week"?"Ventes de la semaine":"Ventes du mois"}
-        <span style={{fontSize:12,color:"#6366F1",fontWeight:600,cursor:"pointer"}} onClick={()=>go("vStats")}>Voir tout →</span>
+        <span style={{fontSize:12,color:"#F97316",fontWeight:600,cursor:"pointer"}} onClick={()=>go("vStats")}>Voir tout →</span>
       </h4>
       <div style={{fontSize:11,color:"var(--muted)",marginBottom:12}}>
         Total: {fmt(chart.reduce((a,b)=>a+b,0))}
@@ -86,7 +86,7 @@ function VDashboardScr({go}){
           <div style={{fontSize:14,fontWeight:600}}>{p.name}</div>
           <div style={{fontSize:12,color:"var(--muted)"}}>{p.sold} vendus</div>
         </div>
-        <div style={{fontSize:13,fontWeight:700,color:"#6366F1"}}>{fmt(p.revenue)}</div>
+        <div style={{fontSize:13,fontWeight:700,color:"#F97316"}}>{fmt(p.revenue)}</div>
       </div>)}
     </div>
 

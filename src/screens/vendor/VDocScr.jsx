@@ -3,7 +3,7 @@
 function VDocScr({docKey,onBack}){
   const docs={
     guide:{
-      title:"Guide de démarrage",icon:"📘",color:"#6366F1",
+      title:"Guide de démarrage",icon:"📘",color:"#F97316",
       sections:[
         {title:"Introduction",content:"L'API Lamuka permet aux commerçants Enterprise d'intégrer leur établissement avec des systèmes externes : ERP, sites web, applications mobiles, CRM et outils d'inventaire."},
         {title:"Base URL",code:"https://api.lamuka.cg/v2"},
@@ -49,7 +49,7 @@ function VDocScr({docKey,onBack}){
       ]
     },
     webhooks:{
-      title:"Guide Webhooks",icon:"🔔",color:"#8B5CF6",
+      title:"Guide Webhooks",icon:"🔔",color:"#FB923C",
       sections:[
         {title:"Principe",content:"Les webhooks envoient des notifications HTTP POST en temps réel lorsqu'un événement se produit sur votre boutique. Vous recevez les données directement sur votre serveur."},
         {title:"Événements disponibles",code:"order.created      Nouvelle commande reçue\norder.updated      Statut commande modifié\norder.delivered    Commande livrée\npayment.received   Paiement confirmé\npayment.failed     Paiement échoué\nstock.low          Stock < seuil (5 par défaut)\nreview.created     Nouvel avis client\ndriver.assigned    Livreur assigné"},
@@ -69,7 +69,7 @@ function VDocScr({docKey,onBack}){
       ]
     },
     sdks:{
-      title:"SDKs & Exemples",icon:"🧩",color:"#6366F1",
+      title:"SDKs & Exemples",icon:"🧩",color:"#F97316",
       sections:[
         {title:"Node.js",code:"npm install @lamuka/sdk\n\nconst Lamuka = require('@lamuka/sdk');\nconst api = new Lamuka({\n  apiKey: 'lmk_live_ent_XXXX'\n});\n\n// Lister les produits\nconst products = await api.products.list({\n  shop: 's1', status: 'active'\n});\n\n// Créer un produit\nconst newProduct = await api.products.create({\n  name: 'Robe Wax',\n  price: 15000,\n  stock: 50\n});\n\n// Mettre à jour une commande\nawait api.orders.updateStatus(\n  'ord_0889', 'preparing'\n);"},
         {title:"Python",code:"pip install lamuka-sdk\n\nfrom lamuka import LamukaClient\n\nclient = LamukaClient(\n  api_key='lmk_live_ent_XXXX'\n)\n\n# Lister les commandes\norders = client.orders.list(\n  status='new',\n  shop_id='s1'\n)\n\n# Solde wallet\nwallet = client.wallet.balance()\nprint(f\"Solde: {wallet.balance} FCFA\")\n\n# Retrait\nclient.wallet.withdraw(\n  amount=100000,\n  method='mtn_momo',\n  phone='+242064663469'\n)"},

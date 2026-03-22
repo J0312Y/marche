@@ -22,7 +22,7 @@ function DrSettingsScr({onBack,go}){
       </div>
       <div className="setting-group"><div className="setting-label">Sécurité</div>
         <div className="setting-item" onClick={()=>go("password")} style={{cursor:"pointer"}}><span className="si-i">🔒</span><span className="si-t">Changer mot de passe</span><span className="mi-c">›</span></div>
-        <div className="setting-item"><span className="si-i">🆔</span><span className="si-t">Vérification d'identité</span><span style={{padding:"3px 8px",borderRadius:6,background:"rgba(16,185,129,0.1)",color:"#10B981",fontSize:11,fontWeight:600}}>Vérifié</span></div>
+        <div className="setting-item"><span className="si-i">🆔</span><span className="si-t">Vérification d'identité</span><span style={{padding:"3px 8px",borderRadius:6,background:"rgba(249,115,22,0.1)",color:"#F97316",fontSize:11,fontWeight:600}}>Vérifié</span></div>
       </div>
       <div className="setting-group"><div className="setting-label">Légal</div>
         <div className="setting-item" onClick={()=>go("terms")} style={{cursor:"pointer"}}><span className="si-i">📋</span><span className="si-t">Conditions d'utilisation</span><span className="mi-c">›</span></div>

@@ -8,7 +8,7 @@ function VWalletScr({go,onBack}){
   if(loading||!data) return <div className="scr" style={{padding:16}}><div className="appbar" style={{padding:0,marginBottom:12}}><button onClick={onBack}>←</button><h2>Portefeuille</h2><div style={{width:38}}/></div><SkeletonWallet/></div>;
   const { balance, pending, transactions=[] } = data;
   return(<div className="scr" style={{padding:16}}><div className="appbar" style={{padding:0,marginBottom:12}}><button onClick={onBack}>←</button><h2>Portefeuille</h2><div style={{width:38}}/></div>
-    <div className="wallet-bal" style={{textAlign:"center",padding:20,background:"linear-gradient(135deg,#6366F1,#4F46E5)",borderRadius:20,color:"#fff",marginBottom:12}}>
+    <div className="wallet-bal" style={{textAlign:"center",padding:20,background:"linear-gradient(135deg,#F97316,#EA580C)",borderRadius:20,color:"#fff",marginBottom:12}}>
       <div style={{fontSize:12,opacity:.8}}>Solde disponible</div>
       <div style={{fontSize:32,fontWeight:800,margin:"6px 0"}}>{fmt(balance)}</div>
       {pending>0&&<div style={{fontSize:12,opacity:.7}}>⏳ {fmt(pending)} en attente</div>}

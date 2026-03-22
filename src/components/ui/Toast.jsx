@@ -16,7 +16,7 @@ const STYLES = {
     padding: '12px 16px', borderRadius: 12, display: 'flex', alignItems: 'center', gap: 8,
     fontSize: 13, fontWeight: 600, pointerEvents: 'auto', animation: 'slideDown .3s ease',
     boxShadow: '0 4px 20px rgba(0,0,0,.15)',
-    background: type === 'success' ? '#10B981' : type === 'error' ? '#EF4444' : '#6366F1',
+    background: type === 'success' ? '#10B981' : type === 'error' ? '#EF4444' : '#F97316',
     color: '#fff',
   }),
 };

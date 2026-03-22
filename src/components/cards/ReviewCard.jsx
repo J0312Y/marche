@@ -5,13 +5,13 @@
  */
 function ReviewCard({ review: r, isOwn = false }) {
   return (
-    <div className="review-card" style={isOwn ? { border: "2px solid rgba(99,102,241,0.2)", background: "rgba(99,102,241,0.02)" } : {}}>
+    <div className="review-card" style={isOwn ? { border: "2px solid rgba(249,115,22,0.2)", background: "rgba(249,115,22,0.02)" } : {}}>
       <div className="review-top">
         <div className="rav">{r.avatar}</div>
         <div style={{ flex: 1 }}>
           <h4 style={{ fontSize: 14, fontWeight: 600 }}>
             {r.name}
-            {isOwn && <span style={{ fontSize: 10, color: "#6366F1", marginLeft: 6, fontWeight: 700 }}>VOUS</span>}
+            {isOwn && <span style={{ fontSize: 10, color: "#F97316", marginLeft: 6, fontWeight: 700 }}>VOUS</span>}
           </h4>
         </div>
         <span className="rd">{r.date}</span>

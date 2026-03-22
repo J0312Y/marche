@@ -20,7 +20,7 @@ function GroupBuyScr({ onBack, go }) {
   return (<div className="scr" style={{ padding: 16, paddingBottom: 20 }}>
     <div className="appbar" style={{ padding: 0, marginBottom: 10 }}><button onClick={onBack}>←</button><h2>🤝 Achats Groupés</h2><div style={{ width: 38 }} /></div>
 
-    <div style={{ padding: 14, background: "linear-gradient(135deg,rgba(99,102,241,0.06),rgba(168,85,247,0.06))", border: "1px solid rgba(99,102,241,0.12)", borderRadius: 16, marginBottom: 14 }}>
+    <div style={{ padding: 14, background: "linear-gradient(135deg,rgba(249,115,22,0.06),rgba(251,146,60,0.06))", border: "1px solid rgba(249,115,22,0.12)", borderRadius: 16, marginBottom: 14 }}>
       <div style={{ fontSize: 14, fontWeight: 700, marginBottom: 4 }}>💡 Comment ça marche ?</div>
       <div style={{ fontSize: 12, color: "var(--sub)", lineHeight: 1.6 }}>Rejoignez un groupe d'achat pour obtenir des prix réduits. Plus on est nombreux, moins c'est cher ! Le prix groupé s'applique dès que le nombre minimum est atteint.</div>
     </div>
@@ -54,14 +54,14 @@ function GroupBuyScr({ onBack, go }) {
             <span style={{ color: "var(--muted)" }}>⏰ {d.ends}</span>
           </div>
           <div style={{ height: 6, background: "var(--border)", borderRadius: 3, overflow: "hidden" }}>
-            <div style={{ width: `${pct}%`, height: "100%", background: isFull ? "#10B981" : "#6366F1", borderRadius: 3, transition: "width .5s" }} />
+            <div style={{ width: `${pct}%`, height: "100%", background: isFull ? "#10B981" : "#F97316", borderRadius: 3, transition: "width .5s" }} />
           </div>
         </div>
 
         {/* Participants */}
         <div style={{ display: "flex", alignItems: "center", gap: -4, marginBottom: 10 }}>
           {Array(Math.min(d.joined, 5)).fill(0).map((_, i) => (
-            <div key={i} style={{ width: 28, height: 28, borderRadius: "50%", background: ["#6366F1", "#10B981", "#F59E0B", "#EF4444", "#EC4899"][i % 5], display: "flex", alignItems: "center", justifyContent: "center", fontSize: 11, color: "#fff", fontWeight: 700, border: "2px solid var(--card)", marginLeft: i > 0 ? -6 : 0 }}>{String.fromCharCode(65 + i)}</div>
+            <div key={i} style={{ width: 28, height: 28, borderRadius: "50%", background: ["#F97316", "#10B981", "#F59E0B", "#EF4444", "#EC4899"][i % 5], display: "flex", alignItems: "center", justifyContent: "center", fontSize: 11, color: "#fff", fontWeight: 700, border: "2px solid var(--card)", marginLeft: i > 0 ? -6 : 0 }}>{String.fromCharCode(65 + i)}</div>
           ))}
           {d.joined > 5 && <span style={{ fontSize: 11, color: "var(--muted)", marginLeft: 4 }}>+{d.joined - 5}</span>}
           <span style={{ flex: 1 }} />
@@ -74,11 +74,11 @@ function GroupBuyScr({ onBack, go }) {
             🛍️ Commander au prix groupé — {fmt(d.groupPrice)}
           </button>
         ) : didJoin ? (
-          <div style={{ width: "100%", padding: 12, borderRadius: 12, background: "rgba(99,102,241,0.06)", border: "1px solid rgba(99,102,241,0.15)", textAlign: "center", fontSize: 13, fontWeight: 600, color: "#6366F1" }}>
+          <div style={{ width: "100%", padding: 12, borderRadius: 12, background: "rgba(249,115,22,0.06)", border: "1px solid rgba(249,115,22,0.15)", textAlign: "center", fontSize: 13, fontWeight: 600, color: "#F97316" }}>
             ✅ Vous participez — en attente de {d.minPeople - d.joined} personnes
           </div>
         ) : (
-          <button onClick={() => join(d)} style={{ width: "100%", padding: 12, borderRadius: 12, border: "none", background: "#6366F1", color: "#fff", fontSize: 13, fontWeight: 700, cursor: "pointer", fontFamily: "inherit" }}>
+          <button onClick={() => join(d)} style={{ width: "100%", padding: 12, borderRadius: 12, border: "none", background: "#F97316", color: "#fff", fontSize: 13, fontWeight: 700, cursor: "pointer", fontFamily: "inherit" }}>
             🤝 Rejoindre · Économisez {fmt(d.price - d.groupPrice)}
           </button>
         )}

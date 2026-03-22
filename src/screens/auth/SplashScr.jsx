@@ -4,7 +4,7 @@ function SplashScr({onDone}){
   const [show,setShow]=useState(false);
   useEffect(()=>{setTimeout(()=>setShow(true),100);const t=setTimeout(onDone,2500);return()=>clearTimeout(t)},[]);
   return(
-    <div style={{display:"flex",flexDirection:"column",alignItems:"center",justifyContent:"center",height:"100%",background:"linear-gradient(135deg,#6366F1 0%,#8B5CF6 40%,#A855F7 100%)",color:"#fff",textAlign:"center",position:"relative",overflow:"hidden"}}>
+    <div style={{display:"flex",flexDirection:"column",alignItems:"center",justifyContent:"center",height:"100%",background:"linear-gradient(135deg,#F97316 0%,#FB923C 40%,#FB923C 100%)",color:"#fff",textAlign:"center",position:"relative",overflow:"hidden"}}>
       {/* Background decorations */}
       <div style={{position:"absolute",top:-60,right:-60,width:200,height:200,borderRadius:"50%",background:"rgba(255,255,255,.06)"}}/>
       <div style={{position:"absolute",bottom:-40,left:-40,width:160,height:160,borderRadius:"50%",background:"rgba(255,255,255,.04)"}}/>

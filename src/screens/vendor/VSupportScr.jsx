@@ -139,13 +139,13 @@ function VSupportScr({go,onBack,vendorPlan}){
     {/* Tabs */}
     {!search&&<>
       <div style={{display:"flex",gap:0,margin:"0 20px 14px",background:"var(--light)",borderRadius:14,padding:4}}>
-        {["📚 Guides","❓ FAQ","📞 Contact"].map((t,i)=><button key={t} onClick={()=>setTab(i)} style={{flex:1,padding:"10px 4px",borderRadius:11,border:"none",fontSize:11,fontWeight:600,cursor:"pointer",fontFamily:"inherit",background:tab===i?"#6366F1":"transparent",color:tab===i?"var(--card)":"var(--muted)"}}>{t}</button>)}
+        {["📚 Guides","❓ FAQ","📞 Contact"].map((t,i)=><button key={t} onClick={()=>setTab(i)} style={{flex:1,padding:"10px 4px",borderRadius:11,border:"none",fontSize:11,fontWeight:600,cursor:"pointer",fontFamily:"inherit",background:tab===i?"#F97316":"transparent",color:tab===i?"var(--card)":"var(--muted)"}}>{t}</button>)}
       </div>
 
       {/* Tab 0: Guides */}
       {tab===0&&<div style={{padding:"0 16px 20px"}}>
         {guides.map(g=><div key={g.id}>
-          <div style={{padding:14,background:"var(--card)",border:guideOpen===g.id?"2px solid #6366F1":"1px solid var(--border)",borderRadius:14,marginBottom:10,cursor:"pointer"}} onClick={()=>setGuideOpen(guideOpen===g.id?null:g.id)}>
+          <div style={{padding:14,background:"var(--card)",border:guideOpen===g.id?"2px solid #F97316":"1px solid var(--border)",borderRadius:14,marginBottom:10,cursor:"pointer"}} onClick={()=>setGuideOpen(guideOpen===g.id?null:g.id)}>
             <div style={{display:"flex",alignItems:"center",gap:10}}>
               <span style={{fontSize:22}}>{g.icon}</span>
               <div style={{flex:1}}>
@@ -156,9 +156,9 @@ function VSupportScr({go,onBack,vendorPlan}){
             </div>
           </div>
           {guideOpen===g.id&&<div style={{padding:"0 0 10px 0",marginTop:-6}}>
-            {g.sections.map((s,i)=><div key={i} style={{padding:14,marginLeft:20,borderLeft:"2px solid #6366F1",marginBottom:0,background:i%2===0?"var(--bg)":"var(--card)"}}>
+            {g.sections.map((s,i)=><div key={i} style={{padding:14,marginLeft:20,borderLeft:"2px solid #F97316",marginBottom:0,background:i%2===0?"var(--bg)":"var(--card)"}}>
               <div style={{display:"flex",alignItems:"center",gap:6,marginBottom:6}}>
-                <span style={{width:20,height:20,borderRadius:6,background:"#6366F1",color:"#fff",display:"inline-flex",alignItems:"center",justifyContent:"center",fontSize:10,fontWeight:700,flexShrink:0}}>{i+1}</span>
+                <span style={{width:20,height:20,borderRadius:6,background:"#F97316",color:"#fff",display:"inline-flex",alignItems:"center",justifyContent:"center",fontSize:10,fontWeight:700,flexShrink:0}}>{i+1}</span>
                 <h4 style={{fontSize:13,fontWeight:700}}>{s.title}</h4>
               </div>
               <p style={{fontSize:12,color:"var(--sub)",lineHeight:1.7,whiteSpace:"pre-line"}}>{s.content}</p>
@@ -176,10 +176,10 @@ function VSupportScr({go,onBack,vendorPlan}){
       {tab===1&&<div style={{padding:"0 16px 20px"}}>
         {faqCats.map((cat,ci)=><div key={cat.cat} style={{marginBottom:12}}>
           <div style={{display:"flex",alignItems:"center",gap:6,marginBottom:8}}><span style={{fontSize:16}}>{cat.icon}</span><h4 style={{fontSize:14,fontWeight:700}}>{cat.cat}</h4><span style={{fontSize:11,color:"var(--muted)"}}>({cat.items.length})</span></div>
-          {cat.items.map((f,fi)=>{const k=`${ci}-${fi}`;return(<div key={k} style={{padding:12,background:"var(--card)",border:open===k?"1px solid #6366F1":"1px solid var(--border)",borderRadius:12,marginBottom:6,cursor:"pointer"}} onClick={()=>setOpen(open===k?null:k)}>
+          {cat.items.map((f,fi)=>{const k=`${ci}-${fi}`;return(<div key={k} style={{padding:12,background:"var(--card)",border:open===k?"1px solid #F97316":"1px solid var(--border)",borderRadius:12,marginBottom:6,cursor:"pointer"}} onClick={()=>setOpen(open===k?null:k)}>
             <div style={{display:"flex",alignItems:"center",justifyContent:"space-between"}}>
               <span style={{fontSize:13,fontWeight:600,flex:1}}>{f.q}</span>
-              <span style={{fontSize:14,color:"#6366F1",transform:open===k?"rotate(45deg)":"",transition:"transform .2s",flexShrink:0,marginLeft:8}}>+</span>
+              <span style={{fontSize:14,color:"#F97316",transform:open===k?"rotate(45deg)":"",transition:"transform .2s",flexShrink:0,marginLeft:8}}>+</span>
             </div>
             {open===k&&<div style={{fontSize:12,color:"var(--sub)",marginTop:8,lineHeight:1.7,paddingTop:8,borderTop:"1px solid var(--border)",whiteSpace:"pre-line"}}>{f.a}</div>}
           </div>)})}
@@ -188,7 +188,7 @@ function VSupportScr({go,onBack,vendorPlan}){
 
       {/* Tab 2: Contact */}
       {tab===2&&<div style={{padding:"0 16px 20px"}}>
-        {isEnt&&<div style={{padding:16,background:"linear-gradient(135deg,#6366F1,#A855F7)",borderRadius:16,marginBottom:14,color:"#fff"}}>
+        {isEnt&&<div style={{padding:16,background:"linear-gradient(135deg,#F97316,#FB923C)",borderRadius:16,marginBottom:14,color:"#fff"}}>
           <h4 style={{fontSize:15,fontWeight:700,marginBottom:6}}>👤 Votre manager dédié</h4>
           <div style={{fontSize:13,marginBottom:4}}>Sophie Mabika</div>
           <div style={{fontSize:11,opacity:.8,lineHeight:1.6}}>📧 sophie.mabika@lamuka.cg{"\n"}📞 +242 06X XXX XXX{"\n"}💬 WhatsApp disponible{"\n"}⏱️ Lun-Ven 8h-18h · Réponse sous 2h</div>
@@ -222,7 +222,7 @@ function VSupportScr({go,onBack,vendorPlan}){
               <div className="field"><label>Sujet</label><input placeholder="Décrivez brièvement le problème"/></div>
               <div className="field"><label>Message</label><textarea rows={3} value={ticketMsg} onChange={e=>setTicketMsg(e.target.value)} placeholder="Donnez-nous tous les détails pour vous aider au mieux..."/></div>
               <div className="field"><label>Pièce jointe (optionnel)</label><div style={{padding:16,border:"1px dashed #E8E6E1",borderRadius:12,textAlign:"center",color:"var(--muted)",fontSize:12,cursor:"pointer"}}>📎 Cliquez pour joindre un fichier (capture d'écran, document...)</div></div>
-              <button className="btn-primary" style={{background:ticketMsg?"#6366F1":"var(--border)",color:ticketMsg?"var(--card)":"var(--muted)"}} onClick={()=>{if(ticketMsg)setContactDone(true)}}>📤 Envoyer le ticket{isEnt?" (prioritaire)":""}</button>
+              <button className="btn-primary" style={{background:ticketMsg?"#F97316":"var(--border)",color:ticketMsg?"var(--card)":"var(--muted)"}} onClick={()=>{if(ticketMsg)setContactDone(true)}}>📤 Envoyer le ticket{isEnt?" (prioritaire)":""}</button>
             </>
           }
         </div>

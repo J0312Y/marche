@@ -92,7 +92,7 @@ function DetailScr({product:p,onBack,onAddCart,go,favs,toggleFav,isFav}){
         {/* Price */}
         <div className="det-price">
           {vp?<>
-            <span className="dp" style={{color:"#6366F1"}}>{fmt(vp.promoPrice)}</span>
+            <span className="dp" style={{color:"#F97316"}}>{fmt(vp.promoPrice)}</span>
             <span className="dpo">{fmt(p.price)}</span>
             <span style={{fontSize:12,color:"#F59E0B",fontWeight:700,marginLeft:8}}>-{vp.promoDiscount}%</span>
           </>:<>
@@ -103,7 +103,7 @@ function DetailScr({product:p,onBack,onAddCart,go,favs,toggleFav,isFav}){
         </div>
 
         {/* Vendor promo banner */}
-        {vp&&<div style={{display:"flex",alignItems:"center",gap:10,padding:"10px 14px",background:"rgba(99,102,241,0.04)",borderRadius:12,marginBottom:12,border:"1px solid rgba(99,102,241,0.12)"}}>
+        {vp&&<div style={{display:"flex",alignItems:"center",gap:10,padding:"10px 14px",background:"rgba(249,115,22,0.04)",borderRadius:12,marginBottom:12,border:"1px solid rgba(249,115,22,0.12)"}}>
           <span style={{fontSize:20}}>🏷️</span>
           <div style={{flex:1}}>
             <div style={{fontSize:13,fontWeight:700,color:"#F59E0B"}}>{vp.promoName}</div>
@@ -115,10 +115,10 @@ function DetailScr({product:p,onBack,onAddCart,go,favs,toggleFav,isFav}){
         {p.tags.length>0&&<div className="det-tags">{p.tags.map(t=><span key={t}>{t}</span>)}</div>}
 
         {/* Delivery estimate */}
-        <div style={{display:"flex",alignItems:"center",gap:8,padding:"10px 14px",background:"rgba(99,102,241,0.04)",borderRadius:12,marginBottom:10,border:"1px solid rgba(99,102,241,0.12)"}}>
+        <div style={{display:"flex",alignItems:"center",gap:8,padding:"10px 14px",background:"rgba(249,115,22,0.04)",borderRadius:12,marginBottom:10,border:"1px solid rgba(249,115,22,0.12)"}}>
           <span style={{fontSize:18}}>🚚</span>
           <div style={{flex:1}}>
-            <div style={{fontSize:12,fontWeight:700,color:"#6366F1"}}>Livraison estimée : {p.eta||"1-3 jours"}</div>
+            <div style={{fontSize:12,fontWeight:700,color:"#F97316"}}>Livraison estimée : {p.eta||"1-3 jours"}</div>
             <div style={{fontSize:10,color:"var(--muted)"}}>À Brazzaville · {p.type==="restaurant"||p.type==="patisserie"?"Préparation incluse":"Expédition sous 24h"}</div>
           </div>
         </div>
@@ -127,7 +127,7 @@ function DetailScr({product:p,onBack,onAddCart,go,favs,toggleFav,isFav}){
         {p.sizes&&<div style={{marginBottom:10}}>
           <div style={{fontSize:12,fontWeight:700,marginBottom:6}}>Taille</div>
           <div style={{display:"flex",gap:6,flexWrap:"wrap"}}>
-            {p.sizes.map(s=><button key={s} onClick={()=>setSelSize(s)} style={{padding:"6px 16px",borderRadius:10,border:selSize===s?"2px solid #6366F1":"1px solid var(--border)",background:selSize===s?"rgba(99,102,241,0.06)":"var(--card)",color:selSize===s?"#6366F1":"var(--text)",fontSize:12,fontWeight:600,cursor:"pointer",fontFamily:"inherit"}}>{s}</button>)}
+            {p.sizes.map(s=><button key={s} onClick={()=>setSelSize(s)} style={{padding:"6px 16px",borderRadius:10,border:selSize===s?"2px solid #F97316":"1px solid var(--border)",background:selSize===s?"rgba(249,115,22,0.06)":"var(--card)",color:selSize===s?"#F97316":"var(--text)",fontSize:12,fontWeight:600,cursor:"pointer",fontFamily:"inherit"}}>{s}</button>)}
           </div>
         </div>}
 
@@ -135,7 +135,7 @@ function DetailScr({product:p,onBack,onAddCart,go,favs,toggleFav,isFav}){
         {p.colors&&<div style={{marginBottom:10}}>
           <div style={{fontSize:12,fontWeight:700,marginBottom:6}}>Couleur : <span style={{fontWeight:500,color:"var(--muted)"}}>{selColor}</span></div>
           <div style={{display:"flex",gap:6,flexWrap:"wrap"}}>
-            {p.colors.map(c=><button key={c} onClick={()=>setSelColor(c)} style={{padding:"6px 14px",borderRadius:10,border:selColor===c?"2px solid #6366F1":"1px solid var(--border)",background:selColor===c?"rgba(99,102,241,0.06)":"var(--card)",color:selColor===c?"#6366F1":"var(--text)",fontSize:11,fontWeight:600,cursor:"pointer",fontFamily:"inherit"}}>{c}</button>)}
+            {p.colors.map(c=><button key={c} onClick={()=>setSelColor(c)} style={{padding:"6px 14px",borderRadius:10,border:selColor===c?"2px solid #F97316":"1px solid var(--border)",background:selColor===c?"rgba(249,115,22,0.06)":"var(--card)",color:selColor===c?"#F97316":"var(--text)",fontSize:11,fontWeight:600,cursor:"pointer",fontFamily:"inherit"}}>{c}</button>)}
           </div>
         </div>}
 
@@ -208,7 +208,7 @@ function DetailScr({product:p,onBack,onAddCart,go,favs,toggleFav,isFav}){
               <h4>Comparer ce produit</h4>
               <p>Voir côte à côte avec un autre</p>
             </div>
-            <span style={{color:"#6366F1",fontSize:14}}>→</span>
+            <span style={{color:"#F97316",fontSize:14}}>→</span>
           </div>
           <div className="det-info" onClick={()=>go("chatVendor",{vendorName:p.vendor,vendorAvatar:p.va})}>
             <span className="dii">💬</span>
@@ -216,7 +216,7 @@ function DetailScr({product:p,onBack,onAddCart,go,favs,toggleFav,isFav}){
               <h4>Contacter le vendeur</h4>
               <p>Poser une question sur ce produit</p>
             </div>
-            <span style={{color:"#6366F1",fontSize:14}}>→</span>
+            <span style={{color:"#F97316",fontSize:14}}>→</span>
           </div>
         </div>}
 
@@ -226,7 +226,7 @@ function DetailScr({product:p,onBack,onAddCart,go,favs,toggleFav,isFav}){
             <div key={i} style={{padding:12,background:"var(--card)",border:"1px solid var(--border)",borderRadius:12,marginBottom:8}}>
               <div style={{fontSize:12,fontWeight:700,marginBottom:6}}>❓ {qa.q}</div>
               <div style={{fontSize:12,color:"var(--sub)",lineHeight:1.5,padding:"8px 10px",background:"var(--light)",borderRadius:8}}>
-                <span style={{fontSize:10,color:"#6366F1",fontWeight:600}}>↩️ {qa.by}</span> · <span style={{fontSize:10,color:"var(--muted)"}}>{qa.date}</span>
+                <span style={{fontSize:10,color:"#F97316",fontWeight:600}}>↩️ {qa.by}</span> · <span style={{fontSize:10,color:"var(--muted)"}}>{qa.date}</span>
                 <div style={{marginTop:3}}>{qa.a}</div>
               </div>
             </div>
@@ -234,16 +234,16 @@ function DetailScr({product:p,onBack,onAddCart,go,favs,toggleFav,isFav}){
           <div style={{marginTop:8}}>
             <div style={{display:"flex",gap:8}}>
               <input value={qaText} onChange={e=>setQaText(e.target.value)} placeholder="Poser une question..." style={{flex:1,padding:10,borderRadius:12,border:"1px solid var(--border)",background:"var(--light)",fontSize:12,fontFamily:"inherit",outline:"none",color:"var(--text)"}}/>
-              <button onClick={()=>{if(qaText.trim()){setQas(prev=>[...prev,{q:qaText,a:"",by:"",date:"Maintenant"}]);setQaText("");toast.success("Question envoyée au vendeur ✅")}}} style={{padding:"0 14px",borderRadius:12,border:"none",background:"#6366F1",color:"#fff",fontSize:12,fontWeight:600,cursor:"pointer",fontFamily:"inherit"}}>Envoyer</button>
+              <button onClick={()=>{if(qaText.trim()){setQas(prev=>[...prev,{q:qaText,a:"",by:"",date:"Maintenant"}]);setQaText("");toast.success("Question envoyée au vendeur ✅")}}} style={{padding:"0 14px",borderRadius:12,border:"none",background:"#F97316",color:"#fff",fontSize:12,fontWeight:600,cursor:"pointer",fontFamily:"inherit"}}>Envoyer</button>
             </div>
           </div>
         </div>}
 
         {/* Vendor card */}
         <div onClick={()=>go("vendor",{id:p.vendorId,name:p.vendor})} style={{display:"flex",alignItems:"center",gap:12,padding:14,background:"var(--card)",borderRadius:14,border:"1px solid var(--border)",marginBottom:12,cursor:"pointer"}}>
-          <div style={{width:44,height:44,borderRadius:12,background:"linear-gradient(135deg,#6366F1,#A855F7)",display:"flex",alignItems:"center",justifyContent:"center",fontSize:20,color:"#fff"}}>{p.va}</div>
+          <div style={{width:44,height:44,borderRadius:12,background:"linear-gradient(135deg,#F97316,#FB923C)",display:"flex",alignItems:"center",justifyContent:"center",fontSize:20,color:"#fff"}}>{p.va}</div>
           <div style={{flex:1}}>
-            <div style={{fontSize:14,fontWeight:700}}>{p.vendor} <span style={{color:"#6366F1"}}>✓</span></div>
+            <div style={{fontSize:14,fontWeight:700}}>{p.vendor} <span style={{color:"#F97316"}}>✓</span></div>
             <div style={{fontSize:11,color:"var(--muted)"}}>Voir la boutique · Tous les articles</div>
           </div>
           <span style={{color:"var(--muted)",fontSize:18}}>›</span>

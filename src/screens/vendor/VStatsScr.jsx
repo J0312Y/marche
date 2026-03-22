@@ -81,7 +81,7 @@ function VStatsScr({onBack}){
     <div style={{padding:16,background:"var(--card)",border:"1px solid var(--border)",borderRadius:18,marginBottom:14}}>
       <h4 style={{fontSize:14,fontWeight:700,marginBottom:14}}>📊 Performance</h4>
       {[
-        {label:"Taux de conversion",val:"3.2%",pct:32,color:"#6366F1"},
+        {label:"Taux de conversion",val:"3.2%",pct:32,color:"#F97316"},
         {label:"Panier moyen",val:fmt(Math.round((s?.revenue||0)/Math.max(s?.orders||1,1))),pct:65,color:"#10B981"},
         {label:"Satisfaction client",val:"4.6/5",pct:92,color:"#F59E0B"},
         {label:"Taux de retour",val:"2.1%",pct:21,color:"#EF4444"},
@@ -105,7 +105,7 @@ function VStatsScr({onBack}){
           <div style={{fontSize:14,fontWeight:600}}>{p.name}</div>
           <div style={{fontSize:12,color:"var(--muted)"}}>{p.sold} vendus</div>
         </div>
-        <div style={{fontSize:13,fontWeight:700,color:"#6366F1"}}>{fmt(p.revenue)}</div>
+        <div style={{fontSize:13,fontWeight:700,color:"#F97316"}}>{fmt(p.revenue)}</div>
       </div>)}
     </div>
 

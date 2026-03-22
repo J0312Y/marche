@@ -178,7 +178,7 @@ function VProductFormScr({product:p,onBack,shopType="boutique"}){
       <h2 style={{fontSize:20,fontWeight:700,marginBottom:8}}>{isEdit?"Article modifié !":"Article ajouté !"}</h2>
       <p style={{fontSize:13,color:"var(--muted)"}}>{name} — {Number(price).toLocaleString()} FCFA</p>
       {articleVariants.filter(v=>v.values.length>0).length>0&&(
-        <p style={{fontSize:12,color:"#6366F1",marginTop:4}}>
+        <p style={{fontSize:12,color:"#F97316",marginTop:4}}>
           {articleVariants.filter(v=>v.values.length>0).map(v=>`${v.values.length} ${v.label.toLowerCase()}`).join(" · ")}
         </p>
       )}
@@ -192,22 +192,22 @@ function VProductFormScr({product:p,onBack,shopType="boutique"}){
     {/* ═══ PHOTOS ═══ */}
     <div style={{display:"flex",alignItems:"center",justifyContent:"space-between",marginBottom:10}}>
       <div style={{fontSize:14,fontWeight:700}}>Photos <span style={{fontSize:11,fontWeight:500,color:errors.photos?"#EF4444":"var(--muted)"}}>({photos.length}/6){errors.photos?" *":""}</span></div>
-      <button onClick={()=>setShowGuide(true)} style={{padding:"4px 10px",borderRadius:8,border:"1px solid rgba(99,102,241,0.2)",background:"rgba(99,102,241,0.04)",color:"#6366F1",fontSize:11,fontWeight:600,cursor:"pointer",fontFamily:"inherit",display:"flex",alignItems:"center",gap:4}}>📸 Guide photo</button>
+      <button onClick={()=>setShowGuide(true)} style={{padding:"4px 10px",borderRadius:8,border:"1px solid rgba(249,115,22,0.2)",background:"rgba(249,115,22,0.04)",color:"#F97316",fontSize:11,fontWeight:600,cursor:"pointer",fontFamily:"inherit",display:"flex",alignItems:"center",gap:4}}>📸 Guide photo</button>
     </div>
     {errMsg("photos")}
 
     <div style={{display:"flex",gap:10,marginBottom:12,overflowX:"auto",paddingBottom:4}}>
       {photos.map((ph,i)=>(
-        <div key={i} onClick={()=>setEditingIdx(editingIdx===i?null:i)} style={{width:80,height:80,borderRadius:14,overflow:"hidden",position:"relative",flexShrink:0,cursor:"pointer",border:editingIdx===i?"2px solid #6366F1":"1px solid var(--border)",boxShadow:editingIdx===i?"0 0 0 3px rgba(99,102,241,0.15)":"none"}}>
+        <div key={i} onClick={()=>setEditingIdx(editingIdx===i?null:i)} style={{width:80,height:80,borderRadius:14,overflow:"hidden",position:"relative",flexShrink:0,cursor:"pointer",border:editingIdx===i?"2px solid #F97316":"1px solid var(--border)",boxShadow:editingIdx===i?"0 0 0 3px rgba(249,115,22,0.15)":"none"}}>
           {ph.url?<img src={ph.url} style={{width:"100%",height:"100%",objectFit:"cover"}} alt=""/>:<Img emoji={ph.emoji} style={{width:"100%",height:"100%"}} fit="cover"/>}
           <button onClick={e=>{e.stopPropagation();removePhoto(i)}} style={{position:"absolute",top:-2,right:-2,width:20,height:20,borderRadius:"50%",background:"#EF4444",color:"#fff",border:"none",fontSize:10,cursor:"pointer",display:"flex",alignItems:"center",justifyContent:"center"}}>✕</button>
           {ph.analysis&&<div style={{position:"absolute",bottom:4,left:4,width:8,height:8,borderRadius:4,background:ph.analysis.color,boxShadow:`0 0 4px ${ph.analysis.color}`}}/>}
-          {i===0&&<div style={{position:"absolute",bottom:4,right:4,padding:"1px 5px",borderRadius:4,background:"#6366F1",color:"#fff",fontSize:8,fontWeight:700}}>MAIN</div>}
+          {i===0&&<div style={{position:"absolute",bottom:4,right:4,padding:"1px 5px",borderRadius:4,background:"#F97316",color:"#fff",fontSize:8,fontWeight:700}}>MAIN</div>}
         </div>
       ))}
       {photos.length<6&&(
         <div onClick={()=>fileRef.current?.click()} style={{width:80,height:80,borderRadius:14,border:errors.photos?"2px dashed #EF4444":"2px dashed #E8E6E1",display:"flex",flexDirection:"column",alignItems:"center",justifyContent:"center",cursor:"pointer",flexShrink:0,background:"var(--bg)"}}>
-          {processing?<div style={{fontSize:11,color:"#6366F1",fontWeight:600}}>⏳</div>:<><div style={{fontSize:22,color:"var(--muted)",lineHeight:1}}>+</div><div style={{fontSize:9,color:"var(--muted)",marginTop:2}}>Ajouter</div></>}
+          {processing?<div style={{fontSize:11,color:"#F97316",fontWeight:600}}>⏳</div>:<><div style={{fontSize:22,color:"var(--muted)",lineHeight:1}}>+</div><div style={{fontSize:9,color:"var(--muted)",marginTop:2}}>Ajouter</div></>}
         </div>
       )}
     </div>
@@ -234,7 +234,7 @@ function VProductFormScr({product:p,onBack,shopType="boutique"}){
       <div style={{display:"flex",gap:8}}>
         <button disabled={enhancing||!editPhoto.file} onClick={()=>doEnhance(editingIdx,{brightness:15})} style={{flex:1,padding:"8px 0",borderRadius:10,border:"1px solid var(--border)",background:"var(--card)",fontSize:11,fontWeight:600,cursor:"pointer",fontFamily:"inherit",opacity:enhancing?.5:1}}>☀️ Éclaircir</button>
         <button disabled={enhancing||!editPhoto.file} onClick={()=>doEnhance(editingIdx,{contrast:15})} style={{flex:1,padding:"8px 0",borderRadius:10,border:"1px solid var(--border)",background:"var(--card)",fontSize:11,fontWeight:600,cursor:"pointer",fontFamily:"inherit",opacity:enhancing?.5:1}}>🎨 Contraste</button>
-        <button disabled={enhancing||!editPhoto.file} onClick={()=>doEnhance(editingIdx,{brightness:10,contrast:10,sharpen:true})} style={{flex:1,padding:"8px 0",borderRadius:10,border:"none",background:"#6366F1",color:"#fff",fontSize:11,fontWeight:600,cursor:"pointer",fontFamily:"inherit",opacity:enhancing?.5:1}}>✨ Auto</button>
+        <button disabled={enhancing||!editPhoto.file} onClick={()=>doEnhance(editingIdx,{brightness:10,contrast:10,sharpen:true})} style={{flex:1,padding:"8px 0",borderRadius:10,border:"none",background:"#F97316",color:"#fff",fontSize:11,fontWeight:600,cursor:"pointer",fontFamily:"inherit",opacity:enhancing?.5:1}}>✨ Auto</button>
       </div>
       {/* Live preview */}
       <div style={{marginTop:14,paddingTop:14,borderTop:"1px solid var(--border)"}}>
@@ -244,7 +244,7 @@ function VProductFormScr({product:p,onBack,shopType="boutique"}){
             <div style={{height:100,background:"var(--light)",overflow:"hidden"}}><img src={editPhoto.url} style={{width:"100%",height:"100%",objectFit:"cover"}} alt=""/></div>
             <div style={{padding:"6px 8px"}}>
               <div style={{fontSize:10,fontWeight:600,overflow:"hidden",textOverflow:"ellipsis",whiteSpace:"nowrap"}}>{name||"Nom du produit"}</div>
-              <div style={{fontSize:11,fontWeight:700,color:"#6366F1",marginTop:2}}>{price?`${Number(price).toLocaleString()} F`:"— F"}</div>
+              <div style={{fontSize:11,fontWeight:700,color:"#F97316",marginTop:2}}>{price?`${Number(price).toLocaleString()} F`:"— F"}</div>
             </div>
           </div>
           <div style={{flex:1,borderRadius:12,overflow:"hidden",border:"1px solid var(--border)",background:"var(--card)"}}>
@@ -256,15 +256,15 @@ function VProductFormScr({product:p,onBack,shopType="boutique"}){
     </div>}
 
     {/* Empty photo CTA */}
-    {photos.length===0&&!errors.photos&&<div onClick={()=>setShowGuide(true)} style={{padding:16,background:"rgba(99,102,241,0.04)",border:"1px solid rgba(99,102,241,0.12)",borderRadius:14,marginBottom:14,cursor:"pointer"}}>
+    {photos.length===0&&!errors.photos&&<div onClick={()=>setShowGuide(true)} style={{padding:16,background:"rgba(249,115,22,0.04)",border:"1px solid rgba(249,115,22,0.12)",borderRadius:14,marginBottom:14,cursor:"pointer"}}>
       <div style={{display:"flex",alignItems:"center",gap:10}}>
         <span style={{fontSize:28}}>📸</span>
-        <div><div style={{fontSize:13,fontWeight:700,color:"#6366F1"}}>Ajoutez de belles photos</div><div style={{fontSize:11,color:"var(--sub)",marginTop:2}}>Consultez notre guide →</div></div>
+        <div><div style={{fontSize:13,fontWeight:700,color:"#F97316"}}>Ajoutez de belles photos</div><div style={{fontSize:11,color:"var(--sub)",marginTop:2}}>Consultez notre guide →</div></div>
       </div>
     </div>}
-    {photos.length===0&&<div onClick={()=>fileRef.current?.click()} style={{padding:24,borderRadius:16,border:errors.photos?"2px dashed #EF4444":"2px dashed rgba(99,102,241,0.3)",background:errors.photos?"rgba(239,68,68,0.02)":"rgba(99,102,241,0.02)",textAlign:"center",cursor:"pointer",marginBottom:12}}>
-      <div style={{width:56,height:56,borderRadius:16,background:"rgba(99,102,241,0.08)",display:"flex",alignItems:"center",justifyContent:"center",fontSize:24,marginBottom:6}}>📷</div>
-      <div style={{fontSize:14,fontWeight:600,color:errors.photos?"#EF4444":"#6366F1"}}>Prendre ou choisir une photo</div>
+    {photos.length===0&&<div onClick={()=>fileRef.current?.click()} style={{padding:24,borderRadius:16,border:errors.photos?"2px dashed #EF4444":"2px dashed rgba(249,115,22,0.3)",background:errors.photos?"rgba(239,68,68,0.02)":"rgba(249,115,22,0.02)",textAlign:"center",cursor:"pointer",marginBottom:12}}>
+      <div style={{width:56,height:56,borderRadius:16,background:"rgba(249,115,22,0.08)",display:"flex",alignItems:"center",justifyContent:"center",fontSize:24,marginBottom:6}}>📷</div>
+      <div style={{fontSize:14,fontWeight:600,color:errors.photos?"#EF4444":"#F97316"}}>Prendre ou choisir une photo</div>
       <div style={{fontSize:11,color:"var(--muted)",marginTop:4}}>JPEG, PNG · Min 500×500px · Max 10 MB</div>
     </div>}
 

@@ -25,7 +25,7 @@ function VReturnsScr({onBack}){
       {r.desc&&<div style={{fontSize:11,color:"var(--muted)",marginBottom:6,fontStyle:"italic"}}>"{r.desc}"</div>}
       {r.photos.length>0&&<div style={{display:"flex",gap:6,marginBottom:8}}>{r.photos.map((p,i)=><img key={i} src={p} style={{width:48,height:48,borderRadius:8,objectFit:"cover"}} alt=""/>)}</div>}
       <div style={{display:"flex",justifyContent:"space-between",alignItems:"center"}}>
-        <span style={{fontSize:14,fontWeight:700,color:"#6366F1"}}>{fmt(r.amount)}</span>
+        <span style={{fontSize:14,fontWeight:700,color:"#F97316"}}>{fmt(r.amount)}</span>
         {r.status==="pending"&&<div style={{display:"flex",gap:6}}>
           <button onClick={()=>act(r.id,"refused")} style={{padding:"6px 14px",borderRadius:10,border:"1px solid rgba(239,68,68,.15)",background:"transparent",color:"#EF4444",fontSize:11,fontWeight:600,cursor:"pointer",fontFamily:"inherit"}}>✕ Refuser</button>
           <button onClick={()=>act(r.id,"approved")} style={{padding:"6px 14px",borderRadius:10,border:"none",background:"#F59E0B",color:"#fff",fontSize:11,fontWeight:700,cursor:"pointer",fontFamily:"inherit"}}>✓ Approuver</button>

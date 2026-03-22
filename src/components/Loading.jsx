@@ -17,7 +17,7 @@ const SC = ({size=40,mb=0,style={}}) => (
 function Loading({ text = "Chargement..." }) {
   return (
     <div style={{ display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", padding: 60, gap: 12 }}>
-      <div className="spinner" style={{ width: 28, height: 28, borderWidth: 3, borderColor: "rgba(99,102,241,.2)", borderTopColor: "#6366F1" }} />
+      <div className="spinner" style={{ width: 28, height: 28, borderWidth: 3, borderColor: "rgba(249,115,22,.2)", borderTopColor: "#F97316" }} />
       <span style={{ fontSize: 13, color: "var(--muted)" }}>{text}</span>
     </div>
   );

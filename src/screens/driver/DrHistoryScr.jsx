@@ -10,19 +10,19 @@ function DrHistoryScr({onBack}){
 
   return(<PullToRefresh onRefresh={async()=>{toast.success("Historique actualisé 📦")}}><div className="scr"><div className="appbar"><button onClick={onBack}>←</button><h2>Historique</h2><div style={{width:38}}/></div>
     <div style={{padding:"0 20px 10px",display:"flex",gap:10}}>
-      <div style={{flex:1,padding:14,background:"rgba(99,102,241,0.04)",border:"1px solid rgba(99,102,241,0.12)",borderRadius:14,textAlign:"center"}}><div style={{fontSize:18,fontWeight:700,color:"#10B981"}}>{D_HISTORY.length}</div><div style={{fontSize:11,color:"var(--muted)"}}>Livraisons</div></div>
-      <div style={{flex:1,padding:14,background:"rgba(99,102,241,0.06)",border:"1px solid rgba(99,102,241,0.12)",borderRadius:14,textAlign:"center"}}><div style={{fontSize:18,fontWeight:700,color:"#6366F1"}}>{fmt(totalEarned)}</div><div style={{fontSize:11,color:"var(--muted)"}}>Total gagné</div></div>
+      <div style={{flex:1,padding:14,background:"rgba(249,115,22,0.04)",border:"1px solid rgba(249,115,22,0.12)",borderRadius:14,textAlign:"center"}}><div style={{fontSize:18,fontWeight:700,color:"#F97316"}}>{D_HISTORY.length}</div><div style={{fontSize:11,color:"var(--muted)"}}>Livraisons</div></div>
+      <div style={{flex:1,padding:14,background:"rgba(249,115,22,0.06)",border:"1px solid rgba(249,115,22,0.12)",borderRadius:14,textAlign:"center"}}><div style={{fontSize:18,fontWeight:700,color:"#F97316"}}>{fmt(totalEarned)}</div><div style={{fontSize:11,color:"var(--muted)"}}>Total gagné</div></div>
       <div style={{flex:1,padding:14,background:"rgba(245,158,11,0.06)",border:"1px solid rgba(245,158,11,0.12)",borderRadius:14,textAlign:"center"}}><div style={{fontSize:18,fontWeight:700,color:"#F59E0B"}}>4.8</div><div style={{fontSize:11,color:"var(--muted)"}}>Note moy.</div></div>
     </div>
 
     <div style={{padding:"0 16px 20px"}}>{D_HISTORY.map(h=>{
       const isOpen=expanded===h.id;
-      return(<div key={h.id} style={{background:"var(--card)",border:isOpen?"2px solid #6366F1":"1px solid var(--border)",borderRadius:16,marginBottom:10,overflow:"hidden",transition:"all .2s"}}>
+      return(<div key={h.id} style={{background:"var(--card)",border:isOpen?"2px solid #F97316":"1px solid var(--border)",borderRadius:16,marginBottom:10,overflow:"hidden",transition:"all .2s"}}>
         {/* Summary — always visible */}
         <div onClick={()=>setExpanded(isOpen?null:h.id)} style={{padding:14,cursor:"pointer"}}>
           <div style={{display:"flex",justifyContent:"space-between",alignItems:"center",marginBottom:6}}>
             <span style={{fontSize:14,fontWeight:700}}>{h.ref}</span>
-            <span style={{fontSize:14,fontWeight:700,color:"#10B981"}}>+{fmt(h.fee+h.tip)}</span>
+            <span style={{fontSize:14,fontWeight:700,color:"#F97316"}}>+{fmt(h.fee+h.tip)}</span>
           </div>
           <div style={{fontSize:13,color:"var(--sub)",marginBottom:4}}>{h.vendor} → {h.client}</div>
           <div style={{display:"flex",gap:10,fontSize:11,color:"var(--muted)",flexWrap:"wrap"}}>
@@ -48,7 +48,7 @@ function DrHistoryScr({onBack}){
           {/* Route */}
           <div style={{marginTop:12}}>
             <div style={{display:"flex",alignItems:"center",gap:10,marginBottom:6}}>
-              <div style={{width:24,height:24,borderRadius:6,background:"rgba(99,102,241,0.1)",display:"flex",alignItems:"center",justifyContent:"center",fontSize:12}}>📍</div>
+              <div style={{width:24,height:24,borderRadius:6,background:"rgba(249,115,22,0.1)",display:"flex",alignItems:"center",justifyContent:"center",fontSize:12}}>📍</div>
               <div><div style={{fontSize:12,fontWeight:600}}>Récupération</div><div style={{fontSize:11,color:"var(--muted)"}}>{h.vendor}</div></div>
             </div>
             <div style={{width:2,height:12,background:"var(--border)",marginLeft:11}}/>

@@ -51,10 +51,10 @@ function OrdersScr({go}){
       <div className="odate">{o.date}</div>
       <div style={{fontSize:13,color:"var(--sub)",marginBottom:10}}>{o.items.join(" · ")}</div>
       <div style={{display:"flex",justifyContent:"space-between",alignItems:"center"}}>
-        <span style={{fontSize:15,fontWeight:700,color:"#6366F1"}}>{o.total} FCFA</span>
+        <span style={{fontSize:15,fontWeight:700,color:"#F97316"}}>{o.total} FCFA</span>
         <div style={{display:"flex",gap:6}}>
-          {o.sc==="ship"&&<button style={{padding:"6px 12px",borderRadius:8,background:"rgba(99,102,241,0.08)",fontSize:11,fontWeight:600,color:"#6366F1",cursor:"pointer",border:"none",fontFamily:"inherit"}} onClick={e=>{e.stopPropagation();go("tracking")}}>📍 Suivre</button>}
-          {o.sc==="done"&&<button style={{padding:"6px 12px",borderRadius:8,background:"rgba(16,185,129,0.08)",fontSize:11,fontWeight:600,color:"#10B981",cursor:"pointer",border:"1px solid rgba(99,102,241,0.15)",fontFamily:"inherit"}} onClick={e=>{e.stopPropagation();setReorderConfirm(o)}}>🔄 Recommander</button>}
+          {o.sc==="ship"&&<button style={{padding:"6px 12px",borderRadius:8,background:"rgba(249,115,22,0.08)",fontSize:11,fontWeight:600,color:"#F97316",cursor:"pointer",border:"none",fontFamily:"inherit"}} onClick={e=>{e.stopPropagation();go("tracking")}}>📍 Suivre</button>}
+          {o.sc==="done"&&<button style={{padding:"6px 12px",borderRadius:8,background:"rgba(16,185,129,0.08)",fontSize:11,fontWeight:600,color:"#10B981",cursor:"pointer",border:"1px solid rgba(249,115,22,0.15)",fontFamily:"inherit"}} onClick={e=>{e.stopPropagation();setReorderConfirm(o)}}>🔄 Recommander</button>}
           {(o.sc==="ship"||o.sc==="prep")&&<button style={{padding:"6px 12px",borderRadius:8,background:"rgba(239,68,68,0.06)",fontSize:11,fontWeight:600,color:"#EF4444",cursor:"pointer",border:"1px solid rgba(239,68,68,0.15)",fontFamily:"inherit"}} onClick={e=>{e.stopPropagation();setCancelConfirm(o)}}>✕ Annuler</button>}
         </div>
       </div>
@@ -83,12 +83,12 @@ function OrdersScr({go}){
         <div style={{textAlign:"left",marginBottom:14}}>
           {reorderConfirm.items.map((item,i)=><div key={i} style={{padding:"6px 0",fontSize:13,borderBottom:i<reorderConfirm.items.length-1?"1px solid var(--border)":"none"}}>{item}</div>)}
           <div style={{display:"flex",justifyContent:"space-between",paddingTop:8,fontWeight:700,fontSize:14}}>
-            <span>Total</span><span style={{color:"#6366F1"}}>{reorderConfirm.total} FCFA</span>
+            <span>Total</span><span style={{color:"#F97316"}}>{reorderConfirm.total} FCFA</span>
           </div>
         </div>
         <div style={{display:"flex",gap:10}}>
           <button onClick={()=>setReorderConfirm(null)} style={{flex:1,padding:12,borderRadius:12,border:"1px solid var(--border)",background:"var(--card)",fontSize:13,fontWeight:600,cursor:"pointer",fontFamily:"inherit"}}>Annuler</button>
-          <button onClick={()=>reorder(reorderConfirm)} style={{flex:1,padding:12,borderRadius:12,border:"none",background:"#6366F1",color:"#fff",fontSize:13,fontWeight:700,cursor:"pointer",fontFamily:"inherit"}}>🛍️ Commander</button>
+          <button onClick={()=>reorder(reorderConfirm)} style={{flex:1,padding:12,borderRadius:12,border:"none",background:"#F97316",color:"#fff",fontSize:13,fontWeight:700,cursor:"pointer",fontFamily:"inherit"}}>🛍️ Commander</button>
         </div>
       </div>
     </div>}

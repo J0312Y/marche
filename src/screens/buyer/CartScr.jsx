@@ -19,7 +19,7 @@ function CartScr({cart,setCart,go,appliedCoupon,setAppliedCoupon}){
 
   return(<><div className="scr" style={{padding:16}}>
     <div className="appbar" style={{padding:0,marginBottom:12}}><h2>Panier ({cart.length})</h2></div>
-    {cart.length===0?<div style={{textAlign:"center",padding:"60px 0"}}><div style={{width:72,height:72,borderRadius:20,background:"rgba(99,102,241,0.08)",display:"flex",alignItems:"center",justifyContent:"center",margin:"0 auto"}}><svg width="40" height="40" viewBox="0 0 64 64" fill="none"><path d="M16 16h5l6 26h16l6-20H24" stroke="#6366F1" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round" opacity=".4"/><circle cx="28" cy="50" r="3" fill="#6366F1" opacity=".4"/><circle cx="42" cy="50" r="3" fill="#6366F1" opacity=".4"/></svg></div><h3 style={{marginTop:14,fontSize:18,fontWeight:700}}>Votre panier est vide</h3><p style={{fontSize:13,color:"var(--muted)",marginTop:6}}>Découvrez nos produits</p></div>
+    {cart.length===0?<div style={{textAlign:"center",padding:"60px 0"}}><div style={{width:72,height:72,borderRadius:20,background:"rgba(249,115,22,0.08)",display:"flex",alignItems:"center",justifyContent:"center",margin:"0 auto"}}><svg width="40" height="40" viewBox="0 0 64 64" fill="none"><path d="M16 16h5l6 26h16l6-20H24" stroke="#F97316" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round" opacity=".4"/><circle cx="28" cy="50" r="3" fill="#F97316" opacity=".4"/><circle cx="42" cy="50" r="3" fill="#F97316" opacity=".4"/></svg></div><h3 style={{marginTop:14,fontSize:18,fontWeight:700}}>Votre panier est vide</h3><p style={{fontSize:13,color:"var(--muted)",marginTop:6}}>Découvrez nos produits</p></div>
     :cart.map((c,i)=>{const p=getItem(c);const vp=getVendorPromo(p,VENDORS);const price=vp?vp.promoPrice:(p.price||0);return(
       <div key={i} className="cart-item">
         <div className="cart-img"><Img src={p.photo} emoji={p.img} style={{width:"100%",height:"100%",borderRadius:12}} fit="cover"/></div>
@@ -36,11 +36,11 @@ function CartScr({cart,setCart,go,appliedCoupon,setAppliedCoupon}){
     {/* Coupon section */}
     {cart.length>0&&<div style={{marginTop:10}}>
       {appliedCoupon?(
-        <div style={{padding:14,background:"rgba(99,102,241,0.04)",border:"2px solid #10B981",borderRadius:16,display:"flex",alignItems:"center",justifyContent:"space-between"}}>
+        <div style={{padding:14,background:"rgba(249,115,22,0.04)",border:"2px solid #10B981",borderRadius:16,display:"flex",alignItems:"center",justifyContent:"space-between"}}>
           <div style={{display:"flex",alignItems:"center",gap:10}}>
             <span style={{fontSize:20}}>🏷️</span>
             <div>
-              <div style={{fontSize:13,fontWeight:700,color:"#6366F1"}}>{appliedCoupon.code}</div>
+              <div style={{fontSize:13,fontWeight:700,color:"#F97316"}}>{appliedCoupon.code}</div>
               <div style={{fontSize:11,color:"var(--muted)"}}>
                 {appliedCoupon.free?"Livraison gratuite":`-${appliedCoupon.discount}% = -${fmt(discountAmount)}`}
               </div>
@@ -58,7 +58,7 @@ function CartScr({cart,setCart,go,appliedCoupon,setAppliedCoupon}){
             <h4 style={{fontSize:13}}>Ajouter un code promo</h4>
             <p>Coupons disponibles</p>
           </div>
-          <span style={{color:"#6366F1",fontWeight:700,fontSize:18}}>›</span>
+          <span style={{color:"#F97316",fontWeight:700,fontSize:18}}>›</span>
         </div>
       )}
     </div>}

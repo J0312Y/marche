@@ -24,8 +24,8 @@ function RoleRegScr({onBack,onDone,forceRole}){
     <h2 style={{fontSize:22,fontWeight:700,marginBottom:8}}>{role==="vendor"?"Bienvenue sur Lamuka !":"Bienvenue livreur !"}</h2>
     <p style={{fontSize:14,color:"var(--sub)",lineHeight:1.6}}>Votre demande a été soumise. Vérification sous 24-48h.</p>
     <p style={{fontSize:13,color:"var(--muted)",marginTop:4}}>Vous recevrez : notification, message in-app, et email de confirmation.</p>
-    <div style={{fontSize:13,color:"#6366F1",fontWeight:600,margin:"16px 0"}}>#{role==="vendor"?"VND":"DRV"}-2026-{String(Math.floor(Math.random()*9000+1000))}</div>
-    {role==="vendor"&&<div style={{padding:10,background:"rgba(99,102,241,0.04)",borderRadius:12,fontSize:12,color:"#6366F1",fontWeight:600,marginBottom:10}}>Plan {plan==="starter"?"Starter (Gratuit)":plan==="pro"?"Pro (15k/mois)":"Enterprise (45k/mois)"}</div>}
+    <div style={{fontSize:13,color:"#F97316",fontWeight:600,margin:"16px 0"}}>#{role==="vendor"?"VND":"DRV"}-2026-{String(Math.floor(Math.random()*9000+1000))}</div>
+    {role==="vendor"&&<div style={{padding:10,background:"rgba(249,115,22,0.04)",borderRadius:12,fontSize:12,color:"#F97316",fontWeight:600,marginBottom:10}}>Plan {plan==="starter"?"Starter (Gratuit)":plan==="pro"?"Pro (15k/mois)":"Enterprise (45k/mois)"}</div>}
     <button className="btn-primary" style={{maxWidth:300,margin:"0 auto"}} onClick={()=>{toast.success("Inscription réussie ! 🎉");onDone(role,role==="vendor"?plan:null)}}>✅ Compris</button>
   </div></div>);
 
@@ -34,20 +34,20 @@ function RoleRegScr({onBack,onDone,forceRole}){
     <div className="scr" style={{padding:16}}>
       <p style={{fontSize:14,color:"var(--sub)",marginBottom:14,lineHeight:1.6}}>Choisissez le rôle que vous souhaitez ajouter à votre compte :</p>
       <div onClick={()=>{setRole("vendor");setStep(0);setDocs({id:false,rccm:false,photo:false})}} style={{padding:16,background:"var(--card)",border:"2px solid var(--border)",borderRadius:20,marginBottom:14,cursor:"pointer",transition:"all .2s"}}>
-        <div style={{display:"flex",alignItems:"center",gap:14,marginBottom:10}}><div style={{width:56,height:56,borderRadius:16,background:"linear-gradient(135deg,#6366F1,#A855F7)",display:"flex",alignItems:"center",justifyContent:"center",fontSize:28}}>🏪</div><div><h3 style={{fontSize:18,fontWeight:700}}>Commerçant</h3><p style={{fontSize:12,color:"var(--muted)"}}>Ouvrez votre commerce sur Lamuka</p></div></div>
+        <div style={{display:"flex",alignItems:"center",gap:14,marginBottom:10}}><div style={{width:56,height:56,borderRadius:16,background:"linear-gradient(135deg,#F97316,#FB923C)",display:"flex",alignItems:"center",justifyContent:"center",fontSize:28}}>🏪</div><div><h3 style={{fontSize:18,fontWeight:700}}>Commerçant</h3><p style={{fontSize:12,color:"var(--muted)"}}>Ouvrez votre commerce sur Lamuka</p></div></div>
         <div style={{fontSize:12,color:"var(--sub)",lineHeight:1.6}}>Restaurant, boutique, pâtisserie, supermarché, pharmacie ou service — vendez et recevez des commandes.</div>
-        <div style={{display:"flex",gap:6,marginTop:10,flexWrap:"wrap"}}>{["🍽️ Resto","🏪 Boutique","🧁 Pâtisserie","🛒 Supermarché","💊 Pharma","🔧 Service"].map(f=><span key={f} style={{padding:"4px 10px",borderRadius:8,background:"rgba(99,102,241,0.06)",color:"#6366F1",fontSize:10,fontWeight:600}}>{f}</span>)}</div>
+        <div style={{display:"flex",gap:6,marginTop:10,flexWrap:"wrap"}}>{["🍽️ Resto","🏪 Boutique","🧁 Pâtisserie","🛒 Supermarché","💊 Pharma","🔧 Service"].map(f=><span key={f} style={{padding:"4px 10px",borderRadius:8,background:"rgba(249,115,22,0.06)",color:"#F97316",fontSize:10,fontWeight:600}}>{f}</span>)}</div>
       </div>
       <div onClick={()=>{setRole("driver");setStep(0);setDocs({id:false,permit:false,vehicle:false})}} style={{padding:16,background:"var(--card)",border:"2px solid var(--border)",borderRadius:20,cursor:"pointer",transition:"all .2s"}}>
         <div style={{display:"flex",alignItems:"center",gap:14,marginBottom:10}}><div style={{width:56,height:56,borderRadius:16,background:"linear-gradient(135deg,#10B981,#059669)",display:"flex",alignItems:"center",justifyContent:"center",fontSize:28}}>🛵</div><div><h3 style={{fontSize:18,fontWeight:700}}>Livreur</h3><p style={{fontSize:12,color:"var(--muted)"}}>Livrez et gagnez de l'argent</p></div></div>
         <div style={{fontSize:12,color:"var(--sub)",lineHeight:1.6}}>Effectuez des livraisons dans votre zone. Choisissez vos horaires, suivez vos gains en temps réel.</div>
-        <div style={{display:"flex",gap:6,marginTop:10,flexWrap:"wrap"}}>{["Horaires flexibles","Gains en temps réel","GPS intégré","Pourboires"].map(f=><span key={f} style={{padding:"4px 10px",borderRadius:8,background:"rgba(99,102,241,0.04)",color:"#10B981",fontSize:10,fontWeight:600}}>{f}</span>)}</div>
+        <div style={{display:"flex",gap:6,marginTop:10,flexWrap:"wrap"}}>{["Horaires flexibles","Gains en temps réel","GPS intégré","Pourboires"].map(f=><span key={f} style={{padding:"4px 10px",borderRadius:8,background:"rgba(249,115,22,0.04)",color:"#10B981",fontSize:10,fontWeight:600}}>{f}</span>)}</div>
       </div>
     </div>
   </div>);
 
   // Multi-step form
-  const color=role==="vendor"?"#6366F1":"#10B981";
+  const color=role==="vendor"?"#F97316":"#10B981";
 
   return(<>
     <div className="appbar"><button onClick={()=>step>0?setStep(step-1):forceRole?onBack():setStep(-1)}>←</button><h2>{role==="vendor"?"Devenir Commerçant":"Devenir Livreur"}</h2><div style={{width:38}}/></div>
@@ -66,10 +66,10 @@ function RoleRegScr({onBack,onDone,forceRole}){
       {step===1&&role==="vendor"&&<><h3 style={{fontSize:16,fontWeight:700,marginBottom:14}}>Votre Établissement</h3>
         <label style={{display:"block",fontSize:12,fontWeight:600,color:"var(--sub)",marginBottom:8}}>Type de commerce <span style={{color:"#EF4444"}}>*</span></label>
         <div style={{display:"grid",gridTemplateColumns:"1fr 1fr 1fr",gap:8,marginBottom:14}}>
-          {[["🏪","Boutique","boutique"],["🍽️","Restaurant","restaurant"],["🧁","Pâtisserie","patisserie"],["🛒","Supermarché","supermarche"],["💊","Pharmacie","pharmacie"],["🔧","Service","service"]].map(([icon,label,val])=>{const sel=selCats.includes(val);return<div key={val} onClick={(e)=>{e.stopPropagation();setSC(p=>{const types=["boutique","restaurant","patisserie","supermarche","pharmacie","service"];const filtered=p.filter(x=>!types.includes(x));return sel?filtered:[...filtered,val]});}} style={{padding:"12px 8px",borderRadius:12,border:sel?"2px solid #6366F1":"2px solid var(--border)",background:sel?"rgba(99,102,241,0.08)":"var(--card)",cursor:"pointer",textAlign:"center",transition:"all .15s",position:"relative",WebkitTapHighlightColor:"transparent",userSelect:"none"}}>
-            {sel&&<div style={{position:"absolute",top:4,right:4,width:16,height:16,borderRadius:"50%",background:"#6366F1",display:"flex",alignItems:"center",justifyContent:"center",fontSize:9,color:"#fff"}}>✓</div>}
+          {[["🏪","Boutique","boutique"],["🍽️","Restaurant","restaurant"],["🧁","Pâtisserie","patisserie"],["🛒","Supermarché","supermarche"],["💊","Pharmacie","pharmacie"],["🔧","Service","service"]].map(([icon,label,val])=>{const sel=selCats.includes(val);return<div key={val} onClick={(e)=>{e.stopPropagation();setSC(p=>{const types=["boutique","restaurant","patisserie","supermarche","pharmacie","service"];const filtered=p.filter(x=>!types.includes(x));return sel?filtered:[...filtered,val]});}} style={{padding:"12px 8px",borderRadius:12,border:sel?"2px solid #F97316":"2px solid var(--border)",background:sel?"rgba(249,115,22,0.08)":"var(--card)",cursor:"pointer",textAlign:"center",transition:"all .15s",position:"relative",WebkitTapHighlightColor:"transparent",userSelect:"none"}}>
+            {sel&&<div style={{position:"absolute",top:4,right:4,width:16,height:16,borderRadius:"50%",background:"#F97316",display:"flex",alignItems:"center",justifyContent:"center",fontSize:9,color:"#fff"}}>✓</div>}
             <div style={{fontSize:22,marginBottom:2}}>{icon}</div>
-            <div style={{fontSize:11,fontWeight:700,color:sel?"#6366F1":"var(--sub)"}}>{label}</div>
+            <div style={{fontSize:11,fontWeight:700,color:sel?"#F97316":"var(--sub)"}}>{label}</div>
           </div>})}
         </div>
         <div className="vr-upload" onClick={()=>document.getElementById("reg-upload")?.click()} style={{cursor:"pointer"}}><div className="vu-icon" id="vu-preview">🖼️</div><b>Logo / Photo</b><p>PNG, JPG · Max 2MB</p><input id="reg-upload" type="file" accept="image/*" style={{display:"none"}} onChange={e=>{const f=e.target.files?.[0];if(f){const r=new FileReader();r.onload=()=>{const el=document.getElementById("vu-preview");el.textContent="";el.style.overflow="hidden";const img=document.createElement("img");img.src=r.result;img.style.cssText="width:100%;height:100%;object-fit:cover;border-radius:12px";el.appendChild(img)};r.readAsDataURL(f)}}}/></div>
@@ -128,7 +128,7 @@ function RoleRegScr({onBack,onDone,forceRole}){
 
             {!docs[key]?(
               <div onClick={()=>document.getElementById(`doc-${key}`)?.click()} style={{cursor:"pointer",display:"flex",alignItems:"center",gap:12}}>
-                <div style={{width:48,height:48,borderRadius:14,background:role==="vendor"?"rgba(99,102,241,0.06)":"rgba(16,185,129,0.06)",display:"flex",alignItems:"center",justifyContent:"center",fontSize:22,flexShrink:0}}>{icon}</div>
+                <div style={{width:48,height:48,borderRadius:14,background:role==="vendor"?"rgba(249,115,22,0.06)":"rgba(16,185,129,0.06)",display:"flex",alignItems:"center",justifyContent:"center",fontSize:22,flexShrink:0}}>{icon}</div>
                 <div style={{flex:1}}>
                   <div style={{fontSize:13,fontWeight:700}}>{title}</div>
                   <div style={{fontSize:11,color:"var(--muted,#908C82)",marginTop:2}}>{desc}</div>
@@ -144,7 +144,7 @@ function RoleRegScr({onBack,onDone,forceRole}){
                       <img src={docs[key].preview} style={{width:"100%",height:"100%",objectFit:"cover"}} alt=""/>
                     </div>
                   ):(
-                    <div style={{width:48,height:48,borderRadius:14,background:"rgba(99,102,241,0.04)",display:"flex",alignItems:"center",justifyContent:"center",fontSize:18,flexShrink:0}}>📄</div>
+                    <div style={{width:48,height:48,borderRadius:14,background:"rgba(249,115,22,0.04)",display:"flex",alignItems:"center",justifyContent:"center",fontSize:18,flexShrink:0}}>📄</div>
                   )}
                   <div style={{flex:1,minWidth:0}}>
                     <div style={{fontSize:13,fontWeight:700,color:"#10B981",display:"flex",alignItems:"center",gap:4}}>✅ {title}</div>
@@ -176,7 +176,7 @@ function RoleRegScr({onBack,onDone,forceRole}){
       {/* STEP 3 DRIVER: Tarifs & Commission */}
       {step===3&&role==="driver"&&<><h3 style={{fontSize:16,fontWeight:700,marginBottom:14}}>Tarifs & Commission</h3>
         {/* Registration fee */}
-        <div style={{padding:16,background:"linear-gradient(135deg,rgba(16,185,129,0.06),rgba(16,185,129,0.02))",border:"1px solid rgba(99,102,241,0.15)",borderRadius:16,marginBottom:14}}>
+        <div style={{padding:16,background:"linear-gradient(135deg,rgba(16,185,129,0.06),rgba(16,185,129,0.02))",border:"1px solid rgba(249,115,22,0.15)",borderRadius:16,marginBottom:14}}>
           <div style={{display:"flex",alignItems:"center",gap:10,marginBottom:10}}>
             <div style={{width:40,height:40,borderRadius:12,background:"#10B981",display:"flex",alignItems:"center",justifyContent:"center",color:"#fff",fontSize:18}}>📋</div>
             <div><div style={{fontSize:14,fontWeight:700}}>Frais d'inscription</div><div style={{fontSize:11,color:"var(--muted)"}}>Paiement unique — couvre la vérification</div></div>

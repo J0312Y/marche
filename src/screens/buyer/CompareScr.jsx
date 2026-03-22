@@ -24,7 +24,7 @@ function CompareScr({product:p,onBack}){
     {P.filter(x=>slot===2?x.id!==(prod1?.id):true).map(x=><div key={x.id} style={{display:"flex",alignItems:"center",gap:12,padding:12,background:"var(--card)",border:"1px solid var(--border)",borderRadius:14,marginBottom:8,cursor:"pointer"}} onClick={()=>pickProduct(x)}>
       <div style={{width:44,height:44,borderRadius:12,background:"var(--light)",display:"flex",alignItems:"center",justifyContent:"center",fontSize:22}}><Img src={x.photo} emoji={x.img} style={{width:44,height:44,borderRadius:12}} fit="cover"/></div>
       <div style={{flex:1,minWidth:0}}><div style={{fontSize:13,fontWeight:600,overflow:"hidden",whiteSpace:"nowrap",textOverflow:"ellipsis"}}>{x.name}</div><div style={{fontSize:11,color:"var(--muted)"}}>{x.vendor} · ⭐ {x.rating}</div></div>
-      <div style={{fontSize:13,fontWeight:700,color:"#6366F1",flexShrink:0}}>{fmt(x.price)}</div>
+      <div style={{fontSize:13,fontWeight:700,color:"#F97316",flexShrink:0}}>{fmt(x.price)}</div>
     </div>)}
   </div>);
 

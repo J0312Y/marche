@@ -55,7 +55,7 @@ function DrDashboardScr({go}){
         <div className="dr-step-dot cur">3</div><div className="dr-step-line"/>
         <div className="dr-step-dot">4</div>
       </div>
-      <div style={{display:"flex",justifyContent:"space-between",fontSize:11,color:"var(--muted)"}}><span>Accepté</span><span>Récupéré</span><span style={{color:"#6366F1",fontWeight:600}}>En route</span><span>Livré</span></div>
+      <div style={{display:"flex",justifyContent:"space-between",fontSize:11,color:"var(--muted)"}}><span>Accepté</span><span>Récupéré</span><span style={{color:"#F97316",fontWeight:600}}>En route</span><span>Livré</span></div>
     </div></>}
 
     {/* Quick stats */}
@@ -63,7 +63,7 @@ function DrDashboardScr({go}){
     <div style={{padding:"0 16px 20px"}}>{D_HISTORY.slice(0,3).map(h=><div key={h.id} style={{display:"flex",alignItems:"center",gap:12,padding:"12px 0",borderBottom:"1px solid var(--border)"}}>
       <div style={{width:36,height:36,borderRadius:10,background:"rgba(16,185,129,0.1)",display:"flex",alignItems:"center",justifyContent:"center",fontSize:16}}>✅</div>
       <div style={{flex:1}}><div style={{fontSize:13,fontWeight:600}}>{h.vendor} → {h.client}</div><div style={{fontSize:11,color:"var(--muted)"}}>{h.date} · {h.duration} · {h.distance}</div></div>
-      <div style={{textAlign:"right"}}><div style={{fontSize:13,fontWeight:700,color:"#10B981"}}>+{fmt(h.fee+h.tip)}</div><div style={{fontSize:11,color:"#F59E0B"}}>{"★".repeat(h.rating)}</div></div>
+      <div style={{textAlign:"right"}}><div style={{fontSize:13,fontWeight:700,color:"#F97316"}}>+{fmt(h.fee+h.tip)}</div><div style={{fontSize:11,color:"#F59E0B"}}>{"★".repeat(h.rating)}</div></div>
     </div>)}</div>
   </div></PullToRefresh>);
 }

@@ -44,11 +44,11 @@ function CouponsScr({onBack,cart=[],appliedCoupon,onApply}){
     <div className="appbar" style={{padding:0,marginBottom:12}}><button onClick={onBack}>←</button><h2>🏷️ Codes Promo</h2><div style={{width:38}}/></div>
 
     {/* Applied coupon banner */}
-    {appliedCoupon&&<div style={{padding:14,background:"rgba(99,102,241,0.04)",border:"1px solid rgba(99,102,241,0.15)",borderRadius:14,marginBottom:12,display:"flex",alignItems:"center",justifyContent:"space-between"}}>
+    {appliedCoupon&&<div style={{padding:14,background:"rgba(249,115,22,0.04)",border:"1px solid rgba(249,115,22,0.15)",borderRadius:14,marginBottom:12,display:"flex",alignItems:"center",justifyContent:"space-between"}}>
       <div style={{display:"flex",alignItems:"center",gap:10}}>
         <span style={{fontSize:22}}>✅</span>
         <div>
-          <div style={{fontSize:13,fontWeight:700,color:"#6366F1"}}>Code appliqué : {appliedCoupon.code}</div>
+          <div style={{fontSize:13,fontWeight:700,color:"#F97316"}}>Code appliqué : {appliedCoupon.code}</div>
           <div style={{fontSize:12,color:"var(--muted)"}}>{appliedCoupon.free?"Livraison gratuite":`-${appliedCoupon.discount}% de réduction`}</div>
         </div>
       </div>
@@ -58,7 +58,7 @@ function CouponsScr({onBack,cart=[],appliedCoupon,onApply}){
     {/* Manual code input */}
     <div style={{display:"flex",gap:8,marginBottom:14}}>
       <input value={manualCode} onChange={e=>setManualCode(e.target.value.toUpperCase())} placeholder="Entrer un code promo..." onKeyDown={e=>e.key==="Enter"&&applyManual()} style={{flex:1,padding:"12px 14px",borderRadius:12,border:"1px solid var(--border)",fontSize:13,fontFamily:"inherit",outline:"none"}}/>
-      <button onClick={applyManual} disabled={!manualCode.trim()||!!verifying} style={{padding:"12px 20px",borderRadius:12,border:"none",background:manualCode.trim()?"#6366F1":"var(--border)",color:manualCode.trim()?"var(--card)":"var(--muted)",fontSize:13,fontWeight:700,cursor:manualCode.trim()?"pointer":"not-allowed",fontFamily:"inherit"}}>
+      <button onClick={applyManual} disabled={!manualCode.trim()||!!verifying} style={{padding:"12px 20px",borderRadius:12,border:"none",background:manualCode.trim()?"#F97316":"var(--border)",color:manualCode.trim()?"var(--card)":"var(--muted)",fontSize:13,fontWeight:700,cursor:manualCode.trim()?"pointer":"not-allowed",fontFamily:"inherit"}}>
         {verifying===manualCode?"⏳":"Appliquer"}
       </button>
     </div>
@@ -77,7 +77,7 @@ function CouponsScr({onBack,cart=[],appliedCoupon,onApply}){
       return(<div key={c.id} style={{padding:16,background:isApplied?"rgba(16,185,129,0.04)":"var(--card)",border:isApplied?"2px solid #10B981":"1px solid var(--border)",borderRadius:16,marginBottom:10,transition:"all .2s"}}>
         <div style={{display:"flex",gap:14,alignItems:"flex-start"}}>
           {/* Left badge */}
-          <div style={{width:56,minHeight:56,borderRadius:12,background:c.free?"linear-gradient(135deg,#10B981,#059669)":"linear-gradient(135deg,#6366F1,#A855F7)",display:"flex",flexDirection:"column",alignItems:"center",justifyContent:"center",color:"#fff",flexShrink:0}}>
+          <div style={{width:56,minHeight:56,borderRadius:12,background:c.free?"linear-gradient(135deg,#10B981,#059669)":"linear-gradient(135deg,#F97316,#FB923C)",display:"flex",flexDirection:"column",alignItems:"center",justifyContent:"center",color:"#fff",flexShrink:0}}>
             {c.free?<><span style={{fontSize:16}}>🚚</span><span style={{fontSize:9,fontWeight:600}}>GRATUIT</span></>
             :<><span style={{fontSize:20,fontWeight:800}}>{c.discount}%</span><span style={{fontSize:9,fontWeight:600}}>REMISE</span></>}
           </div>
@@ -101,7 +101,7 @@ function CouponsScr({onBack,cart=[],appliedCoupon,onApply}){
             <button onClick={removeCoupon} style={{width:"100%",padding:"10px 0",borderRadius:10,border:"1px solid rgba(239,68,68,0.3)",background:"transparent",color:"#EF4444",fontSize:13,fontWeight:600,cursor:"pointer",fontFamily:"inherit"}}>
               ✕ Retirer ce code
             </button>
-          ):(<button onClick={()=>applyCoupon(c)} disabled={!meetsMin||!!verifying} style={{width:"100%",padding:"10px 0",borderRadius:10,border:"none",background:meetsMin?"#6366F1":"var(--border)",color:meetsMin?"var(--card)":"var(--muted)",fontSize:13,fontWeight:700,cursor:meetsMin?"pointer":"not-allowed",fontFamily:"inherit",transition:"all .2s"}}>
+          ):(<button onClick={()=>applyCoupon(c)} disabled={!meetsMin||!!verifying} style={{width:"100%",padding:"10px 0",borderRadius:10,border:"none",background:meetsMin?"#F97316":"var(--border)",color:meetsMin?"var(--card)":"var(--muted)",fontSize:13,fontWeight:700,cursor:meetsMin?"pointer":"not-allowed",fontFamily:"inherit",transition:"all .2s"}}>
             {verifying===c.code?"⏳ Vérification...":meetsMin?"🏷️ Appliquer ce code":`🔒 Minimum ${fmt(c.min)}`}
           </button>)}
         </div>

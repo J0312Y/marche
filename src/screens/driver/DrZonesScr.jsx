@@ -35,7 +35,7 @@ function DrZonesScr({onBack}){
       {zones.map((z,i)=><div key={z.id} style={{padding:14,background:"var(--card)",border:z.active?"1px solid rgba(16,185,129,0.3)":"1px solid var(--border)",borderRadius:14,marginBottom:10}}>
         <div style={{display:"flex",alignItems:"center",gap:10}}>
           <div style={{flex:1}}>
-            <div style={{display:"flex",alignItems:"center",gap:6}}><h4 style={{fontSize:14,fontWeight:700}}>{z.name}</h4>{z.active&&<span style={{width:8,height:8,borderRadius:4,background:"#10B981"}}/>}</div>
+            <div style={{display:"flex",alignItems:"center",gap:6}}><h4 style={{fontSize:14,fontWeight:700}}>{z.name}</h4>{z.active&&<span style={{width:8,height:8,borderRadius:4,background:"#F97316"}}/>}</div>
             <div style={{fontSize:11,color:"var(--muted)",marginTop:2}}>📍 {z.areas}</div>
           </div>
           <div className={`toggle ${z.active?"on":""}`} onClick={()=>toggle(i)}/>
@@ -47,13 +47,13 @@ function DrZonesScr({onBack}){
       </div>)}
 
       {/* Add zone */}
-      {showAdd?<div style={{padding:16,background:"var(--card)",border:"2px solid #10B981",borderRadius:16,marginBottom:14}}>
+      {showAdd?<div style={{padding:16,background:"var(--card)",border:"2px solid #F97316",borderRadius:16,marginBottom:14}}>
         <h4 style={{fontSize:14,fontWeight:700,marginBottom:12}}>➕ Ajouter une zone</h4>
 
         {suggestions.length>0&&<>
           <div style={{fontSize:12,fontWeight:600,color:"var(--sub)",marginBottom:8}}>Zones suggérées</div>
           <div style={{display:"flex",gap:6,flexWrap:"wrap",marginBottom:14}}>
-            {suggestions.map(s=><span key={s.name} onClick={()=>{setAddName(s.name);setAddAreas(s.areas)}} style={{padding:"6px 12px",borderRadius:8,border:addName===s.name?"2px solid #10B981":"1px solid var(--border)",background:addName===s.name?"rgba(16,185,129,0.04)":"var(--card)",fontSize:11,fontWeight:600,cursor:"pointer",color:addName===s.name?"#10B981":"var(--sub)"}}>{addName===s.name?"✓ ":""}{s.name}</span>)}
+            {suggestions.map(s=><span key={s.name} onClick={()=>{setAddName(s.name);setAddAreas(s.areas)}} style={{padding:"6px 12px",borderRadius:8,border:addName===s.name?"2px solid #F97316":"1px solid var(--border)",background:addName===s.name?"rgba(249,115,22,0.04)":"var(--card)",fontSize:11,fontWeight:600,cursor:"pointer",color:addName===s.name?"#F97316":"var(--sub)"}}>{addName===s.name?"✓ ":""}{s.name}</span>)}
           </div>
         </>}
 
@@ -62,12 +62,12 @@ function DrZonesScr({onBack}){
         <div className="field"><label>Quartiers couverts</label><input value={addAreas} onChange={e=>setAddAreas(e.target.value)} placeholder="Ex: Moukondo, Ngamakosso"/></div>
         <div style={{display:"flex",gap:8}}>
           <button style={{flex:1,padding:10,borderRadius:10,border:"1px solid var(--border)",background:"var(--card)",fontSize:12,fontWeight:600,cursor:"pointer",fontFamily:"inherit"}} onClick={()=>{setShowAdd(false);setAddName("");setAddAreas("")}}>Annuler</button>
-          <button className="btn-primary" style={{flex:2,background:addName?"#10B981":"var(--border)",color:addName?"var(--card)":"var(--muted)"}} onClick={doAdd}>Ajouter</button>
+          <button className="btn-primary" style={{flex:2,background:addName?"#F97316":"var(--border)",color:addName?"var(--card)":"var(--muted)"}} onClick={doAdd}>Ajouter</button>
         </div>
       </div>
-      :<button style={{width:"100%",padding:14,borderRadius:14,border:"2px dashed #10B981",background:"rgba(16,185,129,0.02)",color:"#10B981",fontSize:13,fontWeight:600,cursor:"pointer",fontFamily:"inherit",marginBottom:14}} onClick={()=>setShowAdd(true)}>+ Ajouter une zone de livraison</button>}
+      :<button style={{width:"100%",padding:14,borderRadius:14,border:"2px dashed #F97316",background:"rgba(249,115,22,0.02)",color:"#F97316",fontSize:13,fontWeight:600,cursor:"pointer",fontFamily:"inherit",marginBottom:14}} onClick={()=>setShowAdd(true)}>+ Ajouter une zone de livraison</button>}
 
-      <button className="btn-primary" style={{background:saved?"#10B981":"#6366F1"}} onClick={doSave}>{saved?"✅ Zones sauvegardées":"💾 Enregistrer mes zones"}</button>
+      <button className="btn-primary" style={{background:saved?"#10B981":"#F97316"}} onClick={doSave}>{saved?"✅ Zones sauvegardées":"💾 Enregistrer mes zones"}</button>
     </div>
   </div>);
 }

@@ -27,7 +27,7 @@ function OrderDetailScr({order:o,onBack,go}){
         const done=i<currentStep;const active=i===currentStep-1;
         return(<div key={s} style={{display:"flex",gap:12,marginBottom:i<3?4:0}}>
           <div style={{display:"flex",flexDirection:"column",alignItems:"center"}}>
-            <div style={{width:26,height:26,borderRadius:"50%",background:done?"#10B981":active?"#6366F1":"var(--border)",display:"flex",alignItems:"center",justifyContent:"center",fontSize:11,color:done||active?"var(--card)":"var(--muted)",fontWeight:700,flexShrink:0,boxShadow:active?"0 0 0 4px rgba(99,102,241,0.15)":"none"}}>
+            <div style={{width:26,height:26,borderRadius:"50%",background:done?"#10B981":active?"#F97316":"var(--border)",display:"flex",alignItems:"center",justifyContent:"center",fontSize:11,color:done||active?"var(--card)":"var(--muted)",fontWeight:700,flexShrink:0,boxShadow:active?"0 0 0 4px rgba(249,115,22,0.15)":"none"}}>
               {done?"✓":i+1}
             </div>
             {i<3&&<div style={{width:2,height:20,background:done?"#10B981":"var(--border)"}}/>}
