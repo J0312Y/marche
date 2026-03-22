@@ -57,9 +57,9 @@ function VShopDetailScr({shop:sh,go,onBack}){
       {/* Tab 1: Modifier */}
       {tab===1&&<div style={{padding:"0 16px 20px"}}>
         <div className="field"><label>Nom de l'établissement</label><input defaultValue={sh.name}/></div>
-        <div className="field"><label>Description</label><textarea rows={3} defaultValue="Commerce de mode et accessoires africains authentiques."/></div>
+        <div className="field"><label>Description <span style={{color:"var(--muted)",fontWeight:400}}>(optionnel)</span></label><textarea rows={3} defaultValue="Commerce de mode et accessoires africains authentiques."/></div>
         <div className="field-row"><div className="field"><label>Ville</label><input defaultValue={sh.location.split(",")[0]}/></div><div className="field"><label>Quartier</label><input defaultValue={sh.location.split(",")[1]?.trim()}/></div></div>
-        <div className="field"><label>Téléphone</label><input defaultValue="+242 06X XXX XXX"/></div>
+        <div className="field"><label>Téléphone <span style={{color:"#EF4444"}}>*</span></label><input defaultValue="+242 06X XXX XXX"/></div>
         <div className="field"><label>Horaires d'ouverture</label><input defaultValue="Lun-Sam 8h-18h"/></div>
 
         <div style={{fontSize:14,fontWeight:700,margin:"16px 0 10px"}}>Catégories</div>

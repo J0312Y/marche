@@ -99,7 +99,7 @@ function VPromosScr({go,onBack}){
 
         <div className="field"><label>Nom</label><input value={editPromo.name} onChange={e=>setEditPromo({...editPromo,name:e.target.value})} placeholder="Soldes de Mars"/></div>
         <div className="field-row">
-          <div className="field"><label>Réduction</label><input type="number" value={editPromo.discount} onChange={e=>setEditPromo({...editPromo,discount:parseInt(e.target.value)||0})} placeholder="20"/></div>
+          <div className="field"><label>Réduction <span style={{color:"#EF4444"}}>*</span></label><input type="number" value={editPromo.discount} onChange={e=>setEditPromo({...editPromo,discount:parseInt(e.target.value)||0})} placeholder="20"/></div>
           <div className="field"><label>Code (opt.)</label><input value={editPromo.code||""} onChange={e=>setEditPromo({...editPromo,code:e.target.value.toUpperCase()})} placeholder="PROMO20"/></div>
         </div>
         <div className="field"><label>Produits concernés</label>

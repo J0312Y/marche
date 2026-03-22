@@ -23,9 +23,9 @@ function AddressesScr({onBack}){
       </div>
     </div>)}
     {adding&&<div style={{padding:14,background:"var(--card)",border:"1px solid var(--border)",borderRadius:16,marginBottom:10}}>
-      <div className="field"><label>Nom</label><input placeholder="Ex: Bureau"/></div>
-      <div className="field"><label>Adresse</label><input placeholder="Rue, numéro..."/></div>
-      <div className="field-row"><div className="field"><label>Quartier</label><input placeholder="Bacongo"/></div><div className="field"><label>Ville</label><input placeholder="Brazzaville"/></div></div>
+      <div className="field"><label>Nom <span style={{color:"#EF4444"}}>*</span></label><input placeholder="Ex: Bureau"/></div>
+      <div className="field"><label>Adresse <span style={{color:"#EF4444"}}>*</span></label><input placeholder="Rue, numéro..."/></div>
+      <div className="field-row"><div className="field"><label>Quartier <span style={{color:"#EF4444"}}>*</span></label><input placeholder="Bacongo"/></div><div className="field"><label>Ville <span style={{color:"#EF4444"}}>*</span></label><input placeholder="Brazzaville"/></div></div>
       <div style={{display:"flex",gap:8,marginTop:8}}>
         <button style={{flex:1,padding:10,borderRadius:10,border:"1px solid var(--border)",background:"var(--card)",fontSize:12,fontWeight:600,cursor:"pointer",fontFamily:"inherit"}} onClick={()=>setAdding(false)}>Annuler</button>
         <button className="btn-primary" style={{flex:1}} onClick={()=>setAdding(false)}>Enregistrer</button>

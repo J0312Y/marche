@@ -14,9 +14,9 @@ function ProfileCompletionScr({onDone,provider}){
       <div className="sub" style={{marginBottom:14}}>Pour vous offrir la meilleure expérience</div>
 
       {step===0&&<>
-        <div className="field"><label>Prénom</label><input placeholder="Joeldy"/></div>
-        <div className="field"><label>Nom de famille</label><input placeholder="Tsina"/></div>
-        {provider&&<div className="field"><label>Numéro de téléphone</label>
+        <div className="field"><label>Prénom <span style={{color:"#EF4444"}}>*</span></label><input placeholder="Joeldy"/></div>
+        <div className="field"><label>Nom de famille <span style={{color:"#EF4444"}}>*</span></label><input placeholder="Tsina"/></div>
+        {provider&&<div className="field"><label>Numéro de téléphone <span style={{color:"#EF4444"}}>*</span></label>
           <div style={{display:"flex",gap:8}}><div style={{padding:"10px 12px",borderRadius:12,border:"1px solid var(--border)",background:"var(--light)",fontSize:13,fontWeight:600,flexShrink:0}}>🇨🇬 +242</div><input placeholder="06X XXX XXX" type="tel" style={{flex:1}}/></div>
         </div>}
         <button className="btn-primary" onClick={()=>setStep(1)}>Continuer</button>
@@ -24,10 +24,10 @@ function ProfileCompletionScr({onDone,provider}){
       </>}
 
       {step===1&&<>
-        <div className="field"><label>Ville</label>
+        <div className="field"><label>Ville <span style={{color:"#EF4444"}}>*</span></label>
           <Select value={city} onChange={setCity} placeholder="Choisir une ville" options={[{value:"brazzaville",label:"Brazzaville"},{value:"pointe-noire",label:"Pointe-Noire"},{value:"dolisie",label:"Dolisie"},{value:"nkayi",label:"Nkayi"},{value:"oyo",label:"Oyo"},{value:"ouesso",label:"Ouesso"}]}/>
         </div>
-        <div className="field"><label>Quartier</label><input placeholder="Ex: Bacongo, Poto-Poto..."/></div>
+        <div className="field"><label>Quartier <span style={{color:"#EF4444"}}>*</span></label><input placeholder="Ex: Bacongo, Poto-Poto..."/></div>
         <div className="field"><label>Adresse (optionnel)</label><input placeholder="Rue, N°..."/></div>
         <button className="btn-primary" onClick={onDone}>🚀 Commencer</button>
       </>}

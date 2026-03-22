@@ -56,10 +56,10 @@ function RoleRegScr({onBack,onDone,forceRole}){
 
       {/* STEP 0: Infos personnelles (both) */}
       {step===0&&<><h3 style={{fontSize:16,fontWeight:700,marginBottom:14}}>Informations personnelles</h3>
-        <div className="field"><label>Nom complet</label><input placeholder="Joeldy Tsina"/></div>
-        <div className="field"><label>Email</label><input placeholder="joeldytsina94@gmail.com"/></div>
-        <div className="field"><label>Téléphone</label><input placeholder="+242 064 663 469"/></div>
-        <div className="field-row"><div className="field"><label>Ville</label><input placeholder="Brazzaville"/></div><div className="field"><label>Quartier</label><input placeholder="Bacongo"/></div></div>
+        <div className="field"><label>Nom complet <span style={{color:"#EF4444"}}>*</span></label><input placeholder="Joeldy Tsina"/></div>
+        <div className="field"><label>Email <span style={{color:"#EF4444"}}>*</span></label><input placeholder="joeldytsina94@gmail.com"/></div>
+        <div className="field"><label>Téléphone <span style={{color:"#EF4444"}}>*</span></label><input placeholder="+242 064 663 469"/></div>
+        <div className="field-row"><div className="field"><label>Ville <span style={{color:"#EF4444"}}>*</span></label><input placeholder="Brazzaville"/></div><div className="field"><label>Quartier <span style={{color:"#EF4444"}}>*</span></label><input placeholder="Bacongo"/></div></div>
       </>}
 
       {/* STEP 1 VENDOR: Établissement */}
@@ -73,17 +73,17 @@ function RoleRegScr({onBack,onDone,forceRole}){
           </div>})}
         </div>
         <div className="vr-upload" onClick={()=>document.getElementById("reg-upload")?.click()} style={{cursor:"pointer"}}><div className="vu-icon" id="vu-preview">🖼️</div><b>Logo / Photo</b><p>PNG, JPG · Max 2MB</p><input id="reg-upload" type="file" accept="image/*" style={{display:"none"}} onChange={e=>{const f=e.target.files?.[0];if(f){const r=new FileReader();r.onload=()=>{const el=document.getElementById("vu-preview");el.textContent="";el.style.overflow="hidden";const img=document.createElement("img");img.src=r.result;img.style.cssText="width:100%;height:100%;object-fit:cover;border-radius:12px";el.appendChild(img)};r.readAsDataURL(f)}}}/></div>
-        <div className="field"><label>Nom de l'établissement</label><input placeholder="Ex: Chez Mama Ngudi, Congo Tech..."/></div>
-        <div className="field"><label>Description</label><input placeholder="Votre activité, spécialités..."/></div>
+        <div className="field"><label>Nom de l'établissement <span style={{color:"#EF4444"}}>*</span></label><input placeholder="Ex: Chez Mama Ngudi, Congo Tech..."/></div>
+        <div className="field"><label>Description <span style={{color:"var(--muted)",fontWeight:400}}>(optionnel)</span></label><input placeholder="Votre activité, spécialités..."/></div>
         <label style={{display:"block",fontSize:12,fontWeight:600,color:"var(--sub)",margin:"14px 0 8px"}}>Sous-catégories</label>
         <div className="vr-cat-grid">{CATS.map(c=><div key={c.id} className={`vr-cat ${selCats.includes(c.name)?"on":""}`} onClick={()=>toggleCat(c.name)}><div className="vci">{c.icon}</div><div className="vcn">{c.name}</div></div>)}</div>
       </>}
 
       {/* STEP 1 DRIVER: Véhicule */}
       {step===1&&role==="driver"&&<><h3 style={{fontSize:16,fontWeight:700,marginBottom:14}}>Votre Véhicule</h3>
-        <div className="field"><label>Type de véhicule</label><Select value="moto" onChange={()=>{}} options={[{value:"moto",label:"🛵 Moto"},{value:"voiture",label:"🚗 Voiture"},{value:"velo",label:"🚲 Vélo"}]}/></div>
-        <div className="field-row"><div className="field"><label>Marque</label><input placeholder="Honda PCX"/></div><div className="field"><label>Année</label><input placeholder="2023"/></div></div>
-        <div className="field-row"><div className="field"><label>Plaque</label><input placeholder="BZ-4521"/></div><div className="field"><label>Couleur</label><input placeholder="Noir"/></div></div>
+        <div className="field"><label>Type de véhicule <span style={{color:"#EF4444"}}>*</span></label><Select value="moto" onChange={()=>{}} options={[{value:"moto",label:"🛵 Moto"},{value:"voiture",label:"🚗 Voiture"},{value:"velo",label:"🚲 Vélo"}]}/></div>
+        <div className="field-row"><div className="field"><label>Marque <span style={{color:"#EF4444"}}>*</span></label><input placeholder="Honda PCX"/></div><div className="field"><label>Année <span style={{color:"#EF4444"}}>*</span></label><input placeholder="2023"/></div></div>
+        <div className="field-row"><div className="field"><label>Plaque <span style={{color:"#EF4444"}}>*</span></label><input placeholder="BZ-4521"/></div><div className="field"><label>Couleur <span style={{color:"#EF4444"}}>*</span></label><input placeholder="Noir"/></div></div>
         {/* Vehicle photo */}
         <div style={{marginTop:10,marginBottom:14}}>
           <label style={{display:"block",fontSize:12,fontWeight:600,color:"var(--sub,#5E5B53)",marginBottom:6}}>Photo du véhicule</label>

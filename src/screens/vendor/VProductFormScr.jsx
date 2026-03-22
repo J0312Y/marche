@@ -48,13 +48,13 @@ function VProductFormScr({product:p,onBack,shopType="boutique"}){
   const fileRef=useRef(null);
 
       {/* Sizes */}
-      <div className="field"><label>Tailles (séparées par virgule)</label><input placeholder="S, M, L, XL" defaultValue={isEdit&&p.sizes?p.sizes.join(", "):""}/></div>
+      <div className="field"><label>Tailles <span style={{color:"var(--muted)",fontWeight:400}}>(optionnel)</span></label><input placeholder="S, M, L, XL" defaultValue={isEdit&&p.sizes?p.sizes.join(", "):""}/></div>
       {/* Colors */}
-      <div className="field"><label>Couleurs (séparées par virgule)</label><input placeholder="Rouge, Bleu, Noir" defaultValue={isEdit&&p.colors?p.colors.join(", "):""}/></div>
+      <div className="field"><label>Couleurs <span style={{color:"var(--muted)",fontWeight:400}}>(optionnel)</span></label><input placeholder="Rouge, Bleu, Noir" defaultValue={isEdit&&p.colors?p.colors.join(", "):""}/></div>
       {/* Variants */}
       <div className="field"><label>Variantes (optionnel)</label><input placeholder="Costume, Chemise, Robe..." defaultValue={isEdit&&p.variants?p.variants.join(", "):""}/></div>
       {/* Delivery time */}
-      <div className="field"><label>Délai de livraison estimé</label><Select value={isEdit&&p.eta?p.eta:"1-2 jours"} onChange={()=>{}} options={["30 min","1h","20-30 min","30-45 min","1-2 jours","2-3 jours","3-5 jours"]}/></div>
+      <div className="field"><label>Délai de livraison <span style={{color:"#EF4444"}}>*</span></label><Select value={isEdit&&p.eta?p.eta:"1-2 jours"} onChange={()=>{}} options={["30 min","1h","20-30 min","30-45 min","1-2 jours","2-3 jours","3-5 jours"]}/></div>
 
   const [photos,setPhotos]=useState(isEdit&&p.photo?[{url:p.photo,emoji:p.img,status:"existing"}]:[]);
   const [editingIdx,setEditingIdx]=useState(null);
@@ -270,21 +270,21 @@ function VProductFormScr({product:p,onBack,shopType="boutique"}){
 
     {/* ═══ FORM FIELDS ═══ */}
     <div className="field"><label>Nom de l'article *</label><input value={name} onChange={e=>{setName(e.target.value);clearErr("name")}} placeholder="Ex: Poulet DG, Robe Wax, Doliprane..." style={fieldStyle("name")}/>{errMsg("name")}</div>
-    <div className="field"><label>Description</label><textarea rows={3} value={description} onChange={e=>setDescription(e.target.value)} placeholder="Décrivez votre article..."/></div>
+    <div className="field"><label>Description <span style={{color:"var(--muted)",fontWeight:400}}>(optionnel)</span></label><textarea rows={3} value={description} onChange={e=>setDescription(e.target.value)} placeholder="Décrivez votre article..."/></div>
     <div className="field-row">
       <div className="field"><label>Prix (FCFA) *</label><input type="number" value={price} onChange={e=>{setPrice(e.target.value);clearErr("price")}} placeholder="25000" style={fieldStyle("price")}/>{errMsg("price")}</div>
-      <div className="field"><label>Prix barré</label><input type="number" value={oldPrice} onChange={e=>{setOldPrice(e.target.value);clearErr("oldPrice")}} placeholder="Optionnel" style={fieldStyle("oldPrice")}/>{errMsg("oldPrice")}</div>
+      <div className="field"><label>Prix barré <span style={{color:"var(--muted)",fontWeight:400}}>(optionnel)</span></label><input type="number" value={oldPrice} onChange={e=>{setOldPrice(e.target.value);clearErr("oldPrice")}} placeholder="Optionnel" style={fieldStyle("oldPrice")}/>{errMsg("oldPrice")}</div>
     </div>
     <div className="field-row">
       <div className="field"><label>Catégorie *</label><select value={selectedCat} onChange={e=>{setSelectedCat(e.target.value);clearErr("cat")}} style={fieldStyle("cat")}><option value="">Choisir...</option>{CATS.map(c=><option key={c.id} value={c.name}>{c.icon} {c.name}</option>)}</select>{errMsg("cat")}</div>
-      <div className="field"><label>Stock</label><input type="number" value={stock} onChange={e=>setStock(e.target.value)} placeholder="0 = illimité"/></div>
+      <div className="field"><label>Stock <span style={{color:"var(--muted)",fontWeight:400}}>(optionnel, 0 = illimité)</span></label><input type="number" value={stock} onChange={e=>setStock(e.target.value)} placeholder="0 = illimité"/></div>
     </div>
 
     {/* ═══ VARIANTS ═══ */}
     <div style={{margin:"16px 0 10px"}}><VariantEditor shopType={shopType} category={selectedCat} value={articleVariants} onChange={setArticleVariants}/></div>
 
-    <div className="field"><label>Tags</label><input value={tags} onChange={e=>setTags(e.target.value)} placeholder="Séparer par des virgules"/></div>
-    <div className="field"><label>Poids (g)</label><input type="number" value={weight} onChange={e=>setWeight(e.target.value)} placeholder="Pour calcul livraison"/></div>
+    <div className="field"><label>Tags <span style={{color:"var(--muted)",fontWeight:400}}>(optionnel)</span></label><input value={tags} onChange={e=>setTags(e.target.value)} placeholder="Séparer par des virgules"/></div>
+    <div className="field"><label>Poids <span style={{color:"var(--muted)",fontWeight:400}}>(optionnel, en grammes)</span></label><input type="number" value={weight} onChange={e=>setWeight(e.target.value)} placeholder="Pour calcul livraison"/></div>
 
     <div style={{display:"flex",alignItems:"center",gap:10,margin:"16px 0"}}><div className={`toggle ${active?"on":""}`} onClick={()=>setActive(!active)}/><span style={{fontSize:14,fontWeight:500}}>Article actif</span></div>
 
