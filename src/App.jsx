@@ -95,6 +95,7 @@ function AppInner() {
             </>}
 
           {/* Toast */}
+          <ShareSheet/>
           {toast && <div style={{ position: "absolute", bottom: 80, left: 16, right: 16, padding: "14px 18px", borderRadius: 16, background: toast.type === 'error' ? '#EF4444' : toast.type === 'info' ? '#F97316' : '#10B981', color: "#fff", fontSize: 13, fontWeight: 600, textAlign: "center", zIndex: 999, boxShadow: "0 8px 30px rgba(0,0,0,.2)", display: "flex", alignItems: "center", justifyContent: "center", gap: 8, animation: "toast-in .3s ease" }}><span style={{ fontSize: 16 }}>{toast.type === 'error' ? '❌' : toast.type === 'info' ? 'ℹ️' : '✅'}</span>{toast.message}</div>}
 
           {/* Home Indicator */}

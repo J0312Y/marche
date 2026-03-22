@@ -1,23 +1,26 @@
 /**
- * Share utility — uses Web Share API with fallback to clipboard
+ * Share utility — custom bottom sheet instead of native share
+ * Stays inside the phone frame
  */
 import toast from './toast';
 
+let showShareSheet = null;
+
+// Register the share sheet handler (called from App.jsx)
+export function registerShareSheet(handler) {
+  showShareSheet = handler;
+}
+
 export async function share({ title, text, url }) {
-  if (navigator.share) {
-    try {
-      await navigator.share({ title, text, url });
-      toast.success("Partagé avec succès 📤");
-    } catch (e) {
-      if (e.name !== 'AbortError') toast.info("Partage annulé");
-    }
+  if (showShareSheet) {
+    showShareSheet({ title, text, url });
   } else {
     // Fallback: copy link
     try {
       await navigator.clipboard.writeText(url || text || title);
       toast.success("Lien copié ! 📋");
     } catch {
-      toast.info("Partagez: " + (url || text));
+      toast.info(url || text);
     }
   }
 }

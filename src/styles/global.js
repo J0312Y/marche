@@ -506,6 +506,7 @@ select option{background:var(--card);color:var(--text);padding:10px 14px;font-si
 .dr-request{margin:0 20px 14px;padding:18px;border-radius:20px;border:2px solid #F97316;background:rgba(249,115,22,0.03);position:relative;overflow:hidden}
 .dr-request::before{content:'';position:absolute;top:0;left:0;right:0;height:4px;background:linear-gradient(90deg,#F97316,#FDBA74);animation:dr-pulse 2s infinite}
 @keyframes dr-pulse{0%,100%{opacity:1}50%{opacity:.4}}
+@keyframes shareUp{from{transform:translateY(100%)}to{transform:translateY(0)}}
 @keyframes selectFadeIn{from{opacity:0;transform:translateY(-4px)}to{opacity:1;transform:translateY(0)}}
 @keyframes scanLine{0%,100%{top:10%}50%{top:90%}}
 @keyframes blink{0%,100%{opacity:.2}50%{opacity:1}}

@@ -1,11 +1,12 @@
 import { useState } from "react";
 import toast from "../../utils/toast";
+import { share } from "../../utils/share";
 function ReferralScr({onBack}){
   const code="JOELDY2026";
   const invites=[{name:"Patrick M.",status:"inscrit",bonus:2000,date:"12 Fév"},{name:"Celine N.",status:"1ère commande",bonus:2000,date:"8 Fév"},{name:"David T.",status:"en attente",bonus:0,date:"5 Fév"}];
   const earned=invites.filter(i=>i.bonus>0).reduce((s,i)=>s+i.bonus,0);
   const copyCode=()=>{try{navigator.clipboard.writeText(code);toast.success("Code copié 📋")}catch(e){toast.info(code)}};
-  const shareCode=async()=>{if(navigator.share)try{await navigator.share({title:"Lamuka Market",text:`Rejoins Lamuka Market avec mon code ${code} et gagne 2 000 FCFA !`,url:"https://lamuka.market/ref/"+code})}catch(e){}else copyCode()};
+  const shareCode=async()=>{share({title:"Lamuka Market",text:`Rejoins Lamuka Market avec mon code ${code} et gagne 2 000 FCFA !`,url:"https://lamuka.market/ref/"+code})};
   return(<div className="scr" style={{padding:16,paddingBottom:20}}>
     <div className="appbar" style={{padding:0,marginBottom:10}}><button onClick={onBack}>←</button><h2>Parrainage</h2><div style={{width:38}}/></div>
     <div style={{textAlign:"center",padding:20,background:"linear-gradient(135deg,#F97316,#FB923C)",borderRadius:20,color:"#fff",marginBottom:14}}>
