@@ -2,9 +2,18 @@ import { useState } from "react";
 import toast from "../../utils/toast";
 import { fmt } from "../../utils/helpers";
 function GiftCardScr({onBack}){
+  const [gcErrors,setGcErrors]=useState({});
+  const validateGc=()=>{
+    const e={};
+    if(!amount) e.amount="Montant requis";
+    if(!to.trim()) e.to="Numéro requis";
+    setGcErrors(e);
+    if(Object.keys(e).length){toast.error("Remplissez les champs obligatoires");return false}
+    return true;
+  };
   const [amount,setAmount]=useState(null);const [to,setTo]=useState("");const [msg,setMsg]=useState("");const [done,setDone]=useState(false);
   const amounts=[5000,10000,25000,50000];
-  const send=()=>{if(!amount||!to){toast.error("Montant et destinataire requis");return}setDone(true);toast.success("Carte cadeau envoyée ! 🎁")};
+  const send=()=>{if(!amount||!to){toast.error("Montant et destinataire requis");return}setDone(true);validateGc()&&toast.success("Carte cadeau envoyée ! 🎁")};
   if(done)return(<div className="scr" style={{padding:16,textAlign:"center",display:"flex",flexDirection:"column",alignItems:"center",justifyContent:"center",height:"100%"}}>
     <div style={{width:200,padding:24,background:"linear-gradient(135deg,#F97316,#FB923C)",borderRadius:20,color:"#fff",marginBottom:20}}>
       <div style={{fontSize:28,marginBottom:4}}>🎁</div><div style={{fontSize:10,opacity:.7}}>Carte Cadeau Lamuka</div><div style={{fontSize:24,fontWeight:800,margin:"8px 0"}}>{fmt(amount)}</div><div style={{fontSize:11,opacity:.7}}>Pour: {to}</div>

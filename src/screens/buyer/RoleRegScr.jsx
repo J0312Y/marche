@@ -8,6 +8,39 @@ function RoleRegScr({onBack,onDone,forceRole}){
   const [role,setRole]=useState(forceRole||null); // "vendor" | "driver"
   const [step,setStep]=useState(forceRole?0:-1);
   const [plan,setPlan]=useState("starter");
+  const [regErrors,setRegErrors]=useState({});
+  const clrR=(k)=>setRegErrors(p=>{const n={...p};delete n[k];return n});
+  const validateStep=()=>{
+    if(role==="vendor"&&step===0){
+      const e={};
+      if(!document.querySelector("[placeholder=\"Joeldy Tsina\"]")?.value?.trim()) e.name="Nom requis";
+      if(!document.querySelector("[placeholder=\"joeldytsina94@gmail.com\"]")?.value?.trim()) e.email="Email requis";
+      setRegErrors(e);
+      if(Object.keys(e).length){toast.error("Remplissez les champs obligatoires");return false}
+    }
+    if(role==="driver"&&step===0){
+      const e={};
+      if(!document.querySelector("[placeholder=\"Joeldy Tsina\"]")?.value?.trim()) e.name="Nom requis";
+      setRegErrors(e);
+      if(Object.keys(e).length){toast.error("Remplissez les champs obligatoires");return false}
+    }
+    if(step===2){
+      if(role==="vendor"){
+        const missing=[];
+        if(!docs.id) missing.push("Pièce d'identité");
+        if(!docs.photo) missing.push("Photo de l'établissement");
+        if(missing.length){toast.error("Documents requis : "+missing.join(", "));return false}
+      }
+      if(role==="driver"){
+        const missing=[];
+        if(!docs.id) missing.push("Pièce d'identité");
+        if(!docs.permit) missing.push("Permis de conduire");
+        if(!docs.vehicle) missing.push("Photo du véhicule");
+        if(missing.length){toast.error("Documents requis : "+missing.join(", "));return false}
+      }
+    }
+    return true;
+  };
   const [selCats,setSC]=useState([]);
   const [docs,setDocs]=useState({});
   const [ok,setOk]=useState(false);
@@ -111,8 +144,8 @@ function RoleRegScr({onBack,onDone,forceRole}){
       {step===2&&<><h3 style={{fontSize:16,fontWeight:700,marginBottom:6}}>Documents requis</h3>
         <p style={{fontSize:12,color:"var(--muted)",lineHeight:1.5,marginBottom:14}}>Uploadez vos documents pour vérification. Formats acceptés : JPG, PNG, PDF. Max 5 MB par fichier.</p>
         {(role==="vendor"?
-          [["🪪","Pièce d'identité","Carte nationale ou passeport","id","image/*,.pdf"],["📄","RCCM / Patente","Registre de commerce (optionnel)","rccm","image/*,.pdf"],["📸","Photo de l'établissement","Votre espace de vente","photo","image/*"]]
-          :[["🪪","Pièce d'identité","Carte nationale ou passeport","id","image/*,.pdf"],["🪪","Permis de conduire","Obligatoire pour moto/voiture","permit","image/*,.pdf"],["📸","Photo du véhicule","Vue claire du véhicule","vehicle","image/*"]]
+          [["🪪","Pièce d'identité","Carte nationale ou passeport (obligatoire)","id","image/*,.pdf"],["📄","RCCM / Patente","Registre de commerce (optionnel)","rccm","image/*,.pdf"],["📸","Photo de l'établissement","Votre espace de vente (obligatoire)","photo","image/*"]]
+          :[["🪪","Pièce d'identité","Carte nationale ou passeport (obligatoire)","id","image/*,.pdf"],["🪪","Permis de conduire","Obligatoire pour moto/voiture","permit","image/*,.pdf"],["📸","Photo du véhicule","Vue claire du véhicule (obligatoire)","vehicle","image/*"]]
         ).map(([icon,title,desc,key,accept])=>(
           <div key={key} style={{padding:14,background:"var(--card,#fff)",border:docs[key]?"2px solid "+color:"1px solid var(--border,#E8E6E1)",borderRadius:16,marginBottom:10,position:"relative"}}>
             <input id={`doc-${key}`} type="file" accept={accept} style={{display:"none"}} onChange={e=>{
@@ -238,7 +271,7 @@ function RoleRegScr({onBack,onDone,forceRole}){
 
       {/* ── Button inside scroll ── */}
       <div style={{paddingTop:24,paddingBottom:16}}>
-        <button className="btn-primary" style={{background:color}} onClick={()=>step<maxStep?setStep(step+1):setOk(true)}>{step===maxStep?"🚀 Soumettre la demande":"Continuer"}</button>
+        <button className="btn-primary" style={{background:color}} onClick={()=>{if(!validateStep())return;step<maxStep?setStep(step+1):setOk(true)}}>{step===maxStep?"🚀 Soumettre la demande":"Continuer"}</button>
       </div>
     </div>
   </>);

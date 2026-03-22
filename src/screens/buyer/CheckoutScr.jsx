@@ -18,6 +18,7 @@ function CheckoutScr({onBack,onDone,cart=[],appliedCoupon,setAppliedCoupon}){
   const finalDelivery=freeDelivery?0:del;
   const total=sub-discountAmount+finalDelivery;
 
+  const validateCheckout=()=>{if(!momo){toast.error("Choisissez un moyen de paiement");return false}return true};
   const handleConfirm=()=>{
     setOk(true);toast.success("Commande confirmée ! 🎉");if(saveAddr)toast.info("Adresse sauvegardée 📍");
     if(setAppliedCoupon) setAppliedCoupon(null);
@@ -61,7 +62,7 @@ function CheckoutScr({onBack,onDone,cart=[],appliedCoupon,setAppliedCoupon}){
           {(discountAmount>0||freeDelivery)&&<div style={{textAlign:"center",fontSize:11,color:"#F59E0B",fontWeight:600,marginTop:4}}>🎉 Économie : {fmt(discountAmount+(freeDelivery?del:0))}</div>}
         </div></>}
 
-      <div style={{paddingTop:24,paddingBottom:16}}><button className="btn-primary" onClick={()=>step<2?setStep(step+1):handleConfirm()}>{step===2?"Confirmer le paiement":"Continuer"}</button></div>
+      <div style={{paddingTop:24,paddingBottom:16}}><button className="btn-primary" onClick={()=>{if(step===2){if(validateCheckout())handleConfirm()}else setStep(step+1)}}>{step===2?"Confirmer le paiement":"Continuer"}</button></div>
     </div>
 
     {ok&&<div className="success-modal"><div className="success-box"><div className="si">✅</div><h2>Commande confirmée !</h2><p>Vérifiez votre téléphone pour le paiement.</p><div className="ref">#LMK-2026-0214</div>

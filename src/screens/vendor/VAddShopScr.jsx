@@ -9,8 +9,28 @@ function VAddShopScr({onBack}){
   const steps=["Type","Infos","Documents","Confirmation"];
   const maxStep=steps.length-1;
   const toggleCat=c=>setSelCats(p=>p.includes(c)?p.filter(x=>x!==c):[...p,c]);
+  const [shopErrors,setShopErrors]=useState({});
   const canNext=step===0?!!shopType:true;
-  const advance=()=>{if(!canNext)return;step<maxStep?setStep(step+1):setDone(true);toast.success("Boutique créée avec succès 🏪")};
+  const validateShop=()=>{
+    if(step===0&&!shopType){toast.error("Choisissez un type");return false}
+    if(step===1){
+      const e={};
+      if(!shopName.trim()) e.name="Nom requis";
+      if(!shopCity.trim()) e.city="Ville requise";
+      if(!shopArea.trim()) e.area="Quartier requis";
+      setShopErrors(e);
+      if(Object.keys(e).length){toast.error("Remplissez les champs obligatoires");return false}
+    }
+    if(step===2){
+      const missing=[];
+      if(!docs.id) missing.push("Pièce d'identité");
+      // RCCM optionnel pour les boutiques
+      if(!docs.photo) missing.push("Photo de l'établissement");
+      if(missing.length){toast.error("Documents requis : "+missing.join(", "));return false}
+    }
+    return true;
+  };
+  const advance=()=>{if(!canNext)return;if(!validateShop())return;step<maxStep?setStep(step+1):setDone(true);toast.success("Boutique créée avec succès 🏪")};
 
   const shopTypes=[
     {id:"boutique",icon:"🏪",name:"Boutique",desc:"Mode, électronique, artisanat, accessoires..."},
@@ -80,7 +100,7 @@ function VAddShopScr({onBack}){
         <h3 style={{fontSize:16,fontWeight:700,marginBottom:14}}>Documents requis</h3>
         <div className="info-box blue" style={{marginBottom:14}}><span>ℹ️</span><span style={{fontSize:11}}>Les documents sont vérifiés séparément pour chaque {shopType==="restaurant"?"restaurant":shopType==="patisserie"?"pâtisserie":"boutique"}.</span></div>
         {[["🪪","Pièce d'identité du responsable","Carte ou passeport","id"],
-          ["📄","RCCM / Patente","Registre de commerce","rccm"],
+          ["📄","RCCM / Patente","Registre de commerce (optionnel)","rccm"],
           ["📸",shopType==="restaurant"?"Photo du restaurant":shopType==="patisserie"?"Photo de la pâtisserie":"Photo de l'établissement","Façade et intérieur","photo"],
           ...(shopType==="restaurant"?[["🍽️","Certificat d'hygiène","Délivré par la mairie (si disponible)","hygiene"]]:[]),
         ].map(([i,t,d,k])=><div key={k} className="vr-doc" onClick={()=>setDocs({...docs,[k]:true})}><span className="vdi">{i}</span><div className="vdt"><h5>{t}</h5><p>{d}</p></div><span className={`vds ${docs[k]?"up":"pend"}`}>{docs[k]?"✓ Envoyé":"À envoyer"}</span></div>)}
