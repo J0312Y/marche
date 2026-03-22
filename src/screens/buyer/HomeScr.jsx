@@ -22,7 +22,7 @@ function HomeScr({go,favs,toggleFav,isFav,userName}){
   const [loading,setLoading]=useState(true);
   const [pushSent,setPushSent]=useState(false);
   const [promoSlide,setPromoSlide]=useState(0);
-  const promos=[{title:"Soldes de Mars",sub:"Jusqu'à -40% sur tout",bg:"linear-gradient(135deg,#EF4444,#F97316)",icon:"🔥"},{title:"Livraison gratuite",sub:"Dès 15 000 FCFA d'achat",bg:"linear-gradient(135deg,#F97316,#FB923C)",icon:"🚚"},{title:"Nouveau : Mode",sub:"Découvrez les tendances Wax",bg:"linear-gradient(135deg,#EC4899,#F97316)",icon:"👗"}];
+  const promos=[{title:"Soldes de Mars",sub:"Jusqu'à -40% sur tout",img:"https://images.unsplash.com/photo-1607082349566-187342175e2f?w=600&h=300&fit=crop",action:"flash"},{title:"Livraison gratuite",sub:"Dès 15 000 FCFA d'achat",img:"https://images.unsplash.com/photo-1586528116311-ad8dd3c8310d?w=600&h=300&fit=crop",action:"search"},{title:"Mode Africaine",sub:"Découvrez les tendances Wax",img:"https://images.unsplash.com/photo-1590735213920-68192a487bc2?w=600&h=300&fit=crop",action:"cats"}];
   const [dealTimer,setDealTimer]=useState({h:5,m:12,s:45});
 
   useEffect(()=>{const t=setTimeout(()=>setLoading(false),800);return()=>clearTimeout(t)},[]);
@@ -141,14 +141,19 @@ function HomeScr({go,favs,toggleFav,isFav,userName}){
       :<>
 
       {/* Promo carousel */}
-      <div style={{position:"relative",margin:"0 16px 14px",height:120,borderRadius:16,overflow:"hidden"}}>
+      <div style={{position:"relative",margin:"0 16px 14px",height:140,borderRadius:16,overflow:"hidden"}}>
           {promos.map((pr,i)=>(
-            <div key={i} style={{position:"absolute",inset:0,background:pr.bg,borderRadius:16,padding:18,display:"flex",alignItems:"center",justifyContent:"space-between",color:"#fff",opacity:promoSlide===i?1:0,transform:promoSlide===i?"translateX(0)":"translateX(40px)",transition:"all .5s ease",pointerEvents:promoSlide===i?"auto":"none"}}>
-              <div><div style={{fontSize:18,fontWeight:800,marginBottom:4}}>{pr.title}</div><div style={{fontSize:12,opacity:.85}}>{pr.sub}</div><button style={{marginTop:8,padding:"6px 16px",borderRadius:10,border:"none",background:"rgba(255,255,255,.25)",color:"#fff",fontSize:11,fontWeight:700,cursor:"pointer",fontFamily:"inherit"}}>Voir →</button></div>
-              <span style={{fontSize:42}}>{pr.icon}</span>
+            <div key={i} onClick={()=>go(pr.action)} style={{position:"absolute",inset:0,borderRadius:16,overflow:"hidden",cursor:"pointer",opacity:promoSlide===i?1:0,transform:promoSlide===i?"translateX(0)":"translateX(40px)",transition:"all .5s ease",pointerEvents:promoSlide===i?"auto":"none"}}>
+              <img src={pr.img} alt={pr.title} style={{width:"100%",height:"100%",objectFit:"cover"}}/>
+              <div style={{position:"absolute",inset:0,background:"linear-gradient(90deg,rgba(0,0,0,.65) 0%,rgba(0,0,0,.2) 60%,transparent 100%)"}}/>
+              <div style={{position:"absolute",top:0,left:0,bottom:0,padding:18,display:"flex",flexDirection:"column",justifyContent:"center"}}>
+                <div style={{fontSize:20,fontWeight:800,color:"#fff",marginBottom:4,textShadow:"0 2px 8px rgba(0,0,0,.3)"}}>{pr.title}</div>
+                <div style={{fontSize:12,color:"rgba(255,255,255,.85)",marginBottom:10}}>{pr.sub}</div>
+                <div style={{padding:"6px 18px",borderRadius:10,background:"#F97316",color:"#fff",fontSize:11,fontWeight:700,width:"fit-content"}}>Voir les offres</div>
+              </div>
             </div>
           ))}
-          <div style={{position:"absolute",bottom:8,left:"50%",transform:"translateX(-50%)",display:"flex",gap:6}}>{promos.map((_,i)=><div key={i} onClick={()=>setPromoSlide(i)} style={{width:promoSlide===i?20:6,height:6,borderRadius:3,background:promoSlide===i?"#fff":"rgba(255,255,255,.4)",cursor:"pointer",transition:"all .3s"}}/>)}</div>
+          <div style={{position:"absolute",bottom:8,left:"50%",transform:"translateX(-50%)",display:"flex",gap:6}}>{promos.map((_,i)=><div key={i} onClick={(e)=>{e.stopPropagation();setPromoSlide(i)}} style={{width:promoSlide===i?20:6,height:6,borderRadius:3,background:promoSlide===i?"#fff":"rgba(255,255,255,.4)",cursor:"pointer",transition:"all .3s"}}/>)}</div>
       </div>
 
       {/* ⭐ Produit du jour */}
@@ -212,7 +217,7 @@ function HomeScr({go,favs,toggleFav,isFav,userName}){
         <span style={{color:"#F97316",fontSize:16}}>›</span>
       </div>
 
-      {/* Restos à la une */}
+      {/* Restos à la une */}}
       {(selType==="all"||selType==="restaurant")&&nearbyRestos.length>0&&<>
         <div className="sec"><h3>🍽️ Commander à manger</h3><span onClick={()=>go("restoList")}>Voir tout</span></div>
         <div className="marquee-wrap"><div className="marquee-track-resto">
