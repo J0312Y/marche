@@ -1,9 +1,11 @@
+import InvoiceView from "../../components/InvoiceView";
 import { useState } from "react";
 import Img from "../../components/Img";
 import { fmt } from "../../utils/helpers";
 import toast from "../../utils/toast";
 
 function VOrderDetailScr({order:o,onBack,go}){
+  const [showInvoice,setShowInvoice]=useState(false);
   const [status,setStatus]=useState(o.status);
   const [showRefuse,setShowRefuse]=useState(false);
   const statusMap={new:"Nouvelle",preparing:"En préparation",shipped:"Expédiée",delivered:"Livrée",refused:"Refusée"};
@@ -15,7 +17,9 @@ function VOrderDetailScr({order:o,onBack,go}){
       <h3 style={{fontSize:18,fontWeight:700,color:"#EF4444"}}>Commande refusée</h3>
       <p style={{fontSize:13,color:"var(--muted)",marginTop:6}}>{o.ref} · {o.client}</p>
       <p style={{fontSize:12,color:"var(--muted)",marginTop:4}}>Le client sera notifié et remboursé.</p>
-      <button className="btn-primary" style={{marginTop:20}} onClick={onBack}>← Retour aux commandes</button>
+      <button className="btn-primary" style={{marginTop:20}} onClick={onBack}>← Retour</button>
+      <button onClick={()=>setShowInvoice(true)} style={{padding:14,borderRadius:14,border:"1px solid var(--border)",background:"var(--card)",fontSize:14,fontWeight:600,cursor:"pointer",fontFamily:"inherit",color:"var(--text)",marginTop:8}}>🧾 Générer le reçu</button>
+      {showInvoice&&<InvoiceView order={{id:o?.ref||"LMK-0891",client:o?.client||"Marie Koumba",vendor:o?.vendor||"Mode Afrique",amount:o?.total||25000,items:[{name:"Article",qty:1,price:o?.total||25000}],delivery:1500,payment:"Airtel Money"}} onClose={()=>setShowInvoice(false)}/>}
     </div>
   </div>);
 

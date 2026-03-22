@@ -514,6 +514,7 @@ select option{background:var(--card);color:var(--text);padding:10px 14px;font-si
 @keyframes fadeIn{from{opacity:0;transform:translateY(4px)}to{opacity:1;transform:translateY(0)}}
 @keyframes toast-in{from{opacity:0;transform:translateY(20px) scale(.95)}to{opacity:1;transform:translateY(0) scale(1)}}
 @keyframes imgFadeIn{from{opacity:0}to{opacity:1}}
+@keyframes typingDot{0%,100%{opacity:.3;transform:scale(.8)}50%{opacity:1;transform:scale(1)}}
 @keyframes shimmer{0%{transform:translateX(-100%)}100%{transform:translateX(100%)}}
 .typing-dots{display:inline-flex;gap:3px;font-size:14px;color:var(--muted);padding:2px 0}
 .img-shimmer{position:absolute;inset:0;background:var(--light);overflow:hidden}.img-shimmer::after{content:'';position:absolute;inset:0;background:linear-gradient(90deg,transparent,rgba(255,255,255,.15),transparent);animation:shimmer 1.4s infinite}

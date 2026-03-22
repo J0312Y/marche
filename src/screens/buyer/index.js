@@ -38,5 +38,6 @@ export { default as LoyaltyScr } from './LoyaltyScr';
 export { default as ReturnScr } from './ReturnScr';
 export { default as GiftCardScr } from './GiftCardScr';
 export { default as QRScanScr } from './QRScanScr';
+export { default as ChatBotScr } from './ChatBotScr';
 export { default as PriceAlertScr } from './PriceAlertScr';
 export { default as GroupBuyScr } from "./GroupBuyScr";

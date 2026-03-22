@@ -25,6 +25,10 @@ function FlashScr({go,onBack}){
       </div>
     </div>
     {/* Products with individual timers and stock */}
+    <div style={{margin:"0 16px 12px",padding:14,background:"rgba(239,68,68,0.06)",border:"1px solid rgba(239,68,68,0.15)",borderRadius:16,display:"flex",alignItems:"center",justifyContent:"space-between"}}>
+      <div><div style={{fontSize:13,fontWeight:700,color:"#EF4444"}}>⚡ Ventes Flash</div><div style={{fontSize:11,color:"var(--muted)",marginTop:2}}>Offres limitées dans le temps</div></div>
+      <div style={{display:"flex",gap:4}}>{[["h",timeLeft.h],["m",timeLeft.m],["s",timeLeft.s]].map(([l,v])=><div key={l} style={{textAlign:"center"}}><div style={{width:36,height:36,borderRadius:10,background:"#EF4444",color:"#fff",display:"flex",alignItems:"center",justifyContent:"center",fontSize:16,fontWeight:800}}>{String(v).padStart(2,"0")}</div><div style={{fontSize:8,color:"var(--muted)",marginTop:2}}>{l}</div></div>)}</div>
+    </div>
     <div style={{padding:"0 16px 20px"}}>
       {promos.map((p,idx)=>{
         const stock=stocks[idx%stocks.length];

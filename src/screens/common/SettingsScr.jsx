@@ -26,6 +26,13 @@ function SettingsScr({onBack,go}){
       <div className="setting-item" onClick={()=>go("help")} style={{cursor:"pointer"}}><span className="si-i">❓</span><span className="si-t">Centre d'aide</span><span style={{color:"var(--muted)"}}>›</span></div>
       <div className="setting-item" onClick={()=>go("about")} style={{cursor:"pointer"}}><span className="si-i">ℹ️</span><span className="si-t">À propos</span><span style={{color:"var(--muted)"}}>›</span></div>
     </div>
+    <div className="setting-group"><h4>🧪 Test (développeur)</h4>
+      <div className="setting-item" onClick={()=>go("testSkeleton")} style={{cursor:"pointer"}}><span className="si-i">⏳</span><span className="si-t">Skeleton Loader</span><span style={{color:"var(--muted)"}}>›</span></div>
+      <div className="setting-item" onClick={()=>go("testErrors")} style={{cursor:"pointer"}}><span className="si-i">💀</span><span className="si-t">Écrans d'erreur</span><span style={{color:"var(--muted)"}}>›</span></div>
+      <div className="setting-item" onClick={()=>go("testPermissions")} style={{cursor:"pointer"}}><span className="si-i">🔔</span><span className="si-t">Permissions</span><span style={{color:"var(--muted)"}}>›</span></div>
+      <div className="setting-item" onClick={()=>go("testMap")} style={{cursor:"pointer"}}><span className="si-i">🗺️</span><span className="si-t">Carte live</span><span style={{color:"var(--muted)"}}>›</span></div>
+      <div className="setting-item" onClick={()=>go("testFilter")} style={{cursor:"pointer"}}><span className="si-i">🔍</span><span className="si-t">Filtres avancés</span><span style={{color:"var(--muted)"}}>›</span></div>
+    </div>
   </div>);
 }
 

@@ -100,7 +100,18 @@ function HomeScr({go,favs,toggleFav,isFav,userName}){
 
         {/* Popular Categories */}
         <div style={{marginBottom:24}}>
-          <h3 style={{fontSize:17,fontWeight:700,letterSpacing:-.3,color:"var(--text)",paddingBottom:12}}>Catégories populaires</h3>
+          {/* Promo carousel */}
+        <div style={{position:"relative",margin:"0 0 14px",height:120,borderRadius:16,overflow:"hidden"}}>
+          {promos.map((pr,i)=>(
+            <div key={i} style={{position:"absolute",inset:0,background:pr.bg,borderRadius:16,padding:18,display:"flex",alignItems:"center",justifyContent:"space-between",color:"#fff",opacity:promoSlide===i?1:0,transform:promoSlide===i?"translateX(0)":"translateX(40px)",transition:"all .5s ease",pointerEvents:promoSlide===i?"auto":"none"}}>
+              <div><div style={{fontSize:18,fontWeight:800,marginBottom:4}}>{pr.title}</div><div style={{fontSize:12,opacity:.85}}>{pr.sub}</div><button style={{marginTop:8,padding:"6px 16px",borderRadius:10,border:"none",background:"rgba(255,255,255,.25)",color:"#fff",fontSize:11,fontWeight:700,cursor:"pointer",fontFamily:"inherit"}}>Voir →</button></div>
+              <span style={{fontSize:42}}>{pr.icon}</span>
+            </div>
+          ))}
+          <div style={{position:"absolute",bottom:8,left:"50%",transform:"translateX(-50%)",display:"flex",gap:6}}>{promos.map((_,i)=><div key={i} onClick={()=>setPromoSlide(i)} style={{width:promoSlide===i?20:6,height:6,borderRadius:3,background:promoSlide===i?"#fff":"rgba(255,255,255,.4)",cursor:"pointer",transition:"all .3s"}}/>)}</div>
+        </div>
+
+        <h3 style={{fontSize:17,fontWeight:700,letterSpacing:-.3,color:"var(--text)",paddingBottom:12}}>Catégories populaires</h3>
           <div style={{background:"var(--card)",borderRadius:18,overflow:"hidden",boxShadow:"0 2px 10px rgba(0,0,0,.04)"}}>
             {CATS.map((c,i)=><div key={c.id} onClick={()=>doSearch(c.name)} style={{display:"flex",alignItems:"center",gap:14,padding:"12px 16px",cursor:"pointer",borderBottom:i<CATS.length-1?"1px solid var(--border)":"none",transition:"background .12s"}}>
               <div style={{width:48,height:48,borderRadius:12,overflow:"hidden",flexShrink:0,background:"var(--border)"}}>

@@ -11,6 +11,8 @@ const CHART_LABELS={
   month:["Sem 1","Sem 2","Sem 3","Sem 4"],
 };
 
+const CHART_DATA={revenue:[680000,920000,750000,1100000,890000,1350000,847500],orders:[12,18,14,22,16,28,19],days:["Lun","Mar","Mer","Jeu","Ven","Sam","Dim"]};
+
 function VDashboardScr({go}){
   const [period,setPeriod]=useState("week");
   const { data, loading, reload } = useLoad(() => vendor.getDashboard(period), [period]);

@@ -1,3 +1,4 @@
+import InvoiceView from "../../components/InvoiceView";
 import { useState } from "react";
 import toast from "../../utils/toast";
 
@@ -5,6 +6,7 @@ const STEPS=["Confirmée","En préparation","En livraison","Livrée"];
 
 function OrderDetailScr({order:o,onBack,go}){
   const [cancelled,setCancelled]=useState(false);
+  const [showInvoice,setShowInvoice]=useState(false);
   const [showCancel,setShowCancel]=useState(false);
   const status=cancelled?"Annulée":(o.status||"");
   const sc=cancelled?"cancel":(o.sc||"");
@@ -70,6 +72,8 @@ function OrderDetailScr({order:o,onBack,go}){
       {sc==="ship"&&<button style={{padding:14,borderRadius:14,border:"1px solid var(--border)",background:"var(--card)",fontSize:14,fontWeight:600,cursor:"pointer",fontFamily:"inherit"}} onClick={()=>go("chatDriver")}>💬 Contacter le livreur</button>}
       {sc==="done"&&!cancelled&&<button onClick={()=>go("returnOrder",o)} style={{padding:14,borderRadius:14,border:"1px solid var(--border)",background:"var(--card)",fontSize:14,fontWeight:600,cursor:"pointer",fontFamily:"inherit",color:"var(--text)"}}>↩️ Retour / Remboursement</button>}
       {sc==="done"&&!cancelled&&<button onClick={()=>go("rateDriver",{name:"Patrick Moukala"})} style={{padding:14,borderRadius:14,border:"none",background:"#F59E0B",color:"#fff",fontSize:14,fontWeight:600,cursor:"pointer",fontFamily:"inherit"}}>⭐ Évaluer le livreur</button>}
+      <button onClick={()=>setShowInvoice(true)} style={{padding:14,borderRadius:14,border:"1px solid var(--border)",background:"var(--card)",fontSize:14,fontWeight:600,cursor:"pointer",fontFamily:"inherit",color:"var(--text)"}}>🧾 Voir le reçu</button>
+      {showInvoice&&<InvoiceView order={{id:o.ref,client:"Joeldy Tsina",vendor:o.vendor,amount:o.total,items:o.items?.map(it=>({name:it.icon+" "+it.name,qty:it.qty,price:it.price}))||[{name:"Article",qty:1,price:o.total}],delivery:1500,payment:"Airtel Money"}} onClose={()=>setShowInvoice(false)}/>}
       {canCancel&&<button onClick={()=>setShowCancel(true)} style={{padding:14,borderRadius:14,border:"1px solid rgba(239,68,68,0.3)",background:"transparent",color:"#EF4444",fontSize:14,fontWeight:600,cursor:"pointer",fontFamily:"inherit"}}>✕ Annuler la commande</button>}
     </div>
 

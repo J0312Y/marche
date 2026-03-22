@@ -9,6 +9,9 @@ import { fmt, disc, getVendorPromo, totalDisc } from "../../utils/helpers";
 function SearchScr({go,onBack,fromTab,favs,toggleFav,isFav,defaultTab}){
   const { P, VENDORS, CATS } = useData();
   const [q,setQ]=useState("");const [sc,setSC]=useState("Tous");
+  const [searchHistory,setSearchHistory]=useState(["Robe Wax","Poulet DG","iPhone","Doliprane","Croissants"]);
+  const addToHistory=(q)=>{if(!q.trim())return;setSearchHistory(prev=>{const f=prev.filter(h=>h.toLowerCase()!==q.toLowerCase());return[q,...f].slice(0,10)})};
+  const removeFromHistory=(q)=>setSearchHistory(prev=>prev.filter(h=>h!==q));
   const [showFilter,setShowFilter]=useState(false);
   const [filters,setFilters]=useState({});
   const activeFilterCount=Object.values(filters).filter(v=>v&&v!==0&&v!=="popular").length;
