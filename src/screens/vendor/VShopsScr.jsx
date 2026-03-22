@@ -22,7 +22,7 @@ function VShopsScr({go,onBack}){
     <div className="appbar"><button onClick={onBack}>←</button><h2>Mes établissements</h2><button style={{width:38,height:38,borderRadius:12,border:"1px solid var(--border)",background:"var(--card)",cursor:"pointer",fontSize:16,display:"flex",alignItems:"center",justifyContent:"center"}} onClick={()=>go("vAddShop")}>+</button></div>
 
     {/* Enterprise overall banner */}
-    <div style={{margin:"0 20px 14px",padding:16,background:"linear-gradient(135deg,#F97316,#FB923C)",borderRadius:16,color:"#fff"}}>
+    <div style={{margin:"0 20px 14px",padding:16,background:"rgba(249,115,22,0.06)",borderRadius:16,color:"var(--text)",border:"1px solid rgba(249,115,22,0.2)"}}>
       <div style={{display:"flex",justifyContent:"space-between",alignItems:"center",marginBottom:10}}>
         <div><div style={{fontSize:11,opacity:.7}}>Plan Enterprise · Vue globale</div><div style={{fontSize:22,fontWeight:700,marginTop:2}}>{fmt(totalRev)}</div><div style={{fontSize:11,opacity:.7}}>Chiffre d'affaires total</div></div>
         <div style={{textAlign:"right"}}><div style={{fontSize:18,fontWeight:700}}>{shops.length}</div><div style={{fontSize:11,opacity:.7}}>boutiques</div></div>

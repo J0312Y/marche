@@ -15,7 +15,7 @@ function GiftCardScr({onBack}){
   const amounts=[5000,10000,25000,50000];
   const send=()=>{if(!amount||!to){toast.error("Montant et destinataire requis");return}setDone(true);validateGc()&&toast.success("Carte cadeau envoyée ! 🎁")};
   if(done)return(<div className="scr" style={{padding:16,textAlign:"center",display:"flex",flexDirection:"column",alignItems:"center",justifyContent:"center",height:"100%"}}>
-    <div style={{width:200,padding:24,background:"linear-gradient(135deg,#F97316,#FB923C)",borderRadius:20,color:"#fff",marginBottom:20}}>
+    <div style={{width:200,padding:24,background:"var(--card)",borderRadius:20,color:"var(--text)",border:"2px solid #F97316",marginBottom:20}}>
       <div style={{fontSize:28,marginBottom:4}}>🎁</div><div style={{fontSize:10,opacity:.7}}>Carte Cadeau Lamuka</div><div style={{fontSize:24,fontWeight:800,margin:"8px 0"}}>{fmt(amount)}</div><div style={{fontSize:11,opacity:.7}}>Pour: {to}</div>
     </div>
     <h3 style={{fontSize:18,fontWeight:700,marginBottom:4}}>Carte envoyée !</h3><p style={{fontSize:13,color:"var(--muted)"}}>Un SMS a été envoyé à {to}</p>

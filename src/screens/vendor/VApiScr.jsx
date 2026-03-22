@@ -12,7 +12,7 @@ function VApiScr({go,onBack}){
   return(<div className="scr" style={{padding:16}}>
     <div className="appbar" style={{padding:0,marginBottom:12}}><button onClick={onBack}>←</button><h2>API & Intégrations</h2><div style={{width:38}}/></div>
 
-    <div style={{padding:16,background:"linear-gradient(135deg,#F97316,#FB923C)",borderRadius:16,marginBottom:12,color:"#fff"}}>
+    <div style={{padding:16,background:"rgba(249,115,22,0.06)",borderRadius:16,marginBottom:12,color:"var(--text)",border:"1px solid rgba(249,115,22,0.2)"}}>
       <div style={{fontSize:11,opacity:.7}}>Plan Enterprise</div>
       <div style={{fontSize:18,fontWeight:700,margin:"4px 0"}}>API Lamuka v2.0</div>
       <div style={{display:"flex",gap:12,marginTop:6}}>

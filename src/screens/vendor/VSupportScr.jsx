@@ -188,7 +188,7 @@ function VSupportScr({go,onBack,vendorPlan}){
 
       {/* Tab 2: Contact */}
       {tab===2&&<div style={{padding:"0 16px 20px"}}>
-        {isEnt&&<div style={{padding:16,background:"linear-gradient(135deg,#F97316,#FB923C)",borderRadius:16,marginBottom:14,color:"#fff"}}>
+        {isEnt&&<div style={{padding:16,background:"rgba(249,115,22,0.06)",borderRadius:16,marginBottom:14,color:"var(--text)",border:"1px solid rgba(249,115,22,0.2)"}}>
           <h4 style={{fontSize:15,fontWeight:700,marginBottom:6}}>👤 Votre manager dédié</h4>
           <div style={{fontSize:13,marginBottom:4}}>Sophie Mabika</div>
           <div style={{fontSize:11,opacity:.8,lineHeight:1.6}}>📧 sophie.mabika@lamuka.cg{"\n"}📞 +242 06X XXX XXX{"\n"}💬 WhatsApp disponible{"\n"}⏱️ Lun-Ven 8h-18h · Réponse sous 2h</div>

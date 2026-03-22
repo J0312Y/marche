@@ -292,12 +292,12 @@ select option{background:var(--card);color:var(--text);padding:10px 14px;font-si
 .prof-stats{display:flex;justify-content:center;gap:0;margin-top:16px}
 .prof-stats .ps{flex:1;text-align:center}.prof-stats .ps b{display:block;font-size:18px;color:#F97316}.prof-stats .ps span{font-size:11px;color:var(--muted)}
 .prof-stats .psd{width:1px;height:32px;background:var(--border);align-self:center}
-.wallet{margin:0 20px 16px;padding:18px;border-radius:18px;background:linear-gradient(135deg,#F97316,#FB923C,#FB923C);color:#fff;display:flex;align-items:center;justify-content:space-between}
+.wallet{margin:0 20px 16px;padding:18px;border-radius:18px;background:linear-gradient(135deg,#EA580C,#F97316);color:#fff;display:flex;align-items:center;justify-content:space-between}
 .wallet p{font-size:11px;opacity:.7}.wallet h3{font-size:20px;font-weight:700;margin-top:2px}.wallet button{padding:8px 16px;border-radius:10px;background:rgba(255,255,255,.2);border:none;color:#fff;font-size:12px;font-weight:600;cursor:pointer;font-family:inherit}
 .menu-item{display:flex;align-items:center;gap:12px;padding:13px 16px;margin:0 20px 6px;background:var(--card);border:1px solid var(--border);border-radius:14px;cursor:pointer;transition:all .15s}.menu-item:hover{border-color:#bbb}
 .menu-item .mi-i{width:36px;height:36px;border-radius:10px;background:var(--light);display:flex;align-items:center;justify-content:center;font-size:16px;flex-shrink:0}
 .menu-item .mi-t{flex:1;font-size:14px;font-weight:500;color:var(--text)}.menu-item .mi-s{font-size:11px;color:var(--muted)}.menu-item .mi-c{color:var(--muted);font-size:14px}
-.vendor-cta{margin:0 20px 16px;padding:18px;border-radius:18px;background:linear-gradient(135deg,#F59E0B,#D97706);color:#fff;cursor:pointer;display:flex;align-items:center;gap:14px}
+.vendor-cta{margin:0 20px 16px;padding:18px;border-radius:18px;color:var(--text);cursor:pointer;display:flex;align-items:center;gap:14px}
 
 /* Vendor profile */
 .vp-head{padding:32px 20px 20px;background:linear-gradient(135deg,#F97316,#FB923C,#FB923C);color:#fff;text-align:center;position:relative}
@@ -439,7 +439,7 @@ select option{background:var(--card);color:var(--text);padding:10px 14px;font-si
 .pf-variant input{flex:1;padding:10px;border-radius:10px;border:1px solid var(--border);background:var(--light);font-size:13px;font-family:inherit;outline:none}
 
 /* Wallet */
-.vw-card{margin:0 16px 12px;padding:18px;border-radius:18px;color:#fff;background:linear-gradient(135deg,#F97316,#FB923C,#FB923C);color:#fff;text-align:center;position:relative;overflow:hidden}
+.vw-card{margin:0 16px 12px;padding:18px;border-radius:18px;color:#fff;background:linear-gradient(135deg,#EA580C,#F97316);color:#fff;text-align:center;position:relative;overflow:hidden}
 .vw-card::before{content:'';position:absolute;top:-40px;right:-40px;width:120px;height:120px;border-radius:50%;background:rgba(255,255,255,.08)}
 .vw-card::after{content:'';position:absolute;bottom:-30px;left:-30px;width:80px;height:80px;border-radius:50%;background:rgba(255,255,255,.05)}
 .vw-card .vw-lbl{font-size:12px;opacity:.7}.vw-card .vw-bal{font-size:28px;font-weight:700;margin:6px 0}
@@ -493,10 +493,10 @@ select option{background:var(--card);color:var(--text);padding:10px 14px;font-si
 .vo-filter button.on{background:#F97316;border-color:#F97316;color:#fff}
 
 /* ═══ DRIVER MODE ═══ */
-.dr-hero{padding:20px;background:linear-gradient(135deg,#F97316,#EA580C);color:#fff;border-radius:0 0 28px 28px;margin-bottom:16px}
+.dr-hero{padding:20px;background:var(--card);color:var(--text);border-radius:0 0 28px 28px;margin-bottom:16px;border-bottom:3px solid #F97316}
 .dr-hero .dr-top{display:flex;align-items:center;justify-content:space-between;margin-bottom:16px}
-.dr-hero .dr-av{width:48px;height:48px;border-radius:14px;background:rgba(255,255,255,.2);display:flex;align-items:center;justify-content:center;font-size:24px}
-.dr-hero .dr-name{font-size:18px;font-weight:700}.dr-hero .dr-sub{font-size:12px;opacity:.7}
+.dr-hero .dr-av{width:48px;height:48px;border-radius:14px;background:rgba(249,115,22,.1);display:flex;align-items:center;justify-content:center;font-size:24px}
+.dr-hero .dr-name{font-size:18px;font-weight:700}.dr-hero .dr-sub{font-size:12px;color:var(--muted)}
 .dr-toggle-bar{display:flex;align-items:center;gap:10px;padding:12px 16px;background:rgba(255,255,255,.12);border-radius:14px}
 .dr-toggle-bar .dt-dot{width:10px;height:10px;border-radius:50%}.dt-dot.on{background:#4ADE80;box-shadow:0 0 8px rgba(74,222,128,.5)}.dt-dot.off{background:rgba(255,255,255,.3)}
 .dr-toggle-bar span{flex:1;font-size:13px;font-weight:600}
