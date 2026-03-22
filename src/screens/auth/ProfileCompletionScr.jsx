@@ -7,7 +7,7 @@ function ProfileCompletionScr({onDone,provider}){
   return(
     <div className="auth" style={{justifyContent:"flex-start",paddingTop:40}}>
       {provider&&<div style={{textAlign:"center",marginBottom:12}}>
-        <div style={{display:"inline-flex",padding:"6px 16px",borderRadius:10,background:"rgba(16,185,129,0.06)",border:"1px solid rgba(16,185,129,0.15)",fontSize:12,color:"#10B981",fontWeight:600}}>✅ Connecté via {provider==="google"?"Google":provider==="apple"?"Apple":"Facebook"}</div>
+        <div style={{display:"inline-flex",padding:"6px 16px",borderRadius:10,background:"rgba(99,102,241,0.04)",border:"1px solid rgba(99,102,241,0.15)",fontSize:12,color:"#10B981",fontWeight:600}}>✅ Connecté via {provider==="google"?"Google":provider==="apple"?"Apple":"Facebook"}</div>
       </div>}
       <div style={{textAlign:"center",marginBottom:10}}><div style={{width:72,height:72,borderRadius:20,overflow:"hidden",margin:"0 auto 8px",border:"3px solid #E8E6E1",cursor:"pointer"}} onClick={()=>document.getElementById("pc-avatar")?.click()}><img id="pc-av-img" src={USER_AVATAR} style={{width:"100%",height:"100%",objectFit:"cover"}} alt=""/></div><input id="pc-avatar" type="file" accept="image/*" style={{display:"none"}} onChange={e=>{const f=e.target.files?.[0];if(f){const r=new FileReader();r.onload=()=>{document.getElementById("pc-av-img").src=r.result};r.readAsDataURL(f)}}}/><span style={{fontSize:12,color:"#6366F1",fontWeight:600,cursor:"pointer"}} onClick={()=>document.getElementById("pc-avatar")?.click()}>Ajouter une photo</span></div>
       <h2>Complétez votre profil</h2>

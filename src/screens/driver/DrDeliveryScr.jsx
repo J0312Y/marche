@@ -19,7 +19,7 @@ function DrDeliveryScr({delivery:dl,go,onBack}){
     {/* Map */}
     <MapView center={[driverPos.lat,driverPos.lng]} zoom={15} markers={markers} driverPos={driverPos}
       route={[pickup,driverPos,client]} routeColor="#10B981" style={{height:280}}>
-      <div style={{position:"absolute",top:16,left:"50%",transform:"translateX(-50%)",zIndex:1000,background:"#10B981",color:"#fff",padding:"8px 18px",borderRadius:12,fontSize:13,fontWeight:700,boxShadow:"0 4px 12px rgba(16,185,129,.3)",display:"flex",alignItems:"center",gap:6,whiteSpace:"nowrap"}}>
+      <div style={{position:"absolute",top:16,left:"50%",transform:"translateX(-50%)",zIndex:1000,background:"#F59E0B",color:"#fff",padding:"8px 18px",borderRadius:12,fontSize:13,fontWeight:700,boxShadow:"0 4px 12px rgba(16,185,129,.3)",display:"flex",alignItems:"center",gap:6,whiteSpace:"nowrap"}}>
         {step<2?"↗ Vers le commerce · 200m":"↗ Vers le client · 450m"}
       </div>
       <div style={{position:"absolute",top:12,left:12,zIndex:1000}}><button onClick={onBack} style={{width:40,height:40,borderRadius:14,background:"rgba(255,255,255,0.85)",backdropFilter:"blur(12px)",WebkitBackdropFilter:"blur(12px)",border:"1px solid rgba(255,255,255,0.4)",boxShadow:"0 4px 16px rgba(0,0,0,0.12)",cursor:"pointer",display:"flex",alignItems:"center",justifyContent:"center"}}><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><path d="M19 12H5M12 19l-7-7 7-7"/></svg></button></div>
@@ -40,15 +40,15 @@ function DrDeliveryScr({delivery:dl,go,onBack}){
           <div style={{fontSize:13,color:"var(--muted)"}}>{dl.vendor.name} · {dl.ref}</div>
           <div style={{display:"flex",gap:8,marginTop:10}}>
             <button style={{flex:1,padding:10,borderRadius:10,border:"none",background:"#6366F1",color:"#fff",fontSize:12,fontWeight:600,cursor:"pointer",fontFamily:"inherit"}} onClick={()=>go("drChatVendor",dl)}>💬 Commerce</button>
-            <button style={{width:42,padding:10,borderRadius:10,border:"none",background:"#10B981",color:"#fff",fontSize:14,cursor:"pointer",display:"flex",alignItems:"center",justifyContent:"center"}} onClick={()=>toast.info("📞 "+dl.vendor.name)}>📞</button>
+            <button style={{width:42,padding:10,borderRadius:10,border:"none",background:"#F59E0B",color:"#fff",fontSize:14,cursor:"pointer",display:"flex",alignItems:"center",justifyContent:"center"}} onClick={()=>toast.info("📞 "+dl.vendor.name)}>📞</button>
           </div>
         </>:<>
           <div style={{fontSize:15,fontWeight:700,marginBottom:2}}>{dl.client.name}</div>
           <div style={{fontSize:13,color:"var(--muted)"}}>{dl.client.addr}</div>
           <div style={{display:"flex",gap:8,marginTop:10}}>
-            <button style={{flex:1,padding:10,borderRadius:10,border:"none",background:"#10B981",color:"#fff",fontSize:12,fontWeight:600,cursor:"pointer",fontFamily:"inherit"}} onClick={()=>go("drChatClient",dl)}>💬 Client</button>
+            <button style={{flex:1,padding:10,borderRadius:10,border:"none",background:"#F59E0B",color:"#fff",fontSize:12,fontWeight:600,cursor:"pointer",fontFamily:"inherit"}} onClick={()=>go("drChatClient",dl)}>💬 Client</button>
             <button style={{width:42,padding:10,borderRadius:10,border:"none",background:"#3B82F6",color:"#fff",fontSize:14,cursor:"pointer",display:"flex",alignItems:"center",justifyContent:"center"}} onClick={()=>go("drNavigation",dl)}>🗺️</button>
-            <button style={{width:42,padding:10,borderRadius:10,border:"none",background:"#10B981",color:"#fff",fontSize:14,cursor:"pointer",display:"flex",alignItems:"center",justifyContent:"center"}} onClick={()=>toast.info("📞 "+dl.client.name)}>📞</button>
+            <button style={{width:42,padding:10,borderRadius:10,border:"none",background:"#F59E0B",color:"#fff",fontSize:14,cursor:"pointer",display:"flex",alignItems:"center",justifyContent:"center"}} onClick={()=>toast.info("📞 "+dl.client.name)}>📞</button>
           </div>
         </>}
       </div>
@@ -77,7 +77,7 @@ function DrDeliveryScr({delivery:dl,go,onBack}){
       {/* Bottom action - inside scroll */}
       <div style={{paddingTop:20,paddingBottom:16}}>
         {step<3?<button style={{width:"100%",padding:14,borderRadius:14,border:"none",background:step<2?"#6366F1":"#10B981",color:"#fff",fontSize:15,fontWeight:700,cursor:"pointer",fontFamily:"inherit"}} onClick={()=>setStep(step+1)}>{stepActions[step]}</button>
-        :<button style={{width:"100%",padding:14,borderRadius:14,border:"none",background:"#10B981",color:"#fff",fontSize:15,fontWeight:700,cursor:"pointer",fontFamily:"inherit"}} onClick={()=>go("drConfirm",dl)}>✅ Confirmer la livraison</button>}
+        :<button style={{width:"100%",padding:14,borderRadius:14,border:"none",background:"#F59E0B",color:"#fff",fontSize:15,fontWeight:700,cursor:"pointer",fontFamily:"inherit"}} onClick={()=>go("drConfirm",dl)}>✅ Confirmer la livraison</button>}
       </div>
     </div>
   </>);

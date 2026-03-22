@@ -28,7 +28,7 @@ function VReturnsScr({onBack}){
         <span style={{fontSize:14,fontWeight:700,color:"#6366F1"}}>{fmt(r.amount)}</span>
         {r.status==="pending"&&<div style={{display:"flex",gap:6}}>
           <button onClick={()=>act(r.id,"refused")} style={{padding:"6px 14px",borderRadius:10,border:"1px solid rgba(239,68,68,.15)",background:"transparent",color:"#EF4444",fontSize:11,fontWeight:600,cursor:"pointer",fontFamily:"inherit"}}>✕ Refuser</button>
-          <button onClick={()=>act(r.id,"approved")} style={{padding:"6px 14px",borderRadius:10,border:"none",background:"#10B981",color:"#fff",fontSize:11,fontWeight:700,cursor:"pointer",fontFamily:"inherit"}}>✓ Approuver</button>
+          <button onClick={()=>act(r.id,"approved")} style={{padding:"6px 14px",borderRadius:10,border:"none",background:"#F59E0B",color:"#fff",fontSize:11,fontWeight:700,cursor:"pointer",fontFamily:"inherit"}}>✓ Approuver</button>
         </div>}
       </div>
     </div>)}

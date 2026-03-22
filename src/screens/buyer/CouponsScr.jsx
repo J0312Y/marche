@@ -44,11 +44,11 @@ function CouponsScr({onBack,cart=[],appliedCoupon,onApply}){
     <div className="appbar" style={{padding:0,marginBottom:12}}><button onClick={onBack}>←</button><h2>🏷️ Codes Promo</h2><div style={{width:38}}/></div>
 
     {/* Applied coupon banner */}
-    {appliedCoupon&&<div style={{padding:14,background:"rgba(16,185,129,0.06)",border:"1px solid rgba(16,185,129,0.15)",borderRadius:14,marginBottom:12,display:"flex",alignItems:"center",justifyContent:"space-between"}}>
+    {appliedCoupon&&<div style={{padding:14,background:"rgba(99,102,241,0.04)",border:"1px solid rgba(99,102,241,0.15)",borderRadius:14,marginBottom:12,display:"flex",alignItems:"center",justifyContent:"space-between"}}>
       <div style={{display:"flex",alignItems:"center",gap:10}}>
         <span style={{fontSize:22}}>✅</span>
         <div>
-          <div style={{fontSize:13,fontWeight:700,color:"#10B981"}}>Code appliqué : {appliedCoupon.code}</div>
+          <div style={{fontSize:13,fontWeight:700,color:"#6366F1"}}>Code appliqué : {appliedCoupon.code}</div>
           <div style={{fontSize:12,color:"var(--muted)"}}>{appliedCoupon.free?"Livraison gratuite":`-${appliedCoupon.discount}% de réduction`}</div>
         </div>
       </div>

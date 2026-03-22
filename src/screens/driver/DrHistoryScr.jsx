@@ -10,7 +10,7 @@ function DrHistoryScr({onBack}){
 
   return(<PullToRefresh onRefresh={async()=>{toast.success("Historique actualisé 📦")}}><div className="scr"><div className="appbar"><button onClick={onBack}>←</button><h2>Historique</h2><div style={{width:38}}/></div>
     <div style={{padding:"0 20px 10px",display:"flex",gap:10}}>
-      <div style={{flex:1,padding:14,background:"rgba(16,185,129,0.06)",border:"1px solid rgba(16,185,129,0.12)",borderRadius:14,textAlign:"center"}}><div style={{fontSize:18,fontWeight:700,color:"#10B981"}}>{D_HISTORY.length}</div><div style={{fontSize:11,color:"var(--muted)"}}>Livraisons</div></div>
+      <div style={{flex:1,padding:14,background:"rgba(99,102,241,0.04)",border:"1px solid rgba(99,102,241,0.12)",borderRadius:14,textAlign:"center"}}><div style={{fontSize:18,fontWeight:700,color:"#10B981"}}>{D_HISTORY.length}</div><div style={{fontSize:11,color:"var(--muted)"}}>Livraisons</div></div>
       <div style={{flex:1,padding:14,background:"rgba(99,102,241,0.06)",border:"1px solid rgba(99,102,241,0.12)",borderRadius:14,textAlign:"center"}}><div style={{fontSize:18,fontWeight:700,color:"#6366F1"}}>{fmt(totalEarned)}</div><div style={{fontSize:11,color:"var(--muted)"}}>Total gagné</div></div>
       <div style={{flex:1,padding:14,background:"rgba(245,158,11,0.06)",border:"1px solid rgba(245,158,11,0.12)",borderRadius:14,textAlign:"center"}}><div style={{fontSize:18,fontWeight:700,color:"#F59E0B"}}>4.8</div><div style={{fontSize:11,color:"var(--muted)"}}>Note moy.</div></div>
     </div>

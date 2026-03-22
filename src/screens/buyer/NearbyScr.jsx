@@ -33,7 +33,7 @@ function NearbyScr({go,onBack}){
     </MapView>
     <div className="scr" style={{padding:16}}>
       <div style={{fontSize:14,fontWeight:600,marginBottom:12}}>{VENDORS.length} commerces à proximité</div>
-      {VENDORS.map(v=><div key={v.id} className="vcard" style={{marginBottom:8}} onClick={()=>{setSel(v);go("vendor",v)}}><div className="vav" style={v.logo?{overflow:"hidden",padding:0}:{}}>{v.logo?<img src={v.logo} style={{width:"100%",height:"100%",objectFit:"cover"}} alt=""/>:v.avatar}</div><div className="vi"><h4>{v.name}{v.verified&&<span className="vf">✓</span>}</h4><div className="vloc">📍 {v.loc}{v.eta&&<span style={{marginLeft:6,color:"#10B981",fontWeight:600}}>🕐 {v.eta}</span>}</div><div className="vst">⭐ <b>{v.rating}</b> · {v.products} {v.type==="restaurant"?"plats":v.type==="service"?"services":"produits"}</div></div></div>)}
+      {VENDORS.map(v=><div key={v.id} className="vcard" style={{marginBottom:8}} onClick={()=>{setSel(v);go("vendor",v)}}><div className="vav" style={v.logo?{overflow:"hidden",padding:0}:{}}>{v.logo?<img src={v.logo} style={{width:"100%",height:"100%",objectFit:"cover"}} alt=""/>:v.avatar}</div><div className="vi"><h4>{v.name}{v.verified&&<span className="vf">✓</span>}</h4><div className="vloc">📍 {v.loc}{v.eta&&<span style={{marginLeft:6,color:"#6366F1",fontWeight:600}}>🕐 {v.eta}</span>}</div><div className="vst">⭐ <b>{v.rating}</b> · {v.products} {v.type==="restaurant"?"plats":v.type==="service"?"services":"produits"}</div></div></div>)}
     </div>
   </>);
 }

@@ -20,7 +20,7 @@ function RateDriverScr({onBack,onDone,driver={}}){
     <h2 style={{fontSize:20,fontWeight:700,marginBottom:6}}>Merci !</h2>
     <p style={{fontSize:14,color:"var(--muted)",marginBottom:8}}>Votre évaluation aide {driverName} et les autres clients.</p>
     <div style={{fontSize:28,color:"#F59E0B",marginBottom:14}}>{"★".repeat(rating)}</div>
-    {tip>0&&<div style={{padding:"8px 16px",borderRadius:10,background:"rgba(16,185,129,0.06)",color:"#10B981",fontSize:13,fontWeight:600,marginBottom:14}}>🎁 Pourboire de {tip.toLocaleString()} FCFA envoyé</div>}
+    {tip>0&&<div style={{padding:"8px 16px",borderRadius:10,background:"rgba(99,102,241,0.04)",color:"#10B981",fontSize:13,fontWeight:600,marginBottom:14}}>🎁 Pourboire de {tip.toLocaleString()} FCFA envoyé</div>}
     <button className="btn-primary" style={{maxWidth:280}} onClick={onDone||onBack}>Retour à l'accueil</button>
   </div>);
 

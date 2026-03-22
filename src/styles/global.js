@@ -123,7 +123,7 @@ select option{background:var(--card);color:var(--text);padding:10px 14px;font-si
 .det-tags{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:18px}.det-tags span{padding:6px 14px;border-radius:10px;background:rgba(99,102,241,0.08);color:#6366F1;font-size:12px;font-weight:600}
 .det-info{padding:14px;border-radius:14px;border:1px solid var(--border);background:var(--light);display:flex;align-items:center;gap:12px;margin-bottom:10px;cursor:pointer}
 .det-info .dii{font-size:18px}.det-info .dit{flex:1}.det-info .dit h4{font-size:13px;font-weight:600}.det-info .dit p{font-size:11px;color:var(--muted)}
-.det-info .div{font-size:13px;font-weight:700;color:#10B981}
+.det-info .div{font-size:13px;font-weight:700;color:#6366F1}
 .det-bar{display:flex;align-items:center;gap:10px;padding:10px 16px;border-top:1px solid var(--border);background:var(--card);flex-shrink:0}
 .qty{display:flex;align-items:center;border:1px solid var(--border);border-radius:12px;overflow:hidden}
 .qty button{width:40px;height:40px;border:none;background:transparent;font-size:18px;cursor:pointer;display:flex;align-items:center;justify-content:center;color:var(--sub)}

@@ -36,11 +36,11 @@ function CartScr({cart,setCart,go,appliedCoupon,setAppliedCoupon}){
     {/* Coupon section */}
     {cart.length>0&&<div style={{marginTop:10}}>
       {appliedCoupon?(
-        <div style={{padding:14,background:"rgba(16,185,129,0.04)",border:"2px solid #10B981",borderRadius:16,display:"flex",alignItems:"center",justifyContent:"space-between"}}>
+        <div style={{padding:14,background:"rgba(99,102,241,0.04)",border:"2px solid #10B981",borderRadius:16,display:"flex",alignItems:"center",justifyContent:"space-between"}}>
           <div style={{display:"flex",alignItems:"center",gap:10}}>
             <span style={{fontSize:20}}>🏷️</span>
             <div>
-              <div style={{fontSize:13,fontWeight:700,color:"#10B981"}}>{appliedCoupon.code}</div>
+              <div style={{fontSize:13,fontWeight:700,color:"#6366F1"}}>{appliedCoupon.code}</div>
               <div style={{fontSize:11,color:"var(--muted)"}}>
                 {appliedCoupon.free?"Livraison gratuite":`-${appliedCoupon.discount}% = -${fmt(discountAmount)}`}
               </div>
@@ -78,7 +78,7 @@ function CartScr({cart,setCart,go,appliedCoupon,setAppliedCoupon}){
       <b style={freeDelivery?{textDecoration:"line-through",color:"var(--muted)"}:{}}>
         {fmt(del)}
       </b>
-      {freeDelivery&&<span style={{color:"#10B981",fontWeight:700,fontSize:12,marginLeft:6}}>GRATUIT</span>}
+      {freeDelivery&&<span style={{color:"#F59E0B",fontWeight:700,fontSize:12,marginLeft:6}}>GRATUIT</span>}
     </div>
 
     <div className="cs-row tot"><span>Total</span><span className="ctp">{fmt(total)}</span></div>

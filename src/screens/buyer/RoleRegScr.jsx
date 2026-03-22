@@ -41,7 +41,7 @@ function RoleRegScr({onBack,onDone,forceRole}){
       <div onClick={()=>{setRole("driver");setStep(0);setDocs({id:false,permit:false,vehicle:false})}} style={{padding:16,background:"var(--card)",border:"2px solid var(--border)",borderRadius:20,cursor:"pointer",transition:"all .2s"}}>
         <div style={{display:"flex",alignItems:"center",gap:14,marginBottom:10}}><div style={{width:56,height:56,borderRadius:16,background:"linear-gradient(135deg,#10B981,#059669)",display:"flex",alignItems:"center",justifyContent:"center",fontSize:28}}>🛵</div><div><h3 style={{fontSize:18,fontWeight:700}}>Livreur</h3><p style={{fontSize:12,color:"var(--muted)"}}>Livrez et gagnez de l'argent</p></div></div>
         <div style={{fontSize:12,color:"var(--sub)",lineHeight:1.6}}>Effectuez des livraisons dans votre zone. Choisissez vos horaires, suivez vos gains en temps réel.</div>
-        <div style={{display:"flex",gap:6,marginTop:10,flexWrap:"wrap"}}>{["Horaires flexibles","Gains en temps réel","GPS intégré","Pourboires"].map(f=><span key={f} style={{padding:"4px 10px",borderRadius:8,background:"rgba(16,185,129,0.06)",color:"#10B981",fontSize:10,fontWeight:600}}>{f}</span>)}</div>
+        <div style={{display:"flex",gap:6,marginTop:10,flexWrap:"wrap"}}>{["Horaires flexibles","Gains en temps réel","GPS intégré","Pourboires"].map(f=><span key={f} style={{padding:"4px 10px",borderRadius:8,background:"rgba(99,102,241,0.04)",color:"#10B981",fontSize:10,fontWeight:600}}>{f}</span>)}</div>
       </div>
     </div>
   </div>);
@@ -144,7 +144,7 @@ function RoleRegScr({onBack,onDone,forceRole}){
                       <img src={docs[key].preview} style={{width:"100%",height:"100%",objectFit:"cover"}} alt=""/>
                     </div>
                   ):(
-                    <div style={{width:48,height:48,borderRadius:14,background:"rgba(16,185,129,0.06)",display:"flex",alignItems:"center",justifyContent:"center",fontSize:18,flexShrink:0}}>📄</div>
+                    <div style={{width:48,height:48,borderRadius:14,background:"rgba(99,102,241,0.04)",display:"flex",alignItems:"center",justifyContent:"center",fontSize:18,flexShrink:0}}>📄</div>
                   )}
                   <div style={{flex:1,minWidth:0}}>
                     <div style={{fontSize:13,fontWeight:700,color:"#10B981",display:"flex",alignItems:"center",gap:4}}>✅ {title}</div>
@@ -176,7 +176,7 @@ function RoleRegScr({onBack,onDone,forceRole}){
       {/* STEP 3 DRIVER: Tarifs & Commission */}
       {step===3&&role==="driver"&&<><h3 style={{fontSize:16,fontWeight:700,marginBottom:14}}>Tarifs & Commission</h3>
         {/* Registration fee */}
-        <div style={{padding:16,background:"linear-gradient(135deg,rgba(16,185,129,0.06),rgba(16,185,129,0.02))",border:"1px solid rgba(16,185,129,0.15)",borderRadius:16,marginBottom:14}}>
+        <div style={{padding:16,background:"linear-gradient(135deg,rgba(16,185,129,0.06),rgba(16,185,129,0.02))",border:"1px solid rgba(99,102,241,0.15)",borderRadius:16,marginBottom:14}}>
           <div style={{display:"flex",alignItems:"center",gap:10,marginBottom:10}}>
             <div style={{width:40,height:40,borderRadius:12,background:"#10B981",display:"flex",alignItems:"center",justifyContent:"center",color:"#fff",fontSize:18}}>📋</div>
             <div><div style={{fontSize:14,fontWeight:700}}>Frais d'inscription</div><div style={{fontSize:11,color:"var(--muted)"}}>Paiement unique — couvre la vérification</div></div>

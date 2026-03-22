@@ -72,7 +72,7 @@ function TrackingScr({onBack,go}){
           <div style={{fontSize:11,color:"#F59E0B",marginTop:2}}>⭐ 4.8 · 342 livraisons</div>
         </div>
         <div style={{display:"flex",gap:6}}>
-          <button onClick={()=>toast.info("📞 Appel en cours...")} style={{width:40,height:40,borderRadius:12,border:"none",background:"#10B981",color:"#fff",cursor:"pointer",fontSize:16,display:"flex",alignItems:"center",justifyContent:"center"}}>📞</button>
+          <button onClick={()=>toast.info("📞 Appel en cours...")} style={{width:40,height:40,borderRadius:12,border:"none",background:"#F59E0B",color:"#fff",cursor:"pointer",fontSize:16,display:"flex",alignItems:"center",justifyContent:"center"}}>📞</button>
           <button onClick={()=>go("chatDriver")} style={{width:40,height:40,borderRadius:12,border:"none",background:"#6366F1",color:"#fff",cursor:"pointer",fontSize:16,display:"flex",alignItems:"center",justifyContent:"center"}}>💬</button>
         </div>
       </div>

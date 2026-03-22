@@ -48,24 +48,24 @@ function CheckoutScr({onBack,onDone,cart=[],appliedCoupon,setAppliedCoupon}){
         <div className="confirm-card" style={{cursor:"pointer"}} onClick={()=>setStep(1)}><span className="cci">📱</span><div className="ccb"><small>Paiement</small><p>{momos.find(m=>m.k===momo)?.n}</p></div><span className="cce" style={{color:"#6366F1",fontWeight:600}}>✏️</span></div>
 
         {/* Applied coupon */}
-        {appliedCoupon&&<div className="confirm-card" style={{background:"rgba(16,185,129,0.04)",border:"1px solid rgba(16,185,129,0.15)"}}><span className="cci">🏷️</span><div className="ccb"><small>Code promo</small><p style={{color:"#10B981",fontWeight:600}}>{appliedCoupon.code} — {appliedCoupon.free?"Livraison gratuite":`-${appliedCoupon.discount}%`}</p></div></div>}
+        {appliedCoupon&&<div className="confirm-card" style={{background:"rgba(99,102,241,0.04)",border:"1px solid rgba(99,102,241,0.15)"}}><span className="cci">🏷️</span><div className="ccb"><small>Code promo</small><p style={{color:"#6366F1",fontWeight:600}}>{appliedCoupon.code} — {appliedCoupon.free?"Livraison gratuite":`-${appliedCoupon.discount}%`}</p></div></div>}
 
         <div style={{marginTop:16}}>
           <div className="cs-row"><span>Sous-total</span><b>{fmt(sub)}</b></div>
-          {discountAmount>0&&<div className="cs-row" style={{color:"#10B981"}}><span>🏷️ {appliedCoupon.code} (-{appliedCoupon.discount}%)</span><b>-{fmt(discountAmount)}</b></div>}
+          {discountAmount>0&&<div className="cs-row" style={{color:"#F59E0B"}}><span>🏷️ {appliedCoupon.code} (-{appliedCoupon.discount}%)</span><b>-{fmt(discountAmount)}</b></div>}
           <div className="cs-row">
             <span>Livraison</span>
-            {freeDelivery?<span><b style={{textDecoration:"line-through",color:"var(--muted)"}}>{fmt(del)}</b><b style={{color:"#10B981",marginLeft:6}}>GRATUIT</b></span>:<b>{fmt(del)}</b>}
+            {freeDelivery?<span><b style={{textDecoration:"line-through",color:"var(--muted)"}}>{fmt(del)}</b><b style={{color:"#F59E0B",marginLeft:6}}>GRATUIT</b></span>:<b>{fmt(del)}</b>}
           </div>
           <div className="cs-row tot"><span>Total</span><span className="ctp">{fmt(total)}</span></div>
-          {(discountAmount>0||freeDelivery)&&<div style={{textAlign:"center",fontSize:11,color:"#10B981",fontWeight:600,marginTop:4}}>🎉 Économie : {fmt(discountAmount+(freeDelivery?del:0))}</div>}
+          {(discountAmount>0||freeDelivery)&&<div style={{textAlign:"center",fontSize:11,color:"#F59E0B",fontWeight:600,marginTop:4}}>🎉 Économie : {fmt(discountAmount+(freeDelivery?del:0))}</div>}
         </div></>}
 
       <div style={{paddingTop:24,paddingBottom:16}}><button className="btn-primary" onClick={()=>step<2?setStep(step+1):handleConfirm()}>{step===2?"Confirmer le paiement":"Continuer"}</button></div>
     </div>
 
     {ok&&<div className="success-modal"><div className="success-box"><div className="si">✅</div><h2>Commande confirmée !</h2><p>Vérifiez votre téléphone pour le paiement.</p><div className="ref">#LMK-2026-0214</div>
-      {appliedCoupon&&<div style={{fontSize:12,color:"#10B981",fontWeight:600,marginTop:8}}>🏷️ Code {appliedCoupon.code} appliqué</div>}
+      {appliedCoupon&&<div style={{fontSize:12,color:"#6366F1",fontWeight:600,marginTop:8}}>🏷️ Code {appliedCoupon.code} appliqué</div>}
       <button className="btn-primary" onClick={onDone}>Retour à l'accueil</button></div></div>}
   </>);
 }

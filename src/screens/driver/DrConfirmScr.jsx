@@ -59,7 +59,7 @@ function DrConfirmScr({delivery:dl,go,onBack}){
         </div>
         :<div style={{height:160,borderRadius:18,overflow:"hidden",position:"relative",border:"2px solid #10B981"}}>
           <img src={photoTaken} style={{width:"100%",height:"100%",objectFit:"cover"}} alt=""/>
-          <div style={{position:"absolute",top:8,right:8,padding:"4px 10px",borderRadius:8,background:"#10B981",color:"#fff",fontSize:10,fontWeight:700}}>✅ Photo prise</div>
+          <div style={{position:"absolute",top:8,right:8,padding:"4px 10px",borderRadius:8,background:"#F59E0B",color:"#fff",fontSize:10,fontWeight:700}}>✅ Photo prise</div>
           <div onClick={()=>setPhotoTaken(false)} style={{position:"absolute",bottom:8,right:8,padding:"4px 10px",borderRadius:8,background:"rgba(239,68,68,.9)",color:"#fff",fontSize:10,fontWeight:600,cursor:"pointer"}}>🗑️ Reprendre</div>
         </div>}
       </div>}
@@ -69,7 +69,7 @@ function DrConfirmScr({delivery:dl,go,onBack}){
         {!signed?<div onClick={()=>setSigned(true)} style={{height:140,background:"var(--card)",border:"2px dashed #E8E6E1",borderRadius:18,display:"flex",alignItems:"center",justifyContent:"center",cursor:"pointer"}}>
           <div style={{fontSize:13,color:"var(--muted)"}}>✍️ Appuyer ici pour signer</div>
         </div>
-        :<div style={{height:140,background:"rgba(16,185,129,0.04)",border:"2px solid #10B981",borderRadius:18,display:"flex",alignItems:"center",justifyContent:"center",position:"relative"}}>
+        :<div style={{height:140,background:"rgba(99,102,241,0.04)",border:"2px solid #10B981",borderRadius:18,display:"flex",alignItems:"center",justifyContent:"center",position:"relative"}}>
           <div style={{fontFamily:"cursive",fontSize:24,color:"var(--text)",opacity:.6}}>Marie Koumba</div>
           <div onClick={()=>setSigned(false)} style={{position:"absolute",bottom:8,right:8,fontSize:11,color:"#EF4444",cursor:"pointer",fontWeight:600}}>🗑️ Effacer</div>
           <div style={{position:"absolute",top:8,right:8}}><span style={{padding:"3px 8px",borderRadius:6,background:"rgba(16,185,129,0.1)",color:"#10B981",fontSize:10,fontWeight:600}}>✓ Signé</span></div>

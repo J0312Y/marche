@@ -19,7 +19,7 @@ function PaymentHistoryScr({onBack}){
 
     {/* Summary */}
     <div style={{display:"flex",gap:8,marginBottom:14}}>
-      <div style={{flex:1,padding:12,background:"rgba(16,185,129,0.06)",border:"1px solid rgba(16,185,129,0.12)",borderRadius:14,textAlign:"center"}}>
+      <div style={{flex:1,padding:12,background:"rgba(99,102,241,0.04)",border:"1px solid rgba(99,102,241,0.12)",borderRadius:14,textAlign:"center"}}>
         <div style={{fontSize:10,color:"var(--muted)"}}>Rechargements</div>
         <div style={{fontSize:15,fontWeight:700,color:"#10B981"}}>{fmt(income)}</div>
       </div>

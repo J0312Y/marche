@@ -54,7 +54,7 @@ function OrdersScr({go}){
         <span style={{fontSize:15,fontWeight:700,color:"#6366F1"}}>{o.total} FCFA</span>
         <div style={{display:"flex",gap:6}}>
           {o.sc==="ship"&&<button style={{padding:"6px 12px",borderRadius:8,background:"rgba(99,102,241,0.08)",fontSize:11,fontWeight:600,color:"#6366F1",cursor:"pointer",border:"none",fontFamily:"inherit"}} onClick={e=>{e.stopPropagation();go("tracking")}}>📍 Suivre</button>}
-          {o.sc==="done"&&<button style={{padding:"6px 12px",borderRadius:8,background:"rgba(16,185,129,0.08)",fontSize:11,fontWeight:600,color:"#10B981",cursor:"pointer",border:"1px solid rgba(16,185,129,0.15)",fontFamily:"inherit"}} onClick={e=>{e.stopPropagation();setReorderConfirm(o)}}>🔄 Recommander</button>}
+          {o.sc==="done"&&<button style={{padding:"6px 12px",borderRadius:8,background:"rgba(16,185,129,0.08)",fontSize:11,fontWeight:600,color:"#10B981",cursor:"pointer",border:"1px solid rgba(99,102,241,0.15)",fontFamily:"inherit"}} onClick={e=>{e.stopPropagation();setReorderConfirm(o)}}>🔄 Recommander</button>}
           {(o.sc==="ship"||o.sc==="prep")&&<button style={{padding:"6px 12px",borderRadius:8,background:"rgba(239,68,68,0.06)",fontSize:11,fontWeight:600,color:"#EF4444",cursor:"pointer",border:"1px solid rgba(239,68,68,0.15)",fontFamily:"inherit"}} onClick={e=>{e.stopPropagation();setCancelConfirm(o)}}>✕ Annuler</button>}
         </div>
       </div>
@@ -88,7 +88,7 @@ function OrdersScr({go}){
         </div>
         <div style={{display:"flex",gap:10}}>
           <button onClick={()=>setReorderConfirm(null)} style={{flex:1,padding:12,borderRadius:12,border:"1px solid var(--border)",background:"var(--card)",fontSize:13,fontWeight:600,cursor:"pointer",fontFamily:"inherit"}}>Annuler</button>
-          <button onClick={()=>reorder(reorderConfirm)} style={{flex:1,padding:12,borderRadius:12,border:"none",background:"#10B981",color:"#fff",fontSize:13,fontWeight:700,cursor:"pointer",fontFamily:"inherit"}}>🛍️ Commander</button>
+          <button onClick={()=>reorder(reorderConfirm)} style={{flex:1,padding:12,borderRadius:12,border:"none",background:"#6366F1",color:"#fff",fontSize:13,fontWeight:700,cursor:"pointer",fontFamily:"inherit"}}>🛍️ Commander</button>
         </div>
       </div>
     </div>}

@@ -70,10 +70,10 @@ function VendorScr({vendor:vProp,go,onBack}){
     </div>
 
     {/* Vendor promo banner */}
-    {v.promo&&<div style={{margin:"0 20px 14px",padding:14,background:"linear-gradient(135deg,rgba(16,185,129,0.08),rgba(16,185,129,0.04))",border:"1px solid rgba(16,185,129,0.15)",borderRadius:16,display:"flex",alignItems:"center",gap:12}}>
+    {v.promo&&<div style={{margin:"0 20px 14px",padding:14,background:"linear-gradient(135deg,rgba(16,185,129,0.08),rgba(16,185,129,0.04))",border:"1px solid rgba(99,102,241,0.15)",borderRadius:16,display:"flex",alignItems:"center",gap:12}}>
       <div style={{width:44,height:44,borderRadius:12,background:"#10B981",display:"flex",alignItems:"center",justifyContent:"center",color:"#fff",fontWeight:800,fontSize:16,flexShrink:0}}>-{v.promo.discount}%</div>
       <div style={{flex:1}}>
-        <div style={{fontSize:14,fontWeight:700,color:"#10B981"}}>{v.promo.name}</div>
+        <div style={{fontSize:14,fontWeight:700,color:"#F59E0B"}}>{v.promo.name}</div>
         <div style={{fontSize:11,color:"var(--muted)"}}>Sur tous les articles · Jusqu'au {v.promo.ends}</div>
       </div>
       <span style={{fontSize:20}}>🏷️</span>
@@ -89,7 +89,7 @@ function VendorScr({vendor:vProp,go,onBack}){
     {/* ═══ PRODUCTS TAB (default) ═══ */}
     {tab==="products"&&<>
       <div style={{padding:"0 16px",marginBottom:10}}><div style={{fontSize:12,color:"var(--muted)"}}>{vp.length} articles disponibles</div></div>
-      <div className="pgrid">{vp.map(p=>{const vpromo=getVendorPromo(p,VENDORS);return(<div key={p.id} className="pcard" onClick={()=>go("detail",p)}><div className="pimg"><Img src={p.photo} emoji={p.img} style={{width:"100%",height:"100%"}} fit="cover"/>{vpromo&&<span className="badge">-{vpromo.promoDiscount}%</span>}{!vpromo&&disc(p)>0&&<span className="badge">-{disc(p)}%</span>}</div><div className="pbody"><h4>{p.name}</h4><div className="pp">{vpromo?<><span style={{color:"#10B981"}}>{fmt(vpromo.promoPrice)}</span><span className="po">{fmt(p.price)}</span></>:<>{fmt(p.price)}</>}</div><div className="pr">⭐ {p.rating}</div></div></div>)})}</div>
+      <div className="pgrid">{vp.map(p=>{const vpromo=getVendorPromo(p,VENDORS);return(<div key={p.id} className="pcard" onClick={()=>go("detail",p)}><div className="pimg"><Img src={p.photo} emoji={p.img} style={{width:"100%",height:"100%"}} fit="cover"/>{vpromo&&<span className="badge">-{vpromo.promoDiscount}%</span>}{!vpromo&&disc(p)>0&&<span className="badge">-{disc(p)}%</span>}</div><div className="pbody"><h4>{p.name}</h4><div className="pp">{vpromo?<><span style={{color:"#6366F1"}}>{fmt(vpromo.promoPrice)}</span><span className="po">{fmt(p.price)}</span></>:<>{fmt(p.price)}</>}</div><div className="pr">⭐ {p.rating}</div></div></div>)})}</div>
       {vp.length===0&&<div style={{textAlign:"center",padding:"40px 0"}}><div style={{fontSize:36}}>📦</div><div style={{fontSize:13,color:"var(--muted)",marginTop:8}}>Aucun article pour le moment</div></div>}
     </>}
 

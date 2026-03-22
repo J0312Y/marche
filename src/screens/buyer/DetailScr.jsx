@@ -92,21 +92,21 @@ function DetailScr({product:p,onBack,onAddCart,go,favs,toggleFav,isFav}){
         {/* Price */}
         <div className="det-price">
           {vp?<>
-            <span className="dp" style={{color:"#10B981"}}>{fmt(vp.promoPrice)}</span>
+            <span className="dp" style={{color:"#6366F1"}}>{fmt(vp.promoPrice)}</span>
             <span className="dpo">{fmt(p.price)}</span>
-            <span style={{fontSize:12,color:"#10B981",fontWeight:700,marginLeft:8}}>-{vp.promoDiscount}%</span>
+            <span style={{fontSize:12,color:"#F59E0B",fontWeight:700,marginLeft:8}}>-{vp.promoDiscount}%</span>
           </>:<>
             <span className="dp">{fmt(p.price)}</span>
             {p.old&&<span className="dpo">{fmt(p.old)}</span>}
-            {disc(p)>0&&<span style={{fontSize:12,color:"#10B981",fontWeight:700,marginLeft:8}}>Économisez {fmt(p.old-p.price)}</span>}
+            {disc(p)>0&&<span style={{fontSize:12,color:"#F59E0B",fontWeight:700,marginLeft:8}}>Économisez {fmt(p.old-p.price)}</span>}
           </>}
         </div>
 
         {/* Vendor promo banner */}
-        {vp&&<div style={{display:"flex",alignItems:"center",gap:10,padding:"10px 14px",background:"rgba(16,185,129,0.06)",borderRadius:12,marginBottom:12,border:"1px solid rgba(16,185,129,0.12)"}}>
+        {vp&&<div style={{display:"flex",alignItems:"center",gap:10,padding:"10px 14px",background:"rgba(99,102,241,0.04)",borderRadius:12,marginBottom:12,border:"1px solid rgba(99,102,241,0.12)"}}>
           <span style={{fontSize:20}}>🏷️</span>
           <div style={{flex:1}}>
-            <div style={{fontSize:13,fontWeight:700,color:"#10B981"}}>{vp.promoName}</div>
+            <div style={{fontSize:13,fontWeight:700,color:"#F59E0B"}}>{vp.promoName}</div>
             <div style={{fontSize:11,color:"var(--muted)"}}>-{vp.promoDiscount}% appliqué automatiquement · Jusqu'au {vp.promoEnds}</div>
           </div>
         </div>}
@@ -115,10 +115,10 @@ function DetailScr({product:p,onBack,onAddCart,go,favs,toggleFav,isFav}){
         {p.tags.length>0&&<div className="det-tags">{p.tags.map(t=><span key={t}>{t}</span>)}</div>}
 
         {/* Delivery estimate */}
-        <div style={{display:"flex",alignItems:"center",gap:8,padding:"10px 14px",background:"rgba(16,185,129,0.06)",borderRadius:12,marginBottom:10,border:"1px solid rgba(16,185,129,0.12)"}}>
+        <div style={{display:"flex",alignItems:"center",gap:8,padding:"10px 14px",background:"rgba(99,102,241,0.04)",borderRadius:12,marginBottom:10,border:"1px solid rgba(99,102,241,0.12)"}}>
           <span style={{fontSize:18}}>🚚</span>
           <div style={{flex:1}}>
-            <div style={{fontSize:12,fontWeight:700,color:"#10B981"}}>Livraison estimée : {p.eta||"1-3 jours"}</div>
+            <div style={{fontSize:12,fontWeight:700,color:"#6366F1"}}>Livraison estimée : {p.eta||"1-3 jours"}</div>
             <div style={{fontSize:10,color:"var(--muted)"}}>À Brazzaville · {p.type==="restaurant"||p.type==="patisserie"?"Préparation incluse":"Expédition sous 24h"}</div>
           </div>
         </div>
@@ -185,7 +185,7 @@ function DetailScr({product:p,onBack,onAddCart,go,favs,toggleFav,isFav}){
             <div className="dit">
               <h4>Livraison à Brazzaville</h4>
               <p>1-3 jours · À partir de 1 500 FCFA</p>
-              <p style={{fontSize:11,color:"#10B981",marginTop:2}}>Gratuite à partir de 50 000 FCFA</p>
+              <p style={{fontSize:11,color:"#F59E0B",marginTop:2}}>Gratuite à partir de 50 000 FCFA</p>
             </div>
           </div>
           <div className="det-info" style={{marginBottom:8}}>

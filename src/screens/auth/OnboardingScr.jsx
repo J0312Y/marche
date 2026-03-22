@@ -13,7 +13,7 @@ const SLIDES = [
     icon: "🍽️",
     title: "Commandez, achetez, réservez",
     desc: "Des milliers de commerces vérifiés : restaurants, boutiques de mode, boulangeries, pressing et plus encore.",
-    color: "#10B981",
+    color: "#6366F1",
   },
   {
     photo: "https://images.unsplash.com/photo-1556742049-0cfed4f6a45d?w=800&h=1200&fit=crop",
