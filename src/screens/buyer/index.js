@@ -41,3 +41,5 @@ export { default as QRScanScr } from './QRScanScr';
 export { default as ChatBotScr } from './ChatBotScr';
 export { default as PriceAlertScr } from './PriceAlertScr';
 export { default as GroupBuyScr } from "./GroupBuyScr";
+
+export { default as MyStatsScr } from './MyStatsScr';

@@ -243,7 +243,7 @@ function DetailScr({product:p,onBack,onAddCart,go,favs,toggleFav,isFav}){
         <div onClick={()=>go("vendor",{id:p.vendorId,name:p.vendor})} style={{display:"flex",alignItems:"center",gap:12,padding:14,background:"var(--card)",borderRadius:14,border:"1px solid var(--border)",marginBottom:12,cursor:"pointer"}}>
           <div style={{width:44,height:44,borderRadius:12,background:"linear-gradient(135deg,#F97316,#FB923C)",display:"flex",alignItems:"center",justifyContent:"center",fontSize:20,color:"#fff"}}>{p.va}</div>
           <div style={{flex:1}}>
-            <div style={{fontSize:14,fontWeight:700}}>{p.vendor} <span style={{color:"#F97316"}}>✓</span></div>
+            <div style={{fontSize:14,fontWeight:700}}>{p.vendor} <span style={{color:"#F97316"}}>✓</span>{vendor?.badge==="top"&&<span style={{padding:"2px 8px",borderRadius:6,background:"rgba(245,158,11,0.08)",color:"#F59E0B",fontSize:9,fontWeight:700,marginLeft:4}}>🏆 Top Vendeur</span>}{vendor?.badge==="new"&&<span style={{padding:"2px 8px",borderRadius:6,background:"rgba(249,115,22,0.08)",color:"#F97316",fontSize:9,fontWeight:700,marginLeft:4}}>🆕 Nouveau</span>}</div>
             <div style={{fontSize:11,color:"var(--muted)"}}>Voir la boutique · Tous les articles</div>
           </div>
           <span style={{color:"var(--muted)",fontSize:18}}>›</span>
