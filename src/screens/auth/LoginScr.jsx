@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { TermsScr, PrivacyScr } from "../common";
 
 function LoginScr({onDone,onSocial}){
   const [legal,setLegal]=useState(null);
