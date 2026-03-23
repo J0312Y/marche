@@ -83,7 +83,7 @@ function ChatVendorScr({onBack,vendorName,vendorAvatar,vendor}){
           <span>📍 {vInfo.zone}</span>
         </p>
       </div>
-      <button className="ch-call">📞</button>
+      <button className="ch-call" onClick={()=>toast.info("📞 Appel du vendeur...")}>📞</button>
     </div>
 
     <div className="chat-body" ref={ref}>
@@ -125,7 +125,7 @@ function ChatVendorScr({onBack,vendorName,vendorAvatar,vendor}){
     {viewImg&&(
       <div onClick={()=>setViewImg(null)} style={{position:"fixed",inset:0,background:"rgba(0,0,0,.85)",zIndex:100,display:"flex",alignItems:"center",justifyContent:"center",cursor:"pointer",padding:20}}>
         <img src={viewImg} alt="" style={{maxWidth:"100%",maxHeight:"80vh",borderRadius:12,objectFit:"contain"}}/>
-        <button style={{position:"absolute",top:20,right:20,width:40,height:40,borderRadius:"50%",background:"rgba(255,255,255,.2)",border:"none",color:"#fff",fontSize:20,cursor:"pointer"}}>✕</button>
+        <button style={{position:"absolute",top:20,right:20,width:40,height:40,borderRadius:"50%",background:"rgba(255,255,255,.2)",border:"none",color:"#fff",fontSize:20,cursor:"pointer"}} onClick={()=>setViewImg?.(null)}>✕</button>
       </div>
     )}
   </>);

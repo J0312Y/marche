@@ -1,3 +1,4 @@
+import toast from "../../utils/toast";
 import { useState } from "react";
 
 function VSupportScr({go,onBack,vendorPlan}){
@@ -117,7 +118,7 @@ function VSupportScr({go,onBack,vendorPlan}){
         <span style={{fontSize:24}}>⭐</span>
         <div>
           <div style={{fontSize:14,fontWeight:700}}>Support Enterprise Premium</div>
-          <div style={{fontSize:11,opacity:.8}}>Manager dédié · Réponse sous 2h · Hotline 24/7</div>
+          <div style={{fontSize:11,color:"rgba(255,255,255,.85)"}}>Manager dédié · Réponse sous 2h · Hotline 24/7</div>
         </div>
       </div>
     </div>}
@@ -191,10 +192,10 @@ function VSupportScr({go,onBack,vendorPlan}){
         {isEnt&&<div style={{padding:16,background:"rgba(249,115,22,0.06)",borderRadius:16,marginBottom:14,color:"var(--text)",border:"1px solid rgba(249,115,22,0.2)"}}>
           <h4 style={{fontSize:15,fontWeight:700,marginBottom:6}}>👤 Votre manager dédié</h4>
           <div style={{fontSize:13,marginBottom:4}}>Sophie Mabika</div>
-          <div style={{fontSize:11,opacity:.8,lineHeight:1.6}}>📧 sophie.mabika@lamuka.cg{"\n"}📞 +242 06X XXX XXX{"\n"}💬 WhatsApp disponible{"\n"}⏱️ Lun-Ven 8h-18h · Réponse sous 2h</div>
+          <div style={{fontSize:11,color:"rgba(255,255,255,.85)",lineHeight:1.6}}>📧 sophie.mabika@lamuka.cg{"\n"}📞 +242 06X XXX XXX{"\n"}💬 WhatsApp disponible{"\n"}⏱️ Lun-Ven 8h-18h · Réponse sous 2h</div>
           <div style={{display:"flex",gap:8,marginTop:10}}>
-            <button style={{flex:1,padding:10,borderRadius:10,border:"none",background:"rgba(255,255,255,0.2)",color:"#fff",fontSize:12,fontWeight:600,cursor:"pointer",fontFamily:"inherit"}}>📞 Appeler</button>
-            <button style={{flex:1,padding:10,borderRadius:10,border:"none",background:"rgba(255,255,255,0.2)",color:"#fff",fontSize:12,fontWeight:600,cursor:"pointer",fontFamily:"inherit"}}>💬 WhatsApp</button>
+            <button onClick={()=>toast.info("📞 Appel en cours...")} style={{flex:1,padding:10,borderRadius:10,border:"none",background:"rgba(255,255,255,0.25)",color:"#fff",fontSize:12,fontWeight:700,cursor:"pointer",fontFamily:"inherit",backdropFilter:"blur(4px)"}}>📞 Appeler</button>
+            <button onClick={()=>toast.info("💬 WhatsApp ouvert...")} style={{flex:1,padding:10,borderRadius:10,border:"none",background:"rgba(255,255,255,0.25)",color:"#fff",fontSize:12,fontWeight:700,cursor:"pointer",fontFamily:"inherit",backdropFilter:"blur(4px)"}}>💬 WhatsApp</button>
           </div>
         </div>}
 

@@ -24,16 +24,16 @@ function VShopsScr({go,onBack}){
     {/* Enterprise overall banner */}
     <div style={{margin:"0 20px 14px",padding:16,background:"rgba(249,115,22,0.06)",borderRadius:16,color:"var(--text)",border:"1px solid rgba(249,115,22,0.2)"}}>
       <div style={{display:"flex",justifyContent:"space-between",alignItems:"center",marginBottom:10}}>
-        <div><div style={{fontSize:11,opacity:.7}}>Plan Enterprise · Vue globale</div><div style={{fontSize:22,fontWeight:700,marginTop:2}}>{fmt(totalRev)}</div><div style={{fontSize:11,opacity:.7}}>Chiffre d'affaires total</div></div>
-        <div style={{textAlign:"right"}}><div style={{fontSize:18,fontWeight:700}}>{shops.length}</div><div style={{fontSize:11,opacity:.7}}>boutiques</div></div>
+        <div><div style={{fontSize:11,color:"var(--muted)"}}>Plan Enterprise · Vue globale</div><div style={{fontSize:22,fontWeight:700,marginTop:2}}>{fmt(totalRev)}</div><div style={{fontSize:11,color:"var(--muted)"}}>Chiffre d'affaires total</div></div>
+        <div style={{textAlign:"right"}}><div style={{fontSize:18,fontWeight:700}}>{shops.length}</div><div style={{fontSize:11,color:"var(--muted)"}}>boutiques</div></div>
       </div>
       <div style={{display:"grid",gridTemplateColumns:"1fr 1fr 1fr 1fr",gap:6}}>
-        {[["📦",totalOrders,"Cmd"],["🛍️",totalProducts,"Prod."],["👁️",totalViews,"Vues"],["⭐",avgRating,"Note"]].map(([i,v,l])=><div key={l} style={{padding:8,background:"rgba(255,255,255,0.15)",borderRadius:10,textAlign:"center"}}>
+        {[["📦",totalOrders,"Cmd"],["🛍️",totalProducts,"Prod."],["👁️",totalViews,"Vues"],["⭐",avgRating,"Note"]].map(([i,v,l])=><div key={l} style={{padding:8,background:"var(--card)",border:"1px solid var(--border)",borderRadius:10,textAlign:"center"}}>
           <div style={{fontSize:14,fontWeight:700}}>{v}</div>
-          <div style={{fontSize:9,opacity:.7}}>{l}</div>
+          <div style={{fontSize:9,color:"var(--muted)"}}>{l}</div>
         </div>)}
       </div>
-      <button style={{width:"100%",marginTop:10,padding:8,borderRadius:8,border:"none",background:"rgba(255,255,255,0.2)",color:"#fff",fontSize:11,fontWeight:600,cursor:"pointer",fontFamily:"inherit"}} onClick={()=>setShowStats(!showStats)}>{showStats?"▲ Masquer les détails":"▼ Voir les statistiques détaillées"}</button>
+      <button style={{width:"100%",marginTop:10,padding:8,borderRadius:8,border:"none",background:"var(--card)",border:"1px solid var(--border)",color:"#F97316",fontSize:11,fontWeight:600,cursor:"pointer",fontFamily:"inherit"}} onClick={()=>setShowStats(!showStats)}>{showStats?"▲ Masquer les détails":"▼ Voir les statistiques détaillées"}</button>
     </div>
 
     {/* Expanded stats */}

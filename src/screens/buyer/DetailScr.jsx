@@ -52,6 +52,9 @@ function DetailScr({product:p,onBack,onAddCart,go,favs,toggleFav,isFav}){
   const [selColor,setSelColor]=useState(p.colors?.[0]||null);
   const [selVariant,setSelVariant]=useState(p.variants?.[0]||null);
   const [priceAlert,setPriceAlert]=useState(false);
+  const [showAlertPopup,setShowAlertPopup]=useState(false);
+  const [alertPrice,setAlertPrice]=useState("");
+  const [showGroupPopup,setShowGroupPopup]=useState(false);
   const [showQA,setShowQA]=useState(false);
   const [qaText,setQaText]=useState("");
   const [qas,setQas]=useState([
@@ -142,10 +145,10 @@ function DetailScr({product:p,onBack,onAddCart,go,favs,toggleFav,isFav}){
 
         {/* Price alert + Group buy */}
         <div style={{display:"flex",gap:8,marginBottom:10}}>
-          <button onClick={()=>{setPriceAlert(!priceAlert);toast.success(priceAlert?"Alerte retirée":"Alerte activée ! On vous notifie si le prix baisse 🔔")}} style={{flex:1,padding:"8px 0",borderRadius:10,border:priceAlert?"1px solid #F59E0B":"1px solid var(--border)",background:priceAlert?"rgba(245,158,11,0.06)":"var(--card)",fontSize:11,fontWeight:600,cursor:"pointer",fontFamily:"inherit",color:priceAlert?"#F59E0B":"var(--text)",display:"flex",alignItems:"center",justifyContent:"center",gap:4}}>
+          <button onClick={()=>{if(priceAlert){setPriceAlert(false);toast.success("Alerte retirée")}else{setShowAlertPopup(true)}}} style={{flex:1,padding:"8px 0",borderRadius:10,border:priceAlert?"1px solid #F59E0B":"1px solid var(--border)",background:priceAlert?"rgba(245,158,11,0.06)":"var(--card)",fontSize:11,fontWeight:600,cursor:"pointer",fontFamily:"inherit",color:priceAlert?"#F59E0B":"var(--text)",display:"flex",alignItems:"center",justifyContent:"center",gap:4}}>
             {priceAlert?"🔔 Alerte active":"🔔 Alerte prix"}
           </button>
-          <button onClick={()=>toast.info("Achat groupé : partagez le lien, 5 acheteurs = -20% !")} style={{flex:1,padding:"8px 0",borderRadius:10,border:"1px solid var(--border)",background:"var(--card)",fontSize:11,fontWeight:600,cursor:"pointer",fontFamily:"inherit",color:"var(--text)",display:"flex",alignItems:"center",justifyContent:"center",gap:4}}>
+          <button onClick={()=>setShowGroupPopup(true)} style={{flex:1,padding:"8px 0",borderRadius:10,border:"1px solid var(--border)",background:"var(--card)",fontSize:11,fontWeight:600,cursor:"pointer",fontFamily:"inherit",color:"var(--text)",display:"flex",alignItems:"center",justifyContent:"center",gap:4}}>
             👥 Achat groupé -20%
           </button>
         </div>

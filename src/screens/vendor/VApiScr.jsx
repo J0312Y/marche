@@ -1,3 +1,4 @@
+import toast from "../../utils/toast";
 import { useState } from "react";
 
 function VApiScr({go,onBack}){
@@ -13,13 +14,13 @@ function VApiScr({go,onBack}){
     <div className="appbar" style={{padding:0,marginBottom:12}}><button onClick={onBack}>←</button><h2>API & Intégrations</h2><div style={{width:38}}/></div>
 
     <div style={{padding:16,background:"rgba(249,115,22,0.06)",borderRadius:16,marginBottom:12,color:"var(--text)",border:"1px solid rgba(249,115,22,0.2)"}}>
-      <div style={{fontSize:11,opacity:.7}}>Plan Enterprise</div>
+      <div style={{fontSize:11,color:"var(--muted)"}}>Plan Enterprise</div>
       <div style={{fontSize:18,fontWeight:700,margin:"4px 0"}}>API Lamuka v2.0</div>
       <div style={{display:"flex",gap:12,marginTop:6}}>
-        <span style={{padding:"3px 8px",borderRadius:6,background:"rgba(255,255,255,0.2)",fontSize:10}}>REST</span>
-        <span style={{padding:"3px 8px",borderRadius:6,background:"rgba(255,255,255,0.2)",fontSize:10}}>JSON</span>
-        <span style={{padding:"3px 8px",borderRadius:6,background:"rgba(255,255,255,0.2)",fontSize:10}}>10k req/jour</span>
-        <span style={{padding:"3px 8px",borderRadius:6,background:"rgba(255,255,255,0.2)",fontSize:10}}>OAuth 2.0</span>
+        <span style={{padding:"3px 8px",borderRadius:6,background:"var(--card)",border:"1px solid var(--border)",fontSize:10,color:"var(--text)"}}>REST</span>
+        <span style={{padding:"3px 8px",borderRadius:6,background:"var(--card)",border:"1px solid var(--border)",fontSize:10,color:"var(--text)"}}>JSON</span>
+        <span style={{padding:"3px 8px",borderRadius:6,background:"var(--card)",border:"1px solid var(--border)",fontSize:10,color:"var(--text)"}}>10k req/jour</span>
+        <span style={{padding:"3px 8px",borderRadius:6,background:"var(--card)",border:"1px solid var(--border)",fontSize:10,color:"var(--text)"}}>OAuth 2.0</span>
       </div>
     </div>
 
@@ -45,7 +46,7 @@ function VApiScr({go,onBack}){
         <div className="field" style={{marginBottom:8}}><label style={{fontSize:11}}>URL du webhook</label><input value={whUrl[k]} onChange={e=>setWhUrl({...whUrl,[k]:e.target.value})} placeholder="https://votre-site.com/api/webhook" style={{fontFamily:"monospace",fontSize:11}}/></div>
         <div style={{display:"flex",gap:8}}>
           <button style={{flex:1,padding:8,borderRadius:8,border:"1px solid var(--border)",background:"var(--card)",fontSize:11,fontWeight:600,cursor:"pointer",fontFamily:"inherit"}} onClick={()=>{setWhSaved(true);setTimeout(()=>{setWhSaved(false);setWhTab(null)},1500)}}>{whSaved?"✅":"💾"} Sauver</button>
-          <button style={{padding:"8px 12px",borderRadius:8,border:"1px solid rgba(249,115,22,0.2)",background:"var(--card)",color:"#F97316",fontSize:11,fontWeight:600,cursor:"pointer",fontFamily:"inherit"}}>🧪 Tester</button>
+          <button style={{padding:"8px 12px",borderRadius:8,border:"1px solid rgba(249,115,22,0.2)",background:"var(--card)",color:"#F97316",fontSize:11,fontWeight:600,cursor:"pointer",fontFamily:"inherit"}} onClick={()=>toast.success("Test webhook envoyé ✅")}>🧪 Tester</button>
         </div>
       </div>}
     </div>)}

@@ -1,3 +1,4 @@
+import toast from "../../utils/toast";
 
 import Select from "../../components/Select";
 
@@ -12,7 +13,7 @@ function DrVehicleScr({onBack}){
     {[["🪪","Permis de conduire","Valide jusqu'au 12/2027","✅"],["📄","Carte grise","BZ-4521","✅"],["🛡️","Assurance","AXA Congo · Exp. 06/2026","✅"]].map(([i,t,d,s])=><div key={t} style={{display:"flex",alignItems:"center",gap:12,padding:12,background:"var(--card)",border:"1px solid var(--border)",borderRadius:14,marginBottom:8}}>
       <span style={{fontSize:22}}>{i}</span><div style={{flex:1}}><div style={{fontSize:13,fontWeight:600}}>{t}</div><div style={{fontSize:11,color:"var(--muted)"}}>{d}</div></div><span style={{fontSize:14}}>{s}</span>
     </div>)}
-    <button className="btn-primary" style={{marginTop:10}}>💾 Enregistrer</button>
+    <button className="btn-primary" style={{marginTop:10}} onClick={()=>toast.success("Véhicule mis à jour ✅")}>💾 Enregistrer</button>
   </div>);
 }
 
