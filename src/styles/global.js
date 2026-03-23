@@ -53,10 +53,10 @@ select option{background:var(--card);color:var(--text);padding:10px 14px;font-si
 .auth{display:flex;flex-direction:column;height:100%;padding:40px 24px 30px;background:var(--bg);color:var(--text)}
 .auth h2{font-size:26px;font-weight:700;letter-spacing:-.5px;margin-bottom:4px}
 .auth .sub{font-size:14px;color:var(--muted);margin-bottom:28px}
-.phone-input{display:flex;gap:10px;margin-bottom:20px}
-.phone-input .prefix{width:80px;padding:14px;border-radius:14px;border:1px solid var(--border);background:var(--light);color:var(--text);font-size:15px;font-weight:600;text-align:center;display:flex;align-items:center;justify-content:center;gap:4px}
-.phone-input input{flex:1;padding:14px;border-radius:14px;border:1px solid var(--border);background:var(--light);color:var(--text);font-size:15px;outline:none;font-family:inherit}
-.phone-input input:focus{border-color:#F97316}
+.phone-input{display:flex;align-items:center;margin-bottom:20px;border-radius:12px;border:1px solid var(--border);background:var(--light);overflow:hidden}
+.phone-input .prefix{padding:10px 12px;color:var(--text);font-size:14px;font-weight:600;display:flex;align-items:center;gap:4px;border-right:1px solid var(--border);flex-shrink:0}
+.phone-input input{flex:1;padding:10px 12px;border:none;background:transparent;color:var(--text);font-size:14px;outline:none;font-family:inherit}
+.phone-input:focus-within{border-color:#F97316}
 .divider{display:flex;align-items:center;gap:12px;margin:24px 0;font-size:12px;color:var(--muted)}.divider::before,.divider::after{content:'';flex:1;height:1px;background:var(--border)}
 .social-btns{display:flex;gap:10px}
 .social-btn{flex:1;padding:14px;border-radius:14px;border:1px solid var(--border);background:var(--card);color:var(--text);font-size:20px;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:8px;font-family:inherit;transition:all .15s}
