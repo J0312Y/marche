@@ -11,8 +11,10 @@ import {
   VNotifScr, VSettingsScr, VReportsScr, VSupportScr, VProfileScr,
   VShopsScr, ShopTeamTab, VShopDetailScr, VAddShopScr,
   VApiScr, VDocScr, VUpgradePlanScr, VWebsiteScr,
-  VQAScr, VReturnsScr, VInvoiceScr, VStockScr, VCalendarScr, VThemesScr, VEmailScr, VAutoDiscountScr, VAnalyticsScr, VDomainScr, VImportScr, VSeoScr, VStoriesScr, VGroupBuyScr, VQRCodeScr
+  VQAScr, VReturnsScr, VInvoiceScr, VStockScr, VCalendarScr, VThemesScr, VEmailScr, VAutoDiscountScr, VAnalyticsScr, VDomainScr, VImportScr, VSeoScr, VStoriesScr, VGroupBuyScr, VQRCodeScr,
+  VLiveScr, VAdsScr, VRankingScr, VAIDescScr, VAdvisorScr, VCertifiedScr
 } from "../screens/vendor";
+import ChatBotScr from "../screens/common/ChatBotScr";
 import { WithdrawScr } from "../screens/buyer";
 import { SettingsScr, HelpScr, AboutScr, TermsScr, PrivacyScr } from "../screens/common";
 

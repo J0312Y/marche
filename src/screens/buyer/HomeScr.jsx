@@ -14,6 +14,10 @@ function HomeScr({go,favs,toggleFav,isFav,userName}){
   const [selType,setSelType]=useState("all");
   const [storyViewer,setStoryViewer]=useState(null);
   const [homeQ,setHomeQ]=useState("");
+  const [imgSearching,setImgSearching]=useState(false);
+  const [imgResults,setImgResults]=useState(null);
+  const [imgPreview,setImgPreview]=useState(null);
+  const [showCamMenu,setShowCamMenu]=useState(false);
   const [searchFocused,setSearchFocused]=useState(false);
   const [recentSearches,setRecent]=useState(["Poulet DG","Smartphone","Doliprane","Pressing","Robe Wax","Croissants"]);
   const [showFilter,setShowFilter]=useState(false);
@@ -38,8 +42,20 @@ function HomeScr({go,favs,toggleFav,isFav,userName}){
   const filteredV=selType==="all"?VENDORS:VENDORS.filter(v=>v.type===selType);
   const nearbyRestos=VENDORS.filter(v=>v.type==="restaurant");
 
+  const handleImgSearch=(file)=>{
+    const r=new FileReader();
+    r.onload=()=>{
+      setImgPreview(r.result);setImgSearching(true);setSearchFocused(true);
+      setTimeout(()=>{
+        setImgResults(P.slice(0,6).map(p=>({...p,match:Math.floor(Math.random()*20)+80})).sort((a,b)=>b.match-a.match));
+        setImgSearching(false);
+      },1500);
+    };
+    r.readAsDataURL(file);
+  };
+  const clearImgSearch=()=>{setImgPreview(null);setImgResults(null);setImgSearching(false)};
   const doSearch=(term)=>{setHomeQ(term);if(!recentSearches.includes(term))setRecent(r=>[term,...r].slice(0,6))};
-  const exitSearch=()=>{setHomeQ("");setSearchFocused(false)};
+  const exitSearch=()=>{setHomeQ("");setSearchFocused(false);clearImgSearch();setShowCamMenu(false)};
 
   const searchResults=homeQ.length>0?P.filter(p=>{
     const q=homeQ.toLowerCase();
@@ -64,6 +80,7 @@ function HomeScr({go,favs,toggleFav,isFav,userName}){
           <span style={{color:"var(--muted)",fontSize:13,flexShrink:0}}>🔍</span>
           <input value={homeQ} onChange={e=>setHomeQ(e.target.value)} onFocus={()=>setSearchFocused(true)} placeholder="Rechercher produits, restos..." style={{flex:1,border:"none",background:"transparent",outline:"none",fontSize:13,fontFamily:"inherit",color:"var(--text)"}}/>
           {homeQ&&<span style={{cursor:"pointer",color:"var(--muted)",fontSize:12,flexShrink:0}} onClick={()=>setHomeQ("")}>✕</span>}
+          {!homeQ&&<span style={{cursor:"pointer",fontSize:16,flexShrink:0,opacity:.5}} onClick={()=>setShowCamMenu(true)}>📷</span>}
         </div>
         <button onClick={()=>setShowFilter(!showFilter)} style={{width:38,height:38,borderRadius:12,border:"none",background:showFilter?"#F97316":"var(--light)",cursor:"pointer",fontSize:15,display:"flex",alignItems:"center",justifyContent:"center",flexShrink:0,transition:"all .2s"}}>
           <span style={{filter:showFilter?"brightness(10)":"none"}}>⚙️</span>
@@ -71,6 +88,24 @@ function HomeScr({go,favs,toggleFav,isFav,userName}){
       </div>
 
       {/* Filter panel */}
+      {/* Hidden file inputs for image search */}
+      <input id="cam-take" type="file" accept="image/*" capture="environment" style={{display:"none"}} onChange={e=>{const f=e.target.files?.[0];if(f){handleImgSearch(f);setShowCamMenu(false)}}}/>
+      <input id="cam-gallery" type="file" accept="image/*" style={{display:"none"}} onChange={e=>{const f=e.target.files?.[0];if(f){handleImgSearch(f);setShowCamMenu(false)}}}/>
+
+      {/* Camera choice popup */}
+      {showCamMenu&&<div onClick={()=>setShowCamMenu(false)} style={{position:"fixed",inset:0,background:"rgba(0,0,0,.35)",zIndex:120,display:"flex",alignItems:"flex-end",justifyContent:"center",padding:16}}>
+        <div onClick={e=>e.stopPropagation()} style={{width:"100%",maxWidth:360,background:"var(--card)",borderRadius:20,padding:8,paddingBottom:12}}>
+          <div style={{textAlign:"center",padding:"10px 0 8px",fontSize:14,fontWeight:700}}>Recherche par image</div>
+          <div onClick={()=>document.getElementById("cam-take")?.click()} style={{display:"flex",alignItems:"center",gap:12,padding:"12px 16px",cursor:"pointer",borderRadius:12}}>
+            <span style={{fontSize:20}}>📷</span><span style={{fontSize:14,fontWeight:500}}>Prendre une photo</span>
+          </div>
+          <div onClick={()=>document.getElementById("cam-gallery")?.click()} style={{display:"flex",alignItems:"center",gap:12,padding:"12px 16px",cursor:"pointer",borderRadius:12}}>
+            <span style={{fontSize:20}}>🖼️</span><span style={{fontSize:14,fontWeight:500}}>Choisir dans la galerie</span>
+          </div>
+          <div onClick={()=>setShowCamMenu(false)} style={{textAlign:"center",padding:"10px 0",fontSize:13,fontWeight:600,color:"var(--muted)",cursor:"pointer",marginTop:4,borderTop:"1px solid var(--border)"}}>Annuler</div>
+        </div>
+      </div>}
+
       {showFilter&&<div style={{margin:"0 16px 12px",padding:16,background:"var(--card)",borderRadius:18,border:"1px solid var(--border)",boxShadow:"0 4px 16px rgba(0,0,0,.06)"}}>
         <div style={{display:"flex",justifyContent:"space-between",alignItems:"center",marginBottom:12}}>
           <h4 style={{fontSize:14,fontWeight:700}}>Filtres</h4>
@@ -87,7 +122,30 @@ function HomeScr({go,favs,toggleFav,isFav,userName}){
       </div>}
 
       {/* ── SEARCH RESULTS MODE ── */}
-      {searchResults?<div style={{padding:"0 16px 20px"}}>
+      {imgPreview?<div style={{padding:"0 16px 20px"}}>
+        <div style={{position:"relative",marginBottom:12}}>
+          <img src={imgPreview} style={{width:"100%",height:140,objectFit:"cover",borderRadius:14}} alt=""/>
+          {imgSearching&&<div style={{position:"absolute",inset:0,background:"rgba(0,0,0,.4)",borderRadius:14,display:"flex",alignItems:"center",justifyContent:"center",flexDirection:"column"}}>
+            <div style={{width:28,height:28,border:"3px solid rgba(255,255,255,.3)",borderTopColor:"#fff",borderRadius:"50%",animation:"spin 1s linear infinite"}}/>
+            <div style={{color:"#fff",fontSize:11,fontWeight:600,marginTop:6}}>Recherche en cours...</div>
+          </div>}
+          <button onClick={clearImgSearch} style={{position:"absolute",top:6,right:6,width:24,height:24,borderRadius:8,border:"none",background:"rgba(0,0,0,.5)",color:"#fff",fontSize:12,cursor:"pointer"}}>✕</button>
+        </div>
+        {imgResults&&<>
+          <div style={{fontSize:13,fontWeight:700,marginBottom:8}}>{imgResults.length} produits similaires</div>
+          {imgResults.map(p=>(
+            <div key={p.id} onClick={()=>go("detail",p)} style={{display:"flex",gap:10,padding:10,background:"var(--card)",border:"1px solid var(--border)",borderRadius:12,marginBottom:6,cursor:"pointer"}}>
+              <div style={{width:50,height:50,borderRadius:8,overflow:"hidden",flexShrink:0,background:"var(--light)"}}><Img src={p.photo} emoji={p.img} style={{width:"100%",height:"100%"}} fit="cover"/></div>
+              <div style={{flex:1}}>
+                <div style={{fontSize:12,fontWeight:600}}>{p.name}</div>
+                <div style={{fontSize:12,fontWeight:700,color:"#F97316",marginTop:2}}>{fmt(p.price)}</div>
+              </div>
+              <span style={{fontSize:10,padding:"2px 6px",borderRadius:6,background:"rgba(16,185,129,0.08)",color:"#10B981",fontWeight:700,height:"fit-content"}}>{p.match}%</span>
+            </div>
+          ))}
+        </>}
+      </div>
+      :searchResults?<div style={{padding:"0 16px 20px"}}>
         <div style={{fontSize:12,color:"var(--muted)",padding:"4px 0 12px",fontWeight:500}}>{searchResults.length} résultat{searchResults.length!==1?"s":""} pour « {homeQ} »</div>
         {searchResults.length>0?<div className="pgrid" style={{padding:0}}>{searchResults.map(p=><div key={p.id} className="pcard" onClick={()=>go("detail",p)}><div className="pimg"><Img src={p.photo} emoji={p.img} style={{width:"100%",height:"100%"}} fit="cover"/>{disc(p)>0&&<span className="badge">-{disc(p)}%</span>}{p.tags[0]&&<span className="tag">{p.tags[0]}</span>}</div><div className="pbody"><h4>{p.name}</h4><div className="pv">{p.va} {p.vendor}</div><div className="pp">{fmt(p.price)}{p.old&&<span className="po">{fmt(p.old)}</span>}</div><div className="pr" onClick={e=>{e.stopPropagation();go("reviews",p)}}>⭐ {p.rating}</div></div></div>)}</div>
         :<div style={{textAlign:"center",padding:"50px 0"}}><div style={{fontSize:40,marginBottom:10}}>🔍</div><div style={{fontSize:14,fontWeight:600}}>Aucun résultat</div><div style={{fontSize:12,color:"var(--muted)",marginTop:4}}>Essayez un autre terme</div></div>}

@@ -10,6 +10,7 @@ import {
   DrStatsScr, DrSettingsScr, DrHelpScr
 } from "../screens/driver";
 import { WithdrawScr, PasswordScr } from "../screens/buyer";
+import ChatBotScr from "../screens/common/ChatBotScr";
 import { SettingsScr, HelpScr, AboutScr, TermsScr, PrivacyScr } from "../screens/common";
 
 export default function DriverScreens() {
