@@ -31,6 +31,12 @@ function VProfileScr({go,onSwitch,vendorPlan,onLogout}){
     ["📱","QR Code boutique","Imprimer / Partager",()=>go("vQRCode"),null],
     ["🌐","Mon site web",vendorPlan==="enterprise"?"En ligne ✅":"Plan Enterprise requis",vendorPlan==="enterprise"?()=>go("vWebsite"):null,"enterprise"],
     ["🔌","API & Intégrations",vendorPlan==="enterprise"?"Clé active":"Plan Enterprise requis",vendorPlan==="enterprise"?()=>go("vApi"):null,"enterprise"],
+    ["📺","Live Shopping",vendorPlan!=="starter"?"Vendre en direct":"Plan Pro requis",vendorPlan!=="starter"?()=>go("vLive"):null,"pro"],
+    ["📢","Publicités",vendorPlan!=="starter"?"2 campagnes":"Plan Pro requis",vendorPlan!=="starter"?()=>go("vAds"):null,"pro"],
+    ["🏆","Classement",vendorPlan!=="starter"?"#6 ce mois":"Plan Pro requis",vendorPlan!=="starter"?()=>go("vRanking"):null,"pro"],
+    ["🤖","IA Description",vendorPlan!=="starter"?"Générer auto":"Plan Pro requis",vendorPlan!=="starter"?()=>go("vAIDesc"):null,"pro"],
+    ["📊","Business Advisor",vendorPlan!=="starter"?"Tendances, conseils":"Plan Pro requis",vendorPlan!=="starter"?()=>go("vAdvisor"):null,"pro"],
+    ["💎","Boutique certifiée",vendorPlan==="enterprise"?"Badge Or/Diamant":"Plan Enterprise requis",vendorPlan==="enterprise"?()=>go("vCertified"):null,"enterprise"],
     ["🤖","Assistant Lamu","IA intelligente",()=>go("vChatBot"),null],
     ["🆘","Support",vendorPlan==="enterprise"?"Manager dédié":"Centre d'aide",()=>go("vSupport"),null],
   ];

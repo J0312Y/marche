@@ -99,8 +99,10 @@ function ProfileScr({go,userRole,vendorPlan,vendorStatus,driverStatus,onLogout})
     <Section title="🎉 Découvrir">
       <Item icon="🤝" label="Achats groupés" info="3 offres" onClick={()=>go("groupBuy")}/>
       <Item icon="📊" label="Mes statistiques" onClick={()=>go("myStats")}/>
+      <Item icon="🎮" label="Récompenses" info="Roue, missions" onClick={()=>go("gamification")}/>
       <Item icon="🤖" label="Assistant Lamu" onClick={()=>go("chatBot")}/>
       <Item icon="📱" label="Scanner QR" onClick={()=>go("qrScan")}/>
+      <Item icon="🔍" label="Recherche par image" onClick={()=>go("imageSearch")}/>
     </Section>
 
     {/* ── Footer ── */}

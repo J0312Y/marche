@@ -53,6 +53,12 @@ export default function VendorScreens() {
     case "vNotif": return <VNotifScr onBack={back} go={go} />;
     case "vSettings": return <VSettingsScr onBack={back} go={go} />;
     case "vReports": return <VReportsScr onBack={back} />;
+    case "vLive": return <VLiveScr onBack={back} />;
+    case "vAds": return <VAdsScr onBack={back} />;
+    case "vRanking": return <VRankingScr onBack={back} />;
+    case "vAIDesc": return <VAIDescScr onBack={back} />;
+    case "vAdvisor": return <VAdvisorScr onBack={back} vendorPlan={vendorPlan} />;
+    case "vCertified": return <VCertifiedScr onBack={back} />;
     case "vChatBot": return <ChatBotScr onBack={back} mode="vendor" />;
     case "vSupport": return <VSupportScr go={go} onBack={back} vendorPlan={vendorPlan} />;
     case "vShops": return <VShopsScr go={go} onBack={back} />;

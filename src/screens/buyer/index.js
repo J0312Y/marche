@@ -45,3 +45,7 @@ export { default as GroupBuyScr } from "./GroupBuyScr";
 export { default as MyStatsScr } from './MyStatsScr';
 
 export { default as BecomeSellerScr } from './BecomeSellerScr';
+
+export { default as ImageSearchScr } from './ImageSearchScr';
+
+export { default as GamificationScr } from './GamificationScr';

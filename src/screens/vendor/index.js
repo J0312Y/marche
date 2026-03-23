@@ -54,3 +54,15 @@ export { default as VDomainScr } from './VDomainScr';
 export { default as VImportScr } from './VImportScr';
 
 export { default as VSeoScr } from './VSeoScr';
+
+export { default as VLiveScr } from './VLiveScr';
+
+export { default as VAdsScr } from './VAdsScr';
+
+export { default as VRankingScr } from './VRankingScr';
+
+export { default as VAIDescScr } from './VAIDescScr';
+
+export { default as VAdvisorScr } from './VAdvisorScr';
+
+export { default as VCertifiedScr } from './VCertifiedScr';
