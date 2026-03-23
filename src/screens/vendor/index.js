@@ -40,3 +40,17 @@ export { default as VInvoiceScr } from './VInvoiceScr';
 export { default as VStockScr } from './VStockScr';
 
 export { default as VCalendarScr } from './VCalendarScr';
+
+export { default as VThemesScr } from './VThemesScr';
+
+export { default as VEmailScr } from './VEmailScr';
+
+export { default as VAutoDiscountScr } from './VAutoDiscountScr';
+
+export { default as VAnalyticsScr } from './VAnalyticsScr';
+
+export { default as VDomainScr } from './VDomainScr';
+
+export { default as VImportScr } from './VImportScr';
+
+export { default as VSeoScr } from './VSeoScr';

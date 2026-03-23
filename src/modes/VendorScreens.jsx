@@ -11,7 +11,7 @@ import {
   VNotifScr, VSettingsScr, VReportsScr, VSupportScr, VProfileScr,
   VShopsScr, ShopTeamTab, VShopDetailScr, VAddShopScr,
   VApiScr, VDocScr, VUpgradePlanScr, VWebsiteScr,
-  VQAScr, VReturnsScr, VInvoiceScr, VStockScr, VCalendarScr, VStoriesScr, VGroupBuyScr, VQRCodeScr
+  VQAScr, VReturnsScr, VInvoiceScr, VStockScr, VCalendarScr, VThemesScr, VEmailScr, VAutoDiscountScr, VAnalyticsScr, VDomainScr, VImportScr, VSeoScr, VStoriesScr, VGroupBuyScr, VQRCodeScr
 } from "../screens/vendor";
 import { WithdrawScr } from "../screens/buyer";
 import { SettingsScr, HelpScr, AboutScr, TermsScr, PrivacyScr } from "../screens/common";
@@ -63,6 +63,13 @@ export default function VendorScreens() {
     case "vQA": return <VQAScr onBack={back} />;
     case "vInvoice": return <VInvoiceScr onBack={back} />;
     case "vStock": return <VStockScr onBack={back} />;
+    case "vThemes": return <VThemesScr onBack={back} />;
+    case "vEmail": return <VEmailScr onBack={back} />;
+    case "vAutoDiscount": return <VAutoDiscountScr onBack={back} />;
+    case "vAnalytics": return <VAnalyticsScr onBack={back} />;
+    case "vDomain": return <VDomainScr onBack={back} />;
+    case "vImport": return <VImportScr onBack={back} />;
+    case "vSeo": return <VSeoScr onBack={back} />;
     case "vCalendar": return <VCalendarScr onBack={back} />;
     case "vReturns": return <VReturnsScr onBack={back} />;
     case "vStories": return <VStoriesScr onBack={back} />;

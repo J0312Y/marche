@@ -21,6 +21,13 @@ function VProfileScr({go,onSwitch,vendorPlan,onLogout}){
     ["🧾","Factures","3 factures",()=>go("vInvoice"),null],
     ["📦","Gestion Stock","2 alertes",()=>go("vStock"),null],
     ["📅","Calendrier","Vue agenda",()=>go("vCalendar"),null],
+    ["🌟","Thèmes boutique",vendorPlan==="enterprise"?"5 thèmes":"Plan Enterprise requis",vendorPlan==="enterprise"?()=>go("vThemes"):null,"enterprise"],
+    ["📧","Email Marketing",vendorPlan==="enterprise"?"Campagnes":"Plan Enterprise requis",vendorPlan==="enterprise"?()=>go("vEmail"):null,"enterprise"],
+    ["💰","Remises automatiques",vendorPlan==="enterprise"?"3 règles":"Plan Enterprise requis",vendorPlan==="enterprise"?()=>go("vAutoDiscount"):null,"enterprise"],
+    ["📊","Analytics avancés",vendorPlan==="enterprise"?"Conversions, trafic":"Plan Enterprise requis",vendorPlan==="enterprise"?()=>go("vAnalytics"):null,"enterprise"],
+    ["🔗","Domaine personnalisé",vendorPlan==="enterprise"?"maboutique.lamuka.cg":"Plan Enterprise requis",vendorPlan==="enterprise"?()=>go("vDomain"):null,"enterprise"],
+    ["📤","Import / Export",vendorPlan==="enterprise"?"CSV produits":"Plan Enterprise requis",vendorPlan==="enterprise"?()=>go("vImport"):null,"enterprise"],
+    ["🌍","SEO produits",vendorPlan==="enterprise"?"Référencement":"Plan Enterprise requis",vendorPlan==="enterprise"?()=>go("vSeo"):null,"enterprise"],
     ["📱","QR Code boutique","Imprimer / Partager",()=>go("vQRCode"),null],
     ["🌐","Mon site web",vendorPlan==="enterprise"?"En ligne ✅":"Plan Enterprise requis",vendorPlan==="enterprise"?()=>go("vWebsite"):null,"enterprise"],
     ["🔌","API & Intégrations",vendorPlan==="enterprise"?"Clé active":"Plan Enterprise requis",vendorPlan==="enterprise"?()=>go("vApi"):null,"enterprise"],
@@ -54,7 +61,7 @@ function VProfileScr({go,onSwitch,vendorPlan,onLogout}){
       <div style={{display:"flex",flexWrap:"wrap",gap:4}}>
         {vendorPlan==="starter"&&["10 articles","8% commission","Support email","Stats basiques"].map(f=><span key={f} style={{padding:"3px 8px",borderRadius:6,background:"var(--light)",fontSize:10,fontWeight:500,color:"var(--sub)"}}>✓ {f}</span>)}
         {vendorPlan==="pro"&&["Articles illimités","4% commission","Analytics","Badge ✓","Promos","Rapports"].map(f=><span key={f} style={{padding:"3px 8px",borderRadius:6,background:"rgba(249,115,22,0.06)",fontSize:10,fontWeight:500,color:"#F97316"}}>✓ {f}</span>)}
-        {vendorPlan==="enterprise"&&["Multi-shops","2% commission","API","Site web","Manager","Dashboard","Rapports"].map(f=><span key={f} style={{padding:"3px 8px",borderRadius:6,background:"rgba(245,158,11,0.06)",fontSize:10,fontWeight:500,color:"#F59E0B"}}>✓ {f}</span>)}
+        {vendorPlan==="enterprise"&&["Multi-shops","2% commission","API","Site web","Manager","Dashboard","Rapports","Thèmes","Email","Remises auto","Analytics","Domaine","Import/Export","SEO"].map(f=><span key={f} style={{padding:"3px 8px",borderRadius:6,background:"rgba(245,158,11,0.06)",fontSize:10,fontWeight:500,color:"#F59E0B"}}>✓ {f}</span>)}
       </div>
     </div>
 

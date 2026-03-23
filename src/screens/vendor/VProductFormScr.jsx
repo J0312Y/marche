@@ -281,7 +281,8 @@ function VProductFormScr({product:p,onBack,shopType="boutique"}){
     </div>
 
     {/* ═══ VARIANTS ═══ */}
-    <div style={{margin:"16px 0 10px"}}><VariantEditor shopType={shopType} category={selectedCat} value={articleVariants} onChange={setArticleVariants}/></div>
+    <div style={{margin:"16px 0 10px"}}><div style={{fontSize:11,color:"var(--muted)",marginBottom:8}}>💡 Chaque variante peut avoir son propre stock et SKU</div>
+        <VariantEditor shopType={shopType} category={selectedCat} value={articleVariants} onChange={setArticleVariants}/></div>
 
     <div className="field"><label>Tags <span style={{color:"var(--muted)",fontWeight:400}}>(optionnel)</span></label><input value={tags} onChange={e=>setTags(e.target.value)} placeholder="Séparer par des virgules"/></div>
     <div className="field"><label>Poids <span style={{color:"var(--muted)",fontWeight:400}}>(optionnel, en grammes)</span></label><input type="number" value={weight} onChange={e=>setWeight(e.target.value)} placeholder="Pour calcul livraison"/></div>
