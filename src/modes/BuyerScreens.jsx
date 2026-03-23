@@ -12,7 +12,7 @@ import {
   NotifScr, ProfileScr, EditProfileScr, AddressesScr,
   LanguageScr, CurrencyScr, PasswordScr, RechargeScr, WithdrawScr,
   VendorScr, RoleRegScr, PaymentHistoryScr, RateDriverScr,
-  ReferralScr, LoyaltyScr, ReturnScr, GiftCardScr, QRScanScr, ChatBotScr, MyStatsScr, PriceAlertScr, GroupBuyScr
+  ReferralScr, LoyaltyScr, ReturnScr, GiftCardScr, QRScanScr, ChatBotScr, MyStatsScr, BecomeSellerScr, PriceAlertScr, GroupBuyScr
 } from "../screens/buyer";
 import { SettingsScr, HelpScr, AboutScr, TermsScr, PrivacyScr } from "../screens/common";
 
@@ -90,6 +90,7 @@ export default function BuyerScreens() {
     case "groupBuy": return <GroupBuyScr onBack={back} go={go} />;
     case "priceAlerts": return <PriceAlertScr onBack={back} />;
     case "recharge": return <RechargeScr onBack={back} />;
+    case "becomeSeller": return <BecomeSellerScr onBack={back} go={go} />;
     case "roleReg": return <RoleRegScr onBack={back} onDone={(role, plan) => { onRoleApproved(role, plan); goHome(); }} />;
     case "vendorReg": return <RoleRegScr onBack={back} onDone={(role, plan) => { onRoleApproved(role, plan); goHome(); }} forceRole="vendor" />;
     case "switchVendor": return <Redirect action={() => { if (hasVendor) switchTo("vendor"); else go("roleReg"); }} />;

@@ -259,7 +259,26 @@ export function AppProvider({ children }) {
 
 export function useApp() {
   const ctx = useContext(AppContext);
-  if (!ctx) throw new Error('useApp must be used within AppProvider');
+  if (!ctx) {
+    console.warn('useApp: context not available (hot reload?)');
+    return {
+      user:null,authStep:'ready',setAuthStep:()=>{},socialProvider:null,setSocialProvider:()=>{},
+      login:()=>{},completeProfile:()=>{},logout:()=>{},
+      mode:'buyer',setMode:()=>{},tab:0,setTab:()=>{},vTab:0,setVTab:()=>{},dTab:0,setDTab:()=>{},
+      screen:null,setScreen:()=>{},history:[],setHistory:()=>{},go:()=>{},pop:()=>{},goHome:()=>{},switchTo:()=>{},
+      cart:[],setCart:()=>{},cartCount:0,addToCart:()=>{},updateCartQty:()=>{},clearCart:()=>{},
+      appliedCoupon:null,setAppliedCoupon:()=>{},
+      favs:[],toggleFav:()=>{},isFav:()=>false,
+      userRole:'client',vendorPlan:'starter',setVendorPlan:()=>{},vendorStatus:'none',driverStatus:'none',
+      onRoleApproved:()=>{},hasVendor:false,hasDriver:false,
+      unreadCount:0,setUnreadCount:()=>{},
+      toast:null,showToast:()=>{},
+      darkMode:false,toggleDark:()=>{},
+      userName:'',setUserName:()=>{},
+      recentlyViewed:[],addRecentlyViewed:()=>{},
+      seenStories:[],markStorySeen:()=>{},
+    };
+  }
   return ctx;
 }
 

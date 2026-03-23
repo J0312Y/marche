@@ -19,11 +19,11 @@ function ProfileScr({go,userRole,vendorPlan,vendorStatus,driverStatus,onLogout})
   );
 
   const Item=({icon,label,info,onClick})=>(
-    <div onClick={onClick} style={{display:"flex",alignItems:"center",gap:12,padding:"14px 16px",cursor:"pointer",borderBottom:"1px solid var(--border)",transition:"background .12s"}}>
-      <div style={{width:36,height:36,borderRadius:10,background:"var(--light)",display:"flex",alignItems:"center",justifyContent:"center",fontSize:16,flexShrink:0}}>{icon}</div>
-      <span style={{flex:1,fontSize:14,fontWeight:500}}>{label}</span>
-      {info&&<span style={{fontSize:11,fontWeight:600,color:"#F97316",padding:"2px 8px",borderRadius:6,background:"rgba(249,115,22,0.06)"}}>{info}</span>}
-      <span style={{color:"var(--muted)",fontSize:14,fontWeight:300}}>›</span>
+    <div onClick={onClick} style={{display:"flex",alignItems:"center",gap:14,padding:"12px 16px",cursor:"pointer",borderBottom:"1px solid var(--border)"}}>
+      <span style={{fontSize:20,width:22,textAlign:"center"}}>{icon}</span>
+      <span style={{flex:1,fontSize:14,fontWeight:500,color:"var(--text)"}}>{label}</span>
+      {info&&<span style={{fontSize:12,color:"var(--muted)",fontWeight:500}}>{info}</span>}
+      <svg width="7" height="12" viewBox="0 0 7 12" fill="none" style={{flexShrink:0,opacity:.3}}><path d="M1 1l5 5-5 5" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/></svg>
     </div>
   );
 

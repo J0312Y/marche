@@ -43,3 +43,5 @@ export { default as PriceAlertScr } from './PriceAlertScr';
 export { default as GroupBuyScr } from "./GroupBuyScr";
 
 export { default as MyStatsScr } from './MyStatsScr';
+
+export { default as BecomeSellerScr } from './BecomeSellerScr';
