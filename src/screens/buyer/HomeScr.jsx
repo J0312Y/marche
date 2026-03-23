@@ -178,17 +178,17 @@ function HomeScr({go,favs,toggleFav,isFav,userName}){
       {/* 🎯 Recommandations personnalisées */}
       <div style={{padding:"0 16px"}}>
         <h3 style={{fontSize:17,fontWeight:700,letterSpacing:-.3,color:"var(--text)",paddingBottom:12}}>🎯 Pour vous</h3>
-        <div style={{display:"flex",gap:8,overflowX:"auto",scrollbarWidth:"none",paddingBottom:14,paddingRight:16,WebkitOverflowScrolling:"touch"}}>
-          {P.slice(2,7).map(p=>(
-            <div key={p.id} onClick={()=>go("detail",p)} style={{minWidth:130,background:"var(--card)",border:"1px solid var(--border)",borderRadius:14,overflow:"hidden",cursor:"pointer",flexShrink:0}}>
-              <div style={{height:100,background:"var(--light)",display:"flex",alignItems:"center",justifyContent:"center"}}><Img src={p.photo} emoji={p.img} style={{width:"100%",height:"100%"}} fit="cover"/></div>
-              <div style={{padding:"6px 8px"}}>
-                <div style={{fontSize:11,fontWeight:600,overflow:"hidden",whiteSpace:"nowrap",textOverflow:"ellipsis"}}>{p.name}</div>
-                <div style={{fontSize:12,fontWeight:700,color:"#F97316",marginTop:2}}>{fmt(p.price)}</div>
+      </div>
+      <div style={{display:"flex",gap:8,overflowX:"auto",scrollbarWidth:"none",paddingBottom:14,paddingLeft:16,paddingRight:16,WebkitOverflowScrolling:"touch"}}>
+          {P.slice(2,10).map(p=>(
+            <div key={p.id} onClick={()=>go("detail",p)} style={{minWidth:105,background:"var(--card)",border:"1px solid var(--border)",borderRadius:12,overflow:"hidden",cursor:"pointer",flexShrink:0}}>
+              <div style={{height:75,background:"var(--light)",display:"flex",alignItems:"center",justifyContent:"center"}}><Img src={p.photo} emoji={p.img} style={{width:"100%",height:"100%"}} fit="cover"/></div>
+              <div style={{padding:"5px 7px"}}>
+                <div style={{fontSize:10,fontWeight:600,overflow:"hidden",whiteSpace:"nowrap",textOverflow:"ellipsis"}}>{p.name}</div>
+                <div style={{fontSize:11,fontWeight:700,color:"#F97316",marginTop:1}}>{fmt(p.price)}</div>
               </div>
             </div>
           ))}
-        </div>
       </div>
 
       {/* ═══ STORIES ═══ */}

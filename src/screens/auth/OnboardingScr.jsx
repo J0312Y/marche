@@ -89,7 +89,7 @@ function OnboardingScr({onDone}){
       {/* ═══ IMAGE SECTION — 60% ═══ */}
       <div style={{flex:"0 0 58%",position:"relative",overflow:"hidden",borderRadius:"0 0 28px 28px"}}>
         {/* Fallback color */}
-        <div style={{position:"absolute",inset:0,background:slide.color}}/>
+        <div style={{position:"absolute",inset:0,background:"#1a1a2e"}}/>
         {/* Photo */}
         <div style={{
           position:"absolute",inset:0,
