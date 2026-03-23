@@ -264,6 +264,46 @@ function DetailScr({product:p,onBack,onAddCart,go,favs,toggleFav,isFav}){
       </div>
       <button className="add-btn" onClick={()=>onAddCart(p,qty)}>🛍️ Ajouter · {fmt(finalPrice*qty)}</button>
     </div>
+
+    {/* ── Alerte Prix Popup ── */}
+    {showAlertPopup&&<div onClick={()=>setShowAlertPopup(false)} style={{position:"fixed",inset:0,background:"rgba(0,0,0,.4)",zIndex:150,display:"flex",alignItems:"center",justifyContent:"center",padding:16}}>
+      <div onClick={e=>e.stopPropagation()} style={{width:"100%",maxWidth:320,background:"var(--card)",borderRadius:20,padding:20}}>
+        <div style={{textAlign:"center",marginBottom:14}}>
+          <div style={{fontSize:32,marginBottom:6}}>🔔</div>
+          <h3 style={{fontSize:16,fontWeight:700}}>Alerte de prix</h3>
+          <p style={{fontSize:12,color:"var(--muted)",marginTop:4}}>Recevez une notification quand le prix de <b>{p.name}</b> baisse</p>
+        </div>
+        <div style={{fontSize:13,fontWeight:600,marginBottom:6}}>Prix actuel : <span style={{color:"#F97316"}}>{fmt(p.price)}</span></div>
+        <div className="field"><label>M'alerter en dessous de (FCFA)</label><input value={alertPrice} onChange={e=>setAlertPrice(e.target.value.replace(/\D/g,""))} placeholder={String(Math.round(p.price*0.8))} inputMode="numeric"/></div>
+        <div style={{display:"flex",gap:8,marginTop:4}}>
+          <button onClick={()=>setShowAlertPopup(false)} style={{flex:1,padding:10,borderRadius:12,border:"1px solid var(--border)",background:"var(--card)",fontSize:13,fontWeight:600,cursor:"pointer",fontFamily:"inherit",color:"var(--text)"}}>Annuler</button>
+          <button onClick={()=>{setPriceAlert(true);setShowAlertPopup(false);toast.success("🔔 Alerte activée !")}} style={{flex:1,padding:10,borderRadius:12,border:"none",background:"#F97316",color:"#fff",fontSize:13,fontWeight:700,cursor:"pointer",fontFamily:"inherit"}}>Activer</button>
+        </div>
+      </div>
+    </div>}
+
+    {/* ── Achat Groupé Popup ── */}
+    {showGroupPopup&&<div onClick={()=>setShowGroupPopup(false)} style={{position:"fixed",inset:0,background:"rgba(0,0,0,.4)",zIndex:150,display:"flex",alignItems:"center",justifyContent:"center",padding:16}}>
+      <div onClick={e=>e.stopPropagation()} style={{width:"100%",maxWidth:320,background:"var(--card)",borderRadius:20,padding:20}}>
+        <div style={{textAlign:"center",marginBottom:14}}>
+          <div style={{fontSize:32,marginBottom:6}}>🤝</div>
+          <h3 style={{fontSize:16,fontWeight:700}}>Achat Groupé</h3>
+          <p style={{fontSize:12,color:"var(--muted)",marginTop:4}}>Réunissez 5 acheteurs pour <b style={{color:"#F97316"}}>-20%</b></p>
+        </div>
+        <div style={{padding:14,background:"var(--light)",borderRadius:14,marginBottom:14}}>
+          <div style={{display:"flex",justifyContent:"space-between",fontSize:13,marginBottom:6}}><span>Prix normal</span><span style={{textDecoration:"line-through",color:"var(--muted)"}}>{fmt(p.price)}</span></div>
+          <div style={{display:"flex",justifyContent:"space-between",fontSize:15,fontWeight:700}}><span>Prix groupé</span><span style={{color:"#F97316"}}>{fmt(Math.round(p.price*0.8))}</span></div>
+          <div style={{marginTop:8,display:"flex",alignItems:"center",gap:6}}>
+            <div style={{flex:1,height:6,borderRadius:3,background:"var(--border)"}}><div style={{width:"40%",height:"100%",borderRadius:3,background:"#F97316"}}/></div>
+            <span style={{fontSize:10,color:"var(--muted)",fontWeight:600}}>2/5</span>
+          </div>
+        </div>
+        <div style={{display:"flex",gap:8}}>
+          <button onClick={()=>{setShowGroupPopup(false);toast.success("🤝 Vous avez rejoint le groupe !")}} style={{flex:1,padding:12,borderRadius:12,border:"none",background:"#F97316",color:"#fff",fontSize:13,fontWeight:700,cursor:"pointer",fontFamily:"inherit"}}>Rejoindre</button>
+          <button onClick={()=>{setShowGroupPopup(false);toast.info("📤 Lien copié !")}} style={{flex:1,padding:12,borderRadius:12,border:"1px solid var(--border)",background:"var(--card)",fontSize:13,fontWeight:600,cursor:"pointer",fontFamily:"inherit",color:"var(--text)"}}>📤 Partager</button>
+        </div>
+      </div>
+    </div>}
   </>);
 }
 
