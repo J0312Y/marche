@@ -55,6 +55,7 @@ function DetailScr({product:p,onBack,onAddCart,go,favs,toggleFav,isFav}){
   const [showAlertPopup,setShowAlertPopup]=useState(false);
   const [alertPrice,setAlertPrice]=useState("");
   const [showGroupPopup,setShowGroupPopup]=useState(false);
+  const [groupJoined,setGroupJoined]=useState(false);
   const [showQA,setShowQA]=useState(false);
   const [qaText,setQaText]=useState("");
   const [qas,setQas]=useState([
@@ -299,8 +300,11 @@ function DetailScr({product:p,onBack,onAddCart,go,favs,toggleFav,isFav}){
           </div>
         </div>
         <div style={{display:"flex",gap:8}}>
-          <button onClick={()=>{setShowGroupPopup(false);toast.success("🤝 Vous avez rejoint le groupe !")}} style={{flex:1,padding:12,borderRadius:12,border:"none",background:"#F97316",color:"#fff",fontSize:13,fontWeight:700,cursor:"pointer",fontFamily:"inherit"}}>Rejoindre</button>
-          <button onClick={()=>{setShowGroupPopup(false);toast.info("📤 Lien copié !")}} style={{flex:1,padding:12,borderRadius:12,border:"1px solid var(--border)",background:"var(--card)",fontSize:13,fontWeight:600,cursor:"pointer",fontFamily:"inherit",color:"var(--text)"}}>📤 Partager</button>
+          {groupJoined
+            ?<button style={{flex:1,padding:12,borderRadius:12,border:"none",background:"#10B981",color:"#fff",fontSize:13,fontWeight:700,cursor:"default",fontFamily:"inherit"}}>✅ Vous avez rejoint</button>
+            :<button onClick={()=>{setGroupJoined(true);toast.success("🤝 Vous avez rejoint le groupe !")}} style={{flex:1,padding:12,borderRadius:12,border:"none",background:"#F97316",color:"#fff",fontSize:13,fontWeight:700,cursor:"pointer",fontFamily:"inherit"}}>Rejoindre</button>
+          }
+          <button onClick={()=>{import("../../utils/share").then(m=>m.shareProduct({title:"Achat groupé — "+p.name,text:"Rejoins l'achat groupé pour "+p.name+" et obtiens -20% ! 🤝",url:"https://lamuka.market/group/"+p.id}))}} style={{flex:1,padding:12,borderRadius:12,border:"1px solid var(--border)",background:"var(--card)",fontSize:13,fontWeight:600,cursor:"pointer",fontFamily:"inherit",color:"var(--text)"}}>📤 Partager</button>
         </div>
       </div>
     </div>}
