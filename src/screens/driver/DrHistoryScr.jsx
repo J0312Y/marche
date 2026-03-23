@@ -5,6 +5,11 @@ import { D_HISTORY } from "../../data/driverData";
 import { fmt } from "../../utils/helpers";
 
 function DrHistoryScr({onBack}){
+  const weeklyData=[8500,12000,6500,15000,9200,18000,11500];
+  const weekDays=["Lun","Mar","Mer","Jeu","Ven","Sam","Dim"];
+  const maxEarn=Math.max(...weeklyData);
+  const totalWeek=weeklyData.reduce((a,b)=>a+b,0);
+  const fmtK=(n)=>(n/1000).toFixed(0)+"k";
   const totalEarned=D_HISTORY.reduce((s,h)=>s+h.fee+h.tip,0);
   const [expanded,setExpanded]=useState(null);
 
