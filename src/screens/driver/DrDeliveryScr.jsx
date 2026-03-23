@@ -77,7 +77,7 @@ function DrDeliveryScr({delivery:dl,go,onBack}){
       {/* Bottom action - inside scroll */}
       <div style={{paddingTop:20,paddingBottom:16}}>
         {step<3?<button style={{width:"100%",padding:14,borderRadius:14,border:"none",background:"#F97316",color:"#fff",fontSize:15,fontWeight:700,cursor:"pointer",fontFamily:"inherit"}} onClick={()=>setStep(step+1)}>{stepActions[step]}</button>
-        :<button style={{width:"100%",padding:14,borderRadius:14,border:"none",background:"#F59E0B",color:"#fff",fontSize:15,fontWeight:700,cursor:"pointer",fontFamily:"inherit"}} onClick={()=>go("drConfirm",dl)}>✅ Confirmer la livraison</button>}
+        :<button style={{width:"100%",padding:14,borderRadius:14,border:"none",background:"#F59E0B",color:"#fff",fontSize:15,fontWeight:700,cursor:"pointer",fontFamily:"inherit"}} onClick={()=>go("drConfirm",dl)}>✅ 📋 Checklist & Confirmer</button>}
       </div>
     </div>
   </>);

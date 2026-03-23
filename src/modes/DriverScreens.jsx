@@ -6,7 +6,7 @@ import { useApp } from "../context/AppContext";
 import {
   DrDashboardScr, DrDeliveryScr, DrConfirmScr, DrNavigationScr,
   DrChatVendorScr, DrChatClientScr, DrHistoryScr, DrWalletScr,
-  DrNotifScr, DrProfileScr, DrVehicleScr, DrZonesScr,
+  DrNotifScr, DrProfileScr, DrVehicleScr, DrZonesScr, DrChecklistScr, DrRateVendorScr,
   DrStatsScr, DrSettingsScr, DrHelpScr
 } from "../screens/driver";
 import { WithdrawScr, PasswordScr } from "../screens/buyer";
@@ -37,6 +37,8 @@ export default function DriverScreens() {
     case "drWithdraw": return <WithdrawScr onBack={back} mode="driver" />;
     case "drNotif": return <DrNotifScr onBack={back} />;
     case "drVehicle": return <DrVehicleScr onBack={back} />;
+    case "drChecklist": return <DrChecklistScr onBack={back} delivery={data} onConfirm={()=>{}} />;
+    case "drRateVendor": return <DrRateVendorScr onBack={back} vendor={data} />;
     case "drZones": return <DrZonesScr onBack={back} />;
     case "drStats": return <DrStatsScr onBack={back} />;
     case "drSettings": return <DrSettingsScr onBack={back} go={go} />;

@@ -4,10 +4,10 @@ import PullToRefresh from "../../components/PullToRefresh";
 
 function OrdersScr({go}){
   const [orders,setOrders]=useState([
-    {ref:"#LMK-2026-0214",date:"14 Fév 2026",status:"En livraison",sc:"ship",total:"231 500",items:["📱 Galaxy A54","🥬 Panier Bio x3"],prog:[1,1,1,0]},
-    {ref:"#LMK-2026-0210",date:"10 Fév 2026",status:"Livré",sc:"done",total:"42 000",items:["👜 Sac Cuir"],prog:[1,1,1,1]},
-    {ref:"#LMK-2026-0205",date:"5 Fév 2026",status:"Livré",sc:"done",total:"18 000",items:["👔 Chemise Bogolan"],prog:[1,1,1,1]},
-    {ref:"#LMK-2026-0201",date:"1 Fév 2026",status:"En préparation",sc:"prep",total:"5 500",items:["🍗 Poulet DG"],prog:[1,1,0,0]},
+    {ref:"#LMK-2026-0214",date:"14 Fév 2026",status:"En livraison",sc:"ship",total:"231 500",vendor:"Tech Congo",items:["📱 Galaxy A54","🥬 Panier Bio x3"],prog:[1,1,1,0]},
+    {ref:"#LMK-2026-0210",date:"10 Fév 2026",status:"Livré",sc:"done",total:"42 000",vendor:"Mode Afrique",items:["👜 Sac Cuir"],prog:[1,1,1,1]},
+    {ref:"#LMK-2026-0205",date:"5 Fév 2026",status:"Livré",sc:"done",total:"18 000",vendor:"Mode Afrique",items:["👔 Chemise Bogolan"],prog:[1,1,1,1]},
+    {ref:"#LMK-2026-0201",date:"1 Fév 2026",status:"En préparation",sc:"prep",total:"5 500",vendor:"Chez Mama Ngudi",items:["🍗 Poulet DG"],prog:[1,1,0,0]},
   ]);
   const [cancelConfirm,setCancelConfirm]=useState(null);
   const [reorderConfirm,setReorderConfirm]=useState(null);

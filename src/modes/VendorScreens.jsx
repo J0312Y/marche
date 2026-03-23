@@ -11,7 +11,7 @@ import {
   VNotifScr, VSettingsScr, VReportsScr, VSupportScr, VProfileScr,
   VShopsScr, ShopTeamTab, VShopDetailScr, VAddShopScr,
   VApiScr, VDocScr, VUpgradePlanScr, VWebsiteScr,
-  VQAScr, VReturnsScr, VStoriesScr, VGroupBuyScr, VQRCodeScr
+  VQAScr, VReturnsScr, VInvoiceScr, VStockScr, VCalendarScr, VStoriesScr, VGroupBuyScr, VQRCodeScr
 } from "../screens/vendor";
 import { WithdrawScr } from "../screens/buyer";
 import { SettingsScr, HelpScr, AboutScr, TermsScr, PrivacyScr } from "../screens/common";
@@ -61,6 +61,9 @@ export default function VendorScreens() {
     case "vWebsite": return <VWebsiteScr onBack={back} />;
     case "vDoc": return <VDocScr docKey={data} onBack={back} />;
     case "vQA": return <VQAScr onBack={back} />;
+    case "vInvoice": return <VInvoiceScr onBack={back} />;
+    case "vStock": return <VStockScr onBack={back} />;
+    case "vCalendar": return <VCalendarScr onBack={back} />;
     case "vReturns": return <VReturnsScr onBack={back} />;
     case "vStories": return <VStoriesScr onBack={back} />;
     case "vGroupBuy": return <VGroupBuyScr onBack={back} />;

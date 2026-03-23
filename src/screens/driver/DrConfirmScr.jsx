@@ -19,6 +19,7 @@ function DrConfirmScr({delivery:dl,go,onBack}){
         {dl.tip>0&&<div style={{textAlign:"center"}}><div style={{fontSize:20,fontWeight:700,color:"#F59E0B"}}>{fmt(dl.tip)}</div><div style={{fontSize:11,color:"var(--muted)"}}>Pourboire</div></div>}
         <div style={{textAlign:"center"}}><div style={{fontSize:20,fontWeight:700,color:"#F97316"}}>{fmt(dl.fee+dl.tip)}</div><div style={{fontSize:11,color:"var(--muted)"}}>Total gagné</div></div>
       </div>
+      <button onClick={()=>go("drRateVendor",{name:dl?.vendor?.name||"Commerce",avatar:dl?.vendor?.avatar||"🏪"})} style={{width:"100%",padding:14,borderRadius:14,border:"1px solid var(--border)",background:"var(--card)",fontSize:14,fontWeight:600,cursor:"pointer",fontFamily:"inherit",color:"var(--text)",marginBottom:8}}>⭐ Évaluer le commerce</button>
       <button className="btn-primary" style={{background:"#F97316"}} onClick={onBack}>🏠 Retour au dashboard</button>
     </div>
   </div>);

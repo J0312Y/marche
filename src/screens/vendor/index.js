@@ -34,3 +34,9 @@ export { default as VReturnsScr } from './VReturnsScr';
 export { default as VStoriesScr } from './VStoriesScr';
 export { default as VGroupBuyScr } from './VGroupBuyScr';
 export { default as VQRCodeScr } from './VQRCodeScr';
+
+export { default as VInvoiceScr } from './VInvoiceScr';
+
+export { default as VStockScr } from './VStockScr';
+
+export { default as VCalendarScr } from './VCalendarScr';

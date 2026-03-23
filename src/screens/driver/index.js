@@ -13,3 +13,7 @@ export { default as DrZonesScr } from './DrZonesScr';
 export { default as DrStatsScr } from './DrStatsScr';
 export { default as DrSettingsScr } from './DrSettingsScr';
 export { default as DrHelpScr } from './DrHelpScr';
+
+export { default as DrChecklistScr } from './DrChecklistScr';
+
+export { default as DrRateVendorScr } from './DrRateVendorScr';

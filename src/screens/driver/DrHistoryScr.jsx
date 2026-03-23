@@ -8,7 +8,33 @@ function DrHistoryScr({onBack}){
   const totalEarned=D_HISTORY.reduce((s,h)=>s+h.fee+h.tip,0);
   const [expanded,setExpanded]=useState(null);
 
-  return(<PullToRefresh onRefresh={async()=>{toast.success("Historique actualisé 📦")}}><div className="scr"><div className="appbar"><button onClick={onBack}>←</button><h2>Historique</h2><div style={{width:38}}/></div>
+  return(<PullToRefresh onRefresh={async()=>{toast.success("Historique actualisé 📦")}}><div className="scr"><div style={{margin:"0 0 14px"}}>
+      <div style={{padding:16,background:"var(--card)",border:"1px solid var(--border)",borderRadius:16,marginBottom:10}}>
+        <div style={{display:"flex",justifyContent:"space-between",alignItems:"center",marginBottom:10}}>
+          <span style={{fontSize:14,fontWeight:700}}>💰 Gains cette semaine</span>
+          <span style={{fontSize:16,fontWeight:800,color:"#10B981"}}>{totalWeek.toLocaleString("fr-FR")} F</span>
+        </div>
+        <div style={{display:"flex",alignItems:"flex-end",gap:3,height:60}}>
+          {weeklyData.map((v,i)=>(
+            <div key={i} style={{flex:1,display:"flex",flexDirection:"column",alignItems:"center",gap:3}}>
+              <div style={{fontSize:8,color:"var(--muted)",fontWeight:600}}>{fmtK(v)}</div>
+              <div style={{width:"100%",height:`${(v/maxEarn)*100}%`,background:i===weeklyData.length-1?"#10B981":"rgba(16,185,129,0.3)",borderRadius:"3px 3px 0 0",minHeight:4}}/>
+              <span style={{fontSize:8,color:"var(--muted)"}}>{weekDays[i]}</span>
+            </div>
+          ))}
+        </div>
+      </div>
+      <div style={{display:"flex",gap:6}}>
+        {[["📦","42","Livraisons"],["⭐","4.8","Note moy."],["🛵","127 km","Distance"]].map(([ic,v,l])=>
+          <div key={l} style={{flex:1,padding:"10px 0",textAlign:"center",background:"var(--card)",border:"1px solid var(--border)",borderRadius:12}}>
+            <div style={{fontSize:12}}>{ic}</div>
+            <div style={{fontSize:14,fontWeight:700}}>{v}</div>
+            <div style={{fontSize:9,color:"var(--muted)"}}>{l}</div>
+          </div>
+        )}
+      </div>
+    </div>
+    <div className="appbar"><button onClick={onBack}>←</button><h2>Historique</h2><div style={{width:38}}/></div>
     <div style={{padding:"0 20px 10px",display:"flex",gap:10}}>
       <div style={{flex:1,padding:14,background:"rgba(249,115,22,0.04)",border:"1px solid rgba(249,115,22,0.12)",borderRadius:14,textAlign:"center"}}><div style={{fontSize:18,fontWeight:700,color:"#F97316"}}>{D_HISTORY.length}</div><div style={{fontSize:11,color:"var(--muted)"}}>Livraisons</div></div>
       <div style={{flex:1,padding:14,background:"rgba(249,115,22,0.06)",border:"1px solid rgba(249,115,22,0.12)",borderRadius:14,textAlign:"center"}}><div style={{fontSize:18,fontWeight:700,color:"#F97316"}}>{fmt(totalEarned)}</div><div style={{fontSize:11,color:"var(--muted)"}}>Total gagné</div></div>
