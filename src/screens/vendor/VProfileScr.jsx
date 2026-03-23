@@ -31,6 +31,7 @@ function VProfileScr({go,onSwitch,vendorPlan,onLogout}){
     ["📱","QR Code boutique","Imprimer / Partager",()=>go("vQRCode"),null],
     ["🌐","Mon site web",vendorPlan==="enterprise"?"En ligne ✅":"Plan Enterprise requis",vendorPlan==="enterprise"?()=>go("vWebsite"):null,"enterprise"],
     ["🔌","API & Intégrations",vendorPlan==="enterprise"?"Clé active":"Plan Enterprise requis",vendorPlan==="enterprise"?()=>go("vApi"):null,"enterprise"],
+    ["🤖","Assistant Lamu","IA intelligente",()=>go("vChatBot"),null],
     ["🆘","Support",vendorPlan==="enterprise"?"Manager dédié":"Centre d'aide",()=>go("vSupport"),null],
   ];
 

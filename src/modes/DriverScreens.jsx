@@ -42,6 +42,7 @@ export default function DriverScreens() {
     case "drZones": return <DrZonesScr onBack={back} />;
     case "drStats": return <DrStatsScr onBack={back} />;
     case "drSettings": return <DrSettingsScr onBack={back} go={go} />;
+    case "drChatBot": return <ChatBotScr onBack={back} mode="driver" />;
     case "drHelp": return <DrHelpScr onBack={back} />;
     case "password": return <PasswordScr onBack={back} />;
     case "terms": return <TermsScr onBack={back} />;
