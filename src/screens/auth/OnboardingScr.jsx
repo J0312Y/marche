@@ -88,14 +88,12 @@ function OnboardingScr({onDone}){
 
       {/* ═══ IMAGE SECTION — 60% ═══ */}
       <div style={{flex:"0 0 58%",position:"relative",overflow:"hidden",borderRadius:"0 0 28px 28px"}}>
-        {/* Fallback color */}
-        <div style={{position:"absolute",inset:0,background:"#1a1a2e"}}/>
-        {/* Photo */}
-        <div style={{
+        {/* All photos rendered — crossfade */}
+        {SLIDES.map((sl,i)=><div key={i} style={{
           position:"absolute",inset:0,
-          backgroundImage:`url(${slide.photo})`,backgroundSize:"cover",backgroundPosition:"center",
-          opacity:animating?0:(imgLoaded[s]?1:0),transition:"opacity .4s ease",
-        }}/>
+          backgroundImage:`url(${sl.photo})`,backgroundSize:"cover",backgroundPosition:"center",
+          opacity:i===s&&imgLoaded[i]?1:0,transition:"opacity .6s ease",
+        }}/>)}
         {/* Bottom gradient for smooth transition to white */}
         <div style={{position:"absolute",bottom:0,left:0,right:0,height:80,background:"linear-gradient(transparent, var(--bg, #FAF9F6))"}}/>
 

@@ -33,7 +33,7 @@ function VShopsScr({go,onBack}){
           <div style={{fontSize:9,color:"var(--muted)"}}>{l}</div>
         </div>)}
       </div>
-      <button style={{width:"100%",marginTop:10,padding:8,borderRadius:8,border:"none",background:"var(--card)",border:"1px solid var(--border)",color:"#F97316",fontSize:11,fontWeight:600,cursor:"pointer",fontFamily:"inherit"}} onClick={()=>setShowStats(!showStats)}>{showStats?"▲ Masquer les détails":"▼ Voir les statistiques détaillées"}</button>
+      <button style={{width:"100%",marginTop:10,padding:8,borderRadius:8,border:"1px solid var(--border)",background:"var(--card)",color:"#F97316",fontSize:11,fontWeight:600,cursor:"pointer",fontFamily:"inherit"}} onClick={()=>setShowStats(!showStats)}>{showStats?"▲ Masquer les détails":"▼ Voir les statistiques détaillées"}</button>
     </div>
 
     {/* Expanded stats */}
