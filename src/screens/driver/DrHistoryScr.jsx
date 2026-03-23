@@ -13,7 +13,8 @@ function DrHistoryScr({onBack}){
   const totalEarned=D_HISTORY.reduce((s,h)=>s+h.fee+h.tip,0);
   const [expanded,setExpanded]=useState(null);
 
-  return(<PullToRefresh onRefresh={async()=>{toast.success("Historique actualisé 📦")}}><div className="scr"><div style={{margin:"0 0 14px"}}>
+  return(<PullToRefresh onRefresh={async()=>{toast.success("Historique actualisé 📦")}}><div className="scr"><div className="appbar"><button onClick={onBack}>←</button><h2>Historique</h2><div style={{width:38}}/></div>
+    <div style={{padding:"0 16px 14px"}}>
       <div style={{padding:16,background:"var(--card)",border:"1px solid var(--border)",borderRadius:16,marginBottom:10}}>
         <div style={{display:"flex",justifyContent:"space-between",alignItems:"center",marginBottom:10}}>
           <span style={{fontSize:14,fontWeight:700}}>💰 Gains cette semaine</span>
@@ -39,7 +40,6 @@ function DrHistoryScr({onBack}){
         )}
       </div>
     </div>
-    <div className="appbar"><button onClick={onBack}>←</button><h2>Historique</h2><div style={{width:38}}/></div>
     <div style={{padding:"0 20px 10px",display:"flex",gap:10}}>
       <div style={{flex:1,padding:14,background:"rgba(249,115,22,0.04)",border:"1px solid rgba(249,115,22,0.12)",borderRadius:14,textAlign:"center"}}><div style={{fontSize:18,fontWeight:700,color:"#F97316"}}>{D_HISTORY.length}</div><div style={{fontSize:11,color:"var(--muted)"}}>Livraisons</div></div>
       <div style={{flex:1,padding:14,background:"rgba(249,115,22,0.06)",border:"1px solid rgba(249,115,22,0.12)",borderRadius:14,textAlign:"center"}}><div style={{fontSize:18,fontWeight:700,color:"#F97316"}}>{fmt(totalEarned)}</div><div style={{fontSize:11,color:"var(--muted)"}}>Total gagné</div></div>
