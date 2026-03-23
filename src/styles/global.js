@@ -19,6 +19,9 @@ select option{background:var(--card);color:var(--text);padding:10px 14px;font-si
 .appbar button{width:38px;height:38px;border-radius:12px;border:1px solid var(--border);background:var(--card);cursor:pointer;font-size:16px;color:var(--text);display:flex;align-items:center;justify-content:center}
 .appbar h2{flex:1;font-size:17px;font-weight:600;text-align:center}
 .btn-primary{width:100%;padding:12px;border-radius:12px;border:none;background:#F97316;color:#fff;font-size:15px;font-weight:600;cursor:pointer;font-family:inherit;transition:opacity .15s}.btn-primary:hover{opacity:.85}
+.auth .btn-primary{margin:0 30px;width:calc(100% - 60px)}
+.auth .social-btns{padding:0 30px}
+.auth .divider{margin:20px 30px}
 .btn-outline{width:100%;padding:12px;border-radius:12px;border:1px solid var(--border);background:var(--card);color:var(--text);font-size:15px;font-weight:600;cursor:pointer;font-family:inherit}
 .field{margin-bottom:10px}.field label{display:block;font-size:12px;font-weight:600;color:var(--sub);margin-bottom:5px}.field input,.field textarea,.field select{width:100%;padding:12px 14px;border-radius:12px;border:1px solid var(--border);background:var(--light);color:var(--text);font-family:inherit;font-size:14px;outline:none;color:var(--text);resize:none}.field.err input,.field.err textarea,.field.err select{border-color:#EF4444!important}.field .err-msg{font-size:11px;color:#EF4444;margin-top:3px;font-weight:500}
 .field input:focus,.field textarea:focus{border-color:#F97316}
