@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import { useApp } from "../context/AppContext";
 import { addNotification } from "../utils/notifStore";
 
 let showPushBanner = null;
@@ -7,6 +8,7 @@ export function registerPushBanner(handler) { showPushBanner = handler; }
 export function triggerPush(data) { showPushBanner?.(data); }
 
 function PushBanner() {
+  const { go } = useApp();
   const [data, setData] = useState(null);
   const [visible, setVisible] = useState(false);
 
@@ -25,7 +27,7 @@ function PushBanner() {
   if (!data) return null;
 
   return (
-    <div onClick={() => { setVisible(false); data.onTap?.(); }} style={{
+    <div onClick={() => { setVisible(false); if(data.onTap) data.onTap(); else if(go) go("notif"); }} style={{
       position: "fixed", top: 0, left: 0, right: 0, zIndex: 200,
       transform: visible ? "translateY(0)" : "translateY(-100%)",
       transition: "transform .35s cubic-bezier(.4,0,.2,1)",

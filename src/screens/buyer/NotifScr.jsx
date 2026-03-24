@@ -26,7 +26,7 @@ function NotifScr({ onBack, go }) {
   useEffect(() => onNotifChange(setPushNotifs), []);
 
   // Init local state from loaded data
-  const pushItems = pushNotifs.map(p => ({ id: p.id, icon: p.icon, title: p.title, desc: p.body, body: p.body, time: p.time, read: p.read }));
+  const pushItems = pushNotifs.map(p => ({ id: p.id, icon: p.icon, title: p.title, desc: p.body, body: p.body, time: p.time, read: p.read, fromPush: true }));
   const items = [...pushItems, ...(notifs || raw)];
   if (!notifs && raw.length > 0 && items === raw) {
     // Will trigger on next interaction
@@ -113,15 +113,15 @@ function NotifScr({ onBack, go }) {
                 </div>
 
                 {/* Expanded detail */}
-                {isOpen && detail && (
+                {isOpen && (detail || n.fromPush) && (
                   <div style={{
                     marginTop: 12, marginLeft: !n.read ? 20 : 0, padding: 14,
                     background: "var(--light)", borderRadius: 14, border: "1px solid var(--border)",
                   }}>
                     <div style={{ fontSize: 13, color: "var(--sub)", lineHeight: 1.7, whiteSpace: "pre-line" }}>
-                      {detail.full}
+                      {detail ? detail.full : n.body || n.desc}
                     </div>
-                    {detail.action && go && (
+                    {detail?.action && go && (
                       <button onClick={(e) => { e.stopPropagation(); handleAction(n); }} style={{
                         marginTop: 12, width: "100%", padding: "11px 0", borderRadius: 12,
                         border: "none", background: "#F97316", color: "#fff",

@@ -21,7 +21,7 @@ function VNotifScr({onBack,go}){
   const [pushNotifs,setPushNotifs]=useState(getNotifications());
   useEffect(()=>onNotifChange(setPushNotifs),[]);
 
-  const pushItems=pushNotifs.map(p=>({id:p.id,icon:p.icon,title:p.title,desc:p.body,time:p.time,read:p.read}));
+  const pushItems=pushNotifs.map(p=>({id:p.id,icon:p.icon,title:p.title,desc:p.body,body:p.body,time:p.time,read:p.read,fromPush:true}));
   const items=[...pushItems,...(notifs||(rawNotifs||[]))];
   const unreadCount=items.filter(n=>!n.read).length;
 
@@ -65,10 +65,10 @@ function VNotifScr({onBack,go}){
                 </div>
               </div>
 
-              {isOpen&&detail&&(
+              {isOpen&&(detail||n.fromPush)&&(
                 <div style={{marginTop:10,marginLeft:!n.read?20:0,padding:12,background:"var(--light)",borderRadius:12,border:"1px solid var(--border)"}}>
-                  <div style={{fontSize:12,color:"var(--sub)",lineHeight:1.7,whiteSpace:"pre-line"}}>{detail.full}</div>
-                  {detail.action&&go&&(
+                  <div style={{fontSize:12,color:"var(--sub)",lineHeight:1.7,whiteSpace:"pre-line"}}>{detail?detail.full:n.body||n.desc}</div>
+                  {detail?.action&&go&&(
                     <button onClick={e=>{e.stopPropagation();go(detail.action)}} style={{marginTop:10,width:"100%",padding:"10px 0",borderRadius:10,border:"none",background:"#F97316",color:"#fff",fontSize:12,fontWeight:700,cursor:"pointer",fontFamily:"inherit"}}>
                       {detail.actionLabel}
                     </button>
