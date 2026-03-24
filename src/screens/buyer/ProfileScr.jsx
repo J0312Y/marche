@@ -1,6 +1,7 @@
 
 import PullToRefresh from "../../components/PullToRefresh";
 import toast from "../../utils/toast";
+import t from "../../utils/i18n";
 
 import { USER_AVATAR } from "../../data/images";
 function ProfileScr({go,userRole,vendorPlan,vendorStatus,driverStatus,onLogout}){
