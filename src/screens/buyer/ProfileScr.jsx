@@ -4,11 +4,9 @@ import toast from "../../utils/toast";
 import t from "../../utils/i18n";
 
 import { USER_AVATAR } from "../../data/images";
-function ProfileScr({go,userRole,vendorPlan,vendorStatus,driverStatus,onLogout}){
+function ProfileScr({go,userRole,vendorPlan,vendorStatus,driverStatus,onLogout,onRoleApproved}){
   const hasVendor=(userRole==="vendor"||userRole==="both")&&vendorStatus==="approved";
   const hasDriver=(userRole==="driver"||userRole==="both")&&driverStatus==="approved";
-  const pendingVendor=(userRole==="vendor"||userRole==="both")&&vendorStatus==="pending";
-  const pendingDriver=(userRole==="driver"||userRole==="both")&&driverStatus==="pending";
 
   const Section=({title,children})=>(
     <div style={{margin:"0 20px 14px"}}>
@@ -54,15 +52,17 @@ function ProfileScr({go,userRole,vendorPlan,vendorStatus,driverStatus,onLogout})
     </div>
 
     {/* ── Pending status ── */}
-    {pendingVendor&&<div style={{margin:"0 20px 10px",padding:14,background:"rgba(245,158,11,0.06)",border:"1px solid rgba(245,158,11,0.15)",borderRadius:14}}>
-      <div style={{display:"flex",alignItems:"center",gap:10}}><span style={{fontSize:24}}>⏳</span><div><div style={{fontSize:14,fontWeight:700,color:"#F59E0B"}}>Demande commerçant en cours</div><div style={{fontSize:12,color:"var(--muted)",marginTop:2}}>Vérification sous 24-48h</div></div></div></div>}
-    {pendingDriver&&<div style={{margin:"0 20px 10px",padding:14,background:"rgba(245,158,11,0.06)",border:"1px solid rgba(245,158,11,0.15)",borderRadius:14}}>
-      <div style={{display:"flex",alignItems:"center",gap:10}}><span style={{fontSize:24}}>⏳</span><div><div style={{fontSize:14,fontWeight:700,color:"#F59E0B"}}>Demande livreur en cours</div><div style={{fontSize:12,color:"var(--muted)",marginTop:2}}>Vérification sous 24-48h</div></div></div></div>}
 
     {/* ── CTA vendeur/livreur ── */}
-    {userRole==="client"&&<div onClick={()=>go("roleReg")} style={{margin:"0 20px 14px",padding:16,background:"linear-gradient(135deg,#1a1a2e,#16213e)",borderRadius:18,display:"flex",alignItems:"center",gap:14,cursor:"pointer",boxShadow:"0 4px 16px rgba(0,0,0,.12)"}}>
+    {vendorStatus==="pending"&&<div style={{margin:"0 20px 10px",padding:14,background:"rgba(245,158,11,0.06)",border:"1px solid rgba(245,158,11,0.2)",borderRadius:16}}>
+      <div style={{display:"flex",alignItems:"center",gap:10}}><span style={{fontSize:24}}>⏳</span><div><div style={{fontSize:14,fontWeight:700,color:"#F59E0B"}}>Demande commerçant en attente</div><div style={{fontSize:12,color:"var(--muted)",marginTop:2}}>Vérification sous 24-48h</div></div></div>
+    </div>}
+    {driverStatus==="pending"&&<div style={{margin:"0 20px 10px",padding:14,background:"rgba(245,158,11,0.06)",border:"1px solid rgba(245,158,11,0.2)",borderRadius:16}}>
+      <div style={{display:"flex",alignItems:"center",gap:10}}><span style={{fontSize:24}}>⏳</span><div><div style={{fontSize:14,fontWeight:700,color:"#F59E0B"}}>Demande livreur en attente</div><div style={{fontSize:12,color:"var(--muted)",marginTop:2}}>Vérification sous 24-48h</div></div></div>
+    </div>}
+    {vendorStatus!=="pending"&&driverStatus!=="pending"&&!hasVendor&&!hasDriver&&<div onClick={()=>go("roleReg")} style={{margin:"0 20px 14px",padding:16,background:"linear-gradient(135deg,#1a1a2e,#16213e)",borderRadius:18,display:"flex",alignItems:"center",gap:14,cursor:"pointer",boxShadow:"0 4px 16px rgba(0,0,0,.12)"}}>
       <div style={{width:48,height:48,borderRadius:14,background:"linear-gradient(135deg,#F97316,#FB923C)",display:"flex",alignItems:"center",justifyContent:"center",fontSize:24,flexShrink:0}}>🚀</div>
-      <div style={{flex:1}}><div style={{fontSize:15,fontWeight:700,color:"#fff"}}>Devenir commerçant ou livreur</div><div style={{fontSize:11,color:"rgba(255,255,255,.5)",marginTop:3}}>Ouvrez votre restaurant, boutique, pharmacie...</div></div>
+      <div style={{flex:1}}><div style={{fontSize:15,fontWeight:700,color:"#fff"}}>{t("profile.become_seller")}</div><div style={{fontSize:11,color:"rgba(255,255,255,.5)",marginTop:3}}>Ouvrez votre restaurant, boutique, pharmacie...</div></div>
       <span style={{color:"rgba(255,255,255,.3)",fontSize:18}}>›</span>
     </div>}
     {hasVendor&&<div onClick={()=>go("switchVendor")} style={{margin:"0 20px 14px",padding:14,background:"var(--card)",border:"1px solid var(--border)",borderLeft:"4px solid #F97316",borderRadius:16,display:"flex",alignItems:"center",gap:12,cursor:"pointer"}}>

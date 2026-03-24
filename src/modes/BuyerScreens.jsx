@@ -29,7 +29,7 @@ export default function BuyerScreens() {
     cart, setCart, addToCart, updateCartQty,
     appliedCoupon, setAppliedCoupon,
     favs, toggleFav, isFav,
-    userRole, vendorPlan, vendorStatus, driverStatus,
+    userRole, vendorPlan, vendorStatus, setVendorStatus, driverStatus, setDriverStatus,
     logout, onRoleApproved, hasVendor, hasDriver,
     userName,
   } = useApp();
@@ -39,7 +39,7 @@ export default function BuyerScreens() {
     if (tab === 1) return <SearchScr go={go} fromTab favs={favs} toggleFav={toggleFav} isFav={isFav} />;
     if (tab === 2) return <CartScr cart={cart} setCart={setCart} updateCartQty={updateCartQty} go={go} appliedCoupon={appliedCoupon} setAppliedCoupon={setAppliedCoupon} />;
     if (tab === 3) return <OrdersScr go={go} />;
-    return <ProfileScr go={go} userRole={userRole} vendorPlan={vendorPlan} vendorStatus={vendorStatus} driverStatus={driverStatus} onLogout={logout} />;
+    return <ProfileScr go={go} userRole={userRole} vendorPlan={vendorPlan} vendorStatus={vendorStatus} driverStatus={driverStatus} onLogout={logout} onRoleApproved={onRoleApproved} />;
   }
 
   const { type, data } = screen;
@@ -93,8 +93,8 @@ export default function BuyerScreens() {
     case "priceAlerts": return <PriceAlertScr onBack={back} />;
     case "recharge": return <RechargeScr onBack={back} />;
     case "becomeSeller": return <BecomeSellerScr onBack={back} go={go} />;
-    case "roleReg": return <RoleRegScr onBack={back} onDone={(role, plan) => { onRoleApproved(role, plan); goHome(); }} />;
-    case "vendorReg": return <RoleRegScr onBack={back} onDone={(role, plan) => { onRoleApproved(role, plan); goHome(); }} forceRole="vendor" />;
+    case "roleReg": return <RoleRegScr onPending={(role)=>{if(role==="vendor")setVendorStatus("pending");if(role==="driver")setDriverStatus("pending")}} onBack={back} onDone={(role, plan) => { onRoleApproved(role, plan); goHome(); }} />;
+    case "vendorReg": return <RoleRegScr onPending={(role)=>{if(role==="vendor")setVendorStatus("pending");if(role==="driver")setDriverStatus("pending")}} onBack={back} onDone={(role, plan) => { onRoleApproved(role, plan); goHome(); }} forceRole="vendor" />;
     case "switchVendor": return <Redirect action={() => { if (hasVendor) switchTo("vendor"); else go("roleReg"); }} />;
     case "switchDriver": return <Redirect action={() => { if (hasDriver) switchTo("driver"); else go("roleReg"); }} />;
     default: return null;

@@ -2,8 +2,9 @@ import { useState } from "react";
 import Select from "../../components/Select";
 import { useData } from "../../hooks";
 import toast from "../../utils/toast";
+import { triggerPush } from "../../components/PushBanner";
 
-function RoleRegScr({onBack,onDone,forceRole}){
+function RoleRegScr({onBack,onDone,forceRole,onPending}){
   const { CATS } = useData();
   const [role,setRole]=useState(forceRole||null); // "vendor" | "driver"
   const [step,setStep]=useState(forceRole?0:-1);
@@ -83,13 +84,49 @@ function RoleRegScr({onBack,onDone,forceRole}){
 
   // Success screen
   if(ok)return(<div style={{display:"flex",flexDirection:"column",height:"100%",justifyContent:"center"}}><div style={{textAlign:"center",padding:"40px 20px"}}>
-    <div style={{width:80,height:80,borderRadius:"50%",background:"rgba(16,185,129,0.1)",display:"flex",alignItems:"center",justifyContent:"center",margin:"0 auto 20px",fontSize:40}}>🎉</div>
-    <h2 style={{fontSize:22,fontWeight:700,marginBottom:8}}>{role==="vendor"?"Bienvenue sur Lamuka !":"Bienvenue livreur !"}</h2>
-    <p style={{fontSize:14,color:"var(--sub)",lineHeight:1.6}}>Votre demande a été soumise. Vérification sous 24-48h.</p>
-    <p style={{fontSize:13,color:"var(--muted)",marginTop:4}}>Vous recevrez : notification, message in-app, et email de confirmation.</p>
-    <div style={{fontSize:13,color:"#F97316",fontWeight:600,margin:"16px 0"}}>#{role==="vendor"?"VND":"DRV"}-2026-{String(Math.floor(Math.random()*9000+1000))}</div>
-    {role==="vendor"&&<div style={{padding:10,background:"rgba(249,115,22,0.04)",borderRadius:12,fontSize:12,color:"#F97316",fontWeight:600,marginBottom:10}}>Plan {plan==="starter"?"Starter (Gratuit)":plan==="pro"?"Pro (15k/mois)":"Enterprise (45k/mois)"}</div>}
-    <button className="btn-primary" style={{maxWidth:300,margin:"0 auto"}} onClick={()=>{toast.success("Inscription réussie ! 🎉");onDone(role,role==="vendor"?plan:null)}}>✅ Compris</button>
+    <div style={{width:80,height:80,borderRadius:"50%",background:"rgba(249,115,22,0.08)",display:"flex",alignItems:"center",justifyContent:"center",margin:"0 auto 20px",fontSize:40}}>📩</div>
+    <h2 style={{fontSize:20,fontWeight:700,marginBottom:8}}>Demande envoyée !</h2>
+    <p style={{fontSize:14,color:"var(--sub)",lineHeight:1.6}}>Votre demande d'inscription en tant que <b>{role==="vendor"?"commerçant":"livreur"}</b> a bien été reçue.</p>
+
+    {/* Ref number */}
+    <div style={{margin:"16px auto",padding:"10px 20px",background:"var(--light)",borderRadius:12,display:"inline-block"}}>
+      <div style={{fontSize:10,color:"var(--muted)"}}>Numéro de suivi</div>
+      <div style={{fontSize:16,fontWeight:800,color:"#F97316",letterSpacing:1}}>#{role==="vendor"?"VND":"DRV"}-2026-{String(Math.floor(Math.random()*9000+1000))}</div>
+    </div>
+
+    {role==="vendor"&&<div style={{padding:10,background:"rgba(249,115,22,0.04)",borderRadius:12,fontSize:12,color:"#F97316",fontWeight:600,marginBottom:10}}>Plan choisi : {plan==="starter"?"Starter (Gratuit)":plan==="pro"?"Pro (15 000 F/mois)":"Enterprise (45 000 F/mois)"}</div>}
+
+    {/* Timeline */}
+    <div style={{textAlign:"left",maxWidth:300,margin:"16px auto",padding:16,background:"var(--card)",border:"1px solid var(--border)",borderRadius:16}}>
+      <div style={{fontSize:13,fontWeight:700,marginBottom:12}}>📋 Prochaines étapes</div>
+      {[
+        ["✅","Demande soumise","Maintenant","done"],
+        ["⏳","Vérification en cours","Notre équipe examine vos documents","pending"],
+        ["🔔","Notification de validation","Sous 24-48h par SMS et in-app","waiting"],
+        [role==="vendor"?"🏪":"🛵",role==="vendor"?"Accès mode vendeur":"Accès mode livreur","Après validation","waiting"],
+      ].map(([ic,title,desc,status],i)=>(
+        <div key={i} style={{display:"flex",gap:10,marginBottom:i<3?12:0,position:"relative"}}>
+          {i<3&&<div style={{position:"absolute",left:13,top:28,width:2,height:16,background:status==="done"?"#10B981":"var(--border)"}}/>}
+          <div style={{width:28,height:28,borderRadius:8,background:status==="done"?"rgba(16,185,129,0.1)":status==="pending"?"rgba(249,115,22,0.1)":"var(--light)",display:"flex",alignItems:"center",justifyContent:"center",fontSize:14,flexShrink:0}}>{ic}</div>
+          <div>
+            <div style={{fontSize:12,fontWeight:600,color:status==="done"?"#10B981":status==="pending"?"#F97316":"var(--muted)"}}>{title}</div>
+            <div style={{fontSize:10,color:"var(--muted)"}}>{desc}</div>
+          </div>
+        </div>
+      ))}
+    </div>
+
+    <p style={{fontSize:11,color:"var(--muted)",lineHeight:1.5,marginTop:8}}>📱 Vous recevrez un SMS au <b>+242 {rolePhone.slice(0,3)} XXX {rolePhone.slice(6)}</b> dès validation.<br/>Vous pouvez continuer à acheter en attendant.</p>
+
+    <button className="btn-primary" style={{maxWidth:300,margin:"16px auto 0"}} onClick={()=>{toast.success("Demande enregistrée ! Vous serez notifié sous 24-48h 📩");
+      setTimeout(()=>triggerPush("📩 Votre demande de "+(role==="vendor"?"commerçant":"livreur")+" est en cours de vérification. Réponse sous 24-48h."),3000);
+      if(onPending) onPending(role);
+      // ── SIMULATION: auto-approbation après 60s (à retirer en production) ──
+      setTimeout(()=>{
+        triggerPush("🎉 Félicitations ! Votre demande de "+(role==="vendor"?"commerçant":"livreur")+" a été approuvée ! Accédez à votre espace dans le Profil.");
+        if(onDone) onDone(role, role==="vendor"?plan:"driver");
+      },60000);
+      onBack()}}>↩ Retour au marketplace</button>
   </div></div>);
 
   // Role selection
