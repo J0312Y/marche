@@ -14,7 +14,7 @@ import ChatBotScr from "../screens/common/ChatBotScr";
 import { SettingsScr, HelpScr, AboutScr, TermsScr, PrivacyScr } from "../screens/common";
 
 export default function DriverScreens() {
-  const { screen, dTab, setDTab, go, pop, switchTo, logout, setScreen, setHistory } = useApp();
+  const { screen, dTab, setDTab, go, pop, switchTo, logout, setScreen, setHistory , lang } = useApp();
 
   if (!screen) {
     if (dTab === 0) return <DrDashboardScr go={go} />;

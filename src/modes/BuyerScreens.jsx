@@ -31,7 +31,7 @@ export default function BuyerScreens() {
     favs, toggleFav, isFav,
     userRole, vendorPlan, vendorStatus, setVendorStatus, driverStatus, setDriverStatus,
     logout, onRoleApproved, hasVendor, hasDriver,
-    userName,
+    userName, lang,
   } = useApp();
 
   if (!screen) {

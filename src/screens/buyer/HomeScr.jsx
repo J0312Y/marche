@@ -10,7 +10,7 @@ import { fmt, disc, getVendorPromo, totalDisc, effectivePrice } from "../../util
 
 function HomeScr({go,favs,toggleFav,isFav,userName}){
   const { P, VENDORS, CATS, loading: dataLoading, reload } = useData();
-  const { cartCount, recentlyViewed, seenStories, markStorySeen } = useApp();
+  const { cartCount, lang, recentlyViewed, seenStories, markStorySeen } = useApp();
   const [selCat,setSC]=useState(0);
   const [selType,setSelType]=useState("all");
   const [storyViewer,setStoryViewer]=useState(null);

@@ -6,11 +6,12 @@ import toast from "../../utils/toast";
 
 function DrSettingsScr({onBack,go}){
   const { darkMode, toggleDark } = useApp();
-  const [pushN,setPushN]=useState(true);const [sound,setSound]=useState(true);const [autoAccept,setAutoAccept]=useState(false);const [lang,setLang]=useState("fr");
+  const [pushN,setPushN]=useState(true);const [sound,setSound]=useState(true);const [autoAccept,setAutoAccept]=useState(false);const {setLang:ctxSetLang,lang:currentLang}=useApp();
+  const [lang,setLang]=useState(currentLang||"fr");
   return(<div className="scr" style={{paddingBottom:20}}><div className="appbar"><button onClick={onBack}>←</button><h2>Paramètres</h2><div style={{width:38}}/></div>
     <div style={{padding:"0 16px"}}>
       <div className="setting-group"><div className="setting-label">Général</div>
-        <div className="setting-item"><span className="si-i">🌐</span><span className="si-t">Langue</span><Select value={lang} onChange={v=>{setLang(v);setLanguage(v)}} options={[{value:"fr",label:"🇫🇷 Français"},{value:"en",label:"🇬🇧 English"},{value:"ln",label:"🇨🇬 Lingala"}]}/></div>
+        <div className="setting-item"><span className="si-i">🌐</span><span className="si-t">Langue</span><Select value={lang} onChange={v=>{setLang(v);setLanguage(v);ctxSetLang(v)}} options={[{value:"fr",label:"🇫🇷 Français"},{value:"en",label:"🇬🇧 English"},{value:"ln",label:"🇨🇬 Lingala"}]}/></div>
         <div className="setting-item"><span className="si-i">🌙</span><span className="si-t">Mode sombre</span><div className={`toggle ${darkMode?"on":""}`} onClick={()=>{toggleDark();toast.success(darkMode?"Mode clair ☀️":"Mode sombre 🌙")}}/></div>
       </div>
       <div className="setting-group"><div className="setting-label">Notifications</div>

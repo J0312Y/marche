@@ -50,6 +50,12 @@ export function AppProvider({ children }) {
   const markStorySeen = useCallback((vendorId) => { setSeenStories(prev => prev.includes(vendorId) ? prev : [...prev, vendorId]); }, []);
   const [darkMode, setDarkMode] = useState(() => localStorage.getItem('lamuka_dark') === '1');
   const toggleDark = useCallback(() => { setDarkMode(d => { const n = !d; localStorage.setItem('lamuka_dark', n ? '1' : '0'); return n; }); }, []);
+  const [lang, setLangState] = useState(() => {
+    const l = localStorage.getItem('lk-lang') || 'fr';
+    import('../utils/i18n').then(m => m.setLanguage(l));
+    return l;
+  });
+  const setLang = useCallback((l) => { setLangState(l); localStorage.setItem('lk-lang', l); import('../utils/i18n').then(m => m.setLanguage(l)); }, []);
   const showToast = useCallback((message, type = 'success') => {
     setToast({ message, type });
     setTimeout(() => setToast(null), 2500);
@@ -248,7 +254,7 @@ export function AppProvider({ children }) {
     onRoleApproved, hasVendor, hasDriver,
     unreadCount, setUnreadCount,
     toast, showToast,
-    darkMode, toggleDark,
+    darkMode, toggleDark, lang, setLang,
     userName, setUserName,
     recentlyViewed, addRecentlyViewed,
     seenStories, markStorySeen,

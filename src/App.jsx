@@ -18,7 +18,7 @@ function AppInner() {
     mode, tab, setTab, vTab, setVTab, dTab, setDTab,
     screen, setScreen, setHistory, go,
     cart, cartCount, hasVendor, hasDriver,
-    login, completeProfile, toast, darkMode, setUserName,
+    login, completeProfile, toast, darkMode, setUserName, lang,
   } = useApp();
 
   /* ── Auth step mapping: splash=0, onboarding=1, login=2, otp=3, profile=4, ready=5 ── */

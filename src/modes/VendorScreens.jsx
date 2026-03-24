@@ -19,7 +19,7 @@ import { WithdrawScr } from "../screens/buyer";
 import { SettingsScr, HelpScr, AboutScr, TermsScr, PrivacyScr } from "../screens/common";
 
 export default function VendorScreens() {
-  const { screen, vTab, setVTab, go, pop, switchTo, vendorPlan, setVendorPlan, logout } = useApp();
+  const { screen, vTab, setVTab, go, pop, switchTo, vendorPlan, setVendorPlan, logout, lang } = useApp();
 
   if (!screen) {
     if (vTab === 0) return <VDashboardScr go={go} />;
