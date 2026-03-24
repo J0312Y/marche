@@ -1,4 +1,5 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import { getNotifications, onNotifChange } from "../../utils/notifStore";
 import { useLoad } from "../../hooks";
 import { social } from "../../services";
 import { SkeletonList } from "../../components/Loading";
@@ -21,9 +22,12 @@ function NotifScr({ onBack, go }) {
   const raw = data?.notifications || data || [];
   const [notifs, setNotifs] = useState(null);
   const [expanded, setExpanded] = useState(null);
+  const [pushNotifs, setPushNotifs] = useState(getNotifications());
+  useEffect(() => onNotifChange(setPushNotifs), []);
 
   // Init local state from loaded data
-  const items = notifs || raw;
+  const pushItems = pushNotifs.map(p => ({ id: p.id, icon: p.icon, title: p.title, desc: p.body, body: p.body, time: p.time, read: p.read }));
+  const items = [...pushItems, ...(notifs || raw)];
   if (!notifs && raw.length > 0 && items === raw) {
     // Will trigger on next interaction
   }

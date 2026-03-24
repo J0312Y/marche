@@ -1,14 +1,17 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import { getNotifications, onNotifChange } from "../../utils/notifStore";
 import { D_NOTIFS } from "../../data/driverData";
 import toast from "../../utils/toast";
 
 function DrNotifScr({onBack}){
   const [notifs,setNotifs]=useState(D_NOTIFS.map((n,i)=>({...n,id:i})));
   const [expanded,setExpanded]=useState(null);
+  const [pushNotifs,setPushNotifs]=useState(getNotifications());
+  useEffect(()=>onNotifChange(setPushNotifs),[]);
 
   const markRead=(id)=>setNotifs(prev=>prev.map(n=>n.id===id?{...n,read:true}:n));
   const markAllRead=()=>{setNotifs(prev=>prev.map(n=>({...n,read:true})));toast.success('Toutes les notifications lues ✅')};
-  const unreadCount=notifs.filter(n=>!n.read).length;
+  const unreadCount=notifs.filter(n=>!n.read).length+pushNotifs.filter(n=>!n.read).length;
 
   const details={
     0:"Commande #CMD-0891 de Mode Afrique.\nClient: Marie Koumba\nAdresse: Bacongo, Rue 14\nArticles: Robe Wax (×2), Sac Cuir (×1)\nTotal: 92 000 FCFA\nFrais livraison: 2 500 FCFA",
@@ -21,7 +24,7 @@ function DrNotifScr({onBack}){
   return(<div className="scr"><div className="appbar"><button onClick={onBack}>←</button><h2>Notifications {unreadCount>0&&<span style={{fontSize:12,color:"#F97316",fontWeight:600}}>({unreadCount})</span>}</h2>
     {unreadCount>0&&<button onClick={markAllRead} style={{fontSize:12,color:"#F97316",fontWeight:600,background:"none",border:"none",cursor:"pointer",fontFamily:"inherit"}}>Tout lire</button>}</div>
     <div style={{padding:"0 0 20px"}}>
-      {notifs.map((n)=>{
+      {[...pushNotifs.map(p=>({id:p.id,icon:p.icon,title:p.title,desc:p.body,time:p.time,read:p.read})),...notifs].map((n)=>{
         const isOpen=expanded===n.id;
         return(<div key={n.id} onClick={()=>{setExpanded(isOpen?null:n.id);if(!n.read)markRead(n.id)}} style={{padding:"14px 20px",borderBottom:"1px solid var(--border)",cursor:"pointer",background:!n.read?"rgba(249,115,22,0.03)":"transparent",transition:"background .2s"}}>
           <div style={{display:"flex",alignItems:"flex-start",gap:12}}>

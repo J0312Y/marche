@@ -1,4 +1,5 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import { getNotifications, onNotifChange } from "../../utils/notifStore";
 import { useLoad } from "../../hooks";
 import { vendor } from "../../services";
 import { SkeletonList } from "../../components/Loading";
@@ -17,8 +18,11 @@ function VNotifScr({onBack,go}){
   const { data: rawNotifs, loading } = useLoad(() => vendor.getNotifications());
   const [notifs,setNotifs]=useState(null);
   const [expanded,setExpanded]=useState(null);
+  const [pushNotifs,setPushNotifs]=useState(getNotifications());
+  useEffect(()=>onNotifChange(setPushNotifs),[]);
 
-  const items=notifs||(rawNotifs||[]);
+  const pushItems=pushNotifs.map(p=>({id:p.id,icon:p.icon,title:p.title,desc:p.body,time:p.time,read:p.read}));
+  const items=[...pushItems,...(notifs||(rawNotifs||[]))];
   const unreadCount=items.filter(n=>!n.read).length;
 
   const markRead=(idx)=>setNotifs((notifs||rawNotifs||[]).map((n,i)=>i===idx?{...n,read:true}:n));

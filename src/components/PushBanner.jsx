@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import { addNotification } from "../utils/notifStore";
 
 let showPushBanner = null;
 
@@ -13,6 +14,7 @@ function PushBanner() {
     registerPushBanner((d) => {
       const parsed = typeof d === "string" ? { icon: "🔔", title: "Lamuka Market", body: d } : d;
       setData(parsed);
+      addNotification(parsed);
       setVisible(true);
       setTimeout(() => setVisible(false), 4000);
       setTimeout(() => setData(null), 4500);
