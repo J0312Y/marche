@@ -83,7 +83,7 @@ function ChatVendorScr({onBack,vendorName,vendorAvatar,vendor}){
           <span>📍 {vInfo.zone}</span>
         </p>
       </div>
-      <button className="ch-call" onClick={()=>window.open("tel:+242064663469")}>📞</button>
+      <button className="ch-call" onClick={()=>window.location.href="tel:+242064663469"}>📞</button>
     </div>
 
     <div className="chat-body" ref={ref}>
