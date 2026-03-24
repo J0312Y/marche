@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { getNotifications, onNotifChange } from "../../utils/notifStore";
+import { getNotifications, onNotifChange, markPushRead, markAllRead as markAllPushRead } from "../../utils/notifStore";
 import { useLoad } from "../../hooks";
 import { social } from "../../services";
 import { SkeletonList } from "../../components/Loading";
@@ -38,11 +38,14 @@ function NotifScr({ onBack, go }) {
   };
 
   const markAllRead = () => {
-    setNotifs((notifs || raw).map(n => ({ ...n, read: true })));toast.success('Toutes les notifications lues ✅');
+    setNotifs((notifs || raw).map(n => ({ ...n, read: true })));markAllPushRead();toast.success('Toutes les notifications lues ✅');
   };
 
   const handleClick = (n) => {
-    if (!n.read) markRead(n.id);
+    if (!n.read) {
+      if (n.fromPush) markPushRead(n.id);
+      else markRead(n.id);
+    }
     setExpanded(expanded === n.id ? null : n.id);
   };
 

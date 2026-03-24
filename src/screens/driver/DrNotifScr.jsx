@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { getNotifications, onNotifChange } from "../../utils/notifStore";
+import { getNotifications, onNotifChange, markPushRead, markAllRead as markAllPushRead } from "../../utils/notifStore";
 import { D_NOTIFS } from "../../data/driverData";
 import toast from "../../utils/toast";
 
@@ -10,7 +10,7 @@ function DrNotifScr({onBack}){
   useEffect(()=>onNotifChange(setPushNotifs),[]);
 
   const markRead=(id)=>setNotifs(prev=>prev.map(n=>n.id===id?{...n,read:true}:n));
-  const markAllRead=()=>{setNotifs(prev=>prev.map(n=>({...n,read:true})));toast.success('Toutes les notifications lues ✅')};
+  const markAllRead=()=>{setNotifs(prev=>prev.map(n=>({...n,read:true})));markAllPushRead();toast.success('Toutes les notifications lues ✅')};
   const unreadCount=notifs.filter(n=>!n.read).length+pushNotifs.filter(n=>!n.read).length;
 
   const details={
@@ -26,7 +26,7 @@ function DrNotifScr({onBack}){
     <div style={{padding:"0 0 20px"}}>
       {[...pushNotifs.map(p=>({id:p.id,icon:p.icon,title:p.title,desc:p.body,body:p.body,time:p.time,read:p.read,fromPush:true})),...notifs].map((n)=>{
         const isOpen=expanded===n.id;
-        return(<div key={n.id} onClick={()=>{setExpanded(isOpen?null:n.id);if(!n.read)markRead(n.id)}} style={{padding:"14px 20px",borderBottom:"1px solid var(--border)",cursor:"pointer",background:!n.read?"rgba(249,115,22,0.03)":"transparent",transition:"background .2s"}}>
+        return(<div key={n.id} onClick={()=>{setExpanded(isOpen?null:n.id);if(!n.read){if(n.fromPush)markPushRead(n.id);else markRead(n.id)}}} style={{padding:"14px 20px",borderBottom:"1px solid var(--border)",cursor:"pointer",background:!n.read?"rgba(249,115,22,0.03)":"transparent",transition:"background .2s"}}>
           <div style={{display:"flex",alignItems:"flex-start",gap:12}}>
             <div style={{width:40,height:40,borderRadius:12,background:!n.read?"rgba(249,115,22,0.08)":"var(--light)",display:"flex",alignItems:"center",justifyContent:"center",fontSize:18,flexShrink:0}}>{n.icon}</div>
             <div style={{flex:1,minWidth:0}}>

@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { getNotifications, onNotifChange } from "../../utils/notifStore";
+import { getNotifications, onNotifChange, markPushRead, markAllRead as markAllPushRead } from "../../utils/notifStore";
 import { useLoad } from "../../hooks";
 import { vendor } from "../../services";
 import { SkeletonList } from "../../components/Loading";
@@ -26,7 +26,7 @@ function VNotifScr({onBack,go}){
   const unreadCount=items.filter(n=>!n.read).length;
 
   const markRead=(idx)=>setNotifs((notifs||rawNotifs||[]).map((n,i)=>i===idx?{...n,read:true}:n));
-  const markAllRead=()=>{setNotifs((notifs||rawNotifs||[]).map(n=>({...n,read:true})));toast.success("Tout marqué comme lu ✅")};
+  const markAllRead=()=>{setNotifs((notifs||rawNotifs||[]).map(n=>({...n,read:true})));markAllPushRead();toast.success("Tout marqué comme lu ✅")};
 
   const handleClick=(n,idx)=>{
     if(!n.read) markRead(idx);

@@ -31,6 +31,11 @@ export function onNotifChange(fn) {
   return () => store.listeners.delete(fn);
 }
 
+export function markPushRead(id) {
+  store.items = store.items.map(n => n.id === id ? { ...n, read: true } : n);
+  store.listeners.forEach(fn => fn([...store.items]));
+}
+
 export function markAllRead() {
   store.items = store.items.map(n => ({ ...n, read: true }));
   store.listeners.forEach(fn => fn([...store.items]));
