@@ -11,7 +11,8 @@ function PushBanner() {
 
   useEffect(() => {
     registerPushBanner((d) => {
-      setData(d);
+      const parsed = typeof d === "string" ? { icon: "🔔", title: "Lamuka Market", body: d } : d;
+      setData(parsed);
       setVisible(true);
       setTimeout(() => setVisible(false), 4000);
       setTimeout(() => setData(null), 4500);
