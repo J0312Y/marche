@@ -78,9 +78,9 @@ function ProfileScr({go,userRole,vendorPlan,vendorStatus,driverStatus,onLogout})
     {/* ══════ SECTIONS ══════ */}
 
     <Section title="📦 Mes achats">
-      <Item icon="🛍️" label="Commandes" info="3" onClick={()=>go("orders")}/>
-      <Item icon="♡" label="Favoris" info="5" onClick={()=>go("wishlist")}/>
-      <Item icon="💳" label="Historique paiements" info="7" onClick={()=>go("paymentHistory")}/>
+      <Item icon="🛍️" label={t("profile.orders")} info="3" onClick={()=>go("orders")}/>
+      <Item icon="♡" label={t("profile.favorites")} info="5" onClick={()=>go("wishlist")}/>
+      <Item icon="💳" label={t("profile.payment_history")} info="7" onClick={()=>go("paymentHistory")}/>
     </Section>
 
     <Section title="💰 Mon compte">
@@ -90,25 +90,25 @@ function ProfileScr({go,userRole,vendorPlan,vendorStatus,driverStatus,onLogout})
     </Section>
 
     <Section title="🛠️ Outils">
-      <Item icon="💬" label="Messages" info="2" onClick={()=>go("chatList")}/>
-      <Item icon="📍" label="Adresses" info="2" onClick={()=>go("addresses")}/>
-      <Item icon="🔔" label="Notifications" info="3" onClick={()=>go("notif")}/>
-      <Item icon="🔔" label="Alertes de prix" info="3" onClick={()=>go("priceAlerts")}/>
+      <Item icon="💬" label={t("profile.messages")} info="2" onClick={()=>go("chatList")}/>
+      <Item icon="📍" label={t("profile.addresses")} info="2" onClick={()=>go("addresses")}/>
+      <Item icon="🔔" label={t("profile.notifications")} info="3" onClick={()=>go("notif")}/>
+      <Item icon="🔔" label={t("profile.price_alerts")} info="3" onClick={()=>go("priceAlerts")}/>
     </Section>
 
     <Section title="🎉 Découvrir">
-      <Item icon="🤝" label="Achats groupés" info="3 offres" onClick={()=>go("groupBuy")}/>
-      <Item icon="📊" label="Mes statistiques" onClick={()=>go("myStats")}/>
-      <Item icon="🎮" label="Récompenses" info="Roue, missions" onClick={()=>go("gamification")}/>
-      <Item icon="🤖" label="Assistant Lamu" onClick={()=>go("chatBot")}/>
-      <Item icon="📱" label="Scanner QR" onClick={()=>go("qrScan")}/>
+      <Item icon="🤝" label={t("profile.group_buys")} info="3 offres" onClick={()=>go("groupBuy")}/>
+      <Item icon="📊" label={t("profile.stats")} onClick={()=>go("myStats")}/>
+      <Item icon="🎮" label={t("profile.rewards")} info="Roue, missions" onClick={()=>go("gamification")}/>
+      <Item icon="🤖" label={t("profile.assistant")} onClick={()=>go("chatBot")}/>
+      <Item icon="📱" label={t("profile.qr_scan")} onClick={()=>go("qrScan")}/>
 
     </Section>
 
     {/* ── Footer ── */}
     <div style={{display:"flex",gap:10,margin:"4px 20px 20px"}}>
-      <button onClick={()=>go("settings")} style={{flex:1,padding:12,borderRadius:14,border:"1px solid var(--border)",background:"var(--card)",fontSize:13,fontWeight:600,cursor:"pointer",fontFamily:"inherit",color:"var(--text)"}}>⚙️ Paramètres</button>
-      <button onClick={onLogout} style={{flex:1,padding:12,borderRadius:14,border:"1px solid rgba(239,68,68,0.2)",background:"transparent",color:"#EF4444",fontSize:13,fontWeight:600,cursor:"pointer",fontFamily:"inherit"}}>🚪 Déconnexion</button>
+      <button onClick={()=>go("settings")} style={{flex:1,padding:12,borderRadius:14,border:"1px solid var(--border)",background:"var(--card)",fontSize:13,fontWeight:600,cursor:"pointer",fontFamily:"inherit",color:"var(--text)"}}>{t("profile.settings")}</button>
+      <button onClick={onLogout} style={{flex:1,padding:12,borderRadius:14,border:"1px solid rgba(239,68,68,0.2)",background:"transparent",color:"#EF4444",fontSize:13,fontWeight:600,cursor:"pointer",fontFamily:"inherit"}}>{t("profile.logout")}</button>
     </div>
   </div></PullToRefresh>);
 }

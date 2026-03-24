@@ -1,5 +1,6 @@
 import { useState } from "react";
 import CSS from "./styles/global";
+import t from "./utils/i18n";
 import { AppProvider, useApp } from "./context/AppContext";
 import { SplashScr, OnboardingScr, LoginScr, OTPScr, ProfileCompletionScr } from "./screens/auth";
 import ShareSheet from "./components/ShareSheet";
@@ -25,7 +26,7 @@ function AppInner() {
     : authStep === 'otp' ? 3 : authStep === 'profile' ? 4 : authStep === 'ready' ? 5 : authStep === 'loading' ? -1 : 0;
 
   const showNav = !screen && auth === 5;
-  const buyerTabs = [{ icon: "🏠", label: "Accueil" }, { icon: "🔍", label: "Recherche" }, { icon: "🛍️", label: "Panier" }, { icon: "📦", label: "Commandes" }, { icon: "👤", label: "Profil" }];
+  const buyerTabs = [{ icon: "🏠", label: t("nav.home") }, { icon: "🔍", label: t("nav.search") }, { icon: "🛍️", label: t("nav.cart") }, { icon: "📦", label: t("nav.orders") }, { icon: "👤", label: t("nav.profile") }];
   const vendorTabs = [{ icon: "📊", label: "Dashboard" }, { icon: "📦", label: "Commandes" }, { icon: "➕", label: "Ajouter" }, { icon: "💬", label: "Messages" }, { icon: "🏪", label: "Commerce" }];
   const driverTabs = [{ icon: "🏠", label: "Accueil" }, { icon: "📦", label: "Livraisons" }, { icon: "💰", label: "Gains" }, { icon: "🔔", label: "Notifs" }, { icon: "👤", label: "Profil" }];
   const tabs = mode === "buyer" ? buyerTabs : mode === "vendor" ? vendorTabs : driverTabs;

@@ -273,7 +273,7 @@ export function useApp() {
       onRoleApproved:()=>{},hasVendor:false,hasDriver:false,
       unreadCount:0,setUnreadCount:()=>{},
       toast:null,showToast:()=>{},
-      darkMode:false,toggleDark:()=>{},
+      darkMode:false,toggleDark:()=>{},lang:'fr',setLang:()=>{},
       userName:'',setUserName:()=>{},
       recentlyViewed:[],addRecentlyViewed:()=>{},
       seenStories:[],markStorySeen:()=>{},

@@ -7,6 +7,8 @@ function RoleRegScr({onBack,onDone,forceRole}){
   const { CATS } = useData();
   const [role,setRole]=useState(forceRole||null); // "vendor" | "driver"
   const [step,setStep]=useState(forceRole?0:-1);
+  const [rolePhone,setRolePhone]=useState("");
+  const [rolePhoneErr,setRolePhoneErr]=useState("");
   const [plan,setPlan]=useState("starter");
   const [regErrors,setRegErrors]=useState({});
   const [hasLogo,setHasLogo]=useState(false);

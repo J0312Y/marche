@@ -5,6 +5,7 @@ import { useApp } from "../../context/AppContext";
 import { SkeletonHome } from "../../components/Loading";
 import PullToRefresh from "../../components/PullToRefresh";
 import { triggerPush } from "../../components/PushBanner";
+import t from "../../utils/i18n";
 import { fmt, disc, getVendorPromo, totalDisc, effectivePrice } from "../../utils/helpers";
 
 function HomeScr({go,favs,toggleFav,isFav,userName}){
@@ -70,7 +71,7 @@ function HomeScr({go,favs,toggleFav,isFav,userName}){
   return(<>
     <PullToRefresh onRefresh={reload}><div className="scr">
       {/* Header - only show when not in search */}
-      {!inSearchMode&&<div className="hdr"><div><div className="hdr-t">Bonjour{userName?" "+userName:""} 👋</div><div className="hdr-h">Lamuka Market</div></div>
+      {!inSearchMode&&<div className="hdr"><div><div className="hdr-t">{t("home.hello")}{userName?" "+userName:""} 👋</div><div className="hdr-h">Lamuka Market</div></div>
         <div className="hdr-r"><div className="hdr-btn" onClick={()=>go("notif")}>🔔<div className="notif-badge"/></div><div className="hdr-btn" onClick={()=>go("cart")} style={{position:"relative"}}>🛍️{cartCount>0&&<span style={{position:"absolute",top:-4,right:-4,background:"#EF4444",color:"var(--card)",fontSize:9,fontWeight:700,borderRadius:10,padding:"1px 5px",minWidth:16,textAlign:"center"}}>{cartCount}</span>}</div></div></div>}
 
       {/* Search bar */}
@@ -78,7 +79,7 @@ function HomeScr({go,favs,toggleFav,isFav,userName}){
         {inSearchMode&&<button onClick={exitSearch} style={{width:38,height:38,borderRadius:12,border:"none",background:"var(--light)",cursor:"pointer",fontSize:16,display:"flex",alignItems:"center",justifyContent:"center",flexShrink:0,color:"var(--text)",fontFamily:"inherit"}}>←</button>}
         <div style={{flex:1,display:"flex",alignItems:"center",gap:8,padding:inSearchMode?"10px 16px":"9px 14px",background:"var(--card)",borderRadius:24,border:"1px solid var(--border)",boxShadow:"0 2px 8px rgba(0,0,0,.04)"}}>
           <span style={{color:"var(--muted)",fontSize:13,flexShrink:0}}>🔍</span>
-          <input value={homeQ} onChange={e=>setHomeQ(e.target.value)} onFocus={()=>setSearchFocused(true)} placeholder="Rechercher produits, restos..." style={{flex:1,border:"none",background:"transparent",outline:"none",fontSize:13,fontFamily:"inherit",color:"var(--text)"}}/>
+          <input value={homeQ} onChange={e=>setHomeQ(e.target.value)} onFocus={()=>setSearchFocused(true)} placeholder={t("home.search_placeholder")} style={{flex:1,border:"none",background:"transparent",outline:"none",fontSize:13,fontFamily:"inherit",color:"var(--text)"}}/>
           {homeQ&&<span style={{cursor:"pointer",color:"var(--muted)",fontSize:12,flexShrink:0}} onClick={()=>setHomeQ("")}>✕</span>}
           {!homeQ&&<span style={{cursor:"pointer",fontSize:16,flexShrink:0,opacity:.5}} onClick={()=>setShowCamMenu(true)}>📷</span>}
         </div>
@@ -235,7 +236,7 @@ function HomeScr({go,favs,toggleFav,isFav,userName}){
 
       {/* 🎯 Recommandations personnalisées */}
       <div style={{padding:"0 16px"}}>
-        <h3 style={{fontSize:17,fontWeight:700,letterSpacing:-.3,color:"var(--text)",paddingBottom:12}}>🎯 Pour vous</h3>
+        <h3 style={{fontSize:17,fontWeight:700,letterSpacing:-.3,color:"var(--text)",paddingBottom:12}}>🎯 {t("home.for_you")}</h3>
       </div>
       <div style={{display:"flex",gap:8,overflowX:"auto",scrollbarWidth:"none",paddingBottom:14,paddingLeft:16,paddingRight:16,WebkitOverflowScrolling:"touch"}}>
           {P.slice(2,10).map(p=>(
