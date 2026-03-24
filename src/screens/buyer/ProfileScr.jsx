@@ -102,7 +102,7 @@ function ProfileScr({go,userRole,vendorPlan,vendorStatus,driverStatus,onLogout})
       <Item icon="🎮" label="Récompenses" info="Roue, missions" onClick={()=>go("gamification")}/>
       <Item icon="🤖" label="Assistant Lamu" onClick={()=>go("chatBot")}/>
       <Item icon="📱" label="Scanner QR" onClick={()=>go("qrScan")}/>
-      <Item icon="🔍" label="Recherche par image" onClick={()=>go("imageSearch")}/>
+
     </Section>
 
     {/* ── Footer ── */}

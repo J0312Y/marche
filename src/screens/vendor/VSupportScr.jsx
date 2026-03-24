@@ -189,13 +189,13 @@ function VSupportScr({go,onBack,vendorPlan}){
 
       {/* Tab 2: Contact */}
       {tab===2&&<div style={{padding:"0 16px 20px"}}>
-        {isEnt&&<div style={{padding:16,background:"rgba(249,115,22,0.06)",borderRadius:16,marginBottom:14,color:"var(--text)",border:"1px solid rgba(249,115,22,0.2)"}}>
+        {isEnt&&<div style={{padding:16,background:"var(--card)",borderRadius:16,marginBottom:14,color:"var(--text)",border:"1px solid var(--border)"}}>
           <h4 style={{fontSize:15,fontWeight:700,marginBottom:6}}>👤 Votre manager dédié</h4>
-          <div style={{fontSize:13,marginBottom:4}}>Sophie Mabika</div>
-          <div style={{fontSize:11,color:"rgba(255,255,255,.85)",lineHeight:1.6}}>📧 sophie.mabika@lamuka.cg{"\n"}📞 +242 06X XXX XXX{"\n"}💬 WhatsApp disponible{"\n"}⏱️ Lun-Ven 8h-18h · Réponse sous 2h</div>
+          <div style={{fontSize:13,fontWeight:600,marginBottom:4}}>Sophie Mabika</div>
+          <div style={{fontSize:11,color:"var(--muted)",lineHeight:1.8}}>📧 sophie.mabika@lamuka.cg{"\n"}📞 +242 06X XXX XXX{"\n"}💬 WhatsApp disponible{"\n"}⏱️ Lun-Ven 8h-18h · Réponse sous 2h</div>
           <div style={{display:"flex",gap:8,marginTop:10}}>
-            <button onClick={()=>toast.info("📞 Appel en cours...")} style={{flex:1,padding:10,borderRadius:10,border:"none",background:"rgba(255,255,255,0.25)",color:"#fff",fontSize:12,fontWeight:700,cursor:"pointer",fontFamily:"inherit",backdropFilter:"blur(4px)"}}>📞 Appeler</button>
-            <button onClick={()=>toast.info("💬 WhatsApp ouvert...")} style={{flex:1,padding:10,borderRadius:10,border:"none",background:"rgba(255,255,255,0.25)",color:"#fff",fontSize:12,fontWeight:700,cursor:"pointer",fontFamily:"inherit",backdropFilter:"blur(4px)"}}>💬 WhatsApp</button>
+            <button onClick={()=>toast.info("📞 Appel en cours...")} style={{flex:1,padding:10,borderRadius:10,border:"none",background:"#F97316",color:"#fff",fontSize:12,fontWeight:700,cursor:"pointer",fontFamily:"inherit"}}>📞 Appeler</button>
+            <button onClick={()=>toast.info("💬 WhatsApp ouvert...")} style={{flex:1,padding:10,borderRadius:10,border:"1px solid #F97316",background:"transparent",color:"#F97316",fontSize:12,fontWeight:700,cursor:"pointer",fontFamily:"inherit"}}>💬 WhatsApp</button>
           </div>
         </div>}
 
