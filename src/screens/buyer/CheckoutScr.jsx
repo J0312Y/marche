@@ -8,7 +8,9 @@ import { useData } from "../../hooks";
 function CheckoutScr({onBack,onDone,cart=[],appliedCoupon,setAppliedCoupon}){
   const [step,setStep]=useState(0);const [momo,setMomo]=useState("airtel");const [ok,setOk]=useState(false);
   const [ckPhone,setCkPhone]=useState("064663469");
-  const [ckPhoneErr,setCkPhoneErr]=useState("");const [saveAddr,setSaveAddr]=useState(true);const [schedule,setSchedule]=useState("now");const [schedDate,setSchedDate]=useState("");const [schedTime,setSchedTime]=useState("10:00-12:00");
+  const [ckPhoneErr,setCkPhoneErr]=useState("");const [saveAddr,setSaveAddr]=useState(true);
+  const [giftCode,setGiftCode]=useState("");
+  const [giftApplied,setGiftApplied]=useState(null);const [schedule,setSchedule]=useState("now");const [schedDate,setSchedDate]=useState("");const [schedTime,setSchedTime]=useState("10:00-12:00");
   const momos=[{k:"airtel",n:"Airtel Money",e:"🔴"},{k:"mtn",n:"MTN MoMo",e:"🟡"},{k:"kolo",n:"Kolo Pay",e:"🟣"}];
   const { VENDORS } = useData();
 
@@ -19,7 +21,8 @@ function CheckoutScr({onBack,onDone,cart=[],appliedCoupon,setAppliedCoupon}){
   const discountAmount=appliedCoupon?(appliedCoupon.free?0:Math.round(sub*appliedCoupon.discount/100)):0;
   const freeDelivery=appliedCoupon?.free||false;
   const finalDelivery=freeDelivery?0:del;
-  const total=sub-discountAmount+finalDelivery;
+  const giftDeduct=giftApplied?Math.min(giftApplied.remaining,sub-discountAmount+finalDelivery):0;
+  const total=Math.max(0,sub-discountAmount+finalDelivery-giftDeduct);
 
   const validateCheckout=()=>{if(!momo){toast.error("Choisissez un moyen de paiement");return false}return true};
   const handleConfirm=()=>{
@@ -52,6 +55,30 @@ function CheckoutScr({onBack,onDone,cart=[],appliedCoupon,setAppliedCoupon}){
         <div className="confirm-card" style={{cursor:"pointer"}} onClick={()=>setStep(1)}><span className="cci">📱</span><div className="ccb"><small>Paiement</small><p>{momos.find(m=>m.k===momo)?.n}</p></div><span className="cce" style={{color:"#F97316",fontWeight:600}}>✏️</span></div>
 
         {/* Applied coupon */}
+        {/* Gift card code input */}
+        <div style={{padding:14,background:"var(--card)",border:"1px solid var(--border)",borderRadius:14,marginBottom:10}}>
+          <div style={{fontSize:12,fontWeight:600,marginBottom:6}}>🎁 Code carte cadeau / promo</div>
+          {giftApplied?<div style={{display:"flex",justifyContent:"space-between",alignItems:"center"}}>
+            <div><span style={{fontFamily:"monospace",fontWeight:700,fontSize:13}}>{giftApplied.code}</span><span style={{fontSize:11,color:"#10B981",marginLeft:6}}>-{fmt(giftDeduct)}</span></div>
+            <button onClick={()=>setGiftApplied(null)} style={{padding:"3px 8px",borderRadius:6,border:"1px solid var(--border)",background:"var(--card)",fontSize:10,cursor:"pointer",fontFamily:"inherit",color:"var(--muted)"}}>✕</button>
+          </div>
+          :<div style={{display:"flex",gap:6}}>
+            <input value={giftCode} onChange={e=>setGiftCode(e.target.value.toUpperCase())} placeholder="GIFT-XXXX" style={{flex:1,padding:"8px 10px",borderRadius:8,border:"1px solid var(--border)",background:"var(--light)",fontSize:13,fontWeight:600,fontFamily:"monospace",letterSpacing:1,textTransform:"uppercase"}}/>
+            <button onClick={()=>{
+              if(!giftCode.trim()){toast.error("Entrez un code");return}
+              const codes=JSON.parse(localStorage.getItem("lk-gift-wallet")||"[]");
+              const found=codes.find(c=>c.code.toLowerCase()===giftCode.trim().toLowerCase());
+              if(found&&found.remaining>0){setGiftApplied(found);toast.success("🎁 -"+fmt(found.remaining)+" appliqués !")}
+              else{
+                const allCodes=JSON.parse(localStorage.getItem("lk-gift-codes")||"[]");
+                const direct=allCodes.find(c=>c.code.toLowerCase()===giftCode.trim().toLowerCase());
+                if(direct&&direct.remaining>0){setGiftApplied(direct);toast.success("🎁 -"+fmt(direct.remaining)+" appliqués !")}
+                else{toast.error("Code invalide ou expiré")}
+              }
+              setGiftCode("")
+            }} style={{padding:"8px 14px",borderRadius:8,border:"none",background:"#F97316",color:"#fff",fontSize:12,fontWeight:700,cursor:"pointer",fontFamily:"inherit"}}>OK</button>
+          </div>}
+        </div>
         {appliedCoupon&&<div className="confirm-card" style={{background:"rgba(249,115,22,0.04)",border:"1px solid rgba(249,115,22,0.15)"}}><span className="cci">🏷️</span><div className="ccb"><small>Code promo</small><p style={{color:"#F97316",fontWeight:600}}>{appliedCoupon.code} — {appliedCoupon.free?"Livraison gratuite":`-${appliedCoupon.discount}%`}</p></div></div>}
 
         <div style={{marginTop:16}}>
@@ -61,6 +88,7 @@ function CheckoutScr({onBack,onDone,cart=[],appliedCoupon,setAppliedCoupon}){
             <span>Livraison</span>
             {freeDelivery?<span><b style={{textDecoration:"line-through",color:"var(--muted)"}}>{fmt(del)}</b><b style={{color:"#F59E0B",marginLeft:6}}>GRATUIT</b></span>:<b>{fmt(del)}</b>}
           </div>
+          {giftDeduct>0&&<div className="cs-row" style={{color:"#10B981"}}><span>🎁 Carte cadeau</span><b>-{fmt(giftDeduct)}</b></div>}
           <div className="cs-row tot"><span>Total</span><span className="ctp">{fmt(total)}</span></div>
           {(discountAmount>0||freeDelivery)&&<div style={{textAlign:"center",fontSize:11,color:"#F59E0B",fontWeight:600,marginTop:4}}>🎉 Économie : {fmt(discountAmount+(freeDelivery?del:0))}</div>}
         </div></>}
