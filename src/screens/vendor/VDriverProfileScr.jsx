@@ -23,7 +23,7 @@ function VDriverProfileScr({driver:d,go,onBack}){
       <div className="vps f"><div className="vsi">⏱️</div><b>31 min</b><span>Temps moy.</span></div>
     </div>
     <div style={{display:"flex",gap:10,padding:"0 16px",marginBottom:12}}>
-      <button style={{flex:1,padding:12,borderRadius:14,border:"none",background:"#F59E0B",color:"#fff",fontSize:13,fontWeight:600,cursor:"pointer",fontFamily:"inherit",display:"flex",alignItems:"center",justifyContent:"center",gap:6}} onClick={()=>toast.info("📞 Appel vers "+d.name)}>📞 Appeler</button>
+      <button style={{flex:1,padding:12,borderRadius:14,border:"none",background:"#F59E0B",color:"#fff",fontSize:13,fontWeight:600,cursor:"pointer",fontFamily:"inherit",display:"flex",alignItems:"center",justifyContent:"center",gap:6}} onClick={()=>window.open("tel:+242064663469")}>📞 Appeler</button>
       <button style={{flex:1,padding:12,borderRadius:14,border:"none",background:"#F97316",color:"#fff",fontSize:13,fontWeight:600,cursor:"pointer",fontFamily:"inherit",display:"flex",alignItems:"center",justifyContent:"center",gap:6}} onClick={()=>go("vDriverChat",{driver:d.name,driverAv:d.avatar})}>💬 Message</button>
     </div>
     {d.status==="available"&&<div style={{padding:"0 16px",marginBottom:12}}>

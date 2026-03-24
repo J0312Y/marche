@@ -25,7 +25,7 @@ function VTrackDeliveryScr({delivery:d,go,onBack}){
     <div className="scr" style={{padding:16}}>
       <div className="track-driver"><div className="td-av">{d.driverAv}</div><div className="td-info"><h4>{d.driver}</h4><p>→ {d.client}</p><div className="td-r">{d.addr}</div></div></div>
       <div style={{display:"flex",gap:8,marginBottom:12}}>
-        <button style={{flex:1,padding:12,borderRadius:12,border:"none",background:"#F59E0B",color:"#fff",fontSize:12,fontWeight:600,cursor:"pointer",fontFamily:"inherit",display:"flex",alignItems:"center",justifyContent:"center",gap:6}} onClick={()=>toast.info("📞 Appel vers "+d.driver)}>📞 Appeler</button>
+        <button style={{flex:1,padding:12,borderRadius:12,border:"none",background:"#F59E0B",color:"#fff",fontSize:12,fontWeight:600,cursor:"pointer",fontFamily:"inherit",display:"flex",alignItems:"center",justifyContent:"center",gap:6}} onClick={()=>window.open("tel:+242064663469")}>📞 Appeler</button>
         <button style={{flex:1,padding:12,borderRadius:12,border:"none",background:"#F97316",color:"#fff",fontSize:12,fontWeight:600,cursor:"pointer",fontFamily:"inherit",display:"flex",alignItems:"center",justifyContent:"center",gap:6}} onClick={()=>go("vDriverChat",d)}>💬 Message</button>
       </div>
       <div className="eta-box"><h4>Progression</h4><div className="eta-bar"><div className="eta-fill" style={{width:`${d.progress}%`}}/></div><div className="eta-info"><span>Départ</span><span><b>~{d.eta}</b></span></div></div>

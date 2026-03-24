@@ -6,7 +6,9 @@ import { fmt, getVendorPromo } from "../../utils/helpers";
 import { useData } from "../../hooks";
 
 function CheckoutScr({onBack,onDone,cart=[],appliedCoupon,setAppliedCoupon}){
-  const [step,setStep]=useState(0);const [momo,setMomo]=useState("airtel");const [ok,setOk]=useState(false);const [saveAddr,setSaveAddr]=useState(true);const [schedule,setSchedule]=useState("now");const [schedDate,setSchedDate]=useState("");const [schedTime,setSchedTime]=useState("10:00-12:00");
+  const [step,setStep]=useState(0);const [momo,setMomo]=useState("airtel");const [ok,setOk]=useState(false);
+  const [ckPhone,setCkPhone]=useState("064663469");
+  const [ckPhoneErr,setCkPhoneErr]=useState("");const [saveAddr,setSaveAddr]=useState(true);const [schedule,setSchedule]=useState("now");const [schedDate,setSchedDate]=useState("");const [schedTime,setSchedTime]=useState("10:00-12:00");
   const momos=[{k:"airtel",n:"Airtel Money",e:"🔴"},{k:"mtn",n:"MTN MoMo",e:"🟡"},{k:"kolo",n:"Kolo Pay",e:"🟣"}];
   const { VENDORS } = useData();
 
@@ -31,7 +33,7 @@ function CheckoutScr({onBack,onDone,cart=[],appliedCoupon,setAppliedCoupon}){
     <div className="scr" style={{padding:16}}>
       {step===0&&<><h3 style={{fontSize:18,fontWeight:700,marginBottom:14}}>Adresse de livraison</h3>
         <div className="field"><label>Nom complet <span style={{color:"#EF4444"}}>*</span></label><input defaultValue="Joeldy Tsina"/></div>
-        <div className="field"><label>Téléphone <span style={{color:"#EF4444"}}>*</span></label><input defaultValue="+242 064 663 469"/></div>
+        <div className="field"><label>Téléphone <span style={{color:"#EF4444"}}>*</span></label><div style={{display:"flex",gap:8,alignItems:"center"}}><span style={{fontSize:13,fontWeight:600,flexShrink:0}}>+242</span><input value={ckPhone} onChange={e=>{const v=e.target.value.replace(/[^0-9]/g,"").slice(0,9);setCkPhone(v);setCkPhoneErr("")}} placeholder="06X XXX XXX" type="tel" maxLength={11}/></div>{ckPhoneErr&&<div className="err-msg">{ckPhoneErr}</div>}</div>
         <div className="field"><label>Adresse <span style={{color:"#EF4444"}}>*</span></label><input placeholder="Quartier, Rue, N°"/></div>
         <div className="field-row"><div className="field"><label>Ville <span style={{color:"#EF4444"}}>*</span></label><input defaultValue="Brazzaville"/></div><div className="field"><label>Pays</label><input defaultValue="Congo 🇨🇬"/></div></div>
         <div style={{marginTop:12,fontSize:13,fontWeight:700,marginBottom:8}}>📅 Quand livrer ?</div>
@@ -43,7 +45,7 @@ function CheckoutScr({onBack,onDone,cart=[],appliedCoupon,setAppliedCoupon}){
 
       {step===1&&<><h3 style={{fontSize:18,fontWeight:700,marginBottom:6}}>Mode de paiement</h3><p style={{fontSize:13,color:"var(--muted)",marginBottom:14}}>Mobile Money</p>
         {momos.map(m=><div key={m.k} className={`momo ${momo===m.k?"on":""}`} onClick={()=>setMomo(m.k)}><span className="me">{m.e}</span><span className="mn">{m.n}</span>{momo===m.k&&<span className="mc">✓</span>}</div>)}
-        <div className="field" style={{marginTop:18}}><label>Numéro <span style={{color:"#EF4444"}}>*</span></label><input placeholder="06X XXX XXX" maxLength={11}/></div></>}
+        <div className="field" style={{marginTop:18}}><label>Numéro <span style={{color:"#EF4444"}}>*</span></label><div style={{display:"flex",gap:8,alignItems:"center"}}><span style={{fontSize:13,fontWeight:600,flexShrink:0}}>+242</span><input value={ckPhone} onChange={e=>{const v=e.target.value.replace(/[^0-9]/g,"").slice(0,9);setCkPhone(v);setCkPhoneErr("")}} placeholder="06X XXX XXX" type="tel" maxLength={11}/></div>{ckPhoneErr&&<div className="err-msg">{ckPhoneErr}</div>}</div></>}
 
       {step===2&&<><h3 style={{fontSize:18,fontWeight:700,marginBottom:14}}>Résumé</h3>
         <div className="confirm-card" style={{cursor:"pointer"}} onClick={()=>setStep(0)}><span className="cci">📍</span><div className="ccb"><small>Livraison {schedule==="later"?`· ${schedDate} ${schedTime}`:""}</small><p>Brazzaville, Congo 🇨🇬</p></div><span className="cce" style={{color:"#F97316",fontWeight:600}}>✏️</span></div>

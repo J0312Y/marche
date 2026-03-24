@@ -17,12 +17,14 @@ function RoleRegScr({onBack,onDone,forceRole}){
       const e={};
       if(!document.querySelector("[placeholder=\"Joeldy Tsina\"]")?.value?.trim()) e.name="Nom requis";
       if(!document.querySelector("[placeholder=\"joeldytsina94@gmail.com\"]")?.value?.trim()) e.email="Email requis";
+      if(rolePhone.replace(/\s/g,"").length!==9) e.phone="Le numéro doit contenir 9 chiffres";
       setRegErrors(e);
       if(Object.keys(e).length){toast.error("Remplissez les champs obligatoires");return false}
     }
     if(role==="driver"&&step===0){
       const e={};
       if(!document.querySelector("[placeholder=\"Joeldy Tsina\"]")?.value?.trim()) e.name="Nom requis";
+      if(rolePhone.replace(/\s/g,"").length!==9) e.phone="Le numéro doit contenir 9 chiffres";
       setRegErrors(e);
       if(Object.keys(e).length){toast.error("Remplissez les champs obligatoires");return false}
     }
@@ -117,7 +119,7 @@ function RoleRegScr({onBack,onDone,forceRole}){
       {step===0&&<><h3 style={{fontSize:16,fontWeight:700,marginBottom:14}}>Informations personnelles</h3>
         <div className="field"><label>Nom complet <span style={{color:"#EF4444"}}>*</span></label><input placeholder="Joeldy Tsina"/></div>
         <div className="field"><label>Email <span style={{color:"#EF4444"}}>*</span></label><input placeholder="joeldytsina94@gmail.com"/></div>
-        <div className="field"><label>Téléphone <span style={{color:"#EF4444"}}>*</span></label><input placeholder="06X XXX XXX" maxLength={11}/></div>
+        <div className="field"><label>Téléphone <span style={{color:"#EF4444"}}>*</span></label><div style={{display:"flex",gap:8,alignItems:"center"}}><span style={{fontSize:13,fontWeight:600,flexShrink:0}}>+242</span><input value={rolePhone} onChange={e=>{const v=e.target.value.replace(/[^0-9]/g,"").slice(0,9);setRolePhone(v);setRolePhoneErr("")}} placeholder="06X XXX XXX" type="tel" maxLength={11}/></div>{rolePhoneErr&&<div className="err-msg">{rolePhoneErr}</div>}</div>
         <div className="field-row"><div className="field"><label>Ville <span style={{color:"#EF4444"}}>*</span></label><input placeholder="Brazzaville"/></div><div className="field"><label>Quartier <span style={{color:"#EF4444"}}>*</span></label><input placeholder="Bacongo"/></div></div>
       </>}
 

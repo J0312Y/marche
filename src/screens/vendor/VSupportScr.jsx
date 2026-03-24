@@ -194,14 +194,14 @@ function VSupportScr({go,onBack,vendorPlan}){
           <div style={{fontSize:13,fontWeight:600,marginBottom:4}}>Sophie Mabika</div>
           <div style={{fontSize:11,color:"var(--muted)",lineHeight:1.8}}>📧 sophie.mabika@lamuka.cg{"\n"}📞 +242 06X XXX XXX{"\n"}💬 WhatsApp disponible{"\n"}⏱️ Lun-Ven 8h-18h · Réponse sous 2h</div>
           <div style={{display:"flex",gap:8,marginTop:10}}>
-            <button onClick={()=>toast.info("📞 Appel en cours...")} style={{flex:1,padding:10,borderRadius:10,border:"none",background:"#F97316",color:"#fff",fontSize:12,fontWeight:700,cursor:"pointer",fontFamily:"inherit"}}>📞 Appeler</button>
-            <button onClick={()=>toast.info("💬 WhatsApp ouvert...")} style={{flex:1,padding:10,borderRadius:10,border:"1px solid #F97316",background:"transparent",color:"#F97316",fontSize:12,fontWeight:700,cursor:"pointer",fontFamily:"inherit"}}>💬 WhatsApp</button>
+            <button onClick={()=>window.open("tel:+242064663469")} style={{flex:1,padding:10,borderRadius:10,border:"none",background:"#F97316",color:"#fff",fontSize:12,fontWeight:700,cursor:"pointer",fontFamily:"inherit"}}>📞 Appeler</button>
+            <button onClick={()=>window.open("https://wa.me/242064663469?text=Bonjour, je suis vendeur sur Lamuka Market et j'ai besoin d'aide")} style={{flex:1,padding:10,borderRadius:10,border:"1px solid #F97316",background:"transparent",color:"#F97316",fontSize:12,fontWeight:700,cursor:"pointer",fontFamily:"inherit"}}>💬 WhatsApp</button>
           </div>
         </div>}
 
         <div style={{fontSize:14,fontWeight:700,marginBottom:10}}>Canaux de support</div>
         {[
-          ["💬","WhatsApp","+242 064 663 469","Réponse rapide",true],
+          ["💬","WhatsApp","+242 064 663 469","Réponse rapide",true,"https://wa.me/242064663469"],
           ["📧","Email","support@lamuka.cg",isEnt?"Sous 4h":"Sous 24h",true],
           ...(isEnt?[["📞","Hotline Enterprise","24/7","Urgences uniquement",true]]:[]),
           ["🐦","Twitter / X","@LamukaSupport","Lun-Ven",true],
