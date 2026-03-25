@@ -13,8 +13,8 @@ select option{background:var(--card);color:var(--text);padding:10px 14px;font-si
 
 .scr{flex:1;overflow-y:auto;overflow-x:hidden;background:var(--bg);-webkit-overflow-scrolling:touch}.scr::-webkit-scrollbar{display:none}
 .bnav{display:flex;align-items:flex-end;justify-content:space-around;padding:4px 8px 14px;background:var(--card);border-top:1px solid var(--border);flex-shrink:0;position:relative}
-.bni{display:flex;flex-direction:column;align-items:center;gap:3px;padding:8px 14px;border-radius:14px;border:none;background:transparent;cursor:pointer;font-family:inherit;transition:all .2s;font-size:10px;color:var(--muted);font-weight:500}
-.bni.on{background:rgba(249,115,22,0.1);color:#F97316}.bni .bico{font-size:20px;line-height:1}
+.bni{display:flex;flex-direction:column;align-items:center;gap:3px;padding:8px 14px;border-radius:14px;border:none;background:transparent;cursor:pointer;font-family:inherit;transition:all .25s cubic-bezier(.4,0,.2,1);font-size:10px;color:var(--muted);font-weight:500}
+.bni.on{background:rgba(249,115,22,0.1);color:#F97316;transform:translateY(-1px)}.bni:active{transform:scale(.9)}.bni .bico{font-size:20px;line-height:1;transition:transform .2s}.bni.on .bico{transform:scale(1.1)}
 .appbar{display:flex;align-items:center;padding:6px 16px;gap:10px;flex-shrink:0}
 .appbar button{width:38px;height:38px;border-radius:12px;border:1px solid var(--border);background:var(--card);cursor:pointer;font-size:16px;color:var(--text);display:flex;align-items:center;justify-content:center}
 .appbar h2{flex:1;font-size:17px;font-weight:600;text-align:center}
@@ -163,7 +163,7 @@ select option{background:var(--card);color:var(--text);padding:10px 14px;font-si
 .confirm-card{padding:14px;border-radius:14px;border:1px solid var(--border);background:var(--light);display:flex;align-items:center;gap:12px;margin-bottom:10px}
 .confirm-card .cci{font-size:20px;color:#F97316}.confirm-card .ccb{flex:1}.confirm-card .ccb small{font-size:11px;color:var(--muted)}.confirm-card .ccb p{font-size:14px;font-weight:600;margin:0}.confirm-card .cce{font-size:11px;color:#F97316;font-weight:600;cursor:pointer}
 .success-modal{position:absolute;inset:0;background:rgba(0,0,0,.4);display:flex;align-items:end;z-index:10}
-.success-box{width:100%;background:var(--card);border-radius:28px 28px 0 0;padding:32px;text-align:center}
+.success-box{animation:scaleIn .3s cubic-bezier(.4,0,.2,1);width:100%;background:var(--card);border-radius:28px 28px 0 0;padding:32px;text-align:center}
 .success-box .si{width:72px;height:72px;border-radius:50%;background:rgba(16,185,129,0.1);display:flex;align-items:center;justify-content:center;margin:0 auto 18px;font-size:40px}
 .success-box h2{font-size:22px;font-weight:700;margin-bottom:6px}.success-box p{font-size:14px;color:var(--sub);margin-bottom:4px}.success-box .ref{font-size:13px;color:#F97316;font-weight:600;margin-bottom:20px}
 
@@ -339,7 +339,7 @@ select option{background:var(--card);color:var(--text);padding:10px 14px;font-si
 
 /* Settings */
 .setting-group{margin:0 20px 16px}.setting-group h4,.setting-group .setting-label{font-size:11px;font-weight:600;color:var(--muted);text-transform:uppercase;letter-spacing:.5px;margin-bottom:8px;padding-left:4px}
-.setting-item{display:flex;align-items:center;gap:12px;padding:13px 14px;background:var(--card);border:1px solid var(--border);border-radius:14px;margin-bottom:6px}
+.setting-item{transition:background .15s,transform .1s;display:flex;align-items:center;gap:12px;padding:13px 14px;background:var(--card);border:1px solid var(--border);border-radius:14px;margin-bottom:6px}
 .setting-item .si-i{font-size:18px}.setting-item .si-t{flex:1;font-size:14px;font-weight:500;color:var(--text)}.setting-item .si-v{font-size:12px;color:var(--muted)}
 .toggle{width:44px;height:24px;border-radius:12px;background:var(--border);position:relative;cursor:pointer;transition:background .2s}
 .toggle.on{background:#F97316}
@@ -580,6 +580,112 @@ select option{background:var(--card);color:var(--text);padding:10px 14px;font-si
 .dr-confirm-opt{flex:1;padding:16px 10px;border-radius:16px;border:2px solid var(--border);background:var(--card);cursor:pointer;text-align:center;transition:all .2s}
 .dr-confirm-opt.on{border-color:#10B981;background:rgba(16,185,129,0.04)}
 .dr-confirm-opt .dco-icon{font-size:28px;margin-bottom:6px}.dr-confirm-opt .dco-label{font-size:12px;font-weight:600}
+
+
+
+/* ═══ MICRO-INTERACTIONS & ANIMATIONS ═══ */
+
+/* Button press effect */
+.btn-primary:active{transform:scale(.97);transition:transform .1s}
+.social-btn:active{transform:scale(.96)}
+button:active{transform:scale(.97)}
+
+/* Card tap ripple */
+.menu-item{transition:background .15s,transform .1s}
+.menu-item:active{transform:scale(.98);background:var(--light)}
+.momo{transition:all .2s cubic-bezier(.4,0,.2,1)}
+.momo:active{transform:scale(.97)}
+
+/* Heart favorite animation */
+@keyframes heartPop{0%{transform:scale(1)}25%{transform:scale(1.3)}50%{transform:scale(.95)}100%{transform:scale(1)}}
+.fav-pop{animation:heartPop .4s ease}
+
+/* Add to cart bounce */
+@keyframes cartBounce{0%{transform:scale(1)}30%{transform:scale(1.15)}60%{transform:scale(.9)}100%{transform:scale(1)}}
+.cart-bounce{animation:cartBounce .4s ease}
+
+/* Slide up for modals */
+@keyframes slideUp{0%{transform:translateY(100%);opacity:0}100%{transform:translateY(0);opacity:1}}
+@keyframes slideDown{0%{transform:translateY(0);opacity:1}100%{transform:translateY(100%);opacity:0}}
+.modal-up{animation:slideUp .35s cubic-bezier(.4,0,.2,1)}
+
+/* Fade in for screens */
+@keyframes fadeIn{0%{opacity:0;transform:translateY(8px)}100%{opacity:1;transform:translateY(0)}}
+@keyframes fadeInFast{0%{opacity:0}100%{opacity:1}}
+.scr{animation:fadeIn .25s ease}
+
+/* Slide from right (navigation) */
+@keyframes slideRight{0%{transform:translateX(30px);opacity:0}100%{transform:translateX(0);opacity:1}}
+.slide-in{animation:slideRight .25s ease}
+
+/* Scale in for popups */
+@keyframes scaleIn{0%{transform:scale(.85);opacity:0}100%{transform:scale(1);opacity:1}}
+.scale-in{animation:scaleIn .2s cubic-bezier(.4,0,.2,1)}
+
+/* Bounce in for success */
+@keyframes bounceIn{0%{transform:scale(0);opacity:0}50%{transform:scale(1.05)}70%{transform:scale(.95)}100%{transform:scale(1);opacity:1}}
+.bounce-in{animation:bounceIn .5s cubic-bezier(.4,0,.2,1)}
+
+/* Typing dots for chat */
+@keyframes typingDot{0%,100%{opacity:.3;transform:translateY(0)}50%{opacity:1;transform:translateY(-4px)}}
+
+/* Pulse for live badge */
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.5}}
+.pulse{animation:pulse 1.5s ease infinite}
+
+/* Tab bar active indicator */
+.tab-bar .tab-item{transition:all .2s ease}
+.tab-bar .tab-item.on .tab-icon{transition:transform .2s;transform:translateY(-2px)}
+
+/* Notification badge pop */
+@keyframes badgePop{0%{transform:scale(0)}60%{transform:scale(1.2)}100%{transform:scale(1)}}
+.notif-badge{animation:badgePop .3s ease}
+
+/* Smooth toggle switch */
+.toggle{width:44px;height:24px;border-radius:12px;background:var(--border);position:relative;cursor:pointer;transition:background .25s cubic-bezier(.4,0,.2,1)}
+.toggle>div{width:20px;height:20px;border-radius:10px;background:#fff;position:absolute;top:2px;left:2px;transition:transform .25s cubic-bezier(.4,0,.2,1);box-shadow:0 1px 3px rgba(0,0,0,.15)}
+.toggle.on{background:#F97316}
+.toggle.on>div{transform:translateX(20px)}
+
+/* Wallet card shimmer */
+@keyframes walletShimmer{0%{background-position:-200% 0}100%{background-position:200% 0}}
+.wallet{transition:transform .2s}
+.wallet:active{transform:scale(.98)}
+
+/* Search bar focus animation */
+.phone-input:focus-within{box-shadow:0 0 0 3px rgba(249,115,22,.12);transition:box-shadow .2s}
+
+/* Floating label effect for fields */
+.field input:focus,.field textarea:focus,.field select:focus{border-color:#F97316;box-shadow:0 0 0 3px rgba(249,115,22,.08);transition:all .2s}
+
+/* Stagger children animation */
+@keyframes staggerIn{0%{opacity:0;transform:translateY(10px)}100%{opacity:1;transform:translateY(0)}}
+
+/* Toast slide in */
+@keyframes toastIn{0%{transform:translateY(20px);opacity:0}100%{transform:translateY(0);opacity:1}}
+@keyframes toastOut{0%{transform:translateY(0);opacity:1}100%{transform:translateY(20px);opacity:0}}
+
+/* Swipe hint */
+@keyframes swipeHint{0%,100%{transform:translateX(0)}50%{transform:translateX(-5px)}}
+
+/* Progress bar fill */
+@keyframes progressFill{0%{width:0}100%{width:100%}}
+
+/* Glow effect for important buttons */
+@keyframes glow{0%,100%{box-shadow:0 4px 16px rgba(249,115,22,.2)}50%{box-shadow:0 4px 24px rgba(249,115,22,.4)}}
+.btn-glow{animation:glow 2s ease infinite}
+
+/* Image load fade */
+@keyframes imgLoad{0%{opacity:0}100%{opacity:1}}
+.img-loaded{animation:imgLoad .3s ease}
+
+/* Bottom sheet drag indicator */
+@keyframes dragHint{0%,100%{transform:scaleX(1)}50%{transform:scaleX(1.3)}}
+
+.setting-item:active{transform:scale(.98);background:var(--light)}
+.p-card{transition:transform .15s}.p-card:active{transform:scale(.97)}
+.confirm-card{transition:transform .1s}.confirm-card:active{transform:scale(.98)}
+.info-box{animation:fadeIn .3s ease}
 `;
 
 export default CSS;

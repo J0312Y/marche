@@ -107,7 +107,7 @@ function RoleRegScr({onBack,onDone,forceRole,onPending}){
   const maxStep=steps.length-1;
 
   // Success screen
-  if(ok)return(<div style={{display:"flex",flexDirection:"column",height:"100%",justifyContent:"center"}}><div style={{textAlign:"center",padding:"40px 20px"}}>
+  if(ok)return(<div style={{display:"flex",flexDirection:"column",height:"100%",justifyContent:"center",animation:"fadeIn .3s ease"}}><div style={{textAlign:"center",padding:"40px 20px"}}>
     <div style={{width:80,height:80,borderRadius:"50%",background:"rgba(249,115,22,0.08)",display:"flex",alignItems:"center",justifyContent:"center",margin:"0 auto 20px",fontSize:40}}>📩</div>
     <h2 style={{fontSize:20,fontWeight:700,marginBottom:8}}>Demande envoyée !</h2>
     <p style={{fontSize:14,color:"var(--sub)",lineHeight:1.6}}>Votre demande d'inscription en tant que <b>{role==="vendor"?"commerçant":"livreur"}</b> a bien été reçue.</p>
@@ -367,8 +367,8 @@ function RoleRegScr({onBack,onDone,forceRole,onPending}){
     </div>
 
     {/* ── Payment Modal ── */}
-    {showPayment&&<div onClick={()=>!paying&&setShowPayment(false)} style={{position:"fixed",inset:0,background:"rgba(0,0,0,.45)",zIndex:150,display:"flex",alignItems:"center",justifyContent:"center",padding:16}}>
-      <div onClick={e=>e.stopPropagation()} style={{width:"100%",maxWidth:340,background:"var(--card)",borderRadius:20,padding:20,maxHeight:"85vh",overflowY:"auto"}}>
+    {showPayment&&<div onClick={()=>!paying&&setShowPayment(false)} style={{position:"fixed",inset:0,background:"rgba(0,0,0,.45)",zIndex:150,display:"flex",alignItems:"center",justifyContent:"center",padding:16,animation:"fadeInFast .2s ease"}}>
+      <div onClick={e=>e.stopPropagation()} style={{width:"100%",maxWidth:340,background:"var(--card)",borderRadius:20,padding:20,maxHeight:"85vh",overflowY:"auto",animation:"scaleIn .25s cubic-bezier(.4,0,.2,1)"}}>
         
         {payDone?<div style={{textAlign:"center",padding:"20px 0"}}>
           <div style={{fontSize:48,marginBottom:12}}>✅</div>

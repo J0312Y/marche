@@ -121,7 +121,7 @@ function VProfileScr({go,onSwitch,vendorPlan,onLogout}){
 
     {/* Lock popup */}
     {lockPopup&&<div style={{position:"fixed",inset:0,background:"rgba(0,0,0,.4)",zIndex:100,display:"flex",alignItems:"center",justifyContent:"center",padding:20}} onClick={()=>setLockPopup(null)}>
-      <div style={{background:"var(--card)",borderRadius:20,padding:24,maxWidth:320,width:"100%",textAlign:"center"}} onClick={e=>e.stopPropagation()}>
+      <div style={{background:"var(--card)",borderRadius:20,padding:24,maxWidth:320,width:"100%",textAlign:"center",animation:"scaleIn .25s cubic-bezier(.4,0,.2,1)"}} onClick={e=>e.stopPropagation()}>
         <div style={{fontSize:48,marginBottom:10}}>🔒</div>
         <h3 style={{fontSize:17,fontWeight:700,marginBottom:6}}>{lockPopup.title}</h3>
         <p style={{fontSize:13,color:"var(--muted)",marginBottom:14,lineHeight:1.5}}>

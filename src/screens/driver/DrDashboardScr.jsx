@@ -74,8 +74,8 @@ function DrDashboardScr({go}){
   </div></PullToRefresh>
 
     {/* Boost Payment Modal */}
-    {boostPay&&<div onClick={()=>!boostPaying&&setBoostPay(false)} style={{position:"fixed",inset:0,background:"rgba(0,0,0,.45)",zIndex:150,display:"flex",alignItems:"center",justifyContent:"center",padding:16}}>
-      <div onClick={e=>e.stopPropagation()} style={{width:"100%",maxWidth:340,background:"var(--card)",borderRadius:20,padding:20}}>
+    {boostPay&&<div onClick={()=>!boostPaying&&setBoostPay(false)} style={{position:"fixed",inset:0,background:"rgba(0,0,0,.45)",zIndex:150,display:"flex",alignItems:"center",justifyContent:"center",padding:16,animation:"fadeInFast .2s ease"}}>
+      <div onClick={e=>e.stopPropagation()} style={{width:"100%",maxWidth:340,background:"var(--card)",borderRadius:20,padding:20,animation:"scaleIn .25s cubic-bezier(.4,0,.2,1)"}}>
         <div style={{textAlign:"center",marginBottom:14}}>
           <div style={{fontSize:32,marginBottom:6}}>🚀</div>
           <h3 style={{fontSize:16,fontWeight:700}}>Activer le Boost</h3>

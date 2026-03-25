@@ -103,7 +103,7 @@ function CheckoutScr({onBack,onDone,cart=[],appliedCoupon,setAppliedCoupon}){
       <div style={{paddingTop:24,paddingBottom:16}}><button className="btn-primary" onClick={()=>{if(step===2){if(validateCheckout())handleConfirm()}else setStep(step+1)}}>{step===2?"Confirmer le paiement":"Continuer"}</button></div>
     </div>
 
-    {ok&&<div className="success-modal"><div className="success-box"><div className="si">✅</div><h2>Commande confirmée !</h2><p>{momo==="cash"?"Préparez le montant exact pour le livreur.":"Vérifiez votre téléphone pour le paiement."}</p><div className="ref">#LMK-2026-0214</div>
+    {ok&&<div className="success-modal"><div className="success-box bounce-in"><div className="si">✅</div><h2>Commande confirmée !</h2><p>{momo==="cash"?"Préparez le montant exact pour le livreur.":"Vérifiez votre téléphone pour le paiement."}</p><div className="ref">#LMK-2026-0214</div>
       {appliedCoupon&&<div style={{fontSize:12,color:"#F97316",fontWeight:600,marginTop:8}}>🏷️ Code {appliedCoupon.code} appliqué</div>}
       <button className="btn-primary" onClick={onDone}>Retour à l'accueil</button></div></div>}
   </>);
