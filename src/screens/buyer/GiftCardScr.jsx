@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import toast from "../../utils/toast";
+import PayLogo from "../../components/PayLogos";
 import { fmt } from "../../utils/helpers";
 import { validatePayPhone, getPhonePlaceholder } from "../../utils/phoneValidation";
 
@@ -114,9 +115,9 @@ function GiftCardScr({onBack}){
       </div>
       <div style={{fontSize:13,fontWeight:700,marginBottom:6}}>Opérateur du destinataire</div>
       <div style={{display:"flex",gap:6,marginBottom:10}}>
-        {[["airtel","Airtel","🟠"],["mtn","MTN","🟡"]].map(([k,n,ic])=>(
+        {[["airtel","Airtel"],["mtn","MTN"]].map(([k,n])=>(
           <div key={k} onClick={()=>{setToMethod(k);setToErr("")}} style={{flex:1,padding:"8px 4px",textAlign:"center",borderRadius:10,border:toMethod===k?"2px solid #F97316":"1px solid var(--border)",background:toMethod===k?"rgba(249,115,22,0.06)":"var(--card)",cursor:"pointer"}}>
-            <div style={{fontSize:16}}>{ic}</div><div style={{fontSize:10,fontWeight:600,marginTop:2}}>{n}</div>
+            <div style={{display:"flex",justifyContent:"center"}}><PayLogo method={k} size={24}/></div><div style={{fontSize:10,fontWeight:600,marginTop:2}}>{n}</div>
           </div>
         ))}
       </div>

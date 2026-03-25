@@ -4,6 +4,7 @@ import { DRIVER_PHOTO } from "../../data/images";
 import { fmt } from "../../utils/helpers";
 import PullToRefresh from "../../components/PullToRefresh";
 import toast from "../../utils/toast";
+import PayLogo from "../../components/PayLogos";
 import { validatePayPhone, getPhonePlaceholder, isPayPhoneValid } from "../../utils/phoneValidation";
 
 function DrDashboardScr({go}){
@@ -86,9 +87,9 @@ function DrDashboardScr({go}){
           <div style={{fontSize:10,color:"var(--muted)",marginTop:2}}>Valable 24h · Non remboursable</div>
         </div>
         <div style={{display:"flex",gap:6,marginBottom:12}}>
-          {[["airtel","Airtel","🟠"],["mtn","MTN","🟡"],["kolo","Kolo","🟣"]].map(([k,n,ic])=>(
+          {[["airtel","Airtel"],["mtn","MTN"],["kolo","Kolo"]].map(([k,n])=>(
             <div key={k} onClick={()=>setBoostMethod(k)} style={{flex:1,padding:"8px 4px",textAlign:"center",borderRadius:10,border:boostMethod===k?"2px solid #F59E0B":"1px solid var(--border)",background:boostMethod===k?"rgba(245,158,11,0.06)":"var(--card)",cursor:"pointer"}}>
-              <div style={{fontSize:16}}>{ic}</div><div style={{fontSize:9,fontWeight:600,marginTop:2}}>{n}</div>
+              <div style={{display:"flex",justifyContent:"center"}}><PayLogo method={k} size={24}/></div><div style={{fontSize:9,fontWeight:600,marginTop:2}}>{n}</div>
             </div>
           ))}
         </div>

@@ -2,6 +2,7 @@ import { useState } from "react";
 import Select from "../../components/Select";
 import { useData } from "../../hooks";
 import toast from "../../utils/toast";
+import PayLogo from "../../components/PayLogos";
 import { validatePayPhone, getPhonePlaceholder, isPayPhoneValid } from "../../utils/phoneValidation";
 import { triggerPush } from "../../components/PushBanner";
 
@@ -391,9 +392,9 @@ function RoleRegScr({onBack,onDone,forceRole,onPending}){
           {/* Payment method */}
           <div style={{fontSize:13,fontWeight:700,marginBottom:8}}>Mode de paiement</div>
           <div style={{display:"flex",gap:6,marginBottom:14}}>
-            {[["airtel","Airtel Money","🟠"],["mtn","MTN MoMo","🟡"],["kolo","Kolo Pay","🟣"]].map(([k,n,ic])=>(
+            {[["airtel","Airtel Money"],["mtn","MTN MoMo"],["kolo","Kolo Pay"]].map(([k,n])=>(
               <div key={k} onClick={()=>{setPayMethod(k);setPayPhoneErr("")}} style={{flex:1,padding:"10px 4px",textAlign:"center",borderRadius:12,border:payMethod===k?"2px solid #F97316":"1px solid var(--border)",background:payMethod===k?"rgba(249,115,22,0.06)":"var(--card)",cursor:"pointer"}}>
-                <div style={{fontSize:18}}>{ic}</div>
+                <div style={{display:"flex",justifyContent:"center"}}><PayLogo method={k} size={28}/></div>
                 <div style={{fontSize:10,fontWeight:600,marginTop:2}}>{n}</div>
               </div>
             ))}

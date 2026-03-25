@@ -1,4 +1,5 @@
 import { useState } from "react";
+import PayLogo from "../../components/PayLogos";
 import { fmt } from "../../utils/helpers";
 import toast from "../../utils/toast";
 
@@ -10,7 +11,7 @@ function RechargeScr({onBack}){
       <div className="field"><label>Montant (FCFA)</label><input type="number" value={amount} onChange={e=>setAmount(e.target.value)} placeholder="Ex: 10000"/></div>
       <div style={{display:"flex",gap:8,marginBottom:12}}>{[5000,10000,25000,50000].map(v=><button key={v} style={{flex:1,padding:10,borderRadius:10,border:amount===String(v)?"2px solid #F97316":"1px solid var(--border)",background:amount===String(v)?"rgba(249,115,22,0.04)":"var(--card)",fontSize:12,fontWeight:600,cursor:"pointer",fontFamily:"inherit"}} onClick={()=>setAmount(String(v))}>{fmt(v)}</button>)}</div>
       <div style={{fontSize:14,fontWeight:700,marginBottom:10}}>Moyen de paiement</div>
-      {[["airtel","📱","Airtel Money"],["mtn","📱","MTN MoMo"],["kolo","🟣","Kolo Pay"]].map(([k,i,n])=><div key={k} className="setting-item" style={{cursor:"pointer",border:method===k?"2px solid #F97316":"1px solid var(--border)",marginBottom:6}} onClick={()=>setMethod(k)}><span style={{fontSize:20}}>{i}</span><span className="si-t">{n}</span>{method===k&&<span style={{color:"#F97316",fontWeight:700}}>✓</span>}</div>)}
+      {[["airtel","Airtel Money"],["mtn","MTN MoMo"],["kolo","Kolo Pay"]].map(([k,n])=><div key={k} className="setting-item" style={{cursor:"pointer",border:method===k?"2px solid #F97316":"1px solid var(--border)",marginBottom:6}} onClick={()=>setMethod(k)}><PayLogo method={k} size={28}/><span className="si-t">{n}</span>{method===k&&<span style={{color:"#F97316",fontWeight:700}}>✓</span>}</div>)}
       <div style={{paddingTop:24,paddingBottom:16}}><button className="btn-primary" style={{background:amount&&method?"#F97316":"var(--border)",color:amount&&method?"var(--card)":"var(--muted)"}} onClick={()=>{if(amount&&method){setDone(true);toast.success("Recharge effectuée 💰")}}}>Recharger {amount?fmt(parseInt(amount)):""}</button></div>
     </div>
   </>);

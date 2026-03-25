@@ -1,5 +1,6 @@
 import { useState } from "react";
 import toast from "../../utils/toast";
+import PayLogo from "../../components/PayLogos";
 import { validatePayPhone, getPhonePlaceholder, isPayPhoneValid } from "../../utils/phoneValidation";
 
 function VUpgradePlanScr({onBack,onUpgrade,currentPlan="starter"}){
@@ -55,9 +56,9 @@ function VUpgradePlanScr({onBack,onUpgrade,currentPlan="starter"}){
             <div style={{fontSize:10,color:"var(--muted)",marginTop:2}}>Renouvelé chaque mois · Annulable à tout moment</div>
           </div>
           <div style={{display:"flex",gap:6,marginBottom:12}}>
-            {[["airtel","Airtel Money","🟠"],["mtn","MTN MoMo","🟡"],["kolo","Kolo Pay","🟣"]].map(([k,n,ic])=>(
+            {[["airtel","Airtel Money"],["mtn","MTN MoMo"],["kolo","Kolo Pay"]].map(([k,n])=>(
               <div key={k} onClick={()=>{setPayMethod(k);setPayPhoneErr("")}} style={{flex:1,padding:"8px 4px",textAlign:"center",borderRadius:10,border:payMethod===k?"2px solid #F97316":"1px solid var(--border)",background:payMethod===k?"rgba(249,115,22,0.06)":"var(--card)",cursor:"pointer"}}>
-                <div style={{fontSize:16}}>{ic}</div><div style={{fontSize:9,fontWeight:600,marginTop:2}}>{n}</div>
+                <div style={{display:"flex",justifyContent:"center"}}><PayLogo method={k} size={24}/></div><div style={{fontSize:9,fontWeight:600,marginTop:2}}>{n}</div>
               </div>
             ))}
           </div>

@@ -276,7 +276,7 @@ function HomeScr({go,favs,toggleFav,isFav,userName}){
         <span style={{color:"#F97316",fontSize:16}}>›</span>
       </div>
 
-      {/* Restos à la une */}
+      {/* Restos à la une */}}
       {(selType==="all"||selType==="restaurant")&&nearbyRestos.length>0&&<>
         <div className="sec"><h3>🍽️ Commander à manger</h3><span onClick={()=>go("restoList")}>Voir tout</span></div>
         <div className="marquee-wrap"><div className="marquee-track-resto">

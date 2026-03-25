@@ -2,6 +2,7 @@ import DatePicker from "../../components/DatePicker";
 import { useState } from "react";
 import Select from "../../components/Select";
 import toast from "../../utils/toast";
+import PayLogo from "../../components/PayLogos";
 import { validatePayPhone, getPhonePlaceholder } from "../../utils/phoneValidation";
 import { fmt, getVendorPromo } from "../../utils/helpers";
 import { useData } from "../../hooks";
@@ -12,7 +13,7 @@ function CheckoutScr({onBack,onDone,cart=[],appliedCoupon,setAppliedCoupon}){
   const [ckPhoneErr,setCkPhoneErr]=useState("");const [saveAddr,setSaveAddr]=useState(true);
   const [giftCode,setGiftCode]=useState("");
   const [giftApplied,setGiftApplied]=useState(null);const [schedule,setSchedule]=useState("now");const [schedDate,setSchedDate]=useState("");const [schedTime,setSchedTime]=useState("10:00-12:00");
-  const momos=[{k:"airtel",n:"Airtel Money",e:"🔴"},{k:"mtn",n:"MTN MoMo",e:"🟡"},{k:"kolo",n:"Kolo Pay",e:"🟣"},{k:"cash",n:"Paiement à la livraison",e:"💵"}];
+  const momos=[{k:"airtel",n:"Airtel Money"},{k:"mtn",n:"MTN MoMo"},{k:"kolo",n:"Kolo Pay"},{k:"cash",n:"Paiement à la livraison"}];
   const { VENDORS } = useData();
 
   const getItem=(c)=>c.product||c;
@@ -48,7 +49,7 @@ function CheckoutScr({onBack,onDone,cart=[],appliedCoupon,setAppliedCoupon}){
         <div style={{display:"flex",alignItems:"center",gap:8,marginTop:4}}><div className={`toggle ${saveAddr?"on":""}`} onClick={()=>setSaveAddr(!saveAddr)} style={{transform:"scale(.8)"}}/><span style={{fontSize:12,color:"var(--muted)"}}>Sauvegarder cette adresse</span></div></>}
 
       {step===1&&<><h3 style={{fontSize:18,fontWeight:700,marginBottom:6}}>Mode de paiement</h3><p style={{fontSize:13,color:"var(--muted)",marginBottom:14}}>Choisissez comment payer</p>
-        {momos.map(m=><div key={m.k} className={`momo ${momo===m.k?"on":""}`} onClick={()=>setMomo(m.k)}><span className="me">{m.e}</span><span className="mn">{m.n}</span>{momo===m.k&&<span className="mc">✓</span>}</div>)}
+        {momos.map(m=><div key={m.k} className={`momo ${momo===m.k?"on":""}`} onClick={()=>setMomo(m.k)}><span className="me"><PayLogo method={m.k} size={22}/></span><span className="mn">{m.n}</span>{momo===m.k&&<span className="mc">✓</span>}</div>)}
         {momo==="cash"?<div style={{marginTop:14,padding:14,background:"rgba(59,130,246,0.06)",borderRadius:14,fontSize:12,color:"var(--muted)",lineHeight:1.6}}>
           <div style={{fontWeight:700,color:"var(--text)",marginBottom:4}}>💵 Paiement en espèces</div>
           Payez directement au livreur à la réception de votre commande. Le montant exact sera demandé — préparez la monnaie si possible.
