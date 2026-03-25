@@ -11,6 +11,11 @@ function VUpgradePlanScr({onBack,onUpgrade,currentPlan="starter"}){
   const upgradeable=plans.filter(([k])=>planOrder[k]>planOrder[currentPlan]);
   const [plan,setPlan]=useState(upgradeable.length>0?upgradeable[0][0]:"enterprise");
   const [done,setDone]=useState(false);
+  const [showPay,setShowPay]=useState(false);
+  const [payMethod,setPayMethod]=useState("airtel");
+  const [payPhone,setPayPhone]=useState("");
+  const [paying,setPaying]=useState(false);
+  const [payDone,setPayDone]=useState(false);
   const currentInfo=plans.find(([k])=>k===currentPlan);
 
   if(done)return(<div className="scr" style={{padding:16,textAlign:"center"}}><div style={{padding:"40px 0"}}><div style={{fontSize:48,marginBottom:10}}>🎉</div><h3 style={{fontSize:18,fontWeight:700}}>Plan mis à jour !</h3><p style={{fontSize:14,fontWeight:700,marginTop:8,color:plan==="enterprise"?"#F59E0B":"#F97316"}}>Plan {plan==="pro"?"Pro":"Enterprise"} activé</p><p style={{fontSize:13,color:"var(--muted)",marginTop:6}}>Toutes les fonctionnalités sont maintenant débloquées.</p><button className="btn-primary" style={{marginTop:20}} onClick={()=>{onUpgrade(plan);onBack()}}>✅ Retour à la boutique</button></div></div>);
@@ -28,7 +33,7 @@ function VUpgradePlanScr({onBack,onUpgrade,currentPlan="starter"}){
         <p style={{fontSize:12,color:"var(--muted)",marginTop:4}}>{tag}</p>
         <div style={{display:"flex",flexWrap:"wrap",gap:6,marginTop:10}}>{f.map(x=><span key={x} style={{padding:"4px 10px",borderRadius:8,background:k==="enterprise"?"rgba(245,158,11,0.06)":"rgba(249,115,22,0.06)",color:k==="enterprise"?"#F59E0B":"#F97316",fontSize:10,fontWeight:600}}>✓ {x}</span>)}</div>
       </div>)}
-      <div style={{paddingTop:24,paddingBottom:16}}><button className="btn-primary" style={{background:plan==="enterprise"?"linear-gradient(135deg,#F59E0B,#D97706)":undefined}} onClick={()=>setDone(true)}>⬆️ Passer au plan {plan==="pro"?"Pro":"Enterprise"}</button></div>
+      <div style={{paddingTop:24,paddingBottom:16}}><button className="btn-primary" style={{background:plan==="enterprise"?"linear-gradient(135deg,#F59E0B,#D97706)":undefined}} onClick={()=>setShowPay(true)}>💳 Passer au plan {plan==="pro"?"Pro":"Enterprise"}</button></div>
     </div>
   </>);
 }
@@ -39,4 +44,5 @@ function VUpgradePlanScr({onBack,onUpgrade,currentPlan="starter"}){
 
 /* D1 ── DRIVER DASHBOARD ── */
 
+/* Payment handled in modal within component */
 export default VUpgradePlanScr;
