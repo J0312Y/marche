@@ -12,7 +12,7 @@ function CheckoutScr({onBack,onDone,cart=[],appliedCoupon,setAppliedCoupon}){
   const [ckPhoneErr,setCkPhoneErr]=useState("");const [saveAddr,setSaveAddr]=useState(true);
   const [giftCode,setGiftCode]=useState("");
   const [giftApplied,setGiftApplied]=useState(null);const [schedule,setSchedule]=useState("now");const [schedDate,setSchedDate]=useState("");const [schedTime,setSchedTime]=useState("10:00-12:00");
-  const momos=[{k:"airtel",n:"Airtel Money",e:"🔴"},{k:"mtn",n:"MTN MoMo",e:"🟡"},{k:"kolo",n:"Kolo Pay",e:"🟣"}];
+  const momos=[{k:"airtel",n:"Airtel Money",e:"🔴"},{k:"mtn",n:"MTN MoMo",e:"🟡"},{k:"kolo",n:"Kolo Pay",e:"🟣"},{k:"cash",n:"Paiement à la livraison",e:"💵"}];
   const { VENDORS } = useData();
 
   const getItem=(c)=>c.product||c;
@@ -47,13 +47,18 @@ function CheckoutScr({onBack,onDone,cart=[],appliedCoupon,setAppliedCoupon}){
         {schedule==="later"&&<div className="field-row"><div className="field"><label>Date</label><DatePicker value={schedDate} onChange={setSchedDate}/></div><div className="field"><label>Créneau</label><Select value={schedTime} onChange={setSchedTime} options={["08:00-10:00","10:00-12:00","12:00-14:00","14:00-16:00","16:00-18:00","18:00-20:00"]}/></div></div>}
         <div style={{display:"flex",alignItems:"center",gap:8,marginTop:4}}><div className={`toggle ${saveAddr?"on":""}`} onClick={()=>setSaveAddr(!saveAddr)} style={{transform:"scale(.8)"}}/><span style={{fontSize:12,color:"var(--muted)"}}>Sauvegarder cette adresse</span></div></>}
 
-      {step===1&&<><h3 style={{fontSize:18,fontWeight:700,marginBottom:6}}>Mode de paiement</h3><p style={{fontSize:13,color:"var(--muted)",marginBottom:14}}>Mobile Money</p>
+      {step===1&&<><h3 style={{fontSize:18,fontWeight:700,marginBottom:6}}>Mode de paiement</h3><p style={{fontSize:13,color:"var(--muted)",marginBottom:14}}>Choisissez comment payer</p>
         {momos.map(m=><div key={m.k} className={`momo ${momo===m.k?"on":""}`} onClick={()=>setMomo(m.k)}><span className="me">{m.e}</span><span className="mn">{m.n}</span>{momo===m.k&&<span className="mc">✓</span>}</div>)}
-        <div className="field" style={{marginTop:18}}><label>Numéro <span style={{color:"#EF4444"}}>*</span></label><div style={{display:"flex",gap:8,alignItems:"center"}}><span style={{fontSize:13,fontWeight:600,flexShrink:0}}>+242</span><input value={ckPhone} onChange={e=>{const v=e.target.value.replace(/[^0-9]/g,"").slice(0,9);setCkPhone(v);setCkPhoneErr("")}} placeholder="06X XXX XXX" type="tel" maxLength={11}/></div>{ckPhoneErr&&<div className="err-msg">{ckPhoneErr}</div>}</div></>}
+        {momo==="cash"?<div style={{marginTop:14,padding:14,background:"rgba(59,130,246,0.06)",borderRadius:14,fontSize:12,color:"var(--muted)",lineHeight:1.6}}>
+          <div style={{fontWeight:700,color:"var(--text)",marginBottom:4}}>💵 Paiement en espèces</div>
+          Payez directement au livreur à la réception de votre commande. Le montant exact sera demandé — préparez la monnaie si possible.
+        </div>
+        :<div className="field" style={{marginTop:18}}><label>Numéro <span style={{color:"#EF4444"}}>*</span></label><div style={{display:"flex",gap:8,alignItems:"center"}}><span style={{fontSize:13,fontWeight:600,flexShrink:0}}>+242</span><input value={ckPhone} onChange={e=>{const v=e.target.value.replace(/[^0-9]/g,"").slice(0,9);setCkPhone(v);setCkPhoneErr("")}} placeholder="06X XXX XXX" type="tel" maxLength={11}/></div>{ckPhoneErr&&<div className="err-msg">{ckPhoneErr}</div>}</div>}
+      </>}
 
       {step===2&&<><h3 style={{fontSize:18,fontWeight:700,marginBottom:14}}>Résumé</h3>
         <div className="confirm-card" style={{cursor:"pointer"}} onClick={()=>setStep(0)}><span className="cci">📍</span><div className="ccb"><small>Livraison {schedule==="later"?`· ${schedDate} ${schedTime}`:""}</small><p>Brazzaville, Congo 🇨🇬</p></div><span className="cce" style={{color:"#F97316",fontWeight:600}}>✏️</span></div>
-        <div className="confirm-card" style={{cursor:"pointer"}} onClick={()=>setStep(1)}><span className="cci">📱</span><div className="ccb"><small>Paiement</small><p>{momos.find(m=>m.k===momo)?.n}</p></div><span className="cce" style={{color:"#F97316",fontWeight:600}}>✏️</span></div>
+        <div className="confirm-card" style={{cursor:"pointer"}} onClick={()=>setStep(1)}><span className="cci">{momo==="cash"?"💵":"📱"}</span><div className="ccb"><small>Paiement</small><p>{momos.find(m=>m.k===momo)?.n}</p></div><span className="cce" style={{color:"#F97316",fontWeight:600}}>✏️</span></div>
 
         {/* Applied coupon */}
         {/* Gift card code input */}
@@ -97,7 +102,7 @@ function CheckoutScr({onBack,onDone,cart=[],appliedCoupon,setAppliedCoupon}){
       <div style={{paddingTop:24,paddingBottom:16}}><button className="btn-primary" onClick={()=>{if(step===2){if(validateCheckout())handleConfirm()}else setStep(step+1)}}>{step===2?"Confirmer le paiement":"Continuer"}</button></div>
     </div>
 
-    {ok&&<div className="success-modal"><div className="success-box"><div className="si">✅</div><h2>Commande confirmée !</h2><p>Vérifiez votre téléphone pour le paiement.</p><div className="ref">#LMK-2026-0214</div>
+    {ok&&<div className="success-modal"><div className="success-box"><div className="si">✅</div><h2>Commande confirmée !</h2><p>{momo==="cash"?"Préparez le montant exact pour le livreur.":"Vérifiez votre téléphone pour le paiement."}</p><div className="ref">#LMK-2026-0214</div>
       {appliedCoupon&&<div style={{fontSize:12,color:"#F97316",fontWeight:600,marginTop:8}}>🏷️ Code {appliedCoupon.code} appliqué</div>}
       <button className="btn-primary" onClick={onDone}>Retour à l'accueil</button></div></div>}
   </>);
