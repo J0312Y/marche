@@ -2,6 +2,7 @@ import { useState } from "react";
 import Select from "../../components/Select";
 import { useData } from "../../hooks";
 import toast from "../../utils/toast";
+import { validatePayPhone, getPhonePlaceholder, isPayPhoneValid } from "../../utils/phoneValidation";
 import { triggerPush } from "../../components/PushBanner";
 
 function RoleRegScr({onBack,onDone,forceRole,onPending}){
@@ -80,12 +81,14 @@ function RoleRegScr({onBack,onDone,forceRole,onPending}){
   const [payPhone,setPayPhone]=useState("");
   const [paying,setPaying]=useState(false);
   const [payDone,setPayDone]=useState(false);
+  const [payPhoneErr,setPayPhoneErr]=useState("");
   const needsPayment = role==="vendor" ? plan!=="starter" : true;
   const payAmount = role==="vendor" ? (plan==="pro"?15000:45000) : 5000;
   const payLabel = role==="vendor" ? (plan==="pro"?"Plan Pro — 1er mois":"Plan Enterprise — 1er mois") : "Frais d'inscription livreur";
   
   const processPayment = () => {
-    if(payPhone.replace(/\s/g,"").length!==9) return;
+    const err=validatePayPhone(payPhone,payMethod);
+    if(err){setPayPhoneErr(err);return;}
     setPaying(true);
     setTimeout(()=>{
       setPaying(false);
@@ -388,7 +391,7 @@ function RoleRegScr({onBack,onDone,forceRole,onPending}){
           <div style={{fontSize:13,fontWeight:700,marginBottom:8}}>Mode de paiement</div>
           <div style={{display:"flex",gap:6,marginBottom:14}}>
             {[["airtel","Airtel Money","🟠"],["mtn","MTN MoMo","🟡"],["kolo","Kolo Pay","🟣"]].map(([k,n,ic])=>(
-              <div key={k} onClick={()=>setPayMethod(k)} style={{flex:1,padding:"10px 4px",textAlign:"center",borderRadius:12,border:payMethod===k?"2px solid #F97316":"1px solid var(--border)",background:payMethod===k?"rgba(249,115,22,0.06)":"var(--card)",cursor:"pointer"}}>
+              <div key={k} onClick={()=>{setPayMethod(k);setPayPhoneErr("")}} style={{flex:1,padding:"10px 4px",textAlign:"center",borderRadius:12,border:payMethod===k?"2px solid #F97316":"1px solid var(--border)",background:payMethod===k?"rgba(249,115,22,0.06)":"var(--card)",cursor:"pointer"}}>
                 <div style={{fontSize:18}}>{ic}</div>
                 <div style={{fontSize:10,fontWeight:600,marginTop:2}}>{n}</div>
               </div>
@@ -399,8 +402,9 @@ function RoleRegScr({onBack,onDone,forceRole,onPending}){
           <div style={{fontSize:13,fontWeight:700,marginBottom:6}}>Numéro de paiement</div>
           <div style={{display:"flex",alignItems:"center",gap:8,padding:"10px 12px",border:"1px solid var(--border)",borderRadius:12,background:"var(--light)",marginBottom:16}}>
             <span style={{fontSize:13,fontWeight:600,flexShrink:0}}>+242</span>
-            <input value={payPhone} onChange={e=>{const v=e.target.value.replace(/[^0-9]/g,"").slice(0,9);setPayPhone(v)}} placeholder="06X XXX XXX" type="tel" maxLength={11} style={{flex:1,border:"none",background:"transparent",fontSize:14,outline:"none",fontFamily:"inherit",color:"var(--text)"}}/>
+            <input value={payPhone} onChange={e=>{const v=e.target.value.replace(/[^0-9]/g,"").slice(0,9);setPayPhone(v);setPayPhoneErr("")}} placeholder={getPhonePlaceholder(payMethod)} type="tel" maxLength={11} style={{flex:1,border:"none",background:"transparent",fontSize:14,outline:"none",fontFamily:"inherit",color:"var(--text)"}}/>
           </div>
+          {payPhoneErr&&<div style={{fontSize:11,color:"#EF4444",marginTop:4}}>{payPhoneErr}</div>}
 
           {/* Info */}
           <div style={{padding:10,background:"rgba(59,130,246,0.06)",borderRadius:10,fontSize:11,color:"var(--muted)",marginBottom:14,lineHeight:1.5}}>
@@ -410,7 +414,7 @@ function RoleRegScr({onBack,onDone,forceRole,onPending}){
           {/* Buttons */}
           <div style={{display:"flex",gap:8}}>
             <button onClick={()=>setShowPayment(false)} disabled={paying} style={{flex:1,padding:12,borderRadius:12,border:"1px solid var(--border)",background:"var(--card)",fontSize:13,fontWeight:600,cursor:"pointer",fontFamily:"inherit",color:"var(--text)"}}>Annuler</button>
-            <button onClick={processPayment} disabled={paying||payPhone.replace(/\s/g,"").length!==9} style={{flex:1,padding:12,borderRadius:12,border:"none",background:payPhone.replace(/\s/g,"").length===9?"#F97316":"var(--border)",color:payPhone.replace(/\s/g,"").length===9?"#fff":"var(--muted)",fontSize:13,fontWeight:700,cursor:payPhone.replace(/\s/g,"").length===9?"pointer":"not-allowed",fontFamily:"inherit"}}>
+            <button onClick={processPayment} disabled={paying||!isPayPhoneValid(payPhone,payMethod)} style={{flex:1,padding:12,borderRadius:12,border:"none",background:isPayPhoneValid(payPhone,payMethod)?"#F97316":"var(--border)",color:isPayPhoneValid(payPhone,payMethod)?"#fff":"var(--muted)",fontSize:13,fontWeight:700,cursor:isPayPhoneValid(payPhone,payMethod)?"pointer":"not-allowed",fontFamily:"inherit"}}>
               {paying?"⏳ Validation...":"💳 Payer "+payAmount.toLocaleString("fr-FR")+" F"}
             </button>
           </div>

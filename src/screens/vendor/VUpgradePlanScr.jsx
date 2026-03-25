@@ -1,5 +1,6 @@
 import { useState } from "react";
 import toast from "../../utils/toast";
+import { validatePayPhone, getPhonePlaceholder, isPayPhoneValid } from "../../utils/phoneValidation";
 
 function VUpgradePlanScr({onBack,onUpgrade,currentPlan="starter"}){
   const plans=[
@@ -16,6 +17,7 @@ function VUpgradePlanScr({onBack,onUpgrade,currentPlan="starter"}){
   const [payPhone,setPayPhone]=useState("");
   const [paying,setPaying]=useState(false);
   const [payDone,setPayDone]=useState(false);
+  const [payPhoneErr,setPayPhoneErr]=useState("");
   const currentInfo=plans.find(([k])=>k===currentPlan);
 
   if(done)return(<div className="scr" style={{padding:16,textAlign:"center"}}><div style={{padding:"40px 0"}}><div style={{fontSize:48,marginBottom:10}}>🎉</div><h3 style={{fontSize:18,fontWeight:700}}>Plan mis à jour !</h3><p style={{fontSize:14,fontWeight:700,marginTop:8,color:plan==="enterprise"?"#F59E0B":"#F97316"}}>Plan {plan==="pro"?"Pro":"Enterprise"} activé</p><p style={{fontSize:13,color:"var(--muted)",marginTop:6}}>Toutes les fonctionnalités sont maintenant débloquées.</p><button className="btn-primary" style={{marginTop:20}} onClick={()=>{onUpgrade(plan);onBack()}}>✅ Retour à la boutique</button></div></div>);
@@ -54,21 +56,22 @@ function VUpgradePlanScr({onBack,onUpgrade,currentPlan="starter"}){
           </div>
           <div style={{display:"flex",gap:6,marginBottom:12}}>
             {[["airtel","Airtel Money","🟠"],["mtn","MTN MoMo","🟡"],["kolo","Kolo Pay","🟣"]].map(([k,n,ic])=>(
-              <div key={k} onClick={()=>setPayMethod(k)} style={{flex:1,padding:"8px 4px",textAlign:"center",borderRadius:10,border:payMethod===k?"2px solid #F97316":"1px solid var(--border)",background:payMethod===k?"rgba(249,115,22,0.06)":"var(--card)",cursor:"pointer"}}>
+              <div key={k} onClick={()=>{setPayMethod(k);setPayPhoneErr("")}} style={{flex:1,padding:"8px 4px",textAlign:"center",borderRadius:10,border:payMethod===k?"2px solid #F97316":"1px solid var(--border)",background:payMethod===k?"rgba(249,115,22,0.06)":"var(--card)",cursor:"pointer"}}>
                 <div style={{fontSize:16}}>{ic}</div><div style={{fontSize:9,fontWeight:600,marginTop:2}}>{n}</div>
               </div>
             ))}
           </div>
           <div style={{display:"flex",alignItems:"center",gap:8,padding:"10px 12px",border:"1px solid var(--border)",borderRadius:12,background:"var(--light)",marginBottom:12}}>
             <span style={{fontSize:13,fontWeight:600,flexShrink:0}}>+242</span>
-            <input value={payPhone} onChange={e=>{const v=e.target.value.replace(/[^0-9]/g,"").slice(0,9);setPayPhone(v)}} placeholder="06X XXX XXX" type="tel" maxLength={11} style={{flex:1,border:"none",background:"transparent",fontSize:14,outline:"none",fontFamily:"inherit",color:"var(--text)"}}/>
+            <input value={payPhone} onChange={e=>{const v=e.target.value.replace(/[^0-9]/g,"").slice(0,9);setPayPhone(v);setPayPhoneErr("")}} placeholder={getPhonePlaceholder(payMethod)} type="tel" maxLength={11} style={{flex:1,border:"none",background:"transparent",fontSize:14,outline:"none",fontFamily:"inherit",color:"var(--text)"}}/>
           </div>
+          {payPhoneErr&&<div style={{fontSize:11,color:"#EF4444",marginTop:4}}>{payPhoneErr}</div>}
           <div style={{padding:10,background:"rgba(59,130,246,0.06)",borderRadius:10,fontSize:11,color:"var(--muted)",marginBottom:14,lineHeight:1.5}}>
             📱 Validez le paiement depuis l'app {payMethod==="airtel"?"Airtel Money":payMethod==="mtn"?"MTN MoMo":"Kolo Pay"}.
           </div>
           <div style={{display:"flex",gap:8}}>
             <button onClick={()=>setShowPay(false)} disabled={paying} style={{flex:1,padding:11,borderRadius:12,border:"1px solid var(--border)",background:"var(--card)",fontSize:13,fontWeight:600,cursor:"pointer",fontFamily:"inherit",color:"var(--text)"}}>Annuler</button>
-            <button onClick={()=>{if(payPhone.replace(/\s/g,"").length!==9)return;setPaying(true);setTimeout(()=>{setPaying(false);setPayDone(true);setTimeout(()=>{setShowPay(false);setDone(true)},1500)},3000)}} disabled={paying||payPhone.replace(/\s/g,"").length!==9} style={{flex:1,padding:11,borderRadius:12,border:"none",background:payPhone.replace(/\s/g,"").length===9?(plan==="enterprise"?"linear-gradient(135deg,#F59E0B,#D97706)":"#F97316"):"var(--border)",color:payPhone.replace(/\s/g,"").length===9?"#fff":"var(--muted)",fontSize:13,fontWeight:700,cursor:payPhone.replace(/\s/g,"").length===9?"pointer":"not-allowed",fontFamily:"inherit"}}>
+            <button onClick={()=>{const err=validatePayPhone(payPhone,payMethod);if(err){setPayPhoneErr(err);return}setPaying(true);setTimeout(()=>{setPaying(false);setPayDone(true);setTimeout(()=>{setShowPay(false);setDone(true)},1500)},3000)}} disabled={paying||!isPayPhoneValid(payPhone,payMethod)} style={{flex:1,padding:11,borderRadius:12,border:"none",background:isPayPhoneValid(payPhone,payMethod)?(plan==="enterprise"?"linear-gradient(135deg,#F59E0B,#D97706)":"#F97316"):"var(--border)",color:isPayPhoneValid(payPhone,payMethod)?"#fff":"var(--muted)",fontSize:13,fontWeight:700,cursor:isPayPhoneValid(payPhone,payMethod)?"pointer":"not-allowed",fontFamily:"inherit"}}>
               {paying?"⏳ Validation...":"💳 Payer "+(plan==="pro"?"15 000":"45 000")+" F"}
             </button>
           </div>
