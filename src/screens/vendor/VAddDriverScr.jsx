@@ -11,6 +11,7 @@ function VAddDriverScr({onBack}){
     if(!drvName.trim()) e.name="Nom requis";
     if(!drvPhone.trim()) e.phone="Téléphone requis";
     else if(drvPhone.replace(/\s/g,"").length!==9) e.phone="9 chiffres après +242";
+    else if(!drvPhone.startsWith("04")&&!drvPhone.startsWith("05")&&!drvPhone.startsWith("06")) e.phone="Doit commencer par 04, 05 ou 06";
     setDrvErrors(e);
     if(Object.keys(e).length){toast.error("Remplissez les champs obligatoires");return false}
     return true;

@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import toast from "../../utils/toast";
 import { fmt } from "../../utils/helpers";
+import { validatePayPhone, getPhonePlaceholder } from "../../utils/phoneValidation";
 
 const genCode=()=>"GIFT-"+Math.random().toString(36).substring(2,6).toUpperCase();
 
@@ -8,6 +9,8 @@ function GiftCardScr({onBack}){
   const [tab,setTab]=useState("send"); // send | history | redeem
   const [amount,setAmount]=useState(null);
   const [to,setTo]=useState("");
+  const [toMethod,setToMethod]=useState("mtn");
+  const [toErr,setToErr]=useState("");
   const [msg,setMsg]=useState("");
   const [done,setDone]=useState(false);
   const [generatedCode,setGeneratedCode]=useState("");
@@ -22,7 +25,7 @@ function GiftCardScr({onBack}){
 
   const send=()=>{
     if(!amount){toast.error("Choisissez un montant");return}
-    if(to.replace(/\s/g,"").length!==9){toast.error("Le numéro doit contenir 9 chiffres");return}
+    {const err=validatePayPhone(to,toMethod);if(err){setToErr(err);toast.error(err);return}}
     const code=genCode();
     setGeneratedCode(code);
     const card={id:Date.now(),code,amount,to,msg:msg||"",date:new Date().toLocaleDateString("fr-FR",{day:"numeric",month:"short",year:"numeric"}),status:"active"};
@@ -109,8 +112,17 @@ function GiftCardScr({onBack}){
       <div style={{display:"grid",gridTemplateColumns:"1fr 1fr",gap:8,marginBottom:14}}>
         {amounts.map(a=><div key={a} onClick={()=>setAmount(a)} style={{padding:14,borderRadius:14,border:amount===a?"2px solid #F97316":"1px solid var(--border)",background:amount===a?"rgba(249,115,22,0.06)":"var(--card)",cursor:"pointer",textAlign:"center"}}><div style={{fontSize:18,fontWeight:800,color:amount===a?"#F97316":"var(--text)"}}>{fmt(a)}</div></div>)}
       </div>
+      <div style={{fontSize:13,fontWeight:700,marginBottom:6}}>Opérateur du destinataire</div>
+      <div style={{display:"flex",gap:6,marginBottom:10}}>
+        {[["airtel","Airtel","🟠"],["mtn","MTN","🟡"]].map(([k,n,ic])=>(
+          <div key={k} onClick={()=>{setToMethod(k);setToErr("")}} style={{flex:1,padding:"8px 4px",textAlign:"center",borderRadius:10,border:toMethod===k?"2px solid #F97316":"1px solid var(--border)",background:toMethod===k?"rgba(249,115,22,0.06)":"var(--card)",cursor:"pointer"}}>
+            <div style={{fontSize:16}}>{ic}</div><div style={{fontSize:10,fontWeight:600,marginTop:2}}>{n}</div>
+          </div>
+        ))}
+      </div>
       <div className="field"><label>Numéro du destinataire <span style={{color:"#EF4444"}}>*</span></label>
-        <div style={{display:"flex",gap:8,alignItems:"center"}}><span style={{fontSize:13,fontWeight:600,flexShrink:0}}>+242</span><input value={to} onChange={e=>{const v=e.target.value.replace(/[^0-9]/g,"").slice(0,9);setTo(v)}} placeholder="06X XXX XXX" type="tel" maxLength={11}/></div>
+        <div style={{display:"flex",gap:8,alignItems:"center"}}><span style={{fontSize:13,fontWeight:600,flexShrink:0}}>+242</span><input value={to} onChange={e=>{const v=e.target.value.replace(/[^0-9]/g,"").slice(0,9);setTo(v);setToErr("")}} placeholder={getPhonePlaceholder(toMethod)} type="tel" maxLength={11}/></div>
+        {toErr&&<div style={{fontSize:11,color:"#EF4444",marginTop:4}}>{toErr}</div>}
       </div>
       <div className="field"><label>Message <span style={{color:"var(--muted)",fontWeight:400}}>(optionnel)</span></label><input value={msg} onChange={e=>setMsg(e.target.value)} placeholder="Joyeux anniversaire ! 🎂"/></div>
       <button className="btn-primary" onClick={send}>🎁 Envoyer — {amount?fmt(amount):"..."}</button>

@@ -20,6 +20,7 @@ function ProfileCompletionScr({onDone,provider,setUserName}){
     if(!lastName.trim()) e.lastName="Nom requis";
     if(provider&&!phone.trim()) e.phone="Numéro requis";
     else if(provider&&phone.replace(/\s/g,"").length!==9) e.phone="Le numéro doit contenir 9 chiffres";
+    else if(provider&&!phone.startsWith("04")&&!phone.startsWith("05")&&!phone.startsWith("06")) e.phone="Le numéro doit commencer par 04, 05 ou 06";
     setErrors(e);
     if(Object.keys(e).length){toast.error("Remplissez les champs obligatoires");return false}
     return true;
