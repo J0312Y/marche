@@ -35,6 +35,46 @@ function VUpgradePlanScr({onBack,onUpgrade,currentPlan="starter"}){
       </div>)}
       <div style={{paddingTop:24,paddingBottom:16}}><button className="btn-primary" style={{background:plan==="enterprise"?"linear-gradient(135deg,#F59E0B,#D97706)":undefined}} onClick={()=>setShowPay(true)}>💳 Passer au plan {plan==="pro"?"Pro":"Enterprise"}</button></div>
     </div>
+
+    {showPay&&<div onClick={()=>!paying&&setShowPay(false)} style={{position:"fixed",inset:0,background:"rgba(0,0,0,.45)",zIndex:150,display:"flex",alignItems:"center",justifyContent:"center",padding:16}}>
+      <div onClick={e=>e.stopPropagation()} style={{width:"100%",maxWidth:340,background:"var(--card)",borderRadius:20,padding:20}}>
+        {payDone?<div style={{textAlign:"center",padding:"20px 0"}}>
+          <div style={{fontSize:48,marginBottom:12}}>✅</div>
+          <h3 style={{fontSize:18,fontWeight:700}}>Paiement confirmé !</h3>
+          <p style={{fontSize:13,color:"var(--muted)",marginTop:4}}>Plan {plan==="pro"?"Pro":"Enterprise"} activé</p>
+        </div>:<>
+          <div style={{textAlign:"center",marginBottom:14}}>
+            <div style={{fontSize:32,marginBottom:6}}>💳</div>
+            <h3 style={{fontSize:16,fontWeight:700}}>Paiement — Plan {plan==="pro"?"Pro":"Enterprise"}</h3>
+          </div>
+          <div style={{padding:14,background:"var(--light)",borderRadius:14,textAlign:"center",marginBottom:14}}>
+            <div style={{fontSize:10,color:"var(--muted)"}}>Montant mensuel</div>
+            <div style={{fontSize:26,fontWeight:800,color:plan==="enterprise"?"#F59E0B":"#F97316"}}>{plan==="pro"?"15 000":"45 000"} F</div>
+            <div style={{fontSize:10,color:"var(--muted)",marginTop:2}}>Renouvelé chaque mois · Annulable à tout moment</div>
+          </div>
+          <div style={{display:"flex",gap:6,marginBottom:12}}>
+            {[["airtel","Airtel Money","🟠"],["mtn","MTN MoMo","🟡"],["kolo","Kolo Pay","🟣"]].map(([k,n,ic])=>(
+              <div key={k} onClick={()=>setPayMethod(k)} style={{flex:1,padding:"8px 4px",textAlign:"center",borderRadius:10,border:payMethod===k?"2px solid #F97316":"1px solid var(--border)",background:payMethod===k?"rgba(249,115,22,0.06)":"var(--card)",cursor:"pointer"}}>
+                <div style={{fontSize:16}}>{ic}</div><div style={{fontSize:9,fontWeight:600,marginTop:2}}>{n}</div>
+              </div>
+            ))}
+          </div>
+          <div style={{display:"flex",alignItems:"center",gap:8,padding:"10px 12px",border:"1px solid var(--border)",borderRadius:12,background:"var(--light)",marginBottom:12}}>
+            <span style={{fontSize:13,fontWeight:600,flexShrink:0}}>+242</span>
+            <input value={payPhone} onChange={e=>{const v=e.target.value.replace(/[^0-9]/g,"").slice(0,9);setPayPhone(v)}} placeholder="06X XXX XXX" type="tel" maxLength={11} style={{flex:1,border:"none",background:"transparent",fontSize:14,outline:"none",fontFamily:"inherit",color:"var(--text)"}}/>
+          </div>
+          <div style={{padding:10,background:"rgba(59,130,246,0.06)",borderRadius:10,fontSize:11,color:"var(--muted)",marginBottom:14,lineHeight:1.5}}>
+            📱 Validez le paiement depuis l'app {payMethod==="airtel"?"Airtel Money":payMethod==="mtn"?"MTN MoMo":"Kolo Pay"}.
+          </div>
+          <div style={{display:"flex",gap:8}}>
+            <button onClick={()=>setShowPay(false)} disabled={paying} style={{flex:1,padding:11,borderRadius:12,border:"1px solid var(--border)",background:"var(--card)",fontSize:13,fontWeight:600,cursor:"pointer",fontFamily:"inherit",color:"var(--text)"}}>Annuler</button>
+            <button onClick={()=>{if(payPhone.replace(/\s/g,"").length!==9)return;setPaying(true);setTimeout(()=>{setPaying(false);setPayDone(true);setTimeout(()=>{setShowPay(false);setDone(true)},1500)},3000)}} disabled={paying||payPhone.replace(/\s/g,"").length!==9} style={{flex:1,padding:11,borderRadius:12,border:"none",background:payPhone.replace(/\s/g,"").length===9?(plan==="enterprise"?"linear-gradient(135deg,#F59E0B,#D97706)":"#F97316"):"var(--border)",color:payPhone.replace(/\s/g,"").length===9?"#fff":"var(--muted)",fontSize:13,fontWeight:700,cursor:payPhone.replace(/\s/g,"").length===9?"pointer":"not-allowed",fontFamily:"inherit"}}>
+              {paying?"⏳ Validation...":"💳 Payer "+(plan==="pro"?"15 000":"45 000")+" F"}
+            </button>
+          </div>
+        </>}
+      </div>
+    </div>}
   </>);
 }
 
