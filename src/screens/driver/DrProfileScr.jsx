@@ -38,7 +38,7 @@ function DrProfileScr({go,onSwitch,onLogout}){
     </div>
 
     {/* Wallet */}
-    <div className="wallet" style={{margin:"0 16px 14px",background:"linear-gradient(135deg,#F97316,#EA580C)"}}><div><p style={{fontSize:11,opacity:.7}}>Gains disponibles</p><h3 style={{fontSize:20,fontWeight:700,marginTop:2}}>{fmt(D_STATS.month.earned)}</h3></div><button onClick={()=>go("drWallet")}>Retirer</button></div>
+    <div className="wallet" style={{margin:"0 16px 14px",background:"linear-gradient(135deg,#F97316,#EA580C)"}}><div><p style={{fontSize:11,color:"rgba(255,255,255,.7)"}}>Gains disponibles</p><h3 style={{fontSize:20,fontWeight:700,marginTop:2,color:"#fff"}}>{fmt(D_STATS.month.earned)}</h3></div><button onClick={()=>go("drWallet")}>Retirer</button></div>
 
     {/* ═══ LIVRAISONS ═══ */}
     <Section icon="📦" title="MES LIVRAISONS">

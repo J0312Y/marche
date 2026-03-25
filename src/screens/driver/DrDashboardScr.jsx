@@ -4,16 +4,21 @@ import { DRIVER_PHOTO } from "../../data/images";
 import { fmt } from "../../utils/helpers";
 import PullToRefresh from "../../components/PullToRefresh";
 import toast from "../../utils/toast";
+import { validatePayPhone, getPhonePlaceholder, isPayPhoneValid } from "../../utils/phoneValidation";
 
 function DrDashboardScr({go}){
   const [online,setOnline]=useState(true);
   const [period,setPeriod]=useState("today");
   const [boosted,setBoosted]=useState(false);
+  const [boostPay,setBoostPay]=useState(false);
+  const [boostMethod,setBoostMethod]=useState("airtel");
+  const [boostPhone,setBoostPhone]=useState("");
+  const [boostPaying,setBoostPaying]=useState(false);
   const [dismissed,setDismissed]=useState(false);
   const d=D_STATS[period];
   const pending=dismissed?null:D_DELIVERIES.find(x=>x.status==="pending");
   const active=D_DELIVERIES.find(x=>x.status==="active");
-  return(<PullToRefresh onRefresh={async()=>{toast.success("Dashboard actualisé 🛵")}}><div className="scr">
+  return(<><PullToRefresh onRefresh={async()=>{toast.success("Dashboard actualisé 🛵")}}><div className="scr">
     <div className="dr-hero">
       <div className="dr-top"><div style={{display:"flex",alignItems:"center",gap:12}}><div className="dr-av" style={{overflow:"hidden",padding:0}}><img src={DRIVER_PHOTO} style={{width:"100%",height:"100%",objectFit:"cover"}} alt=""/></div><div><div className="dr-name">Patrick Moukala</div><div className="dr-sub">🛵 Honda PCX · BZ-4521</div></div></div><button onClick={()=>go("drNotif")} style={{width:38,height:38,borderRadius:12,background:"rgba(255,255,255,.15)",border:"none",color:"#fff",cursor:"pointer",fontSize:18,display:"flex",alignItems:"center",justifyContent:"center"}}>🔔</button></div>
       <div className="dr-toggle-bar" onClick={()=>setOnline(!online)}><div className={`dt-dot ${online?"on":"off"}`}/><span>{online?"En ligne — Prêt à livrer":"Hors ligne"}</span><div className={`toggle ${online?"on":""}`}/></div>
@@ -28,7 +33,7 @@ function DrDashboardScr({go}){
         <div style={{fontSize:12,fontWeight:700,color:boosted?"#F59E0B":"var(--text)"}}>{boosted?"Boost actif — Priorité max":"Boost · Commandes prioritaires"}</div>
         <div style={{fontSize:10,color:"var(--muted)",marginTop:1}}>{boosted?"Expire ce soir à 23h59":"1 000 FCFA/jour"}</div>
       </div>
-      <button onClick={()=>{setBoosted(!boosted);toast.success(boosted?"Boost désactivé":"Boost activé ! 🔥 Priorité max")}} style={{padding:"6px 12px",borderRadius:10,border:"none",background:boosted?"rgba(239,68,68,0.08)":"#F59E0B",color:boosted?"#EF4444":"#fff",fontSize:11,fontWeight:700,cursor:"pointer",fontFamily:"inherit"}}>{boosted?"Arrêter":"Activer"}</button>
+      <button onClick={()=>{if(boosted){setBoosted(false);toast.success("Boost désactivé")}else{setBoostPay(true)}}} style={{padding:"6px 12px",borderRadius:10,border:"none",background:boosted?"rgba(239,68,68,0.08)":"#F59E0B",color:boosted?"#EF4444":"#fff",fontSize:11,fontWeight:700,cursor:"pointer",fontFamily:"inherit"}}>{boosted?"Arrêter":"Activer"}</button>
     </div>
 
     {/* Pending request */}
@@ -65,7 +70,41 @@ function DrDashboardScr({go}){
       <div style={{flex:1}}><div style={{fontSize:13,fontWeight:600}}>{h.vendor} → {h.client}</div><div style={{fontSize:11,color:"var(--muted)"}}>{h.date} · {h.duration} · {h.distance}</div></div>
       <div style={{textAlign:"right"}}><div style={{fontSize:13,fontWeight:700,color:"#F97316"}}>+{fmt(h.fee+h.tip)}</div><div style={{fontSize:11,color:"#F59E0B"}}>{"★".repeat(h.rating)}</div></div>
     </div>)}</div>
-  </div></PullToRefresh>);
+  </div></PullToRefresh>
+
+    {/* Boost Payment Modal */}
+    {boostPay&&<div onClick={()=>!boostPaying&&setBoostPay(false)} style={{position:"fixed",inset:0,background:"rgba(0,0,0,.45)",zIndex:150,display:"flex",alignItems:"center",justifyContent:"center",padding:16}}>
+      <div onClick={e=>e.stopPropagation()} style={{width:"100%",maxWidth:340,background:"var(--card)",borderRadius:20,padding:20}}>
+        <div style={{textAlign:"center",marginBottom:14}}>
+          <div style={{fontSize:32,marginBottom:6}}>🚀</div>
+          <h3 style={{fontSize:16,fontWeight:700}}>Activer le Boost</h3>
+          <p style={{fontSize:12,color:"var(--muted)",marginTop:4}}>Commandes prioritaires pendant 24h</p>
+        </div>
+        <div style={{padding:14,background:"var(--light)",borderRadius:14,textAlign:"center",marginBottom:14}}>
+          <div style={{fontSize:10,color:"var(--muted)"}}>Prix du boost</div>
+          <div style={{fontSize:26,fontWeight:800,color:"#F59E0B"}}>1 000 F</div>
+          <div style={{fontSize:10,color:"var(--muted)",marginTop:2}}>Valable 24h · Non remboursable</div>
+        </div>
+        <div style={{display:"flex",gap:6,marginBottom:12}}>
+          {[["airtel","Airtel","🟠"],["mtn","MTN","🟡"],["kolo","Kolo","🟣"]].map(([k,n,ic])=>(
+            <div key={k} onClick={()=>setBoostMethod(k)} style={{flex:1,padding:"8px 4px",textAlign:"center",borderRadius:10,border:boostMethod===k?"2px solid #F59E0B":"1px solid var(--border)",background:boostMethod===k?"rgba(245,158,11,0.06)":"var(--card)",cursor:"pointer"}}>
+              <div style={{fontSize:16}}>{ic}</div><div style={{fontSize:9,fontWeight:600,marginTop:2}}>{n}</div>
+            </div>
+          ))}
+        </div>
+        <div style={{display:"flex",alignItems:"center",gap:8,padding:"10px 12px",border:"1px solid var(--border)",borderRadius:12,background:"var(--light)",marginBottom:14}}>
+          <span style={{fontSize:13,fontWeight:600,flexShrink:0}}>+242</span>
+          <input value={boostPhone} onChange={e=>{const v=e.target.value.replace(/[^0-9]/g,"").slice(0,9);setBoostPhone(v)}} placeholder={getPhonePlaceholder(boostMethod)} type="tel" maxLength={11} style={{flex:1,border:"none",background:"transparent",fontSize:14,outline:"none",fontFamily:"inherit",color:"var(--text)"}}/>
+        </div>
+        <div style={{display:"flex",gap:8}}>
+          <button onClick={()=>setBoostPay(false)} disabled={boostPaying} style={{flex:1,padding:11,borderRadius:12,border:"1px solid var(--border)",background:"var(--card)",fontSize:13,fontWeight:600,cursor:"pointer",fontFamily:"inherit",color:"var(--text)"}}>Annuler</button>
+          <button onClick={()=>{const err=validatePayPhone(boostPhone,boostMethod);if(err){toast.error(err);return}setBoostPaying(true);setTimeout(()=>{setBoostPaying(false);setBoostPay(false);setBoosted(true);toast.success("🔥 Boost activé ! Priorité max pendant 24h")},3000)}} disabled={boostPaying||!isPayPhoneValid(boostPhone,boostMethod)} style={{flex:1,padding:11,borderRadius:12,border:"none",background:isPayPhoneValid(boostPhone,boostMethod)?"#F59E0B":"var(--border)",color:isPayPhoneValid(boostPhone,boostMethod)?"#fff":"var(--muted)",fontSize:13,fontWeight:700,cursor:isPayPhoneValid(boostPhone,boostMethod)?"pointer":"not-allowed",fontFamily:"inherit"}}>
+            {boostPaying?"⏳ Validation...":"💳 Payer 1 000 F"}
+          </button>
+        </div>
+      </div>
+    </div>}
+  </>);
 }
 
 /* D2 ── ACTIVE DELIVERY (multi-step) ── */
