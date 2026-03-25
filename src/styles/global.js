@@ -19,9 +19,9 @@ select option{background:var(--card);color:var(--text);padding:10px 14px;font-si
 .appbar button{width:38px;height:38px;border-radius:12px;border:1px solid var(--border);background:var(--card);cursor:pointer;font-size:16px;color:var(--text);display:flex;align-items:center;justify-content:center}
 .appbar h2{flex:1;font-size:17px;font-weight:600;text-align:center}
 .btn-primary{width:100%;padding:12px;border-radius:12px;border:none;background:#F97316;color:#fff;font-size:15px;font-weight:600;cursor:pointer;font-family:inherit;transition:opacity .15s}.btn-primary:hover{opacity:.85}
-.auth .btn-primary{margin:0 30px;width:calc(100% - 60px)}
-.auth .social-btns{padding:0 30px}
-.auth .divider{margin:20px 30px}
+.auth .btn-primary{margin:0 40px;width:calc(100% - 80px)}
+.auth .social-btns{padding:0}
+.auth .divider{margin:20px 0}
 .btn-outline{width:100%;padding:12px;border-radius:12px;border:1px solid var(--border);background:var(--card);color:var(--text);font-size:15px;font-weight:600;cursor:pointer;font-family:inherit}
 .field{margin-bottom:10px}.field label{display:block;font-size:12px;font-weight:600;color:var(--sub);margin-bottom:5px}.field input,.field textarea,.field select{width:100%;padding:12px 14px;border-radius:12px;border:1px solid var(--border);background:var(--light);color:var(--text);font-family:inherit;font-size:14px;outline:none;color:var(--text);resize:none}.field.err input,.field.err textarea,.field.err select{border-color:#EF4444!important}.field .err-msg{font-size:11px;color:#EF4444;margin-top:3px;font-weight:500}
 .field input:focus,.field textarea:focus{border-color:#F97316}
@@ -56,7 +56,7 @@ select option{background:var(--card);color:var(--text);padding:10px 14px;font-si
 .auth{display:flex;flex-direction:column;height:100%;padding:40px 24px 30px;background:var(--bg);color:var(--text)}
 .auth h2{font-size:26px;font-weight:700;letter-spacing:-.5px;margin-bottom:4px}
 .auth .sub{font-size:14px;color:var(--muted);margin-bottom:28px}
-.phone-input{display:flex;align-items:center;margin:0 30px 20px;border-radius:12px;border:1px solid var(--border);background:var(--light);overflow:hidden}
+.phone-input{display:flex;align-items:center;margin:0 40px 20px;width:calc(100% - 80px);border-radius:12px;border:1px solid var(--border);background:var(--light);overflow:hidden}
 .phone-input .prefix{padding:10px 10px;font-size:13px;color:var(--text);font-size:14px;font-weight:600;display:flex;align-items:center;gap:4px;border-right:1px solid var(--border);flex-shrink:0}
 .phone-input input{flex:1;padding:10px 10px;border:none;background:transparent;color:var(--text);font-size:13px;outline:none;font-family:inherit}
 .phone-input:focus-within{border-color:#F97316}
