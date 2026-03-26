@@ -8,6 +8,7 @@ function VOrderDetailScr({order:o,onBack,go}){
   const [showInvoice,setShowInvoice]=useState(false);
   const [status,setStatus]=useState(o.status);
   const [showRefuse,setShowRefuse]=useState(false);
+  const [cashStatus,setCashStatus]=useState(null); // null | "received" | "pending" | "dispute"
   const statusMap={new:"Nouvelle",preparing:"En préparation",shipped:"Expédiée",delivered:"Livrée",refused:"Refusée"};
   const next={new:"preparing",preparing:"shipped",shipped:"delivered"};
   const nextLabel={new:"✅ Accepter",preparing:"📦 Marquer prête",shipped:"🚚 Confirmer livraison"};
@@ -43,6 +44,49 @@ function VOrderDetailScr({order:o,onBack,go}){
         <button style={{flex:1,padding:12,borderRadius:12,border:"1px solid var(--border)",background:"var(--card)",fontSize:13,fontWeight:600,cursor:"pointer",fontFamily:"inherit"}} onClick={()=>setShowRefuse(false)}>Annuler</button>
         <button style={{flex:1,padding:12,borderRadius:12,border:"none",background:"#EF4444",color:"#fff",fontSize:13,fontWeight:600,cursor:"pointer",fontFamily:"inherit"}} onClick={()=>{setStatus("refused");toast.success("Commande refusée ❌")}}>✕ Confirmer le refus</button>
       </div>
+    </div>}
+
+    {/* Cash payment handling */}
+    {o.payment==="cash"&&status==="delivered"&&!cashStatus&&<div style={{padding:16,background:"rgba(245,158,11,0.06)",border:"1px solid rgba(245,158,11,0.2)",borderRadius:16,marginBottom:14,animation:"fadeIn .3s ease"}}>
+      <div style={{display:"flex",alignItems:"center",gap:8,marginBottom:10}}>
+        <span style={{fontSize:22}}>💵</span>
+        <div><div style={{fontSize:14,fontWeight:700,color:"#F59E0B"}}>Paiement cash en attente</div><div style={{fontSize:11,color:"var(--muted)"}}>Le livreur doit vous reverser via Mobile Money</div></div>
+      </div>
+      <div style={{padding:12,background:"var(--card)",borderRadius:12,border:"1px solid var(--border)",marginBottom:12}}>
+        <div style={{display:"flex",justifyContent:"space-between",fontSize:13,marginBottom:4}}><span style={{color:"var(--muted)"}}>Total commande</span><b>{fmt(o.total)}</b></div>
+        <div style={{display:"flex",justifyContent:"space-between",fontSize:13,marginBottom:4,color:"#10B981"}}><span>− Frais livraison</span><b>- {fmt(2000)}</b></div>
+        <div style={{display:"flex",justifyContent:"space-between",fontSize:14,fontWeight:800,paddingTop:6,borderTop:"1px solid var(--border)",color:"#F97316"}}><span>Montant attendu</span><span>{fmt(o.total-2000)}</span></div>
+      </div>
+      <div style={{display:"flex",flexDirection:"column",gap:8}}>
+        <button onClick={()=>{setCashStatus("received");toast.success("✅ Paiement confirmé — commission de "+fmt(Math.round(o.total*0.05))+" déduite du wallet")}} style={{width:"100%",padding:12,borderRadius:12,border:"none",background:"#10B981",color:"#fff",fontSize:13,fontWeight:700,cursor:"pointer",fontFamily:"inherit"}}>✅ J'ai reçu le paiement</button>
+        <button onClick={()=>{setCashStatus("pending");toast.info("⏳ Rappel envoyé au livreur")}} style={{width:"100%",padding:12,borderRadius:12,border:"1px solid #F59E0B",background:"transparent",color:"#F59E0B",fontSize:13,fontWeight:600,cursor:"pointer",fontFamily:"inherit"}}>⏳ Pas encore reçu — Rappeler le livreur</button>
+        <button onClick={()=>{setCashStatus("dispute");toast.error("🚨 Litige signalé — Support Lamuka contacté")}} style={{width:"100%",padding:12,borderRadius:12,border:"1px solid rgba(239,68,68,0.3)",background:"transparent",color:"#EF4444",fontSize:12,fontWeight:600,cursor:"pointer",fontFamily:"inherit"}}>❌ Signaler un problème</button>
+      </div>
+    </div>}
+
+    {/* Cash confirmed */}
+    {o.payment==="cash"&&cashStatus==="received"&&<div style={{padding:12,background:"rgba(16,185,129,0.06)",border:"1px solid rgba(16,185,129,0.2)",borderRadius:14,marginBottom:14,display:"flex",alignItems:"center",gap:10}}>
+      <span style={{fontSize:22}}>✅</span>
+      <div><div style={{fontSize:13,fontWeight:600,color:"#10B981"}}>Paiement cash confirmé</div><div style={{fontSize:11,color:"var(--muted)"}}>Commission de {fmt(Math.round(o.total*0.05))} déduite du wallet</div></div>
+    </div>}
+
+    {/* Cash pending reminder */}
+    {o.payment==="cash"&&cashStatus==="pending"&&<div style={{padding:12,background:"rgba(245,158,11,0.06)",border:"1px solid rgba(245,158,11,0.2)",borderRadius:14,marginBottom:14}}>
+      <div style={{display:"flex",alignItems:"center",gap:8,marginBottom:8}}>
+        <span style={{fontSize:18}}>⏳</span>
+        <div style={{fontSize:13,fontWeight:600,color:"#F59E0B"}}>Rappel envoyé au livreur</div>
+      </div>
+      <div style={{fontSize:11,color:"var(--muted)",marginBottom:10}}>Si le livreur ne reverse pas sous 24h, il sera automatiquement sanctionné.</div>
+      <div style={{display:"flex",gap:8}}>
+        <button onClick={()=>{setCashStatus("received");toast.success("✅ Paiement confirmé")}} style={{flex:1,padding:10,borderRadius:10,border:"none",background:"#10B981",color:"#fff",fontSize:12,fontWeight:600,cursor:"pointer",fontFamily:"inherit"}}>✅ Reçu maintenant</button>
+        <button onClick={()=>{setCashStatus("dispute");toast.error("🚨 Litige ouvert")}} style={{flex:1,padding:10,borderRadius:10,border:"1px solid #EF4444",background:"transparent",color:"#EF4444",fontSize:12,fontWeight:600,cursor:"pointer",fontFamily:"inherit"}}>❌ Ouvrir litige</button>
+      </div>
+    </div>}
+
+    {/* Cash dispute */}
+    {o.payment==="cash"&&cashStatus==="dispute"&&<div style={{padding:12,background:"rgba(239,68,68,0.06)",border:"1px solid rgba(239,68,68,0.2)",borderRadius:14,marginBottom:14,display:"flex",alignItems:"center",gap:10}}>
+      <span style={{fontSize:22}}>🚨</span>
+      <div><div style={{fontSize:13,fontWeight:600,color:"#EF4444"}}>Litige en cours</div><div style={{fontSize:11,color:"var(--muted)"}}>L'équipe Lamuka va traiter votre dossier sous 24-48h.</div></div>
     </div>}
 
     {status!=="delivered"&&!showRefuse&&<div className="vo-actions">
