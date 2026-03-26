@@ -42,8 +42,8 @@ function AddressesScr({onBack}){
           if(!adQuart.trim()) e.quart="Quartier requis";
           if(!adCity.trim()) e.city="Ville requise";
           if(Object.keys(e).length){setAddrErrors(e);return}
-          setList(prev=>[...prev,{id:Date.now(),name:adName,quartier:adQuart,city:adCity,phone:adPhone,note:adNote,def:prev.length===0}]);
-          setAdName("");setAdQuart("");setAdCity("Brazzaville");setAdPhone("");setAdNote("");setAddrErrors({});
+          setList(prev=>[...prev,{id:Date.now(),label:adName,addr:(adAddr?adAddr+", ":"")+"Quartier "+adQuart,city:adCity,phone:adPhone,note:adNote,def:prev.length===0}]);
+          setAdName("");setAdQuart("");setAdCity("Brazzaville");setAdPhone("");setAdNote("");setAdAddr("");setAddrErrors({});
           setAdding(false);toast.success("Adresse ajoutée ✅");
         }}>Enregistrer</button>
       </div>
