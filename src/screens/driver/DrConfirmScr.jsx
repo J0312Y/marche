@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { fmt } from "../../utils/helpers";
 import toast from "../../utils/toast";
+import { validatePayPhone, getPhonePlaceholder, isPayPhoneValid } from "../../utils/phoneValidation";
 
 function DrConfirmScr({delivery:dl,go,onBack}){
   const [method,setMethod]=useState(null);
@@ -8,12 +9,60 @@ function DrConfirmScr({delivery:dl,go,onBack}){
   const [photoTaken,setPhotoTaken]=useState(false);
   const [signed,setSigned]=useState(false);
   const [done,setDone]=useState(false);
+  const [cashCollected,setCashCollected]=useState(false);
+  const [cashReversed,setCashReversed]=useState(false);
+  const isCash=dl.payment==="cash";
+  const vendorAmount=dl.total-(dl.fee||2000);
 
-  if(done)return(<div style={{display:"flex",flexDirection:"column",height:"100%",justifyContent:"center"}}>
+  // Cash reversal screen
+  if(done&&isCash&&!cashReversed)return(<div className="scr" style={{padding:16}}>
+    <div className="appbar" style={{padding:0,marginBottom:12}}><div style={{width:38}}/><h2>Reverser au vendeur</h2><div style={{width:38}}/></div>
+    <div style={{textAlign:"center",marginBottom:16}}>
+      <div style={{fontSize:48,marginBottom:6}}>📤</div>
+      <h3 style={{fontSize:18,fontWeight:700}}>Envoyez l'argent au vendeur</h3>
+      <p style={{fontSize:12,color:"var(--muted)",marginTop:4}}>Vous avez collecté <b style={{color:"#F59E0B"}}>{fmt(dl.total)}</b> en espèces</p>
+    </div>
+
+    {/* Breakdown */}
+    <div style={{padding:16,background:"var(--card)",border:"1px solid var(--border)",borderRadius:16,marginBottom:14}}>
+      <div style={{display:"flex",justifyContent:"space-between",fontSize:13,marginBottom:6}}><span style={{color:"var(--muted)"}}>Montant collecté</span><b>{fmt(dl.total)}</b></div>
+      <div style={{display:"flex",justifyContent:"space-between",fontSize:13,marginBottom:6,color:"#10B981"}}><span>− Vos frais de livraison</span><b>- {fmt(dl.fee||2000)}</b></div>
+      <div style={{display:"flex",justifyContent:"space-between",fontSize:15,fontWeight:800,paddingTop:8,borderTop:"2px solid var(--border)",color:"#F97316"}}><span>À envoyer au vendeur</span><span>{fmt(vendorAmount)}</span></div>
+    </div>
+
+    {/* Vendor info */}
+    <div style={{padding:14,background:"rgba(249,115,22,0.04)",border:"1px solid rgba(249,115,22,0.15)",borderRadius:14,marginBottom:14}}>
+      <div style={{display:"flex",alignItems:"center",gap:10,marginBottom:8}}>
+        <div style={{width:40,height:40,borderRadius:12,background:"linear-gradient(135deg,#F97316,#FB923C)",display:"flex",alignItems:"center",justifyContent:"center",fontSize:18}}>{dl.vendor.avatar||"🏪"}</div>
+        <div style={{flex:1}}><div style={{fontSize:14,fontWeight:700}}>{dl.vendor.name}</div><div style={{fontSize:12,color:"var(--muted)"}}>{dl.vendor.phone}</div></div>
+      </div>
+      <div style={{fontSize:12,color:"var(--muted)",lineHeight:1.5}}>Envoyez <b style={{color:"#F97316"}}>{fmt(vendorAmount)}</b> via Airtel Money ou MTN MoMo au numéro ci-dessus.</div>
+    </div>
+
+    {/* Deadline */}
+    <div style={{padding:12,background:"rgba(239,68,68,0.04)",border:"1px solid rgba(239,68,68,0.15)",borderRadius:12,marginBottom:14,display:"flex",alignItems:"center",gap:8}}>
+      <span style={{fontSize:18}}>⏰</span>
+      <div style={{fontSize:12,color:"var(--muted)"}}><b style={{color:"#EF4444"}}>Délai : 24h maximum.</b> Les retards répétés entraînent la suspension du compte.</div>
+    </div>
+
+    {/* Your earnings */}
+    <div style={{padding:14,background:"rgba(16,185,129,0.04)",border:"1px solid rgba(16,185,129,0.15)",borderRadius:14,marginBottom:14,textAlign:"center"}}>
+      <div style={{fontSize:11,color:"var(--muted)"}}>Vos gains sur cette livraison</div>
+      <div style={{fontSize:24,fontWeight:800,color:"#10B981",marginTop:2}}>{fmt(dl.fee||2000)}</div>
+      {dl.tip>0&&<div style={{fontSize:12,color:"#F59E0B",marginTop:2}}>+ {fmt(dl.tip)} pourboire</div>}
+    </div>
+
+    <button className="btn-primary" style={{background:"#10B981"}} onClick={()=>{setCashReversed(true);toast.success("✅ Reversement confirmé — merci !")}}>✅ J'ai envoyé {fmt(vendorAmount)} au vendeur</button>
+    <div style={{textAlign:"center",marginTop:8}}><span style={{fontSize:10,color:"var(--muted)"}}>Le vendeur confirmera la réception dans son app</span></div>
+  </div>);
+
+  // Done screen (standard or after cash reversal)
+  if(done&&(!isCash||cashReversed))return(<div style={{display:"flex",flexDirection:"column",height:"100%",justifyContent:"center"}}>
     <div style={{textAlign:"center",padding:"40px 24px"}}>
       <div style={{width:90,height:90,borderRadius:"50%",background:"rgba(16,185,129,0.1)",display:"flex",alignItems:"center",justifyContent:"center",margin:"0 auto 16px",fontSize:48,animation:"splash-pop .5s ease"}}>🎉</div>
       <h2 style={{fontSize:24,fontWeight:700,marginBottom:6}}>Livraison terminée !</h2>
       <p style={{fontSize:14,color:"var(--sub)",marginBottom:4}}>{dl.ref} livré à <b>{dl.client.name}</b></p>
+      {isCash&&<div style={{padding:8,background:"rgba(16,185,129,0.06)",borderRadius:10,marginBottom:8,fontSize:12,color:"#10B981",fontWeight:600}}>✅ {fmt(vendorAmount)} reversé à {dl.vendor.name}</div>}
       <div style={{display:"flex",justifyContent:"center",gap:20,margin:"20px 0",padding:16,background:"var(--light)",borderRadius:16}}>
         <div style={{textAlign:"center"}}><div style={{fontSize:20,fontWeight:700,color:"#F97316"}}>{fmt(dl.fee)}</div><div style={{fontSize:11,color:"var(--muted)"}}>Course</div></div>
         {dl.tip>0&&<div style={{textAlign:"center"}}><div style={{fontSize:20,fontWeight:700,color:"#F59E0B"}}>{fmt(dl.tip)}</div><div style={{fontSize:11,color:"var(--muted)"}}>Pourboire</div></div>}
@@ -79,8 +128,18 @@ function DrConfirmScr({delivery:dl,go,onBack}){
 
       {!method&&<div className="info-box yellow" style={{marginTop:14}}><span>💡</span><span>Choisissez une méthode de confirmation pour valider la livraison</span></div>}
 
+      {/* Cash collection confirmation */}
+      {isCash&&method&&<div style={{marginTop:14,padding:14,background:"rgba(245,158,11,0.06)",border:"1px solid rgba(245,158,11,0.2)",borderRadius:14}}>
+        <div style={{fontSize:13,fontWeight:700,color:"#F59E0B",marginBottom:6}}>💵 Paiement en espèces</div>
+        <div style={{fontSize:12,color:"var(--muted)",marginBottom:10}}>Montant à collecter : <b style={{color:"#F59E0B",fontSize:16}}>{fmt(dl.total)}</b></div>
+        <div onClick={()=>setCashCollected(!cashCollected)} style={{display:"flex",alignItems:"center",gap:10,padding:10,background:cashCollected?"rgba(16,185,129,0.06)":"var(--card)",border:cashCollected?"1px solid rgba(16,185,129,0.2)":"1px solid var(--border)",borderRadius:10,cursor:"pointer"}}>
+          <div style={{width:22,height:22,borderRadius:6,border:cashCollected?"none":"2px solid var(--border)",background:cashCollected?"#10B981":"transparent",display:"flex",alignItems:"center",justifyContent:"center",color:"#fff",fontSize:12,fontWeight:700}}>{cashCollected&&"✓"}</div>
+          <span style={{fontSize:13,fontWeight:600,color:cashCollected?"#10B981":"var(--text)"}}>J'ai bien reçu {fmt(dl.total)} du client</span>
+        </div>
+      </div>}
+
       <div style={{paddingTop:24,paddingBottom:16}}>
-        <button className="btn-primary" style={{background:method?"#F97316":"var(--border)",color:method?"var(--card)":"var(--muted)"}} onClick={()=>{if(method){setDone(true);toast.success("Livraison confirmée 🎉")}}} disabled={!method}>✅ Valider la livraison</button>
+        <button className="btn-primary" style={{background:method?"#F97316":"var(--border)",color:method?"var(--card)":"var(--muted)"}} onClick={()=>{if(method&&(!isCash||cashCollected)){setDone(true);toast.success(isCash?"💵 Paiement collecté — Reversez au vendeur":"Livraison confirmée 🎉")}}} disabled={!method||(isCash&&!cashCollected)}>✅ Valider la livraison</button>
       </div>
     </div>
   </>);

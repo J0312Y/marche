@@ -7,7 +7,7 @@ function OrdersScr({go}){
     {ref:"#LMK-2026-0214",date:"14 Fév 2026",status:"En livraison",sc:"ship",total:"231 500",vendor:"Tech Congo",items:["📱 Galaxy A54","🥬 Panier Bio x3"],prog:[1,1,1,0]},
     {ref:"#LMK-2026-0210",date:"10 Fév 2026",status:"Livré",sc:"done",total:"42 000",vendor:"Mode Afrique",items:["👜 Sac Cuir"],prog:[1,1,1,1]},
     {ref:"#LMK-2026-0205",date:"5 Fév 2026",status:"Livré",sc:"done",total:"18 000",vendor:"Mode Afrique",items:["👔 Chemise Bogolan"],prog:[1,1,1,1]},
-    {ref:"#LMK-2026-0201",date:"1 Fév 2026",status:"En préparation",sc:"prep",total:"5 500",vendor:"Chez Mama Ngudi",items:["🍗 Poulet DG"],prog:[1,1,0,0]},
+    {ref:"#LMK-2026-0201",date:"1 Fév 2026",status:"En préparation",sc:"prep",total:"5 500",vendor:"Chez Mama Ngudi",items:["🍗 Poulet DG"],prog:[1,1,0,0],payment:"cash"},
   ]);
   const [cancelConfirm,setCancelConfirm]=useState(null);
   const [reorderConfirm,setReorderConfirm]=useState(null);
@@ -46,7 +46,7 @@ function OrdersScr({go}){
 
     {shown.length===0&&<div style={{textAlign:"center",padding:"40px 0"}}><div style={{fontSize:36,marginBottom:8}}>{tab==="active"?"📦":tab==="done"?"✅":"❌"}</div><div style={{fontSize:13,color:"var(--muted)"}}>Aucune commande {tab==="active"?"en cours":tab==="done"?"livrée":"annulée"}</div></div>}
 
-    {shown.map(o=><div key={o.ref} className="ocard" onClick={()=>go("orderDetail",o)}>
+    {shown.map(o=><div key={o.ref} className="ocard" onClick={()=>go("orderDetail",o)} style={{position:"relative"}}>{o.payment==="cash"&&<span style={{position:"absolute",top:10,right:10,padding:"2px 8px",borderRadius:6,background:"rgba(245,158,11,0.08)",color:"#F59E0B",fontSize:9,fontWeight:700}}>💵 CASH</span>}
       <div className="ocard-h"><h4>{o.ref}</h4><span className={`ost ${o.sc}`}>{o.status}</span></div>
       <div className="odate">{o.date}</div>
       <div style={{fontSize:13,color:"var(--sub)",marginBottom:10}}>{o.items.join(" · ")}</div>

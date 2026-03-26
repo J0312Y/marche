@@ -8,6 +8,7 @@ const PHOTOS={
 };
 const V_ORDERS=[
   {id:"vo1",ref:"#CMD-0891",client:"Marie Koumba",phone:"+242 06X XXX",addr:"Bacongo, Rue 14",items:[{name:"Robe Wax Moderne",qty:2,price:25000,img:"👗",photo:PHOTOS["Robe Wax Moderne"]},{name:"Sac à Main Cuir",qty:1,price:42000,img:"👜",photo:PHOTOS["Sac à Main Cuir"]}],total:92000,status:"new",date:"14 Fév 14:42",payment:"Airtel Money"},
+  {id:"vo5",ref:"#CMD-0887",client:"Bruno Tsaty",phone:"+242 064 663 469",addr:"Talangaï, Av. Marien Ngouabi",items:[{name:"Poulet DG",qty:2,price:5500,img:"🍗"}],total:11000,status:"new",date:"15 Fév 09:30",payment:"cash"},
   {id:"vo2",ref:"#CMD-0890",client:"Patrick Mbemba",phone:"+242 06X XXX",addr:"Poto-Poto, Av. de la Paix",items:[{name:"Chemise Bogolan",qty:1,price:18000,img:"👔",photo:PHOTOS["Chemise Bogolan"]}],total:18000,status:"preparing",date:"14 Fév 11:20",payment:"MTN MoMo"},
   {id:"vo3",ref:"#CMD-0889",client:"Celine Nzaba",phone:"+242 06X XXX",addr:"Moungali, Rue 8",items:[{name:"Robe Wax Moderne",qty:1,price:25000,img:"👗",photo:PHOTOS["Robe Wax Moderne"]}],total:25000,status:"shipped",date:"13 Fév 16:05",payment:"MTN MoMo"},
   {id:"vo4",ref:"#CMD-0885",client:"David Tsaty",phone:"+242 06X XXX",addr:"Talangaï",items:[{name:"Sac à Main Cuir",qty:1,price:42000,img:"👜",photo:PHOTOS["Sac à Main Cuir"]},{name:"Chemise Bogolan",qty:2,price:18000,img:"👔",photo:PHOTOS["Chemise Bogolan"]}],total:78000,status:"delivered",date:"12 Fév 09:30",payment:"Airtel Money"},

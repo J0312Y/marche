@@ -32,6 +32,12 @@ function DrDeliveryScr({delivery:dl,go,onBack}){
       </div>
       <div style={{display:"flex",justifyContent:"space-between",fontSize:10,color:"var(--muted)",marginBottom:12}}>{stepLabels.map((l,i)=><span key={l} style={step===i?{color:"#F97316",fontWeight:700}:{}}>{l}</span>)}</div>
 
+      {/* Cash alert */}
+      {dl.payment==="cash"&&<div style={{padding:12,background:"rgba(245,158,11,0.08)",border:"1px solid rgba(245,158,11,0.2)",borderRadius:14,marginBottom:12,display:"flex",alignItems:"center",gap:10}}>
+        <span style={{fontSize:24}}>💵</span>
+        <div style={{flex:1}}><div style={{fontSize:13,fontWeight:700,color:"#F59E0B"}}>Paiement en espèces</div><div style={{fontSize:11,color:"var(--muted)"}}>Collectez <b style={{color:"#F59E0B"}}>{fmt(dl.total)}</b> au client</div></div>
+      </div>}
+
       {/* Current destination */}
       <div style={{padding:16,background:step<2?"rgba(249,115,22,0.04)":"rgba(16,185,129,0.04)",border:"1px solid "+(step<2?"rgba(249,115,22,0.15)":"rgba(16,185,129,0.15)"),borderRadius:16,marginBottom:14}}>
         <div style={{fontSize:12,fontWeight:600,color:"#F97316",marginBottom:8}}>{step<2?"📍 RETRAIT":"🏠 LIVRAISON"}</div>

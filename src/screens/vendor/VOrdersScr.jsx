@@ -28,7 +28,7 @@ function VOrdersScr({go,onBack}){
             <span style={{padding:"4px 10px",borderRadius:8,background:st.bg,color:st.color,fontSize:11,fontWeight:600}}>{st.label}</span>
           </div>
           {/* Client + payment */}
-          <div style={{fontSize:12,color:"var(--sub)",marginBottom:8}}>👤 {o.client} · {o.payment}</div>
+          <div style={{fontSize:12,color:"var(--sub)",marginBottom:8}}>👤 {o.client} · {o.payment==="cash"?<span style={{color:"#F59E0B",fontWeight:700}}>💵 Cash à la livraison</span>:o.payment}</div>
           {/* Items — compact row with small thumbnails */}
           <div style={{display:"flex",gap:6,marginBottom:10,flexWrap:"wrap"}}>
             {o.items.map((it,i)=>(
