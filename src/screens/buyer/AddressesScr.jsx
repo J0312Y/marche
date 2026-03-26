@@ -15,6 +15,7 @@ function AddressesScr({onBack}){
   const [adCity,setAdCity]=useState("Brazzaville");
   const [adPhone,setAdPhone]=useState("");
   const [adNote,setAdNote]=useState("");
+  const [adAddr,setAdAddr]=useState("");
   const [addrErrors,setAddrErrors]=useState({});
   const clrA=(k)=>setAddrErrors(p=>{const n={...p};delete n[k];return n});
   const remove=id=>{toast.success("Adresse supprimée");setList(prev=>prev.filter(a=>a.id!==id))};
