@@ -42,12 +42,12 @@ function ProfileScr({go,userRole,vendorPlan,vendorStatus,driverStatus,onLogout,o
     </div>
 
     {/* ── Wallet ── */}
-    <div className="wallet-card" onClick={()=>go("recharge")}>
+    <div className="wallet-card">
       <div className="wc-bg"/>
       <div className="wc-content">
         <div className="wc-top"><div className="wc-logo">K</div><span className="wc-label">Kolo Pay</span></div>
         <div className="wc-balance"><span className="wc-amt">125 000</span><span className="wc-cur">FCFA</span></div>
-        <div className="wc-bottom"><span className="wc-num">•••• •••• 4663</span><button className="wc-btn" onClick={e=>{e.stopPropagation();go("recharge")}}>+ Recharger</button></div>
+        <div className="wc-bottom"><span className="wc-num">•••• •••• 4663</span><button className="wc-btn" onClick={()=>go("recharge")}>+ Recharger</button></div>
       </div>
     </div>
 
