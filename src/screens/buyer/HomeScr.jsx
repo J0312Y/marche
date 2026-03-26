@@ -16,6 +16,7 @@ function HomeScr({go,favs,toggleFav,isFav,userName}){
   const [storyViewer,setStoryViewer]=useState(null);
   const [homeQ,setHomeQ]=useState("");
   const [imgSearching,setImgSearching]=useState(false);
+  const [favAnim,setFavAnim]=useState(null);
   const [imgResults,setImgResults]=useState(null);
   const [imgPreview,setImgPreview]=useState(null);
   const [showCamMenu,setShowCamMenu]=useState(false);

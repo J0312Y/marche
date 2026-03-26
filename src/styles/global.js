@@ -24,7 +24,6 @@ select option{background:var(--card);color:var(--text);padding:10px 14px;font-si
 .auth .divider{margin:20px 0}
 .btn-outline{width:100%;padding:12px;border-radius:12px;border:1px solid var(--border);background:var(--card);color:var(--text);font-size:15px;font-weight:600;cursor:pointer;font-family:inherit}
 .field{margin-bottom:10px}.field label{display:block;font-size:12px;font-weight:600;color:var(--sub);margin-bottom:5px}.field input,.field textarea,.field select{width:100%;padding:12px 14px;border-radius:12px;border:1px solid var(--border);background:var(--light);color:var(--text);font-family:inherit;font-size:14px;outline:none;color:var(--text);resize:none}.field.err input,.field.err textarea,.field.err select{border-color:#EF4444!important}.field .err-msg{font-size:11px;color:#EF4444;margin-top:3px;font-weight:500}
-.field input:focus,.field textarea:focus{border-color:#F97316}
 .field-row{display:grid;grid-template-columns:1fr 1fr;gap:12px}
 .chip{display:inline-block;padding:6px 14px;border-radius:10px;font-size:12px;font-weight:600}
 
@@ -59,7 +58,6 @@ select option{background:var(--card);color:var(--text);padding:10px 14px;font-si
 .phone-input{display:flex;align-items:center;margin:0 40px 20px;width:calc(100% - 80px);border-radius:12px;border:1px solid var(--border);background:var(--light);overflow:hidden}
 .phone-input .prefix{padding:10px 10px;font-size:13px;color:var(--text);font-size:14px;font-weight:600;display:flex;align-items:center;gap:4px;border-right:1px solid var(--border);flex-shrink:0}
 .phone-input input{flex:1;padding:10px 10px;border:none;background:transparent;color:var(--text);font-size:13px;outline:none;font-family:inherit}
-.phone-input:focus-within{border-color:#F97316}
 .divider{display:flex;align-items:center;gap:12px;margin:24px 0;font-size:12px;color:var(--muted)}.divider::before,.divider::after{content:'';flex:1;height:1px;background:var(--border)}
 .social-btns{display:flex;gap:10px}
 .social-btn{flex:1;padding:14px;border-radius:14px;border:1px solid var(--border);background:var(--card);color:var(--text);font-size:20px;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:8px;font-family:inherit;transition:all .15s}
@@ -341,9 +339,9 @@ select option{background:var(--card);color:var(--text);padding:10px 14px;font-si
 .setting-group{margin:0 20px 16px}.setting-group h4,.setting-group .setting-label{font-size:11px;font-weight:600;color:var(--muted);text-transform:uppercase;letter-spacing:.5px;margin-bottom:8px;padding-left:4px}
 .setting-item{transition:background .15s,transform .1s;display:flex;align-items:center;gap:12px;padding:13px 14px;background:var(--card);border:1px solid var(--border);border-radius:14px;margin-bottom:6px}
 .setting-item .si-i{font-size:18px}.setting-item .si-t{flex:1;font-size:14px;font-weight:500;color:var(--text)}.setting-item .si-v{font-size:12px;color:var(--muted)}
-.toggle{width:44px;height:24px;border-radius:12px;background:var(--border);position:relative;cursor:pointer;transition:background .2s}
+.toggle{width:44px;height:24px;border-radius:12px;background:var(--border);position:relative;cursor:pointer;transition:background .25s cubic-bezier(.4,0,.2,1)}
 .toggle.on{background:#F97316}
-.toggle::after{content:'';position:absolute;top:2px;left:2px;width:20px;height:20px;border-radius:50%;background:var(--card);transition:transform .2s;box-shadow:0 1px 4px rgba(0,0,0,.15)}
+.toggle::after{content:'';position:absolute;top:2px;left:2px;width:20px;height:20px;border-radius:50%;background:var(--card);transition:transform .25s cubic-bezier(.4,0,.2,1);box-shadow:0 1px 4px rgba(0,0,0,.15)}
 .toggle.on::after{transform:translateX(20px)}
 
 /* FAQ */
@@ -642,10 +640,7 @@ button:active{transform:scale(.97)}
 .notif-badge{animation:badgePop .3s ease}
 
 /* Smooth toggle switch */
-.toggle{width:44px;height:24px;border-radius:12px;background:var(--border);position:relative;cursor:pointer;transition:background .25s cubic-bezier(.4,0,.2,1)}
-.toggle>div{width:20px;height:20px;border-radius:10px;background:#fff;position:absolute;top:2px;left:2px;transition:transform .25s cubic-bezier(.4,0,.2,1);box-shadow:0 1px 3px rgba(0,0,0,.15)}
-.toggle.on{background:#F97316}
-.toggle.on>div{transform:translateX(20px)}
+
 
 /* Wallet card shimmer */
 @keyframes walletShimmer{0%{background-position:-200% 0}100%{background-position:200% 0}}
