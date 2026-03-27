@@ -107,8 +107,8 @@ function DrDeliveryScr({delivery:dl,go,onBack}){
     </div>}
 
     {/* Failure modal */}
-    {showFail&&!failDone&&<div onClick={()=>setShowFail(false)} style={{position:"fixed",inset:0,background:"rgba(0,0,0,.45)",zIndex:150,display:"flex",alignItems:"center",justifyContent:"center",padding:16,animation:"fadeInFast .2s ease"}}>
-      <div onClick={e=>e.stopPropagation()} style={{width:"100%",maxWidth:360,background:"var(--card)",borderRadius:20,padding:20,maxHeight:"85vh",overflowY:"auto",animation:"scaleIn .25s cubic-bezier(.4,0,.2,1)"}}>
+    {showFail&&!failDone&&<div onClick={()=>setShowFail(false)} style={{position:"fixed",inset:0,background:"rgba(0,0,0,.45)",zIndex:9999,display:"flex",alignItems:"flex-end",justifyContent:"center",animation:"fadeInFast .2s ease"}}>
+      <div onClick={e=>e.stopPropagation()} style={{width:"100%",maxWidth:500,background:"var(--card)",borderRadius:"20px 20px 0 0",padding:20,maxHeight:"90vh",overflowY:"auto",animation:"slideUp .3s cubic-bezier(.4,0,.2,1)"}}>
         <div style={{textAlign:"center",marginBottom:14}}>
           <div style={{fontSize:32,marginBottom:6}}>❌</div>
           <h3 style={{fontSize:16,fontWeight:700}}>Signaler un problème</h3>
