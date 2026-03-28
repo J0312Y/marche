@@ -103,7 +103,7 @@ select option{background:var(--card);color:var(--text);padding:10px 14px;font-si
 /* Product grid & cards */
 .pgrid{display:grid;grid-template-columns:1fr 1fr;gap:8px;padding:0 16px 20px}
 .pcard{background:var(--card);border:1px solid var(--border);border-radius:14px;overflow:hidden;cursor:pointer;transition:all .2s}.pcard:hover{transform:translateY(-2px);box-shadow:0 8px 24px rgba(0,0,0,.06)}
-.pimg{height:120px;background:var(--light);display:flex;align-items:center;justify-content:center;position:relative}.pimg .pe{font-size:52px}
+.pimg{height:120px;background:var(--light);display:flex;align-items:center;justify-content:center;position:relative;overflow:hidden}.pimg .pe{font-size:52px}
 .pimg .badge{position:absolute;top:8px;left:8px;padding:4px 8px;border-radius:6px;font-size:10px;font-weight:700;color:#fff;background:#EF4444;z-index:3}
 .pimg .tag{position:absolute;top:8px;right:8px;padding:4px 8px;border-radius:6px;font-size:10px;font-weight:600;color:#F97316;background:rgba(249,115,22,0.1);cursor:pointer;transition:all .15s;z-index:3}.pimg .tag:active{transform:scale(.95)}
 .pimg .fav{position:absolute;bottom:8px;right:8px;width:32px;height:32px;background:var(--card);border-radius:50%;display:flex;align-items:center;justify-content:center;box-shadow:0 2px 8px rgba(0,0,0,.08);font-size:14px;cursor:pointer;z-index:3}
