@@ -1,4 +1,5 @@
 import InvoiceView from "../../components/InvoiceView";
+import CreditNoteView from "../../components/CreditNoteView";
 import { useState } from "react";
 import Img from "../../components/Img";
 import { fmt } from "../../utils/helpers";
@@ -6,6 +7,7 @@ import toast from "../../utils/toast";
 
 function VOrderDetailScr({order:o,onBack,go}){
   const [showInvoice,setShowInvoice]=useState(false);
+  const [showCreditNote,setShowCreditNote]=useState(false);
   const [status,setStatus]=useState(o.status);
   const [showRefuse,setShowRefuse]=useState(false);
   const [cashStatus,setCashStatus]=useState(null); // null | "received" | "pending" | "dispute"
@@ -20,7 +22,8 @@ function VOrderDetailScr({order:o,onBack,go}){
       <p style={{fontSize:12,color:"var(--muted)",marginTop:4}}>Le client sera notifié et remboursé.</p>
       <button className="btn-primary" style={{marginTop:20}} onClick={onBack}>← Retour</button>
       <button onClick={()=>setShowInvoice(true)} style={{padding:14,borderRadius:14,border:"1px solid var(--border)",background:"var(--card)",fontSize:14,fontWeight:600,cursor:"pointer",fontFamily:"inherit",color:"var(--text)",marginTop:8}}>🧾 Générer le reçu</button>
-      {showInvoice&&<InvoiceView order={{id:o?.ref||"LMK-0891",client:o?.client||"Marie Koumba",vendor:o?.vendor||"Mode Afrique",amount:o?.total||25000,items:o?.items?.map(it=>({name:it.name,qty:it.qty,price:it.price}))||[{name:"Article",qty:1,price:o?.total||25000}],delivery:1500,payment:o?.payment||"airtel",status:o?.status||"new"}} onClose={()=>setShowInvoice(false)}/>}
+      {showCreditNote&&<CreditNoteView order={{id:o?.ref||"CMD-0891",client:o?.client||"Marie Koumba",vendor:"Ma Boutique",amount:o?.total||25000,items:o?.items?.map(it=>({name:it.name,qty:it.qty,price:it.price}))||[{name:"Article",qty:1,price:o?.total||25000}],delivery:1500,payment:o?.payment||"airtel",cancelReason:status==="refused"?"Refusé par le vendeur":"Annulation"}} refundMethod="wallet" onClose={()=>setShowCreditNote(false)}/>}
+    {showInvoice&&<InvoiceView order={{id:o?.ref||"LMK-0891",client:o?.client||"Marie Koumba",vendor:o?.vendor||"Mode Afrique",amount:o?.total||25000,items:o?.items?.map(it=>({name:it.name,qty:it.qty,price:it.price}))||[{name:"Article",qty:1,price:o?.total||25000}],delivery:1500,payment:o?.payment||"airtel",status:o?.status||"new"}} onClose={()=>setShowInvoice(false)}/>}
     </div>
   </div>);
 

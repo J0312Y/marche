@@ -19,6 +19,7 @@ function InvoiceView({ order, onClose }) {
   const isCancelled = status === "cancelled" || status === "cancel" || status === "Annulée";
   const isFailed = status === "failed" || status === "Échec livraison";
   const isRefunded = status === "refunded";
+  const refundMethod = o.refundMethod; // "wallet" | "momo" | null
   const isNegative = isCancelled || isFailed || isRefunded;
 
   const paymentLabel = o.payment === "cash" ? "💵 Cash à la livraison"
@@ -103,9 +104,19 @@ function InvoiceView({ order, onClose }) {
           <div style={{ display: "flex", justifyContent: "space-between", fontSize: 16, fontWeight: 800, paddingTop: 8, borderTop: "2px solid var(--border)", color: isNegative ? "var(--muted)" : "#F97316", textDecoration: isNegative ? "line-through" : "none" }}>
             <span>Total</span><span>{fmt(total)}</span>
           </div>
-          {isNegative && <div style={{ display: "flex", justifyContent: "space-between", fontSize: 14, fontWeight: 700, paddingTop: 4, color: "#EF4444" }}>
-            <span>{o.payment === "cash" ? "Non facturé" : "Remboursé"}</span>
-            <span>{o.payment === "cash" ? "0 F" : fmt(total)}</span>
+          {isNegative && <div style={{ display: "flex", justifyContent: "space-between", fontSize: 14, fontWeight: 700, paddingTop: 4, color: isRefunded ? "#10B981" : "#EF4444" }}>
+            <span>{isFailed && o.payment === "cash" ? "Non facturé" : isRefunded ? "Remboursé" : "Annulé"}</span>
+            <span>{isFailed && o.payment === "cash" ? "0 F" : fmt(total)}</span>
+          </div>}
+          {isRefunded && refundMethod && <div style={{ marginTop: 8, padding: 10, background: "rgba(16,185,129,0.06)", borderRadius: 10, border: "1px solid rgba(16,185,129,0.15)" }}>
+            <div style={{ fontSize: 12, fontWeight: 700, color: "#10B981", marginBottom: 4 }}>
+              {refundMethod === "wallet" ? "💰 Crédité sur votre wallet Lamuka" : "📱 Remboursé via Mobile Money"}
+            </div>
+            <div style={{ fontSize: 11, color: "var(--muted)" }}>
+              {refundMethod === "wallet" 
+                ? "Le montant est disponible immédiatement pour vos prochains achats."
+                : "Le remboursement sera effectué sous 24-48h sur votre numéro Mobile Money."}
+            </div>
           </div>}
         </div>
 
@@ -115,6 +126,8 @@ function InvoiceView({ order, onClose }) {
             {isNegative
               ? isCancelled ? "Cette commande a été annulée. Aucun montant n'a été débité."
               : isFailed && o.payment === "cash" ? "Aucun paiement effectué. Le colis est retourné au vendeur."
+              : isRefunded && refundMethod === "wallet" ? "Montant crédité sur votre wallet Lamuka. Utilisez-le pour vos prochains achats."
+              : isRefunded ? "Remboursement envoyé via Mobile Money sous 24-48h."
               : isFailed ? "Le montant sera remboursé sous 24-48h."
               : "Le remboursement a été effectué."
               : o.payment === "cash" && status !== "delivered" ? "Paiement en espèces au livreur à la réception de votre commande." : "Merci pour votre achat sur Lamuka Market !"}

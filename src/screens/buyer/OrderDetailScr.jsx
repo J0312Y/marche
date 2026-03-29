@@ -1,4 +1,5 @@
 import InvoiceView from "../../components/InvoiceView";
+import CreditNoteView from "../../components/CreditNoteView";
 import { useState } from "react";
 import toast from "../../utils/toast";
 
@@ -7,7 +8,10 @@ const STEPS=["Confirmée","En préparation","En livraison","Livrée"];
 function OrderDetailScr({order:o,onBack,go}){
   const [cancelled,setCancelled]=useState(false);
   const [showInvoice,setShowInvoice]=useState(false);
+  const [showCreditNote,setShowCreditNote]=useState(false);
   const [showCancel,setShowCancel]=useState(false);
+  const [refundMethod,setRefundMethod]=useState(null);
+  const [refundPhone,setRefundPhone]=useState("");
   const status=cancelled?"Annulée":(o.status||"");
   const sc=cancelled?"cancel":(o.sc||"");
 
@@ -72,23 +76,45 @@ function OrderDetailScr({order:o,onBack,go}){
       {sc==="ship"&&<button style={{padding:14,borderRadius:14,border:"1px solid var(--border)",background:"var(--card)",fontSize:14,fontWeight:600,cursor:"pointer",fontFamily:"inherit"}} onClick={()=>go("chatDriver")}>💬 Contacter le livreur</button>}
       {sc==="done"&&!cancelled&&<button onClick={()=>go("returnOrder",o)} style={{padding:14,borderRadius:14,border:"1px solid var(--border)",background:"var(--card)",fontSize:14,fontWeight:600,cursor:"pointer",fontFamily:"inherit",color:"var(--text)"}}>↩️ Retour / Remboursement</button>}
       {sc==="done"&&!cancelled&&<button onClick={()=>go("rateDriver",{name:"Patrick Moukala"})} style={{padding:14,borderRadius:14,border:"none",background:"#F59E0B",color:"#fff",fontSize:14,fontWeight:600,cursor:"pointer",fontFamily:"inherit"}}>⭐ Évaluer le livreur</button>}
-      <button onClick={()=>setShowInvoice(true)} style={{padding:14,borderRadius:14,border:"1px solid var(--border)",background:"var(--card)",fontSize:14,fontWeight:600,cursor:"pointer",fontFamily:"inherit",color:"var(--text)"}}>🧾 Voir le reçu</button>
-      {showInvoice&&<InvoiceView order={{id:o.ref,client:"Joeldy Tsina",vendor:o.vendor||"Lamuka Market",amount:parseInt(String(o.total).replace(/\s/g,""))||0,items:o.items?.map(it=>{const parts=it.split(" x");const name=parts[0];const qty=parts[1]?parseInt(parts[1]):1;return{name,qty,price:Math.round((parseInt(String(o.total).replace(/\s/g,""))||0)/o.items.length)}})||[{name:"Article",qty:1,price:parseInt(String(o.total).replace(/\s/g,""))||0}],delivery:1500,payment:o.payment||"airtel",status:o.sc==="cancel"?"cancelled":o.sc==="fail"?"failed":o.sc==="done"?"delivered":"preparing"}} onClose={()=>setShowInvoice(false)}/>}
+      <button onClick={()=>setShowInvoice(true)} style={{padding:14,borderRadius:14,border:"1px solid var(--border)",background:"var(--card)",fontSize:14,fontWeight:600,cursor:"pointer",fontFamily:"inherit",color:"var(--text)"}}>🧾 Voir le reçu original</button>
+      {cancelled&&<button onClick={()=>setShowCreditNote(true)} style={{padding:14,borderRadius:14,border:"1px solid rgba(16,185,129,0.3)",background:"rgba(16,185,129,0.04)",fontSize:14,fontWeight:600,cursor:"pointer",fontFamily:"inherit",color:"#10B981"}}>💸 Voir l'avoir (remboursement)</button>}
+      {showInvoice&&<InvoiceView order={{id:o.ref,client:"Joeldy Tsina",vendor:o.vendor||"Lamuka Market",amount:parseInt(String(o.total).replace(/\s/g,""))||0,items:o.items?.map(it=>{const parts=it.split(" x");const name=parts[0];const qty=parts[1]?parseInt(parts[1]):1;return{name,qty,price:Math.round((parseInt(String(o.total).replace(/\s/g,""))||0)/o.items.length)}})||[{name:"Article",qty:1,price:parseInt(String(o.total).replace(/\s/g,""))||0}],delivery:1500,payment:o.payment||"airtel",status:o.sc==="cancel"?"cancelled":o.sc==="fail"?"failed":o.sc==="done"?"delivered":"preparing",refundMethod:refundMethod||null}} onClose={()=>setShowInvoice(false)}/>}
+      {showCreditNote&&<CreditNoteView order={{id:o.ref,client:"Joeldy Tsina",vendor:o.vendor||"Lamuka Market",amount:parseInt(String(o.total).replace(/\s/g,""))||0,items:o.items?.map(it=>{const parts=it.split(" x");const name=parts[0];const qty=parts[1]?parseInt(parts[1]):1;return{name,qty,price:Math.round((parseInt(String(o.total).replace(/\s/g,""))||0)/o.items.length)}})||[{name:"Article",qty:1,price:parseInt(String(o.total).replace(/\s/g,""))||0}],delivery:1500,payment:o.payment||"airtel",cancelReason:"Annulation client"}} refundMethod={refundMethod} onClose={()=>setShowCreditNote(false)}/>}
       {canCancel&&<button onClick={()=>setShowCancel(true)} style={{padding:14,borderRadius:14,border:"1px solid rgba(239,68,68,0.3)",background:"transparent",color:"#EF4444",fontSize:14,fontWeight:600,cursor:"pointer",fontFamily:"inherit"}}>✕ Annuler la commande</button>}
     </div>
 
     {/* Cancel modal */}
-    {showCancel&&<div style={{position:"fixed",inset:0,background:"rgba(0,0,0,.4)",zIndex:100,display:"flex",alignItems:"center",justifyContent:"center",padding:20}} onClick={()=>setShowCancel(false)}>
-      <div style={{background:"var(--card)",borderRadius:20,padding:24,maxWidth:340,width:"100%",textAlign:"center"}} onClick={e=>e.stopPropagation()}>
-        <div style={{fontSize:40,marginBottom:10}}>⚠️</div>
-        <h3 style={{fontSize:17,fontWeight:700,marginBottom:6}}>Annuler cette commande ?</h3>
-        <p style={{fontSize:13,color:"var(--muted)",marginBottom:6,lineHeight:1.5}}>
-          {o.ref} — {o.total} FCFA
-        </p>
-        <p style={{fontSize:12,color:"var(--muted)",marginBottom:14}}>Le remboursement sera effectué sous 24-48h sur votre Mobile Money.</p>
-        <div style={{display:"flex",gap:10}}>
-          <button onClick={()=>setShowCancel(false)} style={{flex:1,padding:12,borderRadius:12,border:"1px solid var(--border)",background:"var(--card)",fontSize:13,fontWeight:600,cursor:"pointer",fontFamily:"inherit"}}>Non</button>
-          <button onClick={()=>{setCancelled(true);setShowCancel(false);toast.success("Commande annulée avec succès 📦")}} style={{flex:1,padding:12,borderRadius:12,border:"none",background:"#EF4444",color:"#fff",fontSize:13,fontWeight:700,cursor:"pointer",fontFamily:"inherit"}}>Oui, annuler</button>
+    {showCancel&&<div style={{position:"fixed",inset:0,background:"rgba(0,0,0,.4)",zIndex:100,display:"flex",alignItems:"flex-end",justifyContent:"center",animation:"fadeInFast .2s ease"}} onClick={()=>setShowCancel(false)}>
+      <div style={{background:"var(--card)",borderRadius:"20px 20px 0 0",padding:24,width:"100%",maxWidth:500,maxHeight:"85vh",overflowY:"auto",animation:"slideUp .3s cubic-bezier(.4,0,.2,1)"}} onClick={e=>e.stopPropagation()}>
+        <div style={{textAlign:"center"}}>
+          <div style={{fontSize:40,marginBottom:10}}>⚠️</div>
+          <h3 style={{fontSize:17,fontWeight:700,marginBottom:6}}>Annuler cette commande ?</h3>
+          <p style={{fontSize:13,color:"var(--muted)",marginBottom:4,lineHeight:1.5}}>{o.ref} — {o.total} FCFA</p>
+        </div>
+
+        <div style={{fontSize:14,fontWeight:700,marginTop:14,marginBottom:10}}>Mode de remboursement</div>
+        {[["wallet","💰","Wallet Lamuka","Crédit instantané — utilisez-le pour vos prochains achats"],["momo","📱","Mobile Money","Remboursement sous 24-48h sur votre numéro"]].map(([k,ic,n,desc])=>(
+          <div key={k} onClick={()=>setRefundMethod(k)} style={{display:"flex",alignItems:"center",gap:12,padding:14,borderRadius:14,border:refundMethod===k?"2px solid #F97316":"1px solid var(--border)",background:refundMethod===k?"rgba(249,115,22,0.04)":"var(--card)",marginBottom:8,cursor:"pointer"}}>
+            <div style={{width:40,height:40,borderRadius:12,background:refundMethod===k?"rgba(249,115,22,0.08)":"var(--light)",display:"flex",alignItems:"center",justifyContent:"center",fontSize:20}}>{ic}</div>
+            <div style={{flex:1}}>
+              <div style={{fontSize:14,fontWeight:refundMethod===k?700:500}}>{n}</div>
+              <div style={{fontSize:11,color:"var(--muted)",marginTop:1}}>{desc}</div>
+            </div>
+            {refundMethod===k&&<span style={{color:"#F97316",fontWeight:700,fontSize:16}}>✓</span>}
+          </div>
+        ))}
+
+        {refundMethod==="momo"&&<div style={{marginTop:4}}>
+          <div style={{fontSize:13,fontWeight:600,marginBottom:6}}>Numéro de remboursement</div>
+          <div style={{display:"flex",alignItems:"center",gap:8,padding:"10px 12px",border:"1px solid var(--border)",borderRadius:12,background:"var(--light)"}}>
+            <span style={{fontSize:13,fontWeight:600,flexShrink:0}}>+242</span>
+            <input value={refundPhone} onChange={e=>{const v=e.target.value.replace(/[^0-9]/g,"").slice(0,9);setRefundPhone(v)}} placeholder="06X XXX XXX" type="tel" maxLength={11} style={{flex:1,border:"none",background:"transparent",fontSize:14,outline:"none",fontFamily:"inherit",color:"var(--text)"}}/>
+          </div>
+        </div>}
+
+        <div style={{display:"flex",gap:10,marginTop:16}}>
+          <button onClick={()=>{setShowCancel(false);setRefundMethod(null)}} style={{flex:1,padding:12,borderRadius:12,border:"1px solid var(--border)",background:"var(--card)",fontSize:13,fontWeight:600,cursor:"pointer",fontFamily:"inherit",color:"var(--text)"}}>Non</button>
+          <button disabled={!refundMethod||(refundMethod==="momo"&&refundPhone.replace(/\s/g,"").length!==9)} onClick={()=>{setCancelled(true);setShowCancel(false);toast.success(refundMethod==="wallet"?"💰 "+o.total+" FCFA crédité sur votre wallet":"📱 Remboursement envoyé sous 24-48h")}} style={{flex:1,padding:12,borderRadius:12,border:"none",background:refundMethod?"#EF4444":"var(--border)",color:refundMethod?"#fff":"var(--muted)",fontSize:13,fontWeight:700,cursor:refundMethod?"pointer":"not-allowed",fontFamily:"inherit"}}>Annuler et rembourser</button>
         </div>
       </div>
     </div>}
