@@ -69,11 +69,14 @@ function InvoiceView({ order, onClose }) {
         {/* Info */}
         <div style={{ padding: "12px 20px", fontSize: 12, color: "var(--muted)" }}>
           {[["Date", date], ["Client", o.client || "Joeldy Tsina"], ["Vendeur", o.vendor || "Mode Afrique"], ["Paiement", paymentLabel],
-            ...(isNegative ? [["Statut", isCancelled ? "🚫 Annulée" : isFailed ? "❌ Échec livraison" : "💸 Remboursé"]] : [["Statut", "✅ Payé"]])
+            ...(isNegative ? [["Statut", isCancelled ? "🚫 Annulée" : isFailed ? "❌ Échec livraison" : "💸 Remboursé"]]
+            : o.payment === "cash" && status !== "delivered" ? [["Statut", "⏳ Paiement à la livraison"]]
+            : o.payment === "cash" && status === "delivered" ? [["Statut", "✅ Payé en espèces"]]
+            : [["Statut", "✅ Payé"]])
           ].map(([l, v]) => (
             <div key={l} style={{ display: "flex", justifyContent: "space-between", marginBottom: 4 }}>
               <span>{l}</span>
-              <b style={{ color: l === "Statut" ? (isNegative ? "#EF4444" : "#10B981") : l === "Paiement" && o.payment === "cash" ? "#F59E0B" : "var(--text)" }}>{v}</b>
+              <b style={{ color: l === "Statut" ? (isNegative ? "#EF4444" : v.includes("⏳") ? "#F59E0B" : "#10B981") : l === "Paiement" && o.payment === "cash" ? "#F59E0B" : "var(--text)" }}>{v}</b>
             </div>
           ))}
         </div>
@@ -114,7 +117,7 @@ function InvoiceView({ order, onClose }) {
               : isFailed && o.payment === "cash" ? "Aucun paiement effectué. Le colis est retourné au vendeur."
               : isFailed ? "Le montant sera remboursé sous 24-48h."
               : "Le remboursement a été effectué."
-              : "Merci pour votre achat sur Lamuka Market !"}
+              : o.payment === "cash" && status !== "delivered" ? "Paiement en espèces au livreur à la réception de votre commande." : "Merci pour votre achat sur Lamuka Market !"}
           </p>
           <p style={{ fontSize: 9, color: "var(--muted)", opacity: .6 }}>www.lamuka.market · support@lamuka.market · +242 064 663 469</p>
         </div>
