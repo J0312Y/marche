@@ -142,15 +142,16 @@ function RoleRegScr({onBack,onDone,forceRole,onPending}){
 
     <p style={{fontSize:11,color:"var(--muted)",lineHeight:1.5,marginTop:8}}>📱 Vous recevrez un SMS au <b>+242 {rolePhone.slice(0,3)} XXX {rolePhone.slice(6)}</b> dès validation.<br/>Vous pouvez continuer à acheter en attendant.</p>
 
-    <button className="btn-primary" style={{maxWidth:300,margin:"16px auto 0"}} onClick={()=>{toast.success("Demande enregistrée ! Vous serez notifié sous 24-48h 📩");
-      setTimeout(()=>triggerPush("📩 Votre demande de "+(role==="vendor"?"commerçant":"livreur")+" est en cours de vérification. Réponse sous 24-48h."),3000);
-      if(onPending) onPending(role);
-      // ── SIMULATION: auto-approbation après 60s (à retirer en production) ──
-      setTimeout(()=>{
-        triggerPush("🎉 Félicitations ! Votre demande de "+(role==="vendor"?"commerçant":"livreur")+" a été approuvée ! Accédez à votre espace dans le Profil.");
-        if(onDone) onDone(role, role==="vendor"?plan:"driver");
-      },60000);
-      onBack()}}>↩ Retour au marketplace</button>
+    <div style={{maxWidth:300,margin:"16px auto 0",display:"flex",flexDirection:"column",gap:8}}>
+      <button className="btn-primary" onClick={()=>{toast.success("Demande enregistrée ! Vous serez notifié sous 24-48h 📩");
+        setTimeout(()=>triggerPush("📩 Votre demande de "+(role==="vendor"?"commerçant":"livreur")+" est en cours de vérification. Réponse sous 24-48h."),3000);
+        if(onPending) onPending(role);
+        setTimeout(()=>{
+          triggerPush("🎉 Félicitations ! Votre demande de "+(role==="vendor"?"commerçant":"livreur")+" a été approuvée ! Accédez à votre espace dans le Profil.");
+          if(onDone) onDone(role, role==="vendor"?plan:"driver");
+        },60000);
+        onBack()}}>↩ Retour au marketplace</button>
+    </div>
   </div></div>);
 
   // Role selection

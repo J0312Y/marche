@@ -54,11 +54,11 @@ function ProfileScr({go,userRole,vendorPlan,vendorStatus,driverStatus,onLogout,o
     {/* ── Pending status ── */}
 
     {/* ── CTA vendeur/livreur ── */}
-    {vendorStatus==="pending"&&<div style={{margin:"0 20px 10px",padding:14,background:"rgba(245,158,11,0.06)",border:"1px solid rgba(245,158,11,0.2)",borderRadius:16}}>
-      <div style={{display:"flex",alignItems:"center",gap:10}}><span style={{fontSize:24}}>⏳</span><div><div style={{fontSize:14,fontWeight:700,color:"#F59E0B"}}>Demande commerçant en attente</div><div style={{fontSize:12,color:"var(--muted)",marginTop:2}}>Vérification sous 24-48h</div></div></div>
+    {vendorStatus==="pending"&&<div style={{margin:"0 20px 10px",padding:14,background:"rgba(245,158,11,0.06)",border:"1px solid rgba(245,158,11,0.2)",borderRadius:16,cursor:"pointer"}} onClick={()=>go("regStatus")}>
+      <div style={{display:"flex",alignItems:"center",gap:10}}><span style={{fontSize:24}}>⏳</span><div style={{flex:1}}><div style={{fontSize:14,fontWeight:700,color:"#F59E0B"}}>Demande commerçant en attente</div><div style={{fontSize:12,color:"var(--muted)",marginTop:2}}>Vérification sous 24-48h</div></div><span style={{color:"#F59E0B",fontSize:12,fontWeight:600}}>Voir statut →</span></div>
     </div>}
-    {driverStatus==="pending"&&<div style={{margin:"0 20px 10px",padding:14,background:"rgba(245,158,11,0.06)",border:"1px solid rgba(245,158,11,0.2)",borderRadius:16}}>
-      <div style={{display:"flex",alignItems:"center",gap:10}}><span style={{fontSize:24}}>⏳</span><div><div style={{fontSize:14,fontWeight:700,color:"#F59E0B"}}>Demande livreur en attente</div><div style={{fontSize:12,color:"var(--muted)",marginTop:2}}>Vérification sous 24-48h</div></div></div>
+    {driverStatus==="pending"&&<div style={{margin:"0 20px 10px",padding:14,background:"rgba(245,158,11,0.06)",border:"1px solid rgba(245,158,11,0.2)",borderRadius:16,cursor:"pointer"}} onClick={()=>go("regStatus")}>
+      <div style={{display:"flex",alignItems:"center",gap:10}}><span style={{fontSize:24}}>⏳</span><div style={{flex:1}}><div style={{fontSize:14,fontWeight:700,color:"#F59E0B"}}>Demande livreur en attente</div><div style={{fontSize:12,color:"var(--muted)",marginTop:2}}>Vérification sous 24-48h</div></div><span style={{color:"#F59E0B",fontSize:12,fontWeight:600}}>Voir statut →</span></div>
     </div>}
     {vendorStatus!=="pending"&&driverStatus!=="pending"&&!hasVendor&&!hasDriver&&<div onClick={()=>go("roleReg")} style={{margin:"0 20px 14px",padding:16,background:"linear-gradient(135deg,#1a1a2e,#16213e)",borderRadius:18,display:"flex",alignItems:"center",gap:14,cursor:"pointer",boxShadow:"0 4px 16px rgba(0,0,0,.12)"}}>
       <div style={{width:48,height:48,borderRadius:14,background:"linear-gradient(135deg,#F97316,#FB923C)",display:"flex",alignItems:"center",justifyContent:"center",fontSize:24,flexShrink:0}}>🚀</div>

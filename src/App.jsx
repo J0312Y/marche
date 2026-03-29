@@ -14,7 +14,7 @@ import DriverScreens from "./modes/DriverScreens";
 
 function AppInner() {
   const {
-    authStep, setAuthStep, socialProvider, setSocialProvider,
+    authStep, setAuthStep, socialProvider, setSocialProvider, isNewUser, setIsNewUser,
     mode, tab, setTab, vTab, setVTab, dTab, setDTab,
     screen, setScreen, setHistory, go,
     cart, cartCount, hasVendor, hasDriver,
@@ -72,8 +72,8 @@ function AppInner() {
           {auth === -1 ? <LoadingSpinner />
             : auth === 0 ? <SplashScr onDone={() => setAuthStep('onboarding')} />
             : auth === 1 ? <OnboardingScr onDone={() => setAuthStep('login')} />
-            : auth === 2 ? <LoginScr onDone={() => setAuthStep('otp')} onSocial={(p) => { setSocialProvider(p); setAuthStep('otp'); }} />
-            : auth === 3 ? <OTPScr provider={socialProvider} onDone={() => setAuthStep('profile')} />
+            : auth === 2 ? <LoginScr onDone={(signup) => { setIsNewUser(!!signup); setAuthStep('otp'); }} onSocial={(p, signup) => { setSocialProvider(p); setIsNewUser(!!signup); setAuthStep('otp'); }} />
+            : auth === 3 ? <OTPScr provider={socialProvider} onDone={() => setAuthStep(isNewUser ? 'profile' : 'ready')} />
             : auth === 4 ? <ProfileCompletionScr provider={socialProvider} setUserName={setUserName} onDone={() => setAuthStep('ready')} />
             : <>
               {renderScreen()}

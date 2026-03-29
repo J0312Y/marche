@@ -15,6 +15,7 @@ export function AppProvider({ children }) {
   const [user, setUser] = useState(null);
   const [authStep, setAuthStep] = useState(isAuthenticated() ? 'loading' : 'splash');
   const [socialProvider, setSocialProvider] = useState(null);
+  const [isNewUser, setIsNewUser] = useState(false);
 
   // ── Navigation ──
   const [mode, setMode] = useState('buyer');
@@ -243,7 +244,7 @@ export function AppProvider({ children }) {
   // ══════════════════════════════════
 
   const value = {
-    user, authStep, setAuthStep, socialProvider, setSocialProvider,
+    user, authStep, setAuthStep, socialProvider, setSocialProvider, isNewUser, setIsNewUser,
     login, completeProfile, logout,
     mode, setMode: switchMode, tab, setTab, vTab, setVTab, dTab, setDTab,
     screen, setScreen, history, setHistory, go, pop, goHome, switchTo: switchMode,
@@ -268,7 +269,7 @@ export function useApp() {
   if (!ctx) {
     console.warn('useApp: context not available (hot reload?)');
     return {
-      user:null,authStep:'ready',setAuthStep:()=>{},socialProvider:null,setSocialProvider:()=>{},
+      user:null,authStep:'ready',setAuthStep:()=>{},socialProvider:null,setSocialProvider:()=>{},isNewUser:false,setIsNewUser:()=>{},
       login:()=>{},completeProfile:()=>{},logout:()=>{},
       mode:'buyer',setMode:()=>{},tab:0,setTab:()=>{},vTab:0,setVTab:()=>{},dTab:0,setDTab:()=>{},
       screen:null,setScreen:()=>{},history:[],setHistory:()=>{},go:()=>{},pop:()=>{},goHome:()=>{},switchTo:()=>{},
