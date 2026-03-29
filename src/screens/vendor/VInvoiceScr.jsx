@@ -34,7 +34,7 @@ function VInvoiceScr({onBack}){
       </div>
     ))}
 
-    {viewInvoice&&<InvoiceView order={{id:viewInvoice.ref,client:viewInvoice.client,vendor:"Ma Boutique",amount:viewInvoice.total,items:viewInvoice.items,delivery:1500,payment:viewInvoice.payment}} onClose={()=>setViewInvoice(null)}/>}
+    {viewInvoice&&<InvoiceView order={{id:viewInvoice.ref,client:viewInvoice.client,vendor:"Ma Boutique",amount:viewInvoice.total,items:viewInvoice.items,delivery:1500,payment:viewInvoice.payment,status:viewInvoice.status||"delivered"}} onClose={()=>setViewInvoice(null)}/>}
   </div>);
 }
 export default VInvoiceScr;
