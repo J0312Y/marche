@@ -6,6 +6,7 @@ import { fmt, disc, getVendorPromo } from "../../utils/helpers";
 import { useApp } from "../../context/AppContext";
 import { shareProduct } from "../../utils/share";
 import toast from "../../utils/toast";
+import { P } from "../../data";
 
 // Generate specs based on product type
 const getSpecs=(p)=>{
@@ -49,6 +50,17 @@ const getSpecs=(p)=>{
 function DetailScr({product:p,onBack,onAddCart,go,favs,toggleFav,isFav}){
   const [qty,setQty]=useState(1);
   const [cartAnim,setCartAnim]=useState(false);
+  const [photoIdx,setPhotoIdx]=useState(0);
+  const [zoomOpen,setZoomOpen]=useState(false);
+  const allPhotos=p.photos||[p.photo];
+
+  // Save to recently viewed
+  useEffect(()=>{
+    const recent=JSON.parse(localStorage.getItem("lk-recent")||"[]");
+    const filtered=recent.filter(r=>r.id!==p.id);
+    filtered.unshift({id:p.id,name:p.name,price:p.price,img:p.img,photo:p.photo,vendor:p.vendor,va:p.va,rating:p.rating});
+    localStorage.setItem("lk-recent",JSON.stringify(filtered.slice(0,20)));
+  },[p.id]);
   const [selSize,setSelSize]=useState(p.sizes?.[0]||null);
   const [selColor,setSelColor]=useState(p.colors?.[0]||null);
   const [selVariant,setSelVariant]=useState(p.variants?.[0]||null);
@@ -74,14 +86,19 @@ function DetailScr({product:p,onBack,onAddCart,go,favs,toggleFav,isFav}){
   return(<>
     <div className="scr">
       {/* Hero image */}
-      <div className="det-img" onClick={()=>go("gallery",p)}>
-        <Img src={p.photos?.[0]||p.photo} emoji={p.img} style={{width:"100%",height:"100%"}} fit="cover"/>
+      <div className="det-img" onClick={()=>setZoomOpen(true)} style={{position:"relative",overflow:"hidden"}}>
+        <Img src={allPhotos[photoIdx]||p.photo} emoji={p.img} style={{width:"100%",height:"100%"}} fit="cover"/>
+        {allPhotos.length>1&&<div style={{position:"absolute",bottom:50,left:"50%",transform:"translateX(-50%)",display:"flex",gap:6,zIndex:5}}>
+          {allPhotos.map((_,i)=><div key={i} onClick={e=>{e.stopPropagation();setPhotoIdx(i)}} style={{width:photoIdx===i?20:8,height:8,borderRadius:4,background:photoIdx===i?"#F97316":"rgba(255,255,255,.5)",cursor:"pointer",transition:"all .2s"}}/>)}
+        </div>}
+        {allPhotos.length>1&&photoIdx>0&&<div onClick={e=>{e.stopPropagation();setPhotoIdx(photoIdx-1)}} style={{position:"absolute",left:8,top:"50%",transform:"translateY(-50%)",width:32,height:32,borderRadius:16,background:"rgba(0,0,0,.3)",color:"#fff",display:"flex",alignItems:"center",justifyContent:"center",cursor:"pointer",zIndex:5,fontSize:14}}>‹</div>}
+        {allPhotos.length>1&&photoIdx<allPhotos.length-1&&<div onClick={e=>{e.stopPropagation();setPhotoIdx(photoIdx+1)}} style={{position:"absolute",right:8,top:"50%",transform:"translateY(-50%)",width:32,height:32,borderRadius:16,background:"rgba(0,0,0,.3)",color:"#fff",display:"flex",alignItems:"center",justifyContent:"center",cursor:"pointer",zIndex:5,fontSize:14}}>›</div>}
         <div className="det-top">
           <BackButton onClick={e=>{e.stopPropagation();onBack()}} />
           <div style={{display:"flex",gap:8}}><button onClick={e=>{e.stopPropagation();shareProduct(p)}} style={{width:40,height:40,borderRadius:14,background:"rgba(255,255,255,0.85)",backdropFilter:"blur(12px)",border:"1px solid rgba(255,255,255,0.4)",boxShadow:"0 4px 16px rgba(0,0,0,0.12)",cursor:"pointer",display:"flex",alignItems:"center",justifyContent:"center",fontSize:16}}>📤</button><FavButton active={isFav(p.id)} onClick={e=>{e.stopPropagation();toggleFav(p.id)}} /></div>
         </div>
         {disc(p)>0&&<span className="badge" style={{position:"absolute",bottom:14,left:14,zIndex:5}}>-{disc(p)}%</span>}
-        <div style={{position:"absolute",bottom:14,right:14,background:"rgba(0,0,0,.4)",color:"#fff",padding:"4px 10px",borderRadius:8,fontSize:11,fontWeight:600,zIndex:5}}>{p.photos?.length||1} photos</div>
+        <div style={{position:"absolute",bottom:14,right:14,background:"rgba(0,0,0,.4)",color:"#fff",padding:"4px 10px",borderRadius:8,fontSize:11,fontWeight:600,zIndex:5}}>{photoIdx+1}/{allPhotos.length}</div>
       </div>
 
       <div className="det-body">
@@ -308,6 +325,18 @@ function DetailScr({product:p,onBack,onAddCart,go,favs,toggleFav,isFav}){
           <button onClick={()=>{import("../../utils/share").then(m=>m.shareProduct({title:"Achat groupé — "+p.name,text:"Rejoins l'achat groupé pour "+p.name+" et obtiens -20% ! 🤝",url:"https://lamuka.market/group/"+p.id}))}} style={{flex:1,padding:12,borderRadius:12,border:"1px solid var(--border)",background:"var(--card)",fontSize:13,fontWeight:600,cursor:"pointer",fontFamily:"inherit",color:"var(--text)"}}>📤 Partager</button>
         </div>
       </div>
+    </div>}
+
+    {/* Zoom Modal */}
+    {zoomOpen&&<div onClick={()=>setZoomOpen(false)} style={{position:"fixed",inset:0,background:"rgba(0,0,0,.9)",zIndex:9999,display:"flex",flexDirection:"column",alignItems:"center",justifyContent:"center",animation:"fadeInFast .2s ease"}}>
+      <button onClick={()=>setZoomOpen(false)} style={{position:"absolute",top:16,right:16,width:40,height:40,borderRadius:20,background:"rgba(255,255,255,.15)",border:"none",color:"#fff",fontSize:20,cursor:"pointer",zIndex:10}}>✕</button>
+      <img src={allPhotos[photoIdx]||p.photo} style={{maxWidth:"95%",maxHeight:"80vh",objectFit:"contain",borderRadius:8}} alt=""/>
+      <div style={{display:"flex",gap:8,marginTop:12}}>
+        {allPhotos.map((_,i)=><div key={i} onClick={e=>{e.stopPropagation();setPhotoIdx(i)}} style={{width:48,height:48,borderRadius:8,overflow:"hidden",border:photoIdx===i?"2px solid #F97316":"2px solid rgba(255,255,255,.2)",cursor:"pointer",opacity:photoIdx===i?1:.5}}>
+          <img src={allPhotos[i]} style={{width:"100%",height:"100%",objectFit:"cover"}} alt=""/>
+        </div>)}
+      </div>
+      <div style={{color:"rgba(255,255,255,.5)",fontSize:11,marginTop:8}}>{photoIdx+1}/{allPhotos.length} · Appuyez pour fermer</div>
     </div>}
   </>);
 }

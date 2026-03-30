@@ -14,7 +14,7 @@ import {
   VendorScr, RoleRegScr, RegStatusScr, PaymentHistoryScr, RateDriverScr,
   ReferralScr, LoyaltyScr, ReturnScr, GiftCardScr, QRScanScr, ChatBotScr, MyStatsScr, BecomeSellerScr, PriceAlertScr, ImageSearchScr, GamificationScr, GroupBuyScr
 } from "../screens/buyer";
-import { SettingsScr, HelpScr, AboutScr, TermsScr, PrivacyScr } from "../screens/common";
+import { SettingsScr, HelpScr, AboutScr, TermsScr, PrivacyScr, DeliveryPolicyScr } from "../screens/common";
 
 // Redirect component — defers setState to useEffect
 function Redirect({ action }) {
@@ -72,6 +72,7 @@ export default function BuyerScreens() {
     case "addresses": return <AddressesScr onBack={back} />;
     case "settings": return <SettingsScr onBack={back} go={go} />;
     case "help": return <HelpScr onBack={back} />;
+    case "deliveryPolicy": return <DeliveryPolicyScr onBack={back} />;
     case "about": return <AboutScr onBack={back} />;
     case "terms": return <TermsScr onBack={back} />;
     case "privacy": return <PrivacyScr onBack={back} />;

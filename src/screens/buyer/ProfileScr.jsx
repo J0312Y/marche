@@ -102,6 +102,9 @@ function ProfileScr({go,userRole,vendorPlan,vendorStatus,driverStatus,onLogout,o
       <Item icon="📊" label={t("profile.stats")} onClick={()=>go("myStats")}/>
       <Item icon="🎮" label={t("profile.rewards")} info="Roue, missions" onClick={()=>go("gamification")}/>
       <Item icon="🤖" label={t("profile.assistant")} onClick={()=>go("chatBot")}/>
+      <Item icon="❓" label="Centre d'aide" info="FAQ" onClick={()=>go("help")}/>
+      <Item icon="🚚" label="Livraison & Retours" onClick={()=>go("deliveryPolicy")}/>
+      <Item icon="ℹ️" label="À propos" onClick={()=>go("about")}/>
       <Item icon="📱" label={t("profile.qr_scan")} onClick={()=>go("qrScan")}/>
 
     </Section>
