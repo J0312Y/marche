@@ -1,71 +1,226 @@
-import { useState } from "react";
+import { useState, useEffect, useRef } from "react";
 import toast from "../../utils/toast";
+import { useData } from "../../hooks";
+import Img from "../../components/Img";
+import { fmt } from "../../utils/helpers";
 
 function VLiveScr({onBack}){
-  const [live,setLive]=useState(false);
+  const { P } = useData();
+  const [step,setStep]=useState("setup"); // setup | preview | live | ended
+  const [title,setTitle]=useState("");
+  const [desc,setDesc]=useState("");
+  const [selectedProducts,setSelectedProducts]=useState([]);
+  const [pinnedProduct,setPinnedProduct]=useState(null);
   const [viewers,setViewers]=useState(0);
-  const [products,setProducts]=useState([
-    {id:1,name:"Robe Wax Moderne",price:25000,added:false},
-    {id:2,name:"Sac Cuir Artisanal",price:35000,added:false},
-    {id:3,name:"Boucles d'oreilles Or",price:8000,added:true},
-  ]);
-  const [comments]=useState([
-    {user:"Marie K.",text:"C'est magnifique ! 😍",time:"2s"},
-    {user:"Paul N.",text:"Combien le sac ?",time:"5s"},
-    {user:"Grace O.",text:"Je prends la robe !",time:"8s"},
-  ]);
+  const [hearts,setHearts]=useState(0);
+  const [duration,setDuration]=useState(0);
+  const [comments,setComments]=useState([]);
+  const [newComment,setNewComment]=useState("");
+  const [promoCode,setPromoCode]=useState("");
+  const [showPromo,setShowPromo]=useState(false);
+  const [soldItems,setSoldItems]=useState([]);
+  const timerRef=useRef(null);
 
-  const startLive=()=>{setLive(true);let v=0;const iv=setInterval(()=>{v+=Math.floor(Math.random()*3)+1;setViewers(v);if(v>50)clearInterval(iv)},1000);toast.success("🔴 Vous êtes en live !")};
+  const vendorProducts=P.slice(0,8).map(p=>({...p,selected:selectedProducts.includes(p.id)}));
+  const toggleProduct=(id)=>setSelectedProducts(p=>p.includes(id)?p.filter(x=>x!==id):[...p,id]);
 
-  return(<div className="scr" style={{padding:16,paddingBottom:20}}>
-    <div className="appbar" style={{padding:0,marginBottom:12}}><button onClick={live?()=>{setLive(false);toast.info("Live terminé")}:onBack}>←</button><h2>📺 Live Shopping</h2><div style={{width:38}}/></div>
+  const mockComments=[
+    {user:"Marie K.",text:"Bonjour ! 👋",avatar:"👩"},
+    {user:"Paul N.",text:"C'est combien le sac ?",avatar:"👨"},
+    {user:"Grace O.",text:"😍😍😍",avatar:"👩‍🦱"},
+    {user:"David T.",text:"Je prends la robe en M !",avatar:"👨‍🦲"},
+    {user:"Celine N.",text:"Vous livrez à Pointe-Noire ?",avatar:"👩‍🦰"},
+    {user:"Bruno T.",text:"Trop beau ! J'achète direct",avatar:"🧑"},
+    {user:"Anne M.",text:"Le prix est négociable ?",avatar:"👩‍🦳"},
+    {user:"Patrick M.",text:"🔥🔥🔥",avatar:"👨‍🦱"},
+  ];
 
-    {!live?<>
-      {/* Setup */}
-      <div style={{textAlign:"center",padding:"30px 0 20px"}}>
-        <div style={{fontSize:48,marginBottom:12}}>📺</div>
-        <h3 style={{fontSize:18,fontWeight:700}}>Démarrer un Live</h3>
-        <p style={{fontSize:12,color:"var(--muted)",marginTop:4,maxWidth:260,margin:"4px auto 0"}}>Vendez en direct à vos clients. Montrez vos produits, répondez aux questions en temps réel.</p>
-      </div>
+  const startLive=()=>{
+    if(selectedProducts.length===0){toast.error("Sélectionnez au moins 1 produit");return}
+    if(!title.trim()){toast.error("Ajoutez un titre pour votre live");return}
+    setStep("live");
+    let v=0;let h=0;let ci=0;
+    timerRef.current=setInterval(()=>{
+      setDuration(d=>d+1);
+      v+=Math.floor(Math.random()*5)+1;
+      h+=Math.floor(Math.random()*3);
+      setViewers(v);
+      setHearts(h);
+      if(ci<mockComments.length&&Math.random()>0.4){
+        setComments(prev=>[...prev,{...mockComments[ci],time:new Date().toLocaleTimeString("fr",{hour:"2-digit",minute:"2-digit"})}]);
+        ci++;
+      }
+      if(Math.random()>0.85&&selectedProducts.length>0){
+        const soldId=selectedProducts[Math.floor(Math.random()*selectedProducts.length)];
+        const soldP=P.find(x=>x.id===soldId);
+        if(soldP&&!soldItems.includes(soldId)){
+          setSoldItems(prev=>[...prev,soldId]);
+          toast.success("🎉 "+soldP.name+" vendu !");
+        }
+      }
+    },2000);
+    toast.success("🔴 Vous êtes en live !");
+  };
 
-      <div style={{fontSize:13,fontWeight:700,marginBottom:8}}>Produits à présenter</div>
-      {products.map(p=>(
-        <div key={p.id} style={{display:"flex",alignItems:"center",gap:10,padding:12,background:"var(--card)",border:"1px solid var(--border)",borderRadius:12,marginBottom:6}}>
-          <div className={`toggle${p.added?" on":""}`} onClick={()=>setProducts(prev=>prev.map(x=>x.id===p.id?{...x,added:!x.added}:x))}><div/></div>
-          <div style={{flex:1}}><div style={{fontSize:13,fontWeight:600}}>{p.name}</div><div style={{fontSize:11,color:"#F97316"}}>{p.price.toLocaleString("fr-FR")} F</div></div>
+  const endLive=()=>{
+    clearInterval(timerRef.current);
+    setStep("ended");
+  };
+
+  useEffect(()=>()=>clearInterval(timerRef.current),[]);
+
+  const fmtTime=(s)=>{const m=Math.floor(s/60);const ss=s%60;return String(m).padStart(2,"0")+":"+String(ss).padStart(2,"0")};
+
+  // ── SETUP ──
+  if(step==="setup")return(<div className="scr" style={{padding:16,paddingBottom:20}}>
+    <div className="appbar" style={{padding:0,marginBottom:12}}><button onClick={onBack}>←</button><h2>📺 Préparer le Live</h2><div style={{width:38}}/></div>
+
+    <div style={{textAlign:"center",padding:"16px 0"}}>
+      <div style={{width:72,height:72,borderRadius:"50%",background:"rgba(239,68,68,0.08)",display:"flex",alignItems:"center",justifyContent:"center",margin:"0 auto 10px",fontSize:32}}>📺</div>
+      <h3 style={{fontSize:18,fontWeight:700}}>Vendez en direct</h3>
+      <p style={{fontSize:12,color:"var(--muted)",marginTop:4}}>Montrez vos produits, répondez aux questions, vendez en temps réel</p>
+    </div>
+
+    {/* Title */}
+    <div className="field" style={{marginBottom:10}}><label>Titre du live <span style={{color:"#EF4444"}}>*</span></label>
+      <input value={title} onChange={e=>setTitle(e.target.value)} placeholder="Ex: Nouvelle collection Wax 🔥"/>
+    </div>
+
+    {/* Description */}
+    <div className="field" style={{marginBottom:14}}><label>Description (optionnel)</label>
+      <textarea value={desc} onChange={e=>setDesc(e.target.value)} placeholder="Décrivez ce que vous allez présenter..." rows={2} style={{resize:"none"}}/>
+    </div>
+
+    {/* Product selection */}
+    <div style={{display:"flex",justifyContent:"space-between",alignItems:"center",marginBottom:10}}>
+      <div style={{fontSize:14,fontWeight:700}}>📦 Produits à présenter</div>
+      <span style={{fontSize:12,color:"#F97316",fontWeight:600}}>{selectedProducts.length} sélectionnés</span>
+    </div>
+
+    <div style={{maxHeight:280,overflowY:"auto",marginBottom:14}}>
+      {vendorProducts.map(p=>(
+        <div key={p.id} onClick={()=>toggleProduct(p.id)} style={{display:"flex",alignItems:"center",gap:10,padding:10,background:"var(--card)",border:selectedProducts.includes(p.id)?"2px solid #F97316":"1px solid var(--border)",borderRadius:12,marginBottom:6,cursor:"pointer"}}>
+          <div style={{width:20,height:20,borderRadius:6,border:selectedProducts.includes(p.id)?"none":"2px solid var(--border)",background:selectedProducts.includes(p.id)?"#F97316":"transparent",display:"flex",alignItems:"center",justifyContent:"center",color:"#fff",fontSize:12,fontWeight:700,flexShrink:0}}>{selectedProducts.includes(p.id)&&"✓"}</div>
+          <div style={{width:40,height:40,borderRadius:10,overflow:"hidden",flexShrink:0,background:"var(--light)"}}><Img src={p.photo} emoji={p.img} style={{width:"100%",height:"100%"}} fit="cover"/></div>
+          <div style={{flex:1,minWidth:0}}>
+            <div style={{fontSize:13,fontWeight:600,overflow:"hidden",whiteSpace:"nowrap",textOverflow:"ellipsis"}}>{p.name}</div>
+            <div style={{fontSize:12,fontWeight:700,color:"#F97316"}}>{fmt(p.price)}{p.old&&<span style={{fontSize:10,color:"var(--muted)",textDecoration:"line-through",marginLeft:4}}>{fmt(p.old)}</span>}</div>
+          </div>
         </div>
       ))}
+    </div>
 
-      <button onClick={startLive} style={{width:"100%",padding:16,borderRadius:14,border:"none",background:"#EF4444",color:"#fff",fontSize:16,fontWeight:700,cursor:"pointer",fontFamily:"inherit",marginTop:16}}>🔴 Démarrer le Live</button>
-    </>:<>
-      {/* Live view */}
-      <div style={{position:"relative",height:300,background:"linear-gradient(135deg,#1a1a2e,#16213e)",borderRadius:20,overflow:"hidden",marginBottom:14}}>
-        <div style={{position:"absolute",top:12,left:12,display:"flex",gap:6}}>
-          <div style={{padding:"4px 10px",borderRadius:20,background:"#EF4444",color:"#fff",fontSize:10,fontWeight:700,display:"flex",alignItems:"center",gap:4}}>🔴 LIVE</div>
+    {/* Tips */}
+    <div style={{padding:12,background:"rgba(59,130,246,0.04)",border:"1px solid rgba(59,130,246,0.1)",borderRadius:12,marginBottom:16}}>
+      <div style={{fontSize:12,fontWeight:700,color:"#3B82F6",marginBottom:6}}>💡 Conseils pour un bon live</div>
+      <div style={{fontSize:11,color:"var(--muted)",lineHeight:1.6}}>
+        • Bonne luminosité — placez-vous face à la lumière{"\n"}
+        • Présentez les produits un par un{"\n"}
+        • Répondez aux commentaires en direct{"\n"}
+        • Lancez des promos flash pour créer l'urgence
+      </div>
+    </div>
+
+    <button onClick={startLive} disabled={selectedProducts.length===0} style={{width:"100%",padding:16,borderRadius:14,border:"none",background:selectedProducts.length>0?"#EF4444":"var(--border)",color:selectedProducts.length>0?"#fff":"var(--muted)",fontSize:16,fontWeight:700,cursor:selectedProducts.length>0?"pointer":"not-allowed",fontFamily:"inherit"}}>🔴 Démarrer le Live</button>
+  </div>);
+
+  // ── ENDED ──
+  if(step==="ended")return(<div className="scr" style={{padding:16,textAlign:"center"}}>
+    <div style={{padding:"30px 0"}}>
+      <div style={{fontSize:48,marginBottom:10}}>🎉</div>
+      <h2 style={{fontSize:22,fontWeight:700}}>Live terminé !</h2>
+      <p style={{fontSize:13,color:"var(--muted)",marginTop:6}}>{title}</p>
+
+      <div style={{display:"flex",justifyContent:"center",gap:16,margin:"20px 0",padding:16,background:"var(--light)",borderRadius:16}}>
+        <div><div style={{fontSize:22,fontWeight:800,color:"#F97316"}}>{viewers}</div><div style={{fontSize:10,color:"var(--muted)"}}>Spectateurs</div></div>
+        <div><div style={{fontSize:22,fontWeight:800,color:"#EF4444"}}>❤️ {hearts}</div><div style={{fontSize:10,color:"var(--muted)"}}>J'aime</div></div>
+        <div><div style={{fontSize:22,fontWeight:800,color:"var(--text)"}}>{fmtTime(duration)}</div><div style={{fontSize:10,color:"var(--muted)"}}>Durée</div></div>
+        <div><div style={{fontSize:22,fontWeight:800,color:"#10B981"}}>{soldItems.length}</div><div style={{fontSize:10,color:"var(--muted)"}}>Vendus</div></div>
+      </div>
+
+      {soldItems.length>0&&<div style={{textAlign:"left",padding:14,background:"rgba(16,185,129,0.04)",border:"1px solid rgba(16,185,129,0.15)",borderRadius:14,marginBottom:14}}>
+        <div style={{fontSize:13,fontWeight:700,color:"#10B981",marginBottom:8}}>🛒 Produits vendus pendant le live</div>
+        {soldItems.map(id=>{const p=P.find(x=>x.id===id);return p?<div key={id} style={{fontSize:12,padding:"4px 0",display:"flex",justifyContent:"space-between"}}><span>{p.name}</span><b style={{color:"#F97316"}}>{fmt(p.price)}</b></div>:null})}
+        <div style={{borderTop:"1px solid var(--border)",marginTop:6,paddingTop:6,display:"flex",justifyContent:"space-between",fontSize:13,fontWeight:700}}>
+          <span>Total ventes live</span><span style={{color:"#10B981"}}>{fmt(soldItems.reduce((s,id)=>{const p=P.find(x=>x.id===id);return s+(p?.price||0)},0))}</span>
+        </div>
+      </div>}
+
+      <div style={{fontSize:12,color:"var(--muted)",marginBottom:16}}>{comments.length} commentaires reçus</div>
+      <button className="btn-primary" onClick={onBack}>🏠 Retour à la boutique</button>
+    </div>
+  </div>);
+
+  // ── LIVE ──
+  return(<div style={{display:"flex",flexDirection:"column",height:"100%",background:"#000"}}>
+    {/* Camera preview */}
+    <div style={{flex:1,position:"relative",background:"linear-gradient(135deg,#1a1a2e,#16213e)",minHeight:300}}>
+      <div style={{position:"absolute",inset:0,display:"flex",alignItems:"center",justifyContent:"center"}}><span style={{fontSize:80,opacity:.15}}>📷</span></div>
+
+      {/* Top bar */}
+      <div style={{position:"absolute",top:12,left:12,right:12,display:"flex",justifyContent:"space-between",alignItems:"center",zIndex:10}}>
+        <div style={{display:"flex",gap:6}}>
+          <div style={{padding:"4px 10px",borderRadius:20,background:"#EF4444",color:"#fff",fontSize:10,fontWeight:700,display:"flex",alignItems:"center",gap:4,animation:"pulse 1.5s infinite"}}>🔴 LIVE</div>
           <div style={{padding:"4px 10px",borderRadius:20,background:"rgba(0,0,0,.5)",color:"#fff",fontSize:10,fontWeight:600}}>👁️ {viewers}</div>
+          <div style={{padding:"4px 10px",borderRadius:20,background:"rgba(0,0,0,.5)",color:"#fff",fontSize:10,fontWeight:600}}>⏱️ {fmtTime(duration)}</div>
         </div>
-        <div style={{position:"absolute",bottom:0,left:0,right:0,padding:12,background:"linear-gradient(transparent,rgba(0,0,0,.7))"}}>
-          {comments.map((c,i)=>(
-            <div key={i} style={{display:"flex",gap:6,marginBottom:4,animation:`fadeIn .3s ease ${i*.2}s both`}}>
-              <span style={{fontSize:11,fontWeight:700,color:"#FB923C"}}>{c.user}</span>
-              <span style={{fontSize:11,color:"rgba(255,255,255,.8)"}}>{c.text}</span>
-            </div>
-          ))}
-        </div>
-        <div style={{position:"absolute",inset:0,display:"flex",alignItems:"center",justifyContent:"center"}}><span style={{fontSize:56,opacity:.3}}>📷</span></div>
+        <button onClick={endLive} style={{padding:"6px 14px",borderRadius:20,border:"none",background:"rgba(239,68,68,.8)",color:"#fff",fontSize:11,fontWeight:700,cursor:"pointer",fontFamily:"inherit"}}>Terminer</button>
       </div>
 
-      {/* Live products */}
-      <div style={{fontSize:13,fontWeight:700,marginBottom:8}}>Produits en vedette</div>
-      {products.filter(p=>p.added).map(p=>(
-        <div key={p.id} style={{display:"flex",alignItems:"center",gap:10,padding:10,background:"var(--card)",border:"1px solid var(--border)",borderRadius:12,marginBottom:6}}>
-          <div style={{flex:1}}><div style={{fontSize:13,fontWeight:600}}>{p.name}</div><div style={{fontSize:12,fontWeight:700,color:"#F97316"}}>{p.price.toLocaleString("fr-FR")} F</div></div>
-          <button onClick={()=>toast.success("📌 "+p.name+" mis en avant !")} style={{padding:"6px 12px",borderRadius:8,border:"none",background:"#F97316",color:"#fff",fontSize:10,fontWeight:700,cursor:"pointer",fontFamily:"inherit"}}>📌 Pin</button>
-        </div>
-      ))}
+      {/* Hearts animation */}
+      <div style={{position:"absolute",right:16,bottom:80,display:"flex",flexDirection:"column",gap:4}}>
+        {Array.from({length:Math.min(hearts%5+1,5)}).map((_,i)=><span key={i} style={{fontSize:20,opacity:.3+Math.random()*.7,animation:`splash-up ${.5+Math.random()}s ease ${i*.1}s both`}}>❤️</span>)}
+      </div>
 
-      <button onClick={()=>{setLive(false);toast.success("Live terminé — "+viewers+" spectateurs !")}} style={{width:"100%",padding:14,borderRadius:14,border:"none",background:"#EF4444",color:"#fff",fontSize:15,fontWeight:700,cursor:"pointer",fontFamily:"inherit",marginTop:12}}>⏹️ Terminer le Live</button>
-    </>}
+      {/* Comments overlay */}
+      <div style={{position:"absolute",bottom:0,left:0,right:60,padding:12,background:"linear-gradient(transparent,rgba(0,0,0,.6))",maxHeight:200,overflowY:"auto",display:"flex",flexDirection:"column",justifyContent:"flex-end"}}>
+        {comments.slice(-6).map((c,i)=>(
+          <div key={i} style={{display:"flex",gap:6,marginBottom:4}}>
+            <span style={{fontSize:14}}>{c.avatar}</span>
+            <div><span style={{fontSize:11,fontWeight:700,color:"#FB923C"}}>{c.user}</span> <span style={{fontSize:11,color:"rgba(255,255,255,.85)"}}>{c.text}</span></div>
+          </div>
+        ))}
+      </div>
+
+      {/* Pinned product */}
+      {pinnedProduct&&(()=>{const p=P.find(x=>x.id===pinnedProduct);return p?<div style={{position:"absolute",bottom:12,right:12,width:100,background:"rgba(0,0,0,.7)",borderRadius:14,overflow:"hidden",border:"2px solid #F97316",zIndex:10}}>
+        <div style={{height:60,overflow:"hidden"}}><Img src={p.photo} emoji={p.img} style={{width:"100%",height:"100%"}} fit="cover"/></div>
+        <div style={{padding:"4px 6px"}}><div style={{fontSize:9,fontWeight:600,color:"#fff",overflow:"hidden",whiteSpace:"nowrap",textOverflow:"ellipsis"}}>{p.name}</div><div style={{fontSize:10,fontWeight:800,color:"#F97316"}}>{fmt(p.price)}</div></div>
+      </div>:null})()}
+    </div>
+
+    {/* Bottom controls */}
+    <div style={{background:"var(--card)",padding:10,borderTop:"1px solid var(--border)"}}>
+      {/* Products strip */}
+      <div style={{display:"flex",gap:6,overflowX:"auto",scrollbarWidth:"none",marginBottom:8,paddingBottom:4}}>
+        {selectedProducts.map(id=>{const p=P.find(x=>x.id===id);return p?<div key={id} onClick={()=>setPinnedProduct(pinnedProduct===id?null:id)} style={{display:"flex",alignItems:"center",gap:6,padding:"6px 10px",background:pinnedProduct===id?"rgba(249,115,22,0.08)":"var(--light)",border:pinnedProduct===id?"1px solid #F97316":"1px solid var(--border)",borderRadius:10,flexShrink:0,cursor:"pointer"}}>
+          <div style={{width:24,height:24,borderRadius:6,overflow:"hidden"}}><Img src={p.photo} emoji={p.img} style={{width:"100%",height:"100%"}} fit="cover"/></div>
+          <div style={{fontSize:10,fontWeight:600,maxWidth:60,overflow:"hidden",whiteSpace:"nowrap",textOverflow:"ellipsis"}}>{p.name}</div>
+          <span style={{fontSize:10,fontWeight:700,color:"#F97316"}}>{fmt(p.price)}</span>
+          {pinnedProduct===id&&<span style={{fontSize:10}}>📌</span>}
+          {soldItems.includes(id)&&<span style={{fontSize:10}}>✅</span>}
+        </div>:null})}
+      </div>
+
+      {/* Action buttons */}
+      <div style={{display:"flex",gap:6}}>
+        <button onClick={()=>setShowPromo(!showPromo)} style={{padding:"8px 12px",borderRadius:10,border:"1px solid var(--border)",background:showPromo?"rgba(249,115,22,0.06)":"var(--card)",fontSize:11,fontWeight:600,cursor:"pointer",fontFamily:"inherit",color:"var(--text)"}}>🏷️ Promo</button>
+        <button onClick={()=>{setHearts(h=>h+10);toast.success("❤️ +10 cœurs")}} style={{padding:"8px 12px",borderRadius:10,border:"1px solid var(--border)",background:"var(--card)",fontSize:11,fontWeight:600,cursor:"pointer",fontFamily:"inherit",color:"var(--text)"}}>❤️</button>
+        <div style={{flex:1,display:"flex",alignItems:"center",gap:6,padding:"0 10px",border:"1px solid var(--border)",borderRadius:10,background:"var(--light)"}}>
+          <input value={newComment} onChange={e=>setNewComment(e.target.value)} placeholder="Répondre..." style={{flex:1,border:"none",background:"transparent",fontSize:12,outline:"none",fontFamily:"inherit",color:"var(--text)"}}/>
+          <button onClick={()=>{if(newComment.trim()){setComments(p=>[...p,{user:"Vous (vendeur)",text:newComment,avatar:"🏪",time:""}]);setNewComment("");toast.success("Message envoyé")}}} style={{background:"none",border:"none",fontSize:16,cursor:"pointer"}}>📤</button>
+        </div>
+      </div>
+
+      {/* Promo flash */}
+      {showPromo&&<div style={{marginTop:8,padding:10,background:"rgba(239,68,68,0.04)",border:"1px solid rgba(239,68,68,0.15)",borderRadius:10}}>
+        <div style={{fontSize:12,fontWeight:700,color:"#EF4444",marginBottom:6}}>🏷️ Lancer une promo flash</div>
+        <div style={{display:"flex",gap:6}}>
+          <input value={promoCode} onChange={e=>setPromoCode(e.target.value.toUpperCase())} placeholder="Code: LIVE20" style={{flex:1,padding:8,borderRadius:8,border:"1px solid var(--border)",background:"var(--light)",fontSize:12,fontFamily:"inherit",color:"var(--text)"}}/>
+          <button onClick={()=>{if(promoCode){toast.success("🏷️ Code "+promoCode+" lancé en live !");setComments(p=>[...p,{user:"🏷️ PROMO",text:"Code "+promoCode+" activé ! Utilisez-le maintenant 🔥",avatar:"🏷️",time:""}]);setShowPromo(false);setPromoCode("")}}} style={{padding:"8px 14px",borderRadius:8,border:"none",background:"#EF4444",color:"#fff",fontSize:11,fontWeight:700,cursor:"pointer",fontFamily:"inherit"}}>Lancer</button>
+        </div>
+      </div>}
+    </div>
   </div>);
 }
 export default VLiveScr;
