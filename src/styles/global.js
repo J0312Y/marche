@@ -339,7 +339,6 @@ select option{background:var(--card);color:var(--text);padding:10px 14px;font-si
 .setting-group{margin:0 20px 16px}.setting-group h4,.setting-group .setting-label{font-size:11px;font-weight:600;color:var(--muted);text-transform:uppercase;letter-spacing:.5px;margin-bottom:8px;padding-left:4px}
 .setting-item{transition:background .15s,transform .1s;display:flex;align-items:center;gap:12px;padding:13px 14px;background:var(--card);border:1px solid var(--border);border-radius:14px;margin-bottom:6px}
 .setting-item .si-i{font-size:18px}.setting-item .si-t{flex:1;font-size:14px;font-weight:500;color:var(--text)}.setting-item .si-v{font-size:12px;color:var(--muted)}
-.toggle.on::after{transform:translateX(20px)}
 
 /* FAQ */
 .faq-item{margin:0 20px 8px;background:var(--card);border:1px solid var(--border);border-radius:14px;overflow:hidden;cursor:pointer}
@@ -697,7 +696,12 @@ input,textarea,select{font-size:16px !important}
 .field-row .field{flex:1;margin-bottom:0}
 
 /* Toggle improvements */
+
+
+/* Toggle switch — complete */
 .toggle{width:44px;height:24px;border-radius:12px;background:var(--border);position:relative;cursor:pointer;transition:background .25s cubic-bezier(.4,0,.2,1);flex-shrink:0;-webkit-tap-highlight-color:transparent}
+.toggle::after{content:'';position:absolute;top:2px;left:2px;width:20px;height:20px;border-radius:50%;background:#fff;transition:transform .25s cubic-bezier(.4,0,.2,1);box-shadow:0 1px 4px rgba(0,0,0,.15)}
+.toggle.on{background:#F97316}
 .toggle.on::after{transform:translateX(20px)}
 
 `;
