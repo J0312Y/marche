@@ -16,6 +16,7 @@ function RoleRegScr({onBack,onDone,forceRole,onPending}){
   const [regErrors,setRegErrors]=useState({});
   const [hasLogo,setHasLogo]=useState(false);
   const [hasVehPhoto,setHasVehPhoto]=useState(false);
+  const [selZones,setSelZones]=useState(["Brazzaville Sud","Centre-ville"]);
   const clrR=(k)=>setRegErrors(p=>{const n={...p};delete n[k];return n});
   const validateStep=()=>{
     if(role==="vendor"&&step===0){
@@ -229,7 +230,8 @@ function RoleRegScr({onBack,onDone,forceRole,onPending}){
           }}/>
         </div>
         <div style={{fontSize:14,fontWeight:700,margin:"0 0 10px"}}>Zones de livraison</div>
-        <div style={{display:"flex",gap:6,flexWrap:"wrap"}}>{["Brazzaville Sud","Centre-ville","Brazzaville Nord","Pointe-Noire"].map(z=><span key={z} style={{padding:"8px 14px",borderRadius:10,border:"1px solid var(--border)",background:"var(--card)",fontSize:12,cursor:"pointer",fontFamily:"inherit"}}>{z}</span>)}</div>
+        <div style={{display:"flex",gap:6,flexWrap:"wrap"}}>{["Brazzaville Sud","Centre-ville","Brazzaville Nord","Poto-Poto","Ouenzé","Talangaï","Bacongo","Makélékélé","Pointe-Noire"].map(z=>{const sel=selZones.includes(z);return<span key={z} onClick={()=>setSelZones(p=>sel?p.filter(x=>x!==z):[...p,z])} style={{padding:"8px 14px",borderRadius:10,border:sel?"2px solid "+color:"1px solid var(--border)",background:sel?"rgba(249,115,22,0.06)":"var(--card)",color:sel?color:"var(--text)",fontSize:12,cursor:"pointer",fontFamily:"inherit",fontWeight:sel?700:500}}>{sel?"✓ ":""}{z}</span>})}</div>
+        {selZones.length===0&&<div style={{fontSize:11,color:"#EF4444",marginTop:4}}>Sélectionnez au moins 1 zone</div>}
       </>}
 
       {/* STEP 2: Documents (different per role) */}
@@ -353,7 +355,7 @@ function RoleRegScr({onBack,onDone,forceRole,onPending}){
         <div style={{padding:16,background:"var(--card)",border:"1px solid var(--border)",borderRadius:16,marginBottom:14}}>
           {[["Rôle",role==="vendor"?"🏪 Commerçant":"🛵 Livreur"],
             ["Nom","Joeldy Tsina"],
-            ...(role==="vendor"?[["Établissement","Mon Commerce"],["Type",{boutique:"Boutique",restaurant:"Restaurant",patisserie:"Pâtisserie",supermarche:"Supermarché",pharmacie:"Pharmacie",service:"Service"}[selCats.find(c=>["boutique","restaurant","patisserie","supermarche","pharmacie","service"].includes(c))]||"—"]]:[["Véhicule","🛵 Honda PCX"],["Plaque","BZ-4521"],["Inscription","5 000 FCFA (unique)"],["Commission","15% par livraison"]]),
+            ...(role==="vendor"?[["Établissement","Mon Commerce"],["Type",{boutique:"Boutique",restaurant:"Restaurant",patisserie:"Pâtisserie",supermarche:"Supermarché",pharmacie:"Pharmacie",service:"Service"}[selCats.find(c=>["boutique","restaurant","patisserie","supermarche","pharmacie","service"].includes(c))]||"—"]]:[["Véhicule","🛵 Honda PCX"],["Plaque","BZ-4521"],["Inscription","5 000 FCFA (unique)"],["Commission","15% par livraison"],["Zones",selZones.join(", ")||"—"]]),
             ["Documents",`${Object.values(docs).filter(v=>v&&v!==true&&v!==false).length}/${Object.keys(docs).length}`],
             ...(role==="vendor"?[["Plan",plan==="starter"?"Starter (Gratuit)":plan==="pro"?"Pro (15k/mois)":"Enterprise (45k/mois)"]]:[])]
           .map(([l,v])=><div key={l} className="vs-row"><span>{l}</span><b>{v}</b></div>)}

@@ -125,30 +125,74 @@ function VLiveScr({onBack}){
   </div>);
 
   // ── ENDED ──
-  if(step==="ended")return(<div className="scr" style={{padding:16,textAlign:"center"}}>
-    <div style={{padding:"30px 0"}}>
-      <div style={{fontSize:48,marginBottom:10}}>🎉</div>
-      <h2 style={{fontSize:22,fontWeight:700}}>Live terminé !</h2>
-      <p style={{fontSize:13,color:"var(--muted)",marginTop:6}}>{title}</p>
+  if(step==="ended")return(<div className="scr" style={{padding:16}}>
+    <div className="appbar" style={{padding:0,marginBottom:12}}><div style={{width:38}}/><h2>📊 Récapitulatif Live</h2><div style={{width:38}}/></div>
 
-      <div style={{display:"flex",justifyContent:"center",gap:16,margin:"20px 0",padding:16,background:"var(--light)",borderRadius:16}}>
-        <div><div style={{fontSize:22,fontWeight:800,color:"#F97316"}}>{viewers}</div><div style={{fontSize:10,color:"var(--muted)"}}>Spectateurs</div></div>
-        <div><div style={{fontSize:22,fontWeight:800,color:"#EF4444"}}>❤️ {hearts}</div><div style={{fontSize:10,color:"var(--muted)"}}>J'aime</div></div>
-        <div><div style={{fontSize:22,fontWeight:800,color:"var(--text)"}}>{fmtTime(duration)}</div><div style={{fontSize:10,color:"var(--muted)"}}>Durée</div></div>
-        <div><div style={{fontSize:22,fontWeight:800,color:"#10B981"}}>{soldItems.length}</div><div style={{fontSize:10,color:"var(--muted)"}}>Vendus</div></div>
-      </div>
-
-      {soldItems.length>0&&<div style={{textAlign:"left",padding:14,background:"rgba(16,185,129,0.04)",border:"1px solid rgba(16,185,129,0.15)",borderRadius:14,marginBottom:14}}>
-        <div style={{fontSize:13,fontWeight:700,color:"#10B981",marginBottom:8}}>🛒 Produits vendus pendant le live</div>
-        {soldItems.map(id=>{const p=P.find(x=>x.id===id);return p?<div key={id} style={{fontSize:12,padding:"4px 0",display:"flex",justifyContent:"space-between"}}><span>{p.name}</span><b style={{color:"#F97316"}}>{fmt(p.price)}</b></div>:null})}
-        <div style={{borderTop:"1px solid var(--border)",marginTop:6,paddingTop:6,display:"flex",justifyContent:"space-between",fontSize:13,fontWeight:700}}>
-          <span>Total ventes live</span><span style={{color:"#10B981"}}>{fmt(soldItems.reduce((s,id)=>{const p=P.find(x=>x.id===id);return s+(p?.price||0)},0))}</span>
-        </div>
-      </div>}
-
-      <div style={{fontSize:12,color:"var(--muted)",marginBottom:16}}>{comments.length} commentaires reçus</div>
-      <button className="btn-primary" onClick={onBack}>🏠 Retour à la boutique</button>
+    <div style={{textAlign:"center",marginBottom:14}}>
+      <div style={{fontSize:40,marginBottom:6}}>🎉</div>
+      <h3 style={{fontSize:20,fontWeight:700}}>Live terminé !</h3>
+      <p style={{fontSize:12,color:"var(--muted)"}}>{title}</p>
     </div>
+
+    {/* Stats */}
+    <div style={{display:"flex",gap:8,marginBottom:14}}>
+      {[[viewers,"👁️","Spectateurs","#F97316"],[hearts,"❤️","J'aime","#EF4444"],[fmtTime(duration),"⏱️","Durée","var(--text)"],[soldItems.length,"🛒","Vendus","#10B981"]].map(([val,ic,lab,col])=>(
+        <div key={lab} style={{flex:1,padding:10,background:"var(--card)",border:"1px solid var(--border)",borderRadius:14,textAlign:"center"}}>
+          <div style={{fontSize:10}}>{ic}</div>
+          <div style={{fontSize:16,fontWeight:800,color:col,marginTop:2}}>{val}</div>
+          <div style={{fontSize:9,color:"var(--muted)"}}>{lab}</div>
+        </div>
+      ))}
+    </div>
+
+    {/* Sold products */}
+    {soldItems.length>0&&<div style={{padding:14,background:"rgba(16,185,129,0.04)",border:"1px solid rgba(16,185,129,0.15)",borderRadius:14,marginBottom:14}}>
+      <div style={{fontSize:13,fontWeight:700,color:"#10B981",marginBottom:8}}>🛒 Produits vendus</div>
+      {soldItems.map(id=>{const p=P.find(x=>x.id===id);return p?<div key={id} style={{display:"flex",alignItems:"center",gap:8,padding:"6px 0",borderBottom:"1px solid var(--border)"}}>
+        <div style={{width:32,height:32,borderRadius:8,overflow:"hidden",flexShrink:0}}><Img src={p.photo} emoji={p.img} style={{width:"100%",height:"100%"}} fit="cover"/></div>
+        <span style={{flex:1,fontSize:12,fontWeight:500}}>{p.name}</span>
+        <b style={{fontSize:12,color:"#F97316"}}>{fmt(p.price)}</b>
+      </div>:null})}
+      <div style={{display:"flex",justifyContent:"space-between",paddingTop:8,fontSize:14,fontWeight:800}}>
+        <span>Total</span><span style={{color:"#10B981"}}>{fmt(soldItems.reduce((s,id)=>{const p=P.find(x=>x.id===id);return s+(p?.price||0)},0))}</span>
+      </div>
+    </div>}
+
+    {/* Comments timeline */}
+    <div style={{padding:14,background:"var(--card)",border:"1px solid var(--border)",borderRadius:14,marginBottom:14}}>
+      <div style={{display:"flex",justifyContent:"space-between",alignItems:"center",marginBottom:10}}>
+        <span style={{fontSize:13,fontWeight:700}}>💬 Déroulé du live ({comments.length})</span>
+      </div>
+      <div style={{maxHeight:240,overflowY:"auto"}}>
+        {comments.map((c,i)=>(
+          <div key={i} style={{display:"flex",gap:8,padding:"6px 0",borderBottom:i<comments.length-1?"1px solid var(--border)":"none"}}>
+            <div style={{width:28,height:28,borderRadius:8,background:c.user.includes("PROMO")?"rgba(239,68,68,0.08)":c.user==="Vous (vendeur)"?"rgba(249,115,22,0.08)":"var(--light)",display:"flex",alignItems:"center",justifyContent:"center",fontSize:14,flexShrink:0}}>{c.avatar}</div>
+            <div style={{flex:1,minWidth:0}}>
+              <div style={{display:"flex",alignItems:"center",gap:4}}>
+                <span style={{fontSize:11,fontWeight:700,color:c.user.includes("PROMO")?"#EF4444":c.user==="Vous (vendeur)"?"#F97316":"var(--text)"}}>{c.user}</span>
+                {c.time&&<span style={{fontSize:9,color:"var(--muted)"}}>{c.time}</span>}
+              </div>
+              <div style={{fontSize:11,color:"var(--sub)",marginTop:1}}>{c.text}</div>
+            </div>
+          </div>
+        ))}
+      </div>
+      {comments.length===0&&<div style={{textAlign:"center",padding:"16px 0",color:"var(--muted)",fontSize:12}}>Aucun commentaire</div>}
+    </div>
+
+    {/* Products presented */}
+    <div style={{padding:14,background:"var(--card)",border:"1px solid var(--border)",borderRadius:14,marginBottom:14}}>
+      <div style={{fontSize:13,fontWeight:700,marginBottom:8}}>📦 Produits présentés ({selectedProducts.length})</div>
+      {selectedProducts.map(id=>{const p=P.find(x=>x.id===id);const sold=soldItems.includes(id);return p?<div key={id} style={{display:"flex",alignItems:"center",gap:8,padding:"6px 0"}}>
+        <div style={{width:32,height:32,borderRadius:8,overflow:"hidden",flexShrink:0}}><Img src={p.photo} emoji={p.img} style={{width:"100%",height:"100%"}} fit="cover"/></div>
+        <span style={{flex:1,fontSize:12}}>{p.name}</span>
+        <span style={{fontSize:11,fontWeight:700,color:"#F97316"}}>{fmt(p.price)}</span>
+        {sold?<span style={{padding:"2px 6px",borderRadius:4,background:"rgba(16,185,129,0.08)",color:"#10B981",fontSize:9,fontWeight:700}}>✅ Vendu</span>
+        :<span style={{padding:"2px 6px",borderRadius:4,background:"var(--light)",color:"var(--muted)",fontSize:9,fontWeight:600}}>Présenté</span>}
+      </div>:null})}
+    </div>
+
+    <button className="btn-primary" onClick={onBack}>🏠 Retour à la boutique</button>
   </div>);
 
   // ── LIVE ──

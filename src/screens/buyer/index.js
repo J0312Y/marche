@@ -50,3 +50,5 @@ export { default as BecomeSellerScr } from './BecomeSellerScr';
 export { default as ImageSearchScr } from './ImageSearchScr';
 
 export { default as GamificationScr } from './GamificationScr';
+
+export { default as LiveWatchScr } from './LiveWatchScr';

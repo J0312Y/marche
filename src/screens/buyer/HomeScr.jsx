@@ -216,6 +216,22 @@ function HomeScr({go,favs,toggleFav,isFav,userName}){
           <div style={{position:"absolute",bottom:8,left:"50%",transform:"translateX(-50%)",display:"flex",gap:6}}>{promos.map((_,i)=><div key={i} onClick={(e)=>{e.stopPropagation();setPromoSlide(i)}} style={{width:promoSlide===i?20:6,height:6,borderRadius:3,background:promoSlide===i?"#fff":"rgba(255,255,255,.4)",cursor:"pointer",transition:"all .3s"}}/>)}</div>
       </div>
 
+      {/* 🔴 LIVE EN COURS */}
+      <div onClick={()=>go("liveWatch",{vendor:{name:"Mode Afrique",avatar:"👔"},products:P.filter(x=>x.vendor==="Mode Afrique").slice(0,4)})} style={{margin:"0 16px 14px",padding:12,background:"linear-gradient(135deg,rgba(239,68,68,0.06),rgba(249,115,22,0.06))",border:"1px solid rgba(239,68,68,0.15)",borderRadius:16,cursor:"pointer",display:"flex",alignItems:"center",gap:12}}>
+        <div style={{width:48,height:48,borderRadius:14,background:"linear-gradient(135deg,#EF4444,#F97316)",display:"flex",alignItems:"center",justifyContent:"center",flexShrink:0,position:"relative"}}>
+          <span style={{fontSize:22}}>📺</span>
+          <div style={{position:"absolute",top:-3,right:-3,width:12,height:12,borderRadius:6,background:"#EF4444",border:"2px solid var(--bg)",animation:"pulse 1.5s infinite"}}/>
+        </div>
+        <div style={{flex:1,minWidth:0}}>
+          <div style={{display:"flex",alignItems:"center",gap:6}}>
+            <span style={{padding:"2px 6px",borderRadius:4,background:"#EF4444",color:"#fff",fontSize:8,fontWeight:800}}>🔴 LIVE</span>
+            <span style={{fontSize:13,fontWeight:700}}>Mode Afrique</span>
+          </div>
+          <div style={{fontSize:11,color:"var(--muted)",marginTop:2}}>Nouvelle collection Wax — 47 spectateurs</div>
+        </div>
+        <span style={{fontSize:12,color:"#F97316",fontWeight:600}}>Rejoindre →</span>
+      </div>
+
       {/* ⭐ Produit du jour */}
       {P[0]&&<div onClick={()=>go("detail",P[0])} style={{margin:"0 16px 14px",padding:14,background:"var(--card)",border:"2px solid #F59E0B",borderRadius:18,cursor:"pointer",position:"relative",overflow:"hidden"}}>
           <div style={{position:"absolute",top:0,right:0,padding:"4px 12px 4px 16px",background:"#F59E0B",borderRadius:"0 0 0 14px",color:"#fff",fontSize:10,fontWeight:800}}>⭐ PRODUIT DU JOUR</div>
