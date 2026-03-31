@@ -15,10 +15,12 @@ function DrDashboardScr({go}){
   const [boostMethod,setBoostMethod]=useState("airtel");
   const [boostPhone,setBoostPhone]=useState("");
   const [boostPaying,setBoostPaying]=useState(false);
-  const [dismissed,setDismissed]=useState(false);
+  const [dismissed,setDismissed]=useState([]);
   const d=D_STATS[period];
-  const pending=dismissed?null:D_DELIVERIES.find(x=>x.status==="pending");
-  const active=D_DELIVERIES.find(x=>x.status==="active");
+  const allPending=D_DELIVERIES.filter(x=>x.status==="pending"&&!dismissed.includes(x.id));
+  const allActive=D_DELIVERIES.filter(x=>x.status==="active");
+  const active=allActive[0];
+  const pending=allPending[0];
   return(<><PullToRefresh onRefresh={async()=>{toast.success("Dashboard actualisé 🛵")}}><div className="scr">
     <div className="dr-hero">
       <div className="dr-top"><div style={{display:"flex",alignItems:"center",gap:12}}><div className="dr-av" style={{overflow:"hidden",padding:0}}><img src={DRIVER_PHOTO} style={{width:"100%",height:"100%",objectFit:"cover"}} alt=""/></div><div><div className="dr-name">Patrick Moukala</div><div className="dr-sub">🛵 Honda PCX · BZ-4521</div></div></div><button onClick={()=>go("drNotif")} style={{width:38,height:38,borderRadius:12,background:"rgba(255,255,255,.15)",border:"none",color:"#fff",cursor:"pointer",fontSize:18,display:"flex",alignItems:"center",justifyContent:"center"}}>🔔</button></div>
@@ -38,16 +40,33 @@ function DrDashboardScr({go}){
     </div>
 
     {/* Pending request */}
+    {/* Multi-livraisons en cours */}
+    {allActive.length>1&&<div style={{margin:"0 16px 10px",padding:12,background:"rgba(249,115,22,0.04)",border:"1px solid rgba(249,115,22,0.15)",borderRadius:14}}>
+      <div style={{fontSize:13,fontWeight:700,color:"#F97316",marginBottom:8}}>📦 {allActive.length} livraisons en cours</div>
+      {allActive.map((dl,i)=><div key={dl.id} onClick={()=>go("drDelivery",dl)} style={{display:"flex",alignItems:"center",gap:10,padding:8,background:"var(--card)",borderRadius:10,marginBottom:i<allActive.length-1?6:0,cursor:"pointer",border:"1px solid var(--border)"}}>
+        <span style={{fontSize:16}}>{dl.payment==="cash"?"💵":"📦"}</span>
+        <div style={{flex:1,minWidth:0}}>
+          <div style={{fontSize:12,fontWeight:600,overflow:"hidden",whiteSpace:"nowrap",textOverflow:"ellipsis"}}>{dl.vendor.name} → {dl.client.name}</div>
+          <div style={{fontSize:10,color:"var(--muted)"}}>{dl.distance} · {dl.eta}</div>
+        </div>
+        <span style={{fontSize:13,fontWeight:700,color:"#F97316"}}>{fmt(dl.fee)}</span>
+        <span style={{color:"var(--muted)",fontSize:12}}>›</span>
+      </div>)}
+    </div>}
+
+    {/* Pending requests */}
+    {allPending.length>1&&<div style={{margin:"0 16px 8px",padding:8,background:"rgba(59,130,246,0.04)",borderRadius:10,fontSize:11,color:"#3B82F6",fontWeight:600,textAlign:"center"}}>{allPending.length} demandes en attente</div>}
+
     {pending&&<><div className="sec" style={{marginTop:10}}><h3>🆕 Nouvelle demande</h3></div>
     <div className="dr-request">
-      <div className="dr-req-head"><h4>Livraison <span className="dr-new">NOUVEAU</span></h4><div className="dr-req-fee">{fmt(pending.fee+pending.tip)}</div></div>
+      <div className="dr-req-head"><h4>Livraison <span className="dr-new">NOUVEAU</span>{pending.payment==="cash"&&<span style={{marginLeft:6,padding:"2px 6px",borderRadius:4,background:"rgba(245,158,11,0.08)",color:"#F59E0B",fontSize:9,fontWeight:700}}>💵</span>}</h4><div className="dr-req-fee">{fmt(pending.fee+pending.tip)}</div></div>
       <div className="dr-req-route">
         <div className="dr-req-point"><div className="drp-icon drp-pickup">📍</div><div style={{flex:1}}><div style={{fontWeight:600}}>{pending.pickup}</div><div style={{fontSize:11,color:"var(--muted)"}}>{pending.vendor.name}</div></div></div>
         <div className="dr-req-line"/>
         <div className="dr-req-point"><div className="drp-icon drp-drop">🏠</div><div style={{flex:1}}><div style={{fontWeight:600}}>{pending.client.addr.split(",")[0]}</div><div style={{fontSize:11,color:"var(--muted)"}}>{pending.client.name}</div></div></div>
       </div>
       <div className="dr-req-meta"><span>📏 {pending.distance}</span><span>⏱️ ~{pending.eta}</span><span>📦 {pending.items.length} article{pending.items.length>1?"s":""}</span><span>💰 {fmt(pending.total)}</span></div>
-      <div className="dr-req-actions"><button className="dr-decline" onClick={()=>setDismissed(true)}>Refuser</button><button className="dr-accept" onClick={()=>go("drDelivery",{...pending,status:"pickup"})}>✅ Accepter</button></div>
+      <div className="dr-req-actions"><button className="dr-decline" onClick={()=>setDismissed(p=>[...p,pending.id])}>Refuser</button><button className="dr-accept" onClick={()=>go("drDelivery",{...pending,status:"pickup"})}>✅ Accepter</button></div>
     </div></>}
 
     {/* Active delivery */}

@@ -50,6 +50,7 @@ function DrProfileScr({go,onSwitch,onLogout}){
     {/* ═══ VÉHICULE & ZONES ═══ */}
     <Section icon="🛵" title="VÉHICULE & ZONES">
       <Item icon="🛵" label="Mon véhicule" info="Honda PCX" onClick={()=>go("drVehicle")}/>
+      <Item icon="📄" label="Mes documents" info="5/6 valides" onClick={()=>go("drDocuments")}/>
       <Item icon="📍" label="Zones actives" info="Bzv Sud, Centre" onClick={()=>go("drZones")}/>
     </Section>
 

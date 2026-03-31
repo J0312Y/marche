@@ -7,7 +7,7 @@ import {
   DrDashboardScr, DrDeliveryScr, DrConfirmScr, DrNavigationScr,
   DrChatVendorScr, DrChatClientScr, DrHistoryScr, DrWalletScr,
   DrNotifScr, DrProfileScr, DrVehicleScr, DrZonesScr, DrChecklistScr, DrRateVendorScr,
-  DrStatsScr, DrSettingsScr, DrHelpScr
+  DrStatsScr, DrSettingsScr, DrHelpScr, DrDocumentsScr
 } from "../screens/driver";
 import { WithdrawScr, PasswordScr } from "../screens/buyer";
 import ChatBotScr from "../screens/common/ChatBotScr";
@@ -44,6 +44,7 @@ export default function DriverScreens() {
     case "drStats": return <DrStatsScr onBack={back} />;
     case "drSettings": return <DrSettingsScr onBack={back} go={go} />;
     case "drChatBot": return <ChatBotScr onBack={back} mode="driver" />;
+    case "drDocuments": return <DrDocumentsScr onBack={back} />;
     case "drHelp": return <DrHelpScr onBack={back} />;
     case "password": return <PasswordScr onBack={back} />;
     case "terms": return <TermsScr onBack={back} />;

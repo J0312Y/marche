@@ -17,3 +17,5 @@ export { default as DrHelpScr } from './DrHelpScr';
 export { default as DrChecklistScr } from './DrChecklistScr';
 
 export { default as DrRateVendorScr } from './DrRateVendorScr';
+
+export { default as DrDocumentsScr } from './DrDocumentsScr';
