@@ -94,7 +94,7 @@ export default function BuyerScreens() {
     case "priceAlerts": return <PriceAlertScr onBack={back} />;
     case "recharge": return <RechargeScr onBack={back} />;
     case "becomeSeller": return <BecomeSellerScr onBack={back} go={go} />;
-    case "liveWatch": return <LiveWatchScr onBack={back} go={go} liveData={screenData} />;
+    case "liveWatch": return <LiveWatchScr onBack={back} go={go} liveData={data} />;
     case "regStatus": return <RegStatusScr onBack={back} role={vendorStatus==="pending"?"vendor":"driver"} plan={vendorPlan||"starter"} vendorStatus={vendorStatus} driverStatus={driverStatus} />;
     case "roleReg": return <RoleRegScr onPending={(role)=>{if(role==="vendor")setVendorStatus("pending");if(role==="driver")setDriverStatus("pending")}} onBack={back} onDone={(role, plan) => { onRoleApproved(role, plan); goHome(); }} />;
     case "vendorReg": return <RoleRegScr onPending={(role)=>{if(role==="vendor")setVendorStatus("pending");if(role==="driver")setDriverStatus("pending")}} onBack={back} onDone={(role, plan) => { onRoleApproved(role, plan); goHome(); }} forceRole="vendor" />;
