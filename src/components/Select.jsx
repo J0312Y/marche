@@ -63,7 +63,7 @@ function Select({ value, onChange, options = [], placeholder = "Choisir...", dis
           position: "absolute", left: 0, right: 0, top: "calc(100% + 4px)",
           background: "var(--card)", border: "1px solid var(--border)",
           borderRadius: 14, boxShadow: "0 8px 30px rgba(0,0,0,.15)",
-          zIndex: 50, maxHeight: 220, overflowY: "auto",
+          zIndex: 999, maxHeight: 220, overflowY: "auto",
           animation: "selectFadeIn .15s ease",
         }}>
           {opts.map((o, i) => {
@@ -74,7 +74,7 @@ function Select({ value, onChange, options = [], placeholder = "Choisir...", dis
                 onClick={() => { onChange(o.value); setOpen(false); }}
                 style={{
                   display: "flex", alignItems: "center", gap: 8,
-                  padding: "11px 14px", cursor: "pointer",
+                  padding: "12px 14px", cursor: "pointer", minHeight: 44,
                   background: isSelected ? "rgba(249,115,22,0.06)" : "transparent",
                   borderBottom: i < opts.length - 1 ? "1px solid var(--border)" : "none",
                   transition: "background .1s",

@@ -26,6 +26,11 @@ function CheckoutScr({onBack,onDone,cart=[],appliedCoupon,setAppliedCoupon}){
   const giftDeduct=giftApplied?Math.min(giftApplied.remaining,sub-discountAmount+finalDelivery):0;
   const total=Math.max(0,sub-discountAmount+finalDelivery-giftDeduct);
 
+  const validateStep0=()=>{
+    const el=document.querySelector("[placeholder=\"Quartier, rue, numéro...\"]");
+    if(!el?.value?.trim()&&step===0){toast.error("Entrez votre adresse de livraison");return false}
+    return true;
+  };
   const validateCheckout=()=>{if(!momo){toast.error("Choisissez un moyen de paiement");return false}return true};
   const handleConfirm=()=>{
     setOk(true);toast.success("Commande confirmée ! 🎉");if(saveAddr)toast.info("Adresse sauvegardée 📍");
@@ -100,7 +105,7 @@ function CheckoutScr({onBack,onDone,cart=[],appliedCoupon,setAppliedCoupon}){
           {(discountAmount>0||freeDelivery)&&<div style={{textAlign:"center",fontSize:11,color:"#F59E0B",fontWeight:600,marginTop:4}}>🎉 Économie : {fmt(discountAmount+(freeDelivery?del:0))}</div>}
         </div></>}
 
-      <div style={{paddingTop:24,paddingBottom:16}}><button className="btn-primary" onClick={()=>{if(step===2){if(validateCheckout())handleConfirm()}else setStep(step+1)}}>{step===2?"Confirmer le paiement":"Continuer"}</button></div>
+      <div style={{paddingTop:24,paddingBottom:16}}><button className="btn-primary" onClick={()=>{if(step===0&&!validateStep0())return;if(step===1&&momo!=="cash"){const err=validatePayPhone(ckPhone,momo);if(err){setCkPhoneErr(err);return}}if(step===2){if(validateCheckout())handleConfirm()}else setStep(step+1)}}>{step===2?"Confirmer le paiement":"Continuer"}</button></div>
     </div>
 
     {ok&&<div className="success-modal"><div className="success-box bounce-in"><div className="si">✅</div><h2>Commande confirmée !</h2><p>{momo==="cash"?"Préparez le montant exact pour le livreur.":"Vérifiez votre téléphone pour le paiement."}</p><div className="ref">#LMK-2026-0214</div>

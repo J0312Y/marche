@@ -339,9 +339,6 @@ select option{background:var(--card);color:var(--text);padding:10px 14px;font-si
 .setting-group{margin:0 20px 16px}.setting-group h4,.setting-group .setting-label{font-size:11px;font-weight:600;color:var(--muted);text-transform:uppercase;letter-spacing:.5px;margin-bottom:8px;padding-left:4px}
 .setting-item{transition:background .15s,transform .1s;display:flex;align-items:center;gap:12px;padding:13px 14px;background:var(--card);border:1px solid var(--border);border-radius:14px;margin-bottom:6px}
 .setting-item .si-i{font-size:18px}.setting-item .si-t{flex:1;font-size:14px;font-weight:500;color:var(--text)}.setting-item .si-v{font-size:12px;color:var(--muted)}
-.toggle{width:44px;height:24px;border-radius:12px;background:var(--border);position:relative;cursor:pointer;transition:background .25s cubic-bezier(.4,0,.2,1)}
-.toggle.on{background:#F97316}
-.toggle::after{content:'';position:absolute;top:2px;left:2px;width:20px;height:20px;border-radius:50%;background:var(--card);transition:transform .25s cubic-bezier(.4,0,.2,1);box-shadow:0 1px 4px rgba(0,0,0,.15)}
 .toggle.on::after{transform:translateX(20px)}
 
 /* FAQ */
@@ -681,6 +678,28 @@ button:active{transform:scale(.97)}
 .p-card{transition:transform .15s}.p-card:active{transform:scale(.97)}
 .confirm-card{transition:transform .1s}.confirm-card:active{transform:scale(.98)}
 .info-box{animation:fadeIn .3s ease}
+.field.error input,.field.error textarea,.field.error select{border-color:#EF4444}
+input,textarea,select{scroll-margin-top:120px}
+
+/* Fix iOS zoom on focus */
+input,textarea,select{font-size:16px !important}
+@media (min-width:768px){input,textarea,select{font-size:14px !important}}
+
+/* Better field styling */
+.field{margin-bottom:10px}
+.field label{display:block;font-size:13px;font-weight:600;margin-bottom:5px;color:var(--text)}
+.field input,.field textarea,.field select{width:100%;padding:12px 14px;border-radius:14px;border:1px solid var(--border);background:var(--light);font-size:14px;font-family:inherit;color:var(--text);outline:none;transition:border .2s,box-shadow .2s;-webkit-appearance:none;appearance:none}
+.field input:focus,.field textarea:focus{border-color:#F97316;box-shadow:0 0 0 3px rgba(249,115,22,.08)}
+.field input::placeholder,.field textarea::placeholder{color:var(--muted)}
+
+/* Field row (side by side) */
+.field-row{display:flex;gap:10px;margin-bottom:10px}
+.field-row .field{flex:1;margin-bottom:0}
+
+/* Toggle improvements */
+.toggle{width:44px;height:24px;border-radius:12px;background:var(--border);position:relative;cursor:pointer;transition:background .25s cubic-bezier(.4,0,.2,1);flex-shrink:0;-webkit-tap-highlight-color:transparent}
+.toggle.on::after{transform:translateX(20px)}
+
 `;
 
 export default CSS;

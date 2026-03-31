@@ -16,13 +16,22 @@ function RoleRegScr({onBack,onDone,forceRole,onPending}){
   const [regErrors,setRegErrors]=useState({});
   const [hasLogo,setHasLogo]=useState(false);
   const [hasVehPhoto,setHasVehPhoto]=useState(false);
+  // Form fields (proper React state)
+  const [fName,setFName]=useState("Joeldy Tsina");
+  const [fEmail,setFEmail]=useState("joeldytsina94@gmail.com");
+  const [fShopName,setFShopName]=useState("");
+  const [fShopDesc,setFShopDesc]=useState("");
+  const [fVehMarque,setFVehMarque]=useState("");
+  const [fVehAnnee,setFVehAnnee]=useState("");
+  const [fVehPlaque,setFVehPlaque]=useState("");
+  const [fVehType,setFVehType]=useState("moto");
   const [selZones,setSelZones]=useState(["Brazzaville Sud","Centre-ville"]);
   const clrR=(k)=>setRegErrors(p=>{const n={...p};delete n[k];return n});
   const validateStep=()=>{
     if(role==="vendor"&&step===0){
       const e={};
-      if(!document.querySelector("[placeholder=\"Joeldy Tsina\"]")?.value?.trim()) e.name="Nom requis";
-      if(!document.querySelector("[placeholder=\"joeldytsina94@gmail.com\"]")?.value?.trim()) e.email="Email requis";
+      if(!fName.trim()) e.name="Nom requis";
+      if(!fEmail.trim()) e.email="Email requis";
       if(rolePhone.replace(/\s/g,"").length!==9) e.phone="Le numéro doit contenir 9 chiffres";
       else if(!rolePhone.startsWith("04")&&!rolePhone.startsWith("05")&&!rolePhone.startsWith("06")) e.phone="Le numéro doit commencer par 04, 05 ou 06";
       setRegErrors(e);
@@ -30,7 +39,7 @@ function RoleRegScr({onBack,onDone,forceRole,onPending}){
     }
     if(role==="driver"&&step===0){
       const e={};
-      if(!document.querySelector("[placeholder=\"Joeldy Tsina\"]")?.value?.trim()) e.name="Nom requis";
+      if(!fName.trim()) e.name="Nom requis";
       if(rolePhone.replace(/\s/g,"").length!==9) e.phone="Le numéro doit contenir 9 chiffres";
       setRegErrors(e);
       if(Object.keys(e).length){toast.error("Remplissez les champs obligatoires");return false}
@@ -39,23 +48,19 @@ function RoleRegScr({onBack,onDone,forceRole,onPending}){
       const e={};
       const types=["boutique","restaurant","patisserie","supermarche","pharmacie","service"];
       if(!selCats.some(c=>types.includes(c))) e.type="Choisissez un type de commerce";
-      const nameEl=document.querySelector("[placeholder=\"Ex: Chez Mama Ngudi, Congo Tech...\"]");
-      if(!nameEl?.value?.trim()) e.shopName="Nom de l'établissement requis";
+      if(!fShopName.trim()) e.shopName="Nom de l'établissement requis";
       if(!hasLogo) e.logo="Logo / Photo obligatoire";
-      const descEl=document.querySelector("[placeholder=\"Votre activité, spécialités...\"]");
-      if(!descEl?.value?.trim()) e.desc="Description obligatoire";
+      if(!fShopDesc.trim()) e.desc="Description obligatoire";
       setRegErrors(e);
       if(Object.keys(e).length){toast.error(Object.values(e)[0]);return false}
     }
     if(role==="driver"&&step===1){
       const e={};
-      const marqueEl=document.querySelector("[placeholder=\"Honda PCX\"]");
-      const anneeEl=document.querySelector("[placeholder=\"2023\"]");
-      const plaqueEl=document.querySelector("[placeholder=\"BZ-4521\"]");
-      if(!marqueEl?.value?.trim()) e.marque="Marque requise";
-      if(!anneeEl?.value?.trim()) e.annee="Année requise";
-      if(!plaqueEl?.value?.trim()) e.plaque="Plaque requise";
+      if(!fVehMarque.trim()) e.marque="Marque requise";
+      if(!fVehAnnee.trim()) e.annee="Année requise";
+      if(!fVehPlaque.trim()) e.plaque="Plaque requise";
       if(!hasVehPhoto) e.vehPhoto="Photo du véhicule obligatoire";
+      if(selZones.length===0) e.zones="Sélectionnez au moins 1 zone de livraison";
       setRegErrors(e);
       if(Object.keys(e).length){toast.error("Remplissez les champs obligatoires");return false}
     }
@@ -68,6 +73,8 @@ function RoleRegScr({onBack,onDone,forceRole,onPending}){
       }
       if(role==="driver"){
         const missing=[];
+        if(!docs.id) missing.push("Pièce d'identité");
+        if(!docs.permit) missing.push("Permis de conduire");
         if(!docs.id) missing.push("Pièce d'identité");
         if(!docs.permit) missing.push("Permis de conduire");
         if(!docs.vehicle) missing.push("Photo du véhicule");
@@ -182,7 +189,7 @@ function RoleRegScr({onBack,onDone,forceRole,onPending}){
 
       {/* STEP 0: Infos personnelles (both) */}
       {step===0&&<><h3 style={{fontSize:16,fontWeight:700,marginBottom:14}}>Informations personnelles</h3>
-        <div className="field"><label>Nom complet <span style={{color:"#EF4444"}}>*</span></label><input placeholder="Joeldy Tsina"/></div>
+        <div className="field"><label>Nom complet <span style={{color:"#EF4444"}}>*</span></label><input value={fName} onChange={e=>{setFName(e.target.value);clrR("name")}} placeholder="Joeldy Tsina"/>{regErrors.name&&<div className="err-msg">{regErrors.name}</div>}</div>
         <div className="field"><label>Email <span style={{color:"#EF4444"}}>*</span></label><input placeholder="joeldytsina94@gmail.com"/></div>
         <div className="field"><label>Téléphone <span style={{color:"#EF4444"}}>*</span></label><div style={{display:"flex",gap:8,alignItems:"center"}}><span style={{fontSize:13,fontWeight:600,flexShrink:0}}>+242</span><input value={rolePhone} onChange={e=>{const v=e.target.value.replace(/[^0-9]/g,"").slice(0,9);setRolePhone(v);setRolePhoneErr("")}} placeholder="06X XXX XXX" type="tel" maxLength={11}/></div>{rolePhoneErr&&<div className="err-msg">{rolePhoneErr}</div>}</div>
         <div className="field-row"><div className="field"><label>Ville <span style={{color:"#EF4444"}}>*</span></label><input placeholder="Brazzaville"/></div><div className="field"><label>Quartier <span style={{color:"#EF4444"}}>*</span></label><input placeholder="Bacongo"/></div></div>
@@ -199,7 +206,7 @@ function RoleRegScr({onBack,onDone,forceRole,onPending}){
           </div>})}
         </div>
         <div className="vr-upload" onClick={()=>document.getElementById("reg-upload")?.click()} style={{cursor:"pointer"}}><div className="vu-icon" id="vu-preview">🖼️</div><b>Logo / Photo <span style={{color:"#EF4444",fontWeight:400}}>*</span></b><p>PNG, JPG · Max 2MB</p><input id="reg-upload" type="file" accept="image/*" style={{display:"none"}} onChange={e=>{const f=e.target.files?.[0];if(f){const r=new FileReader();r.onload=()=>{const el=document.getElementById("vu-preview");el.textContent="";el.style.overflow="hidden";const img=document.createElement("img");img.src=r.result;img.style.cssText="width:100%;height:100%;object-fit:cover;border-radius:12px";el.appendChild(img);setHasLogo(true)};r.readAsDataURL(f)}}}/></div>
-        <div className="field"><label>Nom de l'établissement <span style={{color:"#EF4444"}}>*</span></label><input placeholder="Ex: Chez Mama Ngudi, Congo Tech..."/></div>
+        <div className="field"><label>Nom de l'établissement <span style={{color:"#EF4444"}}>*</span></label><input value={fShopName} onChange={e=>{setFShopName(e.target.value);clrR("shopName")}} placeholder="Ex: Chez Mama Ngudi, Congo Tech..."/>{regErrors.shopName&&<div className="err-msg">{regErrors.shopName}</div>}</div>
         <div className="field"><label>Description <span style={{color:"#EF4444"}}>*</span></label><input placeholder="Votre activité, spécialités..."/></div>
         <label style={{display:"block",fontSize:12,fontWeight:600,color:"var(--sub)",margin:"14px 0 8px"}}>Sous-catégories</label>
         <div className="vr-cat-grid">{CATS.map(c=><div key={c.id} className={`vr-cat ${selCats.includes(c.name)?"on":""}`} onClick={()=>toggleCat(c.name)}><div className="vci">{c.icon}</div><div className="vcn">{c.name}</div></div>)}</div>
@@ -207,9 +214,9 @@ function RoleRegScr({onBack,onDone,forceRole,onPending}){
 
       {/* STEP 1 DRIVER: Véhicule */}
       {step===1&&role==="driver"&&<><h3 style={{fontSize:16,fontWeight:700,marginBottom:14}}>Votre Véhicule</h3>
-        <div className="field"><label>Type de véhicule <span style={{color:"#EF4444"}}>*</span></label><Select value="moto" onChange={()=>{}} options={[{value:"moto",label:"🛵 Moto"},{value:"voiture",label:"🚗 Voiture"},{value:"velo",label:"🚲 Vélo"}]}/></div>
-        <div className="field-row"><div className="field"><label>Marque <span style={{color:"#EF4444"}}>*</span></label><input placeholder="Honda PCX"/></div><div className="field"><label>Année <span style={{color:"#EF4444"}}>*</span></label><input placeholder="2023"/></div></div>
-        <div className="field-row"><div className="field"><label>Plaque <span style={{color:"#EF4444"}}>*</span></label><input placeholder="BZ-4521"/></div><div className="field"><label>Couleur <span style={{color:"#EF4444"}}>*</span></label><input placeholder="Noir"/></div></div>
+        <div className="field"><label>Type de véhicule <span style={{color:"#EF4444"}}>*</span></label><Select value={fVehType} onChange={v=>setFVehType(v)} options={[{value:"moto",label:"🛵 Moto"},{value:"voiture",label:"🚗 Voiture"},{value:"velo",label:"🚲 Vélo"}]}/></div>
+        <div className="field-row"><div className="field"><label>Marque <span style={{color:"#EF4444"}}>*</span></label><input placeholder="Honda PCX"/>{regErrors.marque&&<div className="err-msg">{regErrors.marque}</div>}</div><div className="field"><label>Année <span style={{color:"#EF4444"}}>*</span></label><input value={fVehAnnee} onChange={e=>{setFVehAnnee(e.target.value);clrR("annee")}} placeholder="2023"/></div></div>
+        <div className="field-row"><div className="field"><label>Plaque <span style={{color:"#EF4444"}}>*</span></label><input placeholder="BZ-4521"/>{regErrors.plaque&&<div className="err-msg">{regErrors.plaque}</div>}</div><div className="field"><label>Couleur <span style={{color:"#EF4444"}}>*</span></label><input placeholder="Noir"/></div></div>
         {/* Vehicle photo */}
         <div style={{marginTop:10,marginBottom:14}}>
           <label style={{display:"block",fontSize:12,fontWeight:600,color:"var(--sub,#5E5B53)",marginBottom:6}}>Photo du véhicule <span style={{color:"#EF4444"}}>*</span></label>
