@@ -25,6 +25,8 @@ function RoleRegScr({onBack,onDone,forceRole,onPending}){
   const [fVehAnnee,setFVehAnnee]=useState("");
   const [fVehPlaque,setFVehPlaque]=useState("");
   const [fVehType,setFVehType]=useState("moto");
+  const [fVille,setFVille]=useState("Brazzaville");
+  const [fQuartier,setFQuartier]=useState("");
   const [selZones,setSelZones]=useState(["Brazzaville Sud","Centre-ville"]);
   const clrR=(k)=>setRegErrors(p=>{const n={...p};delete n[k];return n});
   const validateStep=()=>{
@@ -34,15 +36,21 @@ function RoleRegScr({onBack,onDone,forceRole,onPending}){
       if(!fEmail.trim()) e.email="Email requis";
       if(rolePhone.replace(/\s/g,"").length!==9) e.phone="Le numéro doit contenir 9 chiffres";
       else if(!rolePhone.startsWith("04")&&!rolePhone.startsWith("05")&&!rolePhone.startsWith("06")) e.phone="Le numéro doit commencer par 04, 05 ou 06";
+      if(!fVille.trim()) e.ville="Ville requise";
+      if(!fQuartier.trim()) e.quartier="Quartier requis";
       setRegErrors(e);
-      if(Object.keys(e).length){toast.error("Remplissez les champs obligatoires");return false}
+      if(Object.keys(e).length){toast.error(Object.values(e)[0]);return false}
     }
     if(role==="driver"&&step===0){
       const e={};
       if(!fName.trim()) e.name="Nom requis";
+      if(!fEmail.trim()) e.email="Email requis";
       if(rolePhone.replace(/\s/g,"").length!==9) e.phone="Le numéro doit contenir 9 chiffres";
+      else if(!rolePhone.startsWith("04")&&!rolePhone.startsWith("05")&&!rolePhone.startsWith("06")) e.phone="Le numéro doit commencer par 04, 05 ou 06";
+      if(!fVille.trim()) e.ville="Ville requise";
+      if(!fQuartier.trim()) e.quartier="Quartier requis";
       setRegErrors(e);
-      if(Object.keys(e).length){toast.error("Remplissez les champs obligatoires");return false}
+      if(Object.keys(e).length){toast.error(Object.values(e)[0]);return false}
     }
     if(role==="vendor"&&step===1){
       const e={};
@@ -190,9 +198,9 @@ function RoleRegScr({onBack,onDone,forceRole,onPending}){
       {/* STEP 0: Infos personnelles (both) */}
       {step===0&&<><h3 style={{fontSize:16,fontWeight:700,marginBottom:14}}>Informations personnelles</h3>
         <div className="field"><label>Nom complet <span style={{color:"#EF4444"}}>*</span></label><input value={fName} onChange={e=>{setFName(e.target.value);clrR("name")}} placeholder="Joeldy Tsina"/>{regErrors.name&&<div className="err-msg">{regErrors.name}</div>}</div>
-        <div className="field"><label>Email <span style={{color:"#EF4444"}}>*</span></label><input placeholder="joeldytsina94@gmail.com"/></div>
-        <div className="field"><label>Téléphone <span style={{color:"#EF4444"}}>*</span></label><div style={{display:"flex",gap:8,alignItems:"center"}}><span style={{fontSize:13,fontWeight:600,flexShrink:0}}>+242</span><input value={rolePhone} onChange={e=>{const v=e.target.value.replace(/[^0-9]/g,"").slice(0,9);setRolePhone(v);setRolePhoneErr("")}} placeholder="06X XXX XXX" type="tel" maxLength={11}/></div>{rolePhoneErr&&<div className="err-msg">{rolePhoneErr}</div>}</div>
-        <div className="field-row"><div className="field"><label>Ville <span style={{color:"#EF4444"}}>*</span></label><input placeholder="Brazzaville"/></div><div className="field"><label>Quartier <span style={{color:"#EF4444"}}>*</span></label><input placeholder="Bacongo"/></div></div>
+        <div className="field"><label>Email <span style={{color:"#EF4444"}}>*</span></label><input value={fEmail} onChange={e=>{setFEmail(e.target.value);clrR("email")}} placeholder="joeldytsina94@gmail.com" type="email"/>{regErrors.email&&<div className="err-msg">{regErrors.email}</div>}</div>
+        <div className="field"><label>Téléphone <span style={{color:"#EF4444"}}>*</span></label><div style={{display:"flex",gap:8,alignItems:"center"}}><span style={{fontSize:13,fontWeight:600,flexShrink:0}}>+242</span><input value={rolePhone} onChange={e=>{const v=e.target.value.replace(/[^0-9]/g,"").slice(0,9);setRolePhone(v);setRolePhoneErr("");clrR("phone")}} placeholder="06X XXX XXX" type="tel" maxLength={11}/></div>{(rolePhoneErr||regErrors.phone)&&<div className="err-msg">{rolePhoneErr||regErrors.phone}</div>}</div>
+        <div className="field-row"><div className="field"><label>Ville <span style={{color:"#EF4444"}}>*</span></label><input value={fVille} onChange={e=>{setFVille(e.target.value);clrR("ville")}} placeholder="Brazzaville"/>{regErrors.ville&&<div className="err-msg">{regErrors.ville}</div>}</div><div className="field"><label>Quartier <span style={{color:"#EF4444"}}>*</span></label><input value={fQuartier} onChange={e=>{setFQuartier(e.target.value);clrR("quartier")}} placeholder="Bacongo"/>{regErrors.quartier&&<div className="err-msg">{regErrors.quartier}</div>}</div></div>
       </>}
 
       {/* STEP 1 VENDOR: Établissement */}
@@ -207,7 +215,7 @@ function RoleRegScr({onBack,onDone,forceRole,onPending}){
         </div>
         <div className="vr-upload" onClick={()=>document.getElementById("reg-upload")?.click()} style={{cursor:"pointer"}}><div className="vu-icon" id="vu-preview">🖼️</div><b>Logo / Photo <span style={{color:"#EF4444",fontWeight:400}}>*</span></b><p>PNG, JPG · Max 2MB</p><input id="reg-upload" type="file" accept="image/*" style={{display:"none"}} onChange={e=>{const f=e.target.files?.[0];if(f){const r=new FileReader();r.onload=()=>{const el=document.getElementById("vu-preview");el.textContent="";el.style.overflow="hidden";const img=document.createElement("img");img.src=r.result;img.style.cssText="width:100%;height:100%;object-fit:cover;border-radius:12px";el.appendChild(img);setHasLogo(true)};r.readAsDataURL(f)}}}/></div>
         <div className="field"><label>Nom de l'établissement <span style={{color:"#EF4444"}}>*</span></label><input value={fShopName} onChange={e=>{setFShopName(e.target.value);clrR("shopName")}} placeholder="Ex: Chez Mama Ngudi, Congo Tech..."/>{regErrors.shopName&&<div className="err-msg">{regErrors.shopName}</div>}</div>
-        <div className="field"><label>Description <span style={{color:"#EF4444"}}>*</span></label><input placeholder="Votre activité, spécialités..."/></div>
+        <div className="field"><label>Description <span style={{color:"#EF4444"}}>*</span></label><textarea value={fShopDesc} onChange={e=>{setFShopDesc(e.target.value);clrR("desc")}} placeholder="Votre activité, spécialités..." rows={3} style={{resize:"none"}}/>{regErrors.desc&&<div className="err-msg">{regErrors.desc}</div>}</div>
         <label style={{display:"block",fontSize:12,fontWeight:600,color:"var(--sub)",margin:"14px 0 8px"}}>Sous-catégories</label>
         <div className="vr-cat-grid">{CATS.map(c=><div key={c.id} className={`vr-cat ${selCats.includes(c.name)?"on":""}`} onClick={()=>toggleCat(c.name)}><div className="vci">{c.icon}</div><div className="vcn">{c.name}</div></div>)}</div>
       </>}
