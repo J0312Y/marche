@@ -1,7 +1,8 @@
 import { D_HISTORY, D_STATS } from "../../data/driverData";
 import PullToRefresh from "../../components/PullToRefresh";
 import toast from "../../utils/toast";
-import { DRIVER_PHOTO } from "../../data/images";
+import ImageCropper from "../../components/ImageCropper";
+import { DRIVER_PHOTO, DRIVER_COVER } from "../../data/images";
 import { fmt } from "../../utils/helpers";
 
 function DrProfileScr({go,onSwitch,onLogout}){
@@ -23,12 +24,30 @@ function DrProfileScr({go,onSwitch,onLogout}){
     </div>
   );
 
+  const [drPhoto,setDrPhoto]=useState(DRIVER_PHOTO);
+  const [drCover,setDrCover]=useState(DRIVER_COVER);
+  const [cropDrSrc,setCropDrSrc]=useState(null);
+
   return(<PullToRefresh onRefresh={async()=>{toast.success("Profil actualisé 👤")}}><div className="scr" style={{paddingBottom:20}}>
     <div className="appbar"><h2>Mon Profil</h2><button onClick={()=>go("drNotif")}>🔔</button></div>
 
-    {/* Profile header */}
-    <div style={{textAlign:"center",padding:"10px 20px 16px"}}>
-      <div style={{width:80,height:80,borderRadius:22,background:"linear-gradient(135deg,#F97316,#EA580C)",display:"flex",alignItems:"center",justifyContent:"center",margin:"0 auto 10px",overflow:"hidden"}}><img src={DRIVER_PHOTO} style={{width:"100%",height:"100%",objectFit:"cover"}} alt=""/></div>
+    {/* Profile header — cover + photo */}
+    <div style={{position:"relative",marginBottom:50}}>
+      <div style={{height:120,borderRadius:"0 0 20px 20px",overflow:"hidden",position:"relative"}}>
+        <img src={drCover} style={{width:"100%",height:"100%",objectFit:"cover",objectPosition:"center"}} alt=""/>
+        <label style={{position:"absolute",bottom:8,right:8,padding:"5px 10px",borderRadius:10,background:"rgba(0,0,0,.5)",color:"#fff",fontSize:10,fontWeight:600,cursor:"pointer",display:"flex",alignItems:"center",gap:4}}>📷 Couverture
+          <input type="file" accept="image/*" style={{display:"none"}} onChange={e=>{const f=e.target.files?.[0];if(f){const r=new FileReader();r.onload=()=>{setDrCover(r.result);toast.success("Couverture mise à jour 📸")};r.readAsDataURL(f);e.target.value=""}}}/>
+        </label>
+      </div>
+      <div style={{position:"absolute",bottom:-38,left:"50%",transform:"translateX(-50%)"}}>
+        <div style={{width:76,height:76,borderRadius:"50%",overflow:"hidden",border:"3px solid var(--bg)",boxShadow:"0 2px 12px rgba(0,0,0,.12)",position:"relative",cursor:"pointer"}} onClick={()=>document.getElementById("dr-photo-up")?.click()}>
+          <img src={drPhoto} style={{width:"100%",height:"100%",objectFit:"cover"}} alt=""/>
+          <div style={{position:"absolute",bottom:0,left:0,right:0,padding:"2px 0",background:"rgba(0,0,0,.45)",textAlign:"center"}}><span style={{fontSize:8,color:"#fff"}}>📷</span></div>
+        </div>
+        <input id="dr-photo-up" type="file" accept="image/*" style={{display:"none"}} onChange={e=>{const f=e.target.files?.[0];if(f){const r=new FileReader();r.onload=()=>setCropDrSrc(r.result);r.readAsDataURL(f);e.target.value=""}}}/>
+      </div>
+    </div>
+    <div style={{textAlign:"center",paddingTop:6}}>
       <h2 style={{fontSize:20,fontWeight:700}}>Patrick Moukala</h2>
       <p style={{fontSize:13,color:"var(--muted)"}}>🛵 Honda PCX · BZ-4521</p>
       <div style={{display:"flex",justifyContent:"center",gap:6,marginTop:8}}>
@@ -67,6 +86,7 @@ function DrProfileScr({go,onSwitch,onLogout}){
       <button onClick={onSwitch} style={{flex:1,padding:12,borderRadius:14,border:"1px solid var(--border)",background:"var(--card)",fontSize:13,fontWeight:600,cursor:"pointer",fontFamily:"inherit",color:"var(--text)"}}>🛍️ Mode Acheteur</button>
       <button onClick={onLogout} style={{flex:1,padding:12,borderRadius:14,border:"1px solid rgba(239,68,68,0.3)",background:"transparent",color:"#EF4444",fontSize:13,fontWeight:600,cursor:"pointer",fontFamily:"inherit"}}>🚪 Déconnexion</button>
     </div>
+  {cropDrSrc&&<ImageCropper src={cropDrSrc} shape="circle" onCancel={()=>setCropDrSrc(null)} onConfirm={cropped=>{setDrPhoto(cropped);setCropDrSrc(null);toast.success("Photo mise à jour 📸")}}/>}
   </div></PullToRefresh>);
 }
 

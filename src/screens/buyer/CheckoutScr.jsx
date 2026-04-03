@@ -9,6 +9,7 @@ import { useData } from "../../hooks";
 
 function CheckoutScr({onBack,onDone,cart=[],appliedCoupon,setAppliedCoupon}){
   const [step,setStep]=useState(0);const [momo,setMomo]=useState("airtel");const [ok,setOk]=useState(false);
+  const [ckAddr,setCkAddr]=useState("");
   const [ckPhone,setCkPhone]=useState("064663469");
   const [ckPhoneErr,setCkPhoneErr]=useState("");const [saveAddr,setSaveAddr]=useState(true);
   const [giftCode,setGiftCode]=useState("");
@@ -27,8 +28,7 @@ function CheckoutScr({onBack,onDone,cart=[],appliedCoupon,setAppliedCoupon}){
   const total=Math.max(0,sub-discountAmount+finalDelivery-giftDeduct);
 
   const validateStep0=()=>{
-    const el=document.querySelector("[placeholder=\"Quartier, rue, numéro...\"]");
-    if(!el?.value?.trim()&&step===0){toast.error("Entrez votre adresse de livraison");return false}
+    if(!ckAddr.trim()&&step===0){toast.error("Entrez votre adresse de livraison");return false}
     return true;
   };
   const validateCheckout=()=>{if(!momo){toast.error("Choisissez un moyen de paiement");return false}return true};
@@ -44,7 +44,7 @@ function CheckoutScr({onBack,onDone,cart=[],appliedCoupon,setAppliedCoupon}){
       {step===0&&<><h3 style={{fontSize:18,fontWeight:700,marginBottom:14}}>Adresse de livraison</h3>
         <div className="field"><label>Nom complet <span style={{color:"#EF4444"}}>*</span></label><input defaultValue="Joeldy Tsina"/></div>
         <div className="field"><label>Téléphone <span style={{color:"#EF4444"}}>*</span></label><div style={{display:"flex",gap:8,alignItems:"center"}}><span style={{fontSize:13,fontWeight:600,flexShrink:0}}>+242</span><input value={ckPhone} onChange={e=>{const v=e.target.value.replace(/[^0-9]/g,"").slice(0,9);setCkPhone(v);setCkPhoneErr("")}} placeholder="06X XXX XXX" type="tel" maxLength={11}/></div>{ckPhoneErr&&<div className="err-msg">{ckPhoneErr}</div>}</div>
-        <div className="field"><label>Adresse <span style={{color:"#EF4444"}}>*</span></label><input placeholder="Quartier, Rue, N°"/></div>
+        <div className="field"><label>Adresse <span style={{color:"#EF4444"}}>*</span></label><input value={ckAddr} onChange={e=>setCkAddr(e.target.value)} placeholder="Quartier, Rue, N°"/></div>
         <div className="field-row"><div className="field"><label>Ville <span style={{color:"#EF4444"}}>*</span></label><input defaultValue="Brazzaville"/></div><div className="field"><label>Pays</label><input defaultValue="Congo 🇨🇬"/></div></div>
         <div style={{marginTop:12,fontSize:13,fontWeight:700,marginBottom:8}}>📅 Quand livrer ?</div>
         <div style={{display:"flex",gap:6,marginBottom:8}}>

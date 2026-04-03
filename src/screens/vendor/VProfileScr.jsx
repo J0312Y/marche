@@ -1,11 +1,15 @@
 import { useState } from "react";
 import PullToRefresh from "../../components/PullToRefresh";
 import toast from "../../utils/toast";
-import { VENDOR_LOGO_DEFAULT } from "../../data/images";
+import ImageCropper from "../../components/ImageCropper";
+import { VENDOR_LOGO_DEFAULT, VENDOR_COVER } from "../../data/images";
 
 function VProfileScr({go,onSwitch,vendorPlan,onLogout}){
   const planInfo=vendorPlan==="starter"?{name:"Starter",color:"var(--muted)",badge:"Gratuit",icon:"🆓"}:vendorPlan==="pro"?{name:"Pro",color:"#F97316",badge:"Pro ✓",icon:"⭐"}:{name:"Enterprise",color:"#F59E0B",badge:"Enterprise ★",icon:"🚀"};
   const [lockPopup,setLockPopup]=useState(null);
+  const [vLogo,setVLogo]=useState(VENDOR_LOGO_DEFAULT);
+  const [vCover,setVCover]=useState(VENDOR_COVER);
+  const [cropLogoSrc,setCropLogoSrc]=useState(null);
   const isPro=vendorPlan!=="starter";
   const isEnt=vendorPlan==="enterprise";
 
@@ -33,9 +37,25 @@ function VProfileScr({go,onSwitch,vendorPlan,onLogout}){
   return(<PullToRefresh onRefresh={async()=>{toast.success("Espace actualisé 🏪")}}><div className="scr" style={{paddingBottom:20}}>
     <div className="appbar"><h2>Mon Espace</h2><button onClick={()=>go("vSettings")}>⚙️</button></div>
 
-    {/* Profile header */}
-    <div className="vs-header">
-      <div className="vs-logo" style={{overflow:"hidden",padding:0}}><img src={VENDOR_LOGO_DEFAULT} style={{width:"100%",height:"100%",objectFit:"cover"}} alt=""/></div>
+    {/* Profile header — cover + logo */}
+    <div style={{position:"relative",marginBottom:50}}>
+      {/* Cover */}
+      <div style={{height:130,borderRadius:"0 0 20px 20px",overflow:"hidden",position:"relative"}}>
+        <img src={vCover} style={{width:"100%",height:"100%",objectFit:"cover",objectPosition:"center"}} alt=""/>
+        <label style={{position:"absolute",bottom:8,right:8,padding:"5px 10px",borderRadius:10,background:"rgba(0,0,0,.5)",color:"#fff",fontSize:10,fontWeight:600,cursor:"pointer",display:"flex",alignItems:"center",gap:4}}>📷 Couverture
+          <input type="file" accept="image/*" style={{display:"none"}} onChange={e=>{const f=e.target.files?.[0];if(f){const r=new FileReader();r.onload=()=>{setVCover(r.result);toast.success("Couverture mise à jour 📸")};r.readAsDataURL(f);e.target.value=""}}}/>
+        </label>
+      </div>
+      {/* Logo floating */}
+      <div style={{position:"absolute",bottom:-40,left:"50%",transform:"translateX(-50%)"}}>
+        <div style={{width:80,height:80,borderRadius:22,overflow:"hidden",border:"3px solid var(--bg)",boxShadow:"0 2px 12px rgba(0,0,0,.12)",position:"relative",cursor:"pointer"}} onClick={()=>document.getElementById("vp-logo-up")?.click()}>
+          <img src={vLogo} style={{width:"100%",height:"100%",objectFit:"cover"}} alt=""/>
+          <div style={{position:"absolute",bottom:0,left:0,right:0,padding:"3px 0",background:"rgba(0,0,0,.45)",textAlign:"center"}}><span style={{fontSize:9,color:"#fff"}}>📷</span></div>
+        </div>
+        <input id="vp-logo-up" type="file" accept="image/*" style={{display:"none"}} onChange={e=>{const f=e.target.files?.[0];if(f){const r=new FileReader();r.onload=()=>setCropLogoSrc(r.result);r.readAsDataURL(f);e.target.value=""}}}/>
+      </div>
+    </div>
+    <div style={{textAlign:"center",paddingTop:8}}>
       <h3 style={{fontSize:18,fontWeight:700}}>Mon Commerce</h3>
       <div style={{display:"inline-flex",alignItems:"center",gap:6,padding:"4px 12px",borderRadius:20,background:isEnt?"rgba(245,158,11,0.08)":isPro?"rgba(249,115,22,0.08)":"var(--light)",marginTop:6}}>
         <span style={{fontSize:12}}>{planInfo.icon}</span>
@@ -133,6 +153,7 @@ function VProfileScr({go,onSwitch,vendorPlan,onLogout}){
         </div>
       </div>
     </div>}
+  {cropLogoSrc&&<ImageCropper src={cropLogoSrc} shape="square" onCancel={()=>setCropLogoSrc(null)} onConfirm={cropped=>{setVLogo(cropped);setCropLogoSrc(null);toast.success("Logo mis à jour 📸")}}/>}
   </div></PullToRefresh>);
 }
 

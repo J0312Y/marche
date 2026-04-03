@@ -14,6 +14,8 @@ export const DRIVER_PHOTO = "https://images.unsplash.com/photo-1506277886164-e25
 export const VEHICLE_PHOTO = "https://images.unsplash.com/photo-1558618666-fcd25c85f82e?w=400&h=300&fit=crop"; // motorcycle
 
 // Vendor
+export const VENDOR_COVER = "https://images.unsplash.com/photo-1556742049-0cfed4f6a45d?w=600&h=200&fit=crop"; // shop cover
+export const DRIVER_COVER = "https://images.unsplash.com/photo-1558618666-fcd25c85f82e?w=600&h=200&fit=crop"; // delivery cover
 export const VENDOR_LOGO_DEFAULT = "https://images.unsplash.com/photo-1441986300917-64674bd600d8?w=200&h=200&fit=crop"; // shop front
 
 // Chat avatars
@@ -26,4 +28,4 @@ export const CHAT_AVATARS = {
   femme2: "https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=100&h=100&fit=crop&crop=face",
 };
 
-export default { LAMUKA_LOGO, USER_AVATAR, DRIVER_PHOTO, VEHICLE_PHOTO, VENDOR_LOGO_DEFAULT, CHAT_AVATARS };
+export default { LAMUKA_LOGO, USER_AVATAR, DRIVER_PHOTO, VEHICLE_PHOTO, VENDOR_LOGO_DEFAULT, VENDOR_COVER, DRIVER_COVER, CHAT_AVATARS };
