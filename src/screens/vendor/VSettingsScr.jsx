@@ -4,6 +4,7 @@ import Select from "../../components/Select";
 import { useApp } from "../../context/AppContext";
 import { VENDOR_LOGO_DEFAULT } from "../../data/images";
 import toast from "../../utils/toast";
+import ImageCropper from "../../components/ImageCropper";
 
 function VSettingsScr({onBack,go}){
   const { darkMode, toggleDark } = useApp();
@@ -14,9 +15,10 @@ function VSettingsScr({onBack,go}){
   const [emailReport,setEmailReport]=useState(true);
   const [sound,setSound]=useState(true);
   const {setLang:ctxSetLang,lang:currentLang}=useApp();
+  const [cropVsLogo,setCropVsLogo]=useState(null);
   const [lang,setLang]=useState(currentLang||"fr");
   return(<div className="scr" style={{paddingBottom:20}}><div className="appbar"><button onClick={onBack}>←</button><h2>Paramètres boutique</h2><div style={{width:38}}/></div>
-    <div className="vs-header"><div className="vs-logo" style={{overflow:"hidden",padding:0}}><img src={VENDOR_LOGO_DEFAULT} style={{width:"100%",height:"100%",objectFit:"cover"}} alt=""/></div><h3 style={{fontSize:18,fontWeight:700}}>Mon Commerce</h3><p style={{fontSize:12,color:"var(--muted)"}}>Mode & Accessoires africains</p><div className="edit-logo" onClick={()=>document.getElementById("vset-logo")?.click()}>📸 Changer le logo</div><input id="vset-logo" type="file" accept="image/*" style={{display:"none"}} onChange={e=>{const f=e.target.files?.[0];if(f){toast.success("Logo mis à jour 📸")}}}/></div>
+    <div className="vs-header"><div className="vs-logo" style={{overflow:"hidden",padding:0}}><img src={VENDOR_LOGO_DEFAULT} style={{width:"100%",height:"100%",objectFit:"cover"}} alt=""/></div><h3 style={{fontSize:18,fontWeight:700}}>Mon Commerce</h3><p style={{fontSize:12,color:"var(--muted)"}}>Mode & Accessoires africains</p><div className="edit-logo" onClick={()=>document.getElementById("vset-logo")?.click()}>📸 Changer le logo</div><input id="vset-logo" type="file" accept="image/*" style={{display:"none"}} onChange={e=>{const f=e.target.files?.[0];if(f){const r=new FileReader();r.onload=()=>setCropVsLogo(r.result);r.readAsDataURL(f);e.target.value=""}}}/></div>
     <div style={{padding:"0 16px"}}>
       <div className="field"><label>Nom de l'établissement</label><input defaultValue="Mon Commerce"/></div>
       <div className="field"><label>Description</label><textarea rows={3} defaultValue="Vêtements et accessoires africains modernes. Wax, Bogolan, Cuir artisanal."/></div>
@@ -52,6 +54,7 @@ function VSettingsScr({onBack,go}){
       </div>
     </div>
     <div style={{padding:"0 20px 20px"}}><button className="btn-primary" onClick={()=>toast.success("Paramètres sauvegardés ✅")}>💾 Enregistrer</button></div>
+    {cropVsLogo&&<ImageCropper src={cropVsLogo} shape="square" onCancel={()=>setCropVsLogo(null)} onConfirm={cropped=>{setCropVsLogo(null);toast.success("Logo mis à jour 📸")}}/>}
   </div>);
 }
 

@@ -1,5 +1,6 @@
 import { useState } from "react";
 import Select from "../../components/Select";
+import ImageCropper from "../../components/ImageCropper";
 import toast from "../../utils/toast";
 import { USER_AVATAR } from "../../data/images";
 
@@ -12,6 +13,7 @@ function ProfileCompletionScr({onDone,provider,setUserName}){
   const [quartier,setQuartier]=useState("");
   const [address,setAddress]=useState("");
   const [errors,setErrors]=useState({});
+  const [cropSrc,setCropSrc]=useState(null);
 
   const clr=(k)=>setErrors(p=>{const n={...p};delete n[k];return n});
   const validate0=()=>{
@@ -66,6 +68,7 @@ function ProfileCompletionScr({onDone,provider,setUserName}){
       </>}
 
       <div style={{display:"flex",justifyContent:"center",gap:6,marginTop:20}}>{[0,1].map(i=><div key={i} style={{width:step===i?24:8,height:8,borderRadius:4,background:step>=i?"#F97316":"var(--border)",transition:"all .3s"}}/>)}</div>
+    {cropSrc&&<ImageCropper src={cropSrc} shape="circle" onCancel={()=>setCropSrc(null)} onConfirm={cropped=>{setPhoto(cropped);setCropSrc(null)}}/>}
     </div>
   );
 }

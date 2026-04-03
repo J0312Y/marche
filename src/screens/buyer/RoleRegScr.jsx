@@ -1,5 +1,6 @@
 import { useState } from "react";
 import Select from "../../components/Select";
+import ImageCropper from "../../components/ImageCropper";
 import { useData } from "../../hooks";
 import toast from "../../utils/toast";
 import PayLogo from "../../components/PayLogos";
@@ -26,8 +27,11 @@ function RoleRegScr({onBack,onDone,forceRole,onPending}){
   const [fVehPlaque,setFVehPlaque]=useState("");
   const [fVehType,setFVehType]=useState("moto");
   const [fVille,setFVille]=useState("Brazzaville");
+  const [fVehCouleur,setFVehCouleur]=useState("");
   const [fQuartier,setFQuartier]=useState("");
   const [selZones,setSelZones]=useState(["Brazzaville Sud","Centre-ville"]);
+  const [cropLogSrc,setCropLogSrc]=useState(null);
+  const [cropVehSrc,setCropVehSrc]=useState(null);
   const clrR=(k)=>setRegErrors(p=>{const n={...p};delete n[k];return n});
   const validateStep=()=>{
     if(role==="vendor"&&step===0){
@@ -123,6 +127,18 @@ function RoleRegScr({onBack,onDone,forceRole,onPending}){
   const maxStep=steps.length-1;
 
   // Success screen
+  // Image croppers
+  const applyLogoCrop=(cropped)=>{
+    const el=document.getElementById("vu-preview");
+    if(el){el.textContent="";el.style.overflow="hidden";const img=document.createElement("img");img.src=cropped;img.style.cssText="width:100%;height:100%;object-fit:cover;border-radius:12px";el.appendChild(img)}
+    setHasLogo(true);setCropLogSrc(null);toast.success("Logo ajouté 📸");
+  };
+  const applyVehCrop=(cropped)=>{
+    const wrap=document.getElementById("drv-veh-wrap");
+    if(wrap){wrap.innerHTML="";wrap.style.border="none";wrap.style.padding="0";const img=document.createElement("img");img.src=cropped;img.style.cssText="width:100%;height:100%;object-fit:cover;border-radius:14px";wrap.appendChild(img)}
+    setHasVehPhoto(true);setCropVehSrc(null);toast.success("Photo véhicule ajoutée 📸");
+  };
+
   if(ok)return(<div style={{display:"flex",flexDirection:"column",height:"100%",justifyContent:"center",animation:"fadeIn .3s ease"}}><div style={{textAlign:"center",padding:"40px 20px"}}>
     <div style={{width:80,height:80,borderRadius:"50%",background:"rgba(249,115,22,0.08)",display:"flex",alignItems:"center",justifyContent:"center",margin:"0 auto 20px",fontSize:40}}>📩</div>
     <h2 style={{fontSize:20,fontWeight:700,marginBottom:8}}>Demande envoyée !</h2>
@@ -213,7 +229,7 @@ function RoleRegScr({onBack,onDone,forceRole,onPending}){
             <div style={{fontSize:11,fontWeight:700,color:sel?"#F97316":"var(--sub)"}}>{label}</div>
           </div>})}
         </div>
-        <div className="vr-upload" onClick={()=>document.getElementById("reg-upload")?.click()} style={{cursor:"pointer"}}><div className="vu-icon" id="vu-preview">🖼️</div><b>Logo / Photo <span style={{color:"#EF4444",fontWeight:400}}>*</span></b><p>PNG, JPG · Max 2MB</p><input id="reg-upload" type="file" accept="image/*" style={{display:"none"}} onChange={e=>{const f=e.target.files?.[0];if(f){const r=new FileReader();r.onload=()=>{const el=document.getElementById("vu-preview");el.textContent="";el.style.overflow="hidden";const img=document.createElement("img");img.src=r.result;img.style.cssText="width:100%;height:100%;object-fit:cover;border-radius:12px";el.appendChild(img);setHasLogo(true)};r.readAsDataURL(f)}}}/></div>
+        <div className="vr-upload" onClick={()=>document.getElementById("reg-upload")?.click()} style={{cursor:"pointer"}}><div className="vu-icon" id="vu-preview">🖼️</div><b>Logo / Photo <span style={{color:"#EF4444",fontWeight:400}}>*</span></b><p>PNG, JPG · Max 2MB</p><input id="reg-upload" type="file" accept="image/*" style={{display:"none"}} onChange={e=>{const f=e.target.files?.[0];if(f){const r=new FileReader();r.onload=()=>setCropLogSrc(r.result);r.readAsDataURL(f);e.target.value=""}}}/></div>
         <div className="field"><label>Nom de l'établissement <span style={{color:"#EF4444"}}>*</span></label><input value={fShopName} onChange={e=>{setFShopName(e.target.value);clrR("shopName")}} placeholder="Ex: Chez Mama Ngudi, Congo Tech..."/>{regErrors.shopName&&<div className="err-msg">{regErrors.shopName}</div>}</div>
         <div className="field"><label>Description <span style={{color:"#EF4444"}}>*</span></label><textarea value={fShopDesc} onChange={e=>{setFShopDesc(e.target.value);clrR("desc")}} placeholder="Votre activité, spécialités..." rows={3} style={{resize:"none"}}/>{regErrors.desc&&<div className="err-msg">{regErrors.desc}</div>}</div>
         <label style={{display:"block",fontSize:12,fontWeight:600,color:"var(--sub)",margin:"14px 0 8px"}}>Sous-catégories</label>
@@ -223,8 +239,8 @@ function RoleRegScr({onBack,onDone,forceRole,onPending}){
       {/* STEP 1 DRIVER: Véhicule */}
       {step===1&&role==="driver"&&<><h3 style={{fontSize:16,fontWeight:700,marginBottom:14}}>Votre Véhicule</h3>
         <div className="field"><label>Type de véhicule <span style={{color:"#EF4444"}}>*</span></label><Select value={fVehType} onChange={v=>setFVehType(v)} options={[{value:"moto",label:"🛵 Moto"},{value:"voiture",label:"🚗 Voiture"},{value:"velo",label:"🚲 Vélo"}]}/></div>
-        <div className="field-row"><div className="field"><label>Marque <span style={{color:"#EF4444"}}>*</span></label><input placeholder="Honda PCX"/>{regErrors.marque&&<div className="err-msg">{regErrors.marque}</div>}</div><div className="field"><label>Année <span style={{color:"#EF4444"}}>*</span></label><input value={fVehAnnee} onChange={e=>{setFVehAnnee(e.target.value);clrR("annee")}} placeholder="2023"/></div></div>
-        <div className="field-row"><div className="field"><label>Plaque <span style={{color:"#EF4444"}}>*</span></label><input placeholder="BZ-4521"/>{regErrors.plaque&&<div className="err-msg">{regErrors.plaque}</div>}</div><div className="field"><label>Couleur <span style={{color:"#EF4444"}}>*</span></label><input placeholder="Noir"/></div></div>
+        <div className="field-row"><div className="field"><label>Marque <span style={{color:"#EF4444"}}>*</span></label><input value={fVehMarque} onChange={e=>{setFVehMarque(e.target.value);clrR("marque")}} placeholder="Honda PCX"/>{regErrors.marque&&<div className="err-msg">{regErrors.marque}</div>}</div><div className="field"><label>Année <span style={{color:"#EF4444"}}>*</span></label><input value={fVehAnnee} onChange={e=>{setFVehAnnee(e.target.value);clrR("annee")}} placeholder="2023"/>{regErrors.annee&&<div className="err-msg">{regErrors.annee}</div>}</div></div>
+        <div className="field-row"><div className="field"><label>Plaque <span style={{color:"#EF4444"}}>*</span></label><input value={fVehPlaque} onChange={e=>{setFVehPlaque(e.target.value);clrR("plaque")}} placeholder="BZ-4521"/>{regErrors.plaque&&<div className="err-msg">{regErrors.plaque}</div>}</div><div className="field"><label>Couleur <span style={{color:"#EF4444"}}>*</span></label><input value={fVehCouleur} onChange={e=>setFVehCouleur(e.target.value)} placeholder="Noir"/></div></div>
         {/* Vehicle photo */}
         <div style={{marginTop:10,marginBottom:14}}>
           <label style={{display:"block",fontSize:12,fontWeight:600,color:"var(--sub,#5E5B53)",marginBottom:6}}>Photo du véhicule <span style={{color:"#EF4444"}}>*</span></label>
@@ -235,13 +251,8 @@ function RoleRegScr({onBack,onDone,forceRole,onPending}){
           <input id="drv-veh-upload" type="file" accept="image/*" style={{display:"none"}} onChange={e=>{
             const f=e.target.files?.[0];if(!f)return;
             const reader=new FileReader();
-            reader.onload=()=>{
-              const wrap=document.getElementById("drv-veh-wrap");
-              wrap.innerHTML="";wrap.style.border="none";wrap.style.padding="0";
-              const img=document.createElement("img");img.src=reader.result;img.style.cssText="width:100%;height:100%;object-fit:cover;border-radius:14px";
-              wrap.appendChild(img);
-              setHasVehPhoto(true);toast.success("Photo véhicule ajoutée 📸");
-            };reader.readAsDataURL(f);e.target.value="";
+            reader.onload=()=>setCropVehSrc(reader.result);
+            reader.readAsDataURL(f);e.target.value="";
           }}/>
         </div>
         <div style={{fontSize:14,fontWeight:700,margin:"0 0 10px"}}>Zones de livraison</div>
@@ -441,6 +452,8 @@ function RoleRegScr({onBack,onDone,forceRole,onPending}){
         </>}
       </div>
     </div>}
+    {cropLogSrc&&<ImageCropper src={cropLogSrc} shape="square" onCancel={()=>setCropLogSrc(null)} onConfirm={applyLogoCrop}/>}
+    {cropVehSrc&&<ImageCropper src={cropVehSrc} shape="rect" onCancel={()=>setCropVehSrc(null)} onConfirm={applyVehCrop}/>}
   </>);
 }
 
