@@ -31,7 +31,7 @@ function RoleRegScr({onBack,onDone,forceRole,onPending}){
   const [fQuartier,setFQuartier]=useState("");
   const [selZones,setSelZones]=useState(["Brazzaville Sud","Centre-ville"]);
   const [cropLogSrc,setCropLogSrc]=useState(null);
-  const [cropVehSrc,setCropVehSrc]=useState(null);
+  
   const clrR=(k)=>setRegErrors(p=>{const n={...p};delete n[k];return n});
   const validateStep=()=>{
     if(role==="vendor"&&step===0){
@@ -133,11 +133,7 @@ function RoleRegScr({onBack,onDone,forceRole,onPending}){
     if(el){el.textContent="";el.style.overflow="hidden";const img=document.createElement("img");img.src=cropped;img.style.cssText="width:100%;height:100%;object-fit:cover;border-radius:12px";el.appendChild(img)}
     setHasLogo(true);setCropLogSrc(null);toast.success("Logo ajouté 📸");
   };
-  const applyVehCrop=(cropped)=>{
-    const wrap=document.getElementById("drv-veh-wrap");
-    if(wrap){wrap.innerHTML="";wrap.style.border="none";wrap.style.padding="0";const img=document.createElement("img");img.src=cropped;img.style.cssText="width:100%;height:100%;object-fit:cover;border-radius:14px";wrap.appendChild(img)}
-    setHasVehPhoto(true);setCropVehSrc(null);toast.success("Photo véhicule ajoutée 📸");
-  };
+
 
   if(ok)return(<div style={{display:"flex",flexDirection:"column",height:"100%",justifyContent:"center",animation:"fadeIn .3s ease"}}><div style={{textAlign:"center",padding:"40px 20px"}}>
     <div style={{width:80,height:80,borderRadius:"50%",background:"rgba(249,115,22,0.08)",display:"flex",alignItems:"center",justifyContent:"center",margin:"0 auto 20px",fontSize:40}}>📩</div>
@@ -251,7 +247,13 @@ function RoleRegScr({onBack,onDone,forceRole,onPending}){
           <input id="drv-veh-upload" type="file" accept="image/*" style={{display:"none"}} onChange={e=>{
             const f=e.target.files?.[0];if(!f)return;
             const reader=new FileReader();
-            reader.onload=()=>setCropVehSrc(reader.result);
+            reader.onload=()=>{
+              const wrap=document.getElementById("drv-veh-wrap");
+              if(wrap){wrap.innerHTML="";wrap.style.border="none";wrap.style.padding="0";
+              const img=document.createElement("img");img.src=reader.result;img.style.cssText="width:100%;height:100%;object-fit:cover;object-position:center;border-radius:14px";
+              wrap.appendChild(img)}
+              setHasVehPhoto(true);toast.success("Photo véhicule ajoutée 📸");
+            };
             reader.readAsDataURL(f);e.target.value="";
           }}/>
         </div>
@@ -453,7 +455,6 @@ function RoleRegScr({onBack,onDone,forceRole,onPending}){
       </div>
     </div>}
     {cropLogSrc&&<ImageCropper src={cropLogSrc} shape="square" onCancel={()=>setCropLogSrc(null)} onConfirm={applyLogoCrop}/>}
-    {cropVehSrc&&<ImageCropper src={cropVehSrc} shape="rect" onCancel={()=>setCropVehSrc(null)} onConfirm={applyVehCrop}/>}
   </>);
 }
 

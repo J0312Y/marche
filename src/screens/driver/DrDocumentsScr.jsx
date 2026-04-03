@@ -1,6 +1,5 @@
 import { useState } from "react";
 import toast from "../../utils/toast";
-import ImageCropper from "../../components/ImageCropper";
 
 function DrDocumentsScr({onBack}){
   const [docs,setDocs]=useState({
@@ -12,8 +11,6 @@ function DrDocumentsScr({onBack}){
     photo:{name:"Photo du véhicule",status:"valid",expiry:"—",file:true},
   });
   const [uploading,setUploading]=useState(null);
-  const [cropDocSrc,setCropDocSrc]=useState(null);
-  const [cropDocKey,setCropDocKey]=useState(null);
 
   const statusInfo={
     valid:{color:"#10B981",bg:"rgba(16,185,129,0.08)",label:"✅ Valide",icon:"✅"},
@@ -69,7 +66,7 @@ function DrDocumentsScr({onBack}){
 
         {/* Actions for non-valid docs */}
         {(doc.status==="expiring"||doc.status==="expired")&&<div style={{display:"flex",gap:8}}>
-          <input id={`doc-${key}`} type="file" accept="image/*,.pdf" style={{display:"none"}} onChange={e=>{const f=e.target.files?.[0];if(f){const r=new FileReader();r.onload=()=>{setCropDocSrc(r.result);setCropDocKey(key)};r.readAsDataURL(f);e.target.value=""}}}/>
+          <input id={`doc-${key}`} type="file" accept="image/*,.pdf" style={{display:"none"}} onChange={()=>handleUpload(key)}/>
           <button onClick={()=>document.getElementById(`doc-${key}`)?.click()} disabled={uploading===key} style={{flex:1,padding:10,borderRadius:10,border:"none",background:doc.status==="expired"?"#EF4444":"#F59E0B",color:"#fff",fontSize:12,fontWeight:600,cursor:"pointer",fontFamily:"inherit"}}>
             {uploading===key?"⏳ Envoi...":"📤 Mettre à jour"}
           </button>
@@ -84,7 +81,6 @@ function DrDocumentsScr({onBack}){
       <div style={{fontSize:12,fontWeight:600,color:"#3B82F6",marginBottom:4}}>💡 Important</div>
       <div style={{fontSize:11,color:"var(--muted)",lineHeight:1.5}}>Les documents expirés doivent être renouvelés sous 30 jours. Passé ce délai, votre compte sera temporairement suspendu. Formats acceptés : JPG, PNG, PDF (max 5 MB).</div>
     </div>
-  {cropDocSrc&&<ImageCropper src={cropDocSrc} shape="rect" onCancel={()=>{setCropDocSrc(null);setCropDocKey(null)}} onConfirm={()=>{setCropDocSrc(null);if(cropDocKey)handleUpload(cropDocKey);setCropDocKey(null)}}/>}
   </div>);
 }
 

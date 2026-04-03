@@ -7,7 +7,6 @@ import { analyzeImage, enhanceImage, cropImage, generateVariants } from "../../u
 import { CATS } from "../../data";
 import { vendor } from "../../services";
 import toast from "../../utils/toast";
-import ImageCropper from "../../components/ImageCropper";
 
 function VProductFormScr({product:p,onBack,shopType="boutique"}){
   const isEdit=!!p;
@@ -57,8 +56,6 @@ function VProductFormScr({product:p,onBack,shopType="boutique"}){
       {/* Delivery time */}
       <div className="field"><label>Délai de livraison <span style={{color:"#EF4444"}}>*</span></label><Select value={isEdit&&p.eta?p.eta:"1-2 jours"} onChange={()=>{}} options={["30 min","1h","20-30 min","30-45 min","1-2 jours","2-3 jours","3-5 jours"]}/></div>
 
-  const [cropProdSrc,setCropProdSrc]=useState(null);
-  const [cropProdFile,setCropProdFile]=useState(null);
   const [photos,setPhotos]=useState(isEdit&&p.photo?[{url:p.photo,emoji:p.img,status:"existing"}]:[]);
   const [editingIdx,setEditingIdx]=useState(null);
   const [processing,setProcessing]=useState(false);
@@ -133,19 +130,11 @@ function VProductFormScr({product:p,onBack,shopType="boutique"}){
     if(!file) return;
     e.target.value="";
     if(photos.length>=6){toast.error("Maximum 6 photos 📸");return;}
-    const r=new FileReader();
-    r.onload=()=>{setCropProdSrc(r.result);setCropProdFile(file)};
-    r.readAsDataURL(file);
-  };
-  const handleCroppedProduct=async(croppedDataUrl)=>{
-    setCropProdSrc(null);
     setProcessing(true);
     if(errors.photos) setErrors(prev=>{const n={...prev};delete n.photos;return n;});
     try{
-      const blob=await(await fetch(croppedDataUrl)).blob();
-      const file=new File([blob],(cropProdFile?.name||"photo.jpg"),{type:"image/jpeg"});
       const analysis=await analyzeImage(file);
-      const cropped={url:croppedDataUrl,blob};
+      const cropped=await cropImage(file,"1:1");
       const croppedFile=new File([cropped.blob],file.name,{type:"image/jpeg"});
       let finalUrl=cropped.url; let enhanced=false;
       if(analysis.brightness<100||analysis.contrast<30){
@@ -323,7 +312,6 @@ function VProductFormScr({product:p,onBack,shopType="boutique"}){
     </div>}
 
     {showGuide&&<PhotoGuide onClose={()=>setShowGuide(false)} shopType={shopType}/>}
-    {cropProdSrc&&<ImageCropper src={cropProdSrc} shape="square" onCancel={()=>setCropProdSrc(null)} onConfirm={handleCroppedProduct}/>}
   </div>);
 }
 

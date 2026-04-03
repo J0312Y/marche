@@ -1,9 +1,7 @@
 import { useState, useRef, useEffect, useCallback } from "react";
 import toast from "../../utils/toast";
-import ImageCropper from "../../components/ImageCropper";
 
 function VStoriesScr({onBack}){
-  const [cropStorySrc,setCropStorySrc]=useState(null);
   const [stories,setStories]=useState([
     {id:1,type:"photo",media:"https://images.unsplash.com/photo-1590735213920-68192a487bc2?w=400&h=600&fit=crop",caption:"Nouvelle collection Wax 🌍",date:"Il y a 2h",views:142,duration:null,active:true},
     {id:2,type:"video",media:null,caption:"Making-of sacs artisanaux 🎬",date:"Il y a 5h",views:214,duration:"0:22",active:true},

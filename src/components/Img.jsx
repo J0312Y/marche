@@ -68,6 +68,7 @@ function Img({ src, alt="", emoji, fit="cover", bg, style={}, className="", onCl
           width:"100%",
           height:"100%",
           objectFit: fit,
+          objectPosition: "center",
           display:"block",
           animation:"imgFadeIn .3s ease"
         }}
