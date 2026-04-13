@@ -153,6 +153,12 @@ function DetailScr({product:rawP,onBack,onAddCart,go,favs,toggleFav,isFav}){
             <div style={{fontSize:10,color:"var(--muted)"}}>À Brazzaville · {p.type==="restaurant"||p.type==="patisserie"?"Préparation incluse":"Expédition sous 24h"}</div>
           </div>
         </div>
+        {/* Restaurant-specific: min order + delivery fee */}
+        {(()=>{const v=VENDORS?.find(x=>x.name===p.vendor);return v&&(v.minOrder||v.deliveryFee!==undefined)?<div style={{display:"flex",gap:6,marginBottom:10,flexWrap:"wrap"}}>
+          {v.isOpen!==undefined&&<span style={{padding:"4px 10px",borderRadius:8,background:v.isOpen?"rgba(16,185,129,0.06)":"rgba(239,68,68,0.06)",color:v.isOpen?"#10B981":"#EF4444",fontSize:11,fontWeight:600}}>{v.isOpen?"🟢 Ouvert":"🔴 Fermé"}{v.hours?" · "+v.hours:""}</span>}
+          {v.deliveryFee!==undefined&&<span style={{padding:"4px 10px",borderRadius:8,background:"var(--light)",fontSize:11,fontWeight:600}}>🚚 {v.deliveryFee===0?"Gratuit":fmt(v.deliveryFee)}</span>}
+          {v.minOrder&&<span style={{padding:"4px 10px",borderRadius:8,background:"var(--light)",fontSize:11,fontWeight:600}}>Min. {fmt(v.minOrder)}</span>}
+        </div>:null})()}
 
         {/* Size selector */}
         {p.sizes&&<div style={{marginBottom:10}}>
@@ -171,34 +177,56 @@ function DetailScr({product:rawP,onBack,onAddCart,go,favs,toggleFav,isFav}){
         </div>}
 
 
-        {/* 🍽️ Accompagnements — accordéon style Uber Eats */}
+        {/* 🍽️ Accompagnements — Uber Eats style */}
         {p.sides&&p.sides.length>0&&<div style={{marginBottom:14}}>
           <div style={{fontSize:15,fontWeight:700,marginBottom:8}}>🍽️ Personnalisez votre commande</div>
+
+          {/* Allergens */}
+          {p.allergens&&<div style={{display:"flex",gap:6,marginBottom:8,flexWrap:"wrap"}}>
+            {p.allergens.map(a=><span key={a} style={{padding:"3px 8px",borderRadius:6,background:"rgba(245,158,11,0.08)",color:"#F59E0B",fontSize:10,fontWeight:600}}>⚠️ Contient : {a}</span>)}
+          </div>}
+
           {p.sides.map((cat,ci)=>{
             const isOpen=openSideCat===ci;
-            const catSelected=cat.items.filter(it=>selectedSides[it.name]);
+            const catItems=cat.items.filter(it=>selectedSides[it.name]);
+            const catQty=catItems.reduce((s,it)=>s+(selectedSides[it.name]?.qty||0),0);
             const hasFree=cat.items.some(it=>it.price===0);
+            const isRequired=cat.required;
+            const maxSel=cat.max||99;
             return(
-              <div key={ci} style={{marginBottom:6,borderRadius:14,border:"1px solid var(--border)",overflow:"hidden",background:"var(--card)"}}>
-                <div onClick={()=>setOpenSideCat(isOpen?null:ci)} style={{display:"flex",alignItems:"center",gap:10,padding:"12px 14px",cursor:"pointer",background:isOpen?"rgba(249,115,22,0.02)":"var(--card)"}}>
+              <div key={ci} style={{marginBottom:6,borderRadius:14,border:isRequired&&catQty===0?"2px solid rgba(239,68,68,0.3)":"1px solid var(--border)",overflow:"hidden",background:"var(--card)"}}>
+                <div onClick={()=>setOpenSideCat(isOpen?null:ci)} style={{display:"flex",alignItems:"center",gap:10,padding:"12px 14px",cursor:"pointer"}}>
                   <span style={{flex:1}}>
-                    <div style={{fontSize:13,fontWeight:700}}>{cat.cat}</div>
-                    <div style={{fontSize:11,color:"var(--muted)",marginTop:1}}>
-                      {catSelected.length>0?<span style={{color:"#F97316",fontWeight:600}}>{catSelected.length} choisi{catSelected.length>1?"s":""}</span>:hasFree?"Gratuit disponible":"Optionnel"}
+                    <div style={{display:"flex",alignItems:"center",gap:6}}>
+                      <span style={{fontSize:13,fontWeight:700}}>{cat.cat}</span>
+                      {isRequired?<span style={{padding:"1px 6px",borderRadius:4,background:"rgba(239,68,68,0.08)",color:"#EF4444",fontSize:9,fontWeight:700}}>Obligatoire</span>
+                      :<span style={{padding:"1px 6px",borderRadius:4,background:"var(--light)",color:"var(--muted)",fontSize:9,fontWeight:600}}>Optionnel</span>}
+                    </div>
+                    <div style={{fontSize:11,color:"var(--muted)",marginTop:2}}>
+                      {catQty>0?<span style={{color:"#F97316",fontWeight:600}}>{catQty} choisi{catQty>1?"s":""}</span>
+                      :isRequired?"Choisissez "+maxSel
+                      :hasFree?"Gratuit disponible"
+                      :"Jusqu'à "+maxSel}
                     </div>
                   </span>
-                  {catSelected.length>0&&<span style={{padding:"2px 8px",borderRadius:8,background:"rgba(249,115,22,0.08)",color:"#F97316",fontSize:11,fontWeight:700}}>{catSelected.length}</span>}
+                  {catQty>0&&<span style={{width:22,height:22,borderRadius:11,background:"#F97316",color:"#fff",fontSize:11,fontWeight:700,display:"flex",alignItems:"center",justifyContent:"center"}}>{catQty}</span>}
                   <svg width="12" height="12" style={{transform:isOpen?"rotate(180deg)":"none",transition:"transform .2s",flexShrink:0}}><path d="M2 4l4 4 4-4" stroke="var(--muted)" strokeWidth="2" fill="none" strokeLinecap="round"/></svg>
                 </div>
-                {isOpen&&<div style={{padding:"0 10px 10px",display:"flex",flexDirection:"column",gap:4}}>
+                {isOpen&&<div style={{padding:"0 10px 10px",display:"flex",flexDirection:"column",gap:3}}>
                   {cat.items.map((item,ii)=>{
-                    const sel=!!selectedSides[item.name];
+                    const sel=selectedSides[item.name];
+                    const qty=sel?.qty||0;
                     return(
-                      <div key={ii} onClick={()=>toggleSide(item)} style={{display:"flex",alignItems:"center",gap:8,padding:"8px 10px",borderRadius:10,background:sel?"rgba(249,115,22,0.04)":"transparent",cursor:"pointer",transition:"all .12s"}}>
-                        <div style={{width:18,height:18,borderRadius:5,border:sel?"none":"2px solid var(--border)",background:sel?"#F97316":"transparent",display:"flex",alignItems:"center",justifyContent:"center",color:"#fff",fontSize:10,fontWeight:700,flexShrink:0}}>{sel&&"✓"}</div>
-                        <span style={{fontSize:14}}>{item.img}</span>
-                        <span style={{flex:1,fontSize:13,fontWeight:sel?600:400}}>{item.name}</span>
-                        <span style={{fontSize:12,fontWeight:600,color:item.price>0?(sel?"#F97316":"var(--muted)"):"#10B981"}}>{item.price>0?"+"+fmt(item.price):"Gratuit"}</span>
+                      <div key={ii} style={{display:"flex",alignItems:"center",gap:8,padding:"8px 10px",borderRadius:10,background:qty>0?"rgba(249,115,22,0.04)":"transparent",transition:"all .12s"}}>
+                        <span style={{fontSize:16}}>{item.img}</span>
+                        <span style={{flex:1,fontSize:13,fontWeight:qty>0?600:400}}>{item.name}</span>
+                        <span style={{fontSize:11,fontWeight:600,color:item.price>0?(qty>0?"#F97316":"var(--muted)"):"#10B981",marginRight:6}}>{item.price>0?(qty>0?"+"+fmt(item.price*qty):fmt(item.price)):"Gratuit"}</span>
+                        {qty===0?<button onClick={()=>addSide(item,maxSel)} style={{width:28,height:28,borderRadius:14,border:"1.5px solid #F97316",background:"transparent",color:"#F97316",fontSize:16,cursor:"pointer",display:"flex",alignItems:"center",justifyContent:"center",fontFamily:"inherit",fontWeight:700}}>+</button>
+                        :<div style={{display:"flex",alignItems:"center",gap:4}}>
+                          <button onClick={()=>removeSide(item)} style={{width:26,height:26,borderRadius:13,border:"none",background:"var(--light)",color:"var(--text)",fontSize:14,cursor:"pointer",display:"flex",alignItems:"center",justifyContent:"center",fontFamily:"inherit"}}>−</button>
+                          <span style={{fontSize:13,fontWeight:700,minWidth:18,textAlign:"center"}}>{qty}</span>
+                          <button onClick={()=>{if(catQty<maxSel)addSide(item,maxSel);else toast.info("Max "+maxSel+" pour "+cat.cat)}} style={{width:26,height:26,borderRadius:13,border:"none",background:"#F97316",color:"#fff",fontSize:14,cursor:"pointer",display:"flex",alignItems:"center",justifyContent:"center",fontFamily:"inherit"}}>+</button>
+                        </div>}
                       </div>
                     );
                   })}
@@ -206,8 +234,8 @@ function DetailScr({product:rawP,onBack,onAddCart,go,favs,toggleFav,isFav}){
               </div>
             );
           })}
-          {Object.keys(selectedSides).length>0&&<div style={{marginTop:6,padding:"8px 12px",background:"rgba(249,115,22,0.04)",borderRadius:10,border:"1px solid rgba(249,115,22,0.12)",display:"flex",justifyContent:"space-between",alignItems:"center"}}>
-            <span style={{fontSize:12,color:"var(--sub)"}}>{Object.keys(selectedSides).length} accompagnement{Object.keys(selectedSides).length>1?"s":""} ajouté{Object.keys(selectedSides).length>1?"s":""}</span>
+          {sidesTotalCount>0&&<div style={{marginTop:6,padding:"8px 12px",background:"rgba(249,115,22,0.04)",borderRadius:10,border:"1px solid rgba(249,115,22,0.12)",display:"flex",justifyContent:"space-between",alignItems:"center"}}>
+            <span style={{fontSize:12,color:"var(--sub)"}}>{sidesTotalCount} article{sidesTotalCount>1?"s":""} ajouté{sidesTotalCount>1?"s":""}</span>
             <span style={{fontSize:13,fontWeight:700,color:"#F97316"}}>+{fmt(sidesTotalPrice)}</span>
           </div>}
         </div>}
@@ -337,7 +365,7 @@ function DetailScr({product:rawP,onBack,onAddCart,go,favs,toggleFav,isFav}){
         <span>{qty}</span>
         <button onClick={()=>setQty(qty+1)}>+</button>
       </div>
-      <button className={`add-btn${cartAnim?" cart-bounce":""}`} onClick={()=>{setCartAnim(true);setTimeout(()=>setCartAnim(false),400);onAddCart(p,qty,{sides:Object.values(selectedSides)})}}>🛍️ Ajouter · {fmt(finalPrice*qty+sidesTotalPrice)}</button>
+      <button className={`add-btn${cartAnim?" cart-bounce":""}`} onClick={()=>{setCartAnim(true);setTimeout(()=>setCartAnim(false),400);{const missing=p.sides?.filter(cat=>cat.required&&!cat.items.some(it=>selectedSides[it.name]));if(missing?.length>0){toast.error("Choisissez : "+missing.map(m=>m.cat).join(", "));return}onAddCart(p,qty,{sides:Object.values(selectedSides),note:specialNote})}}}>🛍️ Ajouter · {fmt(finalPrice*qty+sidesTotalPrice)}</button>
     </div>
 
     {/* ── Alerte Prix Popup ── */}

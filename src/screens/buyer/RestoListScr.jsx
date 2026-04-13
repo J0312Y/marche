@@ -14,7 +14,15 @@ function RestoListScr({go,onBack,favs,toggleFav,isFav}){
           <div style={{width:48,height:48,borderRadius:14,overflow:"hidden",background:"linear-gradient(135deg,#F59E0B,#D97706)",display:"flex",alignItems:"center",justifyContent:"center",fontSize:22}}>{v.logo?<img src={v.logo} style={{width:"100%",height:"100%",objectFit:"cover"}} alt=""/>:v.avatar}</div>
           <div style={{flex:1}}><div style={{display:"flex",alignItems:"center",gap:6}}><h4 style={{fontSize:14,fontWeight:700}}>{v.name}</h4>{v.verified&&<span style={{color:"#F97316",fontSize:10}}>✓</span>}</div>
             <p style={{fontSize:11,color:"var(--muted)"}}>📍 {v.loc} · ⭐ {v.rating} · {v.products} plats</p></div>
-          <div style={{textAlign:"right"}}><div style={{color:"#F97316",fontWeight:700,fontSize:12}}>🕐 {v.eta}</div></div>
+          <div style={{textAlign:"right"}}>
+            <span style={{padding:"2px 6px",borderRadius:4,background:v.isOpen?"rgba(16,185,129,0.08)":"rgba(239,68,68,0.08)",color:v.isOpen?"#10B981":"#EF4444",fontSize:9,fontWeight:700}}>{v.isOpen?"Ouvert":"Fermé"}</span>
+            <div style={{color:"#F97316",fontWeight:700,fontSize:12,marginTop:4}}>🕐 {v.eta}</div>
+          </div>
+        </div>
+        <div style={{display:"flex",gap:6,flexWrap:"wrap"}}>
+          {v.deliveryFee!==undefined&&<span style={{padding:"3px 8px",borderRadius:6,background:"var(--light)",fontSize:10,color:"var(--sub)"}}>🚚 {v.deliveryFee===0?"Gratuit":fmt(v.deliveryFee)}</span>}
+          {v.minOrder&&<span style={{padding:"3px 8px",borderRadius:6,background:"var(--light)",fontSize:10,color:"var(--sub)"}}>Min. {fmt(v.minOrder)}</span>}
+          {v.hours&&<span style={{padding:"3px 8px",borderRadius:6,background:"var(--light)",fontSize:10,color:"var(--sub)"}}>🕐 {v.hours}</span>}
         </div>
       </div>)}
     </div>

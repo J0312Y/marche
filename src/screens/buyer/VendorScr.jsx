@@ -31,6 +31,8 @@ function VendorScr({vendor:vProp,go,onBack}){
   const [following,setFollowing]=useState(false);
   const [fCount,setFC]=useState(v.followers||0);
   const [tab,setTab]=useState("products");
+  const [menuTab,setMenuTab]=useState(null);
+  const isFood=v.type==="restaurant"||v.type==="patisserie";
   const [viewImg,setViewImg]=useState(null);
   const vp=P.filter(p=>p.vendor===v.name);
   const toggleFollow=()=>{setFollowing(f=>!f);setFC(c=>following?c-1:c+1);toast.success(following?"Désabonné":"Abonné ✅")};
@@ -61,7 +63,23 @@ function VendorScr({vendor:vProp,go,onBack}){
     </div>
 
     {/* Description */}
-    <div style={{padding:"0 16px",fontSize:14,color:"var(--sub)",marginBottom:14,lineHeight:1.6}}>{v.desc}</div>
+    <div style={{padding:"0 16px",fontSize:14,color:"var(--sub)",marginBottom:isFood?8:14,lineHeight:1.6}}>{v.desc}</div>
+
+    {/* Restaurant info bar */}
+    {isFood&&<div style={{padding:"0 16px",marginBottom:14}}>
+      <div style={{display:"flex",gap:6,flexWrap:"wrap",marginBottom:8}}>
+        <span style={{padding:"4px 10px",borderRadius:8,background:v.isOpen?"rgba(16,185,129,0.08)":"rgba(239,68,68,0.08)",color:v.isOpen?"#10B981":"#EF4444",fontSize:11,fontWeight:700}}>{v.isOpen?"🟢 Ouvert":"🔴 Fermé"}{v.hours&&" · "+v.hours}</span>
+        {v.eta&&<span style={{padding:"4px 10px",borderRadius:8,background:"var(--light)",fontSize:11,fontWeight:600,color:"var(--text)"}}>🕐 {v.eta}</span>}
+        {v.deliveryFee!==undefined&&<span style={{padding:"4px 10px",borderRadius:8,background:"var(--light)",fontSize:11,fontWeight:600,color:"var(--text)"}}>🚚 {v.deliveryFee===0?"Gratuit":fmt(v.deliveryFee)}</span>}
+        {v.minOrder&&<span style={{padding:"4px 10px",borderRadius:8,background:"var(--light)",fontSize:11,fontWeight:600,color:"var(--text)"}}>Min. {fmt(v.minOrder)}</span>}
+      </div>
+
+      {/* Menu category tabs */}
+      {v.menuCats&&<div style={{display:"flex",gap:4,overflowX:"auto",scrollbarWidth:"none",paddingBottom:4}}>
+        <button onClick={()=>setMenuTab(null)} style={{padding:"6px 12px",borderRadius:10,border:"none",background:menuTab===null?"#F97316":"var(--light)",color:menuTab===null?"#fff":"var(--muted)",fontSize:11,fontWeight:600,cursor:"pointer",fontFamily:"inherit",flexShrink:0}}>Tout</button>
+        {v.menuCats.map(mc=><button key={mc} onClick={()=>setMenuTab(mc)} style={{padding:"6px 12px",borderRadius:10,border:"none",background:menuTab===mc?"#F97316":"var(--light)",color:menuTab===mc?"#fff":"var(--muted)",fontSize:11,fontWeight:600,cursor:"pointer",fontFamily:"inherit",flexShrink:0}}>{mc}</button>)}
+      </div>}
+    </div>}
 
     {/* Buttons */}
     <div className="vp-btns">
