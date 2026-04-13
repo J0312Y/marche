@@ -64,6 +64,10 @@ function DetailScr({product:p,onBack,onAddCart,go,favs,toggleFav,isFav}){
   const [selSize,setSelSize]=useState(p.sizes?.[0]||null);
   const [selColor,setSelColor]=useState(p.colors?.[0]||null);
   const [selVariant,setSelVariant]=useState(p.variants?.[0]||null);
+  const [selectedSides,setSelectedSides]=useState({});
+  const [specialNote,setSpecialNote]=useState("");
+  const toggleSide=(item)=>setSelectedSides(prev=>{const k=item.name;if(prev[k]){{const n={...prev};delete n[k];return n}}return{...prev,[k]:item}});
+  const sidesTotalPrice=Object.values(selectedSides).reduce((s,it)=>s+(it.price||0),0);
   const [priceAlert,setPriceAlert]=useState(false);
   const [showAlertPopup,setShowAlertPopup]=useState(false);
   const [alertPrice,setAlertPrice]=useState("");
@@ -281,7 +285,7 @@ function DetailScr({product:p,onBack,onAddCart,go,favs,toggleFav,isFav}){
         <span>{qty}</span>
         <button onClick={()=>setQty(qty+1)}>+</button>
       </div>
-      <button className={`add-btn${cartAnim?" cart-bounce":""}`} onClick={()=>{setCartAnim(true);setTimeout(()=>setCartAnim(false),400);onAddCart(p,qty)}}>🛍️ Ajouter · {fmt(finalPrice*qty)}</button>
+      <button className={`add-btn${cartAnim?" cart-bounce":""}`} onClick={()=>{setCartAnim(true);setTimeout(()=>setCartAnim(false),400);onAddCart(p,qty,{sides:Object.values(selectedSides)})}}>🛍️ Ajouter · {fmt(finalPrice*qty+sidesTotalPrice)}</button>
     </div>
 
     {/* ── Alerte Prix Popup ── */}
