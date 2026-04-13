@@ -47,7 +47,10 @@ const getSpecs=(p)=>{
   ];
 };
 
-function DetailScr({product:p,onBack,onAddCart,go,favs,toggleFav,isFav}){
+function DetailScr({product:rawP,onBack,onAddCart,go,favs,toggleFav,isFav}){
+  // Lookup full product from catalog (for sides, photos, etc.)
+  const fullProduct = P.find(x=>x.id===rawP?.id);
+  const p = fullProduct ? {...fullProduct,...rawP} : rawP;
   const [qty,setQty]=useState(1);
   const [cartAnim,setCartAnim]=useState(false);
   const [photoIdx,setPhotoIdx]=useState(0);
@@ -65,6 +68,7 @@ function DetailScr({product:p,onBack,onAddCart,go,favs,toggleFav,isFav}){
   const [selColor,setSelColor]=useState(p.colors?.[0]||null);
   const [selVariant,setSelVariant]=useState(p.variants?.[0]||null);
   const [selectedSides,setSelectedSides]=useState({});
+  const [openSideCat,setOpenSideCat]=useState(null);
   const [specialNote,setSpecialNote]=useState("");
   const toggleSide=(item)=>setSelectedSides(prev=>{const k=item.name;if(prev[k]){{const n={...prev};delete n[k];return n}}return{...prev,[k]:item}});
   const sidesTotalPrice=Object.values(selectedSides).reduce((s,it)=>s+(it.price||0),0);
@@ -164,6 +168,54 @@ function DetailScr({product:p,onBack,onAddCart,go,favs,toggleFav,isFav}){
           <div style={{display:"flex",gap:6,flexWrap:"wrap"}}>
             {p.colors.map(c=><button key={c} onClick={()=>setSelColor(c)} style={{padding:"6px 14px",borderRadius:10,border:selColor===c?"2px solid #F97316":"1px solid var(--border)",background:selColor===c?"rgba(249,115,22,0.06)":"var(--card)",color:selColor===c?"#F97316":"var(--text)",fontSize:11,fontWeight:600,cursor:"pointer",fontFamily:"inherit"}}>{c}</button>)}
           </div>
+        </div>}
+
+
+        {/* 🍽️ Accompagnements — accordéon style Uber Eats */}
+        {p.sides&&p.sides.length>0&&<div style={{marginBottom:14}}>
+          <div style={{fontSize:15,fontWeight:700,marginBottom:8}}>🍽️ Personnalisez votre commande</div>
+          {p.sides.map((cat,ci)=>{
+            const isOpen=openSideCat===ci;
+            const catSelected=cat.items.filter(it=>selectedSides[it.name]);
+            const hasFree=cat.items.some(it=>it.price===0);
+            return(
+              <div key={ci} style={{marginBottom:6,borderRadius:14,border:"1px solid var(--border)",overflow:"hidden",background:"var(--card)"}}>
+                <div onClick={()=>setOpenSideCat(isOpen?null:ci)} style={{display:"flex",alignItems:"center",gap:10,padding:"12px 14px",cursor:"pointer",background:isOpen?"rgba(249,115,22,0.02)":"var(--card)"}}>
+                  <span style={{flex:1}}>
+                    <div style={{fontSize:13,fontWeight:700}}>{cat.cat}</div>
+                    <div style={{fontSize:11,color:"var(--muted)",marginTop:1}}>
+                      {catSelected.length>0?<span style={{color:"#F97316",fontWeight:600}}>{catSelected.length} choisi{catSelected.length>1?"s":""}</span>:hasFree?"Gratuit disponible":"Optionnel"}
+                    </div>
+                  </span>
+                  {catSelected.length>0&&<span style={{padding:"2px 8px",borderRadius:8,background:"rgba(249,115,22,0.08)",color:"#F97316",fontSize:11,fontWeight:700}}>{catSelected.length}</span>}
+                  <svg width="12" height="12" style={{transform:isOpen?"rotate(180deg)":"none",transition:"transform .2s",flexShrink:0}}><path d="M2 4l4 4 4-4" stroke="var(--muted)" strokeWidth="2" fill="none" strokeLinecap="round"/></svg>
+                </div>
+                {isOpen&&<div style={{padding:"0 10px 10px",display:"flex",flexDirection:"column",gap:4}}>
+                  {cat.items.map((item,ii)=>{
+                    const sel=!!selectedSides[item.name];
+                    return(
+                      <div key={ii} onClick={()=>toggleSide(item)} style={{display:"flex",alignItems:"center",gap:8,padding:"8px 10px",borderRadius:10,background:sel?"rgba(249,115,22,0.04)":"transparent",cursor:"pointer",transition:"all .12s"}}>
+                        <div style={{width:18,height:18,borderRadius:5,border:sel?"none":"2px solid var(--border)",background:sel?"#F97316":"transparent",display:"flex",alignItems:"center",justifyContent:"center",color:"#fff",fontSize:10,fontWeight:700,flexShrink:0}}>{sel&&"✓"}</div>
+                        <span style={{fontSize:14}}>{item.img}</span>
+                        <span style={{flex:1,fontSize:13,fontWeight:sel?600:400}}>{item.name}</span>
+                        <span style={{fontSize:12,fontWeight:600,color:item.price>0?(sel?"#F97316":"var(--muted)"):"#10B981"}}>{item.price>0?"+"+fmt(item.price):"Gratuit"}</span>
+                      </div>
+                    );
+                  })}
+                </div>}
+              </div>
+            );
+          })}
+          {Object.keys(selectedSides).length>0&&<div style={{marginTop:6,padding:"8px 12px",background:"rgba(249,115,22,0.04)",borderRadius:10,border:"1px solid rgba(249,115,22,0.12)",display:"flex",justifyContent:"space-between",alignItems:"center"}}>
+            <span style={{fontSize:12,color:"var(--sub)"}}>{Object.keys(selectedSides).length} accompagnement{Object.keys(selectedSides).length>1?"s":""} ajouté{Object.keys(selectedSides).length>1?"s":""}</span>
+            <span style={{fontSize:13,fontWeight:700,color:"#F97316"}}>+{fmt(sidesTotalPrice)}</span>
+          </div>}
+        </div>}
+
+        {/* 📝 Instructions spéciales */}
+        {(p.type==="restaurant"||p.type==="patisserie")&&<div style={{marginBottom:14}}>
+          <div style={{fontSize:13,fontWeight:700,marginBottom:6}}>📝 Instructions spéciales</div>
+          <textarea value={specialNote} onChange={e=>setSpecialNote(e.target.value)} placeholder="Ex: Sans oignon, bien cuit, pas trop épicé..." rows={2} style={{width:"100%",padding:"10px 12px",borderRadius:12,border:"1px solid var(--border)",background:"var(--light)",fontSize:13,fontFamily:"inherit",color:"var(--text)",resize:"none",outline:"none"}}/>
         </div>}
 
         {/* Price alert + Group buy */}
