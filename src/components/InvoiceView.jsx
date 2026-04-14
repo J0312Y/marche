@@ -97,8 +97,8 @@ function InvoiceView({ order, onClose }) {
           </div>
           {items.map((it, i) => (<>
             <div key={i} style={{ display: "flex", alignItems: "center", gap: 8, padding: "6px 0", borderTop: i ? "1px solid var(--border)" : "none", fontSize: 12 }}>
-              {(()=>{const ph=findPhoto(it.name);return ph?<img src={ph} style={{width:28,height:28,borderRadius:6,objectFit:"cover",flexShrink:0}} alt=""/>:null})()}
-              <span style={{ flex: 2, color: "var(--text)", fontWeight: 500 }}>{it.name}</span>
+              {(()=>{const ph=findPhoto(it.name);return ph?<img src={ph} style={{width:28,height:28,borderRadius:6,objectFit:"cover",flexShrink:0}} alt=""/>:<div style={{width:28,height:28,borderRadius:6,background:"var(--light)",flexShrink:0}}/>})()}
+              <span style={{ flex: 2, color: "var(--text)", fontWeight: 500 }}>{it.name.replace(/^[^a-zA-ZÀ-ÿ]+ /,"")}</span>
               <span style={{ flex: 0.5, textAlign: "center", color: "var(--muted)" }}>×{it.qty||1}</span>
               <span style={{ flex: 1, textAlign: "right", fontWeight: 600, color: "var(--text)" }}>{fmt((it.price||0) * (it.qty||1))}</span>
             </div>
