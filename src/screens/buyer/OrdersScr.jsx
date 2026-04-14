@@ -1,6 +1,9 @@
 import { useState } from "react";
 import toast from "../../utils/toast";
+import { P } from "../../data";
 import PullToRefresh from "../../components/PullToRefresh";
+
+const findPhoto=(itemStr)=>{const name=itemStr.split(" ").slice(1).join(" ").replace(/ x\d+$/,"");const p=P.find(x=>x.name.includes(name)||name.includes(x.name));return p?.photo||null};
 
 function OrdersScr({go}){
   const [orders,setOrders]=useState([
@@ -52,7 +55,7 @@ function OrdersScr({go}){
     {shown.map(o=><div key={o.ref} className="ocard" onClick={()=>go("orderDetail",o)}>
       <div className="ocard-h"><h4>{o.ref}</h4><div style={{display:"flex",gap:4,alignItems:"center"}}>{o.isGroup&&<span style={{padding:"2px 6px",borderRadius:5,background:"rgba(59,130,246,0.08)",color:"#3B82F6",fontSize:9,fontWeight:700}}>🤝</span>}{o.payment==="cash"&&<span style={{padding:"2px 6px",borderRadius:5,background:"rgba(245,158,11,0.08)",color:"#F59E0B",fontSize:9,fontWeight:700}}>💵</span>}<span className={`ost ${o.sc}`}>{o.status}</span></div></div>
       <div className="odate">{o.date}</div>
-      <div style={{fontSize:13,color:"var(--sub)",marginBottom:10}}>{o.items.join(" · ")}</div>
+      <div style={{display:"flex",gap:4,flexWrap:"wrap",marginBottom:10}}>{o.items.map((it,i)=>{const ph=findPhoto(it);return<div key={i} style={{display:"flex",alignItems:"center",gap:4,padding:"3px 8px 3px 3px",background:"var(--light)",borderRadius:8,fontSize:11}}>{ph?<img src={ph} style={{width:20,height:20,borderRadius:5,objectFit:"cover"}} alt=""/>:<span style={{fontSize:12}}>{it.split(" ")[0]}</span>}<span>{it.split(" ").slice(1).join(" ")}</span></div>})}</div>
       <div style={{display:"flex",justifyContent:"space-between",alignItems:"center"}}>
         <span style={{fontSize:15,fontWeight:700,color:"#F97316"}}>{o.total} FCFA</span>
         <div style={{display:"flex",gap:6}}>

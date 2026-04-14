@@ -1,9 +1,12 @@
 import InvoiceView from "../../components/InvoiceView";
+import { P } from "../../data";
 import CreditNoteView from "../../components/CreditNoteView";
 import { useState } from "react";
 import toast from "../../utils/toast";
 
 const STEPS=["Confirmée","En préparation","En livraison","Livrée"];
+
+const findPhoto=(itemStr)=>{const name=itemStr.split(" ").slice(1).join(" ").replace(/ x\d+$/,"");const p=P.find(x=>x.name.includes(name)||name.includes(x.name));return p?.photo||null};
 
 function OrderDetailScr({order:o,onBack,go}){
   const [cancelled,setCancelled]=useState(false);
@@ -59,10 +62,10 @@ function OrderDetailScr({order:o,onBack,go}){
     {/* Items */}
     <div style={{marginBottom:12}}>
       <div style={{fontSize:14,fontWeight:700,marginBottom:10}}>Articles</div>
-      {o.items.map((item,i)=><div key={i} style={{padding:12,background:"var(--card)",border:"1px solid var(--border)",borderRadius:14,marginBottom:8,fontSize:14,fontWeight:500,display:"flex",alignItems:"center",gap:10}}>
-        <span style={{fontSize:20}}>{item.split(" ")[0]}</span>
+      {o.items.map((item,i)=>{const ph=findPhoto(item);return<div key={i} style={{padding:10,background:"var(--card)",border:"1px solid var(--border)",borderRadius:14,marginBottom:8,fontSize:14,fontWeight:500,display:"flex",alignItems:"center",gap:10}}>
+        {ph?<img src={ph} style={{width:40,height:40,borderRadius:10,objectFit:"cover",flexShrink:0}} alt=""/>:<span style={{fontSize:20}}>{item.split(" ")[0]}</span>}
         <span>{item.split(" ").slice(1).join(" ")}</span>
-      </div>)}
+      </div>})}
     </div>
 
     {/* Summary */}

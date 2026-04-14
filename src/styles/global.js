@@ -55,9 +55,9 @@ select option{background:var(--card);color:var(--text);padding:10px 14px;font-si
 .auth{display:flex;flex-direction:column;height:100%;padding:40px 24px 30px;background:var(--bg);color:var(--text)}
 .auth h2{font-size:26px;font-weight:700;letter-spacing:-.5px;margin-bottom:4px}
 .auth .sub{font-size:14px;color:var(--muted);margin-bottom:28px}
-.phone-input{display:flex;align-items:center;margin:0 40px 20px;width:calc(100% - 80px);border-radius:12px;border:1px solid var(--border);background:var(--light);overflow:hidden}
-.phone-input .prefix{padding:10px 10px;font-size:13px;color:var(--text);font-size:14px;font-weight:600;display:flex;align-items:center;gap:4px;border-right:1px solid var(--border);flex-shrink:0}
-.phone-input input{flex:1;padding:10px 10px;border:none;background:transparent;color:var(--text);font-size:13px;outline:none;font-family:inherit}
+.phone-input{display:flex;align-items:center;margin:0 24px 20px;border-radius:14px;border:1px solid var(--border);background:var(--light)}
+.phone-input .prefix{padding:12px 12px;font-size:14px;color:var(--text);font-weight:600;display:flex;align-items:center;gap:4px;border-right:1px solid var(--border);flex-shrink:0;white-space:nowrap}
+.phone-input input{flex:1;padding:12px;border:none;background:transparent;color:var(--text);font-size:16px;outline:none;font-family:inherit}
 .divider{display:flex;align-items:center;gap:12px;margin:24px 0;font-size:12px;color:var(--muted)}.divider::before,.divider::after{content:'';flex:1;height:1px;background:var(--border)}
 .social-btns{display:flex;gap:10px}
 .social-btn{flex:1;padding:14px;border-radius:14px;border:1px solid var(--border);background:var(--card);color:var(--text);font-size:20px;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:8px;font-family:inherit;transition:all .15s}
