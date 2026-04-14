@@ -36,7 +36,7 @@ function VOrderDetailScr({order:o,onBack,go}){
         <div style={{fontSize:12,fontWeight:700,color:"#3B82F6",marginBottom:6}}>🤝 Commande de groupe — {o.groupMembers?.length||0} participants</div>
         {o.groupMembers?.map((m,mi)=><div key={mi} style={{padding:"6px 0",borderBottom:mi<o.groupMembers.length-1?"1px solid var(--border)":"none"}}>
           <div style={{fontSize:12,fontWeight:600,marginBottom:4}}>{m.name}</div>
-          {m.items?.map((it,ii)=><div key={ii} style={{fontSize:11,color:"var(--sub)",paddingLeft:10}}>• {it.name} ×{it.qty} — {fmt(it.price*(it.qty||1))}</div>)}
+          {m.items?.map((it,ii)=><div key={ii} style={{display:"flex",alignItems:"center",gap:6,paddingLeft:10,padding:"3px 0 3px 10px"}}><div style={{width:22,height:22,borderRadius:5,overflow:"hidden",flexShrink:0}}><Img src={it.photo} emoji={it.img} style={{width:"100%",height:"100%"}} fit="cover"/></div><span style={{flex:1,fontSize:11,color:"var(--sub)"}}>{it.name} ×{it.qty}</span><span style={{fontSize:11,fontWeight:600,color:"#F97316"}}>{fmt(it.price*(it.qty||1))}</span></div>)}
         </div>)}
       </div>}
     </div>

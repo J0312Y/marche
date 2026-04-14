@@ -257,9 +257,10 @@ function GroupOrderScr({onBack,go}){
     {allItems.map((g,gi)=>(
       <div key={gi} style={{padding:14,background:"var(--card)",border:"1px solid var(--border)",borderRadius:14,marginBottom:8}}>
         <div style={{fontSize:13,fontWeight:700,marginBottom:8}}>{g.avatar} {g.person}</div>
-        {g.items.map((it,i)=><div key={i} style={{display:"flex",justifyContent:"space-between",padding:"4px 0",fontSize:12}}>
-          <span>{it.name} ×{it.qty||1}</span>
-          <b style={{color:"#F97316"}}>{fmt((it.price||0)*(it.qty||1))}</b>
+        {g.items.map((it,i)=><div key={i} style={{display:"flex",alignItems:"center",gap:8,padding:"4px 0",fontSize:12}}>
+          <div style={{width:28,height:28,borderRadius:6,overflow:"hidden",flexShrink:0}}><Img src={it.photo} emoji={it.img} style={{width:"100%",height:"100%"}} fit="cover"/></div>
+          <span style={{flex:1}}>{it.name} ×{it.qty||1}</span>
+          <b style={{color:"#F97316"}}>{fmt(((it.price||0)+(it.sidesTotal||0))*(it.qty||1))}</b>
         </div>)}
         <div style={{borderTop:"1px solid var(--border)",marginTop:6,paddingTop:6,display:"flex",justifyContent:"space-between",fontSize:12,fontWeight:700}}>
           <span>Sous-total {g.person}</span>

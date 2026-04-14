@@ -34,7 +34,8 @@ function VendorScr({vendor:vProp,go,onBack}){
   const [menuTab,setMenuTab]=useState(null);
   const isFood=v.type==="restaurant"||v.type==="patisserie";
   const [viewImg,setViewImg]=useState(null);
-  const vp=P.filter(p=>p.vendor===v.name);
+  const vpAll=P.filter(p=>p.vendor===v.name);
+  const vp=menuTab?vpAll.filter(p=>p.menuCat===menuTab):vpAll;
   const toggleFollow=()=>{setFollowing(f=>!f);setFC(c=>following?c-1:c+1);toast.success(following?"Désabonné":"Abonné ✅")};
 
   const avgRating=MOCK_REVIEWS.reduce((s,r)=>s+r.rating,0)/MOCK_REVIEWS.length;
@@ -106,7 +107,7 @@ function VendorScr({vendor:vProp,go,onBack}){
 
     {/* ═══ PRODUCTS TAB (default) ═══ */}
     {tab==="products"&&<>
-      <div style={{padding:"0 16px",marginBottom:10}}><div style={{fontSize:12,color:"var(--muted)"}}>{vp.length} articles disponibles</div></div>
+      <div style={{padding:"0 16px",marginBottom:10}}><div style={{fontSize:12,color:"var(--muted)"}}>{vp.length}{menuTab?" (filtré)":""} article{vp.length>1?"s":""} disponible{vp.length>1?"s":""}</div></div>
       <div className="pgrid">{vp.map(p=>{const vpromo=getVendorPromo(p,VENDORS);return(<div key={p.id} className="pcard" onClick={()=>go("detail",p)}><div className="pimg"><Img src={p.photo} emoji={p.img} style={{width:"100%",height:"100%"}} fit="cover"/>{vpromo&&<span className="badge">-{vpromo.promoDiscount}%</span>}{!vpromo&&disc(p)>0&&<span className="badge">-{disc(p)}%</span>}</div><div className="pbody"><h4>{p.name}</h4><div className="pp">{vpromo?<><span style={{color:"#F97316"}}>{fmt(vpromo.promoPrice)}</span><span className="po">{fmt(p.price)}</span></>:<>{fmt(p.price)}</>}</div><div className="pr">⭐ {p.rating}</div></div></div>)})}</div>
       {vp.length===0&&<div style={{textAlign:"center",padding:"40px 0"}}><div style={{fontSize:36}}>📦</div><div style={{fontSize:13,color:"var(--muted)",marginTop:8}}>Aucun article pour le moment</div></div>}
     </>}
