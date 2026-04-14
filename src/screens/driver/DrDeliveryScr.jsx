@@ -54,7 +54,7 @@ function DrDeliveryScr({delivery:dl,go,onBack}){
             <button style={{width:42,padding:10,borderRadius:10,border:"none",background:"#F59E0B",color:"#fff",fontSize:14,cursor:"pointer",display:"flex",alignItems:"center",justifyContent:"center"}} onClick={()=>toast.info("📞 "+dl.vendor.name)}>📞</button>
           </div>
         </>:<>
-          <div style={{fontSize:15,fontWeight:700,marginBottom:2}}>{dl.client.name}</div>
+          <div style={{fontSize:15,fontWeight:700,marginBottom:2}}>{dl.client.name}{dl.isGroup&&<span style={{marginLeft:6,padding:"2px 8px",borderRadius:5,background:"rgba(59,130,246,0.08)",color:"#3B82F6",fontSize:10,fontWeight:700}}>🤝 {dl.groupMembers?.length||0} pers.</span>}</div>
           <div style={{fontSize:13,color:"var(--muted)"}}>{dl.client.addr}</div>
           <div style={{display:"flex",gap:8,marginTop:10}}>
             <button style={{flex:1,padding:10,borderRadius:10,border:"none",background:"#F59E0B",color:"#fff",fontSize:12,fontWeight:600,cursor:"pointer",fontFamily:"inherit"}} onClick={()=>go("drChatClient",dl)}>💬 Client</button>

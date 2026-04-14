@@ -59,7 +59,7 @@ function DrDashboardScr({go}){
 
     {pending&&<><div className="sec" style={{marginTop:10}}><h3>🆕 Nouvelle demande</h3></div>
     <div className="dr-request">
-      <div className="dr-req-head"><h4>Livraison <span className="dr-new">NOUVEAU</span>{pending.payment==="cash"&&<span style={{marginLeft:6,padding:"2px 6px",borderRadius:4,background:"rgba(245,158,11,0.08)",color:"#F59E0B",fontSize:9,fontWeight:700}}>💵</span>}</h4><div className="dr-req-fee">{fmt(pending.fee+pending.tip)}</div></div>
+      <div className="dr-req-head"><h4>Livraison <span className="dr-new">NOUVEAU</span>{pending.payment==="cash"&&<span style={{marginLeft:6,padding:"2px 6px",borderRadius:4,background:"rgba(245,158,11,0.08)",color:"#F59E0B",fontSize:9,fontWeight:700}}>💵</span>}{pending.isGroup&&<span style={{marginLeft:6,padding:"2px 6px",borderRadius:4,background:"rgba(59,130,246,0.08)",color:"#3B82F6",fontSize:9,fontWeight:700}}>🤝 Groupe</span>}</h4><div className="dr-req-fee">{fmt(pending.fee+pending.tip)}</div></div>
       <div className="dr-req-route">
         <div className="dr-req-point"><div className="drp-icon drp-pickup">📍</div><div style={{flex:1}}><div style={{fontWeight:600}}>{pending.pickup}</div><div style={{fontSize:11,color:"var(--muted)"}}>{pending.vendor.name}</div></div></div>
         <div className="dr-req-line"/>

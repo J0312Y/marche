@@ -32,6 +32,13 @@ function VOrderDetailScr({order:o,onBack,go}){
     <div style={{padding:16,background:"var(--card)",border:"1px solid var(--border)",borderRadius:16,marginBottom:14}}>
       <div style={{fontSize:14,fontWeight:700,marginBottom:10}}>👤 Client</div>
       {[["Nom",o.client],["Téléphone",o.phone],["Adresse",o.addr],["Paiement",o.payment==="cash"?"💵 Cash à la livraison":o.payment]].map(([l,v])=><div key={l} style={{display:"flex",justifyContent:"space-between",padding:"6px 0",borderBottom:"1px solid var(--border)",fontSize:13}}><span style={{color:"var(--muted)"}}>{l}</span><b>{v}</b></div>)}
+      {o.isGroup&&<div style={{marginTop:8,padding:10,background:"rgba(59,130,246,0.04)",borderRadius:10,border:"1px solid rgba(59,130,246,0.1)"}}>
+        <div style={{fontSize:12,fontWeight:700,color:"#3B82F6",marginBottom:6}}>🤝 Commande de groupe — {o.groupMembers?.length||0} participants</div>
+        {o.groupMembers?.map((m,mi)=><div key={mi} style={{padding:"6px 0",borderBottom:mi<o.groupMembers.length-1?"1px solid var(--border)":"none"}}>
+          <div style={{fontSize:12,fontWeight:600,marginBottom:4}}>{m.name}</div>
+          {m.items?.map((it,ii)=><div key={ii} style={{fontSize:11,color:"var(--sub)",paddingLeft:10}}>• {it.name} ×{it.qty} — {fmt(it.price*(it.qty||1))}</div>)}
+        </div>)}
+      </div>}
     </div>
     <div style={{padding:16,background:"var(--card)",border:"1px solid var(--border)",borderRadius:16,marginBottom:14}}>
       <div style={{fontSize:14,fontWeight:700,marginBottom:10}}>📦 Articles</div>
