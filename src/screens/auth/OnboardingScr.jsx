@@ -170,11 +170,8 @@ function OnboardingScr({onDone}){
               cursor:"pointer",fontFamily:"inherit",
               boxShadow:"0 4px 16px rgba(249,115,22,.25)",
             }}>
-              🚀 Commencer
+              🚀 Découvrir Lamuka Market
             </button>
-            <div style={{textAlign:"center",marginTop:12,fontSize:12,color:"var(--muted, #908C82)"}}>
-              Déjà un compte ? <span style={{color:"var(--text)",fontWeight:700,cursor:"pointer"}} onClick={onDone}>Se connecter</span>
-            </div>
           </div>
         )}
       </div>
