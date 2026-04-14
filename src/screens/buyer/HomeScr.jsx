@@ -86,27 +86,17 @@ function HomeScr({go,favs,toggleFav,isFav,userName}){
           {homeQ&&<span style={{cursor:"pointer",color:"var(--muted)",fontSize:12,flexShrink:0}} onClick={()=>setHomeQ("")}>✕</span>}
           {!homeQ&&<span style={{cursor:"pointer",fontSize:16,flexShrink:0,opacity:.5}} onClick={()=>setShowCamMenu(true)}>📷</span>}
         </div>
-        <button onClick={()=>setShowFilter(!showFilter)} style={{width:38,height:38,borderRadius:12,border:"none",background:showFilter?"#F97316":"var(--light)",cursor:"pointer",fontSize:15,display:"flex",alignItems:"center",justifyContent:"center",flexShrink:0,transition:"all .2s"}}>
+        <button onClick={()=>setShowFilter(!showFilter)} style={{width:38,height:38,borderRadius:12,border:"none",background:showFilter?"#F97316":(filterType!=="all"||filterSort!=="popular")?"rgba(249,115,22,0.1)":"var(--light)",cursor:"pointer",fontSize:15,display:"flex",alignItems:"center",justifyContent:"center",flexShrink:0,transition:"all .2s",position:"relative"}}>
           <span style={{filter:showFilter?"brightness(10)":"none"}}>⚙️</span>
+          {(filterType!=="all"||filterSort!=="popular")&&!showFilter&&<div style={{position:"absolute",top:2,right:2,width:8,height:8,borderRadius:4,background:"#EF4444"}}/>}
         </button>
       </div>
 
-      {/* Filter panel */}
-      {showFilter&&<div style={{padding:"0 16px 10px",animation:"fadeIn .2s ease"}}>
-        <div style={{padding:12,background:"var(--card)",border:"1px solid var(--border)",borderRadius:14}}>
-          <div style={{fontSize:12,fontWeight:700,marginBottom:8}}>Type de commerce</div>
-          <div style={{display:"flex",gap:4,flexWrap:"wrap",marginBottom:10}}>
-            {[["all","Tout"],["boutique","🏪 Boutiques"],["restaurant","🍽️ Restos"],["patisserie","🧁 Pâtisseries"],["supermarche","🛒 Supermarchés"],["pharmacie","💊 Pharmacies"],["service","🔧 Services"]].map(([k,l])=>
-              <button key={k} onClick={()=>setFilterType(k)} style={{padding:"5px 10px",borderRadius:8,border:"none",background:filterType===k?"#F97316":"var(--light)",color:filterType===k?"#fff":"var(--muted)",fontSize:10,fontWeight:600,cursor:"pointer",fontFamily:"inherit"}}>{l}</button>
-            )}
-          </div>
-          <div style={{fontSize:12,fontWeight:700,marginBottom:8}}>Trier par</div>
-          <div style={{display:"flex",gap:4}}>
-            {[["popular","🔥 Populaires"],["rating","⭐ Mieux notés"],["price","💰 Prix ↑"]].map(([k,l])=>
-              <button key={k} onClick={()=>setFilterSort(k)} style={{padding:"5px 10px",borderRadius:8,border:"none",background:filterSort===k?"#F97316":"var(--light)",color:filterSort===k?"#fff":"var(--muted)",fontSize:10,fontWeight:600,cursor:"pointer",fontFamily:"inherit",flex:1}}>{l}</button>
-            )}
-          </div>
-        </div>
+      {/* Active filter indicator */}
+      {!showFilter&&(filterType!=="all"||filterSort!=="popular")&&<div style={{display:"flex",alignItems:"center",gap:6,padding:"0 16px 8px"}}>
+        <span style={{fontSize:11,color:"var(--muted)"}}>Filtres :</span>
+        {filterType!=="all"&&<span onClick={()=>{setFilterType("all");setSelType("all")}} style={{padding:"3px 8px",borderRadius:6,background:"rgba(249,115,22,0.08)",color:"#F97316",fontSize:10,fontWeight:600,cursor:"pointer"}}>{types.find(t=>t.id===filterType)?.icon} {types.find(t=>t.id===filterType)?.name} ✕</span>}
+        {filterSort!=="popular"&&<span onClick={()=>setFilterSort("popular")} style={{padding:"3px 8px",borderRadius:6,background:"rgba(59,130,246,0.08)",color:"#3B82F6",fontSize:10,fontWeight:600,cursor:"pointer"}}>{filterSort==="rating"?"⭐ Notés":"💰 Prix"} ✕</span>}
       </div>}
 
       {/* Hidden file inputs for image search */}
@@ -130,15 +120,15 @@ function HomeScr({go,favs,toggleFav,isFav,userName}){
       {showFilter&&<div style={{margin:"0 16px 12px",padding:16,background:"var(--card)",borderRadius:18,border:"1px solid var(--border)",boxShadow:"0 4px 16px rgba(0,0,0,.06)"}}>
         <div style={{display:"flex",justifyContent:"space-between",alignItems:"center",marginBottom:12}}>
           <h4 style={{fontSize:14,fontWeight:700}}>Filtres</h4>
-          <span style={{fontSize:12,color:"#F97316",fontWeight:600,cursor:"pointer"}} onClick={()=>{setFilterType("all");setFilterSort("popular")}}>Réinitialiser</span>
+          <span style={{fontSize:12,color:"#F97316",fontWeight:600,cursor:"pointer"}} onClick={()=>{setFilterType("all");setFilterSort("popular");setSelType("all")}}>Réinitialiser</span>
         </div>
         <div style={{fontSize:12,fontWeight:600,color:"var(--muted)",marginBottom:8}}>Type de commerce</div>
         <div style={{display:"flex",gap:6,flexWrap:"wrap",marginBottom:14}}>
-          {types.map(t=><div key={t.id} onClick={()=>setFilterType(t.id)} style={{padding:"6px 12px",borderRadius:20,border:filterType===t.id?"2px solid #F97316":"1px solid var(--border)",background:filterType===t.id?"rgba(249,115,22,0.06)":"var(--card)",cursor:"pointer",fontSize:11,fontWeight:600,color:filterType===t.id?"#F97316":"var(--sub)"}}>{t.icon} {t.name}</div>)}
+          {types.map(t=><div key={t.id} onClick={()=>{setFilterType(t.id);setSelType(t.id);setShowFilter(false)}} style={{padding:"6px 12px",borderRadius:20,border:filterType===t.id?"2px solid #F97316":"1px solid var(--border)",background:filterType===t.id?"rgba(249,115,22,0.06)":"var(--card)",cursor:"pointer",fontSize:11,fontWeight:600,color:filterType===t.id?"#F97316":"var(--sub)"}}>{t.icon} {t.name}</div>)}
         </div>
         <div style={{fontSize:12,fontWeight:600,color:"var(--muted)",marginBottom:8}}>Trier par</div>
         <div style={{display:"flex",gap:6}}>
-          {[["popular","🔥 Populaires"],["rating","⭐ Mieux notés"],["price","💰 Prix ↑"]].map(([k,l])=><div key={k} onClick={()=>setFilterSort(k)} style={{padding:"6px 12px",borderRadius:20,border:filterSort===k?"2px solid #F97316":"1px solid var(--border)",background:filterSort===k?"rgba(249,115,22,0.06)":"var(--card)",cursor:"pointer",fontSize:11,fontWeight:600,color:filterSort===k?"#F97316":"var(--sub)"}}>{l}</div>)}
+          {[["popular","🔥 Populaires"],["rating","⭐ Mieux notés"],["price","💰 Prix ↑"]].map(([k,l])=><div key={k} onClick={()=>{setFilterSort(k);setShowFilter(false)}} style={{padding:"6px 12px",borderRadius:20,border:filterSort===k?"2px solid #F97316":"1px solid var(--border)",background:filterSort===k?"rgba(249,115,22,0.06)":"var(--card)",cursor:"pointer",fontSize:11,fontWeight:600,color:filterSort===k?"#F97316":"var(--sub)"}}>{l}</div>)}
         </div>
       </div>}
 
