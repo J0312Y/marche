@@ -71,6 +71,23 @@ function DetailScr({product:rawP,onBack,onAddCart,go,favs,toggleFav,isFav}){
   const [openSideCat,setOpenSideCat]=useState(null);
   const [specialNote,setSpecialNote]=useState("");
   const toggleSide=(item)=>setSelectedSides(prev=>{const k=item.name;if(prev[k]){{const n={...prev};delete n[k];return n}}return{...prev,[k]:item}});
+  const addSide=(item)=>{
+    setSelectedSides(prev=>{
+      const k=item.name;
+      const cur=prev[k];
+      if(cur){return{...prev,[k]:{...cur,qty:Math.min((cur.qty||1)+1,5)}}}
+      return{...prev,[k]:{...item,qty:1}};
+    });
+  };
+  const removeSide=(item)=>{
+    setSelectedSides(prev=>{
+      const k=item.name;
+      const cur=prev[k];
+      if(!cur)return prev;
+      if((cur.qty||1)<=1){const n={...prev};delete n[k];return n}
+      return{...prev,[k]:{...cur,qty:cur.qty-1}};
+    });
+  };
   const sidesTotalPrice=Object.values(selectedSides).reduce((s,it)=>s+(it.price||0)*(it.qty||1),0);
   const sidesTotalCount=Object.values(selectedSides).reduce((s,it)=>s+(it.qty||1),0);
   const [priceAlert,setPriceAlert]=useState(false);
