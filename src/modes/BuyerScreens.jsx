@@ -26,7 +26,7 @@ export default function BuyerScreens() {
   const {
     screen, tab, setTab, setScreen, setHistory,
     go, pop, goHome, switchTo,
-    cart, setCart, addToCart, updateCartQty,
+    cart, setCart, addToCart, updateCartQty, clearCart,
     appliedCoupon, setAppliedCoupon,
     favs, toggleFav, isFav,
     userRole, vendorPlan, vendorStatus, setVendorStatus, driverStatus, setDriverStatus,
@@ -57,7 +57,7 @@ export default function BuyerScreens() {
     case "flash": return <FlashScr go={go} onBack={back} favs={favs} toggleFav={toggleFav} isFav={isFav} />;
     case "nearby": return <NearbyScr go={go} onBack={back} />;
     case "coupons": return <CouponsScr onBack={back} cart={cart} appliedCoupon={appliedCoupon} onApply={(c)=>{setAppliedCoupon(c);back()}} />;
-    case "checkout": return <CheckoutScr onBack={back} onDone={goHome} cart={cart} appliedCoupon={appliedCoupon} setAppliedCoupon={setAppliedCoupon} />;
+    case "checkout": return <CheckoutScr onBack={back} onDone={goHome} cart={cart} clearCart={clearCart} appliedCoupon={appliedCoupon} setAppliedCoupon={setAppliedCoupon} />;
     case "cart": return <Redirect action={() => { setTab(2); setScreen(null); }} />;
     case "orders": return <Redirect action={() => { setTab(3); setScreen(null); }} />;
     case "search": return <SearchScr go={go} onBack={back} favs={favs} toggleFav={toggleFav} isFav={isFav} defaultTab={data?.tab} />;

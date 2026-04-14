@@ -7,7 +7,7 @@ import { validatePayPhone, getPhonePlaceholder } from "../../utils/phoneValidati
 import { fmt, getVendorPromo } from "../../utils/helpers";
 import { useData } from "../../hooks";
 
-function CheckoutScr({onBack,onDone,cart=[],appliedCoupon,setAppliedCoupon}){
+function CheckoutScr({onBack,onDone,cart=[],clearCart,appliedCoupon,setAppliedCoupon}){
   const [step,setStep]=useState(0);const [momo,setMomo]=useState("airtel");const [ok,setOk]=useState(false);
   const [ckAddr,setCkAddr]=useState("");
   const [ckPhone,setCkPhone]=useState("064663469");
@@ -35,6 +35,7 @@ function CheckoutScr({onBack,onDone,cart=[],appliedCoupon,setAppliedCoupon}){
   const handleConfirm=()=>{
     setOk(true);toast.success("Commande confirmée ! 🎉");if(saveAddr)toast.info("Adresse sauvegardée 📍");
     if(setAppliedCoupon) setAppliedCoupon(null);
+    if(clearCart) clearCart();
   };
 
   return(<>
