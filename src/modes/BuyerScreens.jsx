@@ -11,7 +11,7 @@ import {
   TrackingScr, ChatScr, ChatListScr, ChatVendorScr, WishlistScr,
   NotifScr, ProfileScr, EditProfileScr, AddressesScr,
   LanguageScr, CurrencyScr, PasswordScr, RechargeScr, WithdrawScr,
-  VendorScr, RoleRegScr, RegStatusScr, LiveWatchScr, PaymentHistoryScr, RateDriverScr,
+  VendorScr, RoleRegScr, RegStatusScr, LiveWatchScr, GroupOrderScr, PaymentHistoryScr, RateDriverScr,
   ReferralScr, LoyaltyScr, ReturnScr, GiftCardScr, QRScanScr, ChatBotScr, MyStatsScr, BecomeSellerScr, PriceAlertScr, ImageSearchScr, GamificationScr, GroupBuyScr
 } from "../screens/buyer";
 import { SettingsScr, HelpScr, AboutScr, TermsScr, PrivacyScr, DeliveryPolicyScr } from "../screens/common";
@@ -94,6 +94,7 @@ export default function BuyerScreens() {
     case "priceAlerts": return <PriceAlertScr onBack={back} />;
     case "recharge": return <RechargeScr onBack={back} />;
     case "becomeSeller": return <BecomeSellerScr onBack={back} go={go} />;
+    case "groupOrder": return <GroupOrderScr onBack={back} go={go} />;
     case "liveWatch": return <LiveWatchScr onBack={back} go={go} liveData={data} />;
     case "regStatus": return <RegStatusScr onBack={back} role={vendorStatus==="pending"?"vendor":"driver"} plan={vendorPlan||"starter"} vendorStatus={vendorStatus} driverStatus={driverStatus} />;
     case "roleReg": return <RoleRegScr onPending={(role)=>{if(role==="vendor")setVendorStatus("pending");if(role==="driver")setDriverStatus("pending")}} onBack={back} onDone={(role, plan) => { onRoleApproved(role, plan); goHome(); }} />;

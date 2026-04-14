@@ -52,3 +52,5 @@ export { default as ImageSearchScr } from './ImageSearchScr';
 export { default as GamificationScr } from './GamificationScr';
 
 export { default as LiveWatchScr } from './LiveWatchScr';
+
+export { default as GroupOrderScr } from "./GroupOrderScr";

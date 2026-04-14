@@ -34,6 +34,12 @@ function CartScr({cart,setCart,go,appliedCoupon,setAppliedCoupon}){
         </div>
       </div>)})}
 
+    <div onClick={()=>go("groupOrder")} style={{padding:12,background:"rgba(249,115,22,0.04)",border:"1px solid rgba(249,115,22,0.12)",borderRadius:14,marginBottom:10,display:"flex",alignItems:"center",gap:10,cursor:"pointer"}}>
+      <span style={{fontSize:20}}>🤝</span>
+      <div style={{flex:1}}><div style={{fontSize:13,fontWeight:600}}>Commander en groupe</div><div style={{fontSize:11,color:"var(--muted)"}}>Invitez vos amis à ajouter leurs plats</div></div>
+      <span style={{color:"#F97316",fontSize:12,fontWeight:600}}>→</span>
+    </div>
+
     {/* Coupon section */}
     {cart.length>0&&<div style={{marginTop:10}}>
       {appliedCoupon?(
