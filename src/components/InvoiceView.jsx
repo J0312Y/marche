@@ -82,6 +82,12 @@ function InvoiceView({ order, onClose }) {
           ))}
         </div>
 
+        {/* Group order info */}
+        {o.isGroup&&<div style={{ margin: "0 20px 8px", padding: 10, background: "rgba(59,130,246,0.04)", borderRadius: 10, border: "1px solid rgba(59,130,246,0.1)" }}>
+          <div style={{ fontSize: 11, fontWeight: 700, color: "#3B82F6", marginBottom: 4 }}>🤝 Commande de groupe</div>
+          <div style={{ fontSize: 10, color: "var(--muted)" }}>{o.groupMembers?.join(", ")||"Plusieurs participants"}</div>
+        </div>}
+
         {/* Items */}
         <div style={{ padding: "8px 20px", borderTop: "1px solid var(--border)", borderBottom: "1px solid var(--border)", opacity: isNegative ? .5 : 1 }}>
           <div style={{ display: "flex", justifyContent: "space-between", fontSize: 10, color: "var(--muted)", fontWeight: 700, textTransform: "uppercase", padding: "6px 0" }}>

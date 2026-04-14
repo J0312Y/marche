@@ -17,6 +17,10 @@ function GroupOrderScr({onBack,go}){
   const [friends,setFriends]=useState(MOCK_FRIENDS);
   const [myItems,setMyItems]=useState([]);
   const [showAdd,setShowAdd]=useState(false);
+  const [selProduct,setSelProduct]=useState(null);
+  const [selSides,setSelSides]=useState({});
+  const [selNote,setSelNote]=useState("");
+  const [openSideCat,setOpenSideCat]=useState(null);
   const [splitMode,setSplitMode]=useState("one"); // one | split
   const [timer,setTimer]=useState(15);
   const code="GRP-"+Math.floor(Math.random()*9000+1000);
@@ -46,22 +50,31 @@ function GroupOrderScr({onBack,go}){
     return()=>clearInterval(iv);
   },[step]);
 
-  const addMyItem=(p)=>{
-    setMyItems(prev=>{
-      const ex=prev.find(x=>x.id===p.id);
-      if(ex)return prev.map(x=>x.id===p.id?{...x,qty:x.qty+1}:x);
-      return[...prev,{...p,qty:1}];
-    });
+  const selectProduct=(p)=>{
+    const full=P.find(x=>x.id===p.id)||p;
+    setSelProduct(full);
+    setSelSides({});
+    setSelNote("");
+    setOpenSideCat(null);
     setShowAdd(false);
-    toast.success(p.name+" ajouté 🛍️");
   };
+  const confirmAddItem=()=>{
+    if(!selProduct)return;
+    const sides=Object.values(selSides);
+    const sidesTotal=sides.reduce((s,si)=>s+(si.price||0)*(si.qty||1),0);
+    setMyItems(prev=>[...prev,{...selProduct,qty:1,sides,sidesTotal,note:selNote||null}]);
+    setSelProduct(null);setSelSides({});setSelNote("");
+    toast.success(selProduct.name+" ajouté 🛍️");
+  };
+  const addSideGrp=(item)=>setSelSides(prev=>{const k=item.name;const cur=prev[k];if(cur)return{...prev,[k]:{...cur,qty:Math.min((cur.qty||1)+1,5)}};return{...prev,[k]:{...item,qty:1}}});
+  const removeSideGrp=(item)=>setSelSides(prev=>{const k=item.name;const cur=prev[k];if(!cur)return prev;if((cur.qty||1)<=1){const n={...prev};delete n[k];return n}return{...prev,[k]:{...cur,qty:cur.qty-1}}});
 
   const allItems=[
     {person:"Vous",avatar:"👤",items:myItems},
     ...friends.filter(f=>f.status==="joined"&&f.items.length>0).map(f=>({person:f.name,avatar:f.avatar,items:f.items}))
   ].filter(g=>g.items.length>0);
 
-  const grandTotal=allItems.reduce((s,g)=>s+g.items.reduce((ss,it)=>s+(it.price||0)*(it.qty||1),0),0);
+  const grandTotal=allItems.reduce((s,g)=>s+g.items.reduce((ss,it)=>ss+((it.price||0)+(it.sidesTotal||0))*(it.qty||1),0),0);
   const joinedCount=friends.filter(f=>f.status==="joined").length+1;
 
   // ── CREATE ──
@@ -135,10 +148,14 @@ function GroupOrderScr({onBack,go}){
     {myItems.length===0?<div style={{padding:16,background:"var(--light)",borderRadius:12,textAlign:"center",marginBottom:10}}>
       <div style={{fontSize:13,color:"var(--muted)"}}>Vous n'avez pas encore ajouté d'articles</div>
     </div>
-    :myItems.map((it,i)=><div key={i} style={{display:"flex",alignItems:"center",gap:8,padding:8,background:"var(--card)",border:"1px solid var(--border)",borderRadius:10,marginBottom:4}}>
-      <div style={{width:32,height:32,borderRadius:8,overflow:"hidden",flexShrink:0}}><Img src={it.photo} emoji={it.img} style={{width:"100%",height:"100%"}} fit="cover"/></div>
-      <span style={{flex:1,fontSize:12,fontWeight:500}}>{it.name} ×{it.qty}</span>
-      <span style={{fontSize:12,fontWeight:700,color:"#F97316"}}>{fmt(it.price*(it.qty||1))}</span>
+    :myItems.map((it,i)=><div key={i} style={{padding:8,background:"var(--card)",border:"1px solid var(--border)",borderRadius:10,marginBottom:4}}>
+      <div style={{display:"flex",alignItems:"center",gap:8}}>
+        <div style={{width:32,height:32,borderRadius:8,overflow:"hidden",flexShrink:0}}><Img src={it.photo} emoji={it.img} style={{width:"100%",height:"100%"}} fit="cover"/></div>
+        <span style={{flex:1,fontSize:12,fontWeight:500}}>{it.name} ×{it.qty}</span>
+        <span style={{fontSize:12,fontWeight:700,color:"#F97316"}}>{fmt((it.price+(it.sidesTotal||0))*(it.qty||1))}</span>
+      </div>
+      {it.sides?.length>0&&<div style={{paddingLeft:40,marginTop:4}}>{it.sides.map((s,si)=><div key={si} style={{fontSize:10,color:"var(--muted)"}}>↳ {s.img} {s.name}{s.qty>1?" ×"+s.qty:""}</div>)}</div>}
+      {it.note&&<div style={{paddingLeft:40,marginTop:2,fontSize:10,color:"#3B82F6"}}>📝 {it.note}</div>}
     </div>)}
 
     <button onClick={()=>setShowAdd(true)} style={{width:"100%",padding:12,borderRadius:12,border:"2px dashed var(--border)",background:"transparent",fontSize:13,fontWeight:600,cursor:"pointer",fontFamily:"inherit",color:"#F97316",marginBottom:14}}>+ Ajouter un article</button>
@@ -162,12 +179,66 @@ function GroupOrderScr({onBack,go}){
       <div onClick={e=>e.stopPropagation()} style={{width:"100%",maxWidth:500,margin:"0 auto",background:"var(--card)",borderRadius:"20px 20px 0 0",padding:16,maxHeight:"70vh",overflowY:"auto",animation:"slideUp .3s cubic-bezier(.4,0,.2,1)"}}>
         <div style={{fontSize:15,fontWeight:700,marginBottom:12}}>Ajouter un article</div>
         {P.filter(p=>p.type==="restaurant"||p.type==="patisserie").map(p=>(
-          <div key={p.id} onClick={()=>addMyItem(p)} style={{display:"flex",alignItems:"center",gap:10,padding:10,background:"var(--light)",borderRadius:12,marginBottom:6,cursor:"pointer"}}>
+          <div key={p.id} onClick={()=>selectProduct(p)} style={{display:"flex",alignItems:"center",gap:10,padding:10,background:"var(--light)",borderRadius:12,marginBottom:6,cursor:"pointer"}}>
             <div style={{width:44,height:44,borderRadius:10,overflow:"hidden",flexShrink:0}}><Img src={p.photo} emoji={p.img} style={{width:"100%",height:"100%"}} fit="cover"/></div>
             <div style={{flex:1}}><div style={{fontSize:13,fontWeight:600}}>{p.name}</div><div style={{fontSize:11,color:"var(--muted)"}}>{p.vendor}</div></div>
             <span style={{fontSize:13,fontWeight:700,color:"#F97316"}}>{fmt(p.price)}</span>
           </div>
         ))}
+      </div>
+    </div>}
+
+    {/* Product detail with sides */}
+    {selProduct&&<div onClick={()=>setSelProduct(null)} style={{position:"fixed",inset:0,background:"rgba(0,0,0,.45)",zIndex:99999,display:"flex",alignItems:"flex-end",animation:"fadeInFast .2s ease"}}>
+      <div onClick={e=>e.stopPropagation()} style={{width:"100%",maxWidth:500,margin:"0 auto",background:"var(--card)",borderRadius:"20px 20px 0 0",padding:16,maxHeight:"80vh",overflowY:"auto",animation:"slideUp .3s cubic-bezier(.4,0,.2,1)"}}>
+        <div style={{display:"flex",alignItems:"center",gap:10,marginBottom:12}}>
+          <div style={{width:48,height:48,borderRadius:12,overflow:"hidden",flexShrink:0}}><Img src={selProduct.photo} emoji={selProduct.img} style={{width:"100%",height:"100%"}} fit="cover"/></div>
+          <div style={{flex:1}}><div style={{fontSize:15,fontWeight:700}}>{selProduct.name}</div><div style={{fontSize:12,color:"#F97316",fontWeight:600}}>{fmt(selProduct.price)}</div></div>
+          <button onClick={()=>setSelProduct(null)} style={{background:"none",border:"none",fontSize:18,cursor:"pointer",color:"var(--muted)"}}>✕</button>
+        </div>
+
+        {/* Sides accordion */}
+        {selProduct.sides?.map((cat,ci)=>{
+          const isOpen=openSideCat===ci;
+          const catItems=cat.items.filter(it=>selSides[it.name]);
+          const catQty=catItems.reduce((s,it)=>s+(selSides[it.name]?.qty||0),0);
+          return(<div key={ci} style={{marginBottom:6,borderRadius:12,border:cat.required&&catQty===0?"2px solid rgba(239,68,68,0.3)":"1px solid var(--border)",overflow:"hidden"}}>
+            <div onClick={()=>setOpenSideCat(isOpen?null:ci)} style={{display:"flex",alignItems:"center",gap:8,padding:"10px 12px",cursor:"pointer"}}>
+              <span style={{flex:1}}>
+                <div style={{display:"flex",alignItems:"center",gap:6}}>
+                  <span style={{fontSize:12,fontWeight:700}}>{cat.cat}</span>
+                  {cat.required?<span style={{padding:"1px 5px",borderRadius:4,background:"rgba(239,68,68,0.08)",color:"#EF4444",fontSize:8,fontWeight:700}}>Obligatoire</span>
+                  :<span style={{padding:"1px 5px",borderRadius:4,background:"var(--light)",color:"var(--muted)",fontSize:8}}>Optionnel</span>}
+                </div>
+              </span>
+              {catQty>0&&<span style={{width:18,height:18,borderRadius:9,background:"#F97316",color:"#fff",fontSize:9,fontWeight:700,display:"flex",alignItems:"center",justifyContent:"center"}}>{catQty}</span>}
+              <svg width="10" height="10" style={{transform:isOpen?"rotate(180deg)":"none",transition:"transform .2s"}}><path d="M2 3l3 3 3-3" stroke="var(--muted)" strokeWidth="1.5" fill="none"/></svg>
+            </div>
+            {isOpen&&<div style={{padding:"0 8px 8px"}}>
+              {cat.items.map((item,ii)=>{const sel=selSides[item.name];const qty=sel?.qty||0;return(
+                <div key={ii} style={{display:"flex",alignItems:"center",gap:6,padding:"6px 8px",borderRadius:8,background:qty>0?"rgba(249,115,22,0.04)":"transparent",marginBottom:2}}>
+                  <span style={{fontSize:14}}>{item.img}</span>
+                  <span style={{flex:1,fontSize:12,fontWeight:qty>0?600:400}}>{item.name}</span>
+                  <span style={{fontSize:10,color:item.price>0?"var(--muted)":"#10B981",marginRight:4}}>{item.price>0?fmt(item.price):"Gratuit"}</span>
+                  {qty===0?<button onClick={()=>addSideGrp(item)} style={{width:24,height:24,borderRadius:12,border:"1.5px solid #F97316",background:"transparent",color:"#F97316",fontSize:14,cursor:"pointer",display:"flex",alignItems:"center",justifyContent:"center"}}>+</button>
+                  :<div style={{display:"flex",alignItems:"center",gap:3}}>
+                    <button onClick={()=>removeSideGrp(item)} style={{width:22,height:22,borderRadius:11,border:"none",background:"var(--light)",fontSize:12,cursor:"pointer",display:"flex",alignItems:"center",justifyContent:"center"}}>−</button>
+                    <span style={{fontSize:12,fontWeight:700,minWidth:14,textAlign:"center"}}>{qty}</span>
+                    <button onClick={()=>addSideGrp(item)} style={{width:22,height:22,borderRadius:11,border:"none",background:"#F97316",color:"#fff",fontSize:12,cursor:"pointer",display:"flex",alignItems:"center",justifyContent:"center"}}>+</button>
+                  </div>}
+                </div>
+              )})}
+            </div>}
+          </div>);
+        })}
+
+        {/* Special note */}
+        <div style={{marginTop:8,marginBottom:12}}>
+          <div style={{fontSize:12,fontWeight:700,marginBottom:4}}>📝 Note spéciale</div>
+          <textarea value={selNote} onChange={e=>setSelNote(e.target.value)} placeholder="Sans oignon, bien cuit..." rows={2} style={{width:"100%",padding:"8px 10px",borderRadius:10,border:"1px solid var(--border)",background:"var(--light)",fontSize:12,fontFamily:"inherit",color:"var(--text)",resize:"none",outline:"none"}}/>
+        </div>
+
+        <button onClick={confirmAddItem} className="btn-primary">🛍️ Ajouter · {fmt(selProduct.price+Object.values(selSides).reduce((s,si)=>s+(si.price||0)*(si.qty||1),0))}</button>
       </div>
     </div>}
   </div>);

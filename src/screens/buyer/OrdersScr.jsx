@@ -9,6 +9,8 @@ function OrdersScr({go}){
     {ref:"#LMK-2026-0205",date:"5 Fév 2026",status:"Livré",sc:"done",total:"18 000",vendor:"Mode Afrique",items:["👔 Chemise Bogolan"],prog:[1,1,1,1]},
     {ref:"#LMK-2026-0201",date:"1 Fév 2026",status:"En préparation",sc:"prep",total:"5 500",vendor:"Chez Mama Ngudi",items:["🍗 Poulet DG"],prog:[1,1,0,0],payment:"cash"},
     {ref:"#LMK-2026-0198",date:"28 Jan 2026",status:"Annulée",sc:"cancel",total:"15 000",vendor:"Tech Congo",items:["🎧 Écouteurs Bluetooth"],prog:[1,0,0,0],payment:"mtn"},
+    {ref:"#GRP-4521",date:"15 Fév 2026",status:"En livraison",sc:"ship",total:"39 000",vendor:"Chez Mama Ngudi",items:["🍗 Poulet DG x2","🐟 Poisson Braisé","🎂 Gâteau F.N. x2"],prog:[1,1,1,0],payment:"airtel",isGroup:true,groupMembers:["Joeldy","Marie K.","Patrick M."],groupSides:[{name:"Coca-Cola",qty:2},{name:"Frites",qty:1},{name:"Piment fort",qty:1}]},
+    {ref:"#GRP-3817",date:"10 Fév 2026",status:"Livré",sc:"done",total:"22 500",vendor:"Le Braiseur du Congo",items:["🐟 Poisson Braisé x3","🥤 Bière Ngok x3"],prog:[1,1,1,1],payment:"mtn",isGroup:true,groupMembers:["Joeldy","David T."]},
   ]);
   const [cancelConfirm,setCancelConfirm]=useState(null);
   const [reorderConfirm,setReorderConfirm]=useState(null);
@@ -48,7 +50,7 @@ function OrdersScr({go}){
     {shown.length===0&&<div style={{textAlign:"center",padding:"40px 0"}}><div style={{fontSize:36,marginBottom:8}}>{tab==="active"?"📦":tab==="done"?"✅":"❌"}</div><div style={{fontSize:13,color:"var(--muted)"}}>Aucune commande {tab==="active"?"en cours":tab==="done"?"livrée":"annulée"}</div></div>}
 
     {shown.map(o=><div key={o.ref} className="ocard" onClick={()=>go("orderDetail",o)}>
-      <div className="ocard-h"><h4>{o.ref}</h4><div style={{display:"flex",gap:4,alignItems:"center"}}>{o.payment==="cash"&&<span style={{padding:"2px 6px",borderRadius:5,background:"rgba(245,158,11,0.08)",color:"#F59E0B",fontSize:9,fontWeight:700}}>💵</span>}<span className={`ost ${o.sc}`}>{o.status}</span></div></div>
+      <div className="ocard-h"><h4>{o.ref}</h4><div style={{display:"flex",gap:4,alignItems:"center"}}>{o.isGroup&&<span style={{padding:"2px 6px",borderRadius:5,background:"rgba(59,130,246,0.08)",color:"#3B82F6",fontSize:9,fontWeight:700}}>🤝</span>}{o.payment==="cash"&&<span style={{padding:"2px 6px",borderRadius:5,background:"rgba(245,158,11,0.08)",color:"#F59E0B",fontSize:9,fontWeight:700}}>💵</span>}<span className={`ost ${o.sc}`}>{o.status}</span></div></div>
       <div className="odate">{o.date}</div>
       <div style={{fontSize:13,color:"var(--sub)",marginBottom:10}}>{o.items.join(" · ")}</div>
       <div style={{display:"flex",justifyContent:"space-between",alignItems:"center"}}>
