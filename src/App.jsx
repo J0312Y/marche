@@ -22,6 +22,8 @@ function AppInner() {
   } = useApp();
 
   /* ── Auth step mapping: splash=0, onboarding=1, login=2, otp=3, profile=4, ready=5 ── */
+  /* Skip onboarding if already seen */
+  const hasSeenOnboarding = typeof localStorage !== 'undefined' && localStorage.getItem('lk-onboarded');
   const auth = authStep === 'splash' ? 0 : authStep === 'onboarding' ? 1 : authStep === 'login' ? 2
     : authStep === 'otp' ? 3 : authStep === 'profile' ? 4 : authStep === 'ready' ? 5 : authStep === 'loading' ? -1 : 0;
 
@@ -70,8 +72,8 @@ function AppInner() {
 
           {/* Screen Content */}
           {auth === -1 ? <LoadingSpinner />
-            : auth === 0 ? <SplashScr onDone={() => setAuthStep('onboarding')} />
-            : auth === 1 ? <OnboardingScr onDone={() => setAuthStep('login')} />
+            : auth === 0 ? <SplashScr onDone={() => setAuthStep(hasSeenOnboarding ? 'login' : 'onboarding')} />
+            : auth === 1 ? <OnboardingScr onDone={() => { localStorage.setItem('lk-onboarded','1'); setAuthStep('login'); }} />
             : auth === 2 ? <LoginScr onDone={(signup) => { setIsNewUser(!!signup); setAuthStep('otp'); }} onSocial={(p, signup) => { setSocialProvider(p); setIsNewUser(!!signup); setAuthStep('otp'); }} />
             : auth === 3 ? <OTPScr provider={socialProvider} onDone={() => setAuthStep(isNewUser ? 'profile' : 'ready')} />
             : auth === 4 ? <ProfileCompletionScr provider={socialProvider} setUserName={setUserName} onDone={() => setAuthStep('ready')} />

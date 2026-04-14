@@ -40,8 +40,10 @@ function HomeScr({go,favs,toggleFav,isFav,userName}){
 
   const trending=["iPhone","Samsung","Wax","Pâtisserie","Braisé","Pharmacie","Livraison","Promo"];
   const types=[{id:"all",icon:"🏠",name:"Tout"},{id:"restaurant",icon:"🍽️",name:"Restos"},{id:"patisserie",icon:"🧁",name:"Pâtisseries"},{id:"supermarche",icon:"🛒",name:"Courses"},{id:"pharmacie",icon:"💊",name:"Pharma"},{id:"boutique",icon:"🏪",name:"Boutiques"},{id:"service",icon:"🔧",name:"Services"}];
-  const filteredP=selType==="all"?P:P.filter(p=>p.type===selType);
-  const filteredV=selType==="all"?VENDORS:VENDORS.filter(v=>v.type===selType);
+  const typeFilter=filterType!=="all"?filterType:selType;
+  const filteredP=typeFilter==="all"?P:P.filter(p=>p.type===typeFilter);
+  const filteredV=typeFilter==="all"?VENDORS:VENDORS.filter(v=>v.type===typeFilter);
+  const sortedP=[...filteredP].sort((a,b)=>filterSort==="price"?a.price-b.price:filterSort==="rating"?b.rating-a.rating:b.reviews-a.reviews);
   const nearbyRestos=VENDORS.filter(v=>v.type==="restaurant");
 
   const handleImgSearch=(file)=>{
@@ -90,6 +92,23 @@ function HomeScr({go,favs,toggleFav,isFav,userName}){
       </div>
 
       {/* Filter panel */}
+      {showFilter&&<div style={{padding:"0 16px 10px",animation:"fadeIn .2s ease"}}>
+        <div style={{padding:12,background:"var(--card)",border:"1px solid var(--border)",borderRadius:14}}>
+          <div style={{fontSize:12,fontWeight:700,marginBottom:8}}>Type de commerce</div>
+          <div style={{display:"flex",gap:4,flexWrap:"wrap",marginBottom:10}}>
+            {[["all","Tout"],["boutique","🏪 Boutiques"],["restaurant","🍽️ Restos"],["patisserie","🧁 Pâtisseries"],["supermarche","🛒 Supermarchés"],["pharmacie","💊 Pharmacies"],["service","🔧 Services"]].map(([k,l])=>
+              <button key={k} onClick={()=>setFilterType(k)} style={{padding:"5px 10px",borderRadius:8,border:"none",background:filterType===k?"#F97316":"var(--light)",color:filterType===k?"#fff":"var(--muted)",fontSize:10,fontWeight:600,cursor:"pointer",fontFamily:"inherit"}}>{l}</button>
+            )}
+          </div>
+          <div style={{fontSize:12,fontWeight:700,marginBottom:8}}>Trier par</div>
+          <div style={{display:"flex",gap:4}}>
+            {[["popular","🔥 Populaires"],["rating","⭐ Mieux notés"],["price","💰 Prix ↑"]].map(([k,l])=>
+              <button key={k} onClick={()=>setFilterSort(k)} style={{padding:"5px 10px",borderRadius:8,border:"none",background:filterSort===k?"#F97316":"var(--light)",color:filterSort===k?"#fff":"var(--muted)",fontSize:10,fontWeight:600,cursor:"pointer",fontFamily:"inherit",flex:1}}>{l}</button>
+            )}
+          </div>
+        </div>
+      </div>}
+
       {/* Hidden file inputs for image search */}
       <input id="cam-take" type="file" accept="image/*" capture="environment" style={{display:"none"}} onChange={e=>{const f=e.target.files?.[0];if(f){handleImgSearch(f);setShowCamMenu(false)}}}/>
       <input id="cam-gallery" type="file" accept="image/*" style={{display:"none"}} onChange={e=>{const f=e.target.files?.[0];if(f){handleImgSearch(f);setShowCamMenu(false)}}}/>
@@ -341,7 +360,7 @@ function HomeScr({go,favs,toggleFav,isFav,userName}){
 
 
       <div className="sec"><h3>{selType==="all"?"Populaires":"Populaires en "+types.find(t=>t.id===selType)?.name}</h3><span onClick={()=>go("allProducts")}>Voir tout</span></div>
-      <div className="pgrid">{filteredP.map(p=>{const vp=getVendorPromo(p,VENDORS);const td=totalDisc(p,VENDORS);return(<div key={p.id} className="pcard" onClick={()=>go("detail",p)}><div className="pimg"><Img src={p.photo} emoji={p.img} style={{position:"absolute",inset:0,width:"100%",height:"100%"}} fit="cover"/>{p.old&&<span className="badge">-{disc(p)}%</span>}{vp&&<span className="tag" style={{background:"#F59E0B",color:"#fff"}}>🏷️ {vp.promoName}</span>}{!vp&&p.tags[0]&&<span className="tag">{p.tags[0]}</span>}<span className="fav" onClick={e=>{e.stopPropagation();toggleFav(p.id)}} style={{color:isFav(p.id)?"#EF4444":"var(--muted)",fontSize:14}}>{isFav(p.id)?"♥":"♡"}</span></div><div className="pbody"><h4>{p.name}</h4><div className="pv">{p.va} {p.vendor}{p.eta&&<span style={{marginLeft:4,color:"#F97316",fontSize:10}}>🕐 {p.eta}</span>}</div><div className="pp">{vp?<><span style={{color:"#F97316"}}>{fmt(vp.promoPrice)}</span><span className="po">{fmt(p.price)}</span></>:<>{fmt(p.price)}{p.old&&<span className="po">{fmt(p.old)}</span>}</>}</div><div className="pr" onClick={e=>{e.stopPropagation();go("reviews",p)}}>⭐ {p.rating} ({p.reviews})</div></div></div>)})}</div>
+      <div className="pgrid">{sortedP.map(p=>{const vp=getVendorPromo(p,VENDORS);const td=totalDisc(p,VENDORS);return(<div key={p.id} className="pcard" onClick={()=>go("detail",p)}><div className="pimg"><Img src={p.photo} emoji={p.img} style={{position:"absolute",inset:0,width:"100%",height:"100%"}} fit="cover"/>{p.old&&<span className="badge">-{disc(p)}%</span>}{vp&&<span className="tag" style={{background:"#F59E0B",color:"#fff"}}>🏷️ {vp.promoName}</span>}{!vp&&p.tags[0]&&<span className="tag">{p.tags[0]}</span>}<span className="fav" onClick={e=>{e.stopPropagation();toggleFav(p.id)}} style={{color:isFav(p.id)?"#EF4444":"var(--muted)",fontSize:14}}>{isFav(p.id)?"♥":"♡"}</span></div><div className="pbody"><h4>{p.name}</h4><div className="pv">{p.va} {p.vendor}{p.eta&&<span style={{marginLeft:4,color:"#F97316",fontSize:10}}>🕐 {p.eta}</span>}</div><div className="pp">{vp?<><span style={{color:"#F97316"}}>{fmt(vp.promoPrice)}</span><span className="po">{fmt(p.price)}</span></>:<>{fmt(p.price)}{p.old&&<span className="po">{fmt(p.old)}</span>}</>}</div><div className="pr" onClick={e=>{e.stopPropagation();go("reviews",p)}}>⭐ {p.rating} ({p.reviews})</div></div></div>)})}</div>
       </>}
     </div></PullToRefresh>
 

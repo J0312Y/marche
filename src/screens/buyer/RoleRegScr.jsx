@@ -28,6 +28,9 @@ function RoleRegScr({onBack,onDone,forceRole,onPending}){
   const [fVehType,setFVehType]=useState("moto");
   const [fVille,setFVille]=useState("Brazzaville");
   const [fVehCouleur,setFVehCouleur]=useState("");
+  const [fOpenTime,setFOpenTime]=useState("08:00");
+  const [fCloseTime,setFCloseTime]=useState("20:00");
+  const [fOpenDays,setFOpenDays]=useState(["Lun","Mar","Mer","Jeu","Ven","Sam"]);
   const [fQuartier,setFQuartier]=useState("");
   const [selZones,setSelZones]=useState(["Brazzaville Sud","Centre-ville"]);
   const [cropLogSrc,setCropLogSrc]=useState(null);
@@ -228,6 +231,24 @@ function RoleRegScr({onBack,onDone,forceRole,onPending}){
         <div className="vr-upload" onClick={()=>document.getElementById("reg-upload")?.click()} style={{cursor:"pointer"}}><div className="vu-icon" id="vu-preview">🖼️</div><b>Logo / Photo <span style={{color:"#EF4444",fontWeight:400}}>*</span></b><p>PNG, JPG · Max 2MB</p><input id="reg-upload" type="file" accept="image/*" style={{display:"none"}} onChange={e=>{const f=e.target.files?.[0];if(f){const r=new FileReader();r.onload=()=>setCropLogSrc(r.result);r.readAsDataURL(f);e.target.value=""}}}/></div>
         <div className="field"><label>Nom de l'établissement <span style={{color:"#EF4444"}}>*</span></label><input value={fShopName} onChange={e=>{setFShopName(e.target.value);clrR("shopName")}} placeholder="Ex: Chez Mama Ngudi, Congo Tech..."/>{regErrors.shopName&&<div className="err-msg">{regErrors.shopName}</div>}</div>
         <div className="field"><label>Description <span style={{color:"#EF4444"}}>*</span></label><textarea value={fShopDesc} onChange={e=>{setFShopDesc(e.target.value);clrR("desc")}} placeholder="Votre activité, spécialités..." rows={3} style={{resize:"none"}}/>{regErrors.desc&&<div className="err-msg">{regErrors.desc}</div>}</div>
+        {/* Horaires — restos, pâtisseries, pharmacies, supermarchés */}
+        {["restaurant","patisserie","pharmacie","supermarche"].some(t=>selCats.includes(t))&&<div style={{marginTop:10,marginBottom:14}}>
+          <div style={{fontSize:14,fontWeight:700,marginBottom:8}}>🕐 Horaires d'ouverture</div>
+          <div className="field-row">
+            <div className="field"><label>Ouverture</label><input type="time" value={fOpenTime} onChange={e=>setFOpenTime(e.target.value)} style={{padding:12}}/></div>
+            <div className="field"><label>Fermeture</label><input type="time" value={fCloseTime} onChange={e=>setFCloseTime(e.target.value)} style={{padding:12}}/></div>
+          </div>
+          <div style={{fontSize:12,fontWeight:700,marginBottom:6}}>Jours d'ouverture</div>
+          <div style={{display:"flex",gap:4,flexWrap:"wrap"}}>
+            {["Lun","Mar","Mer","Jeu","Ven","Sam","Dim"].map(d=>{const sel=fOpenDays.includes(d);return(
+              <button key={d} onClick={()=>setFOpenDays(p=>sel?p.filter(x=>x!==d):[...p,d])} style={{padding:"6px 10px",borderRadius:8,border:sel?"2px solid "+color:"1px solid var(--border)",background:sel?"rgba(249,115,22,0.06)":"var(--card)",color:sel?color:"var(--muted)",fontSize:11,fontWeight:sel?700:500,cursor:"pointer",fontFamily:"inherit"}}>{d}</button>
+            )})}
+          </div>
+          <div style={{marginTop:8,padding:8,background:"rgba(249,115,22,0.04)",borderRadius:8,fontSize:11,color:"var(--sub)"}}>
+            📋 {fOpenDays.join(", ")} · {fOpenTime} — {fCloseTime}
+          </div>
+        </div>}
+
         <label style={{display:"block",fontSize:12,fontWeight:600,color:"var(--sub)",margin:"14px 0 8px"}}>Sous-catégories</label>
         <div className="vr-cat-grid">{CATS.map(c=><div key={c.id} className={`vr-cat ${selCats.includes(c.name)?"on":""}`} onClick={()=>toggleCat(c.name)}><div className="vci">{c.icon}</div><div className="vcn">{c.name}</div></div>)}</div>
       </>}
@@ -382,8 +403,9 @@ function RoleRegScr({onBack,onDone,forceRole,onPending}){
       {step===maxStep&&<><h3 style={{fontSize:16,fontWeight:700,marginBottom:14}}>Résumé</h3>
         <div style={{padding:16,background:"var(--card)",border:"1px solid var(--border)",borderRadius:16,marginBottom:14}}>
           {[["Rôle",role==="vendor"?"🏪 Commerçant":"🛵 Livreur"],
-            ["Nom","Joeldy Tsina"],
-            ...(role==="vendor"?[["Établissement","Mon Commerce"],["Type",{boutique:"Boutique",restaurant:"Restaurant",patisserie:"Pâtisserie",supermarche:"Supermarché",pharmacie:"Pharmacie",service:"Service"}[selCats.find(c=>["boutique","restaurant","patisserie","supermarche","pharmacie","service"].includes(c))]||"—"]]:[["Véhicule","🛵 Honda PCX"],["Plaque","BZ-4521"],["Inscription","5 000 FCFA (unique)"],["Commission","15% par livraison"],["Zones",selZones.join(", ")||"—"]]),
+            ["Nom",fName||"—"],
+            ...(role==="vendor"?[["Établissement",fShopName||"—"],["Type",{boutique:"Boutique",restaurant:"Restaurant",patisserie:"Pâtisserie",supermarche:"Supermarché",pharmacie:"Pharmacie",service:"Service"}[selCats.find(c=>["boutique","restaurant","patisserie","supermarche","pharmacie","service"].includes(c))]||"—"]]:[["Véhicule",fVehType==="moto"?"🛵":"🚗"+" "+fVehMarque],["Plaque",fVehPlaque||"—"],["Inscription","5 000 FCFA (unique)"],["Commission","15% par livraison"],["Zones",selZones.join(", ")||"—"]]),
+            ...(["restaurant","patisserie","pharmacie","supermarche"].some(t=>selCats.includes(t))?[["Horaires",fOpenDays.join(", ")+" · "+fOpenTime+"—"+fCloseTime]]:[]),
             ["Documents",`${Object.values(docs).filter(v=>v&&v!==true&&v!==false).length}/${Object.keys(docs).length}`],
             ...(role==="vendor"?[["Plan",plan==="starter"?"Starter (Gratuit)":plan==="pro"?"Pro (15k/mois)":"Enterprise (45k/mois)"]]:[])]
           .map(([l,v])=><div key={l} className="vs-row"><span>{l}</span><b>{v}</b></div>)}
