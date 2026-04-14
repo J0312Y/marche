@@ -1,9 +1,11 @@
+import { P } from "../data";
 /**
  * InvoiceView — Receipt/invoice modal (dark mode compatible)
  * Supports: status (delivered, cancelled, failed, refunded)
  * Supports: payment method display
  */
 function InvoiceView({ order, onClose }) {
+  const findPhoto=(name)=>{if(!name)return null;const clean=name.replace(/^[^a-zA-ZÀ-ÿ]+ /,"");const p=P.find(x=>x.name.includes(clean)||clean.includes(x.name));return p?.photo||null};
   if (!order) return null;
   const o = order;
   const items = o.items || [{ name: "Article 1", qty: 1, price: o.amount || 25000 }];
@@ -94,7 +96,8 @@ function InvoiceView({ order, onClose }) {
             <span style={{ flex: 2 }}>Article</span><span style={{ flex: 0.5, textAlign: "center" }}>Qté</span><span style={{ flex: 1, textAlign: "right" }}>Prix</span>
           </div>
           {items.map((it, i) => (<>
-            <div key={i} style={{ display: "flex", justifyContent: "space-between", padding: "6px 0", borderTop: i ? "1px solid var(--border)" : "none", fontSize: 12 }}>
+            <div key={i} style={{ display: "flex", alignItems: "center", gap: 8, padding: "6px 0", borderTop: i ? "1px solid var(--border)" : "none", fontSize: 12 }}>
+              {(()=>{const ph=findPhoto(it.name);return ph?<img src={ph} style={{width:28,height:28,borderRadius:6,objectFit:"cover",flexShrink:0}} alt=""/>:null})()}
               <span style={{ flex: 2, color: "var(--text)", fontWeight: 500 }}>{it.name}</span>
               <span style={{ flex: 0.5, textAlign: "center", color: "var(--muted)" }}>×{it.qty||1}</span>
               <span style={{ flex: 1, textAlign: "right", fontWeight: 600, color: "var(--text)" }}>{fmt((it.price||0) * (it.qty||1))}</span>
