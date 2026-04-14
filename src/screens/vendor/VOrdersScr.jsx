@@ -40,6 +40,10 @@ function VOrdersScr({go,onBack}){
               </div>
             ))}
           </div>
+          {o.items.some(it=>it.sides?.length>0)&&<div style={{marginBottom:8,padding:"6px 10px",background:"rgba(249,115,22,0.04)",borderRadius:8,fontSize:10,color:"var(--sub)"}}>
+            🍽️ {o.items.flatMap(it=>it.sides||[]).map(s=>s.name+(s.qty>1?" ×"+s.qty:"")).join(", ")}
+          </div>}
+          {o.note&&<div style={{marginBottom:8,padding:"6px 10px",background:"rgba(59,130,246,0.04)",borderRadius:8,fontSize:10,color:"#3B82F6"}}>📝 {o.note}</div>}
           {/* Footer: total + date */}
           <div style={{display:"flex",justifyContent:"space-between",alignItems:"center"}}>
             <span style={{fontSize:15,fontWeight:700,color:"#F97316"}}>{fmt(o.total)}</span>

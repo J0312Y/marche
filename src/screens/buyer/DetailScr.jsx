@@ -71,7 +71,8 @@ function DetailScr({product:rawP,onBack,onAddCart,go,favs,toggleFav,isFav}){
   const [openSideCat,setOpenSideCat]=useState(null);
   const [specialNote,setSpecialNote]=useState("");
   const toggleSide=(item)=>setSelectedSides(prev=>{const k=item.name;if(prev[k]){{const n={...prev};delete n[k];return n}}return{...prev,[k]:item}});
-  const sidesTotalPrice=Object.values(selectedSides).reduce((s,it)=>s+(it.price||0),0);
+  const sidesTotalPrice=Object.values(selectedSides).reduce((s,it)=>s+(it.price||0)*(it.qty||1),0);
+  const sidesTotalCount=Object.values(selectedSides).reduce((s,it)=>s+(it.qty||1),0);
   const [priceAlert,setPriceAlert]=useState(false);
   const [showAlertPopup,setShowAlertPopup]=useState(false);
   const [alertPrice,setAlertPrice]=useState("");

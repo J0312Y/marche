@@ -16,6 +16,9 @@ function VSettingsScr({onBack,go}){
   const [sound,setSound]=useState(true);
   const {setLang:ctxSetLang,lang:currentLang}=useApp();
   const [cropVsLogo,setCropVsLogo]=useState(null);
+  const [shopOpen,setShopOpen]=useState(true);
+  const [minOrder,setMinOrder]=useState("3000");
+  const [deliveryFee,setDeliveryFee]=useState("1500");
   const [vsLogo,setVsLogo]=useState(VENDOR_LOGO_DEFAULT);
   const [vsCover,setVsCover]=useState(VENDOR_COVER);
   const [lang,setLang]=useState(currentLang||"fr");
@@ -46,6 +49,15 @@ function VSettingsScr({onBack,go}){
       <div className="field"><label>Adresse physique</label><input defaultValue="Marché Total, Stand 42, Brazzaville"/></div>
       <div className="field-row"><div className="field"><label>Horaires</label><input defaultValue="8h - 18h"/></div><div className="field"><label>Jours</label><input defaultValue="Lun - Sam"/></div></div>
       <div className="field"><label>Zones de livraison</label><input defaultValue="Brazzaville, Pointe-Noire"/></div>
+      <div style={{fontSize:14,fontWeight:700,margin:"14px 0 8px"}}>🍽️ Paramètres restaurant</div>
+      <div style={{display:"flex",alignItems:"center",justifyContent:"space-between",padding:14,background:"var(--card)",border:"1px solid var(--border)",borderRadius:14,marginBottom:10}}>
+        <div><div style={{fontSize:13,fontWeight:600}}>Statut du commerce</div><div style={{fontSize:11,color:shopOpen?"#10B981":"#EF4444",fontWeight:600,marginTop:2}}>{shopOpen?"🟢 Ouvert — accepte les commandes":"🔴 Fermé — commandes suspendues"}</div></div>
+        <div className={`toggle ${shopOpen?"on":""}`} onClick={()=>setShopOpen(!shopOpen)}><div/></div>
+      </div>
+      <div className="field-row">
+        <div className="field"><label>Commande minimum (FCFA)</label><input value={minOrder} onChange={e=>setMinOrder(e.target.value.replace(/\D/g,""))} placeholder="3000" inputMode="numeric"/></div>
+        <div className="field"><label>Frais de livraison (FCFA)</label><input value={deliveryFee} onChange={e=>setDeliveryFee(e.target.value.replace(/\D/g,""))} placeholder="1500" inputMode="numeric"/></div>
+      </div>
       <div className="field"><label>Politique de retour</label><textarea rows={2} defaultValue="Retour accepté sous 7 jours. Produit en état d'origine."/></div>
       <div style={{fontSize:14,fontWeight:700,margin:"10px 0"}}>Réseaux sociaux</div>
       <div className="field"><label>Instagram</label><input defaultValue="@joeldyofficiel"/></div>

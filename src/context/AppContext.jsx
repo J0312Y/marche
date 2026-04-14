@@ -177,9 +177,9 @@ export function AppProvider({ children }) {
   //  CART ACTIONS (via services)
   // ══════════════════════════════════
 
-  const addToCart = useCallback(async (article, qty = 1) => {
+  const addToCart = useCallback(async (article, qty = 1, extras = {}) => {
     try {
-      await cartSvc.add(article.id, qty);
+      await cartSvc.add(article.id, qty, extras.note || "", extras.sides || []);
       const data = await cartSvc.get();
       setCart(data?.items || []); setCartCount((data?.items || []).reduce((s, i) => s + (i.qty || 1), 0));
       showToast('Ajouté au panier 🛍️');

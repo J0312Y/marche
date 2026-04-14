@@ -23,7 +23,7 @@ function VOrderDetailScr({order:o,onBack,go}){
       <button className="btn-primary" style={{marginTop:20}} onClick={onBack}>← Retour</button>
       <button onClick={()=>setShowInvoice(true)} style={{padding:14,borderRadius:14,border:"1px solid var(--border)",background:"var(--card)",fontSize:14,fontWeight:600,cursor:"pointer",fontFamily:"inherit",color:"var(--text)",marginTop:8}}>🧾 Générer le reçu</button>
       {showCreditNote&&<CreditNoteView order={{id:o?.ref||"CMD-0891",client:o?.client||"Marie Koumba",vendor:"Ma Boutique",amount:o?.total||25000,items:o?.items?.map(it=>({name:it.name,qty:it.qty,price:it.price}))||[{name:"Article",qty:1,price:o?.total||25000}],delivery:1500,payment:o?.payment||"airtel",cancelReason:status==="refused"?"Refusé par le vendeur":"Annulation"}} refundMethod="wallet" onClose={()=>setShowCreditNote(false)}/>}
-    {showInvoice&&<InvoiceView order={{id:o?.ref||"LMK-0891",client:o?.client||"Marie Koumba",vendor:o?.vendor||"Mode Afrique",amount:o?.total||25000,items:o?.items?.map(it=>({name:it.name,qty:it.qty,price:it.price}))||[{name:"Article",qty:1,price:o?.total||25000}],delivery:1500,payment:o?.payment||"airtel",status:o?.status||"new"}} onClose={()=>setShowInvoice(false)}/>}
+    {showInvoice&&<InvoiceView order={{id:o?.ref||"LMK-0891",client:o?.client||"Marie Koumba",vendor:o?.vendor||"Mode Afrique",amount:o?.total||25000,items:o?.items?.map(it=>({name:it.name,qty:it.qty,price:it.price,sides:it.sides}))||[{name:"Article",qty:1,price:o?.total||25000}],delivery:1500,payment:o?.payment||"airtel",status:o?.status||"new"}} onClose={()=>setShowInvoice(false)}/>}
     </div>
   </div>);
 
@@ -35,7 +35,8 @@ function VOrderDetailScr({order:o,onBack,go}){
     </div>
     <div style={{padding:16,background:"var(--card)",border:"1px solid var(--border)",borderRadius:16,marginBottom:14}}>
       <div style={{fontSize:14,fontWeight:700,marginBottom:10}}>📦 Articles</div>
-      {o.items.map((it,i)=><div key={i} style={{display:"flex",alignItems:"center",gap:10,padding:"8px 0",borderBottom:"1px solid var(--border)"}}><Img src={it.photo} emoji={it.img} style={{width:44,height:44,borderRadius:8,flexShrink:0}} fit="cover"/><div style={{flex:1}}><div style={{fontSize:13,fontWeight:600}}>{it.name}</div><div style={{fontSize:11,color:"var(--muted)"}}>x{it.qty}</div></div><div style={{fontSize:13,fontWeight:700,color:"#F97316"}}>{fmt(it.price*it.qty)}</div></div>)}
+      {o.items.map((it,i)=><div key={i}><div style={{display:"flex",alignItems:"center",gap:10,padding:"8px 0",borderBottom:it.sides?.length?"none":"1px solid var(--border)"}}><Img src={it.photo} emoji={it.img} style={{width:44,height:44,borderRadius:8,flexShrink:0}} fit="cover"/><div style={{flex:1}}><div style={{fontSize:13,fontWeight:600}}>{it.name}</div><div style={{fontSize:11,color:"var(--muted)"}}>x{it.qty}</div></div><div style={{fontSize:13,fontWeight:700,color:"#F97316"}}>{fmt(it.price*it.qty)}</div></div>{it.sides?.length>0&&<div style={{padding:"4px 0 8px 54px",borderBottom:"1px solid var(--border)"}}>{it.sides.map((s,si)=><div key={si} style={{fontSize:11,color:"var(--sub)",display:"flex",justifyContent:"space-between",padding:"1px 0"}}><span>↳ {s.img} {s.name}{s.qty>1?" ×"+s.qty:""}</span><span style={{color:s.price>0?"#F97316":"#10B981"}}>{s.price>0?"+"+fmt(s.price*(s.qty||1)):"Gratuit"}</span></div>)}</div>}</div>)}
+      {o.note&&<div style={{padding:"8px 10px",background:"rgba(59,130,246,0.04)",borderRadius:8,marginTop:8,fontSize:11,color:"#3B82F6"}}><b>📝 Note client :</b> {o.note}</div>}
       <div style={{display:"flex",justifyContent:"space-between",paddingTop:10,fontSize:16,fontWeight:700}}><span>Total</span><span style={{color:"#F97316"}}>{fmt(o.total)}</span></div>
     </div>
 

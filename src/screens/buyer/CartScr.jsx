@@ -6,7 +6,7 @@ function CartScr({cart,setCart,go,appliedCoupon,setAppliedCoupon}){
   const { VENDORS } = useData();
   const getItem=(c)=>c.product||c;
   const getPrice=(c)=>{const p=getItem(c);const vp=getVendorPromo(p,VENDORS);return vp?vp.promoPrice:(p.price||0)};
-  const sub=cart.reduce((s,c)=>s+getPrice(c)*(c.qty||1),0);
+  const sub=cart.reduce((s,c)=>s+(getPrice(c)+(c.sidesTotal||0))*(c.qty||1),0);
   const del=2500;
 
   // Calculate discount
@@ -25,9 +25,10 @@ function CartScr({cart,setCart,go,appliedCoupon,setAppliedCoupon}){
         <div className="cart-img"><Img src={p.photo} emoji={p.img} style={{width:"100%",height:"100%",borderRadius:12}} fit="cover"/></div>
         <div className="cart-info">
           <h4>{p.name}</h4>
+          {c.sides&&c.sides.length>0&&<div style={{fontSize:10,color:"#F97316",marginTop:1}}>{c.sides.map(s=>s.name+(s.qty>1?" ×"+s.qty:"")).join(", ")}</div>}
           <div className="cv">{p.vendor||""}{vp&&<span style={{marginLeft:6,fontSize:10,color:"#10B981",fontWeight:600}}>🏷️ -{vp.promoDiscount}%</span>}</div>
           <div className="cart-bot">
-            <span className="cp">{fmt(price*(c.qty||1))}{vp&&<span style={{marginLeft:4,fontSize:10,color:"var(--muted)",textDecoration:"line-through"}}>{fmt(p.price*(c.qty||1))}</span>}</span>
+            <span className="cp">{fmt((price+(c.sidesTotal||0))*(c.qty||1))}{vp&&<span style={{marginLeft:4,fontSize:10,color:"var(--muted)",textDecoration:"line-through"}}>{fmt(p.price*(c.qty||1))}</span>}</span>
             <div className="qty"><button onClick={()=>updQty(i,-1)}>−</button><span>{c.qty||1}</span><button onClick={()=>updQty(i,1)}>+</button></div>
           </div>
         </div>

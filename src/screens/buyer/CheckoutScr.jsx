@@ -19,7 +19,7 @@ function CheckoutScr({onBack,onDone,cart=[],appliedCoupon,setAppliedCoupon}){
 
   const getItem=(c)=>c.product||c;
   const getPrice=(c)=>{const p=getItem(c);const vp=getVendorPromo(p,VENDORS);return vp?vp.promoPrice:(p.price||0)};
-  const sub=cart.reduce((s,c)=>s+getPrice(c)*(c.qty||1),0)||228500;
+  const sub=cart.reduce((s,c)=>s+(getPrice(c)+(c.sidesTotal||0))*(c.qty||1),0)||228500;
   const del=2500;
   const discountAmount=appliedCoupon?(appliedCoupon.free?0:Math.round(sub*appliedCoupon.discount/100)):0;
   const freeDelivery=appliedCoupon?.free||false;

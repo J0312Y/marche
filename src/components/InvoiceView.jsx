@@ -87,13 +87,20 @@ function InvoiceView({ order, onClose }) {
           <div style={{ display: "flex", justifyContent: "space-between", fontSize: 10, color: "var(--muted)", fontWeight: 700, textTransform: "uppercase", padding: "6px 0" }}>
             <span style={{ flex: 2 }}>Article</span><span style={{ flex: 0.5, textAlign: "center" }}>Qté</span><span style={{ flex: 1, textAlign: "right" }}>Prix</span>
           </div>
-          {items.map((it, i) => (
+          {items.map((it, i) => (<>
             <div key={i} style={{ display: "flex", justifyContent: "space-between", padding: "6px 0", borderTop: i ? "1px solid var(--border)" : "none", fontSize: 12 }}>
               <span style={{ flex: 2, color: "var(--text)", fontWeight: 500 }}>{it.name}</span>
               <span style={{ flex: 0.5, textAlign: "center", color: "var(--muted)" }}>×{it.qty||1}</span>
               <span style={{ flex: 1, textAlign: "right", fontWeight: 600, color: "var(--text)" }}>{fmt((it.price||0) * (it.qty||1))}</span>
             </div>
-          ))}
+            {it.sides&&it.sides.length>0&&it.sides.map((si,si_i)=>(
+              <div key={"s"+si_i} style={{ display: "flex", justifyContent: "space-between", padding: "3px 0 3px 16px", fontSize: 11, color: "var(--muted)" }}>
+                <span style={{ flex: 2 }}>↳ {si.name}{si.qty>1?" ×"+si.qty:""}</span>
+                <span style={{ flex: 0.5 }}></span>
+                <span style={{ flex: 1, textAlign: "right" }}>{si.price>0?"+"+fmt(si.price*(si.qty||1)):"Gratuit"}</span>
+              </div>
+            ))}
+          </>))}
         </div>
 
         {/* Totals */}

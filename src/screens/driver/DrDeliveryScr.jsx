@@ -75,7 +75,9 @@ function DrDeliveryScr({delivery:dl,go,onBack}){
       {/* Order info */}
       <div style={{padding:14,background:"var(--card)",border:"1px solid var(--border)",borderRadius:14,marginBottom:14}}>
         <div style={{fontSize:13,fontWeight:700,marginBottom:8}}>📦 Commande {dl.ref}</div>
-        {dl.items.map((it,i)=><div key={i} style={{display:"flex",alignItems:"center",gap:8,padding:"4px 0",fontSize:12}}><Img src={it.photo} emoji={it.img} style={{width:24,height:24,borderRadius:4,flexShrink:0}} fit="cover"/><span style={{flex:1}}>{it.name} x{it.qty}</span></div>)}
+        {dl.items.map((it,i)=><div key={i}><div style={{display:"flex",alignItems:"center",gap:8,padding:"4px 0",fontSize:12}}><Img src={it.photo} emoji={it.img} style={{width:24,height:24,borderRadius:4,flexShrink:0}} fit="cover"/><span style={{flex:1}}>{it.name} x{it.qty}</span></div>
+          {it.sides?.length>0&&<div style={{paddingLeft:32,marginBottom:4}}>{it.sides.map((s,si)=><div key={si} style={{fontSize:10,color:"var(--muted)",padding:"1px 0"}}>↳ {s.img} {s.name}{s.qty>1?" ×"+s.qty:""}</div>)}</div>}</div>)}
+        {dl.note&&<div style={{padding:"6px 10px",background:"rgba(59,130,246,0.04)",borderRadius:8,marginTop:6,fontSize:11,color:"#3B82F6"}}>📝 {dl.note}</div>}
         <div style={{display:"flex",justifyContent:"space-between",paddingTop:8,borderTop:"1px solid var(--border)",marginTop:6,fontSize:13}}><span style={{color:"var(--muted)"}}>Total commande</span><b style={{color:"#F97316"}}>{fmt(dl.total)}</b></div>
         <div style={{display:"flex",justifyContent:"space-between",paddingTop:4,fontSize:12}}><span style={{color:"var(--muted)"}}>Votre gain</span><b style={{color:"#F97316"}}>{fmt(dl.fee+dl.tip)}{dl.tip>0?` (dont ${fmt(dl.tip)} pourboire)`:""}</b></div>
       </div>

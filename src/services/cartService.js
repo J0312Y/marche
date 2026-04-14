@@ -9,19 +9,20 @@ let _mockCart = [];
 
 export default {
   get: async () => {
-    if (USE_MOCK) { await delay(); return { items: _mockCart, total: _mockCart.reduce((s, i) => s + i.price * i.qty, 0) }; }
+    if (USE_MOCK) { await delay(); return { items: _mockCart, total: _mockCart.reduce((s, i) => s + (i.price * i.qty) + (i.sidesTotal || 0) * i.qty, 0) }; }
     return cartAPI.get();
   },
 
-  add: async (articleId, quantity = 1, note = '') => {
+  add: async (articleId, quantity = 1, note = '', sides = []) => {
     if (USE_MOCK) {
       await delay();
-      const existing = _mockCart.find(i => i.article_id === articleId);
+      const existing = sides.length === 0 ? _mockCart.find(i => i.article_id === articleId && (!i.sides || i.sides.length === 0)) : null;
       if (existing) { existing.qty += quantity; }
       else {
         const article = P.find(p => p.id === articleId);
         if (!article) throw new Error("Article introuvable");
-        _mockCart.push({ id: "mc" + Date.now(), article_id: articleId, name: article.name, price: article.price, img: article.img, photo: article.photo, qty: quantity, note });
+        const sidesTotal = sides.reduce((s, si) => s + (si.price || 0) * (si.qty || 1), 0);
+        _mockCart.push({ id: "mc" + Date.now(), article_id: articleId, name: article.name, price: article.price, img: article.img, photo: article.photo, qty: quantity, note, sides, sidesTotal });
       }
       return { count: _mockCart.reduce((s, i) => s + i.qty, 0) };
     }

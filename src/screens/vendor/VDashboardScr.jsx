@@ -15,6 +15,7 @@ const CHART_DATA={revenue:[680000,920000,750000,1100000,890000,1350000,847500],o
 
 function VDashboardScr({go}){
   const [period,setPeriod]=useState("week");
+  const [shopOpen,setShopOpen]=useState(true);
   const { data, loading, reload } = useLoad(() => vendor.getDashboard(period), [period]);
   if(loading||!data) return <div className="scr" style={{padding:16}}><h2 style={{marginBottom:12}}>📊 Tableau de bord</h2><SkeletonDashboard/></div>;
   const { stats:s, new_orders:newOrders, chart=[], top_products:topProducts=[] } = data;
@@ -30,6 +31,13 @@ function VDashboardScr({go}){
 
   return(<PullToRefresh onRefresh={reload}><div className="scr" style={{padding:16,paddingBottom:20}}>
     <div className="appbar" style={{padding:0,marginBottom:10}}><h2>📊 Tableau de bord</h2><button onClick={()=>go("vNotif")}>🔔</button></div>
+    <div style={{display:"flex",alignItems:"center",justifyContent:"space-between",padding:"8px 12px",background:shopOpen?"rgba(16,185,129,0.06)":"rgba(239,68,68,0.06)",borderRadius:12,marginBottom:10,border:`1px solid ${shopOpen?"rgba(16,185,129,0.15)":"rgba(239,68,68,0.15)"}`}}>
+      <div style={{display:"flex",alignItems:"center",gap:8}}>
+        <span style={{fontSize:14}}>{shopOpen?"🟢":"🔴"}</span>
+        <span style={{fontSize:12,fontWeight:600,color:shopOpen?"#10B981":"#EF4444"}}>{shopOpen?"Boutique ouverte":"Boutique fermée"}</span>
+      </div>
+      <div className={`toggle ${shopOpen?"on":""}`} onClick={()=>setShopOpen(!shopOpen)} style={{transform:"scale(.75)"}}><div/></div>
+    </div>
     <div className="vo-filter" style={{padding:0,marginBottom:14}}>{[["today","Aujourd'hui"],["week","Semaine"],["month","Mois"]].map(([k,l])=><button key={k} className={period===k?"on":""} onClick={()=>setPeriod(k)}>{l}</button>)}</div>
 
     {newOrders>0&&<div className="vd-alert" style={{margin:"0 0 14px"}} onClick={()=>go("vOrdersList")}><span>🆕</span> {newOrders} nouvelle{newOrders>1?"s":""} commande{newOrders>1?"s":""} !</div>}
