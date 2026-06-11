@@ -111,35 +111,32 @@ function DetailScr({product:rawP,onBack,onAddCart,go,favs,toggleFav,isFav}){
 
   return(<>
     <div className="scr">
-      {/* Gallery — main image with rounded corners + floating thumbnails */}
-      <div style={{position:"relative",padding:"12px 12px 16px",background:"var(--bg)"}}>
-        {/* Top bar overlay — above image */}
-        <div style={{position:"absolute",top:18,left:18,right:18,display:"flex",justifyContent:"space-between",zIndex:6}}>
-          <BackButton onClick={onBack} />
+      {/* Gallery — full width, rounded bottom corners */}
+      <div onClick={()=>setZoomOpen(true)} style={{position:"relative",width:"100%",aspectRatio:"1/1",background:"var(--light)",borderRadius:"0 0 28px 28px",overflow:"hidden",cursor:"zoom-in",boxShadow:"0 12px 24px rgba(0,0,0,0.08)"}}>
+        <Img src={allPhotos[photoIdx]||p.photo} emoji={p.img} style={{width:"100%",height:"100%",position:"absolute",inset:0}} fit="cover"/>
+
+        {/* Top bar overlay */}
+        <div style={{position:"absolute",top:12,left:12,right:12,display:"flex",justifyContent:"space-between",zIndex:6}}>
+          <BackButton onClick={e=>{e.stopPropagation();onBack()}} />
           <div style={{display:"flex",gap:8}}>
-            <button onClick={()=>shareProduct(p)} style={{width:40,height:40,borderRadius:14,background:"rgba(255,255,255,0.95)",backdropFilter:"blur(12px)",border:"1px solid rgba(255,255,255,0.4)",boxShadow:"0 4px 16px rgba(0,0,0,0.08)",cursor:"pointer",display:"flex",alignItems:"center",justifyContent:"center",fontSize:16}}>📤</button>
-            <FavButton active={isFav(p.id)} onClick={()=>toggleFav(p.id)} />
+            <button onClick={e=>{e.stopPropagation();shareProduct(p)}} style={{width:40,height:40,borderRadius:14,background:"rgba(255,255,255,0.95)",backdropFilter:"blur(12px)",border:"1px solid rgba(255,255,255,0.4)",boxShadow:"0 4px 16px rgba(0,0,0,0.08)",cursor:"pointer",display:"flex",alignItems:"center",justifyContent:"center",fontSize:16}}>📤</button>
+            <FavButton active={isFav(p.id)} onClick={e=>{e.stopPropagation();toggleFav(p.id)}} />
           </div>
         </div>
 
-        {/* Main image with rounded corners */}
-        <div onClick={()=>setZoomOpen(true)} style={{position:"relative",width:"100%",aspectRatio:"1/1",background:"var(--light)",borderRadius:24,overflow:"hidden",cursor:"zoom-in",boxShadow:"0 10px 30px rgba(0,0,0,0.08)"}}>
-          <Img src={allPhotos[photoIdx]||p.photo} emoji={p.img} style={{width:"100%",height:"100%"}} fit="cover"/>
+        {/* Thumbnails floating right */}
+        {allPhotos.length>1&&<div style={{position:"absolute",top:60,right:12,display:"flex",flexDirection:"column",gap:8,zIndex:5}}>
+          {allPhotos.slice(0,4).map((ph,i)=>{const isActive=photoIdx===i;return(
+            <div key={i} onClick={e=>{e.stopPropagation();setPhotoIdx(i)}} style={{width:54,height:54,borderRadius:14,overflow:"hidden",cursor:"pointer",position:"relative",border:isActive?"2.5px solid #fff":"2px solid rgba(255,255,255,0.7)",transition:"all .2s",boxShadow:isActive?"0 4px 14px rgba(0,0,0,0.2)":"0 2px 8px rgba(0,0,0,0.12)",background:"#fff"}}>
+              <Img src={ph} emoji={p.img} style={{width:"100%",height:"100%"}} fit="cover"/>
+              {!isActive&&<div style={{position:"absolute",inset:0,background:"rgba(0,0,0,0.18)",pointerEvents:"none"}}/>}
+              {i===3&&allPhotos.length>4&&<div style={{position:"absolute",inset:0,background:"rgba(0,0,0,0.6)",display:"flex",alignItems:"center",justifyContent:"center",color:"#fff",fontSize:13,fontWeight:700}}>+{allPhotos.length-4}</div>}
+            </div>
+          )})}
+        </div>}
 
-          {/* Thumbnails floating on right — overlay */}
-          {allPhotos.length>1&&<div style={{position:"absolute",top:60,right:12,display:"flex",flexDirection:"column",gap:8,zIndex:4}}>
-            {allPhotos.slice(0,4).map((ph,i)=>{const isActive=photoIdx===i;return(
-              <div key={i} onClick={e=>{e.stopPropagation();setPhotoIdx(i)}} style={{width:54,height:54,borderRadius:14,overflow:"hidden",cursor:"pointer",position:"relative",border:isActive?"2.5px solid #fff":"2px solid rgba(255,255,255,0.7)",transition:"all .2s",boxShadow:isActive?"0 4px 14px rgba(0,0,0,0.2)":"0 2px 8px rgba(0,0,0,0.12)",background:"#fff"}}>
-                <Img src={ph} emoji={p.img} style={{width:"100%",height:"100%"}} fit="cover"/>
-                {!isActive&&<div style={{position:"absolute",inset:0,background:"rgba(0,0,0,0.18)",pointerEvents:"none"}}/>}
-                {i===3&&allPhotos.length>4&&<div style={{position:"absolute",inset:0,background:"rgba(0,0,0,0.6)",display:"flex",alignItems:"center",justifyContent:"center",color:"#fff",fontSize:13,fontWeight:700}}>+{allPhotos.length-4}</div>}
-              </div>
-            )})}
-          </div>}
-
-          {disc(p)>0&&<span className="badge" style={{position:"absolute",bottom:14,left:14,zIndex:5}}>-{disc(p)}%</span>}
-          {allPhotos.length>1&&<div style={{position:"absolute",bottom:14,right:14,background:"rgba(0,0,0,.55)",color:"#fff",padding:"4px 10px",borderRadius:8,fontSize:11,fontWeight:600,backdropFilter:"blur(8px)",zIndex:5}}>{photoIdx+1}/{allPhotos.length}</div>}
-        </div>
+        {disc(p)>0&&<span className="badge" style={{position:"absolute",bottom:22,left:14,zIndex:5}}>-{disc(p)}%</span>}
+        {allPhotos.length>1&&<div style={{position:"absolute",bottom:22,right:14,background:"rgba(0,0,0,.55)",color:"#fff",padding:"4px 10px",borderRadius:8,fontSize:11,fontWeight:600,backdropFilter:"blur(8px)",zIndex:5}}>{photoIdx+1}/{allPhotos.length}</div>}
       </div>
 
       <div className="det-body">
