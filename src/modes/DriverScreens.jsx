@@ -4,7 +4,7 @@
  */
 import { useApp } from "../context/AppContext";
 import {
-  DrDashboardScr, DrDeliveryScr, DrConfirmScr, DrNavigationScr,
+  DrDashboardScr, DrDeliveryScr, DrBriefingScr, DrConfirmScr, DrNavigationScr,
   DrChatVendorScr, DrChatClientScr, DrHistoryScr, DrWalletScr,
   DrNotifScr, DrProfileScr, DrVehicleScr, DrZonesScr, DrChecklistScr, DrRateVendorScr,
   DrStatsScr, DrSettingsScr, DrHelpScr, DrDocumentsScr
@@ -28,6 +28,7 @@ export default function DriverScreens() {
   const back = pop;
 
   switch (type) {
+    case "drBriefing": return <DrBriefingScr delivery={data} go={go} onBack={back} />;
     case "drDelivery": return <DrDeliveryScr delivery={data} go={go} onBack={back} />;
     case "drConfirm": return <DrConfirmScr delivery={data} go={go} onBack={() => { setScreen(null); setDTab(0); setHistory([]); }} />;
     case "drNavigation": return <DrNavigationScr delivery={data} go={go} onBack={back} />;

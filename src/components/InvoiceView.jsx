@@ -1,4 +1,4 @@
-import { P } from "../data";
+import P from "../data/products";
 /**
  * InvoiceView — Receipt/invoice modal (dark mode compatible)
  * Supports: status (delivered, cancelled, failed, refunded)

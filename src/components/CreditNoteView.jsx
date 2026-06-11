@@ -1,4 +1,4 @@
-import { P } from "../data";
+import P from "../data/products";
 /**
  * CreditNoteView — Avoir / Note de crédit (remboursement)
  * Separate document from original receipt

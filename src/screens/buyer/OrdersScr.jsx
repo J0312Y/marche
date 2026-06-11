@@ -1,6 +1,6 @@
 import { useState } from "react";
 import toast from "../../utils/toast";
-import { P } from "../../data";
+import P from "../../data/products";
 import PullToRefresh from "../../components/PullToRefresh";
 
 const findPhoto=(itemStr)=>{const name=itemStr.split(" ").slice(1).join(" ").replace(/ x\d+$/,"");const p=P.find(x=>x.name.includes(name)||name.includes(x.name));return p?.photo||null};

@@ -20,7 +20,14 @@ const D_HISTORY=[
   {id:"dh4",ref:"#CMD-0870",client:"Marie Koumba",vendor:"Mode Afrique",date:"5 Fév",duration:"22 min",distance:"1.9 km",fee:2500,tip:1000,rating:5},
   {id:"dh5",ref:"#CMD-0865",client:"Alain Mboumba",vendor:"Bio Market",date:"3 Fév",duration:"35 min",distance:"4.2 km",fee:2500,tip:200,rating:4},
 ];
-const D_STATS={today:{deliveries:3,earned:9300,distance:9.5,hours:2.5},week:{deliveries:18,earned:52800,distance:62,hours:16},month:{deliveries:64,earned:198000,distance:215,hours:58}};
+const D_STATS={
+  today:{deliveries:3,earned:9300,distance:9.5,hours:2.5},
+  week:{deliveries:18,earned:52800,distance:62,hours:16},
+  month:{deliveries:64,earned:198000,distance:215,hours:58},
+  // Daily earnings — last 10 days (oldest → today). Index 9 = today.
+  dailyEarnings:[6500,8200,5400,11000,6800,9500,7900,10200,7400,9300],
+  vsYesterday:12 // % change vs hier (for the ▲ indicator)
+};
 const D_NOTIFS=[
   {icon:"🆕",title:"Nouvelle livraison !",desc:"Mode Afrique → Marie Koumba · 92 000 FCFA",time:"Il y a 2 min",read:false},
   {icon:"💰",title:"Paiement reçu",desc:"+2 500 FCFA pour #CMD-0885",time:"Il y a 1h",read:false},

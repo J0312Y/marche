@@ -6,7 +6,7 @@ import { fmt, disc, getVendorPromo } from "../../utils/helpers";
 import { useApp } from "../../context/AppContext";
 import { shareProduct } from "../../utils/share";
 import toast from "../../utils/toast";
-import { P } from "../../data";
+import P from "../../data/products";
 
 // Generate specs based on product type
 const getSpecs=(p)=>{

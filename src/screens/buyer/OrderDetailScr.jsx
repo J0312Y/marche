@@ -1,5 +1,5 @@
 import InvoiceView from "../../components/InvoiceView";
-import { P } from "../../data";
+import P from "../../data/products";
 import CreditNoteView from "../../components/CreditNoteView";
 import { useState } from "react";
 import toast from "../../utils/toast";

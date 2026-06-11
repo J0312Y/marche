@@ -4,7 +4,7 @@ import Img from "../../components/Img";
 import PhotoGuide from "../../components/PhotoGuide";
 import VariantEditor from "../../components/VariantEditor";
 import { analyzeImage, enhanceImage, cropImage, generateVariants } from "../../utils/imageProcessor";
-import { CATS } from "../../data";
+import CATS from "../../data/categories";
 import { vendor } from "../../services";
 import toast from "../../utils/toast";
 
