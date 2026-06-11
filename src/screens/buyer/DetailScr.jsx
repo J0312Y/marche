@@ -111,20 +111,35 @@ function DetailScr({product:rawP,onBack,onAddCart,go,favs,toggleFav,isFav}){
 
   return(<>
     <div className="scr">
-      {/* Hero image */}
-      <div className="det-img" onClick={()=>setZoomOpen(true)} style={{position:"relative",overflow:"hidden"}}>
-        <Img src={allPhotos[photoIdx]||p.photo} emoji={p.img} style={{width:"100%",height:"100%"}} fit="cover"/>
-        {allPhotos.length>1&&<div style={{position:"absolute",bottom:50,left:"50%",transform:"translateX(-50%)",display:"flex",gap:6,zIndex:5}}>
-          {allPhotos.map((_,i)=><div key={i} onClick={e=>{e.stopPropagation();setPhotoIdx(i)}} style={{width:photoIdx===i?20:8,height:8,borderRadius:4,background:photoIdx===i?"#F97316":"rgba(255,255,255,.5)",cursor:"pointer",transition:"all .2s"}}/>)}
-        </div>}
-        {allPhotos.length>1&&photoIdx>0&&<div onClick={e=>{e.stopPropagation();setPhotoIdx(photoIdx-1)}} style={{position:"absolute",left:8,top:"50%",transform:"translateY(-50%)",width:32,height:32,borderRadius:16,background:"rgba(0,0,0,.3)",color:"#fff",display:"flex",alignItems:"center",justifyContent:"center",cursor:"pointer",zIndex:5,fontSize:14}}>‹</div>}
-        {allPhotos.length>1&&photoIdx<allPhotos.length-1&&<div onClick={e=>{e.stopPropagation();setPhotoIdx(photoIdx+1)}} style={{position:"absolute",right:8,top:"50%",transform:"translateY(-50%)",width:32,height:32,borderRadius:16,background:"rgba(0,0,0,.3)",color:"#fff",display:"flex",alignItems:"center",justifyContent:"center",cursor:"pointer",zIndex:5,fontSize:14}}>›</div>}
-        <div className="det-top">
-          <BackButton onClick={e=>{e.stopPropagation();onBack()}} />
-          <div style={{display:"flex",gap:8}}><button onClick={e=>{e.stopPropagation();shareProduct(p)}} style={{width:40,height:40,borderRadius:14,background:"rgba(255,255,255,0.85)",backdropFilter:"blur(12px)",border:"1px solid rgba(255,255,255,0.4)",boxShadow:"0 4px 16px rgba(0,0,0,0.12)",cursor:"pointer",display:"flex",alignItems:"center",justifyContent:"center",fontSize:16}}>📤</button><FavButton active={isFav(p.id)} onClick={e=>{e.stopPropagation();toggleFav(p.id)}} /></div>
+      {/* Gallery — main image with rounded corners + floating thumbnails */}
+      <div style={{position:"relative",padding:"12px 12px 16px",background:"var(--bg)"}}>
+        {/* Top bar overlay — above image */}
+        <div style={{position:"absolute",top:18,left:18,right:18,display:"flex",justifyContent:"space-between",zIndex:6}}>
+          <BackButton onClick={onBack} />
+          <div style={{display:"flex",gap:8}}>
+            <button onClick={()=>shareProduct(p)} style={{width:40,height:40,borderRadius:14,background:"rgba(255,255,255,0.95)",backdropFilter:"blur(12px)",border:"1px solid rgba(255,255,255,0.4)",boxShadow:"0 4px 16px rgba(0,0,0,0.08)",cursor:"pointer",display:"flex",alignItems:"center",justifyContent:"center",fontSize:16}}>📤</button>
+            <FavButton active={isFav(p.id)} onClick={()=>toggleFav(p.id)} />
+          </div>
         </div>
-        {disc(p)>0&&<span className="badge" style={{position:"absolute",bottom:14,left:14,zIndex:5}}>-{disc(p)}%</span>}
-        <div style={{position:"absolute",bottom:14,right:14,background:"rgba(0,0,0,.4)",color:"#fff",padding:"4px 10px",borderRadius:8,fontSize:11,fontWeight:600,zIndex:5}}>{photoIdx+1}/{allPhotos.length}</div>
+
+        {/* Main image with rounded corners */}
+        <div onClick={()=>setZoomOpen(true)} style={{position:"relative",width:"100%",aspectRatio:"1/1",background:"var(--light)",borderRadius:24,overflow:"hidden",cursor:"zoom-in",boxShadow:"0 10px 30px rgba(0,0,0,0.08)"}}>
+          <Img src={allPhotos[photoIdx]||p.photo} emoji={p.img} style={{width:"100%",height:"100%"}} fit="cover"/>
+
+          {/* Thumbnails floating on right — overlay */}
+          {allPhotos.length>1&&<div style={{position:"absolute",top:60,right:12,display:"flex",flexDirection:"column",gap:8,zIndex:4}}>
+            {allPhotos.slice(0,4).map((ph,i)=>{const isActive=photoIdx===i;return(
+              <div key={i} onClick={e=>{e.stopPropagation();setPhotoIdx(i)}} style={{width:54,height:54,borderRadius:14,overflow:"hidden",cursor:"pointer",position:"relative",border:isActive?"2.5px solid #fff":"2px solid rgba(255,255,255,0.7)",transition:"all .2s",boxShadow:isActive?"0 4px 14px rgba(0,0,0,0.2)":"0 2px 8px rgba(0,0,0,0.12)",background:"#fff"}}>
+                <Img src={ph} emoji={p.img} style={{width:"100%",height:"100%"}} fit="cover"/>
+                {!isActive&&<div style={{position:"absolute",inset:0,background:"rgba(0,0,0,0.18)",pointerEvents:"none"}}/>}
+                {i===3&&allPhotos.length>4&&<div style={{position:"absolute",inset:0,background:"rgba(0,0,0,0.6)",display:"flex",alignItems:"center",justifyContent:"center",color:"#fff",fontSize:13,fontWeight:700}}>+{allPhotos.length-4}</div>}
+              </div>
+            )})}
+          </div>}
+
+          {disc(p)>0&&<span className="badge" style={{position:"absolute",bottom:14,left:14,zIndex:5}}>-{disc(p)}%</span>}
+          {allPhotos.length>1&&<div style={{position:"absolute",bottom:14,right:14,background:"rgba(0,0,0,.55)",color:"#fff",padding:"4px 10px",borderRadius:8,fontSize:11,fontWeight:600,backdropFilter:"blur(8px)",zIndex:5}}>{photoIdx+1}/{allPhotos.length}</div>}
+        </div>
       </div>
 
       <div className="det-body">

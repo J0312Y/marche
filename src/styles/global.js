@@ -114,7 +114,7 @@ select option{background:var(--card);color:var(--text);padding:10px 14px;font-si
 .pbody .pr{font-size:11px;color:#F59E0B;margin-top:4px;cursor:pointer;display:inline-flex;align-items:center;gap:2px;padding:2px 6px;border-radius:6px;margin-left:-6px;transition:all .15s}.pbody .pr:active{background:rgba(245,158,11,.1)}
 
 /* Detail */
-.det-img{height:280px;background:var(--light);display:flex;align-items:center;justify-content:center;position:relative}.det-img .pe{font-size:96px}
+.det-img-pe{font-size:96px}
 .det-top{position:absolute;top:12px;left:12px;right:12px;display:flex;justify-content:space-between;z-index:5}
 .det-top button{width:40px;height:40px;border-radius:50%;background:var(--card);border:none;cursor:pointer;font-size:18px;box-shadow:0 2px 8px rgba(0,0,0,.08);display:flex;align-items:center;justify-content:center}
 .det-body{padding:20px}
