@@ -4,6 +4,8 @@ import { DRIVER_PHOTO } from "../../data/images";
 import { fmt } from "../../utils/helpers";
 import PullToRefresh from "../../components/PullToRefresh";
 import toast from "../../utils/toast";
+import SuccessAnimation from "../../components/SuccessAnimation";
+import CountUp from "../../components/CountUp";
 import PayLogo from "../../components/PayLogos";
 import { validatePayPhone, getPhonePlaceholder, isPayPhoneValid } from "../../utils/phoneValidation";
 
@@ -26,6 +28,7 @@ function DrDashboardScr({go}){
   const [showGoalModal,setShowGoalModal]=useState(false);
   const [tempGoal,setTempGoal]=useState(goal);
   const [accepting,setAccepting]=useState(null);
+  const [refusing,setRefusing]=useState(null);
   const saveGoal=()=>{const n=parseInt(tempGoal)||10000;setGoal(n);try{localStorage.setItem("lk-driver-goal",String(n))}catch{}setShowGoalModal(false);toast.success(`Objectif fixé à ${fmt(n)} 🎯`)};
   return(<><PullToRefresh onRefresh={async()=>{toast.success("Dashboard actualisé 🛵")}}><div className="scr">
     {/* Minimal header */}
@@ -53,7 +56,7 @@ function DrDashboardScr({go}){
       <div style={{display:"flex",justifyContent:"space-between",alignItems:"flex-start",gap:12}}>
         <div style={{flex:1,minWidth:0}}>
           <div style={{fontSize:10,color:"rgba(255,255,255,0.5)",fontWeight:700,letterSpacing:1,marginBottom:4}}>GAINS DU JOUR</div>
-          <div style={{fontSize:32,fontWeight:800,color:"#fff",lineHeight:1,marginBottom:8}}>{fmt(d.earned||0)}</div>
+          <div style={{fontSize:32,fontWeight:800,color:"#fff",lineHeight:1,marginBottom:8}}><CountUp to={d.earned||0} format={fmt} duration={1500}/></div>
           <div style={{display:"flex",alignItems:"center",gap:6,fontSize:11}}>
             <span style={{color:(d.vsYesterday||0)>=0?"#10B981":"#EF4444",fontWeight:700}}>{(d.vsYesterday||0)>=0?"▲":"▼"} {Math.abs(d.vsYesterday||0)}%</span>
             <span style={{color:"rgba(255,255,255,0.5)"}}>vs hier · {d.deliveries||0} livraisons</span>
@@ -175,7 +178,7 @@ function DrDashboardScr({go}){
 
       {/* Actions */}
       <div style={{display:"flex",gap:8}}>
-        <button onClick={()=>setDismissed(p=>[...p,pending.id])} style={{padding:"14px 22px",borderRadius:14,border:"1px solid var(--border)",background:"transparent",color:"var(--text)",fontSize:14,fontWeight:600,cursor:"pointer",fontFamily:"inherit"}}>Refuser</button>
+        <button onClick={()=>{setRefusing(pending);setTimeout(()=>{setDismissed(p=>[...p,pending.id]);setRefusing(null)},1400)}} style={{padding:"14px 22px",borderRadius:14,border:"1px solid var(--border)",background:"transparent",color:"var(--text)",fontSize:14,fontWeight:600,cursor:"pointer",fontFamily:"inherit"}}>Refuser</button>
         <button onClick={()=>{setAccepting(pending);setTimeout(()=>{setAccepting(null);go("drBriefing",pending)},1600)}} style={{flex:1,padding:"14px",borderRadius:14,border:"none",background:"#10B981",color:"#fff",fontSize:15,fontWeight:700,cursor:"pointer",fontFamily:"inherit",boxShadow:"0 4px 12px rgba(16,185,129,0.25)"}}>Accepter</button>
       </div>
     </div>}
@@ -187,28 +190,19 @@ function DrDashboardScr({go}){
       <div style={{flex:1}}><div style={{fontSize:13,fontWeight:600}}>{h.vendor} → {h.client}</div><div style={{fontSize:11,color:"var(--muted)"}}>{h.date} · {h.duration} · {h.distance}</div></div>
       <div style={{textAlign:"right"}}><div style={{fontSize:13,fontWeight:700,color:"#F97316"}}>+{fmt(h.fee+h.tip)}</div><div style={{fontSize:11,color:"#F59E0B"}}>{"★".repeat(h.rating)}</div></div>
     </div>)}</div>
-  {accepting&&<div style={{position:"fixed",inset:0,background:"#10B981",zIndex:10000,display:"flex",alignItems:"center",justifyContent:"center",flexDirection:"column",animation:"acceptFade .25s ease"}}>
-      <style>{`
-        @keyframes acceptFade{from{opacity:0}to{opacity:1}}
-        @keyframes checkPop{0%{transform:scale(0) rotate(-45deg);opacity:0}50%{transform:scale(1.2) rotate(0)}100%{transform:scale(1) rotate(0);opacity:1}}
-        @keyframes checkDraw{from{stroke-dashoffset:60}to{stroke-dashoffset:0}}
-        @keyframes textRise{0%{opacity:0;transform:translateY(20px)}100%{opacity:1;transform:translateY(0)}}
-        @keyframes rippleOut{0%{transform:scale(.3);opacity:.7}100%{transform:scale(2.5);opacity:0}}
-      `}</style>
-      {/* Ripple effects */}
-      <div style={{position:"absolute",width:120,height:120,borderRadius:"50%",border:"3px solid rgba(255,255,255,.5)",animation:"rippleOut 1.5s ease-out infinite"}}/>
-      <div style={{position:"absolute",width:120,height:120,borderRadius:"50%",border:"3px solid rgba(255,255,255,.5)",animation:"rippleOut 1.5s ease-out infinite .4s"}}/>
-      {/* Big white circle with check */}
-      <div style={{width:120,height:120,borderRadius:"50%",background:"#fff",display:"flex",alignItems:"center",justifyContent:"center",animation:"checkPop .5s cubic-bezier(.34,1.56,.64,1)",boxShadow:"0 12px 40px rgba(0,0,0,.2)"}}>
-        <svg width="60" height="60" viewBox="0 0 60 60" fill="none">
-          <path d="M15 30 L26 41 L46 19" stroke="#10B981" strokeWidth="6" strokeLinecap="round" strokeLinejoin="round" strokeDasharray="60" style={{animation:"checkDraw .5s ease-out .3s both"}}/>
-        </svg>
-      </div>
-      {/* Text */}
-      <div style={{marginTop:24,color:"#fff",fontSize:24,fontWeight:800,animation:"textRise .4s ease-out .5s both"}}>Course acceptée !</div>
-      <div style={{marginTop:6,color:"rgba(255,255,255,.85)",fontSize:14,fontWeight:500,animation:"textRise .4s ease-out .65s both"}}>+{fmt((accepting.fee||0)+(accepting.tip||0))} · {accepting.distance}</div>
-      <div style={{marginTop:18,color:"rgba(255,255,255,.7)",fontSize:12,fontWeight:500,animation:"textRise .4s ease-out .85s both"}}>Préparation des détails...</div>
-    </div>}
+  {refusing&&<SuccessAnimation
+      type="error"
+      title="Course refusée"
+      subtitle={`${refusing.distance} · ${refusing.eta}`}
+      hint="En attente de la prochaine demande..."
+      duration={0}
+    />}
+    {accepting&&<SuccessAnimation
+      title="Course acceptée !"
+      subtitle={`+${fmt((accepting.fee||0)+(accepting.tip||0))} · ${accepting.distance}`}
+      hint="Préparation des détails..."
+      duration={0}
+    />}
 
     {showGoalModal&&<div onClick={()=>setShowGoalModal(false)} style={{position:"fixed",inset:0,background:"rgba(0,0,0,.45)",zIndex:9999,display:"flex",alignItems:"flex-end",animation:"fadeInFast .2s ease"}}>
       <div onClick={e=>e.stopPropagation()} style={{width:"100%",maxWidth:500,margin:"0 auto",background:"var(--card)",borderRadius:"24px 24px 0 0",padding:20,animation:"slideUp .3s cubic-bezier(.4,0,.2,1)"}}>

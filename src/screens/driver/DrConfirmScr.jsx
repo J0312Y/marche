@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { fmt } from "../../utils/helpers";
 import toast from "../../utils/toast";
+import SuccessAnimation from "../../components/SuccessAnimation";
 import { validatePayPhone, getPhonePlaceholder, isPayPhoneValid } from "../../utils/phoneValidation";
 
 function DrConfirmScr({delivery:dl,go,onBack}){
@@ -9,12 +10,14 @@ function DrConfirmScr({delivery:dl,go,onBack}){
   const [photoTaken,setPhotoTaken]=useState(false);
   const [signed,setSigned]=useState(false);
   const [done,setDone]=useState(false);
+  const [showCelebration,setShowCelebration]=useState(false);
   const [cashCollected,setCashCollected]=useState(false);
   const [cashReversed,setCashReversed]=useState(false);
   const isCash=dl.payment==="cash";
   const vendorAmount=dl.total-(dl.fee||2000);
 
   // Cash reversal screen
+  if(showCelebration)return(<SuccessAnimation title="Livraison réussie !" subtitle={`+${fmt(dl.fee||0)} gagnés`} hint={isCash?"Encaissement en cours...":"Bravo !"} duration={2000} onDone={()=>setShowCelebration(false)}/>);
   if(done&&isCash&&!cashReversed)return(<div className="scr" style={{padding:16}}>
     <div className="appbar" style={{padding:0,marginBottom:12}}><div style={{width:38}}/><h2>Reverser au vendeur</h2><div style={{width:38}}/></div>
     <div style={{textAlign:"center",marginBottom:16}}>
@@ -139,7 +142,7 @@ function DrConfirmScr({delivery:dl,go,onBack}){
       </div>}
 
       <div style={{paddingTop:24,paddingBottom:16}}>
-        <button className="btn-primary" style={{background:method?"#F97316":"var(--border)",color:method?"var(--card)":"var(--muted)"}} onClick={()=>{if(method&&(!isCash||cashCollected)){setDone(true);toast.success(isCash?"💵 Paiement collecté — Reversez au vendeur":"Livraison confirmée 🎉")}}} disabled={!method||(isCash&&!cashCollected)}>✅ Valider la livraison</button>
+        <button className="btn-primary" style={{background:method?"#F97316":"var(--border)",color:method?"var(--card)":"var(--muted)"}} onClick={()=>{if(method&&(!isCash||cashCollected)){setDone(true);setShowCelebration(true);toast.success(isCash?"💵 Paiement collecté — Reversez au vendeur":"Livraison confirmée 🎉")}}} disabled={!method||(isCash&&!cashCollected)}>✅ Valider la livraison</button>
       </div>
     </div>
   </>);

@@ -1,6 +1,7 @@
 import InvoiceView from "../../components/InvoiceView";
 import P from "../../data/products";
 import CreditNoteView from "../../components/CreditNoteView";
+import SuccessAnimation from "../../components/SuccessAnimation";
 import { useState } from "react";
 import toast from "../../utils/toast";
 
@@ -9,6 +10,7 @@ const STEPS=["Confirmée","En préparation","En livraison","Livrée"];
 const findPhoto=(itemStr)=>{const name=itemStr.split(" ").slice(1).join(" ").replace(/ x\d+$/,"");const p=P.find(x=>x.name.includes(name)||name.includes(x.name));return p?.photo||null};
 
 function OrderDetailScr({order:o,onBack,go}){
+  const [cancelling,setCancelling]=useState(false);
   const [cancelled,setCancelled]=useState(false);
   const [showInvoice,setShowInvoice]=useState(false);
   const [showCreditNote,setShowCreditNote]=useState(false);
@@ -22,6 +24,8 @@ function OrderDetailScr({order:o,onBack,go}){
 
   const currentStep=o.prog?o.prog.filter(x=>x===1).length:0;
   const canCancel=!cancelled&&(sc==="ship"||sc==="prep");
+
+  if(cancelling)return<SuccessAnimation type="warning" title="Commande annulée" subtitle={o.ref} hint="Remboursement en cours..." duration={0}/>;
 
   return(<div className="scr" style={{padding:16,paddingBottom:20}}>
     <div className="appbar" style={{padding:0,marginBottom:12}}><button onClick={onBack}>←</button><h2>{o.ref}</h2><div style={{width:38}}/></div>
@@ -128,7 +132,7 @@ function OrderDetailScr({order:o,onBack,go}){
 
         <div style={{display:"flex",gap:10,marginTop:16}}>
           <button onClick={()=>{setShowCancel(false);setRefundMethod(null)}} style={{flex:1,padding:12,borderRadius:12,border:"1px solid var(--border)",background:"var(--card)",fontSize:13,fontWeight:600,cursor:"pointer",fontFamily:"inherit",color:"var(--text)"}}>Non</button>
-          <button disabled={!refundMethod||(refundMethod==="momo"&&refundPhone.replace(/\s/g,"").length!==9)} onClick={()=>{setCancelled(true);setShowCancel(false);toast.success(refundMethod==="wallet"?"💰 "+o.total+" FCFA crédité sur votre wallet":"📱 Remboursement envoyé sous 24-48h")}} style={{flex:1,padding:12,borderRadius:12,border:"none",background:refundMethod?"#EF4444":"var(--border)",color:refundMethod?"#fff":"var(--muted)",fontSize:13,fontWeight:700,cursor:refundMethod?"pointer":"not-allowed",fontFamily:"inherit"}}>Annuler et rembourser</button>
+          <button disabled={!refundMethod||(refundMethod==="momo"&&refundPhone.replace(/\s/g,"").length!==9)} onClick={()=>{setCancelling(true);setShowCancel(false);setTimeout(()=>{setCancelling(false);setCancelled(true)},1700)}} style={{flex:1,padding:12,borderRadius:12,border:"none",background:refundMethod?"#EF4444":"var(--border)",color:refundMethod?"#fff":"var(--muted)",fontSize:13,fontWeight:700,cursor:refundMethod?"pointer":"not-allowed",fontFamily:"inherit"}}>Annuler et rembourser</button>
         </div>
       </div>
     </div>}

@@ -6,6 +6,7 @@ import { fmt, disc, getVendorPromo } from "../../utils/helpers";
 import { useApp } from "../../context/AppContext";
 import { shareProduct } from "../../utils/share";
 import toast from "../../utils/toast";
+import SuccessAnimation from "../../components/SuccessAnimation";
 import P from "../../data/products";
 
 // Generate specs based on product type
@@ -53,6 +54,7 @@ function DetailScr({product:rawP,onBack,onAddCart,go,favs,toggleFav,isFav}){
   const p = fullProduct ? {...fullProduct,...rawP} : rawP;
   const [qty,setQty]=useState(1);
   const [cartAnim,setCartAnim]=useState(false);
+  const [cartAdded,setCartAdded]=useState(false);
   const [photoIdx,setPhotoIdx]=useState(0);
   const [zoomOpen,setZoomOpen]=useState(false);
   const allPhotos=p.photos||[p.photo];
@@ -108,6 +110,8 @@ function DetailScr({product:rawP,onBack,onAddCart,go,favs,toggleFav,isFav}){
   const vendor=VENDORS.find(v=>v.name===p.vendor);
   const vp=getVendorPromo(p,VENDORS);
   const finalPrice=vp?vp.promoPrice:p.price;
+
+  if(cartAdded)return<SuccessAnimation title="Ajouté au panier !" subtitle={p.name+" ×"+qty} hint={"Total : "+fmt(finalPrice*qty+sidesTotalPrice)} duration={1300} onDone={()=>{setCartAdded(false);onBack&&onBack()}}/>;
 
   return(<>
     <div className="scr">
@@ -395,7 +399,7 @@ function DetailScr({product:rawP,onBack,onAddCart,go,favs,toggleFav,isFav}){
         <span>{qty}</span>
         <button onClick={()=>setQty(qty+1)}>+</button>
       </div>
-      <button className={`add-btn${cartAnim?" cart-bounce":""}`} onClick={()=>{setCartAnim(true);setTimeout(()=>setCartAnim(false),400);{const missing=p.sides?.filter(cat=>cat.required&&!cat.items.some(it=>selectedSides[it.name]));if(missing?.length>0){toast.error("Choisissez : "+missing.map(m=>m.cat).join(", "));return}onAddCart(p,qty,{sides:Object.values(selectedSides),note:specialNote})}}}>🛍️ Ajouter · {fmt(finalPrice*qty+sidesTotalPrice)}</button>
+      <button className={`add-btn${cartAnim?" cart-bounce":""}`} onClick={()=>{setCartAnim(true);setTimeout(()=>setCartAnim(false),400);{const missing=p.sides?.filter(cat=>cat.required&&!cat.items.some(it=>selectedSides[it.name]));if(missing?.length>0){toast.error("Choisissez : "+missing.map(m=>m.cat).join(", "));return}onAddCart(p,qty,{sides:Object.values(selectedSides),note:specialNote});setCartAdded(true)}}}>🛍️ Ajouter · {fmt(finalPrice*qty+sidesTotalPrice)}</button>
     </div>
 
     {/* ── Alerte Prix Popup ── */}

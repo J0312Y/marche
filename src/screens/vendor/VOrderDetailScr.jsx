@@ -4,8 +4,11 @@ import { useState } from "react";
 import Img from "../../components/Img";
 import { fmt } from "../../utils/helpers";
 import toast from "../../utils/toast";
+import SuccessAnimation from "../../components/SuccessAnimation";
 
 function VOrderDetailScr({order:o,onBack,go}){
+  const [acceptingOrder,setAcceptingOrder]=useState(false);
+  const [refusingOrder,setRefusingOrder]=useState(false);
   const [showInvoice,setShowInvoice]=useState(false);
   const [showCreditNote,setShowCreditNote]=useState(false);
   const [status,setStatus]=useState(o.status);
@@ -26,6 +29,9 @@ function VOrderDetailScr({order:o,onBack,go}){
     {showInvoice&&<InvoiceView order={{id:o?.ref||"LMK-0891",client:o?.client||"Marie Koumba",vendor:o?.vendor||"Mode Afrique",amount:o?.total||25000,items:o?.items?.map(it=>({name:it.name,qty:it.qty,price:it.price,sides:it.sides}))||[{name:"Article",qty:1,price:o?.total||25000}],delivery:1500,payment:o?.payment||"airtel",status:o?.status||"new"}} onClose={()=>setShowInvoice(false)}/>}
     </div>
   </div>);
+
+  if(acceptingOrder)return<SuccessAnimation title="Commande acceptée !" subtitle={o.ref} hint="En préparation..." duration={0}/>;
+  if(refusingOrder)return<SuccessAnimation type="error" title="Commande refusée" subtitle={o.ref} hint="Le client sera notifié" duration={0}/>;
 
   return(<div className="scr" style={{padding:16}}><div className="appbar" style={{padding:0,marginBottom:12}}><button onClick={onBack}>←</button><h2>{o.ref}</h2><div style={{width:38}}/></div>
     <div style={{display:"flex",justifyContent:"space-between",alignItems:"center",marginBottom:12}}><span className={`vo-status ${status}`} style={{fontSize:13}}>{statusMap[status]}</span><span style={{fontSize:12,color:"var(--muted)"}}>{o.date}</span></div>
@@ -53,7 +59,7 @@ function VOrderDetailScr({order:o,onBack,go}){
       <p style={{fontSize:12,color:"var(--sub)",marginBottom:12}}>Le client sera notifié et remboursé automatiquement. Cette action est irréversible.</p>
       <div style={{display:"flex",gap:10}}>
         <button style={{flex:1,padding:12,borderRadius:12,border:"1px solid var(--border)",background:"var(--card)",fontSize:13,fontWeight:600,cursor:"pointer",fontFamily:"inherit"}} onClick={()=>setShowRefuse(false)}>Annuler</button>
-        <button style={{flex:1,padding:12,borderRadius:12,border:"none",background:"#EF4444",color:"#fff",fontSize:13,fontWeight:600,cursor:"pointer",fontFamily:"inherit"}} onClick={()=>{setStatus("refused");toast.success("Commande refusée ❌")}}>✕ Confirmer le refus</button>
+        <button style={{flex:1,padding:12,borderRadius:12,border:"none",background:"#EF4444",color:"#fff",fontSize:13,fontWeight:600,cursor:"pointer",fontFamily:"inherit"}} onClick={()=>{setRefusingOrder(true);setTimeout(()=>{setStatus("refused");setRefusingOrder(false)},1500)}}>✕ Confirmer le refus</button>
       </div>
     </div>}
 

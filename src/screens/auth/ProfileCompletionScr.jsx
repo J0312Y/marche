@@ -2,6 +2,7 @@ import { useState } from "react";
 import Select from "../../components/Select";
 import ImageCropper from "../../components/ImageCropper";
 import toast from "../../utils/toast";
+import SuccessAnimation from "../../components/SuccessAnimation";
 import { USER_AVATAR } from "../../data/images";
 
 function ProfileCompletionScr({onDone,provider,setUserName}){
@@ -13,6 +14,7 @@ function ProfileCompletionScr({onDone,provider,setUserName}){
   const [quartier,setQuartier]=useState("");
   const [address,setAddress]=useState("");
   const [errors,setErrors]=useState({});
+  const [completed,setCompleted]=useState(false);
   const [cropSrc,setCropSrc]=useState(null);
 
   const clr=(k)=>setErrors(p=>{const n={...p};delete n[k];return n});
@@ -35,6 +37,8 @@ function ProfileCompletionScr({onDone,provider,setUserName}){
     if(Object.keys(e).length){toast.error("Remplissez les champs obligatoires");return false}
     return true;
   };
+
+  if(completed)return<SuccessAnimation title="Profil créé !" subtitle="Bienvenue sur Lamuka Market" hint="Préparation de votre espace..." duration={0}/>;
 
   return(
     <div className="auth" style={{justifyContent:"flex-start",paddingTop:40}}>
@@ -64,7 +68,7 @@ function ProfileCompletionScr({onDone,provider,setUserName}){
         </div>
         <div className={`field${errors.quartier?" err":""}`}><label>Quartier <span style={{color:"#EF4444"}}>*</span></label><input value={quartier} onChange={e=>{setQuartier(e.target.value);clr("quartier")}} placeholder="Ex: Bacongo, Poto-Poto..."/>{errors.quartier&&<div className="err-msg">{errors.quartier}</div>}</div>
         <div className="field"><label>Adresse <span style={{color:"var(--muted)",fontWeight:400}}>(optionnel)</span></label><input value={address} onChange={e=>setAddress(e.target.value)} placeholder="Rue, N°..."/></div>
-        <button className="btn-primary" onClick={()=>{if(validate1()){setUserName?.(firstName.trim());onDone()}}}>🚀 Commencer</button>
+        <button className="btn-primary" onClick={()=>{if(validate1()){setUserName?.(firstName.trim());setCompleted(true);setTimeout(onDone,1700)}}}>🚀 Commencer</button>
       </>}
 
       <div style={{display:"flex",justifyContent:"center",gap:6,marginTop:20}}>{[0,1].map(i=><div key={i} style={{width:step===i?24:8,height:8,borderRadius:4,background:step>=i?"#F97316":"var(--border)",transition:"all .3s"}}/>)}</div>

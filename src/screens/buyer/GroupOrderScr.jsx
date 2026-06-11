@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import toast from "../../utils/toast";
+import SuccessAnimation from "../../components/SuccessAnimation";
 import { useData } from "../../hooks";
 import Img from "../../components/Img";
 import { fmt } from "../../utils/helpers";
@@ -21,7 +22,8 @@ function GroupOrderScr({onBack,go}){
   const [selSides,setSelSides]=useState({});
   const [selNote,setSelNote]=useState("");
   const [openSideCat,setOpenSideCat]=useState(null);
-  const [splitMode,setSplitMode]=useState("one"); // one | split
+  const [splitMode,setSplitMode]=useState("one");
+  const [grpConfirmed,setGrpConfirmed]=useState(false); // one | split
   const [timer,setTimer]=useState(15);
   const code="GRP-"+Math.floor(Math.random()*9000+1000);
   const link="https://lamuka.market/group/"+code;
@@ -286,7 +288,13 @@ function GroupOrderScr({onBack,go}){
       {splitMode==="split"&&joinedCount>1&&<div style={{fontSize:11,color:"var(--muted)",marginTop:6,textAlign:"center"}}>≈ {fmt(Math.round((grandTotal+1500)/joinedCount))} / personne</div>}
     </div>
 
-    <button className="btn-primary" onClick={()=>{toast.success("Commande de groupe confirmée ! 🎉");setTimeout(onBack,1500)}}>🛍️ Confirmer la commande</button>
+    <button className="btn-primary" onClick={()=>{setGrpConfirmed(true);setTimeout(onBack,1800)}}>🛍️ Confirmer la commande</button>
+  {grpConfirmed&&<SuccessAnimation
+      title="Commande de groupe confirmée !"
+      subtitle={`${joinedCount} participants · ${fmt(grandTotal+1500)}`}
+      hint="Livraison en préparation..."
+      duration={0}
+    />}
   </div>);
 }
 

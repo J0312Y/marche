@@ -37,8 +37,8 @@ select option{background:var(--card);color:var(--text);padding:10px 14px;font-si
 .splash .loader{margin-top:40px;width:36px;height:36px;border:3px solid rgba(255,255,255,.2);border-top-color:#fff;border-radius:50%;animation:spin 1s linear infinite}
 @keyframes spin{to{transform:rotate(360deg)}}
 .spinner{width:16px;height:16px;border:2px solid rgba(255,255,255,.3);border-top-color:#fff;border-radius:50%;animation:spin .6s linear infinite;display:inline-block}
-.sk{background:linear-gradient(90deg,var(--light) 25%,var(--border) 37%,var(--light) 63%);background-size:400% 100%;animation:sk-shimmer 1.4s ease infinite}
-@keyframes sk-shimmer{0%{background-position:100% 50%}100%{background-position:0 50%}}
+.sk{position:relative;background:var(--light);overflow:hidden;border-radius:8px}.sk::after{content:"";position:absolute;inset:0;background:linear-gradient(90deg,transparent 0%,rgba(255,255,255,.5) 50%,transparent 100%);animation:sk-shimmer 1.6s ease-in-out infinite}
+@keyframes sk-shimmer{0%{transform:translateX(-100%)}100%{transform:translateX(100%)}}
 @keyframes marquee{0%{transform:translateX(0%)}100%{transform:translateX(-50%)}}
 .marquee-wrap{overflow:hidden;padding:0 0 6px;position:relative}
 .marquee-track{display:inline-flex;gap:8px;white-space:nowrap;animation:marquee 14s linear infinite}
@@ -716,6 +716,33 @@ input,textarea,select{font-size:16px !important}
 .pimg{aspect-ratio:4/3;background:var(--light);position:relative;overflow:hidden;border-radius:14px 14px 0 0}
 .pimg .pe{font-size:52px}
 .pimg img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:center}
+
+/* Toast spring animation */
+@keyframes toastSlideIn {
+  0% { transform: translateY(-30px) scale(.85); opacity: 0 }
+  60% { transform: translateY(4px) scale(1.05); opacity: 1 }
+  100% { transform: translateY(0) scale(1); opacity: 1 }
+}
+
+/* Button tap feedback */
+.btn-primary:active, button:active:not(:disabled) {
+  transform: scale(.97);
+  transition: transform .1s;
+}
+
+/* Tab icon bounce on active */
+@keyframes tabBounce {
+  0%,100% { transform: translateY(0) }
+  50% { transform: translateY(-3px) }
+}
+.tab-active-icon { animation: tabBounce .35s cubic-bezier(.34,1.56,.64,1) }
+
+/* Image lightbox open */
+@keyframes lightboxIn {
+  from { opacity: 0; transform: scale(.85) }
+  to { opacity: 1; transform: scale(1) }
+}
+.lightbox-in { animation: lightboxIn .25s cubic-bezier(.4,0,.2,1) }
 `;
 
 export default CSS;

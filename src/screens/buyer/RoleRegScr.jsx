@@ -3,6 +3,7 @@ import Select from "../../components/Select";
 import ImageCropper from "../../components/ImageCropper";
 import { useData } from "../../hooks";
 import toast from "../../utils/toast";
+import SuccessAnimation from "../../components/SuccessAnimation";
 import PayLogo from "../../components/PayLogos";
 import { validatePayPhone, getPhonePlaceholder, isPayPhoneValid } from "../../utils/phoneValidation";
 import { triggerPush } from "../../components/PushBanner";
@@ -101,6 +102,7 @@ function RoleRegScr({onBack,onDone,forceRole,onPending}){
   const [selCats,setSC]=useState([]);
   const [docs,setDocs]=useState({});
   const [ok,setOk]=useState(false);
+  const [showSubmitAnim,setShowSubmitAnim]=useState(false);
   const [showPayment,setShowPayment]=useState(false);
   const [payMethod,setPayMethod]=useState("airtel");
   const [payPhone,setPayPhone]=useState("");
@@ -118,7 +120,7 @@ function RoleRegScr({onBack,onDone,forceRole,onPending}){
     setTimeout(()=>{
       setPaying(false);
       setPayDone(true);
-      setTimeout(()=>{setShowPayment(false);setOk(true)},1500);
+      setTimeout(()=>{setShowPayment(false);setShowSubmitAnim(true);setTimeout(()=>{setShowSubmitAnim(false);setOk(true)},1700)},1500);
     },3000);
   };
 
@@ -137,6 +139,8 @@ function RoleRegScr({onBack,onDone,forceRole,onPending}){
     setHasLogo(true);setCropLogSrc(null);toast.success("Logo ajouté 📸");
   };
 
+
+  if(showSubmitAnim)return<SuccessAnimation title="Demande envoyée !" subtitle={role==="vendor"?"Votre commerce sera vérifié sous 24h":"Votre dossier sera vérifié sous 24h"} hint="Vous recevrez une notification" duration={0}/>;
 
   if(ok)return(<div style={{display:"flex",flexDirection:"column",height:"100%",justifyContent:"center",animation:"fadeIn .3s ease"}}><div style={{textAlign:"center",padding:"40px 20px"}}>
     <div style={{width:80,height:80,borderRadius:"50%",background:"rgba(249,115,22,0.08)",display:"flex",alignItems:"center",justifyContent:"center",margin:"0 auto 20px",fontSize:40}}>📩</div>
@@ -415,7 +419,7 @@ function RoleRegScr({onBack,onDone,forceRole,onPending}){
 
       {/* ── Button inside scroll ── */}
       <div style={{paddingTop:24,paddingBottom:16}}>
-        <button className="btn-primary" style={{background:color}} onClick={()=>{if(!validateStep())return;if(step<maxStep){setStep(step+1)}else{if(needsPayment&&!payDone){setShowPayment(true)}else{setOk(true)}}}}>{step===maxStep?(needsPayment&&!payDone?"💳 Payer et soumettre":"🚀 Soumettre la demande"):"Continuer"}</button>
+        <button className="btn-primary" style={{background:color}} onClick={()=>{if(!validateStep())return;if(step<maxStep){setStep(step+1)}else{if(needsPayment&&!payDone){setShowPayment(true)}else{setShowSubmitAnim(true);setTimeout(()=>{setShowSubmitAnim(false);setOk(true)},1700)}}}}>{step===maxStep?(needsPayment&&!payDone?"💳 Payer et soumettre":"🚀 Soumettre la demande"):"Continuer"}</button>
       </div>
     </div>
 
