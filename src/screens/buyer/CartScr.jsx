@@ -1,4 +1,5 @@
 import { useState } from "react";
+import toast from "../../utils/toast";
 import { fmt, getVendorPromo } from "../../utils/helpers";
 import Img from "../../components/Img";
 import { useData } from "../../hooks";
@@ -10,6 +11,10 @@ const showCartTutorial = () => {
 
 function CartScr({cart,setCart,go,appliedCoupon,setAppliedCoupon}){
   const [showTuto,setShowTuto]=useState(showCartTutorial());
+  const [swipeX,setSwipeX]=useState({});
+  const [swipeStart,setSwipeStart]=useState(null);
+  const [swipeActive,setSwipeActive]=useState(null);
+  const removeItem=(i)=>{const n=[...cart];n.splice(i,1);setCart(n);try{toast.info("🗑️ Article retiré")}catch{}};
   const { VENDORS } = useData();
   const getItem=(c)=>c.product||c;
   const getPrice=(c)=>{const p=getItem(c);const vp=getVendorPromo(p,VENDORS);return vp?vp.promoPrice:(p.price||0)};
@@ -27,8 +32,23 @@ function CartScr({cart,setCart,go,appliedCoupon,setAppliedCoupon}){
   return(<><div className="scr" style={{padding:16}}>
     <div className="appbar" style={{padding:0,marginBottom:12}}><h2>Panier ({cart.length})</h2></div>
     {cart.length===0?<div style={{textAlign:"center",padding:"60px 0"}}><div style={{width:72,height:72,borderRadius:20,background:"rgba(249,115,22,0.08)",display:"flex",alignItems:"center",justifyContent:"center",margin:"0 auto"}}><svg width="40" height="40" viewBox="0 0 64 64" fill="none"><path d="M16 16h5l6 26h16l6-20H24" stroke="#F97316" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round" opacity=".4"/><circle cx="28" cy="50" r="3" fill="#F97316" opacity=".4"/><circle cx="42" cy="50" r="3" fill="#F97316" opacity=".4"/></svg></div><h3 style={{marginTop:14,fontSize:18,fontWeight:700}}>Votre panier est vide</h3><p style={{fontSize:13,color:"var(--muted)",marginTop:6}}>Découvrez nos produits</p></div>
-    :cart.map((c,i)=>{const p=getItem(c);const vp=getVendorPromo(p,VENDORS);const price=vp?vp.promoPrice:(p.price||0);return(
-      <div key={i} className="cart-item">
+    :cart.map((c,i)=>{const p=getItem(c);const vp=getVendorPromo(p,VENDORS);const price=vp?vp.promoPrice:(p.price||0);
+    return(
+      <div key={i} style={{position:"relative",marginBottom:10,overflow:"hidden",borderRadius:14}}>
+        {/* Red delete background revealed when swiping */}
+        <div style={{position:"absolute",inset:0,background:"#EF4444",display:"flex",alignItems:"center",justifyContent:"flex-end",paddingRight:24,color:"#fff",fontWeight:700,fontSize:13,gap:8}}>
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#fff" strokeWidth="2.4" strokeLinecap="round" strokeLinejoin="round"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-2 14a2 2 0 0 1-2 2H9a2 2 0 0 1-2-2L5 6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></svg>
+          Supprimer
+        </div>
+        {/* Foreground item — translates left on touch */}
+        <div className="cart-item" style={{margin:0,position:"relative",background:"var(--card)",transform:`translateX(${swipeX[i]||0}px)`,transition:swipeActive===i?"none":"transform .25s ease"}}
+          onTouchStart={e=>{setSwipeStart(e.touches[0].clientX);setSwipeActive(i)}}
+          onTouchMove={e=>{if(swipeStart==null)return;const dx=e.touches[0].clientX-swipeStart;if(dx<0)setSwipeX(p=>({...p,[i]:Math.max(dx,-120)}))}}
+          onTouchEnd={()=>{const x=swipeX[i]||0;if(x<-80){removeItem(i);setSwipeX(p=>({...p,[i]:0}))}else{setSwipeX(p=>({...p,[i]:0}))}setSwipeStart(null);setSwipeActive(null)}}
+          onMouseDown={e=>{setSwipeStart(e.clientX);setSwipeActive(i)}}
+          onMouseMove={e=>{if(swipeStart==null||swipeActive!==i)return;const dx=e.clientX-swipeStart;if(dx<0)setSwipeX(p=>({...p,[i]:Math.max(dx,-120)}))}}
+          onMouseUp={()=>{const x=swipeX[i]||0;if(x<-80){removeItem(i);setSwipeX(p=>({...p,[i]:0}))}else{setSwipeX(p=>({...p,[i]:0}))}setSwipeStart(null);setSwipeActive(null)}}
+          onMouseLeave={()=>{if(swipeActive===i){setSwipeX(p=>({...p,[i]:0}));setSwipeStart(null);setSwipeActive(null)}}}>
         <div className="cart-img"><Img src={p.photo} emoji={p.img} style={{width:"100%",height:"100%",borderRadius:12}} fit="cover"/></div>
         <div className="cart-info">
           <h4>{p.name}</h4>
@@ -38,6 +58,7 @@ function CartScr({cart,setCart,go,appliedCoupon,setAppliedCoupon}){
             <span className="cp">{fmt((price+(c.sidesTotal||0))*(c.qty||1))}{vp&&<span style={{marginLeft:4,fontSize:10,color:"var(--muted)",textDecoration:"line-through"}}>{fmt(p.price*(c.qty||1))}</span>}</span>
             <div className="qty"><button onClick={()=>updQty(i,-1)}>−</button><span>{c.qty||1}</span><button onClick={()=>updQty(i,1)}>+</button></div>
           </div>
+        </div>
         </div>
       </div>)})}
 

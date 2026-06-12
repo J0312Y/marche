@@ -3,6 +3,7 @@ import PullToRefresh from "../../components/PullToRefresh";
 import toast from "../../utils/toast";
 import { useData } from "../../hooks";
 import Img from "../../components/Img";
+import Icon from "../../components/Icon";
 import { fmt, disc } from "../../utils/helpers";
 
 function AllProductsScr({go,onBack,favs,toggleFav,isFav}){
@@ -30,7 +31,7 @@ function AllProductsScr({go,onBack,favs,toggleFav,isFav}){
   const activeFilters=(selCats.length>0?1:0)+(selTypes.length>0?1:0)+(onlyPromo?1:0)+(priceRange[0]>0||priceRange[1]<500000?1:0);
 
   return(<PullToRefresh onRefresh={async()=>{toast.success("Produits actualisés 📦")}}><div className="scr"><div className="appbar"><button onClick={onBack}>←</button><h2>Tous les articles <span style={{fontSize:12,color:"var(--muted)",fontWeight:500}}>({sorted.length})</span></h2>
-    <button onClick={()=>setShowFilter(true)} style={{position:"relative",background:"none",border:"none",fontSize:20,cursor:"pointer",padding:4}}>🎛️{activeFilters>0&&<span style={{position:"absolute",top:-2,right:-2,width:16,height:16,borderRadius:8,background:"#F97316",color:"#fff",fontSize:9,fontWeight:700,display:"flex",alignItems:"center",justifyContent:"center"}}>{activeFilters}</span>}</button>
+    <button onClick={()=>setShowFilter(true)} style={{position:"relative",background:"none",border:"none",cursor:"pointer",padding:4,display:"flex",alignItems:"center",justifyContent:"center"}}><Icon name="filter" size={20}/>{activeFilters>0&&<span style={{position:"absolute",top:-2,right:-2,width:16,height:16,borderRadius:8,background:"#F97316",color:"#fff",fontSize:9,fontWeight:700,display:"flex",alignItems:"center",justifyContent:"center"}}>{activeFilters}</span>}</button>
   </div>
 
     {/* Sort pills */}

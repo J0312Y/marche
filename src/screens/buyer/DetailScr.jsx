@@ -422,44 +422,6 @@ function DetailScr({product:rawP,onBack,onAddCart,go,favs,toggleFav,isFav}){
           <span style={{color:"var(--muted)",fontSize:18}}>›</span>
         </div>
       </div>
-        {/* "Pour vous" — related products */}
-        {(()=>{
-      const related=P.filter(x=>x.id!==p.id&&(x.cat===p.cat||x.vendor===p.vendor||Math.abs(x.price-p.price)<p.price*0.4)).slice(0,8);
-      if(related.length===0)return null;
-      return(
-        <div style={{padding:"16px 0 8px"}}>
-          <div style={{display:"flex",justifyContent:"space-between",alignItems:"center",padding:"0 16px 12px"}}>
-            <h3 style={{fontSize:16,fontWeight:800}}>✨ Pourrait vous intéresser</h3>
-            <span onClick={()=>go("allProducts")} style={{fontSize:12,color:"#F97316",fontWeight:600,cursor:"pointer"}}>Voir tout</span>
-          </div>
-          <div style={{display:"flex",gap:10,overflowX:"auto",padding:"0 16px 8px",scrollbarWidth:"none"}} className="hide-scroll">
-            {related.map(r=>{
-              const rPromo=getVendorPromo(r,VENDORS);
-              const rPrice=rPromo?rPromo.promoPrice:r.price;
-              return(
-                <div key={r.id} onClick={()=>go("detail",r)} style={{flexShrink:0,width:140,cursor:"pointer"}}>
-                  <div style={{width:140,height:140,borderRadius:14,overflow:"hidden",background:"var(--light)",position:"relative"}}>
-                    <Img src={r.photo} emoji={r.img} style={{width:"100%",height:"100%"}} fit="cover"/>
-                    {r.old&&<span style={{position:"absolute",top:8,left:8,padding:"3px 7px",borderRadius:6,background:"#EF4444",color:"#fff",fontSize:10,fontWeight:800}}>-{Math.round((1-r.price/r.old)*100)}%</span>}
-                    <span onClick={e=>{e.stopPropagation();toggleFav(r.id)}} style={{position:"absolute",top:8,right:8,width:28,height:28,borderRadius:"50%",background:"rgba(255,255,255,0.95)",display:"flex",alignItems:"center",justifyContent:"center",fontSize:14,color:isFav(r.id)?"#EF4444":"var(--muted)",cursor:"pointer"}}>{isFav(r.id)?"♥":"♡"}</span>
-                  </div>
-                  <div style={{padding:"8px 4px 0"}}>
-                    <h4 style={{fontSize:12,fontWeight:600,lineHeight:1.3,overflow:"hidden",textOverflow:"ellipsis",display:"-webkit-box",WebkitLineClamp:2,WebkitBoxOrient:"vertical",height:32}}>{r.name}</h4>
-                    <div style={{fontSize:10,color:"var(--muted)",marginTop:3,overflow:"hidden",whiteSpace:"nowrap",textOverflow:"ellipsis"}}>{r.vendor}</div>
-                    <div style={{display:"flex",alignItems:"baseline",gap:5,marginTop:4}}>
-                      <span style={{fontSize:13,fontWeight:800,color:"#F97316"}}>{fmt(rPrice)}</span>
-                      {r.old&&<span style={{fontSize:10,color:"var(--muted)",textDecoration:"line-through"}}>{fmt(r.old)}</span>}
-                    </div>
-                    <div style={{fontSize:10,color:"#F59E0B",marginTop:3}}>⭐ {r.rating} <span style={{color:"var(--muted)"}}>({r.reviews})</span></div>
-                  </div>
-                </div>
-              );
-            })}
-          </div>
-        </div>
-      );
-        })()}
-
     </div>
 
     {/* Bottom bar */}
@@ -469,7 +431,15 @@ function DetailScr({product:rawP,onBack,onAddCart,go,favs,toggleFav,isFav}){
         <span>{qty}</span>
         <button onClick={()=>setQty(qty+1)}>+</button>
       </div>
-      <button className={`add-btn${cartAnim?" cart-bounce":""}`} onClick={()=>{setCartAnim(true);setTimeout(()=>setCartAnim(false),400);{const missing=p.sides?.filter(cat=>cat.required&&!cat.items.some(it=>selectedSides[it.name]));if(missing?.length>0){toast.error("Choisissez : "+missing.map(m=>m.cat).join(", "));return}onAddCart(p,qty,{sides:Object.values(selectedSides),note:specialNote});setCartAdded(true)}}}>🛍️ Ajouter · {fmt(finalPrice*qty+sidesTotalPrice)}</button>
+      <button className={`add-btn${cartAnim?" cart-bounce":""}`} onClick={()=>{setCartAnim(true);setTimeout(()=>setCartAnim(false),400);{const missing=p.sides?.filter(cat=>cat.required&&!cat.items.some(it=>selectedSides[it.name]));if(missing?.length>0){toast.error("Choisissez : "+missing.map(m=>m.cat).join(", "));return}onAddCart(p,qty,{sides:Object.values(selectedSides),note:specialNote});
+            // First-ever cart add: reset tutorial so it shows
+            try{
+              if(!localStorage.getItem("lk-cart-ever-added")){
+                localStorage.setItem("lk-cart-ever-added","1");
+                localStorage.removeItem("lk-cart-tutorial");
+              }
+            }catch{}
+            setCartAdded(true)}}}>🛍️ Ajouter · {fmt(finalPrice*qty+sidesTotalPrice)}</button>
     </div>
 
     {/* ── Alerte Prix Popup ── */}

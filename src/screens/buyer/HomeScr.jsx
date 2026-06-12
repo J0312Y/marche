@@ -294,19 +294,6 @@ function HomeScr({go,favs,toggleFav,isFav,userName}){
           ))}
       </div>
 
-      {/* 🕐 Vu récemment */}
-      {(()=>{const recent=JSON.parse(localStorage.getItem("lk-recent")||"[]");return recent.length>1?<>
-        <div style={{padding:"0 16px"}}><h3 style={{fontSize:15,fontWeight:700,letterSpacing:-.3,color:"var(--text)",paddingBottom:10}}>🕐 Vu récemment</h3></div>
-        <div style={{display:"flex",gap:8,overflowX:"auto",scrollbarWidth:"none",paddingBottom:14,paddingLeft:16,paddingRight:16}}>
-          {recent.slice(0,8).map(r=>(
-            <div key={r.id} onClick={()=>go("detail",r)} style={{minWidth:105,background:"var(--card)",border:"1px solid var(--border)",borderRadius:12,overflow:"hidden",cursor:"pointer",flexShrink:0}}>
-              <div style={{width:"100%",aspectRatio:"4/3",background:"var(--light)",position:"relative",overflow:"hidden"}}><Img src={r.photo} emoji={r.img} style={{position:"absolute",inset:0,width:"100%",height:"100%"}} fit="cover"/></div>
-              <div style={{padding:"5px 7px"}}><div style={{fontSize:10,fontWeight:600,overflow:"hidden",whiteSpace:"nowrap",textOverflow:"ellipsis"}}>{r.name}</div><div style={{fontSize:11,fontWeight:700,color:"#F97316",marginTop:1}}>{fmt(r.price)}</div></div>
-            </div>
-          ))}
-        </div>
-      </>:null})()}
-
       {/* Group Buy promo */}
       <div onClick={()=>go("groupBuy")} style={{margin:"0 16px 14px",padding:12,background:"linear-gradient(135deg,rgba(249,115,22,0.06),rgba(251,146,60,0.06))",border:"1px solid rgba(249,115,22,0.12)",borderRadius:14,display:"flex",alignItems:"center",gap:10,cursor:"pointer"}}>
         <div style={{width:38,height:38,borderRadius:12,background:"#F97316",display:"flex",alignItems:"center",justifyContent:"center",fontSize:18,flexShrink:0}}>🤝</div>
@@ -314,7 +301,7 @@ function HomeScr({go,favs,toggleFav,isFav,userName}){
         <span style={{color:"#F97316",fontSize:16}}>›</span>
       </div>
 
-      {/* Restos à la une */}
+      {/* Restos à la une */}}
       {(selType==="all"||selType==="restaurant")&&nearbyRestos.length>0&&<>
       {/* Events / promos banner */}
       {(()=>{
