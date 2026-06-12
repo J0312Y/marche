@@ -54,3 +54,5 @@ export { default as GamificationScr } from './GamificationScr';
 export { default as LiveWatchScr } from './LiveWatchScr';
 
 export { default as GroupOrderScr } from "./GroupOrderScr";
+export { default as SubscriptionsScr } from "./SubscriptionsScr";
+export { default as PromosScr } from "./PromosScr";

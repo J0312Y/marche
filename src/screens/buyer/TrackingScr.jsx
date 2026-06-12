@@ -25,12 +25,18 @@ function TrackingScr({onBack,go}){
   const [driverPos,setDriverPos]=useState({lat:-4.268,lng:15.280});
   const [eta,setEta]=useState(12);
   const [progress,setProgress]=useState(65);
+  const [distance,setDistance]=useState(2.1); // km remaining
+  const [showTip,setShowTip]=useState(false);
+  const [tipAmount,setTipAmount]=useState(0);
+  const [noteToDriver,setNoteToDriver]=useState("");
+  const [showNote,setShowNote]=useState(false);
 
   useEffect(()=>{
     const iv=setInterval(()=>{
       setDriverPos(p=>({lat:p.lat-(0.0003+Math.random()*0.0002),lng:p.lng+(0.0001+Math.random()*0.0001)}));
       setEta(e=>Math.max(1,e-Math.random()*0.5));
       setProgress(p=>Math.min(95,p+Math.random()*2));
+      setDistance(d=>Math.max(.1,d-Math.random()*.15));
     },3000);
     return ()=>clearInterval(iv);
   },[]);
@@ -58,6 +64,24 @@ function TrackingScr({onBack,go}){
     </MapView>
 
     <div className="scr" style={{padding:16}}>
+      {/* Live stats bar */}
+      <div className="live-stats-bar" style={{margin:"0 0 12px",padding:"12px 14px",background:"linear-gradient(135deg,#1F2937,#374151)",borderRadius:14,color:"#fff",display:"flex",alignItems:"center",justifyContent:"space-around"}}>
+        <div style={{textAlign:"center"}}>
+          <div style={{fontSize:9,color:"rgba(255,255,255,.5)",fontWeight:700,letterSpacing:.5,marginBottom:3}}>DISTANCE</div>
+          <div style={{fontSize:16,fontWeight:800}}>{distance.toFixed(1)} km</div>
+        </div>
+        <div style={{width:1,background:"rgba(255,255,255,.15)",height:30}}/>
+        <div style={{textAlign:"center"}}>
+          <div style={{fontSize:9,color:"rgba(255,255,255,.5)",fontWeight:700,letterSpacing:.5,marginBottom:3}}>ARRIVÉE</div>
+          <div style={{fontSize:16,fontWeight:800,color:"#10B981"}}>{Math.ceil(eta)} min</div>
+        </div>
+        <div style={{width:1,background:"rgba(255,255,255,.15)",height:30}}/>
+        <div style={{textAlign:"center"}}>
+          <div style={{fontSize:9,color:"rgba(255,255,255,.5)",fontWeight:700,letterSpacing:.5,marginBottom:3}}>VITESSE</div>
+          <div style={{fontSize:16,fontWeight:800}}>~32 km/h</div>
+        </div>
+      </div>
+
       {/* Driver card */}
       <div style={{display:"flex",alignItems:"center",gap:12,padding:14,background:"var(--card)",border:"1px solid var(--border)",borderRadius:16,marginBottom:12}}>
         <div style={{width:48,height:48,borderRadius:14,background:"linear-gradient(135deg,#10B981,#059669)",display:"flex",alignItems:"center",justifyContent:"center",fontSize:22,flexShrink:0,position:"relative",overflow:"hidden"}}>
@@ -72,11 +96,22 @@ function TrackingScr({onBack,go}){
             <span>🛵 Honda PCX</span><span>·</span><span>BZ-4521</span>
           </div>
           <div style={{fontSize:11,color:"#F59E0B",marginTop:2}}>⭐ 4.8 · 342 livraisons</div>
+          <div className="driver-badges" style={{display:"flex",gap:4,marginTop:5}}>
+            <span style={{padding:"2px 6px",borderRadius:4,background:"rgba(59,130,246,0.08)",color:"#3B82F6",fontSize:9,fontWeight:700}}>✓ Vérifié</span>
+            <span style={{padding:"2px 6px",borderRadius:4,background:"rgba(16,185,129,0.08)",color:"#10B981",fontSize:9,fontWeight:700}}>🏆 Top livreur</span>
+          </div>
         </div>
         <div style={{display:"flex",gap:6}}>
           <button onClick={()=>window.location.href="tel:+242064663469"} style={{width:40,height:40,borderRadius:12,border:"none",background:"#F59E0B",color:"#fff",cursor:"pointer",fontSize:16,display:"flex",alignItems:"center",justifyContent:"center"}}>📞</button>
           <button onClick={()=>go("chatDriver")} style={{width:40,height:40,borderRadius:12,border:"none",background:"#F97316",color:"#fff",cursor:"pointer",fontSize:16,display:"flex",alignItems:"center",justifyContent:"center"}}>💬</button>
         </div>
+      </div>
+
+      {/* Quick actions */}
+      <div className="quick-actions-tracking" style={{display:"grid",gridTemplateColumns:"1fr 1fr 1fr",gap:6,marginBottom:12}}>
+        <button onClick={()=>setShowNote(true)} style={{padding:"10px 6px",borderRadius:12,border:"1px solid var(--border)",background:"var(--card)",cursor:"pointer",fontSize:11,fontWeight:600,fontFamily:"inherit"}}>📝<div style={{marginTop:4}}>Note</div></button>
+        <button onClick={()=>setShowTip(true)} style={{padding:"10px 6px",borderRadius:12,border:"1px solid var(--border)",background:"var(--card)",cursor:"pointer",fontSize:11,fontWeight:600,fontFamily:"inherit"}}>💝<div style={{marginTop:4}}>Pourboire</div></button>
+        <button onClick={()=>{navigator.share?navigator.share({title:"Suivez ma livraison",text:`Mon livreur Patrick arrive dans ${Math.ceil(eta)} min`}):toast.info("📍 Lien copié")}} style={{padding:"10px 6px",borderRadius:12,border:"1px solid var(--border)",background:"var(--card)",cursor:"pointer",fontSize:11,fontWeight:600,fontFamily:"inherit"}}>📤<div style={{marginTop:4}}>Partager</div></button>
       </div>
 
       {/* Progress bar */}
@@ -157,6 +192,39 @@ function TrackingScr({onBack,go}){
         <button onClick={()=>{import("../../utils/share").then(m=>m.shareProduct({title:"Suivi de livraison",text:"Suivez ma commande #LMK-2026-0214 sur Lamuka Market !",url:"https://lamuka.market/track/LMK-2026-0214"}))}} style={{flex:1,padding:10,borderRadius:12,border:"1px solid var(--border)",background:"var(--card)",fontSize:12,fontWeight:600,cursor:"pointer",fontFamily:"inherit",display:"flex",alignItems:"center",justifyContent:"center",gap:6}}>📤 Partager</button>
       </div>
     </div>
+
+    {/* Tip modal */}
+    {showTip&&<div onClick={()=>setShowTip(false)} style={{position:"fixed",inset:0,background:"rgba(0,0,0,.5)",zIndex:9999,display:"flex",alignItems:"flex-end"}}>
+      <div onClick={e=>e.stopPropagation()} style={{width:"100%",maxWidth:500,margin:"0 auto",background:"var(--card)",borderRadius:"24px 24px 0 0",padding:20}}>
+        <div style={{width:36,height:4,borderRadius:2,background:"var(--border)",margin:"0 auto 16px"}}/>
+        <div style={{textAlign:"center",marginBottom:16}}>
+          <div style={{fontSize:32,marginBottom:6}}>💝</div>
+          <h3 style={{fontSize:17,fontWeight:800}}>Pourboire pour Patrick</h3>
+          <p style={{fontSize:11,color:"var(--muted)",marginTop:4}}>Récompensez votre livreur</p>
+        </div>
+        <div style={{display:"grid",gridTemplateColumns:"repeat(4,1fr)",gap:6,marginBottom:14}}>
+          {[500,1000,2000,5000].map(v=>(
+            <button key={v} onClick={()=>setTipAmount(v)} style={{padding:"12px 4px",borderRadius:10,border:tipAmount===v?"2px solid #F97316":"1px solid var(--border)",background:tipAmount===v?"rgba(249,115,22,0.06)":"var(--card)",color:tipAmount===v?"#F97316":"var(--text)",fontSize:12,fontWeight:700,cursor:"pointer",fontFamily:"inherit"}}>{v} F</button>
+          ))}
+        </div>
+        <button onClick={()=>{toast.success(`💝 Pourboire de ${tipAmount} F envoyé !`);setShowTip(false);setTipAmount(0)}} disabled={!tipAmount} style={{width:"100%",padding:14,borderRadius:12,border:"none",background:tipAmount?"#F97316":"var(--border)",color:"#fff",fontSize:14,fontWeight:700,cursor:tipAmount?"pointer":"not-allowed",fontFamily:"inherit"}}>Envoyer le pourboire</button>
+      </div>
+    </div>}
+
+    {/* Note modal */}
+    {showNote&&<div onClick={()=>setShowNote(false)} style={{position:"fixed",inset:0,background:"rgba(0,0,0,.5)",zIndex:9999,display:"flex",alignItems:"flex-end"}}>
+      <div onClick={e=>e.stopPropagation()} style={{width:"100%",maxWidth:500,margin:"0 auto",background:"var(--card)",borderRadius:"24px 24px 0 0",padding:20}}>
+        <div style={{width:36,height:4,borderRadius:2,background:"var(--border)",margin:"0 auto 16px"}}/>
+        <h3 style={{fontSize:17,fontWeight:800,marginBottom:12}}>📝 Note pour Patrick</h3>
+        <div style={{display:"flex",gap:6,marginBottom:10,flexWrap:"wrap"}}>
+          {["🚪 Sonnez fort","📞 Appelez en arrivant","🏠 Laissez à la porte","2ème étage"].map(t=>(
+            <button key={t} onClick={()=>setNoteToDriver(t)} style={{padding:"5px 10px",borderRadius:8,border:"1px solid var(--border)",background:noteToDriver===t?"rgba(249,115,22,0.06)":"var(--card)",fontSize:11,fontWeight:600,cursor:"pointer",fontFamily:"inherit"}}>{t}</button>
+          ))}
+        </div>
+        <textarea value={noteToDriver} onChange={e=>setNoteToDriver(e.target.value)} placeholder="Ou écrivez votre propre note..." rows={3} style={{width:"100%",padding:10,borderRadius:10,border:"1px solid var(--border)",fontSize:13,fontFamily:"inherit",resize:"vertical",outline:"none",boxSizing:"border-box",marginBottom:12}}/>
+        <button onClick={()=>{toast.success("📝 Note envoyée au livreur !");setShowNote(false)}} style={{width:"100%",padding:14,borderRadius:12,border:"none",background:"#F97316",color:"#fff",fontSize:14,fontWeight:700,cursor:"pointer",fontFamily:"inherit"}}>Envoyer la note</button>
+      </div>
+    </div>}
   </>);
 }
 

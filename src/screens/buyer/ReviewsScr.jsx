@@ -15,6 +15,8 @@ function ReviewsScr({product:p,onBack}){
   const [userReviews,setUserReviews]=useState([]);
   const [submitted,setSubmitted]=useState(false);
   const [viewImg,setViewImg]=useState(null);
+  const [filter,setFilter]=useState("all"); // all | photos | recent | 5stars
+  const [helpfulVotes,setHelpfulVotes]=useState({});
   const fileRef=useRef(null);
 
   const handlePhotoUpload=(e)=>{
@@ -37,7 +39,15 @@ function ReviewsScr({product:p,onBack}){
     setTimeout(()=>setSubmitted(false),3000);
   };
 
-  const allReviews=[...userReviews,...REVIEWS];
+  const allReviewsRaw=[...userReviews,...REVIEWS];
+  const allReviews=(()=>{
+    let list=[...allReviewsRaw];
+    if(filter==="photos")list=list.filter(r=>r.photos&&r.photos.length>0);
+    if(filter==="5stars")list=list.filter(r=>r.rating===5);
+    if(filter==="recent")list=list.slice().sort((a,b)=>{if(a.date==="Aujourd'hui")return -1;if(b.date==="Aujourd'hui")return 1;return 0});
+    return list;
+  })();
+  const handleHelpful=(idx)=>{setHelpfulVotes(p=>({...p,[idx]:!p[idx]}));toast.info(helpfulVotes[idx]?"Vote retiré":"Merci ! 👍")};
 
   // Dynamic avg and distribution — recalculates when user adds a review
   const allRatings=allReviews.map(r=>r.rating);
@@ -110,11 +120,23 @@ function ReviewsScr({product:p,onBack}){
     {/* Success toast */}
     {submitted&&<div style={{padding:12,background:"rgba(16,185,129,0.08)",border:"1px solid rgba(16,185,129,0.2)",borderRadius:12,marginBottom:14,display:"flex",alignItems:"center",gap:8,fontSize:13,fontWeight:600,color:"#10B981"}}>✅ Avis publié avec succès !</div>}
 
+
+    {/* Review filters */}
+    <div className="review-filters" style={{display:"flex",gap:6,padding:"4px 0 12px",overflowX:"auto",scrollbarWidth:"none"}} className="hide-scroll">
+      {[["all","Tous",allReviewsRaw.length],["photos","📷 Avec photos",allReviewsRaw.filter(r=>r.photos?.length>0).length],["5stars","⭐ 5 étoiles",allReviewsRaw.filter(r=>r.rating===5).length],["recent","🕐 Récents",allReviewsRaw.length]].map(([k,l,n])=>(
+        <button key={k} onClick={()=>setFilter(k)} style={{flexShrink:0,padding:"6px 12px",borderRadius:20,border:filter===k?"2px solid #F97316":"1px solid var(--border)",background:filter===k?"rgba(249,115,22,0.06)":"var(--card)",color:filter===k?"#F97316":"var(--sub)",fontSize:11,fontWeight:600,cursor:"pointer",fontFamily:"inherit"}}>{l} <span style={{opacity:.6}}>({n})</span></button>
+      ))}
+    </div>
+
     {/* All reviews */}
     {allReviews.map((r,i)=><div key={i} className="review-card" style={r.name==="Moi"?{border:"2px solid rgba(249,115,22,0.2)",background:"rgba(249,115,22,0.02)"}:{}}>
       <div className="review-top">
         <div className="rav" style={{overflow:"hidden",padding:0}}>{r.avatar?.startsWith("http")?<img src={r.avatar} style={{width:"100%",height:"100%",objectFit:"cover"}} alt=""/>:<img src={CHAT_AVATARS.client} style={{width:"100%",height:"100%",objectFit:"cover"}} alt=""/>}</div>
-        <div style={{flex:1}}><h4 style={{fontSize:14,fontWeight:600}}>{r.name}{r.name==="Moi"&&<span style={{fontSize:10,color:"#F97316",marginLeft:6,fontWeight:700}}>VOUS</span>}</h4></div>
+        <div style={{flex:1}}><h4 style={{fontSize:14,fontWeight:600,display:"flex",alignItems:"center",gap:6,flexWrap:"wrap"}}>
+          {r.name}
+          {r.name==="Moi"&&<span style={{fontSize:10,color:"#F97316",fontWeight:700}}>VOUS</span>}
+          {r.verified&&<span style={{display:"inline-flex",alignItems:"center",gap:2,fontSize:9,padding:"2px 6px",borderRadius:5,background:"rgba(59,130,246,0.08)",color:"#3B82F6",fontWeight:700}}>✓ Achat vérifié</span>}
+        </h4></div>
         <span className="rd">{r.date}</span>
       </div>
       <div className="review-stars">{"★".repeat(r.rating)}{"☆".repeat(5-r.rating)}</div>
@@ -127,6 +149,11 @@ function ReviewsScr({product:p,onBack}){
           ))}
         </div>
       )}
+      {/* Helpful counter */}
+      <div style={{marginTop:10,paddingTop:8,borderTop:"1px solid var(--border)",display:"flex",justifyContent:"space-between",alignItems:"center"}}>
+        <button onClick={()=>handleHelpful(i)} style={{display:"inline-flex",alignItems:"center",gap:5,padding:"4px 10px",borderRadius:8,border:"1px solid var(--border)",background:helpfulVotes[i]?"rgba(16,185,129,0.08)":"var(--card)",color:helpfulVotes[i]?"#10B981":"var(--sub)",fontSize:11,fontWeight:600,cursor:"pointer",fontFamily:"inherit"}}>👍 Utile {r.helpful?`(${(r.helpful||0)+(helpfulVotes[i]?1:0)})`:""}</button>
+        {r.rating===5&&<span style={{fontSize:10,color:"#10B981",fontWeight:600}}>Recommande ce produit</span>}
+      </div>
     </div>)}
 
     {/* Image fullscreen viewer */}

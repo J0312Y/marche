@@ -1,3 +1,4 @@
+import Icon from "../../components/Icon";
 import { useState, useEffect } from "react";
 import { getNotifications, onNotifChange, markPushRead, markAllRead as markAllPushRead } from "../../utils/notifStore";
 import { useLoad } from "../../hooks";

@@ -1,8 +1,15 @@
+import { useState } from "react";
 import { fmt, getVendorPromo } from "../../utils/helpers";
 import Img from "../../components/Img";
 import { useData } from "../../hooks";
 
+// Cart onboarding tutorial - shows only on first cart open
+const showCartTutorial = () => {
+  try { return !localStorage.getItem("lk-cart-tutorial"); } catch { return false; }
+};
+
 function CartScr({cart,setCart,go,appliedCoupon,setAppliedCoupon}){
+  const [showTuto,setShowTuto]=useState(showCartTutorial());
   const { VENDORS } = useData();
   const getItem=(c)=>c.product||c;
   const getPrice=(c)=>{const p=getItem(c);const vp=getVendorPromo(p,VENDORS);return vp?vp.promoPrice:(p.price||0)};
@@ -95,6 +102,32 @@ function CartScr({cart,setCart,go,appliedCoupon,setAppliedCoupon}){
     </div>}
 
     <button className="btn-primary" style={{marginTop:14}} onClick={()=>go("checkout")}>Passer la commande</button>
+  </div>}
+
+  {showTuto&&<div onClick={()=>{setShowTuto(false);try{localStorage.setItem("lk-cart-tutorial","1")}catch{}}} style={{position:"fixed",inset:0,background:"rgba(0,0,0,.7)",zIndex:9999,display:"flex",alignItems:"flex-end"}}>
+    <div onClick={e=>e.stopPropagation()} style={{width:"100%",maxWidth:500,margin:"0 auto",background:"var(--card)",borderRadius:"24px 24px 0 0",padding:24}}>
+      <div style={{width:36,height:4,borderRadius:2,background:"var(--border)",margin:"0 auto 16px"}}/>
+      <div style={{textAlign:"center",marginBottom:18}}>
+        <div style={{fontSize:48,marginBottom:8}}>🛒</div>
+        <h3 style={{fontSize:18,fontWeight:800,marginBottom:4}}>Bienvenue dans votre panier !</h3>
+        <p style={{fontSize:12,color:"var(--muted)"}}>Quelques astuces rapides</p>
+      </div>
+      {[
+        {icon:"👈",t:"Glisser pour supprimer",d:"Glissez un article vers la gauche pour le retirer du panier"},
+        {icon:"♡",t:"Sauvegarder pour plus tard",d:"Le cœur met de côté sans supprimer du panier"},
+        {icon:"🤝",t:"Commander en groupe",d:"Partagez avec vos amis et payez chacun votre part"},
+        {icon:"💳",t:"Paiement sécurisé",d:"Airtel, MTN, Orange Money ou cash à la livraison"},
+      ].map((it,i)=>(
+        <div key={i} style={{display:"flex",gap:12,padding:"10px 0",borderBottom:i<3?"1px solid var(--border)":"none"}}>
+          <div style={{fontSize:24}}>{it.icon}</div>
+          <div>
+            <div style={{fontSize:13,fontWeight:700}}>{it.t}</div>
+            <div style={{fontSize:11,color:"var(--muted)",marginTop:2}}>{it.d}</div>
+          </div>
+        </div>
+      ))}
+      <button onClick={()=>{setShowTuto(false);try{localStorage.setItem("lk-cart-tutorial","1")}catch{}}} style={{width:"100%",marginTop:18,padding:14,borderRadius:14,border:"none",background:"#F97316",color:"#fff",fontSize:14,fontWeight:700,cursor:"pointer",fontFamily:"inherit"}}>J'ai compris ✨</button>
+    </div>
   </div>}
   </>);
 }

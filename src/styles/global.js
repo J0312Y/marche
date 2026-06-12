@@ -743,6 +743,12 @@ input,textarea,select{font-size:16px !important}
   to { opacity: 1; transform: scale(1) }
 }
 .lightbox-in { animation: lightboxIn .25s cubic-bezier(.4,0,.2,1) }
+
+/* Empty state floating animation */
+@keyframes emptyBounce {
+  0%,100% { transform: translateY(0) }
+  50% { transform: translateY(-8px) }
+}
 `;
 
 export default CSS;

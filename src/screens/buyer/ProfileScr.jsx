@@ -1,3 +1,6 @@
+import Icon from "../../components/Icon";
+import { fmt } from "../../utils/helpers";
+import { getLevel } from "../../data/loyalty";
 
 import PullToRefresh from "../../components/PullToRefresh";
 import toast from "../../utils/toast";
@@ -76,16 +79,31 @@ function ProfileScr({go,userRole,vendorPlan,vendorStatus,driverStatus,onLogout,o
       <span style={{color:"var(--muted)"}}>›</span>
     </div>}
 
+    {/* Lamuka Points hero card */}
+    {(()=>{const lp=(()=>{try{return JSON.parse(localStorage.getItem("lk-loyalty")||"{}")}catch{return{}}})();const pts=lp.points??2450;const lvl=getLevel(lp.lifetimePoints??8200);return(
+    <div className="lamuka-points-card" onClick={()=>go("loyalty")} style={{margin:"0 16px 14px",padding:16,background:`linear-gradient(135deg, ${lvl.color}22 0%, ${lvl.color}08 100%)`,border:`2px solid ${lvl.color}33`,borderRadius:16,cursor:"pointer",display:"flex",alignItems:"center",gap:12}}>
+      <div style={{fontSize:32}}>{lvl.icon}</div>
+      <div style={{flex:1}}>
+        <div style={{fontSize:10,color:lvl.color,fontWeight:800,letterSpacing:.5}}>NIVEAU {lvl.name.toUpperCase()}</div>
+        <div style={{fontSize:20,fontWeight:800,color:lvl.color,marginTop:2}}>{pts.toLocaleString()} pts</div>
+        <div style={{fontSize:11,color:"var(--muted)"}}>≈ {fmt(pts)} de réduction</div>
+      </div>
+      <span style={{fontSize:18,color:"var(--muted)"}}>›</span>
+    </div>
+    )})()}
+
     {/* ══════ SECTIONS ══════ */}
 
     <Section title="📦 Mes achats">
       <Item icon="🛍️" label={t("profile.orders")} info="3" onClick={()=>go("orders")}/>
+      <Item icon="🔁" label="Abonnements" info="2 actifs" onClick={()=>go("subscriptions")}/>
       <Item icon="♡" label={t("profile.favorites")} info="5" onClick={()=>go("wishlist")}/>
       <Item icon="💳" label={t("profile.payment_history")} info="7" onClick={()=>go("paymentHistory")}/>
     </Section>
 
     <Section title="💰 Mon compte">
       <Item icon="⭐" label="Fidélité" info="3 450 pts" onClick={()=>go("loyalty")}/>
+      <Item icon="🎫" label="Mes promos" info="6 codes" onClick={()=>go("promos")}/>
       <Item icon="🎁" label="Parrainage" info="4 000 F gagnés" onClick={()=>go("referral")}/>
       <Item icon="🎁" label="Cartes cadeaux" onClick={()=>go("giftCard")}/>
     </Section>

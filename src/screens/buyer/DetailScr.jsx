@@ -1,3 +1,4 @@
+import Icon from "../../components/Icon";
 import { useState, useEffect } from "react";
 import Img from "../../components/Img";
 import { BackButton, FavButton } from "../../components/BackButton";
@@ -46,6 +47,16 @@ const getSpecs=(p)=>{
     ["⚖️","Poids","Variable"],
     ["🛡️","Garantie","Selon vendeur"],
   ];
+};
+
+// Track recently viewed products
+const trackRecentlyViewed = (productId) => {
+  try {
+    const list = JSON.parse(localStorage.getItem("lk-recently-viewed") || "[]");
+    const filtered = list.filter(id => id !== productId);
+    filtered.unshift(productId);
+    localStorage.setItem("lk-recently-viewed", JSON.stringify(filtered.slice(0, 12)));
+  } catch {}
 };
 
 function DetailScr({product:rawP,onBack,onAddCart,go,favs,toggleFav,isFav}){
@@ -123,7 +134,7 @@ function DetailScr({product:rawP,onBack,onAddCart,go,favs,toggleFav,isFav}){
         <div style={{position:"absolute",top:12,left:12,right:12,display:"flex",justifyContent:"space-between",zIndex:6}}>
           <BackButton onClick={e=>{e.stopPropagation();onBack()}} />
           <div style={{display:"flex",gap:8}}>
-            <button onClick={e=>{e.stopPropagation();shareProduct(p)}} style={{width:40,height:40,borderRadius:14,background:"rgba(255,255,255,0.95)",backdropFilter:"blur(12px)",border:"1px solid rgba(255,255,255,0.4)",boxShadow:"0 4px 16px rgba(0,0,0,0.08)",cursor:"pointer",display:"flex",alignItems:"center",justifyContent:"center",fontSize:16}}>📤</button>
+            <button onClick={e=>{e.stopPropagation();shareProduct(p)}} style={{width:40,height:40,borderRadius:14,background:"rgba(255,255,255,0.95)",backdropFilter:"blur(12px)",border:"1px solid rgba(255,255,255,0.4)",boxShadow:"0 4px 16px rgba(0,0,0,0.08)",cursor:"pointer",display:"flex",alignItems:"center",justifyContent:"center",fontSize:16}}><Icon name="share" size={16}/></button>
             <FavButton active={isFav(p.id)} onClick={e=>{e.stopPropagation();toggleFav(p.id)}} />
           </div>
         </div>
@@ -142,6 +153,27 @@ function DetailScr({product:rawP,onBack,onAddCart,go,favs,toggleFav,isFav}){
         {disc(p)>0&&<span className="badge" style={{position:"absolute",bottom:22,left:14,zIndex:5}}>-{disc(p)}%</span>}
         {allPhotos.length>1&&<div style={{position:"absolute",bottom:22,right:14,background:"rgba(0,0,0,.55)",color:"#fff",padding:"4px 10px",borderRadius:8,fontSize:11,fontWeight:600,backdropFilter:"blur(8px)",zIndex:5}}>{photoIdx+1}/{allPhotos.length}</div>}
       </div>
+
+          {/* FOMO badges — urgency + social proof */}
+    {(()=>{
+      const seed=(p.id||"").split("").reduce((a,c)=>a+c.charCodeAt(0),0);
+      const viewers=8+(seed%18);
+      const stock=2+(seed%6);
+      const soldToday=3+(seed%12);
+      const hasLowStock=seed%3===0;
+      const hasHotProduct=p.rating>=4.5||(seed%5===0);
+      return(
+        <div className="fomo-badges" style={{display:"flex",gap:6,padding:"12px 16px 0",flexWrap:"wrap",overflowX:"auto"}}>
+          <div style={{display:"flex",alignItems:"center",gap:5,padding:"5px 10px",borderRadius:8,background:"rgba(239,68,68,0.08)",fontSize:11,fontWeight:600,color:"#EF4444",whiteSpace:"nowrap"}}>
+            <span style={{width:6,height:6,borderRadius:3,background:"#EF4444",animation:"pulse 1.5s infinite"}}/>
+            🔥 {viewers} personnes regardent
+          </div>
+          {hasLowStock&&<div style={{padding:"5px 10px",borderRadius:8,background:"rgba(245,158,11,0.08)",fontSize:11,fontWeight:600,color:"#F59E0B",whiteSpace:"nowrap"}}>⚡ Plus que {stock} en stock !</div>}
+          <div style={{padding:"5px 10px",borderRadius:8,background:"rgba(16,185,129,0.08)",fontSize:11,fontWeight:600,color:"#10B981",whiteSpace:"nowrap"}}>✓ Vendu {soldToday}× aujourd'hui</div>
+          {hasHotProduct&&<div style={{padding:"5px 10px",borderRadius:8,background:"rgba(249,115,22,0.08)",fontSize:11,fontWeight:600,color:"#F97316",whiteSpace:"nowrap"}}>🏆 Best-seller</div>}
+        </div>
+      );
+    })()}
 
       <div className="det-body">
         {/* Vendor + Name */}
@@ -390,6 +422,44 @@ function DetailScr({product:rawP,onBack,onAddCart,go,favs,toggleFav,isFav}){
           <span style={{color:"var(--muted)",fontSize:18}}>›</span>
         </div>
       </div>
+        {/* "Pour vous" — related products */}
+        {(()=>{
+      const related=P.filter(x=>x.id!==p.id&&(x.cat===p.cat||x.vendor===p.vendor||Math.abs(x.price-p.price)<p.price*0.4)).slice(0,8);
+      if(related.length===0)return null;
+      return(
+        <div style={{padding:"16px 0 8px"}}>
+          <div style={{display:"flex",justifyContent:"space-between",alignItems:"center",padding:"0 16px 12px"}}>
+            <h3 style={{fontSize:16,fontWeight:800}}>✨ Pourrait vous intéresser</h3>
+            <span onClick={()=>go("allProducts")} style={{fontSize:12,color:"#F97316",fontWeight:600,cursor:"pointer"}}>Voir tout</span>
+          </div>
+          <div style={{display:"flex",gap:10,overflowX:"auto",padding:"0 16px 8px",scrollbarWidth:"none"}} className="hide-scroll">
+            {related.map(r=>{
+              const rPromo=getVendorPromo(r,VENDORS);
+              const rPrice=rPromo?rPromo.promoPrice:r.price;
+              return(
+                <div key={r.id} onClick={()=>go("detail",r)} style={{flexShrink:0,width:140,cursor:"pointer"}}>
+                  <div style={{width:140,height:140,borderRadius:14,overflow:"hidden",background:"var(--light)",position:"relative"}}>
+                    <Img src={r.photo} emoji={r.img} style={{width:"100%",height:"100%"}} fit="cover"/>
+                    {r.old&&<span style={{position:"absolute",top:8,left:8,padding:"3px 7px",borderRadius:6,background:"#EF4444",color:"#fff",fontSize:10,fontWeight:800}}>-{Math.round((1-r.price/r.old)*100)}%</span>}
+                    <span onClick={e=>{e.stopPropagation();toggleFav(r.id)}} style={{position:"absolute",top:8,right:8,width:28,height:28,borderRadius:"50%",background:"rgba(255,255,255,0.95)",display:"flex",alignItems:"center",justifyContent:"center",fontSize:14,color:isFav(r.id)?"#EF4444":"var(--muted)",cursor:"pointer"}}>{isFav(r.id)?"♥":"♡"}</span>
+                  </div>
+                  <div style={{padding:"8px 4px 0"}}>
+                    <h4 style={{fontSize:12,fontWeight:600,lineHeight:1.3,overflow:"hidden",textOverflow:"ellipsis",display:"-webkit-box",WebkitLineClamp:2,WebkitBoxOrient:"vertical",height:32}}>{r.name}</h4>
+                    <div style={{fontSize:10,color:"var(--muted)",marginTop:3,overflow:"hidden",whiteSpace:"nowrap",textOverflow:"ellipsis"}}>{r.vendor}</div>
+                    <div style={{display:"flex",alignItems:"baseline",gap:5,marginTop:4}}>
+                      <span style={{fontSize:13,fontWeight:800,color:"#F97316"}}>{fmt(rPrice)}</span>
+                      {r.old&&<span style={{fontSize:10,color:"var(--muted)",textDecoration:"line-through"}}>{fmt(r.old)}</span>}
+                    </div>
+                    <div style={{fontSize:10,color:"#F59E0B",marginTop:3}}>⭐ {r.rating} <span style={{color:"var(--muted)"}}>({r.reviews})</span></div>
+                  </div>
+                </div>
+              );
+            })}
+          </div>
+        </div>
+      );
+        })()}
+
     </div>
 
     {/* Bottom bar */}

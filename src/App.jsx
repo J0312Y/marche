@@ -1,6 +1,7 @@
 import { useState } from "react";
 import CSS from "./styles/global";
 import t from "./utils/i18n";
+import Icon from "./components/Icon";
 import { AppProvider, useApp } from "./context/AppContext";
 import { SplashScr, OnboardingScr, LoginScr, OTPScr, ProfileCompletionScr } from "./screens/auth";
 import ShareSheet from "./components/ShareSheet";
@@ -26,9 +27,9 @@ function AppInner() {
     : authStep === 'otp' ? 3 : authStep === 'profile' ? 4 : authStep === 'ready' ? 5 : authStep === 'loading' ? -1 : 0;
 
   const showNav = !screen && auth === 5;
-  const buyerTabs = [{ icon: "🏠", label: t("nav.home") }, { icon: "🔍", label: t("nav.search") }, { icon: "🛍️", label: t("nav.cart") }, { icon: "📦", label: t("nav.orders") }, { icon: "👤", label: t("nav.profile") }];
-  const vendorTabs = [{ icon: "📊", label: "Dashboard" }, { icon: "📦", label: "Commandes" }, { icon: "➕", label: "Ajouter" }, { icon: "💬", label: "Messages" }, { icon: "🏪", label: "Commerce" }];
-  const driverTabs = [{ icon: "🏠", label: "Accueil" }, { icon: "📦", label: "Livraisons" }, { icon: "💰", label: "Gains" }, { icon: "🔔", label: "Notifs" }, { icon: "👤", label: "Profil" }];
+  const buyerTabs = [{ icon: "home", label: t("nav.home") }, { icon: "search", label: t("nav.search") }, { icon: "cart", label: t("nav.cart") }, { icon: "package", label: t("nav.orders") }, { icon: "user", label: t("nav.profile") }];
+  const vendorTabs = [{ icon: "dashboard", label: "Dashboard" }, { icon: "package", label: "Commandes" }, { icon: "plus", label: "Ajouter" }, { icon: "chat", label: "Messages" }, { icon: "store", label: "Commerce" }];
+  const driverTabs = [{ icon: "home", label: "Accueil" }, { icon: "package", label: "Livraisons" }, { icon: "wallet", label: "Gains" }, { icon: "bell", label: "Notifs" }, { icon: "user", label: "Profil" }];
   const tabs = mode === "buyer" ? buyerTabs : mode === "vendor" ? vendorTabs : driverTabs;
   const activeTab = mode === "buyer" ? tab : mode === "vendor" ? vTab : dTab;
   const modeBadge = mode === "vendor" ? { bg: "#F97316", label: "MODE VENDEUR" } : mode === "driver" ? { bg: "#10B981", label: "MODE LIVREUR" } : null;
@@ -84,7 +85,7 @@ function AppInner() {
                 if (isCart) return (
                   <button key={i} onClick={() => { setTab(i); setScreen(null); setHistory([]); }} style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 2, border: "none", background: "transparent", cursor: "pointer", fontFamily: "inherit", marginTop: -28, position: "relative", zIndex: 10 }}>
                     <div style={{ width: 56, height: 56, borderRadius: 28, background: isActive ? "linear-gradient(135deg,#F97316,#EA580C)" : "linear-gradient(135deg,#F97316,#FDBA74)", display: "flex", alignItems: "center", justifyContent: "center", fontSize: 24, boxShadow: isActive ? "0 6px 20px rgba(249,115,22,.45)" : "0 4px 14px rgba(249,115,22,.3)", border: "4px solid var(--card)", transition: "all .2s", position: "relative" }}>
-                      🛍️
+                      <Icon name="cart" size={24} color="#fff"/>
                       {cartCount > 0 && <span style={{ position: "absolute", top: -4, right: -4, background: "#EF4444", color: "#fff", fontSize: 9, fontWeight: 700, borderRadius: 10, padding: "1px 5px", minWidth: 16, textAlign: "center", animation: "badgePop .3s ease" }} key={cartCount}>{cartCount}</span>}
                     </div>
                     <span style={{ fontSize: 9, fontWeight: 600, color: isActive ? "#F97316" : "var(--muted)", marginTop: 1 }}>{isActive && t.label}</span>
@@ -92,7 +93,7 @@ function AppInner() {
                 );
                 return (
                   <button key={i} className={`bni ${isActive ? "on" : ""}`} onClick={() => { mode === "buyer" ? setTab(i) : mode === "vendor" ? setVTab(i) : setDTab(i); setScreen(null); setHistory([]); }}>
-                    <span className="bico">{t.icon}</span>{isActive && t.label}
+                    <span className="bico"><Icon name={t.icon} size={20} color={isActive?"#F97316":"var(--muted)"}/></span>{isActive && t.label}
                   </button>
                 );
               })}</div>}

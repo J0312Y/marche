@@ -12,7 +12,7 @@ import {
   NotifScr, ProfileScr, EditProfileScr, AddressesScr,
   LanguageScr, CurrencyScr, PasswordScr, RechargeScr, WithdrawScr,
   VendorScr, RoleRegScr, RegStatusScr, LiveWatchScr, GroupOrderScr, PaymentHistoryScr, RateDriverScr,
-  ReferralScr, LoyaltyScr, ReturnScr, GiftCardScr, QRScanScr, ChatBotScr, MyStatsScr, BecomeSellerScr, PriceAlertScr, ImageSearchScr, GamificationScr, GroupBuyScr
+  ReferralScr, LoyaltyScr, SubscriptionsScr, PromosScr, ReturnScr, GiftCardScr, QRScanScr, ChatBotScr, MyStatsScr, BecomeSellerScr, PriceAlertScr, ImageSearchScr, GamificationScr, GroupBuyScr
 } from "../screens/buyer";
 import { SettingsScr, HelpScr, AboutScr, TermsScr, PrivacyScr, DeliveryPolicyScr } from "../screens/common";
 
@@ -81,6 +81,8 @@ export default function BuyerScreens() {
     case "password": return <PasswordScr onBack={back} />;
     case "paymentHistory": return <PaymentHistoryScr onBack={back} />;
     case "rateDriver": return <RateDriverScr onBack={back} driver={data} onDone={goHome} />;
+    case "promos": return <PromosScr onBack={back} go={go} />;
+    case "subscriptions": return <SubscriptionsScr onBack={back} go={go} />;
     case "referral": return <ReferralScr onBack={back} />;
     case "loyalty": return <LoyaltyScr onBack={back} />;
     case "returnOrder": return <ReturnScr onBack={back} order={data} />;

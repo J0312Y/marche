@@ -64,6 +64,19 @@ function OrderDetailScr({order:o,onBack,go}){
     </div>}
 
     {/* Items */}
+    {/* Reorder CTA — for delivered orders */}
+    {(o.status==="delivered"||o.status==="completed"||!o.status)&&<div style={{margin:"16px 16px 8px",padding:14,background:"linear-gradient(135deg,rgba(249,115,22,0.06),rgba(249,115,22,0.02))",border:"1px solid rgba(249,115,22,0.2)",borderRadius:14,display:"flex",alignItems:"center",gap:12}}>
+      <div style={{fontSize:28}}>🔄</div>
+      <div style={{flex:1}}>
+        <div style={{fontSize:13,fontWeight:700}}>Commander à nouveau ?</div>
+        <div style={{fontSize:11,color:"var(--muted)"}}>Les mêmes articles en 1 clic</div>
+      </div>
+      <div style={{display:"flex",gap:6}}>
+        <button onClick={()=>{go("subscriptions")}} style={{padding:"8px 12px",borderRadius:10,border:"1px solid var(--border)",background:"transparent",color:"var(--text)",fontSize:11,fontWeight:700,cursor:"pointer",fontFamily:"inherit"}}>🔁 M'abonner</button>
+        <button onClick={()=>{toast.success("🛒 Articles ajoutés au panier !");setTimeout(()=>go("cart"),800)}} style={{padding:"8px 14px",borderRadius:10,border:"none",background:"#F97316",color:"#fff",fontSize:12,fontWeight:700,cursor:"pointer",fontFamily:"inherit"}}>Recommander</button>
+      </div>
+    </div>}
+
     <div style={{marginBottom:12}}>
       <div style={{fontSize:14,fontWeight:700,marginBottom:10}}>Articles</div>
       {o.items.map((item,i)=>{const ph=findPhoto(item);return<div key={i} style={{padding:10,background:"var(--card)",border:"1px solid var(--border)",borderRadius:14,marginBottom:8,fontSize:14,fontWeight:500,display:"flex",alignItems:"center",gap:10}}>

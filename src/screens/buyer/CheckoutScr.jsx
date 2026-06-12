@@ -35,6 +35,19 @@ function CheckoutScr({onBack,onDone,cart=[],clearCart,appliedCoupon,setAppliedCo
   };
   const validateCheckout=()=>{if(!momo){toast.error("Choisissez un moyen de paiement");return false}return true};
   const handleConfirm=()=>{
+    /* Award Lamuka Points: 1 point per 100 F */
+    try{
+      const earned=Math.floor(total/100);
+      const lp=JSON.parse(localStorage.getItem("lk-loyalty")||"{}");
+      const newLp={
+        points:(lp.points??2450)+earned,
+        lifetimePoints:(lp.lifetimePoints??8200)+earned,
+        streakDays:lp.streakDays??4,
+        lastCheckIn:lp.lastCheckIn,
+      };
+      localStorage.setItem("lk-loyalty",JSON.stringify(newLp));
+      window.__lastPointsEarned=earned;
+    }catch{}
     setOk(true);setOkAnimShown(false);if(saveAddr)toast.info("Adresse sauvegardée 📍");
     if(setAppliedCoupon) setAppliedCoupon(null);
     if(clearCart) clearCart();
@@ -111,7 +124,7 @@ function CheckoutScr({onBack,onDone,cart=[],clearCart,appliedCoupon,setAppliedCo
       <div style={{paddingTop:24,paddingBottom:16}}><button className="btn-primary" onClick={()=>{if(step===0&&!validateStep0())return;if(step===1&&momo!=="cash"){const err=validatePayPhone(ckPhone,momo);if(err){setCkPhoneErr(err);return}}if(step===2){if(validateCheckout())handleConfirm()}else setStep(step+1)}}>{step===2?"Confirmer le paiement":"Continuer"}</button></div>
     </div>
 
-    {ok&&!okAnimShown&&<SuccessAnimation title="Commande confirmée !" subtitle={"Total : "+fmt(total)} hint="Préparation du reçu..." duration={2000} onDone={()=>setOkAnimShown(true)}/>}
+    {ok&&!okAnimShown&&<SuccessAnimation title="Commande confirmée !" subtitle={"Total : "+fmt(total)} hint={`+${window.__lastPointsEarned||Math.floor(total/100)} Lamuka Points gagnés ! 🎁`} duration={2000} onDone={()=>setOkAnimShown(true)}/>}
     {ok&&okAnimShown&&<div className="success-modal"><div className="success-box bounce-in"><div className="si">✅</div><h2>Commande confirmée !</h2><p>{momo==="cash"?"Préparez le montant exact pour le livreur.":"Vérifiez votre téléphone pour le paiement."}</p><div className="ref">#LMK-2026-0214</div>
       {appliedCoupon&&<div style={{fontSize:12,color:"#F97316",fontWeight:600,marginTop:8}}>🏷️ Code {appliedCoupon.code} appliqué</div>}
       <button className="btn-primary" onClick={onDone}>Retour à l'accueil</button></div></div>}

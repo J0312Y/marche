@@ -1,3 +1,5 @@
+import Icon from "../../components/Icon";
+import StoriesCarousel from "../../components/StoriesCarousel";
 import { useState, useEffect } from "react";
 import Img from "../../components/Img";
 import { useData } from "../../hooks";
@@ -10,10 +12,9 @@ import { fmt, disc, getVendorPromo, totalDisc, effectivePrice } from "../../util
 
 function HomeScr({go,favs,toggleFav,isFav,userName}){
   const { P, VENDORS, CATS, loading: dataLoading, reload } = useData();
-  const { cartCount, lang, recentlyViewed, seenStories, markStorySeen } = useApp();
+  const { cartCount, lang, recentlyViewed } = useApp();
   const [selCat,setSC]=useState(0);
   const [selType,setSelType]=useState("all");
-  const [storyViewer,setStoryViewer]=useState(null);
   const [homeQ,setHomeQ]=useState("");
   const [imgSearching,setImgSearching]=useState(false);
   const [favAnim,setFavAnim]=useState(null);
@@ -75,7 +76,7 @@ function HomeScr({go,favs,toggleFav,isFav,userName}){
     <PullToRefresh onRefresh={reload}><div className="scr">
       {/* Header - only show when not in search */}
       {!inSearchMode&&<div className="hdr"><div><div className="hdr-t">{t("home.hello")}{userName?" "+userName:""} 👋</div><div className="hdr-h">Lamuka Market</div></div>
-        <div className="hdr-r"><div className="hdr-btn" onClick={()=>go("notif")}>🔔<div className="notif-badge"/></div><div className="hdr-btn" onClick={()=>go("cart")} style={{position:"relative"}}>🛍️{cartCount>0&&<span style={{position:"absolute",top:-4,right:-4,background:"#EF4444",color:"var(--card)",fontSize:9,fontWeight:700,borderRadius:10,padding:"1px 5px",minWidth:16,textAlign:"center"}}>{cartCount}</span>}</div></div></div>}
+        <div className="hdr-r"><div className="hdr-btn" onClick={()=>go("notif")} style={{position:"relative"}}><Icon name="bell" size={20}/><div className="notif-badge"/></div><div className="hdr-btn" onClick={()=>go("cart")} style={{position:"relative"}}><Icon name="cart" size={20}/>{cartCount>0&&<span style={{position:"absolute",top:-4,right:-4,background:"#EF4444",color:"var(--card)",fontSize:9,fontWeight:700,borderRadius:10,padding:"1px 5px",minWidth:16,textAlign:"center"}}>{cartCount}</span>}</div></div></div>}
 
       {/* Search bar */}
       <div style={{display:"flex",alignItems:"center",gap:8,padding:inSearchMode?"14px 16px 10px":"0 16px 12px",marginTop:inSearchMode?0:10}}>
@@ -86,11 +87,28 @@ function HomeScr({go,favs,toggleFav,isFav,userName}){
           {homeQ&&<span style={{cursor:"pointer",color:"var(--muted)",fontSize:12,flexShrink:0}} onClick={()=>setHomeQ("")}>✕</span>}
           {!homeQ&&<span style={{cursor:"pointer",fontSize:16,flexShrink:0,opacity:.5}} onClick={()=>setShowCamMenu(true)}>📷</span>}
         </div>
+        <button onClick={()=>toast.info("Dites votre recherche...")} style={{width:38,height:38,borderRadius:12,border:"none",background:"var(--light)",cursor:"pointer",display:"flex",alignItems:"center",justifyContent:"center",flexShrink:0,marginRight:6,color:"var(--text)"}}><Icon name="mic" size={18}/></button>
         <button onClick={()=>setShowFilter(!showFilter)} style={{width:38,height:38,borderRadius:12,border:"none",background:showFilter?"#F97316":(filterType!=="all"||filterSort!=="popular")?"rgba(249,115,22,0.1)":"var(--light)",cursor:"pointer",fontSize:15,display:"flex",alignItems:"center",justifyContent:"center",flexShrink:0,transition:"all .2s",position:"relative"}}>
-          <span style={{filter:showFilter?"brightness(10)":"none"}}>⚙️</span>
+          <Icon name="filter" size={18} color={showFilter?"#fff":"var(--text)"}/>
           {(filterType!=="all"||filterSort!=="popular")&&!showFilter&&<div style={{position:"absolute",top:2,right:2,width:8,height:8,borderRadius:4,background:"#EF4444"}}/>}
         </button>
       </div>
+
+
+      {/* Promos rapide */}
+      <div style={{padding:"4px 16px 12px"}}>
+        <div onClick={()=>go("promos")} className="mes-promos-pill" style={{padding:"10px 12px",background:"linear-gradient(135deg,rgba(249,115,22,0.08),rgba(236,72,153,0.08))",border:"1px solid rgba(249,115,22,0.2)",borderRadius:12,cursor:"pointer",display:"flex",alignItems:"center",gap:10}}>
+          <div style={{fontSize:22}}>🎁</div>
+          <div style={{flex:1}}>
+            <div style={{fontSize:12,fontWeight:700}}>Vous avez 3 promos perso 🎉</div>
+            <div style={{fontSize:10,color:"var(--muted)"}}>Codes BIRTHDAY2026, JOELDY10, WELCOMEBACK...</div>
+          </div>
+          <span style={{color:"#F97316",fontSize:16}}>›</span>
+        </div>
+      </div>
+
+      {/* Stories carousel */}
+      <StoriesCarousel vendors={VENDORS} go={go} />
 
       {/* Active filter indicator */}
       {!showFilter&&(filterType!=="all"||filterSort!=="popular")&&<div style={{display:"flex",alignItems:"center",gap:6,padding:"0 16px 8px"}}>
@@ -289,25 +307,6 @@ function HomeScr({go,favs,toggleFav,isFav,userName}){
         </div>
       </>:null})()}
 
-      {/* ═══ STORIES ═══ */}
-      <div style={{display:"flex",gap:12,padding:"0 16px 10px",overflowX:"auto",scrollbarWidth:"none",WebkitOverflowScrolling:"touch"}}>
-        {[...VENDORS.filter(v=>v.verified)].sort((a,b)=>{
-          const aSeen=seenStories.includes(a.id);const bSeen=seenStories.includes(b.id);
-          if(aSeen&&!bSeen)return 1;if(!aSeen&&bSeen)return -1;return 0;
-        }).slice(0,6).map((v,i)=>{
-          const seen=seenStories.includes(v.id);
-          return(<div key={"story-"+v.id} onClick={()=>{markStorySeen(v.id);setStoryViewer({vendor:v,index:i})}} style={{flexShrink:0,textAlign:"center",cursor:"pointer",width:60}}>
-            <div style={{width:52,height:52,borderRadius:16,padding:2,background:seen?"var(--border)":"linear-gradient(135deg,#F97316,#FB923C,#F59E0B)",margin:"0 auto 4px",opacity:seen?.5:1,transition:"opacity .3s"}}>
-              <div style={{width:"100%",height:"100%",borderRadius:14,overflow:"hidden",border:"2px solid var(--bg)"}}>
-                {v.logo?<img src={v.logo} style={{width:"100%",height:"100%",objectFit:"cover"}} alt=""/>:<div style={{width:"100%",height:"100%",background:"var(--light)",display:"flex",alignItems:"center",justifyContent:"center",fontSize:16}}>{v.avatar}</div>}
-              </div>
-            </div>
-            <div style={{fontSize:9,fontWeight:seen?500:600,color:seen?"var(--muted)":"var(--text)",overflow:"hidden",whiteSpace:"nowrap",textOverflow:"ellipsis"}}>{v.name.split(" ")[0]}</div>
-          </div>);
-        })}
-      </div>
-
-
       {/* Group Buy promo */}
       <div onClick={()=>go("groupBuy")} style={{margin:"0 16px 14px",padding:12,background:"linear-gradient(135deg,rgba(249,115,22,0.06),rgba(251,146,60,0.06))",border:"1px solid rgba(249,115,22,0.12)",borderRadius:14,display:"flex",alignItems:"center",gap:10,cursor:"pointer"}}>
         <div style={{width:38,height:38,borderRadius:12,background:"#F97316",display:"flex",alignItems:"center",justifyContent:"center",fontSize:18,flexShrink:0}}>🤝</div>
@@ -317,6 +316,29 @@ function HomeScr({go,favs,toggleFav,isFav,userName}){
 
       {/* Restos à la une */}
       {(selType==="all"||selType==="restaurant")&&nearbyRestos.length>0&&<>
+      {/* Events / promos banner */}
+      {(()=>{
+        const now=new Date();
+        const month=now.getMonth();
+        const day=now.getDate();
+        let event=null;
+        if(month===10&&day>=20&&day<=30)event={icon:"🛍️",title:"Black Friday Lamuka",sub:"Jusqu'à -70% partout",bg:"linear-gradient(135deg,#000,#1F2937)",text:"#fff",badge:"-70%"};
+        else if(month===7&&day>=10&&day<=20)event={icon:"🇨🇬",title:"Indépendance Congo",sub:"Spéciales fête nationale",bg:"linear-gradient(135deg,#10B981,#F97316,#EF4444)",text:"#fff",badge:"NEW"};
+        else if(month===11&&day>=15)event={icon:"🎄",title:"Spéciales Fêtes",sub:"Cadeaux à prix doux",bg:"linear-gradient(135deg,#DC2626,#16A34A)",text:"#fff"};
+        else event={icon:"🎁",title:"Promo spéciale",sub:"Code WEEKEND15 — -15% restos",bg:"linear-gradient(135deg,#F97316,#EC4899)",text:"#fff",badge:"-15%"};
+        return(
+          <div onClick={()=>go("allProducts")} style={{margin:"4px 16px 14px",padding:14,background:event.bg,borderRadius:14,color:event.text,cursor:"pointer",display:"flex",alignItems:"center",gap:12,position:"relative",overflow:"hidden"}}>
+            <div style={{position:"absolute",top:-20,right:-20,fontSize:90,opacity:.15}}>{event.icon}</div>
+            <div style={{fontSize:32,zIndex:1}}>{event.icon}</div>
+            <div style={{flex:1,zIndex:1,minWidth:0}}>
+              <div style={{fontSize:14,fontWeight:800}}>{event.title}</div>
+              <div style={{fontSize:11,opacity:.9,marginTop:2}}>{event.sub}</div>
+            </div>
+            {event.badge&&<div style={{padding:"4px 8px",borderRadius:6,background:"rgba(255,255,255,.25)",backdropFilter:"blur(8px)",fontSize:10,fontWeight:800,zIndex:1}}>{event.badge}</div>}
+          </div>
+        );
+      })()}
+
         <div className="sec"><h3>🍽️ Commander à manger</h3><span onClick={()=>go("restoList")}>Voir tout</span></div>
         <div className="marquee-wrap"><div className="marquee-track-resto">
           {[...nearbyRestos,...nearbyRestos].map((v,i)=><div key={v.id+"-"+i} style={{minWidth:170,padding:12,background:"var(--card)",border:"1px solid var(--border)",borderRadius:14,cursor:"pointer",flexShrink:0}} onClick={()=>go("vendor",v)}>
@@ -354,53 +376,7 @@ function HomeScr({go,favs,toggleFav,isFav,userName}){
       </>}
     </div></PullToRefresh>
 
-    {/* ═══ STORY VIEWER ═══ */}
-    {storyViewer&&(()=>{
-      const storyVendors=[...VENDORS.filter(v=>v.verified)].sort((a,b)=>{
-        const aSeen=seenStories.includes(a.id);const bSeen=seenStories.includes(b.id);
-        if(aSeen&&!bSeen)return 1;if(!aSeen&&bSeen)return -1;return 0;
-      }).slice(0,6);
-      const sv=storyViewer.vendor;
-      const promoText=sv.promo?`🏷️ ${sv.promo.name} · -${sv.promo.discount}% jusqu'au ${sv.promo.ends}`:`⭐ ${sv.rating}/5 · ${sv.products} articles · ${sv.followers} abonnés`;
-      return(<div style={{position:"absolute",inset:0,background:"#000",zIndex:200,display:"flex",flexDirection:"column",borderRadius:"inherit",overflow:"hidden"}}>
-        {/* Progress bars */}
-        <div style={{display:"flex",gap:3,padding:"8px 12px",zIndex:10}}>
-          {storyVendors.map((v,i)=><div key={v.id} style={{flex:1,height:2,borderRadius:1,background:"rgba(255,255,255,.25)",overflow:"hidden"}}>
-            <div style={{height:"100%",background:"var(--card)",width:i<storyViewer.index?"100%":i===storyViewer.index?"100%":"0%",borderRadius:1}}/>
-          </div>)}
-        </div>
-        {/* Header */}
-        <div style={{display:"flex",alignItems:"center",gap:10,padding:"4px 14px 10px",zIndex:10}}>
-          <div style={{width:36,height:36,borderRadius:12,overflow:"hidden",border:"2px solid #fff"}}>
-            {sv.logo?<img src={sv.logo} style={{width:"100%",height:"100%",objectFit:"cover"}} alt=""/>:<div style={{width:"100%",height:"100%",background:"#333",display:"flex",alignItems:"center",justifyContent:"center",fontSize:14}}>{sv.avatar}</div>}
-          </div>
-          <div style={{flex:1}}>
-            <div style={{fontSize:13,fontWeight:700,color:"#fff"}}>{sv.name} {sv.verified&&<span style={{color:"#F97316"}}>✓</span>}</div>
-            <div style={{fontSize:10,color:"rgba(255,255,255,.6)"}}>Il y a {storyViewer.index+1}h · 📍 {sv.loc}</div>
-          </div>
-          <button onClick={()=>setStoryViewer(null)} style={{width:32,height:32,borderRadius:10,background:"rgba(255,255,255,.15)",border:"none",color:"#fff",fontSize:16,cursor:"pointer",display:"flex",alignItems:"center",justifyContent:"center"}}>✕</button>
-        </div>
-        {/* Image */}
-        <div style={{flex:1,position:"relative",overflow:"hidden"}}>
-          {sv.cover?<img src={sv.cover} style={{width:"100%",height:"100%",objectFit:"cover"}} alt=""/>:<div style={{width:"100%",height:"100%",background:"linear-gradient(135deg,#F97316,#FB923C)"}}/>}
-          <div style={{position:"absolute",inset:0,background:"linear-gradient(transparent 50%,rgba(0,0,0,.7))"}}/>
-          {/* Text overlay */}
-          <div style={{position:"absolute",bottom:0,left:0,right:0,padding:20}}>
-            <div style={{fontSize:18,fontWeight:800,color:"#fff",marginBottom:6}}>{sv.name}</div>
-            <div style={{fontSize:13,color:"rgba(255,255,255,.85)",lineHeight:1.5,marginBottom:4}}>{sv.desc}</div>
-            <div style={{fontSize:12,color:"#F59E0B",fontWeight:600}}>{promoText}</div>
-          </div>
-          {/* Tap zones */}
-          <div onClick={()=>{const idx=storyViewer.index-1;if(idx>=0){markStorySeen(storyVendors[idx].id);setStoryViewer({vendor:storyVendors[idx],index:idx})}else setStoryViewer(null)}} style={{position:"absolute",left:0,top:0,bottom:0,width:"30%",cursor:"pointer"}}/>
-          <div onClick={()=>{const idx=storyViewer.index+1;if(idx<storyVendors.length){markStorySeen(storyVendors[idx].id);setStoryViewer({vendor:storyVendors[idx],index:idx})}else setStoryViewer(null)}} style={{position:"absolute",right:0,top:0,bottom:0,width:"30%",cursor:"pointer"}}/>
-        </div>
-        {/* Bottom button */}
-        <div style={{padding:"12px 16px 20px",display:"flex",gap:10}}>
-          <button onClick={()=>{setStoryViewer(null);go("vendor",sv)}} style={{flex:1,padding:14,borderRadius:14,border:"none",background:"#F97316",color:"#fff",fontSize:14,fontWeight:700,cursor:"pointer",fontFamily:"inherit"}}>🏪 Voir la boutique</button>
-          <button onClick={()=>{setStoryViewer(null);go("chatVendor",sv)}} style={{width:50,borderRadius:14,border:"1px solid rgba(255,255,255,.2)",background:"transparent",color:"#fff",fontSize:18,cursor:"pointer",display:"flex",alignItems:"center",justifyContent:"center"}}>💬</button>
-        </div>
-      </div>);
-    })()}
+
   </>);
 }
 
