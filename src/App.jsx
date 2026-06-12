@@ -1,6 +1,7 @@
 import { useState } from "react";
 import CSS from "./styles/global";
 import t from "./utils/i18n";
+import Icon from "./components/Icon";
 import { AppProvider, useApp } from "./context/AppContext";
 import { SplashScr, OnboardingScr, LoginScr, OTPScr, ProfileCompletionScr } from "./screens/auth";
 import ShareSheet from "./components/ShareSheet";
