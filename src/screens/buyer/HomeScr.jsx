@@ -85,7 +85,7 @@ function HomeScr({go,favs,toggleFav,isFav,userName}){
           <span style={{color:"var(--muted)",fontSize:13,flexShrink:0}}>🔍</span>
           <input value={homeQ} onChange={e=>setHomeQ(e.target.value)} onFocus={()=>setSearchFocused(true)} placeholder={t("home.search_placeholder")} style={{flex:1,border:"none",background:"transparent",outline:"none",fontSize:13,fontFamily:"inherit",color:"var(--text)"}}/>
           {homeQ&&<span style={{cursor:"pointer",color:"var(--muted)",fontSize:12,flexShrink:0}} onClick={()=>setHomeQ("")}>✕</span>}
-          {!homeQ&&<span style={{cursor:"pointer",fontSize:16,flexShrink:0,opacity:.5}} onClick={()=>setShowCamMenu(true)}>📷</span>}
+          {!homeQ&&<><span style={{cursor:"pointer",flexShrink:0,opacity:.6,display:"flex",alignItems:"center",justifyContent:"center"}} onClick={()=>setShowCamMenu(true)}><Icon name="camera" size={18}/></span><span style={{cursor:"pointer",flexShrink:0,opacity:.6,display:"flex",alignItems:"center",justifyContent:"center"}} onClick={()=>go("qrScan")} title="Scanner QR/code-barres"><Icon name="scan" size={18}/></span></>}
         </div>
         <button onClick={()=>toast.info("Dites votre recherche...")} style={{width:38,height:38,borderRadius:12,border:"none",background:"var(--light)",cursor:"pointer",display:"flex",alignItems:"center",justifyContent:"center",flexShrink:0,marginRight:6,color:"var(--text)"}}><Icon name="mic" size={18}/></button>
         <button onClick={()=>setShowFilter(!showFilter)} style={{width:38,height:38,borderRadius:12,border:"none",background:showFilter?"#F97316":(filterType!=="all"||filterSort!=="popular")?"rgba(249,115,22,0.1)":"var(--light)",cursor:"pointer",fontSize:15,display:"flex",alignItems:"center",justifyContent:"center",flexShrink:0,transition:"all .2s",position:"relative"}}>
@@ -124,12 +124,15 @@ function HomeScr({go,favs,toggleFav,isFav,userName}){
       {/* Camera choice popup */}
       {showCamMenu&&<div onClick={()=>setShowCamMenu(false)} style={{position:"fixed",inset:0,background:"rgba(0,0,0,.35)",zIndex:120,display:"flex",alignItems:"flex-end",justifyContent:"center",padding:16}}>
         <div onClick={e=>e.stopPropagation()} style={{width:"100%",maxWidth:360,background:"var(--card)",borderRadius:20,padding:8,paddingBottom:12}}>
-          <div style={{textAlign:"center",padding:"10px 0 8px",fontSize:14,fontWeight:700}}>Recherche par image</div>
+          <div style={{textAlign:"center",padding:"10px 0 8px",fontSize:14,fontWeight:700}}>Rechercher un produit</div>
           <div onClick={()=>document.getElementById("cam-take")?.click()} style={{display:"flex",alignItems:"center",gap:12,padding:"12px 16px",cursor:"pointer",borderRadius:12}}>
-            <span style={{fontSize:20}}>📷</span><span style={{fontSize:14,fontWeight:500}}>Prendre une photo</span>
+            <span style={{display:"flex",alignItems:"center",justifyContent:"center",width:24}}><Icon name="camera" size={20}/></span><span style={{fontSize:14,fontWeight:500}}>Prendre une photo</span>
+          </div>
+          <div onClick={()=>{setShowCamMenu(false);go("qrScan")}} style={{display:"flex",alignItems:"center",gap:12,padding:"12px 16px",cursor:"pointer",borderRadius:12}}>
+            <span style={{display:"flex",alignItems:"center",justifyContent:"center",width:24}}><Icon name="qr_code" size={20}/></span><span style={{fontSize:14,fontWeight:500}}>Scanner code QR / code-barres</span>
           </div>
           <div onClick={()=>document.getElementById("cam-gallery")?.click()} style={{display:"flex",alignItems:"center",gap:12,padding:"12px 16px",cursor:"pointer",borderRadius:12}}>
-            <span style={{fontSize:20}}>🖼️</span><span style={{fontSize:14,fontWeight:500}}>Choisir dans la galerie</span>
+            <span style={{display:"flex",alignItems:"center",justifyContent:"center",width:24}}><Icon name="image" size={20}/></span><span style={{fontSize:14,fontWeight:500}}>Choisir dans la galerie</span>
           </div>
           <div onClick={()=>setShowCamMenu(false)} style={{textAlign:"center",padding:"10px 0",fontSize:13,fontWeight:600,color:"var(--muted)",cursor:"pointer",marginTop:4,borderTop:"1px solid var(--border)"}}>Annuler</div>
         </div>

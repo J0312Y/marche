@@ -143,6 +143,50 @@ function Icon({ name, size = 18, color = "currentColor", strokeWidth = 2 }) {
         <path d="m19 22-.66-10" />
       </svg>
     ),
+    camera: (
+      <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke={stroke} strokeWidth={sw} strokeLinecap="round" strokeLinejoin="round">
+        <path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/>
+        <circle cx="12" cy="13" r="4"/>
+      </svg>
+    ),
+    image: (
+      <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke={stroke} strokeWidth={sw} strokeLinecap="round" strokeLinejoin="round">
+        <rect x="3" y="3" width="18" height="18" rx="2" ry="2"/>
+        <circle cx="8.5" cy="8.5" r="1.5"/>
+        <polyline points="21 15 16 10 5 21"/>
+      </svg>
+    ),
+    scan: (
+      <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke={stroke} strokeWidth={sw} strokeLinecap="round" strokeLinejoin="round">
+        <path d="M3 7V5a2 2 0 0 1 2-2h2"/>
+        <path d="M17 3h2a2 2 0 0 1 2 2v2"/>
+        <path d="M21 17v2a2 2 0 0 1-2 2h-2"/>
+        <path d="M7 21H5a2 2 0 0 1-2-2v-2"/>
+        <line x1="7" y1="12" x2="17" y2="12"/>
+      </svg>
+    ),
+    qr_code: (
+      <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke={stroke} strokeWidth={sw} strokeLinecap="round" strokeLinejoin="round">
+        <rect x="3" y="3" width="7" height="7"/>
+        <rect x="14" y="3" width="7" height="7"/>
+        <rect x="14" y="14" width="7" height="7"/>
+        <rect x="3" y="14" width="7" height="7"/>
+        <line x1="6.5" y1="6.5" x2="6.5" y2="6.5"/>
+        <line x1="17.5" y1="6.5" x2="17.5" y2="6.5"/>
+        <line x1="6.5" y1="17.5" x2="6.5" y2="17.5"/>
+        <line x1="17.5" y1="17.5" x2="17.5" y2="17.5"/>
+      </svg>
+    ),
+    barcode: (
+      <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke={stroke} strokeWidth={sw} strokeLinecap="round" strokeLinejoin="round">
+        <line x1="4" y1="6" x2="4" y2="18"/>
+        <line x1="7" y1="6" x2="7" y2="18"/>
+        <line x1="10" y1="6" x2="10" y2="18"/>
+        <line x1="13" y1="6" x2="13" y2="18"/>
+        <line x1="16" y1="6" x2="16" y2="18"/>
+        <line x1="19" y1="6" x2="19" y2="18"/>
+      </svg>
+    ),
     close: (
       <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke={stroke} strokeWidth={sw} strokeLinecap="round" strokeLinejoin="round">
         <line x1="18" y1="6" x2="6" y2="18" />

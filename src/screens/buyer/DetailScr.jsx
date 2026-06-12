@@ -423,6 +423,19 @@ function DetailScr({product:rawP,onBack,onAddCart,go,favs,toggleFav,isFav}){
         </div>
       </div>
 
+
+        {/* Product QR code chip */}
+        <div onClick={()=>{const code=`LMK-PROD-${p.id}`;navigator.clipboard?.writeText(code).then(()=>toast.success("Code copié : "+code))}} style={{margin:"10px 16px",padding:"10px 14px",background:"var(--light)",borderRadius:12,display:"flex",alignItems:"center",gap:10,cursor:"pointer"}}>
+          <div style={{width:36,height:36,background:"#fff",borderRadius:8,display:"flex",alignItems:"center",justifyContent:"center",border:"1px solid var(--border)"}}>
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor"><rect x="3" y="3" width="7" height="7" fill="none" stroke="currentColor" strokeWidth="2"/><rect x="14" y="3" width="7" height="7" fill="none" stroke="currentColor" strokeWidth="2"/><rect x="3" y="14" width="7" height="7" fill="none" stroke="currentColor" strokeWidth="2"/><rect x="14" y="14" width="2" height="2"/><rect x="18" y="14" width="2" height="2"/><rect x="14" y="18" width="2" height="2"/><rect x="18" y="18" width="2" height="2"/><rect x="16" y="16" width="2" height="2"/></svg>
+          </div>
+          <div style={{flex:1,minWidth:0}}>
+            <div style={{fontSize:11,color:"var(--muted)",fontWeight:600,letterSpacing:.3}}>CODE PRODUIT</div>
+            <div style={{fontSize:13,fontWeight:700,fontFamily:"monospace",overflow:"hidden",textOverflow:"ellipsis",whiteSpace:"nowrap"}}>LMK-PROD-{p.id}</div>
+          </div>
+          <span style={{fontSize:11,color:"#F97316",fontWeight:600}}>Copier</span>
+        </div>
+
         {/* "Pourrait vous intéresser" — related products */}
         {(()=>{
           const related=P.filter(x=>x.id!==p.id&&(x.cat===p.cat||x.vendor===p.vendor||Math.abs(x.price-p.price)<p.price*0.4)).slice(0,8);
