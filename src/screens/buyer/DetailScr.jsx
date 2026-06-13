@@ -553,6 +553,30 @@ function DetailScr({product:rawP,onBack,onAddCart,go,favs,toggleFav,isFav}){
       </div>
       <div style={{color:"rgba(255,255,255,.5)",fontSize:11,marginTop:8}}>{photoIdx+1}/{allPhotos.length} · Appuyez pour fermer</div>
     </div>}
+
+    {/* QR Code modal — show enlarged within the app */}
+    {showQRModal && (
+      <div onClick={()=>setShowQRModal(false)} style={{position:"fixed",inset:0,background:"rgba(0,0,0,0.85)",zIndex:9999,display:"flex",alignItems:"center",justifyContent:"center",padding:20,animation:"fadeInFast .2s ease"}}>
+        <div onClick={e=>e.stopPropagation()} style={{background:"#fff",borderRadius:20,padding:24,maxWidth:340,width:"100%",position:"relative"}}>
+          <button onClick={()=>setShowQRModal(false)} style={{position:"absolute",top:12,right:12,width:32,height:32,borderRadius:"50%",border:"none",background:"#F5F5F7",cursor:"pointer",display:"flex",alignItems:"center",justifyContent:"center",color:"#000",zIndex:10}}>
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.4" strokeLinecap="round" strokeLinejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+          </button>
+          <div style={{fontSize:11,color:"#6B7280",fontWeight:700,letterSpacing:.5,textAlign:"center",marginTop:4}}>QR CODE PRODUIT</div>
+          <div style={{fontSize:14,fontWeight:800,textAlign:"center",marginTop:4,overflow:"hidden",textOverflow:"ellipsis",whiteSpace:"nowrap",color:"#1A1F2E"}}>{p.name}</div>
+          <div style={{width:"100%",aspectRatio:"1 / 1",background:"#fff",borderRadius:14,padding:18,marginTop:14,border:"2px solid #EDEDF0",boxSizing:"border-box"}}>
+            <img src={`https://api.qrserver.com/v1/create-qr-code/?size=400x400&margin=2&data=${encodeURIComponent("LMK-PROD-"+p.id)}`} alt="QR code agrandi" style={{width:"100%",height:"100%",display:"block"}}/>
+          </div>
+          <div style={{fontSize:11,color:"#6B7280",textAlign:"center",marginTop:12,lineHeight:1.5}}>
+            Scannez ce QR code avec l'app Lamuka<br/>ou tout lecteur de code-barres
+          </div>
+          <div style={{fontSize:12,fontWeight:700,fontFamily:"monospace",textAlign:"center",marginTop:8,padding:"8px 12px",background:"#F5F5F7",borderRadius:8,color:"#1A1F2E"}}>LMK-PROD-{p.id}</div>
+          <div style={{display:"flex",gap:8,marginTop:14}}>
+            <button onClick={()=>{const code="LMK-PROD-"+p.id;navigator.clipboard?.writeText(code).then(()=>toast.success("Code copié"))}} style={{flex:1,padding:"10px 12px",fontSize:12,fontWeight:700,border:"1px solid #EDEDF0",background:"#fff",color:"#1A1F2E",borderRadius:10,cursor:"pointer",fontFamily:"inherit"}}>Copier le code</button>
+            <button onClick={()=>{if(navigator.share){navigator.share({title:p.name,text:"Voici "+p.name+" sur Lamuka : LMK-PROD-"+p.id,url:window.location.href}).catch(()=>{})}else{const code="LMK-PROD-"+p.id;navigator.clipboard?.writeText(code).then(()=>toast.success("Code copié — partage non disponible"))}}} style={{flex:1,padding:"10px 12px",fontSize:12,fontWeight:700,border:"none",background:"#F97316",color:"#fff",borderRadius:10,cursor:"pointer",fontFamily:"inherit"}}>Partager</button>
+          </div>
+        </div>
+      </div>
+    )}
   </>);
 }
 
