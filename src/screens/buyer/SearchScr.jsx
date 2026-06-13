@@ -207,13 +207,13 @@ function SearchScr({ go, onBack, fromTab, favs, toggleFav, isFav, defaultTab }) 
             {isAllSelected ? (
               <>
                 <div style={{ fontSize: 13, fontWeight: 800, marginBottom: 10 }}>Toutes les catégories</div>
-                <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 10, marginBottom: 18 }}>
+                <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr 1fr", gap: 6, marginBottom: 18 }}>
                   {CATS.map(c => (
                     <div key={c.id} onClick={() => setSelectedCatId(c.id)} style={{ textAlign: "center", cursor: "pointer" }}>
                       <div style={{ width: "100%", aspectRatio: "1 / 1", borderRadius: 10, overflow: "hidden", background: "var(--light)" }}>
                         <img src={c.photo} alt="" style={{ width: "100%", height: "100%", objectFit: "cover", objectPosition: "center" }} />
                       </div>
-                      <div style={{ fontSize: 12, fontWeight: 600, marginTop: 6, color: "var(--text)", lineHeight: 1.3 }}>{c.name}</div>
+                      <div style={{ fontSize: 10.5, fontWeight: 600, marginTop: 5, color: "var(--text)", lineHeight: 1.25, display: "-webkit-box", WebkitLineClamp: 2, WebkitBoxOrient: "vertical", overflow: "hidden", minHeight: 26 }}>{c.name}</div>
                     </div>
                   ))}
                 </div>
@@ -221,13 +221,13 @@ function SearchScr({ go, onBack, fromTab, favs, toggleFav, isFav, defaultTab }) 
             ) : selectedCat.subs && (
               <>
                 <div style={{ fontSize: 13, fontWeight: 800, marginBottom: 10 }}>Catégories populaires</div>
-                <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 10, marginBottom: 18 }}>
+                <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr 1fr", gap: 6, marginBottom: 18 }}>
                   {selectedCat.subs.map((s, i) => (
                     <div key={i} onClick={() => setQ(s.name)} style={{ textAlign: "center", cursor: "pointer" }}>
                       <div style={{ width: "100%", aspectRatio: "1 / 1", borderRadius: 10, overflow: "hidden", background: "var(--light)" }}>
                         <img src={s.photo} alt="" style={{ width: "100%", height: "100%", objectFit: "cover", objectPosition: "center" }} />
                       </div>
-                      <div style={{ fontSize: 12, fontWeight: 600, marginTop: 6, color: "var(--text)", lineHeight: 1.3 }}>{s.name}</div>
+                      <div style={{ fontSize: 10.5, fontWeight: 600, marginTop: 5, color: "var(--text)", lineHeight: 1.25, display: "-webkit-box", WebkitLineClamp: 2, WebkitBoxOrient: "vertical", overflow: "hidden", minHeight: 26 }}>{s.name}</div>
                     </div>
                   ))}
                 </div>
