@@ -85,9 +85,8 @@ function HomeScr({go,favs,toggleFav,isFav,userName}){
           <span style={{color:"var(--muted)",fontSize:13,flexShrink:0}}>🔍</span>
           <input value={homeQ} onChange={e=>setHomeQ(e.target.value)} onFocus={()=>setSearchFocused(true)} placeholder={t("home.search_placeholder")} style={{flex:1,border:"none",background:"transparent",outline:"none",fontSize:13,fontFamily:"inherit",color:"var(--text)"}}/>
           {homeQ&&<span style={{cursor:"pointer",color:"var(--muted)",fontSize:12,flexShrink:0}} onClick={()=>setHomeQ("")}>✕</span>}
-          {!homeQ&&<><span style={{cursor:"pointer",flexShrink:0,opacity:.6,display:"flex",alignItems:"center",justifyContent:"center"}} onClick={()=>setShowCamMenu(true)}><Icon name="camera" size={18}/></span><span style={{cursor:"pointer",flexShrink:0,opacity:.6,display:"flex",alignItems:"center",justifyContent:"center"}} onClick={()=>go("qrScan")} title="Scanner QR/code-barres"><Icon name="scan" size={18}/></span></>}
+          {!homeQ&&<span style={{cursor:"pointer",flexShrink:0,opacity:.6,display:"flex",alignItems:"center",justifyContent:"center"}} onClick={()=>setShowCamMenu(true)}><Icon name="camera" size={18}/></span>}
         </div>
-        <button onClick={()=>toast.info("Dites votre recherche...")} style={{width:38,height:38,borderRadius:12,border:"none",background:"var(--light)",cursor:"pointer",display:"flex",alignItems:"center",justifyContent:"center",flexShrink:0,marginRight:6,color:"var(--text)"}}><Icon name="mic" size={18}/></button>
         <button onClick={()=>setShowFilter(!showFilter)} style={{width:38,height:38,borderRadius:12,border:"none",background:showFilter?"#F97316":(filterType!=="all"||filterSort!=="popular")?"rgba(249,115,22,0.1)":"var(--light)",cursor:"pointer",fontSize:15,display:"flex",alignItems:"center",justifyContent:"center",flexShrink:0,transition:"all .2s",position:"relative"}}>
           <Icon name="filter" size={18} color={showFilter?"#fff":"var(--text)"}/>
           {(filterType!=="all"||filterSort!=="popular")&&!showFilter&&<div style={{position:"absolute",top:2,right:2,width:8,height:8,borderRadius:4,background:"#EF4444"}}/>}
@@ -205,7 +204,7 @@ function HomeScr({go,favs,toggleFav,isFav,userName}){
           <div style={{background:"var(--card)",borderRadius:18,overflow:"hidden",boxShadow:"0 2px 10px rgba(0,0,0,.04)"}}>
             {CATS.map((c,i)=><div key={c.id} onClick={()=>doSearch(c.name)} style={{display:"flex",alignItems:"center",gap:14,padding:"12px 16px",cursor:"pointer",borderBottom:i<CATS.length-1?"1px solid var(--border)":"none",transition:"background .12s"}}>
               <div style={{width:48,height:48,borderRadius:12,overflow:"hidden",flexShrink:0,background:"var(--border)"}}>
-                {c.photo?<img src={c.photo} alt={c.name} style={{width:"100%",height:"100%",objectFit:"cover"}}/>:<div style={{width:"100%",height:"100%",display:"flex",alignItems:"center",justifyContent:"center",fontSize:22}}>{c.icon}</div>}
+                <img src={c.photo} alt={c.name} style={{width:"100%",height:"100%",objectFit:"cover"}}/>
               </div>
               <div style={{flex:1,minWidth:0}}>
                 <div style={{fontSize:15,fontWeight:600,color:"var(--text)"}}>{c.name}</div>

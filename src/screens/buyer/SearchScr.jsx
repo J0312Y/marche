@@ -6,10 +6,18 @@ import Icon from "../../components/Icon";
 import { useData } from "../../hooks";
 import { fmt, getVendorPromo } from "../../utils/helpers";
 
+// Normalize string for matching (lowercase, no accents, strip plurals)
+const normalize = (s) => (s || "")
+  .toString()
+  .toLowerCase()
+  .normalize("NFD")
+  .replace(/[\u0300-\u036f]/g, "")
+  .replace(/s$/, ""); // remove trailing plural s
+
 function SearchScr({ go, onBack, fromTab, favs, toggleFav, isFav, defaultTab }) {
   const { P, VENDORS, CATS } = useData();
   const [q, setQ] = useState("");
-  const [selectedCatId, setSelectedCatId] = useState(CATS[0].id);
+  const [selectedCatId, setSelectedCatId] = useState("all"); // "all" or category id
   const [showFilter, setShowFilter] = useState(false);
   const [filters, setFilters] = useState({});
   const [sortBy, setSortBy] = useState("popular");
@@ -45,10 +53,12 @@ function SearchScr({ go, onBack, fromTab, favs, toggleFav, isFav, defaultTab }) 
   };
 
   // Search results
+  const qn = normalize(q);
   const searchResults = applyFilters(P.filter(p =>
-    p.name.toLowerCase().includes(ql) ||
-    p.cat.toLowerCase().includes(ql) ||
-    p.vendor.toLowerCase().includes(ql)
+    normalize(p.name).includes(qn) ||
+    normalize(p.cat).includes(qn) ||
+    normalize(p.desc || "").includes(qn) ||
+    normalize(p.vendor).includes(qn)
   )).sort((a, b) =>
     sortBy === "priceAsc" ? a.price - b.price :
     sortBy === "priceDesc" ? b.price - a.price :
@@ -56,11 +66,12 @@ function SearchScr({ go, onBack, fromTab, favs, toggleFav, isFav, defaultTab }) 
     b.reviews - a.reviews
   );
   const vendorResults = VENDORS.filter(v =>
-    v.name.toLowerCase().includes(ql) || (v.desc || "").toLowerCase().includes(ql)
+    normalize(v.name).includes(qn) || normalize(v.desc || "").includes(qn)
   );
 
-  const selectedCat = CATS.find(c => c.id === selectedCatId) || CATS[0];
-  const catProducts = applyFilters(P.filter(p => p.cat === selectedCat.name));
+  const isAllSelected = selectedCatId === "all";
+  const selectedCat = isAllSelected ? { id: "all", name: "Toutes catégories", icon: "📦", count: P.length, photo: "https://images.unsplash.com/photo-1607082348824-0a96f2a4b9da?w=400&h=200&fit=crop", subs: null } : (CATS.find(c => c.id === selectedCatId) || CATS[0]);
+  const catProducts = applyFilters(isAllSelected ? P : P.filter(p => p.cat === selectedCat.name));
 
   return (
     <div className="scr" style={{ padding: 0, display: "flex", flexDirection: "column" }}>
@@ -129,7 +140,7 @@ function SearchScr({ go, onBack, fromTab, favs, toggleFav, isFav, defaultTab }) 
               </div>
             ) : (
               <div style={{ padding: "60px 20px", textAlign: "center" }}>
-                <div style={{ fontSize: 48, marginBottom: 12, opacity: .3 }}>🔍</div>
+                <div style={{ marginBottom: 12, opacity: .3, display: "flex", justifyContent: "center" }}><Icon name="search" size={48} color="var(--muted)"/></div>
                 <div style={{ fontSize: 14, color: "var(--muted)" }}>Aucun produit pour "{q}"</div>
               </div>
             )
@@ -151,7 +162,7 @@ function SearchScr({ go, onBack, fromTab, favs, toggleFav, isFav, defaultTab }) 
               </div>
             ) : (
               <div style={{ padding: "60px 20px", textAlign: "center" }}>
-                <div style={{ fontSize: 48, marginBottom: 12, opacity: .3 }}>🏪</div>
+                <div style={{ marginBottom: 12, opacity: .3, display: "flex", justifyContent: "center" }}><Icon name="store" size={48} color="var(--muted)"/></div>
                 <div style={{ fontSize: 14, color: "var(--muted)" }}>Aucune boutique pour "{q}"</div>
               </div>
             )
@@ -161,6 +172,15 @@ function SearchScr({ go, onBack, fromTab, favs, toggleFav, isFav, defaultTab }) 
         /* BROWSE MODE — sidebar + content */
         <div style={{ flex: 1, display: "flex", overflow: "hidden" }}>
           <div style={{ width: 92, background: "var(--light)", overflowY: "auto", flexShrink: 0, scrollbarWidth: "none" }} className="hide-scroll">
+            {/* "Toutes" as first item */}
+            {(() => {
+              const active = selectedCatId === "all";
+              return (
+                <div onClick={() => setSelectedCatId("all")} style={{ padding: "16px 8px", fontSize: 11.5, fontWeight: active ? 700 : 600, color: active ? "#F97316" : "var(--text)", cursor: "pointer", textAlign: "center", background: active ? "var(--card)" : "transparent", borderLeft: active ? "3px solid #F97316" : "3px solid transparent" }}>
+                  Toutes
+                </div>
+              );
+            })()}
             {CATS.map(c => {
               const active = c.id === selectedCatId;
               return (
@@ -183,8 +203,22 @@ function SearchScr({ go, onBack, fromTab, favs, toggleFav, isFav, defaultTab }) 
               </div>
             </div>
 
-            {/* Sub-categories */}
-            {selectedCat.subs && (
+            {/* Sub-categories OR All categories grid */}
+            {isAllSelected ? (
+              <>
+                <div style={{ fontSize: 13, fontWeight: 800, marginBottom: 10 }}>Toutes les catégories</div>
+                <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr 1fr", gap: 8, marginBottom: 18 }}>
+                  {CATS.map(c => (
+                    <div key={c.id} onClick={() => setSelectedCatId(c.id)} style={{ textAlign: "center", cursor: "pointer" }}>
+                      <div style={{ width: "100%", aspectRatio: "1", borderRadius: 10, overflow: "hidden", background: "var(--light)" }}>
+                        <img src={c.photo} alt="" style={{ width: "100%", height: "100%", objectFit: "cover" }} />
+                      </div>
+                      <div style={{ fontSize: 10.5, fontWeight: 600, marginTop: 5, color: "var(--text)", overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>{c.name}</div>
+                    </div>
+                  ))}
+                </div>
+              </>
+            ) : selectedCat.subs && (
               <>
                 <div style={{ fontSize: 13, fontWeight: 800, marginBottom: 10 }}>Catégories populaires</div>
                 <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr 1fr", gap: 8, marginBottom: 18 }}>
@@ -230,7 +264,7 @@ function SearchScr({ go, onBack, fromTab, favs, toggleFav, isFav, defaultTab }) 
               </>
             ) : (
               <div style={{ padding: "40px 20px", textAlign: "center" }}>
-                <div style={{ fontSize: 40, marginBottom: 10, opacity: .3 }}>{selectedCat.icon}</div>
+                <div style={{ marginBottom: 10, opacity: .3, display: "flex", justifyContent: "center" }}><Icon name="package" size={40} color="var(--muted)"/></div>
                 <div style={{ fontSize: 13, color: "var(--muted)" }}>Aucun produit dans cette catégorie</div>
               </div>
             )}
