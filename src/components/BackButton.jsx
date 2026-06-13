@@ -1,4 +1,5 @@
 /**
+import Icon from "./Icon";
  * BackButton — Glassmorphism back button that's always visible
  * on any background (dark images, light images, solid colors)
  */
@@ -45,7 +46,7 @@ function FavButton({ active, onClick, style = {} }) {
         ...style,
       }}
     >
-      {active ? "♥" : "♡"}
+      {active ? "" : ""}
     </button>
   );
 }

@@ -3,6 +3,7 @@ import { useState } from "react";
 import { useLoad } from "../../hooks";
 import { user as userSvc } from "../../services";
 import { SkeletonList } from "../../components/Loading";
+import Icon from "../../components/Icon";
 
 function AddressesScr({onBack}){
   const { data: loadedAddrs, loading } = useLoad(() => userSvc.getAddresses());
@@ -23,7 +24,7 @@ function AddressesScr({onBack}){
   if(loading) return <div className="scr" style={{padding:16}}><div className="appbar" style={{padding:0,marginBottom:12}}><button onClick={onBack}>←</button><h2>Mes adresses</h2><div style={{width:38}}/></div><SkeletonList count={3}/></div>;
   return(<div className="scr" style={{padding:16}}><div className="appbar" style={{padding:0,marginBottom:12}}><button onClick={onBack}>←</button><h2>Mes adresses</h2><div style={{width:38}}/></div>
     {list.map(a=><div key={a.id} className={`addr-card ${a.def?"def":""}`}>
-      <div className="ai">{a.def?"🏠":"🏢"}</div>
+      <div className="ai">{a.def?"":""}</div>
       <div className="ab"><h4>{a.label}{a.def&&<span className="def-badge">Par défaut</span>}</h4><p>{a.addr}<br/>{a.city}, Congo</p></div>
       <div style={{display:"flex",flexDirection:"column",gap:4}}>
         {!a.def&&<button style={{padding:"4px 8px",borderRadius:6,border:"1px solid var(--border)",background:"var(--card)",fontSize:10,cursor:"pointer",fontFamily:"inherit"}} onClick={()=>setDefault(a.id)}>Par défaut</button>}
@@ -44,7 +45,7 @@ function AddressesScr({onBack}){
           if(Object.keys(e).length){setAddrErrors(e);return}
           setList(prev=>[...prev,{id:Date.now(),label:adName,addr:(adAddr?adAddr+", ":"")+"Quartier "+adQuart,city:adCity,phone:adPhone,note:adNote,def:prev.length===0}]);
           setAdName("");setAdQuart("");setAdCity("Brazzaville");setAdPhone("");setAdNote("");setAdAddr("");setAddrErrors({});
-          setAdding(false);toast.success("Adresse ajoutée ✅");
+          setAdding(false);toast.success("Adresse ajoutée");
         }}>Enregistrer</button>
       </div>
     </div>}

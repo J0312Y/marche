@@ -1,4 +1,5 @@
 import { useEffect, useRef, useState } from "react";
+import Icon from "./Icon";
 
 /**
  * Reusable real map component - loads Leaflet from CDN (no npm install needed)
@@ -113,7 +114,7 @@ function MapView({
     }
     const L=window.L;
     const icon=L.divIcon({
-      html:`<div style="width:44px;height:44px;border-radius:50%;background:#10B981;border:4px solid #fff;box-shadow:0 4px 16px rgba(16,185,129,.4);display:flex;align-items:center;justify-content:center;font-size:20px">🛵</div>`,
+      html:`<div style="width:44px;height:44px;border-radius:50%;background:#10B981;border:4px solid #fff;box-shadow:0 4px 16px rgba(16,185,129,.4);display:flex;align-items:center;justify-content:center;font-size:20px"><Icon name="truck" size={18}/></div>`,
       iconSize:[44,44],iconAnchor:[22,22],className:"",
     });
     if(driverRef.current){

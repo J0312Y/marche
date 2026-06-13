@@ -2,33 +2,34 @@ import toast from "../../utils/toast";
 import { useState } from "react";
 import { fmt } from "../../utils/helpers";
 import { DRIVER_PHOTO, CHAT_AVATARS } from "../../data/images";
+import Icon from "../../components/Icon";
 
 function VDeliveryScr({go,onBack}){
   const [tab,setTab]=useState(0);
   // Platform drivers (auto-listed from Lamuka accounts)
   const platformDrivers=[
-    {id:"d1",name:"Patrick Moukala",vehicle:"🛵 Honda PCX",plate:"BZ-4521",phone:"+242 06X XXX",status:"available",rating:4.8,deliveries:342,zone:"Brazzaville Sud",photo:"https://images.unsplash.com/photo-1506277886164-e25aa3f4ef7f?w=80&h=80&fit=crop&crop=face",source:"platform"},
-    {id:"d3",name:"Grace Okemba",vehicle:"🛵 Yamaha NMAX",plate:"BZ-2190",phone:"+242 06X XXX",status:"available",rating:4.9,deliveries:267,zone:"Brazzaville Centre",photo:"https://images.unsplash.com/photo-1531123897727-8f129e1688ce?w=80&h=80&fit=crop&crop=face",source:"platform"},
-    {id:"d5",name:"Alain Mboumba",vehicle:"🚲 Vélo",plate:"—",phone:"+242 06X XXX",status:"available",rating:4.3,deliveries:52,zone:"Brazzaville Sud",photo:"https://images.unsplash.com/photo-1506277886164-e25aa3f4ef7f?w=80&h=80&fit=crop&crop=face",source:"platform"},
+    {id:"d1",name:"Patrick Moukala",vehicle:"Honda PCX",plate:"BZ-4521",phone:"+242 06X XXX",status:"available",rating:4.8,deliveries:342,zone:"Brazzaville Sud",photo:"https://images.unsplash.com/photo-1506277886164-e25aa3f4ef7f?w=80&h=80&fit=crop&crop=face",source:"platform"},
+    {id:"d3",name:"Grace Okemba",vehicle:"Yamaha NMAX",plate:"BZ-2190",phone:"+242 06X XXX",status:"available",rating:4.9,deliveries:267,zone:"Brazzaville Centre",photo:"https://images.unsplash.com/photo-1531123897727-8f129e1688ce?w=80&h=80&fit=crop&crop=face",source:"platform"},
+    {id:"d5",name:"Alain Mboumba",vehicle:"Vélo",plate:"—",phone:"+242 06X XXX",status:"available",rating:4.3,deliveries:52,zone:"Brazzaville Sud",photo:"https://images.unsplash.com/photo-1506277886164-e25aa3f4ef7f?w=80&h=80&fit=crop&crop=face",source:"platform"},
   ];
   // Manually added by vendor
   const [manualDrivers,setManualDrivers]=useState([
-    {id:"d2",name:"Jean Mbemba",vehicle:"🚗 Toyota Vitz",plate:"BZ-7803",phone:"+242 06X XXX",status:"busy",rating:4.5,deliveries:128,zone:"Brazzaville Nord",photo:"https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=80&h=80&fit=crop&crop=face",source:"manual"},
-    {id:"d4",name:"Michel Ngoma",vehicle:"🚗 Suzuki Alto",plate:"BZ-5541",phone:"+242 06X XXX",status:"offline",rating:4.2,deliveries:89,zone:"Pointe-Noire",photo:"https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=80&h=80&fit=crop&crop=face",source:"manual"},
+    {id:"d2",name:"Jean Mbemba",vehicle:" Toyota Vitz",plate:"BZ-7803",phone:"+242 06X XXX",status:"busy",rating:4.5,deliveries:128,zone:"Brazzaville Nord",photo:"https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=80&h=80&fit=crop&crop=face",source:"manual"},
+    {id:"d4",name:"Michel Ngoma",vehicle:" Suzuki Alto",plate:"BZ-5541",phone:"+242 06X XXX",status:"offline",rating:4.2,deliveries:89,zone:"Pointe-Noire",photo:"https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=80&h=80&fit=crop&crop=face",source:"manual"},
   ]);
   const allDrivers=[...platformDrivers,...manualDrivers];
   const [showAdd,setShowAdd]=useState(false);
   const [addName,setAddName]=useState("");const [addPhone,setAddPhone]=useState("");const [addVehicle,setAddVehicle]=useState("moto");
   const doAddManual=()=>{
     if(!addName||!addPhone)return;
-    setManualDrivers([...manualDrivers,{id:"dm"+Date.now(),name:addName,vehicle:addVehicle==="moto"?"🛵 Moto":addVehicle==="voiture"?"🚗 Voiture":"🚲 Vélo",plate:"—",phone:addPhone,status:"offline",rating:0,deliveries:0,zone:"Brazzaville",photo:"https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=80&h=80&fit=crop&crop=face",source:"manual"}]);
+    setManualDrivers([...manualDrivers,{id:"dm"+Date.now(),name:addName,vehicle:addVehicle==="moto"?"Moto":addVehicle==="voiture"?" Voiture":"Vélo",plate:"—",phone:addPhone,status:"offline",rating:0,deliveries:0,zone:"Brazzaville",photo:"https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=80&h=80&fit=crop&crop=face",source:"manual"}]);
     setAddName("");setAddPhone("");setShowAdd(false);
   };
   const removeManual=id=>setManualDrivers(manualDrivers.filter(d=>d.id!==id));
 
   const activeDeliveries=[
-    {ref:"#CMD-0889",client:"Celine Nzaba",addr:"Moungali, Rue 8",driver:"Patrick Moukala",driverAv:"🧑",status:"En route",eta:"8 min",progress:65},
-    {ref:"#CMD-0888",client:"Alain Mboumba",addr:"Poto-Poto, Av. Paix",driver:"Jean Mbemba",driverAv:"👨",status:"Récupération",eta:"22 min",progress:25},
+    {ref:"#CMD-0889",client:"Celine Nzaba",addr:"Moungali, Rue 8",driver:"Patrick Moukala",driverAv:"",status:"En route",eta:"8 min",progress:65},
+    {ref:"#CMD-0888",client:"Alain Mboumba",addr:"Poto-Poto, Av. Paix",driver:"Jean Mbemba",driverAv:"",status:"Récupération",eta:"22 min",progress:25},
   ];
   const pastDeliveries=[
     {ref:"#CMD-0885",client:"David Tsaty",driver:"Patrick Moukala",date:"12 Fév",status:"Livrée",duration:"32 min",rating:5},
@@ -53,7 +54,7 @@ function VDeliveryScr({go,onBack}){
   const zoneSuggestions=["Dolisie","Nkayi","Oyo","Owando","Sibiti"].filter(n=>!zones.find(z=>z.name===n));
 
   return(<div className="scr">
-    <div className="appbar"><button onClick={onBack}>←</button><h2>Gestion livraison</h2><button onClick={()=>go("vNotif")}>🔔</button></div>
+    <div className="appbar"><button onClick={onBack}>←</button><h2>Gestion livraison</h2><button onClick={()=>go("vNotif")}><Icon name="bell" size={18}/></button></div>
 
     {/* Tabs */}
     <div style={{display:"flex",gap:0,margin:"0 20px 14px",background:"var(--light)",borderRadius:14,padding:4,border:"1px solid var(--border)"}}>
@@ -66,15 +67,15 @@ function VDeliveryScr({go,onBack}){
       {/* Section 1: Platform drivers (auto-listed) */}
       <div style={{display:"flex",justifyContent:"space-between",alignItems:"center",marginBottom:10}}>
         <div><span style={{fontSize:14,fontWeight:700}}>Livreurs Lamuka</span><span style={{fontSize:11,color:"var(--muted)",marginLeft:6}}>({platformDrivers.length} inscrits)</span></div>
-        <span style={{padding:"4px 10px",borderRadius:8,background:"rgba(16,185,129,0.08)",color:"#10B981",fontSize:10,fontWeight:700}}>🔄 Auto</span>
+        <span style={{padding:"4px 10px",borderRadius:8,background:"rgba(16,185,129,0.08)",color:"#10B981",fontSize:10,fontWeight:700}}> Auto</span>
       </div>
       <div className="info-box blue" style={{marginBottom:10,padding:"8px 12px"}}><span>ℹ️</span><span style={{fontSize:11}}>Ces livreurs ont un compte Lamuka actif et sont automatiquement disponibles dans votre zone.</span></div>
       {platformDrivers.map(d=><div key={d.id} className="del-card" onClick={()=>go("vDriverProfile",d)}>
         <div className="del-av" style={{overflow:"hidden"}}>{d.photo?<img src={d.photo} style={{width:"100%",height:"100%",objectFit:"cover"}} alt=""/>:d.avatar}</div>
         <div className="del-info">
-          <h4>{d.name} <span style={{padding:"2px 6px",borderRadius:4,background:"rgba(16,185,129,0.08)",color:"#10B981",fontSize:9,fontWeight:700,marginLeft:4}}>Lamuka ✓</span></h4>
+          <h4>{d.name} <span style={{padding:"2px 6px",borderRadius:4,background:"rgba(16,185,129,0.08)",color:"#10B981",fontSize:9,fontWeight:700,marginLeft:4}}>Lamuka </span></h4>
           <p>{d.vehicle} · {d.plate}</p>
-          <p style={{marginTop:2}}>⭐ {d.rating} · {d.deliveries} livraisons · 📍 {d.zone}</p>
+          <p style={{marginTop:2}}><Icon name="star_full" size={16}/>{" "}{d.rating} · {d.deliveries} livraisons ·  {d.zone}</p>
         </div>
         <span className={`del-status ${d.status==="available"?"available":d.status==="busy"?"busy":""}`}>{d.status==="available"?"Dispo":d.status==="busy"?"Occupé":"Hors ligne"}</span>
       </div>)}
@@ -90,25 +91,25 @@ function VDeliveryScr({go,onBack}){
           <div className="del-av" style={{width:40,height:40,borderRadius:12,overflow:"hidden",background:"linear-gradient(135deg,#F59E0B,#D97706)",display:"flex",alignItems:"center",justifyContent:"center",fontSize:16,flexShrink:0}}>{d.photo?<img src={d.photo} style={{width:"100%",height:"100%",objectFit:"cover"}} alt=""/>:d.avatar}</div>
           <div style={{flex:1}}>
             <h4 style={{fontSize:14,fontWeight:600}}>{d.name} <span style={{padding:"2px 6px",borderRadius:4,background:"rgba(245,158,11,0.08)",color:"#F59E0B",fontSize:9,fontWeight:700,marginLeft:4}}>Manuel</span></h4>
-            <p style={{fontSize:11,color:"var(--muted)"}}>{d.vehicle} · 📍 {d.zone}</p>
+            <p style={{fontSize:11,color:"var(--muted)"}}>{d.vehicle} ·  {d.zone}</p>
           </div>
           <span className={`del-status ${d.status==="available"?"available":d.status==="busy"?"busy":""}`} style={d.status==="offline"?{background:"rgba(0,0,0,0.05)",color:"var(--muted)"}:{}}>{d.status==="available"?"Dispo":d.status==="busy"?"Occupé":"Hors ligne"}</span>
         </div>
         <div style={{display:"flex",gap:8,marginTop:10,paddingTop:10,borderTop:"1px solid var(--border)"}}>
-          <button style={{flex:1,padding:8,borderRadius:8,border:"1px solid var(--border)",background:"var(--card)",fontSize:11,fontWeight:600,cursor:"pointer",fontFamily:"inherit"}} onClick={()=>go("vAddDriver")}>✏️ Modifier</button>
-          <button style={{padding:"8px 12px",borderRadius:8,border:"1px solid rgba(239,68,68,0.2)",background:"var(--card)",color:"#EF4444",fontSize:11,fontWeight:600,cursor:"pointer",fontFamily:"inherit"}} onClick={()=>removeManual(d.id)}>🗑️ Retirer</button>
+          <button style={{flex:1,padding:8,borderRadius:8,border:"1px solid var(--border)",background:"var(--card)",fontSize:11,fontWeight:600,cursor:"pointer",fontFamily:"inherit"}} onClick={()=>go("vAddDriver")}><Icon name="edit" size={16}/>{" "}Modifier</button>
+          <button style={{padding:"8px 12px",borderRadius:8,border:"1px solid rgba(239,68,68,0.2)",background:"var(--card)",color:"#EF4444",fontSize:11,fontWeight:600,cursor:"pointer",fontFamily:"inherit"}} onClick={()=>removeManual(d.id)}>️ Retirer</button>
         </div>
       </div>)}
 
       {/* Inline add form */}
       {showAdd&&<div style={{padding:16,background:"var(--card)",border:"2px solid #F97316",borderRadius:16,marginTop:10}}>
-        <h4 style={{fontSize:14,fontWeight:700,marginBottom:12}}>➕ Ajouter un livreur manuellement</h4>
+        <h4 style={{fontSize:14,fontWeight:700,marginBottom:12}}> Ajouter un livreur manuellement</h4>
         <div className="field"><label>Nom complet</label><input value={addName} onChange={e=>setAddName(e.target.value)} placeholder="Ex: Patrick Moukala"/></div>
         <div className="field"><label>Téléphone</label><input value={addPhone} onChange={e=>{const v=e.target.value.replace(/[^0-9]/g,"").slice(0,9);setAddPhone(v)}} placeholder="06X XXX XXX" maxLength={11} type="tel"/></div>
         <div className="field"><label>Véhicule</label>
-          <div style={{display:"flex",gap:6}}>{[["moto","🛵 Moto"],["voiture","🚗 Voiture"],["velo","🚲 Vélo"]].map(([k,l])=><button key={k} onClick={()=>setAddVehicle(k)} style={{flex:1,padding:8,borderRadius:8,border:addVehicle===k?"2px solid #F97316":"1px solid var(--border)",background:addVehicle===k?"rgba(249,115,22,0.04)":"var(--card)",fontSize:11,fontWeight:600,cursor:"pointer",fontFamily:"inherit"}}>{l}</button>)}</div>
+          <div style={{display:"flex",gap:6}}>{[["moto","Moto"],["voiture"," Voiture"],["velo","Vélo"]].map(([k,l])=><button key={k} onClick={()=>setAddVehicle(k)} style={{flex:1,padding:8,borderRadius:8,border:addVehicle===k?"2px solid #F97316":"1px solid var(--border)",background:addVehicle===k?"rgba(249,115,22,0.04)":"var(--card)",fontSize:11,fontWeight:600,cursor:"pointer",fontFamily:"inherit"}}>{l}</button>)}</div>
         </div>
-        <div className="info-box yellow" style={{marginBottom:10,padding:"6px 10px"}}><span>📱</span><span style={{fontSize:11}}>Un SMS sera envoyé pour l'inviter à créer un compte Lamuka</span></div>
+        <div className="info-box yellow" style={{marginBottom:10,padding:"6px 10px"}}><span><Icon name="phone" size={18}/></span><span style={{fontSize:11}}>Un SMS sera envoyé pour l'inviter à créer un compte Lamuka</span></div>
         <div style={{display:"flex",gap:8}}>
           <button style={{flex:1,padding:10,borderRadius:10,border:"1px solid var(--border)",background:"var(--card)",fontSize:12,fontWeight:600,cursor:"pointer",fontFamily:"inherit"}} onClick={()=>{setShowAdd(false);setAddName("");setAddPhone("")}}>Annuler</button>
           <button className="btn-primary" style={{flex:2,background:addName&&addPhone?"#F97316":"var(--border)",color:addName&&addPhone?"var(--card)":"var(--muted)"}} onClick={doAddManual}>Ajouter</button>
@@ -118,7 +119,7 @@ function VDeliveryScr({go,onBack}){
 
     {/* Tab 1: En cours */}
     {tab===1&&<div style={{padding:"0 16px 20px"}}>
-      {activeDeliveries.length===0?<div style={{textAlign:"center",padding:"40px 0"}}><div style={{fontSize:48}}>📭</div><h3 style={{marginTop:10,fontSize:16,fontWeight:700}}>Aucune livraison en cours</h3><p style={{fontSize:13,color:"var(--muted)",marginTop:4}}>Les livraisons actives apparaîtront ici</p></div>
+      {activeDeliveries.length===0?<div style={{textAlign:"center",padding:"40px 0"}}><div style={{fontSize:48}}></div><h3 style={{marginTop:10,fontSize:16,fontWeight:700}}>Aucune livraison en cours</h3><p style={{fontSize:13,color:"var(--muted)",marginTop:4}}>Les livraisons actives apparaîtront ici</p></div>
       :activeDeliveries.map((d,i)=><div key={i} style={{padding:16,background:"var(--card)",border:"1px solid var(--border)",borderRadius:18,marginBottom:12}}>
         <div style={{display:"flex",justifyContent:"space-between",alignItems:"center",marginBottom:8}}><span style={{fontSize:14,fontWeight:700}}>{d.ref}</span><span className="vo-status shipped">{d.status}</span></div>
         <div style={{display:"flex",alignItems:"center",gap:10,marginBottom:10}}>
@@ -128,9 +129,9 @@ function VDeliveryScr({go,onBack}){
         </div>
         <div className="eta-bar" style={{marginBottom:6}}><div className="eta-fill" style={{width:`${d.progress}%`}}/></div>
         <div style={{display:"flex",gap:8}}>
-          <button style={{flex:1,padding:10,borderRadius:10,border:"none",background:"#F97316",color:"#fff",fontSize:12,fontWeight:600,cursor:"pointer",fontFamily:"inherit",display:"flex",alignItems:"center",justifyContent:"center",gap:4}} onClick={()=>go("vTrackDelivery",d)}>📍 Suivre</button>
-          <button style={{flex:1,padding:10,borderRadius:10,border:"1px solid var(--border)",background:"var(--card)",fontSize:12,fontWeight:600,cursor:"pointer",fontFamily:"inherit",display:"flex",alignItems:"center",justifyContent:"center",gap:4}} onClick={()=>go("vDriverChat",d)}>💬 Contacter</button>
-          <button style={{width:42,padding:10,borderRadius:10,border:"none",background:"#F59E0B",color:"#fff",fontSize:14,cursor:"pointer",display:"flex",alignItems:"center",justifyContent:"center"}} onClick={()=>toast.info("📞 Appel vers "+d.driver)}>📞</button>
+          <button style={{flex:1,padding:10,borderRadius:10,border:"none",background:"#F97316",color:"#fff",fontSize:12,fontWeight:600,cursor:"pointer",fontFamily:"inherit",display:"flex",alignItems:"center",justifyContent:"center",gap:4}} onClick={()=>go("vTrackDelivery",d)}><Icon name="location" size={16}/>{" "}Suivre</button>
+          <button style={{flex:1,padding:10,borderRadius:10,border:"1px solid var(--border)",background:"var(--card)",fontSize:12,fontWeight:600,cursor:"pointer",fontFamily:"inherit",display:"flex",alignItems:"center",justifyContent:"center",gap:4}} onClick={()=>go("vDriverChat",d)}><Icon name="chat" size={16}/>{" "}Contacter</button>
+          <button style={{width:42,padding:10,borderRadius:10,border:"none",background:"#F59E0B",color:"#fff",fontSize:14,cursor:"pointer",display:"flex",alignItems:"center",justifyContent:"center"}} onClick={()=>toast.info("Appel vers "+d.driver)}><Icon name="phone" size={18}/></button>
         </div>
       </div>)}
     </div>}
@@ -139,9 +140,9 @@ function VDeliveryScr({go,onBack}){
     {tab===2&&<div style={{padding:"0 16px 20px"}}>
       <div style={{fontSize:14,fontWeight:700,marginBottom:12}}>{pastDeliveries.length} livraisons terminées</div>
       {pastDeliveries.map((d,i)=><div key={i} style={{padding:14,background:"var(--card)",border:"1px solid var(--border)",borderRadius:14,marginBottom:8,display:"flex",alignItems:"center",gap:12}}>
-        <div style={{width:40,height:40,borderRadius:12,background:"rgba(16,185,129,0.1)",display:"flex",alignItems:"center",justifyContent:"center",fontSize:18,flexShrink:0}}>✅</div>
+        <div style={{width:40,height:40,borderRadius:12,background:"rgba(16,185,129,0.1)",display:"flex",alignItems:"center",justifyContent:"center",fontSize:18,flexShrink:0}}><Icon name="check_circle" size={18}/></div>
         <div style={{flex:1,minWidth:0}}><div style={{fontSize:13,fontWeight:600}}>{d.ref} → {d.client}</div><div style={{fontSize:11,color:"var(--muted)"}}>{d.driver} · {d.date} · {d.duration}</div></div>
-        <div style={{textAlign:"right"}}><div style={{fontSize:14,color:"#F59E0B"}}>{"★".repeat(d.rating)}</div></div>
+        <div style={{textAlign:"right"}}><div style={{fontSize:14,color:"#F59E0B"}}>{"".repeat(d.rating)}</div></div>
       </div>)}
     </div>}
 
@@ -155,7 +156,7 @@ function VDeliveryScr({go,onBack}){
           <div style={{display:"flex",alignItems:"center",gap:6}}><h4 style={{fontSize:14,fontWeight:700}}>{z.name}</h4>{z.active&&<span style={{width:8,height:8,borderRadius:4,background:"#10B981"}}/>}</div>
           <div className={`toggle ${z.active?"on":""}`} onClick={()=>toggleZone(z.id)}/>
         </div>
-        <div style={{fontSize:12,color:"var(--muted)",marginBottom:8}}>📍 {z.areas}</div>
+        <div style={{fontSize:12,color:"var(--muted)",marginBottom:8}}><Icon name="location" size={16}/>{" "}{z.areas}</div>
 
         {editZone===z.id
           ?<div style={{paddingTop:10,borderTop:"1px solid var(--border)"}}>
@@ -163,23 +164,23 @@ function VDeliveryScr({go,onBack}){
             <div className="field"><label>Frais de livraison (FCFA)</label><input type="number" value={editPrice} onChange={e=>setEditPrice(e.target.value)}/></div>
             <div style={{display:"flex",gap:8}}>
               <button style={{flex:1,padding:8,borderRadius:8,border:"1px solid var(--border)",background:"var(--card)",fontSize:11,fontWeight:600,cursor:"pointer",fontFamily:"inherit"}} onClick={()=>setEditZone(null)}>Annuler</button>
-              <button style={{flex:1,padding:8,borderRadius:8,border:"none",background:"#F97316",color:"#fff",fontSize:11,fontWeight:600,cursor:"pointer",fontFamily:"inherit"}} onClick={()=>saveEdit(z.id)}>💾 Sauver</button>
-              <button style={{padding:"8px 12px",borderRadius:8,border:"1px solid rgba(239,68,68,0.2)",background:"var(--card)",color:"#EF4444",fontSize:11,fontWeight:600,cursor:"pointer",fontFamily:"inherit"}} onClick={()=>{removeZone(z.id);setEditZone(null)}}>🗑️</button>
+              <button style={{flex:1,padding:8,borderRadius:8,border:"none",background:"#F97316",color:"#fff",fontSize:11,fontWeight:600,cursor:"pointer",fontFamily:"inherit"}} onClick={()=>saveEdit(z.id)}> Sauver</button>
+              <button style={{padding:"8px 12px",borderRadius:8,border:"1px solid rgba(239,68,68,0.2)",background:"var(--card)",color:"#EF4444",fontSize:11,fontWeight:600,cursor:"pointer",fontFamily:"inherit"}} onClick={()=>{removeZone(z.id);setEditZone(null)}}>️</button>
             </div>
           </div>
           :<div style={{display:"flex",justifyContent:"space-between",alignItems:"center"}}>
             <span style={{fontSize:14,fontWeight:700,color:"#F97316"}}>{fmt(z.price)}</span>
-            <button style={{padding:"6px 14px",borderRadius:8,border:"1px solid var(--border)",background:"var(--card)",fontSize:11,fontWeight:600,cursor:"pointer",fontFamily:"inherit",color:"var(--sub)"}} onClick={()=>{setEditZone(z.id);setEditPrice(String(z.price));setEditAreas(z.areas)}}>✏️ Modifier</button>
+            <button style={{padding:"6px 14px",borderRadius:8,border:"1px solid var(--border)",background:"var(--card)",fontSize:11,fontWeight:600,cursor:"pointer",fontFamily:"inherit",color:"var(--sub)"}} onClick={()=>{setEditZone(z.id);setEditPrice(String(z.price));setEditAreas(z.areas)}}><Icon name="edit" size={16}/>{" "}Modifier</button>
           </div>
         }
       </div>)}
 
       {/* Add zone */}
       {showAddZone?<div style={{padding:16,background:"var(--card)",border:"2px solid #F97316",borderRadius:16,marginBottom:14}}>
-        <h4 style={{fontSize:14,fontWeight:700,marginBottom:12}}>➕ Ajouter une zone</h4>
+        <h4 style={{fontSize:14,fontWeight:700,marginBottom:12}}> Ajouter une zone</h4>
         {zoneSuggestions.length>0&&<>
           <div style={{fontSize:11,fontWeight:600,color:"var(--muted)",marginBottom:6}}>Suggestions</div>
-          <div style={{display:"flex",gap:6,flexWrap:"wrap",marginBottom:12}}>{zoneSuggestions.map(n=><span key={n} onClick={()=>setAzName(n)} style={{padding:"6px 12px",borderRadius:8,border:azName===n?"2px solid #F97316":"1px solid var(--border)",background:azName===n?"rgba(249,115,22,0.04)":"var(--card)",fontSize:11,fontWeight:600,cursor:"pointer",color:azName===n?"#F97316":"var(--sub)"}}>{azName===n?"✓ ":""}{n}</span>)}</div>
+          <div style={{display:"flex",gap:6,flexWrap:"wrap",marginBottom:12}}>{zoneSuggestions.map(n=><span key={n} onClick={()=>setAzName(n)} style={{padding:"6px 12px",borderRadius:8,border:azName===n?"2px solid #F97316":"1px solid var(--border)",background:azName===n?"rgba(249,115,22,0.04)":"var(--card)",fontSize:11,fontWeight:600,cursor:"pointer",color:azName===n?"#F97316":"var(--sub)"}}>{azName===n?" ":""}{n}</span>)}</div>
         </>}
         <div className="field"><label>Nom de la zone</label><input value={azName} onChange={e=>setAzName(e.target.value)} placeholder="Ex: Dolisie Centre"/></div>
         <div className="field"><label>Quartiers</label><input value={azAreas} onChange={e=>setAzAreas(e.target.value)} placeholder="Ex: Centre-ville, Loubomo"/></div>

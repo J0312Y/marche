@@ -1,23 +1,24 @@
 import { useState, useEffect, useRef, useCallback } from "react";
+import Icon from "../../components/Icon";
 
 const SLIDES = [
   {
     photo: "https://images.unsplash.com/photo-1604719312566-8912e9227c6a?w=800&h=1200&fit=crop",
-    icon: "🛍️",
+    icon: "️",
     title: "Tout le Congo en une app",
     desc: "Restaurants, boutiques, pharmacies, pâtisseries, supermarchés et services — commandez et faites-vous livrer à Brazzaville et Pointe-Noire.",
     color: "#F97316",
   },
   {
     photo: "https://images.unsplash.com/photo-1414235077428-338989a2e8c0?w=800&h=1200&fit=crop",
-    icon: "🍽️",
+    icon: "",
     title: "Commandez, achetez, réservez",
     desc: "Des milliers de commerces vérifiés : restaurants, boutiques de mode, boulangeries, pressing et plus encore.",
     color: "#F97316",
   },
   {
     photo: "https://images.unsplash.com/photo-1556742049-0cfed4f6a45d?w=800&h=1200&fit=crop",
-    icon: "💳",
+    icon: "",
     title: "Paiement Mobile Money",
     desc: "Payez facilement avec Airtel Money ou MTN MoMo. Sécurisé et instantané via Kolo Pay.",
     color: "#F59E0B",
@@ -170,7 +171,7 @@ function OnboardingScr({onDone}){
               cursor:"pointer",fontFamily:"inherit",
               boxShadow:"0 4px 16px rgba(249,115,22,.25)",
             }}>
-              🚀 Découvrir Lamuka Market
+               Découvrir Lamuka Market
             </button>
           </div>
         )}

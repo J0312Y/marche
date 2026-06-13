@@ -6,7 +6,7 @@ import { VENDOR_LOGO_DEFAULT, VENDOR_COVER } from "../../data/images";
 import Icon from "../../components/Icon";
 
 function VProfileScr({go,onSwitch,vendorPlan,onLogout}){
-  const planInfo=vendorPlan==="starter"?{name:"Starter",color:"var(--muted)",badge:"Gratuit",icon:"🆓"}:vendorPlan==="pro"?{name:"Pro",color:"#F97316",badge:"Pro ✓",icon:"⭐"}:{name:"Enterprise",color:"#F59E0B",badge:"Enterprise ★",icon:"🚀"};
+  const planInfo=vendorPlan==="starter"?{name:"Starter",color:"var(--muted)",badge:"Gratuit",icon:"🆓"}:vendorPlan==="pro"?{name:"Pro",color:"#F97316",badge:"Pro ",icon:"star_full"}:{name:"Enterprise",color:"#F59E0B",badge:"Enterprise ",icon:"rocket"};
   const [lockPopup,setLockPopup]=useState(null);
   const [vLogo,setVLogo]=useState(VENDOR_LOGO_DEFAULT);
   const [vCover,setVCover]=useState(VENDOR_COVER);
@@ -35,7 +35,7 @@ function VProfileScr({go,onSwitch,vendorPlan,onLogout}){
 
   const handleLocked=(item)=>setLockPopup(item);
 
-  return(<PullToRefresh onRefresh={async()=>{toast.success("Espace actualisé 🏪")}}><div className="scr" style={{paddingBottom:20}}>
+  return(<PullToRefresh onRefresh={async()=>{toast.success("Espace actualisé")}}><div className="scr" style={{paddingBottom:20}}>
     <div className="appbar"><h2>Mon Espace</h2><button onClick={()=>go("vSettings")}><Icon name="settings" size={18}/></button></div>
 
     {/* Profile header — cover + logo */}
@@ -44,7 +44,7 @@ function VProfileScr({go,onSwitch,vendorPlan,onLogout}){
       <div style={{height:130,borderRadius:"0 0 20px 20px",overflow:"hidden",position:"relative"}}>
         <img src={vCover} style={{width:"100%",height:"100%",objectFit:"cover",objectPosition:"center"}} alt=""/>
         <label style={{position:"absolute",bottom:8,right:8,padding:"5px 10px",borderRadius:10,background:"rgba(0,0,0,.5)",color:"#fff",fontSize:10,fontWeight:600,cursor:"pointer",display:"flex",alignItems:"center",gap:4}}><Icon name="camera" size={16}/>{" "}Couverture
-          <input type="file" accept="image/*" style={{display:"none"}} onChange={e=>{const f=e.target.files?.[0];if(f){const r=new FileReader();r.onload=()=>{setVCover(r.result);toast.success("Couverture mise à jour 📸")};r.readAsDataURL(f);e.target.value=""}}}/>
+          <input type="file" accept="image/*" style={{display:"none"}} onChange={e=>{const f=e.target.files?.[0];if(f){const r=new FileReader();r.onload=()=>{setVCover(r.result);toast.success("Couverture mise à jour")};r.readAsDataURL(f);e.target.value=""}}}/>
         </label>
       </div>
       {/* Logo floating */}
@@ -68,57 +68,57 @@ function VProfileScr({go,onSwitch,vendorPlan,onLogout}){
     <div className="wallet" style={{margin:"0 16px 14px"}}><div><p style={{fontSize:11,color:"var(--muted)"}}>Solde disponible</p><h3 style={{fontSize:20,fontWeight:700,marginTop:2}}>457 800 FCFA</h3></div><button onClick={()=>go("vWallet")}>Retirer</button></div>
 
     {/* ═══ VENTES & COMMANDES ═══ */}
-    <Section icon="📦" title="VENTES & COMMANDES">
-      <Item icon="📊" label="Statistiques" info={isPro?"Analytics":"—"} onClick={isPro?()=>go("vStats"):null} locked={!isPro} plan="pro"/>
-      <Item icon="⭐" label="Avis clients" info="4.6 / 5" onClick={()=>go("vReviews")}/>
-      <Item icon="❓" label="Questions clients" info="3" onClick={()=>go("vQA")}/>
+    <Section icon="" title="VENTES & COMMANDES">
+      <Item icon="" label="Statistiques" info={isPro?"Analytics":"—"} onClick={isPro?()=>go("vStats"):null} locked={!isPro} plan="pro"/>
+      <Item icon="" label="Avis clients" info="4.6 / 5" onClick={()=>go("vReviews")}/>
+      <Item icon="" label="Questions clients" info="3" onClick={()=>go("vQA")}/>
       <Item icon="↩️" label="Retours" info="1" onClick={()=>go("vReturns")}/>
-      <Item icon="🧾" label="Factures" info="3" onClick={()=>go("vInvoice")}/>
-      <Item icon="📅" label="Calendrier" info="Agenda" onClick={()=>go("vCalendar")}/>
+      <Item icon="" label="Factures" info="3" onClick={()=>go("vInvoice")}/>
+      <Item icon="" label="Calendrier" info="Agenda" onClick={()=>go("vCalendar")}/>
     </Section>
 
     {/* ═══ PRODUITS & STOCK ═══ */}
-    <Section icon="🛍️" title="PRODUITS & STOCK">
-      <Item icon="📦" label="Gestion Stock" info="2 alertes" onClick={()=>go("vStock")}/>
-      <Item icon="🏷️" label="Promotions" info={isPro?"2 actives":"—"} onClick={isPro?()=>go("vPromos"):null} locked={!isPro} plan="pro"/>
-      <Item icon="📸" label="Stories" info="2 actives" onClick={()=>go("vStories")}/>
-      <Item icon="👥" label="Achats groupés" info="2 offres" onClick={()=>go("vGroupBuy")}/>
-      <Item icon="💰" label="Remises auto" info={isEnt?"3 règles":"—"} onClick={isEnt?()=>go("vAutoDiscount"):null} locked={!isEnt} plan="enterprise"/>
+    <Section icon="️" title="PRODUITS & STOCK">
+      <Item icon="" label="Gestion Stock" info="2 alertes" onClick={()=>go("vStock")}/>
+      <Item icon="" label="Promotions" info={isPro?"2 actives":"—"} onClick={isPro?()=>go("vPromos"):null} locked={!isPro} plan="pro"/>
+      <Item icon="" label="Stories" info="2 actives" onClick={()=>go("vStories")}/>
+      <Item icon="" label="Achats groupés" info="2 offres" onClick={()=>go("vGroupBuy")}/>
+      <Item icon="" label="Remises auto" info={isEnt?"3 règles":"—"} onClick={isEnt?()=>go("vAutoDiscount"):null} locked={!isEnt} plan="enterprise"/>
     </Section>
 
     {/* ═══ MARKETING & CROISSANCE ═══ */}
-    <Section icon="📈" title="MARKETING & CROISSANCE">
-      <Item icon="📺" label="Live Shopping" info={isPro?"En direct":"—"} onClick={isPro?()=>go("vLive"):null} locked={!isPro} plan="pro"/>
-      <Item icon="📢" label="Publicités" info={isPro?"2 campagnes":"—"} onClick={isPro?()=>go("vAds"):null} locked={!isPro} plan="pro"/>
-      <Item icon="🏆" label="Classement" info={isPro?"#6":"—"} onClick={isPro?()=>go("vRanking"):null} locked={!isPro} plan="pro"/>
-      <Item icon="🤖" label="IA Description" info={isPro?"Auto":"—"} onClick={isPro?()=>go("vAIDesc"):null} locked={!isPro} plan="pro"/>
-      <Item icon="📊" label="Business Advisor" info={isPro?"Conseils":"—"} onClick={isPro?()=>go("vAdvisor"):null} locked={!isPro} plan="pro"/>
-      <Item icon="📧" label="Email Marketing" info={isEnt?"Campagnes":"—"} onClick={isEnt?()=>go("vEmail"):null} locked={!isEnt} plan="enterprise"/>
+    <Section icon="" title="MARKETING & CROISSANCE">
+      <Item icon="" label="Live Shopping" info={isPro?"En direct":"—"} onClick={isPro?()=>go("vLive"):null} locked={!isPro} plan="pro"/>
+      <Item icon="" label="Publicités" info={isPro?"2 campagnes":"—"} onClick={isPro?()=>go("vAds"):null} locked={!isPro} plan="pro"/>
+      <Item icon="" label="Classement" info={isPro?"#6":"—"} onClick={isPro?()=>go("vRanking"):null} locked={!isPro} plan="pro"/>
+      <Item icon="" label="IA Description" info={isPro?"Auto":"—"} onClick={isPro?()=>go("vAIDesc"):null} locked={!isPro} plan="pro"/>
+      <Item icon="" label="Business Advisor" info={isPro?"Conseils":"—"} onClick={isPro?()=>go("vAdvisor"):null} locked={!isPro} plan="pro"/>
+      <Item icon="" label="Email Marketing" info={isEnt?"Campagnes":"—"} onClick={isEnt?()=>go("vEmail"):null} locked={!isEnt} plan="enterprise"/>
     </Section>
 
     {/* ═══ BOUTIQUE EN LIGNE ═══ */}
-    <Section icon="🌐" title="BOUTIQUE EN LIGNE">
-      <Item icon="💎" label="Boutique certifiée" info={isEnt?"Or/Diamant":"—"} onClick={isEnt?()=>go("vCertified"):null} locked={!isEnt} plan="enterprise"/>
-      <Item icon="🌟" label="Thèmes" info={isEnt?"5 thèmes":"—"} onClick={isEnt?()=>go("vThemes"):null} locked={!isEnt} plan="enterprise"/>
-      <Item icon="🌐" label="Mon site web" info={isEnt?"En ligne ✅":"—"} onClick={isEnt?()=>go("vWebsite"):null} locked={!isEnt} plan="enterprise"/>
-      <Item icon="🔗" label="Domaine" info={isEnt?".lamuka.cg":"—"} onClick={isEnt?()=>go("vDomain"):null} locked={!isEnt} plan="enterprise"/>
-      <Item icon="🌍" label="SEO produits" info={isEnt?"Optimisé":"—"} onClick={isEnt?()=>go("vSeo"):null} locked={!isEnt} plan="enterprise"/>
-      <Item icon="📱" label="QR Code" info="Partager" onClick={()=>go("vQRCode")}/>
+    <Section icon="" title="BOUTIQUE EN LIGNE">
+      <Item icon="" label="Boutique certifiée" info={isEnt?"Or/Diamant":"—"} onClick={isEnt?()=>go("vCertified"):null} locked={!isEnt} plan="enterprise"/>
+      <Item icon="" label="Thèmes" info={isEnt?"5 thèmes":"—"} onClick={isEnt?()=>go("vThemes"):null} locked={!isEnt} plan="enterprise"/>
+      <Item icon="" label="Mon site web" info={isEnt?"En ligne":"—"} onClick={isEnt?()=>go("vWebsite"):null} locked={!isEnt} plan="enterprise"/>
+      <Item icon="" label="Domaine" info={isEnt?".lamuka.cg":"—"} onClick={isEnt?()=>go("vDomain"):null} locked={!isEnt} plan="enterprise"/>
+      <Item icon="" label="SEO produits" info={isEnt?"Optimisé":"—"} onClick={isEnt?()=>go("vSeo"):null} locked={!isEnt} plan="enterprise"/>
+      <Item icon="" label="QR Code" info="Partager" onClick={()=>go("vQRCode")}/>
     </Section>
 
     {/* ═══ LOGISTIQUE ═══ */}
-    <Section icon="🚚" title="LOGISTIQUE">
-      <Item icon="🚚" label="Livraison" info="3 livreurs" onClick={()=>go("vDelivery")}/>
-      <Item icon="🏬" label="Établissements" info={isEnt?"3":"—"} onClick={isEnt?()=>go("vShops"):null} locked={!isEnt} plan="enterprise"/>
-      <Item icon="📤" label="Import / Export" info={isEnt?"CSV":"—"} onClick={isEnt?()=>go("vImport"):null} locked={!isEnt} plan="enterprise"/>
+    <Section icon="" title="LOGISTIQUE">
+      <Item icon="" label="Livraison" info="3 livreurs" onClick={()=>go("vDelivery")}/>
+      <Item icon="" label="Établissements" info={isEnt?"3":"—"} onClick={isEnt?()=>go("vShops"):null} locked={!isEnt} plan="enterprise"/>
+      <Item icon="" label="Import / Export" info={isEnt?"CSV":"—"} onClick={isEnt?()=>go("vImport"):null} locked={!isEnt} plan="enterprise"/>
     </Section>
 
     {/* ═══ OUTILS & TECHNIQUE ═══ */}
-    <Section icon="🔧" title="OUTILS & SUPPORT">
-      <Item icon="📄" label="Rapports" info={isPro?"Fév 2026":"—"} onClick={isPro?()=>go("vReports"):null} locked={!isPro} plan="pro"/>
-      <Item icon="📊" label="Analytics avancés" info={isEnt?"Trafic":"—"} onClick={isEnt?()=>go("vAnalytics"):null} locked={!isEnt} plan="enterprise"/>
-      <Item icon="🔌" label="API & Intégrations" info={isEnt?"Active":"—"} onClick={isEnt?()=>go("vApi"):null} locked={!isEnt} plan="enterprise"/>
-      <Item icon="🤖" label="Assistant Lamu" info="IA" onClick={()=>go("vChatBot")}/>
+    <Section icon="" title="OUTILS & SUPPORT">
+      <Item icon="" label="Rapports" info={isPro?"Fév 2026":"—"} onClick={isPro?()=>go("vReports"):null} locked={!isPro} plan="pro"/>
+      <Item icon="" label="Analytics avancés" info={isEnt?"Trafic":"—"} onClick={isEnt?()=>go("vAnalytics"):null} locked={!isEnt} plan="enterprise"/>
+      <Item icon="" label="API & Intégrations" info={isEnt?"Active":"—"} onClick={isEnt?()=>go("vApi"):null} locked={!isEnt} plan="enterprise"/>
+      <Item icon="" label="Assistant Lamu" info="IA" onClick={()=>go("vChatBot")}/>
       <Item icon="🆘" label="Support" info={isEnt?"Manager dédié":"Centre d'aide"} onClick={()=>go("vSupport")}/>
     </Section>
 
@@ -154,7 +154,7 @@ function VProfileScr({go,onSwitch,vendorPlan,onLogout}){
         </div>
       </div>
     </div>}
-  {cropLogoSrc&&<ImageCropper src={cropLogoSrc} shape="square" onCancel={()=>setCropLogoSrc(null)} onConfirm={cropped=>{setVLogo(cropped);setCropLogoSrc(null);toast.success("Logo mis à jour 📸")}}/>}
+  {cropLogoSrc&&<ImageCropper src={cropLogoSrc} shape="square" onCancel={()=>setCropLogoSrc(null)} onConfirm={cropped=>{setVLogo(cropped);setCropLogoSrc(null);toast.success("Logo mis à jour")}}/>}
   </div></PullToRefresh>);
 }
 

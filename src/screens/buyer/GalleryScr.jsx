@@ -1,5 +1,6 @@
 import { useState, useRef } from "react";
 import Img from "../../components/Img";
+import Icon from "../../components/Icon";
 
 function GalleryScr({product:p,onClose}){
   const photos=p.photos||[p.photo];
@@ -42,7 +43,7 @@ function GalleryScr({product:p,onClose}){
     <div style={{display:"flex",justifyContent:"space-between",alignItems:"center",padding:"12px 16px",color:"#fff",flexShrink:0}}>
       <span style={{fontSize:13,fontWeight:600}}>{idx+1} / {photos.length}</span>
       <span style={{fontSize:13,fontWeight:500,opacity:.7}}>{p.name}</span>
-      <button onClick={onClose} style={{width:36,height:36,borderRadius:12,background:"rgba(255,255,255,.15)",border:"none",color:"#fff",fontSize:16,cursor:"pointer",display:"flex",alignItems:"center",justifyContent:"center"}}>✕</button>
+      <button onClick={onClose} style={{width:36,height:36,borderRadius:12,background:"rgba(255,255,255,.15)",border:"none",color:"#fff",fontSize:16,cursor:"pointer",display:"flex",alignItems:"center",justifyContent:"center"}}></button>
     </div>
 
     {/* Image area */}

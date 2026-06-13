@@ -1,4 +1,5 @@
 import { useState } from "react";
+import Icon from "../../components/Icon";
 
 function DrZonesScr({onBack}){
   const [zones,setZones]=useState([{id:"z1",name:"Brazzaville Sud",areas:"Bacongo, Makélékélé",active:true},{id:"z2",name:"Brazzaville Centre",areas:"Poto-Poto, Moungali, Ouenzé",active:true},{id:"z3",name:"Brazzaville Nord",areas:"Talangaï, Mfilou, Djiri",active:false},{id:"z4",name:"Pointe-Noire",areas:"Centre-ville, Loandjili",active:false}]);
@@ -28,7 +29,7 @@ function DrZonesScr({onBack}){
 
   return(<div className="scr"><div className="appbar"><button onClick={onBack}>←</button><h2>Mes zones de livraison</h2><div style={{width:38}}/></div>
     <div style={{padding:"0 16px 20px"}}>
-      <div className="info-box blue" style={{marginBottom:14}}><span>📍</span><span style={{fontSize:11}}>Activez/désactivez les zones où vous acceptez des livraisons. Ajoutez de nouvelles zones selon votre couverture.</span></div>
+      <div className="info-box blue" style={{marginBottom:14}}><span><Icon name="location" size={18}/></span><span style={{fontSize:11}}>Activez/désactivez les zones où vous acceptez des livraisons. Ajoutez de nouvelles zones selon votre couverture.</span></div>
 
       <div style={{fontSize:12,color:"var(--muted)",marginBottom:8}}>{zones.filter(z=>z.active).length} zone{zones.filter(z=>z.active).length>1?"s":""} active{zones.filter(z=>z.active).length>1?"s":""} sur {zones.length}</div>
 
@@ -36,24 +37,24 @@ function DrZonesScr({onBack}){
         <div style={{display:"flex",alignItems:"center",gap:10}}>
           <div style={{flex:1}}>
             <div style={{display:"flex",alignItems:"center",gap:6}}><h4 style={{fontSize:14,fontWeight:700}}>{z.name}</h4>{z.active&&<span style={{width:8,height:8,borderRadius:4,background:"#F97316"}}/>}</div>
-            <div style={{fontSize:11,color:"var(--muted)",marginTop:2}}>📍 {z.areas}</div>
+            <div style={{fontSize:11,color:"var(--muted)",marginTop:2}}><Icon name="location" size={16}/>{" "}{z.areas}</div>
           </div>
           <div className={`toggle ${z.active?"on":""}`} onClick={()=>toggle(i)}/>
         </div>
         <div style={{display:"flex",gap:8,marginTop:10,paddingTop:10,borderTop:"1px solid var(--border)"}}>
-          <span style={{flex:1,fontSize:11,color:z.active?"#10B981":"var(--muted)",fontWeight:600}}>{z.active?"✅ Active":"⏸️ Inactive"}</span>
+          <span style={{flex:1,fontSize:11,color:z.active?"#10B981":"var(--muted)",fontWeight:600}}>{z.active?"Active":"⏸️ Inactive"}</span>
           <button style={{padding:"4px 12px",borderRadius:6,border:"1px solid rgba(239,68,68,0.2)",background:"var(--card)",color:"#EF4444",fontSize:10,fontWeight:600,cursor:"pointer",fontFamily:"inherit"}} onClick={()=>remove(z.id)}>Retirer</button>
         </div>
       </div>)}
 
       {/* Add zone */}
       {showAdd?<div style={{padding:16,background:"var(--card)",border:"2px solid #F97316",borderRadius:16,marginBottom:14}}>
-        <h4 style={{fontSize:14,fontWeight:700,marginBottom:12}}>➕ Ajouter une zone</h4>
+        <h4 style={{fontSize:14,fontWeight:700,marginBottom:12}}> Ajouter une zone</h4>
 
         {suggestions.length>0&&<>
           <div style={{fontSize:12,fontWeight:600,color:"var(--sub)",marginBottom:8}}>Zones suggérées</div>
           <div style={{display:"flex",gap:6,flexWrap:"wrap",marginBottom:14}}>
-            {suggestions.map(s=><span key={s.name} onClick={()=>{setAddName(s.name);setAddAreas(s.areas)}} style={{padding:"6px 12px",borderRadius:8,border:addName===s.name?"2px solid #F97316":"1px solid var(--border)",background:addName===s.name?"rgba(249,115,22,0.04)":"var(--card)",fontSize:11,fontWeight:600,cursor:"pointer",color:addName===s.name?"#F97316":"var(--sub)"}}>{addName===s.name?"✓ ":""}{s.name}</span>)}
+            {suggestions.map(s=><span key={s.name} onClick={()=>{setAddName(s.name);setAddAreas(s.areas)}} style={{padding:"6px 12px",borderRadius:8,border:addName===s.name?"2px solid #F97316":"1px solid var(--border)",background:addName===s.name?"rgba(249,115,22,0.04)":"var(--card)",fontSize:11,fontWeight:600,cursor:"pointer",color:addName===s.name?"#F97316":"var(--sub)"}}>{addName===s.name?" ":""}{s.name}</span>)}
           </div>
         </>}
 
@@ -67,7 +68,7 @@ function DrZonesScr({onBack}){
       </div>
       :<button style={{width:"100%",padding:14,borderRadius:14,border:"2px dashed #F97316",background:"rgba(249,115,22,0.02)",color:"#F97316",fontSize:13,fontWeight:600,cursor:"pointer",fontFamily:"inherit",marginBottom:14}} onClick={()=>setShowAdd(true)}>+ Ajouter une zone de livraison</button>}
 
-      <button className="btn-primary" style={{background:saved?"#10B981":"#F97316"}} onClick={doSave}>{saved?"✅ Zones sauvegardées":"💾 Enregistrer mes zones"}</button>
+      <button className="btn-primary" style={{background:saved?"#10B981":"#F97316"}} onClick={doSave}>{saved?"Zones sauvegardées":" Enregistrer mes zones"}</button>
     </div>
   </div>);
 }

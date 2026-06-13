@@ -1,4 +1,5 @@
 import { useState } from "react";
+import Icon from "./Icon";
 
 const MONTHS = ["Janvier","Février","Mars","Avril","Mai","Juin","Juillet","Août","Septembre","Octobre","Novembre","Décembre"];
 const DAYS = ["Lu","Ma","Me","Je","Ve","Sa","Di"];
@@ -35,7 +36,7 @@ function DatePicker({ value, onChange, label, placeholder = "Choisir une date" }
     <>
       <div onClick={() => setOpen(true)} style={{ padding: "10px 14px", borderRadius: 12, border: "1px solid var(--border)", background: "var(--light)", cursor: "pointer", display: "flex", justifyContent: "space-between", alignItems: "center", fontSize: 14, fontFamily: "inherit", color: value ? "var(--text)" : "var(--muted)" }}>
         {formatted || placeholder}
-        <span style={{ fontSize: 16 }}>📅</span>
+        <span style={{ fontSize: 16 }}></span>
       </div>
 
       {open && <div onClick={() => setOpen(false)} style={{ position: "fixed", inset: 0, background: "rgba(0,0,0,.4)", zIndex: 160, display: "flex", alignItems: "center", justifyContent: "center", padding: 16 }}>

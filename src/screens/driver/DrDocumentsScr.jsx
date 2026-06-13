@@ -1,5 +1,6 @@
 import { useState } from "react";
 import toast from "../../utils/toast";
+import Icon from "../../components/Icon";
 
 function DrDocumentsScr({onBack}){
   const [docs,setDocs]=useState({
@@ -13,9 +14,9 @@ function DrDocumentsScr({onBack}){
   const [uploading,setUploading]=useState(null);
 
   const statusInfo={
-    valid:{color:"#10B981",bg:"rgba(16,185,129,0.08)",label:"✅ Valide",icon:"✅"},
-    expiring:{color:"#F59E0B",bg:"rgba(245,158,11,0.08)",label:"⚠️ Expire bientôt",icon:"⚠️"},
-    expired:{color:"#EF4444",bg:"rgba(239,68,68,0.08)",label:"❌ Expiré",icon:"❌"},
+    valid:{color:"#10B981",bg:"rgba(16,185,129,0.08)",label:"Valide",icon:"check_circle"},
+    expiring:{color:"#F59E0B",bg:"rgba(245,158,11,0.08)",label:"️ Expire bientôt",icon:"️"},
+    expired:{color:"#EF4444",bg:"rgba(239,68,68,0.08)",label:"Expiré",icon:"x_circle"},
     pending:{color:"#3B82F6",bg:"rgba(59,130,246,0.08)",label:"⏳ En vérification",icon:"⏳"},
   };
 
@@ -37,7 +38,7 @@ function DrDocumentsScr({onBack}){
 
     {/* Status summary */}
     <div style={{padding:14,background:hasIssues?"rgba(245,158,11,0.06)":"rgba(16,185,129,0.06)",border:`1px solid ${hasIssues?"rgba(245,158,11,0.2)":"rgba(16,185,129,0.2)"}`,borderRadius:16,marginBottom:14,display:"flex",alignItems:"center",gap:12}}>
-      <div style={{width:48,height:48,borderRadius:14,background:hasIssues?"rgba(245,158,11,0.1)":"rgba(16,185,129,0.1)",display:"flex",alignItems:"center",justifyContent:"center",fontSize:24}}>{hasIssues?"⚠️":"✅"}</div>
+      <div style={{width:48,height:48,borderRadius:14,background:hasIssues?"rgba(245,158,11,0.1)":"rgba(16,185,129,0.1)",display:"flex",alignItems:"center",justifyContent:"center",fontSize:24}}>{hasIssues?"️":""}</div>
       <div style={{flex:1}}>
         <div style={{fontSize:14,fontWeight:700,color:hasIssues?"#F59E0B":"#10B981"}}>{hasIssues?"Attention requise":"Tous les documents sont à jour"}</div>
         <div style={{fontSize:12,color:"var(--muted)",marginTop:2}}>{validCount}/{totalCount} documents valides</div>
@@ -68,7 +69,7 @@ function DrDocumentsScr({onBack}){
         {(doc.status==="expiring"||doc.status==="expired")&&<div style={{display:"flex",gap:8}}>
           <input id={`doc-${key}`} type="file" accept="image/*,.pdf" style={{display:"none"}} onChange={()=>handleUpload(key)}/>
           <button onClick={()=>document.getElementById(`doc-${key}`)?.click()} disabled={uploading===key} style={{flex:1,padding:10,borderRadius:10,border:"none",background:doc.status==="expired"?"#EF4444":"#F59E0B",color:"#fff",fontSize:12,fontWeight:600,cursor:"pointer",fontFamily:"inherit"}}>
-            {uploading===key?"⏳ Envoi...":"📤 Mettre à jour"}
+            {uploading===key?"⏳ Envoi...":" Mettre à jour"}
           </button>
         </div>}
 
@@ -78,7 +79,7 @@ function DrDocumentsScr({onBack}){
 
     {/* Info */}
     <div style={{padding:12,background:"rgba(59,130,246,0.04)",border:"1px solid rgba(59,130,246,0.1)",borderRadius:12,marginTop:4}}>
-      <div style={{fontSize:12,fontWeight:600,color:"#3B82F6",marginBottom:4}}>💡 Important</div>
+      <div style={{fontSize:12,fontWeight:600,color:"#3B82F6",marginBottom:4}}><Icon name="info" size={16}/>{" "}Important</div>
       <div style={{fontSize:11,color:"var(--muted)",lineHeight:1.5}}>Les documents expirés doivent être renouvelés sous 30 jours. Passé ce délai, votre compte sera temporairement suspendu. Formats acceptés : JPG, PNG, PDF (max 5 MB).</div>
     </div>
   </div>);

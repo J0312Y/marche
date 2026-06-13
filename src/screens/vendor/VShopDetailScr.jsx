@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { fmt } from "../../utils/helpers";
 import ShopTeamTab from "./ShopTeamTab";
+import Icon from "../../components/Icon";
 
 function VShopDetailScr({shop:sh,go,onBack}){
   const [tab,setTab]=useState(0);
@@ -19,10 +20,10 @@ function VShopDetailScr({shop:sh,go,onBack}){
     <div style={{textAlign:"center",padding:"0 20px 16px"}}>
       <div style={{width:72,height:72,borderRadius:20,background:"linear-gradient(135deg,#F97316,#FB923C)",display:"flex",alignItems:"center",justifyContent:"center",margin:"0 auto 10px",fontSize:34}}>{sh.logo}</div>
       <h3 style={{fontSize:18,fontWeight:700}}>{sh.name}</h3>
-      <p style={{fontSize:12,color:"var(--muted)"}}>📍 {sh.location} · Créée en {sh.created}</p>
+      <p style={{fontSize:12,color:"var(--muted)"}}><Icon name="location" size={16}/>{" "}{sh.location} · Créée en {sh.created}</p>
       <div style={{display:"flex",justifyContent:"center",gap:6,marginTop:8}}>
-        <span style={{padding:"4px 12px",borderRadius:8,background:isActive?"rgba(16,185,129,0.1)":"rgba(245,158,11,0.1)",color:isActive?"#10B981":"#F59E0B",fontSize:12,fontWeight:600}}>{isActive?"✅ Active":"⏳ En attente"}</span>
-        <span style={{padding:"4px 12px",borderRadius:8,background:"rgba(245,158,11,0.1)",color:"#F59E0B",fontSize:12,fontWeight:600}}>Enterprise ★</span>
+        <span style={{padding:"4px 12px",borderRadius:8,background:isActive?"rgba(16,185,129,0.1)":"rgba(245,158,11,0.1)",color:isActive?"#10B981":"#F59E0B",fontSize:12,fontWeight:600}}>{isActive?"Active":"⏳ En attente"}</span>
+        <span style={{padding:"4px 12px",borderRadius:8,background:"rgba(245,158,11,0.1)",color:"#F59E0B",fontSize:12,fontWeight:600}}>Enterprise </span>
       </div>
     </div>
 
@@ -35,7 +36,7 @@ function VShopDetailScr({shop:sh,go,onBack}){
       {/* Tab 0: Dashboard */}
       {tab===0&&<div style={{padding:"0 16px 20px"}}>
         <div style={{display:"grid",gridTemplateColumns:"1fr 1fr",gap:10,marginBottom:12}}>
-          {[["💰","Chiffre d'affaires",fmt(sh.revenue),"↑ 18%","#10B981"],["📦","Commandes",sh.orders,"↑ 12%","#F97316"],["👁️","Visiteurs",sh.views,"↑ 24%","#F59E0B"],["⭐","Note moyenne",sh.rating,"↑ 0.3","#10B981"]].map(([i,l,v,t,c])=><div key={l} style={{padding:14,background:"var(--card)",border:"1px solid var(--border)",borderRadius:14}}>
+          {[["","Chiffre d'affaires",fmt(sh.revenue),"↑ 18%","#10B981"],["","Commandes",sh.orders,"↑ 12%","#F97316"],["️","Visiteurs",sh.views,"↑ 24%","#F59E0B"],["","Note moyenne",sh.rating,"↑ 0.3","#10B981"]].map(([i,l,v,t,c])=><div key={l} style={{padding:14,background:"var(--card)",border:"1px solid var(--border)",borderRadius:14}}>
             <div style={{fontSize:18,marginBottom:6}}>{i}</div>
             <div style={{fontSize:18,fontWeight:700}}>{v}</div>
             <div style={{fontSize:11,color:"var(--muted)"}}>{l}</div>
@@ -51,7 +52,7 @@ function VShopDetailScr({shop:sh,go,onBack}){
         </div>)}
 
         <div style={{fontSize:14,fontWeight:700,margin:"16px 0 10px"}}>Actions rapides</div>
-        {[["📦","Voir les commandes",()=>go("vOrdersList")],["🛍️","Gérer les produits",()=>go("vProducts")],["📊","Voir les statistiques",()=>go("vStats")]].map(([i,t,fn])=><div key={t} className="menu-item" onClick={fn}><div className="mi-i">{i}</div><span className="mi-t">{t}</span><span className="mi-c">›</span></div>)}
+        {[["","Voir les commandes",()=>go("vOrdersList")],["️","Gérer les produits",()=>go("vProducts")],["","Voir les statistiques",()=>go("vStats")]].map(([i,t,fn])=><div key={t} className="menu-item" onClick={fn}><div className="mi-i">{i}</div><span className="mi-t">{t}</span><span className="mi-c">›</span></div>)}
       </div>}
 
       {/* Tab 1: Modifier */}
@@ -64,19 +65,19 @@ function VShopDetailScr({shop:sh,go,onBack}){
 
         <div style={{fontSize:14,fontWeight:700,margin:"16px 0 10px"}}>Catégories</div>
         <div style={{display:"flex",gap:6,flexWrap:"wrap",marginBottom:14}}>
-          {allCats.map(c=><span key={c} onClick={()=>toggleCat(c)} style={{padding:"8px 14px",borderRadius:10,background:selCats.includes(c)?"rgba(249,115,22,0.08)":"var(--card)",border:selCats.includes(c)?"2px solid #F97316":"1px solid var(--border)",color:selCats.includes(c)?"#F97316":"var(--muted)",fontSize:12,fontWeight:600,cursor:"pointer",transition:"all .2s"}}>{selCats.includes(c)?"✓ ":""}{c}</span>)}
+          {allCats.map(c=><span key={c} onClick={()=>toggleCat(c)} style={{padding:"8px 14px",borderRadius:10,background:selCats.includes(c)?"rgba(249,115,22,0.08)":"var(--card)",border:selCats.includes(c)?"2px solid #F97316":"1px solid var(--border)",color:selCats.includes(c)?"#F97316":"var(--muted)",fontSize:12,fontWeight:600,cursor:"pointer",transition:"all .2s"}}>{selCats.includes(c)?" ":""}{c}</span>)}
         </div>
 
         <div style={{fontSize:14,fontWeight:700,margin:"10px 0 10px"}}>Visibilité</div>
         <div style={{display:"flex",gap:10,marginBottom:14}}>
-          {[["active","🟢 Active","Visible sur le marketplace"],["pause","⏸️ En pause","Masquée temporairement"],["close","🔴 Fermée","Plus de commandes"]].map(([k,l,d])=><div key={k} onClick={()=>setVisibility(k)} style={{flex:1,padding:12,background:visibility===k?(k==="active"?"rgba(16,185,129,0.04)":k==="pause"?"rgba(245,158,11,0.04)":"rgba(239,68,68,0.04)"):"var(--card)",border:visibility===k?(k==="active"?"2px solid #10B981":k==="pause"?"2px solid #F59E0B":"2px solid #EF4444"):"1px solid var(--border)",borderRadius:12,cursor:"pointer",textAlign:"center",transition:"all .2s"}}>
+          {[["active","Active","Visible sur le marketplace"],["pause","⏸️ En pause","Masquée temporairement"],["close","Fermée","Plus de commandes"]].map(([k,l,d])=><div key={k} onClick={()=>setVisibility(k)} style={{flex:1,padding:12,background:visibility===k?(k==="active"?"rgba(16,185,129,0.04)":k==="pause"?"rgba(245,158,11,0.04)":"rgba(239,68,68,0.04)"):"var(--card)",border:visibility===k?(k==="active"?"2px solid #10B981":k==="pause"?"2px solid #F59E0B":"2px solid #EF4444"):"1px solid var(--border)",borderRadius:12,cursor:"pointer",textAlign:"center",transition:"all .2s"}}>
             <div style={{fontSize:12,fontWeight:700}}>{l}</div>
             <div style={{fontSize:9,color:"var(--muted)",marginTop:4}}>{d}</div>
           </div>)}
         </div>
 
-        <div className="info-box yellow" style={{marginBottom:10}}><span>⚠️</span><span style={{fontSize:11}}>Les modifications sont appliquées immédiatement sur le marketplace.</span></div>
-        <button className="btn-primary" style={{background:saved?"#10B981":"#F97316"}} onClick={doSave}>{saved?"✅ Modifications enregistrées":"💾 Enregistrer les modifications"}</button>
+        <div className="info-box yellow" style={{marginBottom:10}}><span>️</span><span style={{fontSize:11}}>Les modifications sont appliquées immédiatement sur le marketplace.</span></div>
+        <button className="btn-primary" style={{background:saved?"#10B981":"#F97316"}} onClick={doSave}>{saved?"Modifications enregistrées":" Enregistrer les modifications"}</button>
       </div>}
 
       {/* Tab 2: Équipe */}
@@ -90,7 +91,7 @@ function VShopDetailScr({shop:sh,go,onBack}){
         <h3 style={{fontSize:16,fontWeight:700,marginBottom:6}}>Vérification en cours</h3>
         <p style={{fontSize:13,color:"var(--muted)",lineHeight:1.6}}>Vos documents sont en cours d'examen. Vous serez notifié dès l'approbation (24-48h).</p>
         <div style={{marginTop:16}}>
-          {[["Documents soumis","✅"],["Vérification identité","⏳"],["Validation finale","⬜"]].map(([l,s])=><div key={l} style={{display:"flex",justifyContent:"space-between",padding:"8px 0",borderTop:"1px solid var(--border)",fontSize:13}}><span>{l}</span><span>{s}</span></div>)}
+          {[["Documents soumis",""],["Vérification identité","⏳"],["Validation finale","⬜"]].map(([l,s])=><div key={l} style={{display:"flex",justifyContent:"space-between",padding:"8px 0",borderTop:"1px solid var(--border)",fontSize:13}}><span>{l}</span><span>{s}</span></div>)}
         </div>
       </div>
     </div>}

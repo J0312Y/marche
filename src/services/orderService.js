@@ -5,9 +5,9 @@ import { USE_MOCK, delay } from './config';
 import { ordersAPI, paymentsAPI } from '../api';
 
 const mockOrders = [
-  { id: "o1", ref: "#LMK-0214", status: "shipped", total: 92000, date: "14 Fév 14:42", items: [{ name: "Robe Wax Moderne", qty: 2, price: 25000, img: "👗" }, { name: "Sac à Main Cuir", qty: 1, price: 42000, img: "👜" }], payment: "Airtel Money", vendor: "Mode Afrique", delivery_fee: 2500 },
-  { id: "o2", ref: "#LMK-0210", status: "delivered", total: 18000, date: "12 Fév 10:30", items: [{ name: "Chemise Bogolan", qty: 1, price: 18000, img: "👔" }], payment: "MTN MoMo", vendor: "Mode Afrique", delivery_fee: 2500 },
-  { id: "o3", ref: "#LMK-0205", status: "delivered", total: 5500, date: "10 Fév 12:15", items: [{ name: "Poulet DG", qty: 1, price: 5500, img: "🍗" }], payment: "Kolo Wallet", vendor: "Chez Mama Ngudi", delivery_fee: 1500 },
+  { id: "o1", ref: "#LMK-0214", status: "shipped", total: 92000, date: "14 Fév 14:42", items: [{ name: "Robe Wax Moderne", qty: 2, price: 25000, img: "" }, { name: "Sac à Main Cuir", qty: 1, price: 42000, img: "" }], payment: "Airtel Money", vendor: "Mode Afrique", delivery_fee: 2500 },
+  { id: "o2", ref: "#LMK-0210", status: "delivered", total: 18000, date: "12 Fév 10:30", items: [{ name: "Chemise Bogolan", qty: 1, price: 18000, img: "" }], payment: "MTN MoMo", vendor: "Mode Afrique", delivery_fee: 2500 },
+  { id: "o3", ref: "#LMK-0205", status: "delivered", total: 5500, date: "10 Fév 12:15", items: [{ name: "Poulet DG", qty: 1, price: 5500, img: "" }], payment: "Kolo Wallet", vendor: "Chez Mama Ngudi", delivery_fee: 1500 },
 ];
 
 export default {

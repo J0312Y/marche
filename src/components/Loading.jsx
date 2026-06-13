@@ -1,4 +1,5 @@
 /**
+import Icon from "./Icon";
  * Skeleton Loading System
  * Shimmer animation + preset skeletons for different page types
  */
@@ -192,14 +193,14 @@ function SkeletonHome(){
 function ErrorMsg({ message = "Erreur de chargement", onRetry }) {
   return (
     <div style={{ display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", padding: 60, gap: 12, textAlign: "center" }}>
-      <span style={{ fontSize: 32 }}>⚠️</span>
+      <span style={{ fontSize: 32 }}>️</span>
       <span style={{ fontSize: 13, color: "#EF4444", fontWeight: 600 }}>{message}</span>
-      {onRetry && <button onClick={onRetry} style={{ padding: "8px 20px", borderRadius: 10, border: "1px solid #E8E6E1", background: "var(--card)", fontSize: 12, fontWeight: 600, cursor: "pointer", fontFamily: "inherit" }}>🔄 Réessayer</button>}
+      {onRetry && <button onClick={onRetry} style={{ padding: "8px 20px", borderRadius: 10, border: "1px solid #E8E6E1", background: "var(--card)", fontSize: 12, fontWeight: 600, cursor: "pointer", fontFamily: "inherit" }}> Réessayer</button>}
     </div>
   );
 }
 
-function Empty({ icon = "📭", text = "Aucun résultat" }) {
+function Empty({ icon = "", text = "Aucun résultat" }) {
   return (
     <div style={{ display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", padding: 60, gap: 8, textAlign: "center" }}>
       <span style={{ fontSize: 36 }}>{icon}</span>

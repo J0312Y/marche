@@ -1,4 +1,5 @@
 import { useEffect } from "react";
+import Icon from "../../components/Icon";
 
 function VCreatePromoScr({onBack}){
   useEffect(()=>{onBack()},[]);

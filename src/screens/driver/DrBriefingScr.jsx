@@ -1,6 +1,7 @@
 import { useState } from "react";
 import Img from "../../components/Img";
 import { fmt } from "../../utils/helpers";
+import Icon from "../../components/Icon";
 
 /**
  * DrBriefingScr — order details before starting delivery
@@ -44,9 +45,9 @@ function DrBriefingScr({ delivery: dl, go, onBack }) {
       <div style={{ margin: "0 16px 14px", padding: 16, background: "var(--card)", border: "1px solid var(--border)", borderRadius: 16 }}>
         <div style={{ display: "flex", gap: 12 }}>
           <div style={{ display: "flex", flexDirection: "column", alignItems: "center" }}>
-            <div style={{ width: 36, height: 36, borderRadius: "50%", background: "rgba(16,185,129,0.1)", display: "flex", alignItems: "center", justifyContent: "center", fontSize: 16 }}>🏪</div>
+            <div style={{ width: 36, height: 36, borderRadius: "50%", background: "rgba(16,185,129,0.1)", display: "flex", alignItems: "center", justifyContent: "center", fontSize: 16 }}><Icon name="store" size={18}/></div>
             <div style={{ width: 2, flex: 1, background: "var(--border)", margin: "4px 0" }} />
-            <div style={{ width: 36, height: 36, borderRadius: "50%", background: "rgba(249,115,22,0.1)", display: "flex", alignItems: "center", justifyContent: "center", fontSize: 16 }}>🏠</div>
+            <div style={{ width: 36, height: 36, borderRadius: "50%", background: "rgba(249,115,22,0.1)", display: "flex", alignItems: "center", justifyContent: "center", fontSize: 16 }}></div>
           </div>
           <div style={{ flex: 1, minWidth: 0 }}>
             {/* Pickup */}
@@ -54,14 +55,14 @@ function DrBriefingScr({ delivery: dl, go, onBack }) {
               <div style={{ fontSize: 10, fontWeight: 700, color: "#10B981", letterSpacing: .5, marginBottom: 4 }}>RÉCUPÉRATION</div>
               <div style={{ fontSize: 14, fontWeight: 700, marginBottom: 2 }}>{dl.vendor?.name}</div>
               <div style={{ fontSize: 12, color: "var(--muted)", marginBottom: 6 }}>{dl.pickup || "Adresse vendeur"}</div>
-              <button onClick={() => window.location.href = `tel:${dl.vendor?.phone}`} style={{ padding: "4px 10px", borderRadius: 8, border: "1px solid var(--border)", background: "var(--light)", fontSize: 11, fontWeight: 600, cursor: "pointer", fontFamily: "inherit" }}>📞 Appeler</button>
+              <button onClick={() => window.location.href = `tel:${dl.vendor?.phone}`} style={{ padding: "4px 10px", borderRadius: 8, border: "1px solid var(--border)", background: "var(--light)", fontSize: 11, fontWeight: 600, cursor: "pointer", fontFamily: "inherit" }}><Icon name="phone" size={16}/>{" "}Appeler</button>
             </div>
             {/* Drop */}
             <div style={{ paddingTop: 14 }}>
               <div style={{ fontSize: 10, fontWeight: 700, color: "#F97316", letterSpacing: .5, marginBottom: 4 }}>LIVRAISON</div>
               <div style={{ fontSize: 14, fontWeight: 700, marginBottom: 2 }}>{dl.client?.name}</div>
               <div style={{ fontSize: 12, color: "var(--muted)", marginBottom: 6 }}>{dl.client?.addr}</div>
-              <button onClick={() => window.location.href = `tel:${dl.client?.phone}`} style={{ padding: "4px 10px", borderRadius: 8, border: "1px solid var(--border)", background: "var(--light)", fontSize: 11, fontWeight: 600, cursor: "pointer", fontFamily: "inherit" }}>📞 Appeler</button>
+              <button onClick={() => window.location.href = `tel:${dl.client?.phone}`} style={{ padding: "4px 10px", borderRadius: 8, border: "1px solid var(--border)", background: "var(--light)", fontSize: 11, fontWeight: 600, cursor: "pointer", fontFamily: "inherit" }}><Icon name="phone" size={16}/>{" "}Appeler</button>
             </div>
           </div>
         </div>
@@ -69,7 +70,7 @@ function DrBriefingScr({ delivery: dl, go, onBack }) {
 
       {/* Items */}
       <div style={{ margin: "0 16px 14px" }}>
-        <div style={{ fontSize: 13, fontWeight: 700, marginBottom: 8 }}>📦 Articles à livrer</div>
+        <div style={{ fontSize: 13, fontWeight: 700, marginBottom: 8 }}><Icon name="package" size={16}/>{" "}Articles à livrer</div>
         <div style={{ background: "var(--card)", border: "1px solid var(--border)", borderRadius: 14, overflow: "hidden" }}>
           {dl.items?.map((it, i) => (
             <div key={i} style={{ display: "flex", alignItems: "center", gap: 10, padding: "10px 14px", borderBottom: i < dl.items.length - 1 ? "1px solid var(--border)" : "none" }}>
@@ -88,7 +89,7 @@ function DrBriefingScr({ delivery: dl, go, onBack }) {
 
       {/* Note */}
       {dl.note && <div style={{ margin: "0 16px 14px", padding: 12, background: "rgba(59,130,246,0.04)", border: "1px solid rgba(59,130,246,0.12)", borderRadius: 12 }}>
-        <div style={{ fontSize: 11, fontWeight: 700, color: "#3B82F6", marginBottom: 4 }}>📝 Note du client</div>
+        <div style={{ fontSize: 11, fontWeight: 700, color: "#3B82F6", marginBottom: 4 }}> Note du client</div>
         <div style={{ fontSize: 12, color: "var(--sub)" }}>{dl.note}</div>
       </div>}
 
@@ -97,7 +98,7 @@ function DrBriefingScr({ delivery: dl, go, onBack }) {
         <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
           <div>
             <div style={{ fontSize: 11, color: "var(--muted)", fontWeight: 600, marginBottom: 2 }}>{dl.payment === "cash" ? "À ENCAISSER" : "PAIEMENT"}</div>
-            <div style={{ fontSize: 13, fontWeight: 700 }}>{dl.payment === "cash" ? "💵 Cash à la livraison" : "✅ Déjà payé"}</div>
+            <div style={{ fontSize: 13, fontWeight: 700 }}>{dl.payment === "cash" ? "Cash à la livraison" : "Déjà payé"}</div>
           </div>
           {dl.payment === "cash" && <div style={{ fontSize: 20, fontWeight: 800, color: "#F59E0B" }}>{fmt(dl.total)}</div>}
         </div>
@@ -105,7 +106,7 @@ function DrBriefingScr({ delivery: dl, go, onBack }) {
 
       {/* Bottom CTA */}
       <div style={{ position: "fixed", bottom: 0, left: 0, right: 0, padding: 16, background: "var(--bg)", borderTop: "1px solid var(--border)", maxWidth: 500, margin: "0 auto" }}>
-        <button onClick={() => go("drDelivery", { ...dl, status: "pickup" })} style={{ width: "100%", padding: 16, borderRadius: 14, border: "none", background: "#10B981", color: "#fff", fontSize: 16, fontWeight: 800, cursor: "pointer", fontFamily: "inherit", boxShadow: "0 4px 14px rgba(16,185,129,0.3)" }}>🚀 Démarrer la course</button>
+        <button onClick={() => go("drDelivery", { ...dl, status: "pickup" })} style={{ width: "100%", padding: 16, borderRadius: 14, border: "none", background: "#10B981", color: "#fff", fontSize: 16, fontWeight: 800, cursor: "pointer", fontFamily: "inherit", boxShadow: "0 4px 14px rgba(16,185,129,0.3)" }}><Icon name="rocket" size={16}/>{" "}Démarrer la course</button>
       </div>
     </div>
   );

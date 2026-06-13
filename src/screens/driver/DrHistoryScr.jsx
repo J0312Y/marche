@@ -3,6 +3,7 @@ import PullToRefresh from "../../components/PullToRefresh";
 import toast from "../../utils/toast";
 import { D_HISTORY } from "../../data/driverData";
 import { fmt } from "../../utils/helpers";
+import Icon from "../../components/Icon";
 
 function DrHistoryScr({onBack}){
   const [period,setPeriod]=useState("week");
@@ -27,7 +28,7 @@ function DrHistoryScr({onBack}){
   const completed=D_HISTORY.filter(h=>h.status==="done").length;
   const cancelled=D_HISTORY.filter(h=>h.status==="cancelled").length;
 
-  return(<PullToRefresh onRefresh={async()=>{toast.success("Historique actualisé 📦")}}><div className="scr"><div className="appbar"><button onClick={onBack}>←</button><h2>Historique</h2><div style={{width:38}}/></div>
+  return(<PullToRefresh onRefresh={async()=>{toast.success("Historique actualisé")}}><div className="scr"><div className="appbar"><button onClick={onBack}>←</button><h2>Historique</h2><div style={{width:38}}/></div>
     <div style={{padding:"0 16px 14px"}}>
 
       {/* Period selector */}
@@ -49,14 +50,14 @@ function DrHistoryScr({onBack}){
         </div>
         <div style={{flex:1,padding:14,background:"var(--card)",border:"1px solid var(--border)",borderRadius:14,textAlign:"center"}}>
           <div style={{fontSize:10,color:"var(--muted)"}}>Note moy.</div>
-          <div style={{fontSize:18,fontWeight:800,color:"#F59E0B",marginTop:2}}>⭐ {avgRating}</div>
+          <div style={{fontSize:18,fontWeight:800,color:"#F59E0B",marginTop:2}}><Icon name="star_full" size={16}/>{" "}{avgRating}</div>
         </div>
       </div>
 
       {/* Chart */}
       {period!=="all"&&<div style={{padding:16,background:"var(--card)",border:"1px solid var(--border)",borderRadius:16,marginBottom:12}}>
         <div style={{display:"flex",justifyContent:"space-between",alignItems:"center",marginBottom:10}}>
-          <span style={{fontSize:14,fontWeight:700}}>💰 Gains — {period==="today"?"Aujourd'hui":period==="week"?"Cette semaine":"Ce mois"}</span>
+          <span style={{fontSize:14,fontWeight:700}}><Icon name="wallet" size={16}/>{" "}Gains — {period==="today"?"Aujourd'hui":period==="week"?"Cette semaine":"Ce mois"}</span>
           <span style={{fontSize:13,fontWeight:700,color:"#F97316"}}>{fmt(totalPeriod)}</span>
         </div>
         <div style={{display:"flex",alignItems:"flex-end",gap:period==="month"?12:6,height:100}}>
@@ -70,7 +71,7 @@ function DrHistoryScr({onBack}){
 
       {/* Status filter */}
       <div style={{display:"flex",gap:6,marginBottom:12}}>
-        {[["all","Toutes ("+D_HISTORY.length+")"],["done","✅ Livrées ("+completed+")"],["cancelled","❌ Annulées ("+cancelled+")"]].map(([k,l])=>
+        {[["all","Toutes ("+D_HISTORY.length+")"],["done","Livrées ("+completed+")"],["cancelled","Annulées ("+cancelled+")"]].map(([k,l])=>
           <button key={k} onClick={()=>setStatusFilter(k)} style={{padding:"6px 10px",borderRadius:8,border:statusFilter===k?"2px solid #F97316":"1px solid var(--border)",background:statusFilter===k?"rgba(249,115,22,0.04)":"var(--card)",fontSize:10,fontWeight:600,cursor:"pointer",fontFamily:"inherit",color:statusFilter===k?"#F97316":"var(--muted)",flexShrink:0}}>{l}</button>
         )}
       </div>
@@ -80,7 +81,7 @@ function DrHistoryScr({onBack}){
         const isOpen=expanded===i;
         return(<div key={i} onClick={()=>setExpanded(isOpen?null:i)} style={{padding:14,background:"var(--card)",border:"1px solid var(--border)",borderRadius:14,marginBottom:8,cursor:"pointer"}}>
           <div style={{display:"flex",alignItems:"center",gap:10}}>
-            <div style={{width:40,height:40,borderRadius:12,background:h.status==="done"?"rgba(16,185,129,0.08)":"rgba(239,68,68,0.08)",display:"flex",alignItems:"center",justifyContent:"center",fontSize:18,flexShrink:0}}>{h.status==="done"?"✅":"❌"}</div>
+            <div style={{width:40,height:40,borderRadius:12,background:h.status==="done"?"rgba(16,185,129,0.08)":"rgba(239,68,68,0.08)",display:"flex",alignItems:"center",justifyContent:"center",fontSize:18,flexShrink:0}}>{h.status==="done"?"":""}</div>
             <div style={{flex:1,minWidth:0}}>
               <div style={{fontSize:13,fontWeight:600,overflow:"hidden",whiteSpace:"nowrap",textOverflow:"ellipsis"}}>{h.ref} · {h.client}</div>
               <div style={{fontSize:11,color:"var(--muted)",marginTop:1}}>{h.vendor} · {h.date}</div>
@@ -92,18 +93,18 @@ function DrHistoryScr({onBack}){
           </div>
           {isOpen&&<div style={{marginTop:10,paddingTop:10,borderTop:"1px solid var(--border)"}}>
             <div style={{display:"flex",flexWrap:"wrap",gap:8,fontSize:12}}>
-              <span style={{color:"var(--muted)"}}>📍 {h.distance}</span>
+              <span style={{color:"var(--muted)"}}><Icon name="location" size={16}/>{" "}{h.distance}</span>
               <span style={{color:"var(--muted)"}}>⏱️ {h.duration||"15 min"}</span>
-              <span style={{color:"var(--muted)"}}>💰 Course: {fmt(h.fee)}</span>
-              {h.tip>0&&<span style={{color:"#F59E0B"}}>🎁 Pourboire: {fmt(h.tip)}</span>}
-              {h.rating&&<span style={{color:"#F59E0B"}}>⭐ {h.rating}/5</span>}
-              {h.payment==="cash"&&<span style={{color:"#F59E0B"}}>💵 Cash</span>}
+              <span style={{color:"var(--muted)"}}><Icon name="wallet" size={16}/>{" "}Course: {fmt(h.fee)}</span>
+              {h.tip>0&&<span style={{color:"#F59E0B"}}><Icon name="gift" size={16}/>{" "}Pourboire: {fmt(h.tip)}</span>}
+              {h.rating&&<span style={{color:"#F59E0B"}}><Icon name="star_full" size={16}/>{" "}{h.rating}/5</span>}
+              {h.payment==="cash"&&<span style={{color:"#F59E0B"}}><Icon name="wallet" size={16}/>{" "}Cash</span>}
             </div>
           </div>}
         </div>);
       })}
 
-      {filtered.length===0&&<div style={{textAlign:"center",padding:"30px 0"}}><div style={{fontSize:36,marginBottom:8}}>📭</div><div style={{fontSize:13,color:"var(--muted)"}}>Aucune livraison dans cette catégorie</div></div>}
+      {filtered.length===0&&<div style={{textAlign:"center",padding:"30px 0"}}><div style={{fontSize:36,marginBottom:8}}></div><div style={{fontSize:13,color:"var(--muted)"}}>Aucune livraison dans cette catégorie</div></div>}
     </div>
   </div></PullToRefresh>);
 }

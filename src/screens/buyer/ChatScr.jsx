@@ -1,17 +1,18 @@
 import toast from "../../utils/toast";
 import { useState, useEffect, useRef } from "react";
 import { DRIVER_PHOTO } from "../../data/images";
+import Icon from "../../components/Icon";
 
 function ChatScr({onBack}){
   const now=()=>{const t=new Date();return `${t.getHours()}:${String(t.getMinutes()).padStart(2,"0")}`};
 
-  const driver={name:"Patrick Moukala",avatar:"https://images.unsplash.com/photo-1506277886164-e25aa3f4ef7f?w=80&h=80&fit=crop&crop=face",vehicle:"🛵 Honda PCX",online:true,zone:"Bacongo",lastSeen:"En ligne"};
+  const driver={name:"Patrick Moukala",avatar:"https://images.unsplash.com/photo-1506277886164-e25aa3f4ef7f?w=80&h=80&fit=crop&crop=face",vehicle:"Honda PCX",online:true,zone:"Bacongo",lastSeen:"En ligne"};
   const [msgs,setMsgs]=useState([]);
   const [inp,setInp]=useState("");const ref=useRef(null);const fileRef=useRef(null);const [typing,setTyping]=useState(false);
 
   useEffect(()=>{
     const timer=setTimeout(()=>{
-      setMsgs([{from:"bot",text:`Bonjour ! Je suis ${driver.name}, votre livreur ${driver.vehicle}.\nJ'ai récupéré votre commande et je suis en route ! 📍`,time:now(),isWelcome:true}]);
+      setMsgs([{from:"bot",text:`Bonjour ! Je suis ${driver.name}, votre livreur ${driver.vehicle}.\nJ'ai récupéré votre commande et je suis en route ! `,time:now(),isWelcome:true}]);
     },600);
     return ()=>clearTimeout(timer);
   },[]);
@@ -21,15 +22,15 @@ function ChatScr({onBack}){
   const quickReplies=["Vous êtes où ?","Combien de temps ?","Je suis au portail","Appelez-moi en arrivant"];
 
   const botResponses={
-    "Vous êtes où ?":"Je suis à environ 800m de chez vous, j'arrive bientôt ! 📍",
+    "Vous êtes où ?":"Je suis à environ 800m de chez vous, j'arrive bientôt !",
     "Combien de temps ?":"Environ 8-10 minutes, le trafic est fluide ! ⏱️",
-    "Je suis au portail":"Parfait, je suis presque là ! Restez au portail. 👍",
-    "Appelez-moi en arrivant":"D'accord, je vous appelle dès que je suis devant ! 📞",
+    "Je suis au portail":"Parfait, je suis presque là ! Restez au portail. ",
+    "Appelez-moi en arrivant":"D'accord, je vous appelle dès que je suis devant !",
   };
 
   const fallbackResponses=[
-    "D'accord, noté ! 👍","Je suis presque arrivé !","Pas de souci !",
-    "Je vous appelle à l'arrivée 📞","OK, encore quelques minutes !","Bien reçu, merci ! 🛵",
+    "D'accord, noté ! ","Je suis presque arrivé !","Pas de souci !",
+    "Je vous appelle à l'arrivée","OK, encore quelques minutes !","Bien reçu, merci !",
   ];
 
   const send=(text)=>{
@@ -48,17 +49,17 @@ function ChatScr({onBack}){
   const handleFileUpload=(e)=>{
     const file=e.target.files?.[0];
     if(!file)return;
-    if(file.size>5*1024*1024){toast.error("Fichier trop volumineux (max 5 Mo) ⚠️");return;}
+    if(file.size>5*1024*1024){toast.error("Fichier trop volumineux (max 5 Mo) ️");return;}
     const reader=new FileReader();
     reader.onload=()=>{
       const isImage=file.type.startsWith("image/");
-      setMsgs(p=>[...p,{from:"user",text:isImage?"":"📎 "+file.name,time:now(),
+      setMsgs(p=>[...p,{from:"user",text:isImage?"":" "+file.name,time:now(),
         attachment:{type:isImage?"image":"file",url:isImage?reader.result:null,name:file.name,size:(file.size/1024).toFixed(0)+" KB"}}]);
       // Bot reply
       setTyping(true);
       setTimeout(()=>{
         setTyping(false);
-        setMsgs(p=>[...p,{from:"bot",text:isImage?"Bien reçu, merci pour la photo ! 👍":"Fichier bien reçu ! 📄",time:now()}]);
+        setMsgs(p=>[...p,{from:"bot",text:isImage?"Bien reçu, merci pour la photo ! ":"Fichier bien reçu ! ",time:now()}]);
       },1000);
     };
     reader.readAsDataURL(file);
@@ -78,18 +79,18 @@ function ChatScr({onBack}){
       <div className="ch-info">
         <h4>{driver.name}</h4>
         <p style={{display:"flex",alignItems:"center",gap:4,fontSize:11,color:"var(--muted)"}}>
-          <span style={{color:driver.online?"#10B981":"var(--muted)",fontWeight:600}}>{driver.online?"🟢 En ligne":"⚪ Hors ligne"}</span>
+          <span style={{color:driver.online?"#10B981":"var(--muted)",fontWeight:600}}>{driver.online?"En ligne":" Hors ligne"}</span>
           <span>·</span>
-          <span>📍 {driver.zone}</span>
+          <span><Icon name="location" size={16}/>{" "}{driver.zone}</span>
           <span>·</span>
           <span>{driver.vehicle}</span>
         </p>
       </div>
-      <button className="ch-call" onClick={()=>window.location.href="tel:+242064663469"}>📞</button>
+      <button className="ch-call" onClick={()=>window.location.href="tel:+242064663469"}><Icon name="phone" size={18}/></button>
     </div>
 
     <div className="chat-body" ref={ref}>
-      {msgs.length===0&&<div style={{textAlign:"center",padding:"40px 20px",color:"var(--muted)"}}><div style={{fontSize:36,marginBottom:8}}>🛵</div><div style={{fontSize:13}}>Connexion avec votre livreur...</div></div>}
+      {msgs.length===0&&<div style={{textAlign:"center",padding:"40px 20px",color:"var(--muted)"}}><div style={{fontSize:36,marginBottom:8}}><Icon name="truck" size={18}/></div><div style={{fontSize:13}}>Connexion avec votre livreur...</div></div>}
 
       {msgs.map((m,i)=><div key={i} className={`msg ${m.from==="user"?"user":"bot"}`}>
         {m.isWelcome&&<div style={{width:28,height:28,borderRadius:8,overflow:"hidden",marginBottom:6}}><img src={DRIVER_PHOTO} style={{width:"100%",height:"100%",objectFit:"cover"}} alt=""/></div>}
@@ -100,7 +101,7 @@ function ChatScr({onBack}){
         {/* File attachment */}
         {m.attachment&&m.attachment.type==="file"&&(
           <div style={{display:"flex",alignItems:"center",gap:8,padding:"8px 12px",background:m.from==="user"?"rgba(255,255,255,.15)":"rgba(0,0,0,.05)",borderRadius:10,marginBottom:4}}>
-            <span style={{fontSize:20}}>📄</span>
+            <span style={{fontSize:20}}></span>
             <div><div style={{fontSize:12,fontWeight:600}}>{m.attachment.name}</div><div style={{fontSize:10,opacity:.7}}>{m.attachment.size}</div></div>
           </div>
         )}
@@ -121,17 +122,17 @@ function ChatScr({onBack}){
 
     {/* Input with attachment */}
     <div className="chat-input">
-      <button className="chat-attach" onClick={()=>fileRef.current?.click()}>📎</button>
+      <button className="chat-attach" onClick={()=>fileRef.current?.click()}></button>
       <input ref={fileRef} type="file" accept="image/*,.pdf,.doc,.docx" style={{display:"none"}} onChange={handleFileUpload}/>
       <input placeholder="Écrire..." value={inp} onChange={e=>setInp(e.target.value)} onKeyDown={e=>e.key==="Enter"&&send()}/>
-      <button onClick={()=>send()}>➤</button>
+      <button onClick={()=>send()}></button>
     </div>
 
     {/* Image fullscreen */}
     {viewImg&&(
       <div onClick={()=>setViewImg(null)} style={{position:"fixed",inset:0,background:"rgba(0,0,0,.85)",zIndex:100,display:"flex",alignItems:"center",justifyContent:"center",cursor:"pointer",padding:20}}>
         <img src={viewImg} alt="" style={{maxWidth:"100%",maxHeight:"80vh",borderRadius:12,objectFit:"contain"}}/>
-        <button style={{position:"absolute",top:20,right:20,width:40,height:40,borderRadius:"50%",background:"rgba(255,255,255,.2)",border:"none",color:"#fff",fontSize:20,cursor:"pointer"}} onClick={()=>setViewImg?.(null)}>✕</button>
+        <button style={{position:"absolute",top:20,right:20,width:40,height:40,borderRadius:"50%",background:"rgba(255,255,255,.2)",border:"none",color:"#fff",fontSize:20,cursor:"pointer"}} onClick={()=>setViewImg?.(null)}></button>
       </div>
     )}
   </>);

@@ -1,4 +1,5 @@
 import { fmt, disc } from "../../utils/helpers";
+import Icon from "./Icon";
 
 /**
  * ProductCard - Carte produit dans les grilles
@@ -27,7 +28,7 @@ function ProductCard({ product: p, onPress, onReview, toggleFav, isFav }) {
             onClick={e => { e.stopPropagation(); toggleFav(p.id); }}
             style={{ color: fav ? "#EF4444" : "inherit", fontSize: fav ? 16 : 14 }}
           >
-            {fav ? "♥" : "♡"}
+            {fav ? "" : ""}
           </span>
         )}
       </div>
@@ -35,7 +36,7 @@ function ProductCard({ product: p, onPress, onReview, toggleFav, isFav }) {
         <h4>{p.name}</h4>
         <div className="pv">
           {p.va} {p.vendor}
-          {p.eta && <span style={{ marginLeft: 4, color: "#10B981", fontSize: 10 }}>🕐 {p.eta}</span>}
+          {p.eta && <span style={{ marginLeft: 4, color: "#10B981", fontSize: 10 }}> {p.eta}</span>}
         </div>
         <div className="pp">
           {fmt(p.price)}
@@ -44,7 +45,7 @@ function ProductCard({ product: p, onPress, onReview, toggleFav, isFav }) {
         <div className="pr"
           onClick={onReview ? e => { e.stopPropagation(); onReview(); } : undefined}
         >
-          ⭐ {p.rating}{p.reviews != null && ` (${p.reviews})`}
+           {p.rating}{p.reviews != null && ` (${p.reviews})`}
         </div>
       </div>
     </div>

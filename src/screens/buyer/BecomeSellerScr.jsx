@@ -1,5 +1,6 @@
 import { useState } from "react";
 import toast from "../../utils/toast";
+import Icon from "../../components/Icon";
 
 function BecomeSellerScr({ onBack, go }) {
   const [contactSent, setContactSent] = useState(false);
@@ -23,10 +24,10 @@ function BecomeSellerScr({ onBack, go }) {
         <h3 style={{ fontSize: 18, fontWeight: 700, marginBottom: 16 }}>Pourquoi vendre sur Lamuka ?</h3>
 
         {[
-          ["👥", "#10B981", "Des milliers de clients", "Accédez à une base de clients en pleine croissance à Brazzaville et Pointe-Noire"],
-          ["📈", "#F97316", "Développez votre activité", "Outils et statistiques pour booster vos ventes"],
-          ["💳", "#3B82F6", "Paiements sécurisés", "Airtel Money, MTN MoMo — paiement rapide et garanti"],
-          ["🚚", "#8B5CF6", "Livraison intégrée", "Réseau de livreurs Lamuka ou vos propres livreurs"],
+          ["", "#10B981", "Des milliers de clients", "Accédez à une base de clients en pleine croissance à Brazzaville et Pointe-Noire"],
+          ["", "#F97316", "Développez votre activité", "Outils et statistiques pour booster vos ventes"],
+          ["", "#3B82F6", "Paiements sécurisés", "Airtel Money, MTN MoMo — paiement rapide et garanti"],
+          ["", "#8B5CF6", "Livraison intégrée", "Réseau de livreurs Lamuka ou vos propres livreurs"],
         ].map(([icon, color, title, desc], i) => (
           <div key={i} style={{ display: "flex", alignItems: "flex-start", gap: 14, marginBottom: 18 }}>
             <div style={{ width: 44, height: 44, borderRadius: 12, background: `${color}12`, display: "flex", alignItems: "center", justifyContent: "center", fontSize: 20, flexShrink: 0 }}>{icon}</div>
@@ -62,7 +63,7 @@ function BecomeSellerScr({ onBack, go }) {
       {/* Plans preview */}
       <div style={{ padding: "0 20px 20px" }}>
         <div style={{ padding: 16, background: "var(--card)", border: "1px solid var(--border)", borderRadius: 16 }}>
-          <div style={{ fontSize: 14, fontWeight: 700, marginBottom: 10 }}>📋 Nos plans</div>
+          <div style={{ fontSize: 14, fontWeight: 700, marginBottom: 10 }}><Icon name="document" size={16}/>{" "}Nos plans</div>
           {[
             ["Starter", "Gratuit", "Idéal pour débuter · 5% commission"],
             ["Pro", "9 900 F/mois", "Boutique avancée · 3% commission"],
@@ -90,7 +91,7 @@ function BecomeSellerScr({ onBack, go }) {
             toast.success("Notre équipe vous contactera sous 24h !");
           }
         }} style={{ width: "100%", padding: 14, borderRadius: 16, border: "2px solid #F97316", background: "transparent", color: "#F97316", fontSize: 14, fontWeight: 700, cursor: "pointer", fontFamily: "inherit" }}>
-          {contactSent ? "✅ Demande envoyée !" : "Contacter l'équipe commerciale"}
+          {contactSent ? "Demande envoyée !" : "Contacter l'équipe commerciale"}
         </button>
       </div>
     </div>

@@ -7,6 +7,7 @@ import SuccessAnimation from "../../components/SuccessAnimation";
 import PayLogo from "../../components/PayLogos";
 import { validatePayPhone, getPhonePlaceholder, isPayPhoneValid } from "../../utils/phoneValidation";
 import { triggerPush } from "../../components/PushBanner";
+import Icon from "../../components/Icon";
 
 function RoleRegScr({onBack,onDone,forceRole,onPending}){
   const { CATS } = useData();
@@ -136,14 +137,14 @@ function RoleRegScr({onBack,onDone,forceRole,onPending}){
   const applyLogoCrop=(cropped)=>{
     const el=document.getElementById("vu-preview");
     if(el){el.textContent="";el.style.overflow="hidden";const img=document.createElement("img");img.src=cropped;img.style.cssText="width:100%;height:100%;object-fit:cover;border-radius:12px";el.appendChild(img)}
-    setHasLogo(true);setCropLogSrc(null);toast.success("Logo ajouté 📸");
+    setHasLogo(true);setCropLogSrc(null);toast.success("Logo ajouté");
   };
 
 
   if(showSubmitAnim)return<SuccessAnimation title="Demande envoyée !" subtitle={role==="vendor"?"Votre commerce sera vérifié sous 24h":"Votre dossier sera vérifié sous 24h"} hint="Vous recevrez une notification" duration={0}/>;
 
   if(ok)return(<div style={{display:"flex",flexDirection:"column",height:"100%",justifyContent:"center",animation:"fadeIn .3s ease"}}><div style={{textAlign:"center",padding:"40px 20px"}}>
-    <div style={{width:80,height:80,borderRadius:"50%",background:"rgba(249,115,22,0.08)",display:"flex",alignItems:"center",justifyContent:"center",margin:"0 auto 20px",fontSize:40}}>📩</div>
+    <div style={{width:80,height:80,borderRadius:"50%",background:"rgba(249,115,22,0.08)",display:"flex",alignItems:"center",justifyContent:"center",margin:"0 auto 20px",fontSize:40}}></div>
     <h2 style={{fontSize:20,fontWeight:700,marginBottom:8}}>Demande envoyée !</h2>
     <p style={{fontSize:14,color:"var(--sub)",lineHeight:1.6}}>Votre demande d'inscription en tant que <b>{role==="vendor"?"commerçant":"livreur"}</b> a bien été reçue.</p>
 
@@ -157,12 +158,12 @@ function RoleRegScr({onBack,onDone,forceRole,onPending}){
 
     {/* Timeline */}
     <div style={{textAlign:"left",maxWidth:300,margin:"16px auto",padding:16,background:"var(--card)",border:"1px solid var(--border)",borderRadius:16}}>
-      <div style={{fontSize:13,fontWeight:700,marginBottom:12}}>📋 Prochaines étapes</div>
+      <div style={{fontSize:13,fontWeight:700,marginBottom:12}}><Icon name="document" size={16}/>{" "}Prochaines étapes</div>
       {[
-        ["✅","Demande soumise","Maintenant","done"],
+        ["","Demande soumise","Maintenant","done"],
         ["⏳","Vérification en cours","Notre équipe examine vos documents","pending"],
-        ["🔔","Notification de validation","Sous 24-48h par SMS et in-app","waiting"],
-        [role==="vendor"?"🏪":"🛵",role==="vendor"?"Accès mode vendeur":"Accès mode livreur","Après validation","waiting"],
+        ["","Notification de validation","Sous 24-48h par SMS et in-app","waiting"],
+        [role==="vendor"?"":"",role==="vendor"?"Accès mode vendeur":"Accès mode livreur","Après validation","waiting"],
       ].map(([ic,title,desc,status],i)=>(
         <div key={i} style={{display:"flex",gap:10,marginBottom:i<3?12:0,position:"relative"}}>
           {i<3&&<div style={{position:"absolute",left:13,top:28,width:2,height:16,background:status==="done"?"#10B981":"var(--border)"}}/>}
@@ -175,14 +176,14 @@ function RoleRegScr({onBack,onDone,forceRole,onPending}){
       ))}
     </div>
 
-    <p style={{fontSize:11,color:"var(--muted)",lineHeight:1.5,marginTop:8}}>📱 Vous recevrez un SMS au <b>+242 {rolePhone.slice(0,3)} XXX {rolePhone.slice(6)}</b> dès validation.<br/>Vous pouvez continuer à acheter en attendant.</p>
+    <p style={{fontSize:11,color:"var(--muted)",lineHeight:1.5,marginTop:8}}><Icon name="phone" size={16}/>{" "}Vous recevrez un SMS au <b>+242 {rolePhone.slice(0,3)} XXX {rolePhone.slice(6)}</b> dès validation.<br/>Vous pouvez continuer à acheter en attendant.</p>
 
     <div style={{maxWidth:300,margin:"16px auto 0",display:"flex",flexDirection:"column",gap:8}}>
-      <button className="btn-primary" onClick={()=>{toast.success("Demande enregistrée ! Vous serez notifié sous 24-48h 📩");
-        setTimeout(()=>triggerPush("📩 Votre demande de "+(role==="vendor"?"commerçant":"livreur")+" est en cours de vérification. Réponse sous 24-48h."),3000);
+      <button className="btn-primary" onClick={()=>{toast.success("Demande enregistrée ! Vous serez notifié sous 24-48h ");
+        setTimeout(()=>triggerPush(" Votre demande de "+(role==="vendor"?"commerçant":"livreur")+" est en cours de vérification. Réponse sous 24-48h."),3000);
         if(onPending) onPending(role);
         setTimeout(()=>{
-          triggerPush("🎉 Félicitations ! Votre demande de "+(role==="vendor"?"commerçant":"livreur")+" a été approuvée ! Accédez à votre espace dans le Profil.");
+          triggerPush("Félicitations ! Votre demande de "+(role==="vendor"?"commerçant":"livreur")+" a été approuvée ! Accédez à votre espace dans le Profil.");
           if(onDone) onDone(role, role==="vendor"?plan:"driver");
         },60000);
         onBack()}}>↩ Retour au marketplace</button>
@@ -194,12 +195,12 @@ function RoleRegScr({onBack,onDone,forceRole,onPending}){
     <div className="scr" style={{padding:16}}>
       <p style={{fontSize:14,color:"var(--sub)",marginBottom:14,lineHeight:1.6}}>Choisissez le rôle que vous souhaitez ajouter à votre compte :</p>
       <div onClick={()=>{setRole("vendor");setStep(0);setDocs({id:false,rccm:false,photo:false})}} style={{padding:16,background:"var(--card)",border:"2px solid var(--border)",borderRadius:20,marginBottom:14,cursor:"pointer",transition:"all .2s"}}>
-        <div style={{display:"flex",alignItems:"center",gap:14,marginBottom:10}}><div style={{width:56,height:56,borderRadius:16,background:"linear-gradient(135deg,#F97316,#FB923C)",display:"flex",alignItems:"center",justifyContent:"center",fontSize:28}}>🏪</div><div><h3 style={{fontSize:18,fontWeight:700}}>Commerçant</h3><p style={{fontSize:12,color:"var(--muted)"}}>Ouvrez votre commerce sur Lamuka</p></div></div>
+        <div style={{display:"flex",alignItems:"center",gap:14,marginBottom:10}}><div style={{width:56,height:56,borderRadius:16,background:"linear-gradient(135deg,#F97316,#FB923C)",display:"flex",alignItems:"center",justifyContent:"center",fontSize:28}}><Icon name="store" size={18}/></div><div><h3 style={{fontSize:18,fontWeight:700}}>Commerçant</h3><p style={{fontSize:12,color:"var(--muted)"}}>Ouvrez votre commerce sur Lamuka</p></div></div>
         <div style={{fontSize:12,color:"var(--sub)",lineHeight:1.6}}>Restaurant, boutique, pâtisserie, supermarché, pharmacie ou service — vendez et recevez des commandes.</div>
-        <div style={{display:"flex",gap:6,marginTop:10,flexWrap:"wrap"}}>{["🍽️ Resto","🏪 Boutique","🧁 Pâtisserie","🛒 Supermarché","💊 Pharma","🔧 Service"].map(f=><span key={f} style={{padding:"4px 10px",borderRadius:8,background:"rgba(249,115,22,0.06)",color:"#F97316",fontSize:10,fontWeight:600}}>{f}</span>)}</div>
+        <div style={{display:"flex",gap:6,marginTop:10,flexWrap:"wrap"}}>{["Resto","Boutique","Pâtisserie","Supermarché","Pharma","Service"].map(f=><span key={f} style={{padding:"4px 10px",borderRadius:8,background:"rgba(249,115,22,0.06)",color:"#F97316",fontSize:10,fontWeight:600}}>{f}</span>)}</div>
       </div>
       <div onClick={()=>{setRole("driver");setStep(0);setDocs({id:false,permit:false,vehicle:false})}} style={{padding:16,background:"var(--card)",border:"2px solid var(--border)",borderRadius:20,cursor:"pointer",transition:"all .2s"}}>
-        <div style={{display:"flex",alignItems:"center",gap:14,marginBottom:10}}><div style={{width:56,height:56,borderRadius:16,background:"linear-gradient(135deg,#10B981,#059669)",display:"flex",alignItems:"center",justifyContent:"center",fontSize:28}}>🛵</div><div><h3 style={{fontSize:18,fontWeight:700}}>Livreur</h3><p style={{fontSize:12,color:"var(--muted)"}}>Livrez et gagnez de l'argent</p></div></div>
+        <div style={{display:"flex",alignItems:"center",gap:14,marginBottom:10}}><div style={{width:56,height:56,borderRadius:16,background:"linear-gradient(135deg,#10B981,#059669)",display:"flex",alignItems:"center",justifyContent:"center",fontSize:28}}><Icon name="truck" size={18}/></div><div><h3 style={{fontSize:18,fontWeight:700}}>Livreur</h3><p style={{fontSize:12,color:"var(--muted)"}}>Livrez et gagnez de l'argent</p></div></div>
         <div style={{fontSize:12,color:"var(--sub)",lineHeight:1.6}}>Effectuez des livraisons dans votre zone. Choisissez vos horaires, suivez vos gains en temps réel.</div>
         <div style={{display:"flex",gap:6,marginTop:10,flexWrap:"wrap"}}>{["Horaires flexibles","Gains en temps réel","GPS intégré","Pourboires"].map(f=><span key={f} style={{padding:"4px 10px",borderRadius:8,background:"rgba(249,115,22,0.04)",color:"#10B981",fontSize:10,fontWeight:600}}>{f}</span>)}</div>
       </div>
@@ -211,7 +212,7 @@ function RoleRegScr({onBack,onDone,forceRole,onPending}){
 
   return(<>
     <div className="appbar"><button onClick={()=>step>0?setStep(step-1):forceRole?onBack():setStep(-1)}>←</button><h2>{role==="vendor"?"Devenir Commerçant":"Devenir Livreur"}</h2><div style={{width:38}}/></div>
-    <div className="vr-steps">{steps.map((s,i)=><div key={s} style={{display:"contents"}}>{i>0&&<div className={`vr-line ${step>=i?"on":""}`} style={step>=i?{background:color}:{}}/>}<div className="step-col"><div className={`vr-dot ${step>i?"done":step>=i?"on":""}`} style={step>=i?{background:color,color:"#fff"}:{}}>{step>i?"✓":i+1}</div><div className={`vr-lbl ${step>=i?"on":""}`}>{s}</div></div></div>)}</div>
+    <div className="vr-steps">{steps.map((s,i)=><div key={s} style={{display:"contents"}}>{i>0&&<div className={`vr-line ${step>=i?"on":""}`} style={step>=i?{background:color}:{}}/>}<div className="step-col"><div className={`vr-dot ${step>i?"done":step>=i?"on":""}`} style={step>=i?{background:color,color:"#fff"}:{}}>{step>i?"":i+1}</div><div className={`vr-lbl ${step>=i?"on":""}`}>{s}</div></div></div>)}</div>
     <div className="scr" style={{padding:16}}>
 
       {/* STEP 0: Infos personnelles (both) */}
@@ -226,18 +227,18 @@ function RoleRegScr({onBack,onDone,forceRole,onPending}){
       {step===1&&role==="vendor"&&<><h3 style={{fontSize:16,fontWeight:700,marginBottom:14}}>Votre Établissement</h3>
         <label style={{display:"block",fontSize:12,fontWeight:600,color:"var(--sub)",marginBottom:8}}>Type de commerce <span style={{color:"#EF4444"}}>*</span></label>
         <div style={{display:"grid",gridTemplateColumns:"1fr 1fr 1fr",gap:8,marginBottom:14}}>
-          {[["🏪","Boutique","boutique"],["🍽️","Restaurant","restaurant"],["🧁","Pâtisserie","patisserie"],["🛒","Supermarché","supermarche"],["💊","Pharmacie","pharmacie"],["🔧","Service","service"]].map(([icon,label,val])=>{const sel=selCats.includes(val);return<div key={val} onClick={(e)=>{e.stopPropagation();setSC(p=>{const types=["boutique","restaurant","patisserie","supermarche","pharmacie","service"];const filtered=p.filter(x=>!types.includes(x));return sel?filtered:[...filtered,val]});}} style={{padding:"12px 8px",borderRadius:12,border:sel?"2px solid #F97316":"2px solid var(--border)",background:sel?"rgba(249,115,22,0.08)":"var(--card)",cursor:"pointer",textAlign:"center",transition:"all .15s",position:"relative",WebkitTapHighlightColor:"transparent",userSelect:"none"}}>
-            {sel&&<div style={{position:"absolute",top:4,right:4,width:16,height:16,borderRadius:"50%",background:"#F97316",display:"flex",alignItems:"center",justifyContent:"center",fontSize:9,color:"#fff"}}>✓</div>}
+          {[["","Boutique","boutique"],["","Restaurant","restaurant"],["","Pâtisserie","patisserie"],["","Supermarché","supermarche"],["","Pharmacie","pharmacie"],["","Service","service"]].map(([icon,label,val])=>{const sel=selCats.includes(val);return<div key={val} onClick={(e)=>{e.stopPropagation();setSC(p=>{const types=["boutique","restaurant","patisserie","supermarche","pharmacie","service"];const filtered=p.filter(x=>!types.includes(x));return sel?filtered:[...filtered,val]});}} style={{padding:"12px 8px",borderRadius:12,border:sel?"2px solid #F97316":"2px solid var(--border)",background:sel?"rgba(249,115,22,0.08)":"var(--card)",cursor:"pointer",textAlign:"center",transition:"all .15s",position:"relative",WebkitTapHighlightColor:"transparent",userSelect:"none"}}>
+            {sel&&<div style={{position:"absolute",top:4,right:4,width:16,height:16,borderRadius:"50%",background:"#F97316",display:"flex",alignItems:"center",justifyContent:"center",fontSize:9,color:"#fff"}}></div>}
             <div style={{fontSize:22,marginBottom:2}}>{icon}</div>
             <div style={{fontSize:11,fontWeight:700,color:sel?"#F97316":"var(--sub)"}}>{label}</div>
           </div>})}
         </div>
-        <div className="vr-upload" onClick={()=>document.getElementById("reg-upload")?.click()} style={{cursor:"pointer"}}><div className="vu-icon" id="vu-preview">🖼️</div><b>Logo / Photo <span style={{color:"#EF4444",fontWeight:400}}>*</span></b><p>PNG, JPG · Max 2MB</p><input id="reg-upload" type="file" accept="image/*" style={{display:"none"}} onChange={e=>{const f=e.target.files?.[0];if(f){const r=new FileReader();r.onload=()=>setCropLogSrc(r.result);r.readAsDataURL(f);e.target.value=""}}}/></div>
+        <div className="vr-upload" onClick={()=>document.getElementById("reg-upload")?.click()} style={{cursor:"pointer"}}><div className="vu-icon" id="vu-preview">️</div><b>Logo / Photo <span style={{color:"#EF4444",fontWeight:400}}>*</span></b><p>PNG, JPG · Max 2MB</p><input id="reg-upload" type="file" accept="image/*" style={{display:"none"}} onChange={e=>{const f=e.target.files?.[0];if(f){const r=new FileReader();r.onload=()=>setCropLogSrc(r.result);r.readAsDataURL(f);e.target.value=""}}}/></div>
         <div className="field"><label>Nom de l'établissement <span style={{color:"#EF4444"}}>*</span></label><input value={fShopName} onChange={e=>{setFShopName(e.target.value);clrR("shopName")}} placeholder="Ex: Chez Mama Ngudi, Congo Tech..."/>{regErrors.shopName&&<div className="err-msg">{regErrors.shopName}</div>}</div>
         <div className="field"><label>Description <span style={{color:"#EF4444"}}>*</span></label><textarea value={fShopDesc} onChange={e=>{setFShopDesc(e.target.value);clrR("desc")}} placeholder="Votre activité, spécialités..." rows={3} style={{resize:"none"}}/>{regErrors.desc&&<div className="err-msg">{regErrors.desc}</div>}</div>
         {/* Horaires — restos, pâtisseries, pharmacies, supermarchés */}
         {["restaurant","patisserie","pharmacie","supermarche"].some(t=>selCats.includes(t))&&<div style={{marginTop:10,marginBottom:14}}>
-          <div style={{fontSize:14,fontWeight:700,marginBottom:8}}>🕐 Horaires d'ouverture</div>
+          <div style={{fontSize:14,fontWeight:700,marginBottom:8}}> Horaires d'ouverture</div>
           <div className="field-row">
             <div className="field"><label>Ouverture</label><input type="time" value={fOpenTime} onChange={e=>setFOpenTime(e.target.value)} style={{padding:12}}/></div>
             <div className="field"><label>Fermeture</label><input type="time" value={fCloseTime} onChange={e=>setFCloseTime(e.target.value)} style={{padding:12}}/></div>
@@ -249,24 +250,24 @@ function RoleRegScr({onBack,onDone,forceRole,onPending}){
             )})}
           </div>
           <div style={{marginTop:8,padding:8,background:"rgba(249,115,22,0.04)",borderRadius:8,fontSize:11,color:"var(--sub)"}}>
-            📋 {fOpenDays.join(", ")} · {fOpenTime} — {fCloseTime}
+             {fOpenDays.join(", ")} · {fOpenTime} — {fCloseTime}
           </div>
         </div>}
 
         <label style={{display:"block",fontSize:12,fontWeight:600,color:"var(--sub)",margin:"14px 0 8px"}}>Sous-catégories</label>
-        <div className="vr-cat-grid">{CATS.map(c=><div key={c.id} className={`vr-cat ${selCats.includes(c.name)?"on":""}`} onClick={()=>toggleCat(c.name)}><div className="vci">{c.icon}</div><div className="vcn">{c.name}</div></div>)}</div>
+        <div className="vr-cat-grid">{CATS.map(c=><div key={c.id} className={`vr-cat ${selCats.includes(c.name)?"on":""}`} onClick={()=>toggleCat(c.name)}><div className="vci"><Icon name={c.icon} size={20}/></div><div className="vcn">{c.name}</div></div>)}</div>
       </>}
 
       {/* STEP 1 DRIVER: Véhicule */}
       {step===1&&role==="driver"&&<><h3 style={{fontSize:16,fontWeight:700,marginBottom:14}}>Votre Véhicule</h3>
-        <div className="field"><label>Type de véhicule <span style={{color:"#EF4444"}}>*</span></label><Select value={fVehType} onChange={v=>setFVehType(v)} options={[{value:"moto",label:"🛵 Moto"},{value:"voiture",label:"🚗 Voiture"},{value:"velo",label:"🚲 Vélo"}]}/></div>
+        <div className="field"><label>Type de véhicule <span style={{color:"#EF4444"}}>*</span></label><Select value={fVehType} onChange={v=>setFVehType(v)} options={[{value:"moto",label:"Moto"},{value:"voiture",label:" Voiture"},{value:"velo",label:"Vélo"}]}/></div>
         <div className="field-row"><div className="field"><label>Marque <span style={{color:"#EF4444"}}>*</span></label><input value={fVehMarque} onChange={e=>{setFVehMarque(e.target.value);clrR("marque")}} placeholder="Honda PCX"/>{regErrors.marque&&<div className="err-msg">{regErrors.marque}</div>}</div><div className="field"><label>Année <span style={{color:"#EF4444"}}>*</span></label><input value={fVehAnnee} onChange={e=>{setFVehAnnee(e.target.value);clrR("annee")}} placeholder="2023"/>{regErrors.annee&&<div className="err-msg">{regErrors.annee}</div>}</div></div>
         <div className="field-row"><div className="field"><label>Plaque <span style={{color:"#EF4444"}}>*</span></label><input value={fVehPlaque} onChange={e=>{setFVehPlaque(e.target.value);clrR("plaque")}} placeholder="BZ-4521"/>{regErrors.plaque&&<div className="err-msg">{regErrors.plaque}</div>}</div><div className="field"><label>Couleur <span style={{color:"#EF4444"}}>*</span></label><input value={fVehCouleur} onChange={e=>setFVehCouleur(e.target.value)} placeholder="Noir"/></div></div>
         {/* Vehicle photo */}
         <div style={{marginTop:10,marginBottom:14}}>
           <label style={{display:"block",fontSize:12,fontWeight:600,color:"var(--sub,#5E5B53)",marginBottom:6}}>Photo du véhicule <span style={{color:"#EF4444"}}>*</span></label>
           <div id="drv-veh-wrap" onClick={()=>document.getElementById("drv-veh-upload")?.click()} style={{width:"100%",height:120,borderRadius:16,border:"2px dashed var(--border,#E8E6E1)",background:"var(--light,#F5F4F1)",display:"flex",flexDirection:"column",alignItems:"center",justifyContent:"center",cursor:"pointer",overflow:"hidden"}}>
-            <div id="drv-veh-preview" style={{fontSize:32,marginBottom:4}}>🛵</div>
+            <div id="drv-veh-preview" style={{fontSize:32,marginBottom:4}}><Icon name="truck" size={18}/></div>
             <span style={{fontSize:11,color:"var(--muted,#908C82)"}}>Cliquez pour ajouter une photo</span>
           </div>
           <input id="drv-veh-upload" type="file" accept="image/*" style={{display:"none"}} onChange={e=>{
@@ -277,13 +278,13 @@ function RoleRegScr({onBack,onDone,forceRole,onPending}){
               if(wrap){wrap.innerHTML="";wrap.style.border="none";wrap.style.padding="0";
               const img=document.createElement("img");img.src=reader.result;img.style.cssText="width:100%;height:100%;object-fit:cover;object-position:center;border-radius:14px";
               wrap.appendChild(img)}
-              setHasVehPhoto(true);toast.success("Photo véhicule ajoutée 📸");
+              setHasVehPhoto(true);toast.success("Photo véhicule ajoutée");
             };
             reader.readAsDataURL(f);e.target.value="";
           }}/>
         </div>
         <div style={{fontSize:14,fontWeight:700,margin:"0 0 10px"}}>Zones de livraison</div>
-        <div style={{display:"flex",gap:6,flexWrap:"wrap"}}>{["Brazzaville Sud","Centre-ville","Brazzaville Nord","Poto-Poto","Ouenzé","Talangaï","Bacongo","Makélékélé","Pointe-Noire"].map(z=>{const sel=selZones.includes(z);return<span key={z} onClick={()=>setSelZones(p=>sel?p.filter(x=>x!==z):[...p,z])} style={{padding:"8px 14px",borderRadius:10,border:sel?"2px solid "+color:"1px solid var(--border)",background:sel?"rgba(249,115,22,0.06)":"var(--card)",color:sel?color:"var(--text)",fontSize:12,cursor:"pointer",fontFamily:"inherit",fontWeight:sel?700:500}}>{sel?"✓ ":""}{z}</span>})}</div>
+        <div style={{display:"flex",gap:6,flexWrap:"wrap"}}>{["Brazzaville Sud","Centre-ville","Brazzaville Nord","Poto-Poto","Ouenzé","Talangaï","Bacongo","Makélékélé","Pointe-Noire"].map(z=>{const sel=selZones.includes(z);return<span key={z} onClick={()=>setSelZones(p=>sel?p.filter(x=>x!==z):[...p,z])} style={{padding:"8px 14px",borderRadius:10,border:sel?"2px solid "+color:"1px solid var(--border)",background:sel?"rgba(249,115,22,0.06)":"var(--card)",color:sel?color:"var(--text)",fontSize:12,cursor:"pointer",fontFamily:"inherit",fontWeight:sel?700:500}}>{sel?" ":""}{z}</span>})}</div>
         {selZones.length===0&&<div style={{fontSize:11,color:"#EF4444",marginTop:4}}>Sélectionnez au moins 1 zone</div>}
       </>}
 
@@ -291,8 +292,8 @@ function RoleRegScr({onBack,onDone,forceRole,onPending}){
       {step===2&&<><h3 style={{fontSize:16,fontWeight:700,marginBottom:6}}>Documents requis</h3>
         <p style={{fontSize:12,color:"var(--muted)",lineHeight:1.5,marginBottom:14}}>Uploadez vos documents pour vérification. Formats acceptés : JPG, PNG, PDF. Max 5 MB par fichier.</p>
         {(role==="vendor"?
-          [["🪪","Pièce d'identité","Carte nationale ou passeport (obligatoire)","id","image/*,.pdf"],["📄","RCCM / Patente","Registre de commerce (optionnel)","rccm","image/*,.pdf"],["📸","Photo de l'établissement","Votre espace de vente (obligatoire)","photo","image/*"]]
-          :[["🪪","Pièce d'identité","Carte nationale ou passeport (obligatoire)","id","image/*,.pdf"],["🪪","Permis de conduire","Obligatoire pour moto/voiture","permit","image/*,.pdf"],["📸","Photo du véhicule","Vue claire du véhicule (obligatoire)","vehicle","image/*"]]
+          [["","Pièce d'identité","Carte nationale ou passeport (obligatoire)","id","image/*,.pdf"],["","RCCM / Patente","Registre de commerce (optionnel)","rccm","image/*,.pdf"],["","Photo de l'établissement","Votre espace de vente (obligatoire)","photo","image/*"]]
+          :[["","Pièce d'identité","Carte nationale ou passeport (obligatoire)","id","image/*,.pdf"],["","Permis de conduire","Obligatoire pour moto/voiture","permit","image/*,.pdf"],["","Photo du véhicule","Vue claire du véhicule (obligatoire)","vehicle","image/*"]]
         ).map(([icon,title,desc,key,accept])=>(
           <div key={key} style={{padding:14,background:"var(--card,#fff)",border:docs[key]?"2px solid "+color:"1px solid var(--border,#E8E6E1)",borderRadius:16,marginBottom:10,position:"relative"}}>
             <input id={`doc-${key}`} type="file" accept={accept} style={{display:"none"}} onChange={e=>{
@@ -302,7 +303,7 @@ function RoleRegScr({onBack,onDone,forceRole,onPending}){
               const reader=new FileReader();
               reader.onload=()=>{setDocs(prev=>({...prev,[key]:{name:f.name,size:(f.size/1024).toFixed(0),type:f.type,preview:f.type.startsWith("image/")?reader.result:null}}))};
               reader.readAsDataURL(f);
-              toast.success("Document uploadé ✅");
+              toast.success("Document uploadé");
               e.target.value="";
             }}/>
 
@@ -313,7 +314,7 @@ function RoleRegScr({onBack,onDone,forceRole,onPending}){
                   <div style={{fontSize:13,fontWeight:700}}>{title}</div>
                   <div style={{fontSize:11,color:"var(--muted,#908C82)",marginTop:2}}>{desc}</div>
                 </div>
-                <div style={{padding:"8px 14px",borderRadius:10,border:`1px dashed ${color}`,color:color,fontSize:11,fontWeight:600,flexShrink:0}}>📎 Upload</div>
+                <div style={{padding:"8px 14px",borderRadius:10,border:`1px dashed ${color}`,color:color,fontSize:11,fontWeight:600,flexShrink:0}}> Upload</div>
               </div>
             ):(
               <div>
@@ -324,15 +325,15 @@ function RoleRegScr({onBack,onDone,forceRole,onPending}){
                       <img src={docs[key].preview} style={{width:"100%",height:"100%",objectFit:"cover"}} alt=""/>
                     </div>
                   ):(
-                    <div style={{width:48,height:48,borderRadius:14,background:"rgba(249,115,22,0.04)",display:"flex",alignItems:"center",justifyContent:"center",fontSize:18,flexShrink:0}}>📄</div>
+                    <div style={{width:48,height:48,borderRadius:14,background:"rgba(249,115,22,0.04)",display:"flex",alignItems:"center",justifyContent:"center",fontSize:18,flexShrink:0}}></div>
                   )}
                   <div style={{flex:1,minWidth:0}}>
-                    <div style={{fontSize:13,fontWeight:700,color:"#10B981",display:"flex",alignItems:"center",gap:4}}>✅ {title}</div>
+                    <div style={{fontSize:13,fontWeight:700,color:"#10B981",display:"flex",alignItems:"center",gap:4}}><Icon name="check_circle" size={16}/>{" "}{title}</div>
                     <div style={{fontSize:11,color:"var(--muted,#908C82)",marginTop:2,overflow:"hidden",whiteSpace:"nowrap",textOverflow:"ellipsis"}}>{docs[key].name} · {docs[key].size} KB</div>
                   </div>
                   <div style={{display:"flex",flexDirection:"column",gap:4,flexShrink:0}}>
-                    <button onClick={()=>document.getElementById(`doc-${key}`)?.click()} style={{padding:"5px 10px",borderRadius:8,border:"1px solid var(--border,#E8E6E1)",background:"var(--card,#fff)",fontSize:10,fontWeight:600,cursor:"pointer",fontFamily:"inherit",color:"var(--text,#191815)"}}>🔄 Changer</button>
-                    <button onClick={()=>setDocs(prev=>({...prev,[key]:false}))} style={{padding:"5px 10px",borderRadius:8,border:"1px solid rgba(239,68,68,.15)",background:"transparent",fontSize:10,fontWeight:600,cursor:"pointer",fontFamily:"inherit",color:"#EF4444"}}>✕ Retirer</button>
+                    <button onClick={()=>document.getElementById(`doc-${key}`)?.click()} style={{padding:"5px 10px",borderRadius:8,border:"1px solid var(--border,#E8E6E1)",background:"var(--card,#fff)",fontSize:10,fontWeight:600,cursor:"pointer",fontFamily:"inherit",color:"var(--text,#191815)"}}> Changer</button>
+                    <button onClick={()=>setDocs(prev=>({...prev,[key]:false}))} style={{padding:"5px 10px",borderRadius:8,border:"1px solid rgba(239,68,68,.15)",background:"transparent",fontSize:10,fontWeight:600,cursor:"pointer",fontFamily:"inherit",color:"#EF4444"}}> Retirer</button>
                   </div>
                 </div>
               </div>
@@ -358,7 +359,7 @@ function RoleRegScr({onBack,onDone,forceRole,onPending}){
         {/* Registration fee */}
         <div style={{padding:16,background:"linear-gradient(135deg,rgba(16,185,129,0.06),rgba(16,185,129,0.02))",border:"1px solid rgba(249,115,22,0.15)",borderRadius:16,marginBottom:14}}>
           <div style={{display:"flex",alignItems:"center",gap:10,marginBottom:10}}>
-            <div style={{width:40,height:40,borderRadius:12,background:"#10B981",display:"flex",alignItems:"center",justifyContent:"center",color:"#fff",fontSize:18}}>📋</div>
+            <div style={{width:40,height:40,borderRadius:12,background:"#10B981",display:"flex",alignItems:"center",justifyContent:"center",color:"#fff",fontSize:18}}><Icon name="document" size={18}/></div>
             <div><div style={{fontSize:14,fontWeight:700}}>Frais d'inscription</div><div style={{fontSize:11,color:"var(--muted)"}}>Paiement unique — couvre la vérification</div></div>
           </div>
           <div style={{fontSize:28,fontWeight:800,color:"#10B981",textAlign:"center",margin:"8px 0"}}>5 000 FCFA</div>
@@ -383,7 +384,7 @@ function RoleRegScr({onBack,onDone,forceRole,onPending}){
         {/* Boost option */}
         <div style={{padding:16,background:"var(--card)",border:"1px solid var(--border)",borderRadius:16}}>
           <div style={{display:"flex",alignItems:"center",gap:10,marginBottom:8}}>
-            <span style={{fontSize:20}}>🚀</span>
+            <span style={{fontSize:20}}><Icon name="rocket" size={18}/></span>
             <div style={{flex:1}}><div style={{fontSize:14,fontWeight:700}}>Boost (Optionnel)</div><div style={{fontSize:11,color:"var(--muted)"}}>Recevez les commandes en priorité</div></div>
             <div style={{padding:"4px 10px",borderRadius:8,background:"rgba(245,158,11,0.08)",color:"#F59E0B",fontSize:12,fontWeight:700}}>1 000 F/jour</div>
           </div>
@@ -394,32 +395,32 @@ function RoleRegScr({onBack,onDone,forceRole,onPending}){
       {/* STEP 3 VENDOR: Plan (only vendor) */}
       {step===3&&role==="vendor"&&<><h3 style={{fontSize:16,fontWeight:700,marginBottom:14}}>Choisir un plan</h3>
         {[["starter","Starter","Gratuit","Pour démarrer",["10 articles max","8% commission","Support email","Stats basiques"]],
-          ["pro","Pro","15 000 FCFA/mois","Articles illimités",["Articles illimités","4% commission","Analytics avancés","Badge vérifié ✓","Support prioritaire"]],
-          ["enterprise","Enterprise","45 000 FCFA/mois","Multi-établissements",["Multi-établissements","2% commission","API complète","🌐 Site web personnalisé","Manager dédié","Dashboard personnalisé"]]
+          ["pro","Pro","15 000 FCFA/mois","Articles illimités",["Articles illimités","4% commission","Analytics avancés","Badge vérifié ","Support prioritaire"]],
+          ["enterprise","Enterprise","45 000 FCFA/mois","Multi-établissements",["Multi-établissements","2% commission","API complète","Site web personnalisé","Manager dédié","Dashboard personnalisé"]]
         ].map(([k,n,pr,d,f])=><div key={k} className={`vr-plan ${plan===k?"on":""}`} onClick={()=>setPlan(k)} style={plan===k?{borderColor:color}:{}}>
           <h4>{n}<span>{pr}</span></h4><p>{d}</p>
-          <div className="vrf">{f.map(x=><span key={x}>✓ {x}</span>)}</div>
-          {k==="starter"&&<div className="info-box yellow" style={{margin:"8px 0 0",padding:"6px 10px"}}><span style={{fontSize:12}}>💡</span><span style={{fontSize:11}}>Limitations : 10 articles, pas d'analytics avancés, pas de badge</span></div>}
+          <div className="vrf">{f.map(x=><span key={x}> {x}</span>)}</div>
+          {k==="starter"&&<div className="info-box yellow" style={{margin:"8px 0 0",padding:"6px 10px"}}><span style={{fontSize:12}}><Icon name="info" size={18}/></span><span style={{fontSize:11}}>Limitations : 10 articles, pas d'analytics avancés, pas de badge</span></div>}
         </div>)}
       </>}
 
       {/* LAST STEP: Résumé */}
       {step===maxStep&&<><h3 style={{fontSize:16,fontWeight:700,marginBottom:14}}>Résumé</h3>
         <div style={{padding:16,background:"var(--card)",border:"1px solid var(--border)",borderRadius:16,marginBottom:14}}>
-          {[["Rôle",role==="vendor"?"🏪 Commerçant":"🛵 Livreur"],
+          {[["Rôle",role==="vendor"?"Commerçant":"Livreur"],
             ["Nom",fName||"—"],
-            ...(role==="vendor"?[["Établissement",fShopName||"—"],["Type",{boutique:"Boutique",restaurant:"Restaurant",patisserie:"Pâtisserie",supermarche:"Supermarché",pharmacie:"Pharmacie",service:"Service"}[selCats.find(c=>["boutique","restaurant","patisserie","supermarche","pharmacie","service"].includes(c))]||"—"]]:[["Véhicule",fVehType==="moto"?"🛵":"🚗"+" "+fVehMarque],["Plaque",fVehPlaque||"—"],["Inscription","5 000 FCFA (unique)"],["Commission","15% par livraison"],["Zones",selZones.join(", ")||"—"]]),
+            ...(role==="vendor"?[["Établissement",fShopName||"—"],["Type",{boutique:"Boutique",restaurant:"Restaurant",patisserie:"Pâtisserie",supermarche:"Supermarché",pharmacie:"Pharmacie",service:"Service"}[selCats.find(c=>["boutique","restaurant","patisserie","supermarche","pharmacie","service"].includes(c))]||"—"]]:[["Véhicule",fVehType==="moto"?"":""+" "+fVehMarque],["Plaque",fVehPlaque||"—"],["Inscription","5 000 FCFA (unique)"],["Commission","15% par livraison"],["Zones",selZones.join(", ")||"—"]]),
             ...(["restaurant","patisserie","pharmacie","supermarche"].some(t=>selCats.includes(t))?[["Horaires",fOpenDays.join(", ")+" · "+fOpenTime+"—"+fCloseTime]]:[]),
             ["Documents",`${Object.values(docs).filter(v=>v&&v!==true&&v!==false).length}/${Object.keys(docs).length}`],
             ...(role==="vendor"?[["Plan",plan==="starter"?"Starter (Gratuit)":plan==="pro"?"Pro (15k/mois)":"Enterprise (45k/mois)"]]:[])]
           .map(([l,v])=><div key={l} className="vs-row"><span>{l}</span><b>{v}</b></div>)}
         </div>
-        <div className="info-box green"><span>✅</span><span>{role==="vendor"?"En soumettant, vous acceptez les CGV de Lamuka Marketplace.":"Votre demande sera vérifiée sous 24-48h. Vous serez notifié par SMS, email et notification."}</span></div>
+        <div className="info-box green"><span><Icon name="check_circle" size={18}/></span><span>{role==="vendor"?"En soumettant, vous acceptez les CGV de Lamuka Marketplace.":"Votre demande sera vérifiée sous 24-48h. Vous serez notifié par SMS, email et notification."}</span></div>
       </>}
 
       {/* ── Button inside scroll ── */}
       <div style={{paddingTop:24,paddingBottom:16}}>
-        <button className="btn-primary" style={{background:color}} onClick={()=>{if(!validateStep())return;if(step<maxStep){setStep(step+1)}else{if(needsPayment&&!payDone){setShowPayment(true)}else{setShowSubmitAnim(true);setTimeout(()=>{setShowSubmitAnim(false);setOk(true)},1700)}}}}>{step===maxStep?(needsPayment&&!payDone?"💳 Payer et soumettre":"🚀 Soumettre la demande"):"Continuer"}</button>
+        <button className="btn-primary" style={{background:color}} onClick={()=>{if(!validateStep())return;if(step<maxStep){setStep(step+1)}else{if(needsPayment&&!payDone){setShowPayment(true)}else{setShowSubmitAnim(true);setTimeout(()=>{setShowSubmitAnim(false);setOk(true)},1700)}}}}>{step===maxStep?(needsPayment&&!payDone?"Payer et soumettre":"Soumettre la demande"):"Continuer"}</button>
       </div>
     </div>
 
@@ -428,12 +429,12 @@ function RoleRegScr({onBack,onDone,forceRole,onPending}){
       <div onClick={e=>e.stopPropagation()} style={{width:"100%",maxWidth:340,background:"var(--card)",borderRadius:20,padding:20,maxHeight:"85vh",overflowY:"auto",animation:"scaleIn .25s cubic-bezier(.4,0,.2,1)"}}>
         
         {payDone?<div style={{textAlign:"center",padding:"20px 0"}}>
-          <div style={{fontSize:48,marginBottom:12}}>✅</div>
+          <div style={{fontSize:48,marginBottom:12}}><Icon name="check_circle" size={18}/></div>
           <h3 style={{fontSize:18,fontWeight:700}}>Paiement confirmé !</h3>
           <p style={{fontSize:13,color:"var(--muted)",marginTop:4}}>{payAmount.toLocaleString("fr-FR")} FCFA reçu via {payMethod==="airtel"?"Airtel Money":payMethod==="mtn"?"MTN MoMo":"Kolo Pay"}</p>
         </div>:<>
           <div style={{textAlign:"center",marginBottom:16}}>
-            <div style={{fontSize:32,marginBottom:8}}>💳</div>
+            <div style={{fontSize:32,marginBottom:8}}><Icon name="creditCard" size={18}/></div>
             <h3 style={{fontSize:16,fontWeight:700}}>Paiement requis</h3>
             <p style={{fontSize:12,color:"var(--muted)",marginTop:4}}>{payLabel}</p>
           </div>
@@ -467,14 +468,14 @@ function RoleRegScr({onBack,onDone,forceRole,onPending}){
 
           {/* Info */}
           <div style={{padding:10,background:"rgba(59,130,246,0.06)",borderRadius:10,fontSize:11,color:"var(--muted)",marginBottom:14,lineHeight:1.5}}>
-            📱 Un message de confirmation sera envoyé sur votre téléphone. Validez le paiement depuis l'app {payMethod==="airtel"?"Airtel Money":payMethod==="mtn"?"MTN MoMo":"Kolo Pay"}.
+             Un message de confirmation sera envoyé sur votre téléphone. Validez le paiement depuis l'app {payMethod==="airtel"?"Airtel Money":payMethod==="mtn"?"MTN MoMo":"Kolo Pay"}.
           </div>
 
           {/* Buttons */}
           <div style={{display:"flex",gap:8}}>
             <button onClick={()=>setShowPayment(false)} disabled={paying} style={{flex:1,padding:12,borderRadius:12,border:"1px solid var(--border)",background:"var(--card)",fontSize:13,fontWeight:600,cursor:"pointer",fontFamily:"inherit",color:"var(--text)"}}>Annuler</button>
             <button onClick={processPayment} disabled={paying||!isPayPhoneValid(payPhone,payMethod)} style={{flex:1,padding:12,borderRadius:12,border:"none",background:isPayPhoneValid(payPhone,payMethod)?"#F97316":"var(--border)",color:isPayPhoneValid(payPhone,payMethod)?"#fff":"var(--muted)",fontSize:13,fontWeight:700,cursor:isPayPhoneValid(payPhone,payMethod)?"pointer":"not-allowed",fontFamily:"inherit"}}>
-              {paying?"⏳ Validation...":"💳 Payer "+payAmount.toLocaleString("fr-FR")+" F"}
+              {paying?"⏳ Validation...":"Payer "+payAmount.toLocaleString("fr-FR")+" F"}
             </button>
           </div>
         </>}

@@ -4,6 +4,7 @@ import { LEVELS, STREAK_REWARDS, getLevel, getNextLevel } from "../../data/loyal
 import { fmt } from "../../utils/helpers";
 import CountUp from "../../components/CountUp";
 import SuccessAnimation from "../../components/SuccessAnimation";
+import Icon from "../../components/Icon";
 
 function LoyaltyScr({ onBack, go }) {
   // Read from localStorage or default
@@ -45,7 +46,7 @@ function LoyaltyScr({ onBack, go }) {
 
   if (showClaim) return <SuccessAnimation
     title={`+${claimedAmount} points !`}
-    subtitle={`Jour ${streak + 1} du streak 🔥`}
+    subtitle={`Jour ${streak + 1} du streak `}
     hint="Continuez demain pour gagner plus"
     duration={2000}
     onDone={() => setShowClaim(false)}
@@ -89,13 +90,13 @@ function LoyaltyScr({ onBack, go }) {
       <div style={{ margin: "0 16px 14px", padding: 16, background: "var(--card)", border: "1px solid var(--border)", borderRadius: 16 }}>
         <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 12 }}>
           <div>
-            <div style={{ fontSize: 14, fontWeight: 700, display: "flex", alignItems: "center", gap: 6 }}>🔥 Connexion quotidienne</div>
-            <div style={{ fontSize: 11, color: "var(--muted)", marginTop: 2 }}>Streak : {streak} jour{streak > 1 ? "s" : ""} {streak >= 7 ? "🎉" : ""}</div>
+            <div style={{ fontSize: 14, fontWeight: 700, display: "flex", alignItems: "center", gap: 6 }}><Icon name="fire" size={16}/>{" "}Connexion quotidienne</div>
+            <div style={{ fontSize: 11, color: "var(--muted)", marginTop: 2 }}>Streak : {streak} jour{streak > 1 ? "s" : ""} {streak >= 7 ? "" : ""}</div>
           </div>
           {canCheckIn ? (
             <button onClick={handleCheckIn} style={{ padding: "8px 16px", borderRadius: 10, border: "none", background: "#F97316", color: "#fff", fontSize: 12, fontWeight: 700, cursor: "pointer", fontFamily: "inherit" }}>Récupérer</button>
           ) : (
-            <span style={{ padding: "8px 12px", borderRadius: 10, background: "rgba(16,185,129,0.08)", color: "#10B981", fontSize: 11, fontWeight: 700 }}>✓ Reçu</span>
+            <span style={{ padding: "8px 12px", borderRadius: 10, background: "rgba(16,185,129,0.08)", color: "#10B981", fontSize: 11, fontWeight: 700 }}> Reçu</span>
           )}
         </div>
         {/* 7-day calendar */}
@@ -110,7 +111,7 @@ function LoyaltyScr({ onBack, go }) {
                 border: isToday ? "2px solid #F97316" : "1px solid transparent",
               }}>
                 <div style={{ fontSize: 8, fontWeight: 700, color: "var(--muted)", marginBottom: 2 }}>J{i + 1}</div>
-                <div style={{ fontSize: 13 }}>{completed ? "✓" : reward >= 1000 ? "🎁" : "🔥"}</div>
+                <div style={{ fontSize: 13 }}>{completed ? "" : reward >= 1000 ? "" : ""}</div>
                 <div style={{ fontSize: 8, fontWeight: 700, color: completed ? "#10B981" : isToday ? "#F97316" : "var(--muted)", marginTop: 2 }}>+{reward}</div>
               </div>
             );
@@ -120,7 +121,7 @@ function LoyaltyScr({ onBack, go }) {
 
       {/* Use points CTA */}
       <div style={{ margin: "0 16px 14px", padding: 16, background: "linear-gradient(135deg,#F97316,#EA580C)", borderRadius: 16, color: "#fff", display: "flex", alignItems: "center", gap: 12 }}>
-        <span style={{ fontSize: 28 }}>💰</span>
+        <span style={{ fontSize: 28 }}><Icon name="wallet" size={18}/></span>
         <div style={{ flex: 1 }}>
           <div style={{ fontSize: 14, fontWeight: 700 }}>Utiliser mes points</div>
           <div style={{ fontSize: 11, opacity: .85, marginTop: 2 }}>Réduction au prochain achat</div>
@@ -130,12 +131,12 @@ function LoyaltyScr({ onBack, go }) {
 
       {/* Levels overview */}
       <div style={{ margin: "0 16px 14px" }}>
-        <div style={{ fontSize: 13, fontWeight: 700, marginBottom: 8, padding: "0 4px" }}>📊 Tous les niveaux</div>
+        <div style={{ fontSize: 13, fontWeight: 700, marginBottom: 8, padding: "0 4px" }}><Icon name="chart_pie" size={16}/>{" "}Tous les niveaux</div>
         {LEVELS.map(l => {
           const isCurrent = l.id === level.id;
           return (
             <div key={l.id} style={{ padding: 14, background: isCurrent ? `${l.color}08` : "var(--card)", border: `1px solid ${isCurrent ? l.color + "33" : "var(--border)"}`, borderRadius: 14, marginBottom: 6, display: "flex", gap: 12 }}>
-              <div style={{ fontSize: 28 }}>{l.icon}</div>
+              <div style={{ fontSize: 28 }}><Icon name={l.icon} size={20}/></div>
               <div style={{ flex: 1 }}>
                 <div style={{ fontSize: 14, fontWeight: 700, color: isCurrent ? l.color : "var(--text)", display: "flex", alignItems: "center", gap: 6 }}>
                   {l.name}

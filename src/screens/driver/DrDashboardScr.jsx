@@ -8,6 +8,7 @@ import SuccessAnimation from "../../components/SuccessAnimation";
 import CountUp from "../../components/CountUp";
 import PayLogo from "../../components/PayLogos";
 import { validatePayPhone, getPhonePlaceholder, isPayPhoneValid } from "../../utils/phoneValidation";
+import Icon from "../../components/Icon";
 
 function DrDashboardScr({go}){
   const [online,setOnline]=useState(true);
@@ -29,8 +30,8 @@ function DrDashboardScr({go}){
   const [tempGoal,setTempGoal]=useState(goal);
   const [accepting,setAccepting]=useState(null);
   const [refusing,setRefusing]=useState(null);
-  const saveGoal=()=>{const n=parseInt(tempGoal)||10000;setGoal(n);try{localStorage.setItem("lk-driver-goal",String(n))}catch{}setShowGoalModal(false);toast.success(`Objectif fixé à ${fmt(n)} 🎯`)};
-  return(<><PullToRefresh onRefresh={async()=>{toast.success("Dashboard actualisé 🛵")}}><div className="scr">
+  const saveGoal=()=>{const n=parseInt(tempGoal)||10000;setGoal(n);try{localStorage.setItem("lk-driver-goal",String(n))}catch{}setShowGoalModal(false);toast.success(`Objectif fixé à ${fmt(n)} `)};
+  return(<><PullToRefresh onRefresh={async()=>{toast.success("Dashboard actualisé")}}><div className="scr">
     {/* Minimal header */}
     <div style={{padding:"16px 16px 12px",display:"flex",alignItems:"center",gap:10}}>
       <div style={{width:42,height:42,borderRadius:"50%",background:"#1F2937",color:"#fff",overflow:"hidden",flexShrink:0}}>
@@ -38,7 +39,7 @@ function DrDashboardScr({go}){
       </div>
       <div style={{flex:1,minWidth:0}}>
         <div style={{fontSize:16,fontWeight:800,lineHeight:1.1}}>Patrick</div>
-        <div style={{fontSize:11,color:"#F59E0B",fontWeight:600,marginTop:2}}>★ Niveau Or</div>
+        <div style={{fontSize:11,color:"#F59E0B",fontWeight:600,marginTop:2}}> Niveau Or</div>
       </div>
       <div onClick={()=>setOnline(!online)} style={{display:"flex",alignItems:"center",gap:6,padding:"5px 10px 5px 12px",borderRadius:20,background:online?"rgba(16,185,129,0.1)":"var(--light)",border:`1px solid ${online?"rgba(16,185,129,0.2)":"var(--border)"}`,cursor:"pointer"}}>
         <span style={{fontSize:11,fontWeight:700,color:online?"#10B981":"var(--muted)"}}>{online?"En ligne":"Hors ligne"}</span>
@@ -47,7 +48,7 @@ function DrDashboardScr({go}){
         </div>
       </div>
       <button onClick={()=>go("drNotif")} style={{width:38,height:38,borderRadius:"50%",background:"var(--card)",border:"1px solid var(--border)",cursor:"pointer",fontSize:15,display:"flex",alignItems:"center",justifyContent:"center",flexShrink:0,position:"relative"}}>
-        🔔<div style={{position:"absolute",top:8,right:9,width:7,height:7,borderRadius:"50%",background:"#EF4444"}}/>
+        <Icon name="bell" size={16}/><div style={{position:"absolute",top:8,right:9,width:7,height:7,borderRadius:"50%",background:"#EF4444"}}/>
       </button>
     </div>
 
@@ -72,7 +73,7 @@ function DrDashboardScr({go}){
     {/* Dernière livraison */}
     {D_HISTORY.length>0&&(()=>{const last=D_HISTORY[0];return(
       <div style={{margin:"10px 16px",padding:14,background:"var(--card)",border:"1px solid var(--border)",borderRadius:14,display:"flex",alignItems:"center",gap:12,boxShadow:"0 2px 8px rgba(0,0,0,0.03)"}}>
-        <div style={{width:38,height:38,borderRadius:"50%",background:"rgba(16,185,129,0.1)",display:"flex",alignItems:"center",justifyContent:"center",flexShrink:0,fontSize:16,color:"#10B981"}}>✓</div>
+        <div style={{width:38,height:38,borderRadius:"50%",background:"rgba(16,185,129,0.1)",display:"flex",alignItems:"center",justifyContent:"center",flexShrink:0,fontSize:16,color:"#10B981"}}></div>
         <div style={{flex:1,minWidth:0}}>
           <div style={{fontSize:13,fontWeight:700,marginBottom:2}}>Dernière livraison</div>
           <div style={{fontSize:11,color:"var(--muted)",overflow:"hidden",whiteSpace:"nowrap",textOverflow:"ellipsis"}}>{last.vendor} · {last.date}</div>
@@ -119,7 +120,7 @@ function DrDashboardScr({go}){
             <div style={{fontSize:9,fontWeight:700,color:"var(--muted)",letterSpacing:.5}}>AUCUNE LIVRAISON</div>
           </div>
           <div style={{padding:"24px 0",textAlign:"center"}}>
-            <div style={{fontSize:32,marginBottom:6,opacity:.4}}>🛵</div>
+            <div style={{fontSize:32,marginBottom:6,opacity:.4}}><Icon name="truck" size={18}/></div>
             <div style={{fontSize:11,color:"var(--muted)"}}>En attente de demande</div>
           </div>
         </>}
@@ -128,7 +129,7 @@ function DrDashboardScr({go}){
 
     {/* Boost card */}
     <div style={{margin:"0 16px 10px",padding:12,background:boosted?"linear-gradient(135deg,rgba(245,158,11,0.1),rgba(245,158,11,0.03))":"var(--card)",border:boosted?"1px solid rgba(245,158,11,0.25)":"1px solid var(--border)",borderRadius:14,display:"flex",alignItems:"center",gap:10}}>
-      <div style={{width:36,height:36,borderRadius:10,background:boosted?"#F59E0B":"var(--light)",display:"flex",alignItems:"center",justifyContent:"center",fontSize:16}}>{boosted?"🔥":"🚀"}</div>
+      <div style={{width:36,height:36,borderRadius:10,background:boosted?"#F59E0B":"var(--light)",display:"flex",alignItems:"center",justifyContent:"center",fontSize:16}}>{boosted?"":""}</div>
       <div style={{flex:1}}>
         <div style={{fontSize:12,fontWeight:700,color:boosted?"#F59E0B":"var(--text)"}}>{boosted?"Boost actif — Priorité max":"Boost · Commandes prioritaires"}</div>
         <div style={{fontSize:10,color:"var(--muted)",marginTop:1}}>{boosted?"Expire ce soir à 23h59":"1 000 FCFA/jour"}</div>
@@ -139,9 +140,9 @@ function DrDashboardScr({go}){
     {/* Pending request */}
     {/* Multi-livraisons en cours */}
     {allActive.length>1&&<div style={{margin:"0 16px 10px",padding:12,background:"rgba(249,115,22,0.04)",border:"1px solid rgba(249,115,22,0.15)",borderRadius:14}}>
-      <div style={{fontSize:13,fontWeight:700,color:"#F97316",marginBottom:8}}>📦 {allActive.length} livraisons en cours</div>
+      <div style={{fontSize:13,fontWeight:700,color:"#F97316",marginBottom:8}}><Icon name="package" size={16}/>{" "}{allActive.length} livraisons en cours</div>
       {allActive.map((dl,i)=><div key={dl.id} onClick={()=>go("drDelivery",dl)} style={{display:"flex",alignItems:"center",gap:10,padding:8,background:"var(--card)",borderRadius:10,marginBottom:i<allActive.length-1?6:0,cursor:"pointer",border:"1px solid var(--border)"}}>
-        <span style={{fontSize:16}}>{dl.payment==="cash"?"💵":"📦"}</span>
+        <span style={{fontSize:16}}>{dl.payment==="cash"?"":""}</span>
         <div style={{flex:1,minWidth:0}}>
           <div style={{fontSize:12,fontWeight:600,overflow:"hidden",whiteSpace:"nowrap",textOverflow:"ellipsis"}}>{dl.vendor.name} → {dl.client.name}</div>
           <div style={{fontSize:10,color:"var(--muted)"}}>{dl.distance} · {dl.eta}</div>
@@ -158,8 +159,8 @@ function DrDashboardScr({go}){
       {/* Top row: badge + timer */}
       <div style={{display:"flex",justifyContent:"space-between",alignItems:"center",marginBottom:10}}>
         <div style={{display:"flex",gap:6}}>
-          <span style={{padding:"4px 10px",borderRadius:8,background:"rgba(16,185,129,0.08)",color:"#10B981",fontSize:10,fontWeight:800,letterSpacing:.5}}>{pending.isGroup?"🤝 GROUPE":pending.items?.[0]?.name?.toLowerCase()?.includes("colis")?"COLIS":"COURSE"}</span>
-          {pending.payment==="cash"&&<span style={{padding:"4px 8px",borderRadius:8,background:"rgba(245,158,11,0.08)",color:"#F59E0B",fontSize:10,fontWeight:700}}>💵 Cash</span>}
+          <span style={{padding:"4px 10px",borderRadius:8,background:"rgba(16,185,129,0.08)",color:"#10B981",fontSize:10,fontWeight:800,letterSpacing:.5}}>{pending.isGroup?"GROUPE":pending.items?.[0]?.name?.toLowerCase()?.includes("colis")?"COLIS":"COURSE"}</span>
+          {pending.payment==="cash"&&<span style={{padding:"4px 8px",borderRadius:8,background:"rgba(245,158,11,0.08)",color:"#F59E0B",fontSize:10,fontWeight:700}}><Icon name="wallet" size={16}/>{" "}Cash</span>}
         </div>
         <div style={{display:"flex",alignItems:"center",gap:5,padding:"4px 10px",borderRadius:14,background:"rgba(239,68,68,0.08)"}}>
           <div style={{width:6,height:6,borderRadius:"50%",background:"#EF4444",animation:"pulse 1s infinite"}}/>
@@ -186,9 +187,9 @@ function DrDashboardScr({go}){
 {/* Quick stats */}
     <div className="sec" style={{marginTop:6}}><h3>Dernières livraisons</h3><span onClick={()=>go("drHistory")}>Voir tout</span></div>
     <div style={{padding:"0 16px 20px"}}>{D_HISTORY.slice(0,3).map(h=><div key={h.id} style={{display:"flex",alignItems:"center",gap:12,padding:"12px 0",borderBottom:"1px solid var(--border)"}}>
-      <div style={{width:36,height:36,borderRadius:10,background:"rgba(16,185,129,0.1)",display:"flex",alignItems:"center",justifyContent:"center",fontSize:16}}>✅</div>
+      <div style={{width:36,height:36,borderRadius:10,background:"rgba(16,185,129,0.1)",display:"flex",alignItems:"center",justifyContent:"center",fontSize:16}}><Icon name="check_circle" size={18}/></div>
       <div style={{flex:1}}><div style={{fontSize:13,fontWeight:600}}>{h.vendor} → {h.client}</div><div style={{fontSize:11,color:"var(--muted)"}}>{h.date} · {h.duration} · {h.distance}</div></div>
-      <div style={{textAlign:"right"}}><div style={{fontSize:13,fontWeight:700,color:"#F97316"}}>+{fmt(h.fee+h.tip)}</div><div style={{fontSize:11,color:"#F59E0B"}}>{"★".repeat(h.rating)}</div></div>
+      <div style={{textAlign:"right"}}><div style={{fontSize:13,fontWeight:700,color:"#F97316"}}>+{fmt(h.fee+h.tip)}</div><div style={{fontSize:11,color:"#F59E0B"}}>{"".repeat(h.rating)}</div></div>
     </div>)}</div>
   {refusing&&<SuccessAnimation
       type="error"
@@ -208,7 +209,7 @@ function DrDashboardScr({go}){
       <div onClick={e=>e.stopPropagation()} style={{width:"100%",maxWidth:500,margin:"0 auto",background:"var(--card)",borderRadius:"24px 24px 0 0",padding:20,animation:"slideUp .3s cubic-bezier(.4,0,.2,1)"}}>
         <div style={{width:36,height:4,borderRadius:2,background:"var(--border)",margin:"0 auto 16px"}}/>
         <div style={{textAlign:"center",marginBottom:16}}>
-          <div style={{fontSize:32,marginBottom:6}}>🎯</div>
+          <div style={{fontSize:32,marginBottom:6}}><Icon name="target" size={18}/></div>
           <h3 style={{fontSize:18,fontWeight:800,marginBottom:4}}>Votre objectif du jour</h3>
           <p style={{fontSize:12,color:"var(--muted)"}}>Définissez combien vous souhaitez gagner aujourd'hui</p>
         </div>
@@ -231,7 +232,7 @@ function DrDashboardScr({go}){
         </div>
 
         <div style={{padding:10,background:"rgba(59,130,246,0.04)",borderRadius:10,fontSize:11,color:"var(--sub)",marginBottom:14,lineHeight:1.5}}>
-          💡 Conseil : commencez petit (5-10k F) et augmentez progressivement. Vous gagnez 20% de bonus en atteignant votre objectif.
+           Conseil : commencez petit (5-10k F) et augmentez progressivement. Vous gagnez 20% de bonus en atteignant votre objectif.
         </div>
 
         <div style={{display:"flex",gap:8}}>
@@ -246,7 +247,7 @@ function DrDashboardScr({go}){
     {boostPay&&<div onClick={()=>!boostPaying&&setBoostPay(false)} style={{position:"fixed",inset:0,background:"rgba(0,0,0,.45)",zIndex:150,display:"flex",alignItems:"center",justifyContent:"center",padding:16,animation:"fadeInFast .2s ease"}}>
       <div onClick={e=>e.stopPropagation()} style={{width:"100%",maxWidth:340,background:"var(--card)",borderRadius:20,padding:20,animation:"scaleIn .25s cubic-bezier(.4,0,.2,1)"}}>
         <div style={{textAlign:"center",marginBottom:14}}>
-          <div style={{fontSize:32,marginBottom:6}}>🚀</div>
+          <div style={{fontSize:32,marginBottom:6}}><Icon name="rocket" size={18}/></div>
           <h3 style={{fontSize:16,fontWeight:700}}>Activer le Boost</h3>
           <p style={{fontSize:12,color:"var(--muted)",marginTop:4}}>Commandes prioritaires pendant 24h</p>
         </div>
@@ -268,8 +269,8 @@ function DrDashboardScr({go}){
         </div>
         <div style={{display:"flex",gap:8}}>
           <button onClick={()=>setBoostPay(false)} disabled={boostPaying} style={{flex:1,padding:11,borderRadius:12,border:"1px solid var(--border)",background:"var(--card)",fontSize:13,fontWeight:600,cursor:"pointer",fontFamily:"inherit",color:"var(--text)"}}>Annuler</button>
-          <button onClick={()=>{const err=validatePayPhone(boostPhone,boostMethod);if(err){toast.error(err);return}setBoostPaying(true);setTimeout(()=>{setBoostPaying(false);setBoostPay(false);setBoosted(true);toast.success("🔥 Boost activé ! Priorité max pendant 24h")},3000)}} disabled={boostPaying||!isPayPhoneValid(boostPhone,boostMethod)} style={{flex:1,padding:11,borderRadius:12,border:"none",background:isPayPhoneValid(boostPhone,boostMethod)?"#F59E0B":"var(--border)",color:isPayPhoneValid(boostPhone,boostMethod)?"#fff":"var(--muted)",fontSize:13,fontWeight:700,cursor:isPayPhoneValid(boostPhone,boostMethod)?"pointer":"not-allowed",fontFamily:"inherit"}}>
-            {boostPaying?"⏳ Validation...":"💳 Payer 1 000 F"}
+          <button onClick={()=>{const err=validatePayPhone(boostPhone,boostMethod);if(err){toast.error(err);return}setBoostPaying(true);setTimeout(()=>{setBoostPaying(false);setBoostPay(false);setBoosted(true);toast.success("Boost activé ! Priorité max pendant 24h")},3000)}} disabled={boostPaying||!isPayPhoneValid(boostPhone,boostMethod)} style={{flex:1,padding:11,borderRadius:12,border:"none",background:isPayPhoneValid(boostPhone,boostMethod)?"#F59E0B":"var(--border)",color:isPayPhoneValid(boostPhone,boostMethod)?"#fff":"var(--muted)",fontSize:13,fontWeight:700,cursor:isPayPhoneValid(boostPhone,boostMethod)?"pointer":"not-allowed",fontFamily:"inherit"}}>
+            {boostPaying?"⏳ Validation...":"Payer 1 000 F"}
           </button>
         </div>
       </div>

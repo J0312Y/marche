@@ -1,6 +1,7 @@
 import { useState } from "react";
 import toast from "../../utils/toast";
 import { fmt } from "../../utils/helpers";
+import Icon from "../../components/Icon";
 
 function ReferralScr({ onBack }) {
   const [referralCode] = useState("JOELDY2026");
@@ -14,14 +15,14 @@ function ReferralScr({ onBack }) {
 
   const shareToWhatsApp = () => {
     const msg = encodeURIComponent(
-      `Salut ! Rejoins-moi sur Lamuka Market — le marketplace de Brazza pour commander tout ce qu'on aime 🛒✨\n\nUtilise mon code ${referralCode} et reçois 500 F en bonus !\n\n${shareUrl}`
+      `Salut ! Rejoins-moi sur Lamuka Market — le marketplace de Brazza pour commander tout ce qu'on aime \n\nUtilise mon code ${referralCode} et reçois 500 F en bonus !\n\n${shareUrl}`
     );
     window.open(`https://wa.me/?text=${msg}`, "_blank");
   };
 
   const copyLink = () => {
     navigator.clipboard?.writeText(shareUrl);
-    toast.success("📋 Lien copié !");
+    toast.success("Lien copié !");
   };
 
   return (
@@ -33,7 +34,7 @@ function ReferralScr({ onBack }) {
 
       {/* Hero */}
       <div style={{ margin: "0 16px 14px", padding: 24, background: "linear-gradient(135deg,#F97316,#EC4899)", borderRadius: 20, color: "#fff", textAlign: "center" }}>
-        <div style={{ fontSize: 56, marginBottom: 12 }}>🎁</div>
+        <div style={{ fontSize: 56, marginBottom: 12 }}><Icon name="gift" size={18}/></div>
         <div style={{ fontSize: 22, fontWeight: 800, marginBottom: 4 }}>Invitez vos amis</div>
         <div style={{ fontSize: 13, opacity: .9, marginBottom: 16 }}>Vous recevez <b>1 000 F</b>, ils reçoivent <b>500 F</b></div>
 
@@ -51,7 +52,7 @@ function ReferralScr({ onBack }) {
 
       {/* Stats */}
       <div style={{ margin: "0 16px 14px", padding: 16, background: "var(--card)", border: "1px solid var(--border)", borderRadius: 16 }}>
-        <div style={{ fontSize: 13, fontWeight: 700, marginBottom: 10 }}>📊 Mon parrainage</div>
+        <div style={{ fontSize: 13, fontWeight: 700, marginBottom: 10 }}><Icon name="chart_pie" size={16}/>{" "}Mon parrainage</div>
         <div style={{ display: "grid", gridTemplateColumns: "repeat(3,1fr)", gap: 6 }}>
           <div style={{ textAlign: "center", padding: 10 }}>
             <div style={{ fontSize: 20, fontWeight: 800, color: "#F97316" }}>{stats.invited}</div>
@@ -70,7 +71,7 @@ function ReferralScr({ onBack }) {
 
       {/* How it works */}
       <div style={{ margin: "0 16px 14px", padding: 16, background: "var(--card)", border: "1px solid var(--border)", borderRadius: 16 }}>
-        <div style={{ fontSize: 13, fontWeight: 700, marginBottom: 12 }}>💡 Comment ça marche</div>
+        <div style={{ fontSize: 13, fontWeight: 700, marginBottom: 12 }}><Icon name="info" size={16}/>{" "}Comment ça marche</div>
         {[
           { n: 1, t: "Partagez votre code", d: "Envoyez à vos amis via WhatsApp, SMS ou tout autre moyen" },
           { n: 2, t: "Votre ami s'inscrit", d: "Il utilise votre code pendant l'inscription" },
@@ -88,7 +89,7 @@ function ReferralScr({ onBack }) {
 
       {/* Recent referrals (mock) */}
       <div style={{ margin: "0 16px 14px" }}>
-        <div style={{ fontSize: 13, fontWeight: 700, marginBottom: 8, padding: "0 4px" }}>👥 Amis parrainés</div>
+        <div style={{ fontSize: 13, fontWeight: 700, marginBottom: 8, padding: "0 4px" }}> Amis parrainés</div>
         {[
           { name: "Marie K.", date: "il y a 3 jours", status: "joined", reward: 1000 },
           { name: "Patrick M.", date: "il y a 1 semaine", status: "joined", reward: 1000 },

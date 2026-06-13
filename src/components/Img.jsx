@@ -1,4 +1,5 @@
 import { useState, useRef, useEffect } from "react";
+import Icon from "./Icon";
 
 /**
  * Professional image component like Amazon/Alibaba
@@ -75,7 +76,7 @@ function Img({ src, alt="", emoji, fit="cover", bg, style={}, className="", onCl
       />}
 
       {/* Emoji fallback */}
-      {showEmoji&&<span style={{fontSize: style.height>200?96:style.height>100?52:32, userSelect:"none"}}>{emoji||"📦"}</span>}
+      {showEmoji && emoji && <Icon name={emoji} size={style.height>200?80:style.height>100?44:28} color="var(--muted)"/>}
     </div>
   );
 }

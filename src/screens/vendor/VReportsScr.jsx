@@ -1,5 +1,6 @@
 import { useState } from "react";
 import toast from "../../utils/toast";
+import Icon from "../../components/Icon";
 
 function VReportsScr({onBack}){
   const [month,setMonth]=useState("Février");
@@ -11,24 +12,24 @@ function VReportsScr({onBack}){
   };
   const d=monthData[month];
   const reports=[
-    {id:"sales",icon:"📊",title:"Rapport des ventes",desc:"Détail des ventes par article et période",format:"PDF / Excel"},
-    {id:"tax",icon:"💰",title:"Rapport fiscal",desc:"Revenus, commissions, TVA mensuelle",format:"PDF"},
-    {id:"stock",icon:"📦",title:"Rapport de stock",desc:"Inventaire, mouvements, alertes",format:"Excel"},
-    {id:"invoice",icon:"🧾",title:"Factures Lamuka",desc:"Commissions et frais de plateforme",format:"PDF"},
-    {id:"perf",icon:"📈",title:"Performance boutique",desc:"Taux de conversion, visites, panier moyen",format:"PDF"},
+    {id:"sales",icon:"chart_pie",title:"Rapport des ventes",desc:"Détail des ventes par article et période",format:"PDF / Excel"},
+    {id:"tax",icon:"wallet",title:"Rapport fiscal",desc:"Revenus, commissions, TVA mensuelle",format:"PDF"},
+    {id:"stock",icon:"package",title:"Rapport de stock",desc:"Inventaire, mouvements, alertes",format:"Excel"},
+    {id:"invoice",icon:"receipt",title:"Factures Lamuka",desc:"Commissions et frais de plateforme",format:"PDF"},
+    {id:"perf",icon:"",title:"Performance boutique",desc:"Taux de conversion, visites, panier moyen",format:"PDF"},
   ];
-  const doExport=(id)=>{setExported(e=>({...e,[id]:"loading"}));setTimeout(()=>{setExported(e=>({...e,[id]:"done"}));toast.success("Export prêt ! 📄")},1500);setTimeout(()=>setExported(e=>{const n={...e};delete n[id];return n}),4000)};
+  const doExport=(id)=>{setExported(e=>({...e,[id]:"loading"}));setTimeout(()=>{setExported(e=>({...e,[id]:"done"}));toast.success("Export prêt ! ")},1500);setTimeout(()=>setExported(e=>{const n={...e};delete n[id];return n}),4000)};
   return(<div className="scr" style={{padding:16}}><div className="appbar" style={{padding:0,marginBottom:12}}><button onClick={onBack}>←</button><h2>Rapports & Exports</h2><div style={{width:38}}/></div>
     <div className="vd-period">{["Janvier","Février","Mars"].map(m=><button key={m} className={month===m?"on":""} onClick={()=>setMonth(m)}>{m}</button>)}</div>
     <div style={{padding:16,background:"var(--card)",border:"1px solid var(--border)",borderRadius:16,marginBottom:12}}>
-      <div style={{fontSize:14,fontWeight:700,marginBottom:10}}>📋 Résumé {month}</div>
+      <div style={{fontSize:14,fontWeight:700,marginBottom:10}}><Icon name="document" size={16}/>{" "}Résumé {month}</div>
       {[["Revenus bruts",d.brut+" FCFA"],["Commissions (4%)",d.comm+" FCFA"],["Revenus nets",d.net+" FCFA"],["Nombre de commandes",d.orders],["Panier moyen",d.avg+" FCFA"]].map(([l,v],i)=><div key={l} style={{display:"flex",justifyContent:"space-between",padding:"8px 0",borderBottom:i<4?"1px solid var(--border)":"none",fontSize:13,...(i===2?{fontWeight:700,color:"#10B981"}:{})}}><span style={{color:i===2?"#10B981":"var(--muted)"}}>{l}</span><b>{v}</b></div>)}
     </div>
     {reports.map(r=><div key={r.id} className="rpt-card">
-      <div className="rpt-icon">{r.icon}</div>
+      <div className="rpt-icon"><Icon name={r.icon} size={20}/></div>
       <div className="rpt-info"><h4>{r.title}</h4><p>{r.desc} · {r.format}</p></div>
       {exported[r.id]==="loading"?<button className="rpt-dl" style={{background:"var(--light)",color:"var(--muted)",minWidth:80}}>⏳ Export...</button>
-      :exported[r.id]==="done"?<button className="rpt-dl" style={{background:"rgba(16,185,129,0.1)",color:"#10B981",borderColor:"rgba(16,185,129,0.2)",minWidth:80}}>✅ Prêt</button>
+      :exported[r.id]==="done"?<button className="rpt-dl" style={{background:"rgba(16,185,129,0.1)",color:"#10B981",borderColor:"rgba(16,185,129,0.2)",minWidth:80}}><Icon name="check_circle" size={16}/>{" "}Prêt</button>
       :<button className="rpt-dl" onClick={()=>doExport(r.id)}>Exporter</button>}
     </div>)}
   </div>);

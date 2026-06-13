@@ -1,6 +1,7 @@
 
 
 import { CHAT_AVATARS } from "../../data/images";
+import Icon from "../../components/Icon";
 const PHOTOS=["https://images.unsplash.com/photo-1531123897727-8f129e1688ce?w=80&h=80&fit=crop&crop=face","https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=80&h=80&fit=crop&crop=face","https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=80&h=80&fit=crop&crop=face","https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=80&h=80&fit=crop&crop=face"];
 function VMessagesScr({go}){
   const vChats=[

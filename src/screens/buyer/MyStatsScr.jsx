@@ -1,4 +1,5 @@
 import { useState } from "react";
+import Icon from "../../components/Icon";
 
 const fmt = (n) => n?.toLocaleString("fr-FR") + " FCFA";
 
@@ -9,10 +10,10 @@ function MyStatsScr({ onBack }) {
     savedWithPromos: 42000, loyaltyPoints: 1250,
     monthlySpending: [12000, 28000, 45000, 32000, 18000, 56000, 67000, 42000, 38000, 0, 0, 0],
     topCategories: [
-      { name: "👗 Mode", amount: 145000, pct: 42 },
-      { name: "🍽️ Restaurants", amount: 89000, pct: 26 },
-      { name: "📱 Électronique", amount: 67000, pct: 19 },
-      { name: "💊 Pharmacie", amount: 44000, pct: 13 },
+      { name: "Mode", amount: 145000, pct: 42 },
+      { name: "Restaurants", amount: 89000, pct: 26 },
+      { name: "Électronique", amount: 67000, pct: 19 },
+      { name: "Pharmacie", amount: 44000, pct: 13 },
     ],
   };
   const months = ["Jan","Fév","Mar","Avr","Mai","Jun","Jul","Aoû","Sep","Oct","Nov","Déc"];
@@ -27,7 +28,7 @@ function MyStatsScr({ onBack }) {
         <div style={{ fontSize: 28, fontWeight: 800, color: "#F97316" }}>{fmt(stats.totalSpent)}</div>
         <div style={{ fontSize: 12, color: "var(--muted)", marginTop: 4 }}>dépensés depuis {stats.since}</div>
         <div style={{ display: "flex", justifyContent: "center", gap: 16, marginTop: 14 }}>
-          {[["📦", stats.orders, "Commandes"], ["🧺", fmt(stats.avgBasket), "Panier moy."], ["⭐", stats.loyaltyPoints, "Points"]].map(([ic, v, l]) => (
+          {[["", stats.orders, "Commandes"], ["", fmt(stats.avgBasket), "Panier moy."], ["", stats.loyaltyPoints, "Points"]].map(([ic, v, l]) => (
             <div key={l} style={{ textAlign: "center" }}>
               <div style={{ fontSize: 16 }}>{ic}</div>
               <div style={{ fontSize: 14, fontWeight: 700, marginTop: 2 }}>{v}</div>
@@ -39,7 +40,7 @@ function MyStatsScr({ onBack }) {
 
       {/* Monthly chart */}
       <div style={{ padding: 16, background: "var(--card)", border: "1px solid var(--border)", borderRadius: 16, marginBottom: 14 }}>
-        <div style={{ fontSize: 14, fontWeight: 700, marginBottom: 12 }}>📈 Dépenses mensuelles</div>
+        <div style={{ fontSize: 14, fontWeight: 700, marginBottom: 12 }}> Dépenses mensuelles</div>
         <div style={{ display: "flex", alignItems: "flex-end", gap: 2, height: 80 }}>
           {stats.monthlySpending.map((v, i) => (
             <div key={i} style={{ flex: 1, display: "flex", flexDirection: "column", alignItems: "center", gap: 3 }}>
@@ -52,7 +53,7 @@ function MyStatsScr({ onBack }) {
 
       {/* Top categories */}
       <div style={{ padding: 16, background: "var(--card)", border: "1px solid var(--border)", borderRadius: 16, marginBottom: 14 }}>
-        <div style={{ fontSize: 14, fontWeight: 700, marginBottom: 12 }}>🏷️ Catégories préférées</div>
+        <div style={{ fontSize: 14, fontWeight: 700, marginBottom: 12 }}><Icon name="tag" size={16}/>{" "}Catégories préférées</div>
         {stats.topCategories.map((cat, i) => (
           <div key={cat.name} style={{ marginBottom: 10 }}>
             <div style={{ display: "flex", justifyContent: "space-between", fontSize: 12, marginBottom: 4 }}>
@@ -68,12 +69,12 @@ function MyStatsScr({ onBack }) {
 
       {/* Fun facts */}
       <div style={{ padding: 16, background: "var(--card)", border: "1px solid var(--border)", borderRadius: 16 }}>
-        <div style={{ fontSize: 14, fontWeight: 700, marginBottom: 10 }}>🎉 En bref</div>
+        <div style={{ fontSize: 14, fontWeight: 700, marginBottom: 10 }}><Icon name="sparkle" size={16}/>{" "}En bref</div>
         {[
-          ["🏪", "Vendeur préféré", stats.favVendor],
-          ["💰", "Économisé avec les promos", fmt(stats.savedWithPromos)],
-          ["📅", "Membre depuis", stats.since],
-          ["🛍️", "Catégorie #1", stats.favCategory],
+          ["", "Vendeur préféré", stats.favVendor],
+          ["", "Économisé avec les promos", fmt(stats.savedWithPromos)],
+          ["", "Membre depuis", stats.since],
+          ["️", "Catégorie #1", stats.favCategory],
         ].map(([ic, l, v]) => (
           <div key={l} style={{ display: "flex", justifyContent: "space-between", padding: "8px 0", borderBottom: "1px solid var(--border)", fontSize: 12 }}>
             <span style={{ color: "var(--muted)" }}>{ic} {l}</span>

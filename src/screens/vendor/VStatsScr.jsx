@@ -3,6 +3,7 @@ import { useLoad } from "../../hooks";
 import { vendor } from "../../services";
 import { SkeletonStats } from "../../components/Loading";
 import { fmt } from "../../utils/helpers";
+import Icon from "../../components/Icon";
 
 const CHART_LABELS={
   today:["8h","9h","10h","11h","12h","14h","16h"],
@@ -29,32 +30,32 @@ function VStatsScr({onBack}){
   const chartTotal=chart.reduce((a,b)=>a+b,0);
 
   return(<div className="scr" style={{padding:16,paddingBottom:20}}>
-    <div className="appbar" style={{padding:0,marginBottom:12}}><button onClick={onBack}>←</button><h2>📈 Statistiques</h2><div style={{width:38}}/></div>
+    <div className="appbar" style={{padding:0,marginBottom:12}}><button onClick={onBack}>←</button><h2> Statistiques</h2><div style={{width:38}}/></div>
 
     <div className="vo-filter" style={{padding:0,marginBottom:14}}>{[["today","Aujourd'hui"],["week","Semaine"],["month","Mois"]].map(([k,l])=><button key={k} className={period===k?"on":""} onClick={()=>setPeriod(k)}>{l}</button>)}</div>
 
     {/* Stats 2x2 */}
     <div className="vd-stats" style={{padding:0}}>
       <div className="vd-stat">
-        <div className="vs-icon">💰</div>
+        <div className="vs-icon"><Icon name="wallet" size={18}/></div>
         <div className="vs-val">{fmt(s?.revenue||0)}</div>
         <div className="vs-lbl">Revenus</div>
         <div className="vs-trend up">↑ 23%</div>
       </div>
       <div className="vd-stat">
-        <div className="vs-icon">📦</div>
+        <div className="vs-icon"><Icon name="package" size={18}/></div>
         <div className="vs-val">{s?.orders||0}</div>
         <div className="vs-lbl">Commandes</div>
         <div className="vs-trend up">↑ 18%</div>
       </div>
       <div className="vd-stat">
-        <div className="vs-icon">👁️</div>
+        <div className="vs-icon"><Icon name="map" size={18}/></div>
         <div className="vs-val">{s?.visitors||0}</div>
         <div className="vs-lbl">Visiteurs</div>
         <div className="vs-trend up">↑ 12%</div>
       </div>
       <div className="vd-stat">
-        <div className="vs-icon">⭐</div>
+        <div className="vs-icon"><Icon name="star_full" size={18}/></div>
         <div className="vs-val">4.6</div>
         <div className="vs-lbl">Note moyenne</div>
         <div className="vs-trend up">↑ 0.2</div>
@@ -79,7 +80,7 @@ function VStatsScr({onBack}){
 
     {/* Performance */}
     <div style={{padding:16,background:"var(--card)",border:"1px solid var(--border)",borderRadius:18,marginBottom:14}}>
-      <h4 style={{fontSize:14,fontWeight:700,marginBottom:14}}>📊 Performance</h4>
+      <h4 style={{fontSize:14,fontWeight:700,marginBottom:14}}><Icon name="chart_pie" size={16}/>{" "}Performance</h4>
       {[
         {label:"Taux de conversion",val:"3.2%",pct:32,color:"#F97316"},
         {label:"Panier moyen",val:fmt(Math.round((s?.revenue||0)/Math.max(s?.orders||1,1))),pct:65,color:"#10B981"},
@@ -98,7 +99,7 @@ function VStatsScr({onBack}){
 
     {/* Top Products */}
     <div style={{padding:16,background:"var(--card)",border:"1px solid var(--border)",borderRadius:18,marginBottom:14}}>
-      <h4 style={{fontSize:14,fontWeight:700,marginBottom:14}}>🏆 Top Produits</h4>
+      <h4 style={{fontSize:14,fontWeight:700,marginBottom:14}}><Icon name="crown" size={16}/>{" "}Top Produits</h4>
       {tp.map((p,i)=><div key={i} style={{display:"flex",alignItems:"center",gap:12,padding:"10px 0",borderTop:i?"1px solid var(--border)":"none"}}>
         <div style={{width:28,height:28,borderRadius:8,background:i===0?"linear-gradient(135deg,#F59E0B,#D97706)":i===1?"linear-gradient(135deg,#94A3B8,#64748B)":"linear-gradient(135deg,#D97706,#B45309)",display:"flex",alignItems:"center",justifyContent:"center",color:"#fff",fontSize:12,fontWeight:800,flexShrink:0}}>{i+1}</div>
         <div style={{flex:1}}>
@@ -111,7 +112,7 @@ function VStatsScr({onBack}){
 
     {/* Revenue breakdown */}
     <div style={{padding:16,background:"var(--card)",border:"1px solid var(--border)",borderRadius:18}}>
-      <h4 style={{fontSize:14,fontWeight:700,marginBottom:14}}>💰 Résumé financier</h4>
+      <h4 style={{fontSize:14,fontWeight:700,marginBottom:14}}><Icon name="wallet" size={16}/>{" "}Résumé financier</h4>
       {[
         ["Revenus bruts",fmt(s?.revenue||0),"var(--text)"],
         ["Commission Lamuka (4%)","-"+fmt(Math.round((s?.revenue||0)*0.04)),"#EF4444"],

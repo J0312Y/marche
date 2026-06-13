@@ -1,5 +1,6 @@
 import { useState } from "react";
 import toast from "../../utils/toast";
+import Icon from "../../components/Icon";
 
 function VAIDescScr({onBack}){
   const [productName,setProductName]=useState("");
@@ -26,8 +27,8 @@ function VAIDescScr({onBack}){
     }catch{
       setResult({
         title:productName+" — Qualité Premium | Lamuka Market",
-        description:`Découvrez ${productName}, disponible sur Lamuka Market ! 🛍️ Livraison rapide à Brazzaville et Pointe-Noire. Paiement sécurisé par Airtel Money et MTN MoMo. Qualité garantie avec retour possible sous 7 jours.`,
-        bulletPoints:["✅ Livraison 1-3 jours","💳 Paiement Mobile Money","↩️ Retour 7 jours","⭐ Vendeur vérifié"],
+        description:`Découvrez ${productName}, disponible sur Lamuka Market ! ️ Livraison rapide à Brazzaville et Pointe-Noire. Paiement sécurisé par Airtel Money et MTN MoMo. Qualité garantie avec retour possible sous 7 jours.`,
+        bulletPoints:["Livraison 1-3 jours","Paiement Mobile Money","↩️ Retour 7 jours","Vendeur vérifié"],
         seoTags:["lamuka","congo","brazzaville",productName.toLowerCase()]
       });
     }
@@ -38,22 +39,22 @@ function VAIDescScr({onBack}){
     if(!result)return;
     const text=`${result.title}\n\n${result.description}\n\n${result.bulletPoints?.join("\n")||""}\n\nTags: ${result.seoTags?.join(", ")||""}`;
     navigator.clipboard?.writeText(text);
-    toast.success("📋 Copié !");
+    toast.success("Copié !");
   };
 
   return(<div className="scr" style={{padding:16,paddingBottom:20}}>
-    <div className="appbar" style={{padding:0,marginBottom:12}}><button onClick={onBack}>←</button><h2>🤖 IA Description</h2><div style={{width:38}}/></div>
+    <div className="appbar" style={{padding:0,marginBottom:12}}><button onClick={onBack}>←</button><h2><Icon name="headphones" size={16}/>{" "}IA Description</h2><div style={{width:38}}/></div>
 
     <div className="field"><label>Nom du produit *</label><input value={productName} onChange={e=>setProductName(e.target.value)} placeholder="Ex: Robe Wax Moderne, Galaxy A54..."/></div>
     <div className="field"><label>Catégorie</label><input value={category} onChange={e=>setCategory(e.target.value)} placeholder="Mode, Électronique, Restaurant..."/></div>
     <div className="field"><label>Mots-clés (optionnel)</label><input value={keywords} onChange={e=>setKeywords(e.target.value)} placeholder="qualité, tendance, fait main..."/></div>
 
-    <button onClick={generate} disabled={loading} style={{width:"100%",padding:14,borderRadius:14,border:"none",background:"#F97316",color:"#fff",fontSize:15,fontWeight:700,cursor:loading?"wait":"pointer",fontFamily:"inherit"}}>{loading?"🤖 Génération en cours...":"🤖 Générer la description"}</button>
+    <button onClick={generate} disabled={loading} style={{width:"100%",padding:14,borderRadius:14,border:"none",background:"#F97316",color:"#fff",fontSize:15,fontWeight:700,cursor:loading?"wait":"pointer",fontFamily:"inherit"}}>{loading?"Génération en cours...":"Générer la description"}</button>
 
     {result&&<div style={{marginTop:16}}>
       <div style={{display:"flex",justifyContent:"space-between",alignItems:"center",marginBottom:10}}>
         <span style={{fontSize:14,fontWeight:700}}>Résultat</span>
-        <button onClick={copyAll} style={{padding:"4px 12px",borderRadius:8,border:"1px solid var(--border)",background:"var(--card)",fontSize:11,fontWeight:600,cursor:"pointer",fontFamily:"inherit",color:"var(--text)"}}>📋 Copier tout</button>
+        <button onClick={copyAll} style={{padding:"4px 12px",borderRadius:8,border:"1px solid var(--border)",background:"var(--card)",fontSize:11,fontWeight:600,cursor:"pointer",fontFamily:"inherit",color:"var(--text)"}}><Icon name="document" size={16}/>{" "}Copier tout</button>
       </div>
       <div style={{padding:14,background:"var(--card)",border:"1px solid var(--border)",borderRadius:14,marginBottom:8}}>
         <div style={{fontSize:10,color:"var(--muted)",marginBottom:4}}>TITRE</div>

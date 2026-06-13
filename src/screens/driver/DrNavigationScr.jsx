@@ -2,6 +2,7 @@ import toast from "../../utils/toast";
 import LiveMap from "../../components/LiveMap";
 import { useState, useEffect } from "react";
 import MapView from "../../components/MapView";
+import Icon from "../../components/Icon";
 
 function DrNavigationScr({delivery:dl,go,onBack}){
   const client=dl.client?.lat?{lat:dl.client.lat,lng:dl.client.lng}:{lat:-4.277,lng:15.283};
@@ -19,7 +20,7 @@ function DrNavigationScr({delivery:dl,go,onBack}){
   },[]);
 
   const markers=[
-    {lat:client.lat,lng:client.lng,emoji:"🏠"},
+    {lat:client.lat,lng:client.lng,emoji:""},
   ];
 
   return(<div style={{display:"flex",flexDirection:"column",height:"100%"}}>
@@ -44,11 +45,11 @@ function DrNavigationScr({delivery:dl,go,onBack}){
       {/* Bottom info */}
       <div style={{position:"absolute",bottom:16,left:16,right:16,zIndex:1000,background:"var(--card)",padding:14,borderRadius:16,boxShadow:"0 4px 20px rgba(0,0,0,.12)"}}>
         <div style={{display:"flex",alignItems:"center",gap:12}}>
-          <div style={{width:44,height:44,borderRadius:12,background:"rgba(16,185,129,0.1)",display:"flex",alignItems:"center",justifyContent:"center",fontSize:20,flexShrink:0}}>🏠</div>
+          <div style={{width:44,height:44,borderRadius:12,background:"rgba(16,185,129,0.1)",display:"flex",alignItems:"center",justifyContent:"center",fontSize:20,flexShrink:0}}></div>
           <div style={{flex:1}}><h3 style={{fontSize:15,fontWeight:700,marginBottom:2}}>{dl.client.name}</h3><p style={{fontSize:12,color:"var(--muted)",margin:0}}>{dl.client.addr}</p></div>
           <div style={{display:"flex",gap:6}}>
-            <button style={{width:38,height:38,borderRadius:10,border:"none",background:"#F59E0B",color:"#fff",cursor:"pointer",fontSize:16,display:"flex",alignItems:"center",justifyContent:"center"}} onClick={()=>toast.info("📞 Appel")}>📞</button>
-            <button style={{width:38,height:38,borderRadius:10,border:"none",background:"#F97316",color:"#fff",cursor:"pointer",fontSize:16,display:"flex",alignItems:"center",justifyContent:"center"}} onClick={()=>go("drChatClient",dl)}>💬</button>
+            <button style={{width:38,height:38,borderRadius:10,border:"none",background:"#F59E0B",color:"#fff",cursor:"pointer",fontSize:16,display:"flex",alignItems:"center",justifyContent:"center"}} onClick={()=>toast.info("Appel")}><Icon name="phone" size={18}/></button>
+            <button style={{width:38,height:38,borderRadius:10,border:"none",background:"#F97316",color:"#fff",cursor:"pointer",fontSize:16,display:"flex",alignItems:"center",justifyContent:"center"}} onClick={()=>go("drChatClient",dl)}><Icon name="chat" size={18}/></button>
           </div>
         </div>
       </div>

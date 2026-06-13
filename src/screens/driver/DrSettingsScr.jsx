@@ -13,14 +13,14 @@ function DrSettingsScr({onBack,go}){
     <div style={{padding:"0 16px"}}>
       <div className="setting-group"><div className="setting-label">Général</div>
         <div className="setting-item"><span className="si-i"><Icon name="globe" size={18}/></span><span className="si-t">Langue</span><Select value={lang} onChange={v=>{setLang(v);setLanguage(v);ctxSetLang(v)}} options={[{value:"fr",label:"FR Français"},{value:"en",label:"GB English"},{value:"ln",label:"CG Lingala"}]}/></div>
-        <div className="setting-item"><span className="si-i"><Icon name="moon" size={18}/></span><span className="si-t">Mode sombre</span><div className={`toggle ${darkMode?"on":""}`} onClick={()=>{toggleDark();toast.success(darkMode?"Mode clair ☀️":"Mode sombre 🌙")}}/></div>
+        <div className="setting-item"><span className="si-i"><Icon name="moon" size={18}/></span><span className="si-t">Mode sombre</span><div className={`toggle ${darkMode?"on":""}`} onClick={()=>{toggleDark();toast.success(darkMode?"Mode clair ️":"Mode sombre")}}/></div>
       </div>
       <div className="setting-group"><div className="setting-label">Notifications</div>
-        <div className="setting-item"><span className="si-i"><Icon name="bell" size={18}/></span><span className="si-t">Notifications push</span><div className={`toggle ${pushN?"on":""}`} onClick={()=>{setPushN(!pushN);toast.success(!pushN?'Notifications activées 🔔':'Notifications désactivées')}}/></div>
-        <div className="setting-item"><span className="si-i"><Icon name="bell" size={18}/></span><span className="si-t">Son nouvelles commandes</span><div className={`toggle ${sound?"on":""}`} onClick={()=>{setSound(!sound);toast.success(!sound?'Son activé 🔊':'Son désactivé')}}/></div>
+        <div className="setting-item"><span className="si-i"><Icon name="bell" size={18}/></span><span className="si-t">Notifications push</span><div className={`toggle ${pushN?"on":""}`} onClick={()=>{setPushN(!pushN);toast.success(!pushN?'Notifications activées':'Notifications désactivées')}}/></div>
+        <div className="setting-item"><span className="si-i"><Icon name="bell" size={18}/></span><span className="si-t">Son nouvelles commandes</span><div className={`toggle ${sound?"on":""}`} onClick={()=>{setSound(!sound);toast.success(!sound?'Son activé':'Son désactivé')}}/></div>
       </div>
       <div className="setting-group"><div className="setting-label">Livraison</div>
-        <div className="setting-item"><span className="si-i"><Icon name="lightning" size={18}/></span><span className="si-t">Acceptation automatique</span><div className={`toggle ${autoAccept?"on":""}`} onClick={()=>{setAutoAccept(!autoAccept);toast.success(!autoAccept?'Acceptation auto activée ⚡':'Désactivée')}}/></div>
+        <div className="setting-item"><span className="si-i"><Icon name="lightning" size={18}/></span><span className="si-t">Acceptation automatique</span><div className={`toggle ${autoAccept?"on":""}`} onClick={()=>{setAutoAccept(!autoAccept);toast.success(!autoAccept?'Acceptation auto activée':'Désactivée')}}/></div>
         <div className="info-box yellow" style={{margin:"8px 0"}}><span><Icon name="info" size={18}/></span><span>Si activé, les livraisons proches seront acceptées automatiquement.</span></div>
       </div>
       <div className="setting-group"><div className="setting-label">Sécurité</div>

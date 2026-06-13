@@ -1,34 +1,35 @@
 import { useState, useRef, useEffect } from "react";
 import toast from "../../utils/toast";
+import Icon from "../../components/Icon";
 
 /* ═══ LOCAL FALLBACK — 30+ keywords ═══ */
 const LOCAL = {
-  "commande":{r:"📦 Pour suivre votre commande : **Commandes** > cliquez dessus > **Suivre la livraison**. Donnez-moi le numéro (#LMK-XXXX) pour plus de détails."},
-  "livraison":{r:"🚚 Livraison standard : 1-3 jours à Brazzaville.\n• Bacongo/Poto-Poto : 1 500 F\n• Moungali/Ouenzé : 2 000 F\n• Talangaï/Mfilou : 2 500 F\nGratuite dès 15 000 FCFA !"},
-  "paiement":{r:"💳 Modes de paiement :\n• Airtel Money\n• MTN Mobile Money\n• Kolo Pay (wallet intégré)\nTout est sécurisé et instantané."},
+  "commande":{r:"Pour suivre votre commande : **Commandes** > cliquez dessus > **Suivre la livraison**. Donnez-moi le numéro (#LMK-XXXX) pour plus de détails."},
+  "livraison":{r:"Livraison standard : 1-3 jours à Brazzaville.\n• Bacongo/Poto-Poto : 1 500 F\n• Moungali/Ouenzé : 2 000 F\n• Talangaï/Mfilou : 2 500 F\nGratuite dès 15 000 FCFA !"},
+  "paiement":{r:"Modes de paiement :\n• Airtel Money\n• MTN Mobile Money\n• Kolo Pay (wallet intégré)\nTout est sécurisé et instantané."},
   "retour":{r:"↩️ Retours possibles sous 7 jours. Allez dans **Commandes** > commande concernée > **Retour / Remboursement**. Remboursement sous 48h."},
-  "vendeur":{r:"🏪 Pour devenir vendeur :\n1. **Profil** > Devenir commerçant\n2. Remplissez vos infos\n3. Uploadez vos documents\n4. Choisissez un plan\nValidation sous 24-48h !"},
-  "promo":{r:"🏷️ Les promos sont dans l'onglet **Recherche** et la section **Ventes Flash** sur l'accueil. Utilisez un code promo dans le panier."},
-  "contact":{r:"📞 Contactez-nous :\n• WhatsApp : +242 064 663 469\n• Email : support@lamuka.market\n• Chat : ici même !\nDisponible Lun-Sam, 8h-20h."},
-  "prix":{r:"💰 Les prix sont en FCFA et fixés par chaque vendeur. Utilisez les **Alertes de prix** pour être notifié quand un article baisse."},
-  "kolo":{r:"💜 Kolo Pay est le wallet intégré de Lamuka. Rechargez via Airtel/MTN et payez en un clic. Bonus : cashback sur certains achats !"},
-  "groupe":{r:"🤝 Les **achats groupés** permettent d'obtenir -20% quand 5 personnes achètent le même produit. Partagez le lien pour recruter !"},
-  "fidélité":{r:"⭐ Programme fidélité : gagnez des points à chaque achat. 100 pts = 1 000 FCFA de réduction. Consultez vos points dans **Profil** > **Fidélité**."},
-  "carte cadeau":{r:"🎁 Offrez une carte cadeau Lamuka ! Montant au choix, le destinataire l'utilise comme bon de réduction."},
-  "parrainage":{r:"👥 Parrainez vos amis et gagnez 2 000 FCFA par filleul inscrit. Votre ami reçoit aussi 1 000 FCFA. Allez dans **Profil** > **Parrainage**."},
-  "livreur":{r:"🛵 Pour devenir livreur Lamuka :\n1. **Profil** > Devenir livreur\n2. Infos personnelles + véhicule\n3. Documents (permis, ID)\n4. Gagnez dès votre première livraison !"},
-  "compte":{r:"👤 Gérez votre compte dans **Profil** : modifier vos infos, adresses, mot de passe, notifications et préférences."},
-  "adresse":{r:"📍 Ajoutez/modifiez vos adresses dans **Profil** > **Adresses**. Vous pouvez en avoir plusieurs (maison, bureau, etc.)."},
-  "notification":{r:"🔔 Gérez vos notifications dans **Paramètres**. Vous recevez des alertes pour : commandes, promos, livraisons et messages."},
-  "annuler":{r:"❌ Pour annuler une commande : **Commandes** > sélectionnez la commande > **Annuler**. Possible tant qu'elle n'est pas en livraison."},
-  "horaire":{r:"🕐 Lamuka Market est disponible 24h/24. Les horaires de livraison dépendent de chaque commerce (généralement 8h-20h)."},
-  "sécurité":{r:"🔒 Vos données sont protégées. Paiements chiffrés, pas de stockage de numéros Mobile Money. Politique complète dans **Paramètres** > **Confidentialité**."},
-  "langue":{r:"🌐 Lamuka est disponible en Français, English et Lingala. Changez dans **Paramètres** > **Langue**."},
-  "bug":{r:"🐛 Désolé pour ce désagrément ! Essayez de redémarrer l'app. Si le problème persiste, contactez-nous : support@lamuka.market avec une capture d'écran."},
-  "restaurant":{r:"🍽️ Pour commander à manger : accueil > **Commander à manger** ou cherchez un restaurant. Livraison en 30-45 min !"},
-  "pharmacie":{r:"💊 Trouvez une pharmacie dans la barre de recherche. Livraison express disponible pour les médicaments."},
-  "avis":{r:"⭐ Laissez un avis après chaque commande livrée. Cela aide les autres acheteurs et les vendeurs à s'améliorer !"},
-  "flash":{r:"⚡ Les **Ventes Flash** sont des offres limitées dans le temps avec de grosses réductions. Consultez-les sur l'accueil !"},
+  "vendeur":{r:"Pour devenir vendeur :\n1. **Profil** > Devenir commerçant\n2. Remplissez vos infos\n3. Uploadez vos documents\n4. Choisissez un plan\nValidation sous 24-48h !"},
+  "promo":{r:"Les promos sont dans l'onglet **Recherche** et la section **Ventes Flash** sur l'accueil. Utilisez un code promo dans le panier."},
+  "contact":{r:"Contactez-nous :\n• WhatsApp : +242 064 663 469\n• Email : support@lamuka.market\n• Chat : ici même !\nDisponible Lun-Sam, 8h-20h."},
+  "prix":{r:"Les prix sont en FCFA et fixés par chaque vendeur. Utilisez les **Alertes de prix** pour être notifié quand un article baisse."},
+  "kolo":{r:" Kolo Pay est le wallet intégré de Lamuka. Rechargez via Airtel/MTN et payez en un clic. Bonus : cashback sur certains achats !"},
+  "groupe":{r:"Les **achats groupés** permettent d'obtenir -20% quand 5 personnes achètent le même produit. Partagez le lien pour recruter !"},
+  "fidélité":{r:"Programme fidélité : gagnez des points à chaque achat. 100 pts = 1 000 FCFA de réduction. Consultez vos points dans **Profil** > **Fidélité**."},
+  "carte cadeau":{r:"Offrez une carte cadeau Lamuka ! Montant au choix, le destinataire l'utilise comme bon de réduction."},
+  "parrainage":{r:" Parrainez vos amis et gagnez 2 000 FCFA par filleul inscrit. Votre ami reçoit aussi 1 000 FCFA. Allez dans **Profil** > **Parrainage**."},
+  "livreur":{r:"Pour devenir livreur Lamuka :\n1. **Profil** > Devenir livreur\n2. Infos personnelles + véhicule\n3. Documents (permis, ID)\n4. Gagnez dès votre première livraison !"},
+  "compte":{r:"Gérez votre compte dans **Profil** : modifier vos infos, adresses, mot de passe, notifications et préférences."},
+  "adresse":{r:"Ajoutez/modifiez vos adresses dans **Profil** > **Adresses**. Vous pouvez en avoir plusieurs (maison, bureau, etc.)."},
+  "notification":{r:"Gérez vos notifications dans **Paramètres**. Vous recevez des alertes pour : commandes, promos, livraisons et messages."},
+  "annuler":{r:"Pour annuler une commande : **Commandes** > sélectionnez la commande > **Annuler**. Possible tant qu'elle n'est pas en livraison."},
+  "horaire":{r:" Lamuka Market est disponible 24h/24. Les horaires de livraison dépendent de chaque commerce (généralement 8h-20h)."},
+  "sécurité":{r:"Vos données sont protégées. Paiements chiffrés, pas de stockage de numéros Mobile Money. Politique complète dans **Paramètres** > **Confidentialité**."},
+  "langue":{r:"Lamuka est disponible en Français, English et Lingala. Changez dans **Paramètres** > **Langue**."},
+  "bug":{r:" Désolé pour ce désagrément ! Essayez de redémarrer l'app. Si le problème persiste, contactez-nous : support@lamuka.market avec une capture d'écran."},
+  "restaurant":{r:"Pour commander à manger : accueil > **Commander à manger** ou cherchez un restaurant. Livraison en 30-45 min !"},
+  "pharmacie":{r:"Trouvez une pharmacie dans la barre de recherche. Livraison express disponible pour les médicaments."},
+  "avis":{r:"Laissez un avis après chaque commande livrée. Cela aide les autres acheteurs et les vendeurs à s'améliorer !"},
+  "flash":{r:"Les **Ventes Flash** sont des offres limitées dans le temps avec de grosses réductions. Consultez-les sur l'accueil !"},
 };
 
 const GREETINGS = ["bonjour","salut","hello","hi","yo","hey","bonsoir","bjr","coucou","mbote"];
@@ -36,8 +37,8 @@ const THANKS = ["merci","thanks","ok","d'accord","super","parfait","bien","top",
 
 function findLocal(msg) {
   const lower = msg.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g,"");
-  if (GREETINGS.some(g => lower.includes(g))) return "Bonjour ! 👋 Je suis **Lamu**, votre assistant Lamuka Market. Comment puis-je vous aider aujourd'hui ?";
-  if (THANKS.some(t => lower.includes(t))) return "Avec plaisir ! 😊 N'hésitez pas si vous avez d'autres questions.";
+  if (GREETINGS.some(g => lower.includes(g))) return "Bonjour !  Je suis **Lamu**, votre assistant Lamuka Market. Comment puis-je vous aider aujourd'hui ?";
+  if (THANKS.some(t => lower.includes(t))) return "Avec plaisir !  N'hésitez pas si vous avez d'autres questions.";
   for (const [key, data] of Object.entries(LOCAL)) {
     if (lower.includes(key.normalize("NFD").replace(/[\u0300-\u036f]/g,""))) return data.r;
   }
@@ -45,7 +46,7 @@ function findLocal(msg) {
 }
 
 /* ═══ SYSTEM PROMPT ═══ */
-const SYSTEM = `Tu es Lamu, l'assistant IA de Lamuka Market — le marketplace #1 du Congo 🇨🇬.
+const SYSTEM = `Tu es Lamu, l'assistant IA de Lamuka Market — le marketplace #1 du Congo .
 
 CONTEXTE:
 - Lamuka Market est une app mobile de e-commerce pour Brazzaville et Pointe-Noire
@@ -68,9 +69,9 @@ RÈGLES:
 - Tu peux comprendre le lingala basique (mbote = bonjour, etc.)`;
 
 /* ═══ QUICK REPLIES ═══ */
-const QUICK_BUYER = [["📦","Suivre ma commande"],["🚚","Frais de livraison"],["💳","Paiement"],["↩️","Retour"],["🏷️","Promos"],["📞","Contact"]];
-const QUICK_VENDOR = [["📊","Mes statistiques"],["📦","Gérer commandes"],["🏷️","Créer une promo"],["📤","Importer produits"],["💰","Retirer mes gains"],["🆘","Problème commande"]];
-const QUICK_DRIVER = [["💰","Mes gains"],["📍","Changer de zone"],["🛵","Problème véhicule"],["📦","Problème livraison"],["💳","Retrait Mobile Money"],["📞","Contact support"]];
+const QUICK_BUYER = [["","Suivre ma commande"],["","Frais de livraison"],["","Paiement"],["↩️","Retour"],["","Promos"],["","Contact"]];
+const QUICK_VENDOR = [["","Mes statistiques"],["","Gérer commandes"],["","Créer une promo"],["","Importer produits"],["","Retirer mes gains"],["🆘","Problème commande"]];
+const QUICK_DRIVER = [["","Mes gains"],["","Changer de zone"],["","Problème véhicule"],["","Problème livraison"],["","Retrait Mobile Money"],["","Contact support"]];
 
 function ChatBotScr({ onBack, mode = "buyer" }) {
   const MODE_CONTEXT = {
@@ -80,7 +81,7 @@ function ChatBotScr({ onBack, mode = "buyer" }) {
   };
   const SYSTEM_FULL = SYSTEM + "\n\nMODE: " + MODE_CONTEXT[mode];
   const [msgs, setMsgs] = useState([
-    { from: "bot", text: mode==="vendor"?"Bonjour ! 👋 Je suis **Lamu**, votre assistant vendeur. Posez-moi vos questions sur la gestion de boutique, produits, commandes, promos, stats...":mode==="driver"?"Bonjour ! 👋 Je suis **Lamu**, votre assistant livreur. Questions sur vos gains, zones, livraisons, véhicule ? Je suis là !":"Bonjour ! 👋 Je suis **Lamu**, votre assistant Lamuka Market. Posez-moi n'importe quelle question !", time: new Date().toLocaleTimeString("fr", { hour: "2-digit", minute: "2-digit" }) },
+    { from: "bot", text: mode==="vendor"?"Bonjour !  Je suis **Lamu**, votre assistant vendeur. Posez-moi vos questions sur la gestion de boutique, produits, commandes, promos, stats...":mode==="driver"?"Bonjour !  Je suis **Lamu**, votre assistant livreur. Questions sur vos gains, zones, livraisons, véhicule ? Je suis là !":"Bonjour !  Je suis **Lamu**, votre assistant Lamuka Market. Posez-moi n'importe quelle question !", time: new Date().toLocaleTimeString("fr", { hour: "2-digit", minute: "2-digit" }) },
   ]);
   const [inp, setInp] = useState("");
   const [typing, setTyping] = useState(false);
@@ -153,7 +154,7 @@ function ChatBotScr({ onBack, mode = "buyer" }) {
       <div className="appbar">
         <button onClick={onBack}>←</button>
         <h2 style={{display:"flex",alignItems:"center",gap:6}}>
-          🤖 Lamu {isAI&&<span style={{fontSize:8,padding:"2px 6px",borderRadius:4,background:"rgba(16,185,129,0.1)",color:"#10B981",fontWeight:600}}>IA</span>}
+           Lamu {isAI&&<span style={{fontSize:8,padding:"2px 6px",borderRadius:4,background:"rgba(16,185,129,0.1)",color:"#10B981",fontWeight:600}}>IA</span>}
         </h2>
         <div style={{ width: 38 }} />
       </div>
@@ -161,7 +162,7 @@ function ChatBotScr({ onBack, mode = "buyer" }) {
       <div ref={scrollRef} style={{ flex: 1, overflowY: "auto", padding: "8px 12px" }}>
         {msgs.map((m, i) => (
           <div key={i} style={{ display: "flex", justifyContent: m.from === "user" ? "flex-end" : "flex-start", marginBottom: 8 }}>
-            {m.from === "bot" && <div style={{ width: 28, height: 28, borderRadius: 10, background: "rgba(249,115,22,0.1)", display: "flex", alignItems: "center", justifyContent: "center", fontSize: 14, marginRight: 6, flexShrink: 0, marginTop: 2 }}>🤖</div>}
+            {m.from === "bot" && <div style={{ width: 28, height: 28, borderRadius: 10, background: "rgba(249,115,22,0.1)", display: "flex", alignItems: "center", justifyContent: "center", fontSize: 14, marginRight: 6, flexShrink: 0, marginTop: 2 }}><Icon name="headphones" size={18}/></div>}
             <div style={{
               maxWidth: "78%", padding: "10px 14px", borderRadius: 16,
               background: m.from === "user" ? "#F97316" : "var(--light)",
@@ -178,7 +179,7 @@ function ChatBotScr({ onBack, mode = "buyer" }) {
         ))}
         {typing && (
           <div style={{ display: "flex", alignItems: "center", gap: 6, padding: "8px 0" }}>
-            <div style={{ width: 28, height: 28, borderRadius: 10, background: "rgba(249,115,22,0.1)", display: "flex", alignItems: "center", justifyContent: "center", fontSize: 14 }}>🤖</div>
+            <div style={{ width: 28, height: 28, borderRadius: 10, background: "rgba(249,115,22,0.1)", display: "flex", alignItems: "center", justifyContent: "center", fontSize: 14 }}><Icon name="headphones" size={18}/></div>
             <div style={{ padding: "8px 14px", background: "var(--light)", borderRadius: 16, display: "flex", gap: 4 }}>
               {[0, 1, 2].map(i => <div key={i} style={{ width: 6, height: 6, borderRadius: 3, background: "var(--muted)", animation: `typingDot .8s ease-in-out ${i * .2}s infinite` }} />)}
             </div>
@@ -200,7 +201,7 @@ function ChatBotScr({ onBack, mode = "buyer" }) {
       {/* Input */}
       <div className="chat-input">
         <input placeholder="Posez votre question..." value={inp} onChange={e => setInp(e.target.value)} onKeyDown={e => e.key === "Enter" && send()} />
-        <button onClick={() => send()} style={{ background: "#F97316" }}>➤</button>
+        <button onClick={() => send()} style={{ background: "#F97316" }}></button>
       </div>
     </div>
   );

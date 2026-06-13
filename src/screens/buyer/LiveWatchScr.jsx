@@ -2,18 +2,19 @@ import { useState, useEffect, useRef } from "react";
 import Img from "../../components/Img";
 import { fmt } from "../../utils/helpers";
 import toast from "../../utils/toast";
+import Icon from "../../components/Icon";
 
 function LiveWatchScr({onBack,go,liveData}){
-  const vendor=liveData?.vendor||{name:"Mode Afrique",avatar:"👔"};
+  const vendor=liveData?.vendor||{name:"Mode Afrique",avatar:""};
   const products=liveData?.products||[];
   const [pinned,setPinned]=useState(products[0]||null);
   const [viewers,setViewers]=useState(47);
   const [hearts,setHearts]=useState(0);
   const [myHeart,setMyHeart]=useState(false);
   const [comments,setComments]=useState([
-    {user:"Marie K.",text:"Bonjour ! 👋",avatar:"👩",time:"14:30"},
-    {user:"Paul N.",text:"C'est magnifique 😍",avatar:"👨",time:"14:31"},
-    {user:vendor.name,text:"Bienvenue à tous ! Aujourd'hui on vous présente notre nouvelle collection 🔥",avatar:"🏪",time:"14:31",isVendor:true},
+    {user:"Marie K.",text:"Bonjour ! ",avatar:"",time:"14:30"},
+    {user:"Paul N.",text:"C'est magnifique ",avatar:"",time:"14:31"},
+    {user:vendor.name,text:"Bienvenue à tous ! Aujourd'hui on vous présente notre nouvelle collection",avatar:"",time:"14:31",isVendor:true},
   ]);
   const [myComment,setMyComment]=useState("");
   const [showProducts,setShowProducts]=useState(false);
@@ -22,14 +23,14 @@ function LiveWatchScr({onBack,go,liveData}){
   // Simulate live activity
   useEffect(()=>{
     const mockNew=[
-      {user:"Grace O.",text:"Trop beau le sac !",avatar:"👩‍🦱"},
-      {user:vendor.name,text:"Merci Grace ! Il est en cuir véritable 💼",avatar:"🏪",isVendor:true},
-      {user:"David T.",text:"Vous livrez à Poto-Poto ?",avatar:"👨‍🦲"},
-      {user:vendor.name,text:"Oui, livraison dans tout Brazzaville 🚚",avatar:"🏪",isVendor:true},
-      {user:"Bruno T.",text:"Je prends la robe en taille M !",avatar:"🧑"},
-      {user:"🏷️ PROMO",text:"Code LIVE20 activé ! -20% pendant le live 🔥",avatar:"🏷️",isPromo:true},
-      {user:"Celine N.",text:"Comment utiliser le code promo ?",avatar:"👩‍🦰"},
-      {user:vendor.name,text:"Ajoutez LIVE20 dans le panier au checkout 😊",avatar:"🏪",isVendor:true},
+      {user:"Grace O.",text:"Trop beau le sac !",avatar:"‍"},
+      {user:vendor.name,text:"Merci Grace ! Il est en cuir véritable ",avatar:"",isVendor:true},
+      {user:"David T.",text:"Vous livrez à Poto-Poto ?",avatar:"‍"},
+      {user:vendor.name,text:"Oui, livraison dans tout Brazzaville",avatar:"",isVendor:true},
+      {user:"Bruno T.",text:"Je prends la robe en taille M !",avatar:""},
+      {user:"PROMO",text:"Code LIVE20 activé ! -20% pendant le live",avatar:"",isPromo:true},
+      {user:"Celine N.",text:"Comment utiliser le code promo ?",avatar:"‍"},
+      {user:vendor.name,text:"Ajoutez LIVE20 dans le panier au checkout ",avatar:"",isVendor:true},
     ];
     let i=0;
     const iv=setInterval(()=>{
@@ -47,7 +48,7 @@ function LiveWatchScr({onBack,go,liveData}){
 
   const sendComment=()=>{
     if(!myComment.trim())return;
-    setComments(p=>[...p,{user:"Vous",text:myComment,avatar:"👤",time:new Date().toLocaleTimeString("fr",{hour:"2-digit",minute:"2-digit"}),isMe:true}]);
+    setComments(p=>[...p,{user:"Vous",text:myComment,avatar:"",time:new Date().toLocaleTimeString("fr",{hour:"2-digit",minute:"2-digit"}),isMe:true}]);
     setMyComment("");
   };
 
@@ -60,7 +61,7 @@ function LiveWatchScr({onBack,go,liveData}){
   return(<div style={{display:"flex",flexDirection:"column",height:"100%",background:"#000"}}>
     {/* Video area */}
     <div style={{flex:1,position:"relative",background:"linear-gradient(135deg,#1a1a2e,#16213e)",minHeight:280}}>
-      <div style={{position:"absolute",inset:0,display:"flex",alignItems:"center",justifyContent:"center"}}><span style={{fontSize:80,opacity:.1}}>📺</span></div>
+      <div style={{position:"absolute",inset:0,display:"flex",alignItems:"center",justifyContent:"center"}}><span style={{fontSize:80,opacity:.1}}></span></div>
 
       {/* Top bar */}
       <div style={{position:"absolute",top:12,left:12,right:12,display:"flex",justifyContent:"space-between",alignItems:"center",zIndex:10}}>
@@ -72,14 +73,14 @@ function LiveWatchScr({onBack,go,liveData}){
           </div>
         </div>
         <div style={{display:"flex",gap:6}}>
-          <div style={{padding:"4px 10px",borderRadius:20,background:"#EF4444",color:"#fff",fontSize:10,fontWeight:700,animation:"pulse 1.5s infinite"}}>🔴 LIVE</div>
-          <div style={{padding:"4px 10px",borderRadius:20,background:"rgba(0,0,0,.5)",color:"#fff",fontSize:10}}>👁️ {viewers}</div>
+          <div style={{padding:"4px 10px",borderRadius:20,background:"#EF4444",color:"#fff",fontSize:10,fontWeight:700,animation:"pulse 1.5s infinite"}}><Icon name="x_circle" size={16}/>{" "}LIVE</div>
+          <div style={{padding:"4px 10px",borderRadius:20,background:"rgba(0,0,0,.5)",color:"#fff",fontSize:10}}><Icon name="map" size={16}/>{" "}{viewers}</div>
         </div>
       </div>
 
       {/* Hearts floating */}
       <div style={{position:"absolute",right:16,bottom:80}}>
-        {myHeart&&<span style={{fontSize:28,animation:"splash-up .5s ease both"}}>❤️</span>}
+        {myHeart&&<span style={{fontSize:28,animation:"splash-up .5s ease both"}}>️</span>}
       </div>
 
       {/* Pinned product */}
@@ -119,24 +120,24 @@ function LiveWatchScr({onBack,go,liveData}){
             <span style={{fontSize:10,fontWeight:700,color:"#F97316"}}>{fmt(p.price)}</span>
           </div>
         ))}
-        <button onClick={()=>setShowProducts(!showProducts)} style={{padding:"6px 12px",borderRadius:10,border:"1px solid #F97316",background:"transparent",color:"#F97316",fontSize:10,fontWeight:700,cursor:"pointer",fontFamily:"inherit",flexShrink:0}}>🛒 Tous ({products.length})</button>
+        <button onClick={()=>setShowProducts(!showProducts)} style={{padding:"6px 12px",borderRadius:10,border:"1px solid #F97316",background:"transparent",color:"#F97316",fontSize:10,fontWeight:700,cursor:"pointer",fontFamily:"inherit",flexShrink:0}}><Icon name="cart" size={16}/>{" "}Tous ({products.length})</button>
       </div>
 
       {/* Comment input + actions */}
       <div style={{display:"flex",gap:6}}>
         <div style={{flex:1,display:"flex",alignItems:"center",gap:6,padding:"0 10px",border:"1px solid var(--border)",borderRadius:10,background:"var(--light)"}}>
           <input value={myComment} onChange={e=>setMyComment(e.target.value)} onKeyDown={e=>e.key==="Enter"&&sendComment()} placeholder="Commenter..." style={{flex:1,border:"none",background:"transparent",fontSize:12,outline:"none",fontFamily:"inherit",color:"var(--text)",padding:"8px 0"}}/>
-          <button onClick={sendComment} style={{background:"none",border:"none",fontSize:14,cursor:"pointer"}}>📤</button>
+          <button onClick={sendComment} style={{background:"none",border:"none",fontSize:14,cursor:"pointer"}}></button>
         </div>
-        <button onClick={sendHeart} style={{width:40,height:40,borderRadius:20,border:"none",background:myHeart?"#EF4444":"var(--light)",color:myHeart?"#fff":"#EF4444",fontSize:18,cursor:"pointer",transition:"all .15s"}}>❤️</button>
-        <button onClick={()=>{if(pinned)toast.success(pinned.name+" ajouté au panier 🛒")}} style={{width:40,height:40,borderRadius:20,border:"none",background:"#F97316",color:"#fff",fontSize:16,cursor:"pointer"}}>🛒</button>
+        <button onClick={sendHeart} style={{width:40,height:40,borderRadius:20,border:"none",background:myHeart?"#EF4444":"var(--light)",color:myHeart?"#fff":"#EF4444",fontSize:18,cursor:"pointer",transition:"all .15s"}}>️</button>
+        <button onClick={()=>{if(pinned)toast.success(pinned.name+" ajouté au panier")}} style={{width:40,height:40,borderRadius:20,border:"none",background:"#F97316",color:"#fff",fontSize:16,cursor:"pointer"}}><Icon name="cart" size={18}/></button>
       </div>
     </div>
 
     {/* Products modal */}
     {showProducts&&<div onClick={()=>setShowProducts(false)} style={{position:"fixed",inset:0,background:"rgba(0,0,0,.45)",zIndex:9999,display:"flex",alignItems:"flex-end",animation:"fadeInFast .2s ease"}}>
       <div onClick={e=>e.stopPropagation()} style={{width:"100%",maxWidth:500,margin:"0 auto",background:"var(--card)",borderRadius:"20px 20px 0 0",padding:16,maxHeight:"60vh",overflowY:"auto",animation:"slideUp .3s cubic-bezier(.4,0,.2,1)"}}>
-        <div style={{fontSize:15,fontWeight:700,marginBottom:12}}>🛒 Produits du live ({products.length})</div>
+        <div style={{fontSize:15,fontWeight:700,marginBottom:12}}><Icon name="cart" size={16}/>{" "}Produits du live ({products.length})</div>
         {products.map(p=>(
           <div key={p.id} onClick={()=>{go("detail",p);setShowProducts(false)}} style={{display:"flex",alignItems:"center",gap:10,padding:10,background:"var(--light)",borderRadius:12,marginBottom:6,cursor:"pointer"}}>
             <div style={{width:48,height:48,borderRadius:10,overflow:"hidden",flexShrink:0}}><Img src={p.photo} emoji={p.img} style={{width:"100%",height:"100%"}} fit="cover"/></div>
@@ -144,7 +145,7 @@ function LiveWatchScr({onBack,go,liveData}){
               <div style={{fontSize:13,fontWeight:600}}>{p.name}</div>
               <div style={{fontSize:12,fontWeight:700,color:"#F97316"}}>{fmt(p.price)}{p.old&&<span style={{fontSize:10,color:"var(--muted)",textDecoration:"line-through",marginLeft:4}}>{fmt(p.old)}</span>}</div>
             </div>
-            <button onClick={e=>{e.stopPropagation();toast.success(p.name+" ajouté au panier 🛒")}} style={{padding:"6px 12px",borderRadius:8,border:"none",background:"#F97316",color:"#fff",fontSize:10,fontWeight:700,cursor:"pointer",fontFamily:"inherit"}}>🛒 Acheter</button>
+            <button onClick={e=>{e.stopPropagation();toast.success(p.name+" ajouté au panier")}} style={{padding:"6px 12px",borderRadius:8,border:"none",background:"#F97316",color:"#fff",fontSize:10,fontWeight:700,cursor:"pointer",fontFamily:"inherit"}}><Icon name="cart" size={16}/>{" "}Acheter</button>
           </div>
         ))}
       </div>

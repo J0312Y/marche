@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import Icon from "../../components/Icon";
 
 function OTPScr({onDone, provider}){
   const [timer,setTimer]=useState(45);

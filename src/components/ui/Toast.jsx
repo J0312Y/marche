@@ -3,6 +3,7 @@
  * Usage: Toast.success('Article ajouté !'), Toast.error('Erreur réseau')
  */
 import { useState, useEffect, useCallback, createContext, useContext } from 'react';
+import Icon from "./Icon";
 
 const ToastContext = createContext(null);
 
@@ -21,7 +22,7 @@ const STYLES = {
   }),
 };
 
-const ICONS = { success: '✅', error: '❌', info: 'ℹ️' };
+const ICONS = { success: '', error: '', info: 'ℹ️' };
 
 export function ToastProvider({ children }) {
   const [toasts, setToasts] = useState([]);

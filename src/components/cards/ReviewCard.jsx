@@ -1,4 +1,5 @@
 /**
+import Icon from "./Icon";
  * ReviewCard - Carte d'avis client
  * @param {object} review - {name, avatar, rating, text, date}
  * @param {boolean} isOwn - Avis de l'utilisateur courant
@@ -17,7 +18,7 @@ function ReviewCard({ review: r, isOwn = false }) {
         <span className="rd">{r.date}</span>
       </div>
       <div className="review-stars">
-        {"★".repeat(r.rating)}{"☆".repeat(5 - r.rating)}
+        {"".repeat(r.rating)}{"".repeat(5 - r.rating)}
       </div>
       {r.text && <div className="review-text">{r.text}</div>}
     </div>

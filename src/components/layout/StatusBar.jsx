@@ -1,4 +1,5 @@
 /**
+import Icon from "./Icon";
  * StatusBar - iPhone 16 Pro status bar + Dynamic Island
  * @param {object} modeBadge - {bg, label} ou null
  */

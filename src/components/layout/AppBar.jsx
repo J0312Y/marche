@@ -1,4 +1,5 @@
 /**
+import Icon from "./Icon";
  * AppBar - Barre de navigation supérieure
  * @param {function} onBack - Action retour (affiche ←)
  * @param {string} title - Titre central

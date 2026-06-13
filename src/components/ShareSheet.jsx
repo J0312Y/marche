@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import { registerShareSheet } from "../utils/share";
 import toast from "../utils/toast";
+import Icon from "./Icon";
 
 function ShareSheet() {
   const [data, setData] = useState(null);
@@ -17,7 +18,7 @@ function ShareSheet() {
   const copyLink = async () => {
     try {
       await navigator.clipboard.writeText(data.url || data.text);
-      toast.success("Lien copié ! 📋");
+      toast.success("Lien copié !");
     } catch {
       toast.info(data.url || data.text);
     }
@@ -39,10 +40,10 @@ function ShareSheet() {
 
   const options = [
     { icon: <svg width="22" height="22" viewBox="0 0 32 32" fill="#fff"><path d="M16 2C8.27 2 2 8.27 2 16c0 2.78.81 5.37 2.2 7.55L2 30l6.6-2.16C10.74 29.21 13.3 30 16 30c7.73 0 14-6.27 14-14S23.73 2 16 2zm0 25.5c-2.4 0-4.65-.7-6.54-1.92l-.47-.28-4.85 1.58 1.58-4.72-.31-.5C4.2 19.74 3.5 17.92 3.5 16 3.5 9.1 9.1 3.5 16 3.5S28.5 9.1 28.5 16 22.9 28.5 16 28.5zm7.13-9.4c-.4-.2-2.32-1.14-2.68-1.27-.36-.13-.62-.2-.88.2-.26.4-1.03 1.27-1.27 1.53-.23.26-.46.3-.86.1-.4-.2-1.67-.62-3.18-1.96-1.18-1.05-1.97-2.35-2.2-2.75-.23-.4-.02-.62.17-.82.18-.18.4-.46.6-.7.2-.23.26-.4.4-.66.13-.26.06-.5-.03-.7-.1-.2-.88-2.12-1.21-2.91-.32-.76-.64-.66-.88-.67h-.75c-.26 0-.66.1-1 .5-.34.4-1.31 1.28-1.31 3.11 0 1.83 1.34 3.6 1.53 3.86.2.26 2.64 4.03 6.4 5.65.9.39 1.6.62 2.14.8.9.29 1.71.25 2.36.15.72-.11 2.32-.95 2.65-1.87.32-.92.32-1.7.23-1.87-.1-.17-.36-.27-.76-.47z"/></svg>, label: "WhatsApp", color: "#25D366", action: () => openLink("whatsapp") },
-    { icon: "✉️", label: "SMS", color: "#F97316", action: () => openLink("sms") },
-    { icon: "📨", label: "Telegram", color: "#0088cc", action: () => openLink("telegram") },
-    { icon: "📧", label: "Email", color: "#EA580C", action: () => openLink("email") },
-    { icon: "📋", label: "Copier le lien", color: "var(--muted)", action: copyLink },
+    { icon: "️", label: "SMS", color: "#F97316", action: () => openLink("sms") },
+    { icon: "", label: "Telegram", color: "#0088cc", action: () => openLink("telegram") },
+    { icon: "", label: "Email", color: "#EA580C", action: () => openLink("email") },
+    { icon: "", label: "Copier le lien", color: "var(--muted)", action: copyLink },
   ];
 
   return (
@@ -74,7 +75,7 @@ function ShareSheet() {
                 fontSize: 22, marginBottom: 6, margin: "0 auto 6px",
                 transition: "transform .1s",
               }}>
-                {o.icon}
+                <Icon name={o.icon} size={20}/>
               </div>
               <div style={{ fontSize: 10, fontWeight: 600, color: "var(--sub)" }}>{o.label}</div>
             </div>
@@ -88,7 +89,7 @@ function ShareSheet() {
             fontSize: 11, color: "var(--muted)", overflow: "hidden", whiteSpace: "nowrap",
             textOverflow: "ellipsis", cursor: "pointer", marginBottom: 10,
           }}>
-            🔗 {data.url}
+             {data.url}
           </div>
         )}
 

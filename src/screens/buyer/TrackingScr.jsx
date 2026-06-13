@@ -4,19 +4,20 @@ import { useState, useEffect } from "react";
 import toast from "../../utils/toast";
 import { DRIVER_PHOTO } from "../../data/images";
 import MapView from "../../components/MapView";
+import Icon from "../../components/Icon";
 
 const STEPS=[
-  {icon:"✅",label:"Commande confirmée",time:"14:42",done:true},
-  {icon:"👨‍🍳",label:"Préparation en cours",time:"14:48",done:true},
-  {icon:"📦",label:"Colis récupéré",time:"15:02",done:true},
-  {icon:"🛵",label:"En route vers vous",time:"15:10",done:false,active:true},
-  {icon:"🏠",label:"Livré",time:"~15:22",done:false},
+  {icon:"check_circle",label:"Commande confirmée",time:"14:42",done:true},
+  {icon:"‍",label:"Préparation en cours",time:"14:48",done:true},
+  {icon:"package",label:"Colis récupéré",time:"15:02",done:true},
+  {icon:"truck",label:"En route vers vous",time:"15:10",done:false,active:true},
+  {icon:"",label:"Livré",time:"~15:22",done:false},
 ];
 
 const ITEMS=[
-  {name:"Galaxy A54",emoji:"📱",qty:1,price:185000},
-  {name:"Panier Bio Légumes",emoji:"🥬",qty:3,price:4500},
-  {name:"Chemise Bogolan",emoji:"👔",qty:1,price:18000},
+  {name:"Galaxy A54",emoji:"",qty:1,price:185000},
+  {name:"Panier Bio Légumes",emoji:"",qty:3,price:4500},
+  {name:"Chemise Bogolan",emoji:"",qty:1,price:18000},
 ];
 
 function TrackingScr({onBack,go}){
@@ -42,8 +43,8 @@ function TrackingScr({onBack,go}){
   },[]);
 
   const markers=[
-    {lat:pickup.lat,lng:pickup.lng,emoji:"📍",label:"Retrait"},
-    {lat:dest.lat,lng:dest.lng,emoji:"🏠",label:"Livraison"},
+    {lat:pickup.lat,lng:pickup.lng,emoji:"",label:"Retrait"},
+    {lat:dest.lat,lng:dest.lng,emoji:"",label:"Livraison"},
   ];
   const route=[pickup,driverPos,dest];
   const sub=ITEMS.reduce((s,i)=>s+i.price*i.qty,0);
@@ -93,25 +94,25 @@ function TrackingScr({onBack,go}){
         <div style={{flex:1}}>
           <div style={{fontSize:14,fontWeight:700}}>Patrick Moukala</div>
           <div style={{fontSize:11,color:"var(--muted)",display:"flex",alignItems:"center",gap:6,marginTop:2}}>
-            <span>🛵 Honda PCX</span><span>·</span><span>BZ-4521</span>
+            <span><Icon name="truck" size={16}/>{" "}Honda PCX</span><span>·</span><span>BZ-4521</span>
           </div>
-          <div style={{fontSize:11,color:"#F59E0B",marginTop:2}}>⭐ 4.8 · 342 livraisons</div>
+          <div style={{fontSize:11,color:"#F59E0B",marginTop:2}}><Icon name="star_full" size={16}/>{" "}4.8 · 342 livraisons</div>
           <div className="driver-badges" style={{display:"flex",gap:4,marginTop:5}}>
-            <span style={{padding:"2px 6px",borderRadius:4,background:"rgba(59,130,246,0.08)",color:"#3B82F6",fontSize:9,fontWeight:700}}>✓ Vérifié</span>
-            <span style={{padding:"2px 6px",borderRadius:4,background:"rgba(16,185,129,0.08)",color:"#10B981",fontSize:9,fontWeight:700}}>🏆 Top livreur</span>
+            <span style={{padding:"2px 6px",borderRadius:4,background:"rgba(59,130,246,0.08)",color:"#3B82F6",fontSize:9,fontWeight:700}}> Vérifié</span>
+            <span style={{padding:"2px 6px",borderRadius:4,background:"rgba(16,185,129,0.08)",color:"#10B981",fontSize:9,fontWeight:700}}><Icon name="crown" size={16}/>{" "}Top livreur</span>
           </div>
         </div>
         <div style={{display:"flex",gap:6}}>
-          <button onClick={()=>window.location.href="tel:+242064663469"} style={{width:40,height:40,borderRadius:12,border:"none",background:"#F59E0B",color:"#fff",cursor:"pointer",fontSize:16,display:"flex",alignItems:"center",justifyContent:"center"}}>📞</button>
-          <button onClick={()=>go("chatDriver")} style={{width:40,height:40,borderRadius:12,border:"none",background:"#F97316",color:"#fff",cursor:"pointer",fontSize:16,display:"flex",alignItems:"center",justifyContent:"center"}}>💬</button>
+          <button onClick={()=>window.location.href="tel:+242064663469"} style={{width:40,height:40,borderRadius:12,border:"none",background:"#F59E0B",color:"#fff",cursor:"pointer",fontSize:16,display:"flex",alignItems:"center",justifyContent:"center"}}><Icon name="phone" size={18}/></button>
+          <button onClick={()=>go("chatDriver")} style={{width:40,height:40,borderRadius:12,border:"none",background:"#F97316",color:"#fff",cursor:"pointer",fontSize:16,display:"flex",alignItems:"center",justifyContent:"center"}}><Icon name="chat" size={18}/></button>
         </div>
       </div>
 
       {/* Quick actions */}
       <div className="quick-actions-tracking" style={{display:"grid",gridTemplateColumns:"1fr 1fr 1fr",gap:6,marginBottom:12}}>
-        <button onClick={()=>setShowNote(true)} style={{padding:"10px 6px",borderRadius:12,border:"1px solid var(--border)",background:"var(--card)",cursor:"pointer",fontSize:11,fontWeight:600,fontFamily:"inherit"}}>📝<div style={{marginTop:4}}>Note</div></button>
-        <button onClick={()=>setShowTip(true)} style={{padding:"10px 6px",borderRadius:12,border:"1px solid var(--border)",background:"var(--card)",cursor:"pointer",fontSize:11,fontWeight:600,fontFamily:"inherit"}}>💝<div style={{marginTop:4}}>Pourboire</div></button>
-        <button onClick={()=>{navigator.share?navigator.share({title:"Suivez ma livraison",text:`Mon livreur Patrick arrive dans ${Math.ceil(eta)} min`}):toast.info("📍 Lien copié")}} style={{padding:"10px 6px",borderRadius:12,border:"1px solid var(--border)",background:"var(--card)",cursor:"pointer",fontSize:11,fontWeight:600,fontFamily:"inherit"}}>📤<div style={{marginTop:4}}>Partager</div></button>
+        <button onClick={()=>setShowNote(true)} style={{padding:"10px 6px",borderRadius:12,border:"1px solid var(--border)",background:"var(--card)",cursor:"pointer",fontSize:11,fontWeight:600,fontFamily:"inherit"}}><div style={{marginTop:4}}>Note</div></button>
+        <button onClick={()=>setShowTip(true)} style={{padding:"10px 6px",borderRadius:12,border:"1px solid var(--border)",background:"var(--card)",cursor:"pointer",fontSize:11,fontWeight:600,fontFamily:"inherit"}}><div style={{marginTop:4}}>Pourboire</div></button>
+        <button onClick={()=>{navigator.share?navigator.share({title:"Suivez ma livraison",text:`Mon livreur Patrick arrive dans ${Math.ceil(eta)} min`}):toast.info("Lien copié")}} style={{padding:"10px 6px",borderRadius:12,border:"1px solid var(--border)",background:"var(--card)",cursor:"pointer",fontSize:11,fontWeight:600,fontFamily:"inherit"}}><div style={{marginTop:4}}>Partager</div></button>
       </div>
 
       {/* Progress bar */}
@@ -124,8 +125,8 @@ function TrackingScr({onBack,go}){
           <div style={{width:`${progress}%`,height:"100%",background:"linear-gradient(90deg,#F97316,#FB923C)",borderRadius:3,transition:"width 1s ease"}}/>
         </div>
         <div style={{display:"flex",justifyContent:"space-between",fontSize:11,color:"var(--muted)"}}>
-          <span>📍 Marché Total</span>
-          <span>🏠 Bacongo, Rue 14</span>
+          <span><Icon name="location" size={16}/>{" "}Marché Total</span>
+          <span> Bacongo, Rue 14</span>
         </div>
       </div>
 
@@ -136,7 +137,7 @@ function TrackingScr({onBack,go}){
           <div key={i} style={{display:"flex",gap:10,marginBottom:i<STEPS.length-1?0:0}}>
             <div style={{display:"flex",flexDirection:"column",alignItems:"center"}}>
               <div style={{width:28,height:28,borderRadius:8,background:s.done?"#10B981":s.active?"#F97316":"var(--border)",display:"flex",alignItems:"center",justifyContent:"center",fontSize:12,color:s.done||s.active?"var(--card)":"var(--muted)",flexShrink:0,boxShadow:s.active?"0 0 0 4px rgba(249,115,22,.15)":"none"}}>
-                {s.done?"✓":s.icon}
+                {s.done?"":s.icon}
               </div>
               {i<STEPS.length-1&&<div style={{width:2,height:18,background:s.done?"#10B981":"var(--border)"}}/>}
             </div>
@@ -177,11 +178,11 @@ function TrackingScr({onBack,go}){
       <div style={{padding:14,background:"var(--card)",border:"1px solid var(--border)",borderRadius:16,marginBottom:12}}>
         <div style={{fontSize:13,fontWeight:700,marginBottom:8}}>Adresse de livraison</div>
         <div style={{display:"flex",gap:10,alignItems:"flex-start"}}>
-          <span style={{fontSize:18}}>🏠</span>
+          <span style={{fontSize:18}}></span>
           <div>
             <div style={{fontSize:13,fontWeight:600}}>Quartier Bacongo, Rue 14, N°42</div>
-            <div style={{fontSize:11,color:"var(--muted)",marginTop:2}}>Brazzaville, Congo 🇨🇬</div>
-            <div style={{fontSize:11,color:"var(--muted)",marginTop:2}}>Paiement : Airtel Money ✅</div>
+            <div style={{fontSize:11,color:"var(--muted)",marginTop:2}}>Brazzaville, Congo </div>
+            <div style={{fontSize:11,color:"var(--muted)",marginTop:2}}>Paiement : Airtel Money <Icon name="check_circle" size={16}/></div>
           </div>
         </div>
       </div>
@@ -189,7 +190,7 @@ function TrackingScr({onBack,go}){
       {/* Help */}
       <div style={{display:"flex",gap:8,paddingBottom:20}}>
         <button onClick={()=>go("chatBot")} style={{flex:1,padding:10,borderRadius:12,border:"1px solid var(--border)",background:"var(--card)",fontSize:12,fontWeight:600,cursor:"pointer",fontFamily:"inherit",display:"flex",alignItems:"center",justifyContent:"center",gap:6}}>🆘 Aide</button>
-        <button onClick={()=>{import("../../utils/share").then(m=>m.shareProduct({title:"Suivi de livraison",text:"Suivez ma commande #LMK-2026-0214 sur Lamuka Market !",url:"https://lamuka.market/track/LMK-2026-0214"}))}} style={{flex:1,padding:10,borderRadius:12,border:"1px solid var(--border)",background:"var(--card)",fontSize:12,fontWeight:600,cursor:"pointer",fontFamily:"inherit",display:"flex",alignItems:"center",justifyContent:"center",gap:6}}>📤 Partager</button>
+        <button onClick={()=>{import("../../utils/share").then(m=>m.shareProduct({title:"Suivi de livraison",text:"Suivez ma commande #LMK-2026-0214 sur Lamuka Market !",url:"https://lamuka.market/track/LMK-2026-0214"}))}} style={{flex:1,padding:10,borderRadius:12,border:"1px solid var(--border)",background:"var(--card)",fontSize:12,fontWeight:600,cursor:"pointer",fontFamily:"inherit",display:"flex",alignItems:"center",justifyContent:"center",gap:6}}> Partager</button>
       </div>
     </div>
 
@@ -198,7 +199,7 @@ function TrackingScr({onBack,go}){
       <div onClick={e=>e.stopPropagation()} style={{width:"100%",maxWidth:500,margin:"0 auto",background:"var(--card)",borderRadius:"24px 24px 0 0",padding:20}}>
         <div style={{width:36,height:4,borderRadius:2,background:"var(--border)",margin:"0 auto 16px"}}/>
         <div style={{textAlign:"center",marginBottom:16}}>
-          <div style={{fontSize:32,marginBottom:6}}>💝</div>
+          <div style={{fontSize:32,marginBottom:6}}></div>
           <h3 style={{fontSize:17,fontWeight:800}}>Pourboire pour Patrick</h3>
           <p style={{fontSize:11,color:"var(--muted)",marginTop:4}}>Récompensez votre livreur</p>
         </div>
@@ -207,7 +208,7 @@ function TrackingScr({onBack,go}){
             <button key={v} onClick={()=>setTipAmount(v)} style={{padding:"12px 4px",borderRadius:10,border:tipAmount===v?"2px solid #F97316":"1px solid var(--border)",background:tipAmount===v?"rgba(249,115,22,0.06)":"var(--card)",color:tipAmount===v?"#F97316":"var(--text)",fontSize:12,fontWeight:700,cursor:"pointer",fontFamily:"inherit"}}>{v} F</button>
           ))}
         </div>
-        <button onClick={()=>{toast.success(`💝 Pourboire de ${tipAmount} F envoyé !`);setShowTip(false);setTipAmount(0)}} disabled={!tipAmount} style={{width:"100%",padding:14,borderRadius:12,border:"none",background:tipAmount?"#F97316":"var(--border)",color:"#fff",fontSize:14,fontWeight:700,cursor:tipAmount?"pointer":"not-allowed",fontFamily:"inherit"}}>Envoyer le pourboire</button>
+        <button onClick={()=>{toast.success(` Pourboire de ${tipAmount} F envoyé !`);setShowTip(false);setTipAmount(0)}} disabled={!tipAmount} style={{width:"100%",padding:14,borderRadius:12,border:"none",background:tipAmount?"#F97316":"var(--border)",color:"#fff",fontSize:14,fontWeight:700,cursor:tipAmount?"pointer":"not-allowed",fontFamily:"inherit"}}>Envoyer le pourboire</button>
       </div>
     </div>}
 
@@ -215,14 +216,14 @@ function TrackingScr({onBack,go}){
     {showNote&&<div onClick={()=>setShowNote(false)} style={{position:"fixed",inset:0,background:"rgba(0,0,0,.5)",zIndex:9999,display:"flex",alignItems:"flex-end"}}>
       <div onClick={e=>e.stopPropagation()} style={{width:"100%",maxWidth:500,margin:"0 auto",background:"var(--card)",borderRadius:"24px 24px 0 0",padding:20}}>
         <div style={{width:36,height:4,borderRadius:2,background:"var(--border)",margin:"0 auto 16px"}}/>
-        <h3 style={{fontSize:17,fontWeight:800,marginBottom:12}}>📝 Note pour Patrick</h3>
+        <h3 style={{fontSize:17,fontWeight:800,marginBottom:12}}> Note pour Patrick</h3>
         <div style={{display:"flex",gap:6,marginBottom:10,flexWrap:"wrap"}}>
-          {["🚪 Sonnez fort","📞 Appelez en arrivant","🏠 Laissez à la porte","2ème étage"].map(t=>(
+          {["Sonnez fort","Appelez en arrivant"," Laissez à la porte","2ème étage"].map(t=>(
             <button key={t} onClick={()=>setNoteToDriver(t)} style={{padding:"5px 10px",borderRadius:8,border:"1px solid var(--border)",background:noteToDriver===t?"rgba(249,115,22,0.06)":"var(--card)",fontSize:11,fontWeight:600,cursor:"pointer",fontFamily:"inherit"}}>{t}</button>
           ))}
         </div>
         <textarea value={noteToDriver} onChange={e=>setNoteToDriver(e.target.value)} placeholder="Ou écrivez votre propre note..." rows={3} style={{width:"100%",padding:10,borderRadius:10,border:"1px solid var(--border)",fontSize:13,fontFamily:"inherit",resize:"vertical",outline:"none",boxSizing:"border-box",marginBottom:12}}/>
-        <button onClick={()=>{toast.success("📝 Note envoyée au livreur !");setShowNote(false)}} style={{width:"100%",padding:14,borderRadius:12,border:"none",background:"#F97316",color:"#fff",fontSize:14,fontWeight:700,cursor:"pointer",fontFamily:"inherit"}}>Envoyer la note</button>
+        <button onClick={()=>{toast.success(" Note envoyée au livreur !");setShowNote(false)}} style={{width:"100%",padding:14,borderRadius:12,border:"none",background:"#F97316",color:"#fff",fontSize:14,fontWeight:700,cursor:"pointer",fontFamily:"inherit"}}>Envoyer la note</button>
       </div>
     </div>}
   </>);

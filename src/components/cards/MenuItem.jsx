@@ -1,4 +1,5 @@
 /**
+import Icon from "./Icon";
  * MenuItem - Ligne de menu (profil, settings)
  * @param {string} icon - Emoji icône
  * @param {string} title - Titre

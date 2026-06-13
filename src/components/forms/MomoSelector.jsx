@@ -1,4 +1,5 @@
 import { useState } from "react";
+import Icon from "./Icon";
 
 /**
  * MomoSelector - Sélection Mobile Money (Airtel, MTN, Kolo Pay)
@@ -6,9 +7,9 @@ import { useState } from "react";
  * @param {function} onSelect - Callback(key)
  */
 const PROVIDERS = [
-  { k: "airtel", n: "Airtel Money", e: "🔴" },
-  { k: "mtn", n: "MTN MoMo", e: "🟡" },
-  { k: "kolo", n: "Kolo Pay", e: "🟣" },
+  { k: "airtel", n: "Airtel Money", e: "" },
+  { k: "mtn", n: "MTN MoMo", e: "" },
+  { k: "kolo", n: "Kolo Pay", e: "" },
 ];
 
 function MomoSelector({ selected = "airtel", onSelect }) {
@@ -22,7 +23,7 @@ function MomoSelector({ selected = "airtel", onSelect }) {
         >
           <span className="me">{m.e}</span>
           <span className="mn">{m.n}</span>
-          {selected === m.k && <span className="mc">✓</span>}
+          {selected === m.k && <span className="mc"></span>}
         </div>
       ))}
     </div>

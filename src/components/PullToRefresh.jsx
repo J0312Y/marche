@@ -1,4 +1,5 @@
 import { useState, useRef, useCallback } from "react";
+import Icon from "./Icon";
 
 /**
  * PullToRefresh — Wrap scrollable content to add pull-to-refresh gesture

@@ -1,4 +1,5 @@
 /**
+import Icon from "./Icon";
  * PhoneFrame - Cadre iPhone 16 Pro avec boutons titane et home indicator
  */
 function PhoneFrame({ children }) {

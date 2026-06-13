@@ -3,6 +3,7 @@ import toast from "../../utils/toast";
 import { fmt } from "../../utils/helpers";
 import { USER_SUBSCRIPTIONS, FREQUENCY_LABELS } from "../../data/subscriptions";
 import SuccessAnimation from "../../components/SuccessAnimation";
+import Icon from "../../components/Icon";
 
 function SubscriptionsScr({ onBack, go }) {
   const [subs, setSubs] = useState(USER_SUBSCRIPTIONS);
@@ -12,7 +13,7 @@ function SubscriptionsScr({ onBack, go }) {
   const toggleStatus = (id) => {
     setSubs(p => p.map(s => s.id === id ? { ...s, status: s.status === "active" ? "paused" : "active" } : s));
     const newStatus = subs.find(s => s.id === id)?.status === "active" ? "paused" : "active";
-    toast.success(newStatus === "active" ? "✅ Abonnement réactivé" : "⏸️ Abonnement en pause");
+    toast.success(newStatus === "active" ? "Abonnement réactivé" : "⏸️ Abonnement en pause");
     setShowActionsFor(null);
   };
 
@@ -70,7 +71,7 @@ function SubscriptionsScr({ onBack, go }) {
       <div style={{ padding: "0 16px" }}>
         {subs.length === 0 ? (
           <div style={{ padding: "40px 20px", textAlign: "center" }}>
-            <div style={{ fontSize: 56, marginBottom: 12, animation: "emptyBounce 2s ease-in-out infinite" }}>📦</div>
+            <div style={{ fontSize: 56, marginBottom: 12, animation: "emptyBounce 2s ease-in-out infinite" }}><Icon name="package" size={18}/></div>
             <div style={{ fontSize: 15, fontWeight: 700, marginBottom: 4 }}>Aucun abonnement</div>
             <div style={{ fontSize: 12, color: "var(--muted)", marginBottom: 16 }}>Créez un abonnement depuis une commande passée pour économiser du temps</div>
           </div>
@@ -110,7 +111,7 @@ function SubscriptionsScr({ onBack, go }) {
                     </div>
                     <div>
                       <div style={{ fontSize: 9, color: "var(--muted)", fontWeight: 700, letterSpacing: .5 }}>PROCHAINE</div>
-                      <div style={{ fontSize: 12, fontWeight: 700, marginTop: 2 }}>{isPaused ? "⏸️ En pause" : `📅 ${s.nextDate}`}</div>
+                      <div style={{ fontSize: 12, fontWeight: 700, marginTop: 2 }}>{isPaused ? "⏸️ En pause" : ` ${s.nextDate}`}</div>
                     </div>
                     <div>
                       <div style={{ fontSize: 9, color: "var(--muted)", fontWeight: 700, letterSpacing: .5 }}>LIVRAISONS</div>
@@ -123,8 +124,8 @@ function SubscriptionsScr({ onBack, go }) {
                     <div style={{ marginTop: 10, padding: 10, background: "var(--light)", borderRadius: 12, display: "grid", gridTemplateColumns: "1fr 1fr", gap: 6 }}>
                       <button onClick={() => toggleStatus(s.id)} style={{ padding: 10, borderRadius: 8, border: "none", background: "var(--card)", fontSize: 12, fontWeight: 600, cursor: "pointer", fontFamily: "inherit" }}>{isPaused ? "▶️ Réactiver" : "⏸️ Mettre en pause"}</button>
                       <button onClick={() => skipNext(s.id)} style={{ padding: 10, borderRadius: 8, border: "none", background: "var(--card)", fontSize: 12, fontWeight: 600, cursor: "pointer", fontFamily: "inherit" }}>⏭️ Sauter prochaine</button>
-                      <button onClick={() => deliverNow(s.id)} style={{ padding: 10, borderRadius: 8, border: "none", background: "rgba(16,185,129,0.1)", color: "#10B981", fontSize: 12, fontWeight: 600, cursor: "pointer", fontFamily: "inherit" }}>🚀 Livrer maintenant</button>
-                      <button onClick={() => cancel(s.id)} style={{ padding: 10, borderRadius: 8, border: "none", background: "rgba(239,68,68,0.08)", color: "#EF4444", fontSize: 12, fontWeight: 600, cursor: "pointer", fontFamily: "inherit" }}>🗑️ Supprimer</button>
+                      <button onClick={() => deliverNow(s.id)} style={{ padding: 10, borderRadius: 8, border: "none", background: "rgba(16,185,129,0.1)", color: "#10B981", fontSize: 12, fontWeight: 600, cursor: "pointer", fontFamily: "inherit" }}><Icon name="rocket" size={16}/>{" "}Livrer maintenant</button>
+                      <button onClick={() => cancel(s.id)} style={{ padding: 10, borderRadius: 8, border: "none", background: "rgba(239,68,68,0.08)", color: "#EF4444", fontSize: 12, fontWeight: 600, cursor: "pointer", fontFamily: "inherit" }}>️ Supprimer</button>
                     </div>
                   )}
                 </div>
@@ -134,23 +135,23 @@ function SubscriptionsScr({ onBack, go }) {
         )}
 
         {/* CTA */}
-        <div onClick={() => { toast.info("💡 Créez un abonnement depuis une commande passée"); go("orders"); }} style={{ marginTop: 14, padding: 16, background: "rgba(249,115,22,0.04)", border: "2px dashed rgba(249,115,22,0.2)", borderRadius: 14, textAlign: "center", cursor: "pointer" }}>
-          <div style={{ fontSize: 24, marginBottom: 6 }}>➕</div>
+        <div onClick={() => { toast.info("Créez un abonnement depuis une commande passée"); go("orders"); }} style={{ marginTop: 14, padding: 16, background: "rgba(249,115,22,0.04)", border: "2px dashed rgba(249,115,22,0.2)", borderRadius: 14, textAlign: "center", cursor: "pointer" }}>
+          <div style={{ fontSize: 24, marginBottom: 6 }}></div>
           <div style={{ fontSize: 13, fontWeight: 700, color: "#F97316" }}>Créer un nouvel abonnement</div>
           <div style={{ fontSize: 11, color: "var(--muted)", marginTop: 4 }}>Depuis vos commandes passées</div>
         </div>
 
         {/* Benefits */}
         <div style={{ margin: "20px 0 0", padding: 14, background: "var(--card)", border: "1px solid var(--border)", borderRadius: 14 }}>
-          <div style={{ fontSize: 13, fontWeight: 700, marginBottom: 10 }}>✨ Avantages</div>
+          <div style={{ fontSize: 13, fontWeight: 700, marginBottom: 10 }}><Icon name="sparkle" size={16}/>{" "}Avantages</div>
           {[
-            { icon: "💰", t: "Économisez 5-10%", d: "Réduction automatique sur les abonnements" },
-            { icon: "🚚", t: "Livraison gratuite", d: "À partir de 3 livraisons consécutives" },
+            { icon: "", t: "Économisez 5-10%", d: "Réduction automatique sur les abonnements" },
+            { icon: "", t: "Livraison gratuite", d: "À partir de 3 livraisons consécutives" },
             { icon: "⏰", t: "Gain de temps", d: "Plus besoin de recommander chaque semaine" },
-            { icon: "🎁", t: "Bonus fidélité", d: "+2× Lamuka Points sur les abonnements" },
+            { icon: "", t: "Bonus fidélité", d: "+2× Lamuka Points sur les abonnements" },
           ].map((b, i) => (
             <div key={i} style={{ display: "flex", gap: 12, padding: "8px 0", borderBottom: i < 3 ? "1px solid var(--border)" : "none" }}>
-              <div style={{ fontSize: 20 }}>{b.icon}</div>
+              <div style={{ fontSize: 20 }}><Icon name={b.icon} size={20}/></div>
               <div>
                 <div style={{ fontSize: 13, fontWeight: 600 }}>{b.t}</div>
                 <div style={{ fontSize: 11, color: "var(--muted)", marginTop: 2 }}>{b.d}</div>

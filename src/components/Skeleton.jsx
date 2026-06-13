@@ -1,4 +1,5 @@
 /**
+import Icon from "./Icon";
  * Skeleton — shimmer loading placeholders
  * Usage: <Skeleton type="product-grid" /> or <Skeleton type="list" count={5} />
  */

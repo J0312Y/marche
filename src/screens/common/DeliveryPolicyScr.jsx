@@ -1,6 +1,8 @@
+import Icon from "../../components/Icon";
+
 function DeliveryPolicyScr({onBack}){
   const sections=[
-    {title:"🚚 Zones de livraison",items:[
+    {title:"Zones de livraison",items:[
       "Brazzaville : toutes les communes (Bacongo, Poto-Poto, Moungali, Ouenzé, Talangaï, Makélékélé, Mfilou, Djiri, Madibou)",
       "Pointe-Noire : centre-ville et communes environnantes",
       "Autres villes : bientôt disponible",
@@ -11,14 +13,14 @@ function DeliveryPolicyScr({onBack}){
       "Boutiques & commerces (Pointe-Noire) : 3 à 5 jours ouvrés",
       "Pharmacies : dans l'heure (selon disponibilité)",
     ]},
-    {title:"💰 Tarifs de livraison",items:[
+    {title:"Tarifs de livraison",items:[
       "Zone centre : 1 500 FCFA",
       "Zone périphérie : 2 500 FCFA",
       "Hors zone : 3 000 - 5 000 FCFA",
       "Gratuit pour les commandes de plus de 50 000 FCFA",
       "Restaurants : frais inclus ou offerts selon le commerce",
     ]},
-    {title:"💵 Paiement à la livraison",items:[
+    {title:"Paiement à la livraison",items:[
       "Disponible pour toutes les commandes",
       "Payez en espèces directement au livreur",
       "Préparez le montant exact si possible",
@@ -31,7 +33,7 @@ function DeliveryPolicyScr({onBack}){
       "Les services ne sont pas remboursables après exécution",
       "Photo du produit requise pour toute demande de retour",
     ]},
-    {title:"💸 Remboursements",items:[
+    {title:" Remboursements",items:[
       "Choix entre crédit sur Wallet Lamuka (instantané) ou Mobile Money (24-48h)",
       "Un avoir (note de crédit) est émis séparément du reçu original",
       "Le reçu original n'est jamais modifié",

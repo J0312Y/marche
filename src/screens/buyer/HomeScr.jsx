@@ -35,7 +35,7 @@ function HomeScr({go,favs,toggleFav,isFav,userName}){
   useEffect(()=>{const t=setTimeout(()=>setLoading(false),800);return()=>clearTimeout(t)},[]);
   useEffect(()=>{const iv=setInterval(()=>setPromoSlide(p=>(p+1)%3),4000);return()=>clearInterval(iv)},[]);
   useEffect(()=>{const iv=setInterval(()=>{setDealTimer(p=>{let{h,m,s}=p;s--;if(s<0){s=59;m--}if(m<0){m=59;h--}if(h<0)return{h:0,m:0,s:0};return{h,m,s}})},1000);return()=>clearInterval(iv)},[]);
-  useEffect(()=>{if(!loading&&!pushSent){const t=setTimeout(()=>{triggerPush({icon:'📦',title:'Commande en route !',body:'Votre commande #LMK-2026-0214 est en livraison — Patrick arrive dans 15 min',onTap:()=>go('orders')});setPushSent(true)},5000);return()=>clearTimeout(t)}},[loading,pushSent]);
+  useEffect(()=>{if(!loading&&!pushSent){const t=setTimeout(()=>{triggerPush({icon:'package',title:'Commande en route !',body:'Votre commande #LMK-2026-0214 est en livraison — Patrick arrive dans 15 min',onTap:()=>go('orders')});setPushSent(true)},5000);return()=>clearTimeout(t)}},[loading,pushSent]);
 
   if(dataLoading || P.length===0) return <div className="scr"><SkeletonHome/></div>;
 
@@ -75,16 +75,16 @@ function HomeScr({go,favs,toggleFav,isFav,userName}){
   return(<>
     <PullToRefresh onRefresh={reload}><div className="scr">
       {/* Header - only show when not in search */}
-      {!inSearchMode&&<div className="hdr"><div><div className="hdr-t">{t("home.hello")}{userName?" "+userName:""} 👋</div><div className="hdr-h">Lamuka Market</div></div>
+      {!inSearchMode&&<div className="hdr"><div><div className="hdr-t">{t("home.hello")}{userName?" "+userName:""} </div><div className="hdr-h">Lamuka Market</div></div>
         <div className="hdr-r"><div className="hdr-btn" onClick={()=>go("notif")} style={{position:"relative"}}><Icon name="bell" size={20}/><div className="notif-badge"/></div><div className="hdr-btn" onClick={()=>go("cart")} style={{position:"relative"}}><Icon name="cart" size={20}/>{cartCount>0&&<span style={{position:"absolute",top:-4,right:-4,background:"#EF4444",color:"var(--card)",fontSize:9,fontWeight:700,borderRadius:10,padding:"1px 5px",minWidth:16,textAlign:"center"}}>{cartCount}</span>}</div></div></div>}
 
       {/* Search bar */}
       <div style={{display:"flex",alignItems:"center",gap:8,padding:inSearchMode?"14px 16px 10px":"0 16px 12px",marginTop:inSearchMode?0:10}}>
         {inSearchMode&&<button onClick={exitSearch} style={{width:38,height:38,borderRadius:12,border:"none",background:"var(--light)",cursor:"pointer",fontSize:16,display:"flex",alignItems:"center",justifyContent:"center",flexShrink:0,color:"var(--text)",fontFamily:"inherit"}}>←</button>}
         <div style={{flex:1,display:"flex",alignItems:"center",gap:8,padding:inSearchMode?"10px 16px":"9px 14px",background:"var(--card)",borderRadius:24,border:"1px solid var(--border)",boxShadow:"0 2px 8px rgba(0,0,0,.04)"}}>
-          <span style={{color:"var(--muted)",fontSize:13,flexShrink:0}}>🔍</span>
+          <span style={{color:"var(--muted)",fontSize:13,flexShrink:0}}></span>
           <input value={homeQ} onChange={e=>setHomeQ(e.target.value)} onFocus={()=>setSearchFocused(true)} placeholder={t("home.search_placeholder")} style={{flex:1,border:"none",background:"transparent",outline:"none",fontSize:13,fontFamily:"inherit",color:"var(--text)"}}/>
-          {homeQ&&<span style={{cursor:"pointer",color:"var(--muted)",fontSize:12,flexShrink:0}} onClick={()=>setHomeQ("")}>✕</span>}
+          {homeQ&&<span style={{cursor:"pointer",color:"var(--muted)",fontSize:12,flexShrink:0}} onClick={()=>setHomeQ("")}></span>}
           {!homeQ&&<span style={{cursor:"pointer",flexShrink:0,opacity:.6,display:"flex",alignItems:"center",justifyContent:"center"}} onClick={()=>setShowCamMenu(true)}><Icon name="camera" size={18}/></span>}
         </div>
         <button onClick={()=>setShowFilter(!showFilter)} style={{width:38,height:38,borderRadius:12,border:"none",background:showFilter?"#F97316":(filterType!=="all"||filterSort!=="popular")?"rgba(249,115,22,0.1)":"var(--light)",cursor:"pointer",fontSize:15,display:"flex",alignItems:"center",justifyContent:"center",flexShrink:0,transition:"all .2s",position:"relative"}}>
@@ -97,9 +97,9 @@ function HomeScr({go,favs,toggleFav,isFav,userName}){
       {/* Promos rapide */}
       <div style={{padding:"4px 16px 12px"}}>
         <div onClick={()=>go("promos")} className="mes-promos-pill" style={{padding:"10px 12px",background:"linear-gradient(135deg,rgba(249,115,22,0.08),rgba(236,72,153,0.08))",border:"1px solid rgba(249,115,22,0.2)",borderRadius:12,cursor:"pointer",display:"flex",alignItems:"center",gap:10}}>
-          <div style={{fontSize:22}}>🎁</div>
+          <div style={{fontSize:22}}><Icon name="gift" size={18}/></div>
           <div style={{flex:1}}>
-            <div style={{fontSize:12,fontWeight:700}}>Vous avez 3 promos perso 🎉</div>
+            <div style={{fontSize:12,fontWeight:700}}>Vous avez 3 promos perso <Icon name="sparkle" size={16}/></div>
             <div style={{fontSize:10,color:"var(--muted)"}}>Codes BIRTHDAY2026, JOELDY10, WELCOMEBACK...</div>
           </div>
           <span style={{color:"#F97316",fontSize:16}}>›</span>
@@ -112,8 +112,8 @@ function HomeScr({go,favs,toggleFav,isFav,userName}){
       {/* Active filter indicator */}
       {!showFilter&&(filterType!=="all"||filterSort!=="popular")&&<div style={{display:"flex",alignItems:"center",gap:6,padding:"0 16px 8px"}}>
         <span style={{fontSize:11,color:"var(--muted)"}}>Filtres :</span>
-        {filterType!=="all"&&<span onClick={()=>{setFilterType("all");setSelType("all")}} style={{padding:"3px 8px",borderRadius:6,background:"rgba(249,115,22,0.08)",color:"#F97316",fontSize:10,fontWeight:600,cursor:"pointer"}}>{types.find(t=>t.id===filterType)?.icon} {types.find(t=>t.id===filterType)?.name} ✕</span>}
-        {filterSort!=="popular"&&<span onClick={()=>setFilterSort("popular")} style={{padding:"3px 8px",borderRadius:6,background:"rgba(59,130,246,0.08)",color:"#3B82F6",fontSize:10,fontWeight:600,cursor:"pointer"}}>{filterSort==="rating"?"⭐ Notés":"💰 Prix"} ✕</span>}
+        {filterType!=="all"&&<span onClick={()=>{setFilterType("all");setSelType("all")}} style={{padding:"3px 8px",borderRadius:6,background:"rgba(249,115,22,0.08)",color:"#F97316",fontSize:10,fontWeight:600,cursor:"pointer"}}>{types.find(t=>t.id===filterType)?.icon} {types.find(t=>t.id===filterType)?.name} </span>}
+        {filterSort!=="popular"&&<span onClick={()=>setFilterSort("popular")} style={{padding:"3px 8px",borderRadius:6,background:"rgba(59,130,246,0.08)",color:"#3B82F6",fontSize:10,fontWeight:600,cursor:"pointer"}}>{filterSort==="rating"?"Notés":"Prix"} </span>}
       </div>}
 
       {/* Hidden file inputs for image search */}
@@ -148,7 +148,7 @@ function HomeScr({go,favs,toggleFav,isFav,userName}){
         </div>
         <div style={{fontSize:12,fontWeight:600,color:"var(--muted)",marginBottom:8}}>Trier par</div>
         <div style={{display:"flex",gap:6}}>
-          {[["popular","🔥 Populaires"],["rating","⭐ Mieux notés"],["price","💰 Prix ↑"]].map(([k,l])=><div key={k} onClick={()=>{setFilterSort(k);setShowFilter(false)}} style={{padding:"6px 12px",borderRadius:20,border:filterSort===k?"2px solid #F97316":"1px solid var(--border)",background:filterSort===k?"rgba(249,115,22,0.06)":"var(--card)",cursor:"pointer",fontSize:11,fontWeight:600,color:filterSort===k?"#F97316":"var(--sub)"}}>{l}</div>)}
+          {[["popular","Populaires"],["rating","Mieux notés"],["price","Prix ↑"]].map(([k,l])=><div key={k} onClick={()=>{setFilterSort(k);setShowFilter(false)}} style={{padding:"6px 12px",borderRadius:20,border:filterSort===k?"2px solid #F97316":"1px solid var(--border)",background:filterSort===k?"rgba(249,115,22,0.06)":"var(--card)",cursor:"pointer",fontSize:11,fontWeight:600,color:filterSort===k?"#F97316":"var(--sub)"}}>{l}</div>)}
         </div>
       </div>}
 
@@ -160,7 +160,7 @@ function HomeScr({go,favs,toggleFav,isFav,userName}){
             <div style={{width:28,height:28,border:"3px solid rgba(255,255,255,.3)",borderTopColor:"#fff",borderRadius:"50%",animation:"spin 1s linear infinite"}}/>
             <div style={{color:"#fff",fontSize:11,fontWeight:600,marginTop:6}}>Recherche en cours...</div>
           </div>}
-          <button onClick={clearImgSearch} style={{position:"absolute",top:6,right:6,width:24,height:24,borderRadius:8,border:"none",background:"rgba(0,0,0,.5)",color:"#fff",fontSize:12,cursor:"pointer"}}>✕</button>
+          <button onClick={clearImgSearch} style={{position:"absolute",top:6,right:6,width:24,height:24,borderRadius:8,border:"none",background:"rgba(0,0,0,.5)",color:"#fff",fontSize:12,cursor:"pointer"}}></button>
         </div>
         {imgResults&&<>
           <div style={{fontSize:13,fontWeight:700,marginBottom:8}}>{imgResults.length} produits similaires</div>
@@ -178,8 +178,8 @@ function HomeScr({go,favs,toggleFav,isFav,userName}){
       </div>
       :searchResults?<div style={{padding:"0 16px 20px"}}>
         <div style={{fontSize:12,color:"var(--muted)",padding:"4px 0 12px",fontWeight:500}}>{searchResults.length} résultat{searchResults.length!==1?"s":""} pour « {homeQ} »</div>
-        {searchResults.length>0?<div className="pgrid" style={{padding:0}}>{searchResults.map(p=><div key={p.id} className="pcard" onClick={()=>go("detail",p)}><div className="pimg"><Img src={p.photo} emoji={p.img} style={{position:"absolute",inset:0,width:"100%",height:"100%"}} fit="cover"/>{disc(p)>0&&<span className="badge">-{disc(p)}%</span>}{p.tags[0]&&<span className="tag">{p.tags[0]}</span>}</div><div className="pbody"><h4>{p.name}</h4><div className="pv">{p.va} {p.vendor}</div><div className="pp">{fmt(p.price)}{p.old&&<span className="po">{fmt(p.old)}</span>}</div><div className="pr" onClick={e=>{e.stopPropagation();go("reviews",p)}}>⭐ {p.rating}</div></div></div>)}</div>
-        :<div style={{textAlign:"center",padding:"50px 0"}}><div style={{fontSize:40,marginBottom:10}}>🔍</div><div style={{fontSize:14,fontWeight:600}}>Aucun résultat</div><div style={{fontSize:12,color:"var(--muted)",marginTop:4}}>Essayez un autre terme</div></div>}
+        {searchResults.length>0?<div className="pgrid" style={{padding:0}}>{searchResults.map(p=><div key={p.id} className="pcard" onClick={()=>go("detail",p)}><div className="pimg"><Img src={p.photo} emoji={p.img} style={{position:"absolute",inset:0,width:"100%",height:"100%"}} fit="cover"/>{disc(p)>0&&<span className="badge">-{disc(p)}%</span>}{p.tags[0]&&<span className="tag">{p.tags[0]}</span>}</div><div className="pbody"><h4>{p.name}</h4><div className="pv">{p.va} {p.vendor}</div><div className="pp">{fmt(p.price)}{p.old&&<span className="po">{fmt(p.old)}</span>}</div><div className="pr" onClick={e=>{e.stopPropagation();go("reviews",p)}}><Icon name="star_full" size={16}/>{" "}{p.rating}</div></div></div>)}</div>
+        :<div style={{textAlign:"center",padding:"50px 0"}}><div style={{fontSize:40,marginBottom:10}}></div><div style={{fontSize:14,fontWeight:600}}>Aucun résultat</div><div style={{fontSize:12,color:"var(--muted)",marginTop:4}}>Essayez un autre terme</div></div>}
       </div>
 
       /* ── DISCOVERY MODE (focused, no query) ── */
@@ -193,7 +193,7 @@ function HomeScr({go,favs,toggleFav,isFav,userName}){
           </div>
           <div style={{display:"flex",gap:8,flexWrap:"wrap"}}>
             {recentSearches.map(s=><div key={s} onClick={()=>doSearch(s)} style={{display:"inline-flex",alignItems:"center",gap:7,padding:"8px 16px",background:"var(--light)",borderRadius:24,cursor:"pointer",fontSize:13,fontWeight:500,color:"var(--sub)",transition:"all .15s"}}>
-              <span style={{fontSize:11,color:"var(--muted)"}}>🕐</span>{s}
+              <span style={{fontSize:11,color:"var(--muted)"}}></span>{s}
             </div>)}
           </div>
         </div>}
@@ -220,7 +220,7 @@ function HomeScr({go,favs,toggleFav,isFav,userName}){
           <h3 style={{fontSize:17,fontWeight:700,letterSpacing:-.3,color:"var(--text)",paddingBottom:12}}>Tendances</h3>
           <div style={{display:"flex",gap:8,flexWrap:"wrap"}}>
             {trending.map(t=><div key={t} onClick={()=>doSearch(t)} style={{display:"inline-flex",alignItems:"center",gap:6,padding:"9px 18px",background:"var(--card)",borderRadius:24,border:"1px solid var(--border)",cursor:"pointer",fontSize:13,fontWeight:500,color:"var(--sub)",boxShadow:"0 1px 3px rgba(0,0,0,.03)",transition:"all .15s"}}>
-              <span style={{fontSize:11,color:"#F97316"}}>🔥</span>{t}
+              <span style={{fontSize:11,color:"#F97316"}}><Icon name="fire" size={18}/></span>{t}
             </div>)}
           </div>
         </div>
@@ -245,15 +245,15 @@ function HomeScr({go,favs,toggleFav,isFav,userName}){
           <div style={{position:"absolute",bottom:8,left:"50%",transform:"translateX(-50%)",display:"flex",gap:6}}>{promos.map((_,i)=><div key={i} onClick={(e)=>{e.stopPropagation();setPromoSlide(i)}} style={{width:promoSlide===i?20:6,height:6,borderRadius:3,background:promoSlide===i?"#fff":"rgba(255,255,255,.4)",cursor:"pointer",transition:"all .3s"}}/>)}</div>
       </div>
 
-      {/* 🔴 LIVE EN COURS */}
-      <div onClick={()=>go("liveWatch",{vendor:{name:"Mode Afrique",avatar:"👔"},products:P.filter(x=>x.vendor==="Mode Afrique").slice(0,4)})} style={{margin:"0 16px 14px",padding:12,background:"linear-gradient(135deg,rgba(239,68,68,0.06),rgba(249,115,22,0.06))",border:"1px solid rgba(239,68,68,0.15)",borderRadius:16,cursor:"pointer",display:"flex",alignItems:"center",gap:12}}>
+      {/*  LIVE EN COURS */}
+      <div onClick={()=>go("liveWatch",{vendor:{name:"Mode Afrique",avatar:""},products:P.filter(x=>x.vendor==="Mode Afrique").slice(0,4)})} style={{margin:"0 16px 14px",padding:12,background:"linear-gradient(135deg,rgba(239,68,68,0.06),rgba(249,115,22,0.06))",border:"1px solid rgba(239,68,68,0.15)",borderRadius:16,cursor:"pointer",display:"flex",alignItems:"center",gap:12}}>
         <div style={{width:48,height:48,borderRadius:14,background:"linear-gradient(135deg,#EF4444,#F97316)",display:"flex",alignItems:"center",justifyContent:"center",flexShrink:0,position:"relative"}}>
-          <span style={{fontSize:22}}>📺</span>
+          <span style={{fontSize:22}}></span>
           <div style={{position:"absolute",top:-3,right:-3,width:12,height:12,borderRadius:6,background:"#EF4444",border:"2px solid var(--bg)",animation:"pulse 1.5s infinite"}}/>
         </div>
         <div style={{flex:1,minWidth:0}}>
           <div style={{display:"flex",alignItems:"center",gap:6}}>
-            <span style={{padding:"2px 6px",borderRadius:4,background:"#EF4444",color:"#fff",fontSize:8,fontWeight:800}}>🔴 LIVE</span>
+            <span style={{padding:"2px 6px",borderRadius:4,background:"#EF4444",color:"#fff",fontSize:8,fontWeight:800}}><Icon name="x_circle" size={16}/>{" "}LIVE</span>
             <span style={{fontSize:13,fontWeight:700}}>Mode Afrique</span>
           </div>
           <div style={{fontSize:11,color:"var(--muted)",marginTop:2}}>Nouvelle collection Wax — 47 spectateurs</div>
@@ -261,9 +261,9 @@ function HomeScr({go,favs,toggleFav,isFav,userName}){
         <span style={{fontSize:12,color:"#F97316",fontWeight:600}}>Rejoindre →</span>
       </div>
 
-      {/* ⭐ Produit du jour */}
+      {/*  Produit du jour */}
       {P[0]&&<div onClick={()=>go("detail",P[0])} style={{margin:"0 16px 14px",padding:14,background:"var(--card)",border:"2px solid #F59E0B",borderRadius:18,cursor:"pointer",position:"relative",overflow:"hidden"}}>
-          <div style={{position:"absolute",top:0,right:0,padding:"4px 12px 4px 16px",background:"#F59E0B",borderRadius:"0 0 0 14px",color:"#fff",fontSize:10,fontWeight:800}}>⭐ PRODUIT DU JOUR</div>
+          <div style={{position:"absolute",top:0,right:0,padding:"4px 12px 4px 16px",background:"#F59E0B",borderRadius:"0 0 0 14px",color:"#fff",fontSize:10,fontWeight:800}}><Icon name="star_full" size={16}/>{" "}PRODUIT DU JOUR</div>
           <div style={{display:"flex",gap:12,marginTop:6}}>
             <div style={{width:80,height:80,borderRadius:14,background:"var(--light)",display:"flex",alignItems:"center",justifyContent:"center",overflow:"hidden",flexShrink:0}}><Img src={P[0].photo} emoji={P[0].img} style={{width:"100%",height:"100%"}} fit="cover"/></div>
             <div style={{flex:1,minWidth:0}}>
@@ -280,9 +280,9 @@ function HomeScr({go,favs,toggleFav,isFav,userName}){
           </div>
       </div>}
 
-      {/* 🎯 Recommandations personnalisées */}
+      {/*  Recommandations personnalisées */}
       <div style={{padding:"0 16px"}}>
-        <h3 style={{fontSize:17,fontWeight:700,letterSpacing:-.3,color:"var(--text)",paddingBottom:12}}>🎯 {t("home.for_you")}</h3>
+        <h3 style={{fontSize:17,fontWeight:700,letterSpacing:-.3,color:"var(--text)",paddingBottom:12}}><Icon name="target" size={16}/>{" "}{t("home.for_you")}</h3>
       </div>
       <div style={{display:"flex",gap:8,overflowX:"auto",scrollbarWidth:"none",paddingBottom:14,paddingLeft:16,paddingRight:16,WebkitOverflowScrolling:"touch"}}>
           {P.slice(2,10).map(p=>(
@@ -298,12 +298,12 @@ function HomeScr({go,favs,toggleFav,isFav,userName}){
 
       {/* Group Buy promo */}
       <div onClick={()=>go("groupBuy")} style={{margin:"0 16px 14px",padding:12,background:"linear-gradient(135deg,rgba(249,115,22,0.06),rgba(251,146,60,0.06))",border:"1px solid rgba(249,115,22,0.12)",borderRadius:14,display:"flex",alignItems:"center",gap:10,cursor:"pointer"}}>
-        <div style={{width:38,height:38,borderRadius:12,background:"#F97316",display:"flex",alignItems:"center",justifyContent:"center",fontSize:18,flexShrink:0}}>🤝</div>
+        <div style={{width:38,height:38,borderRadius:12,background:"#F97316",display:"flex",alignItems:"center",justifyContent:"center",fontSize:18,flexShrink:0}}><Icon name="handshake" size={18}/></div>
         <div style={{flex:1}}><div style={{fontSize:13,fontWeight:700}}>Achats groupés — Jusqu'à -30%</div><div style={{fontSize:11,color:"var(--muted)",marginTop:1}}>3 offres en cours · Rejoignez un groupe</div></div>
         <span style={{color:"#F97316",fontSize:16}}>›</span>
       </div>
 
-      {/* Restos à la une */}
+      {/* Restos à la une */}}
       {(selType==="all"||selType==="restaurant")&&nearbyRestos.length>0&&<>
       {/* Events / promos banner */}
       {(()=>{
@@ -311,10 +311,10 @@ function HomeScr({go,favs,toggleFav,isFav,userName}){
         const month=now.getMonth();
         const day=now.getDate();
         let event=null;
-        if(month===10&&day>=20&&day<=30)event={icon:"🛍️",title:"Black Friday Lamuka",sub:"Jusqu'à -70% partout",bg:"linear-gradient(135deg,#000,#1F2937)",text:"#fff",badge:"-70%"};
-        else if(month===7&&day>=10&&day<=20)event={icon:"🇨🇬",title:"Indépendance Congo",sub:"Spéciales fête nationale",bg:"linear-gradient(135deg,#10B981,#F97316,#EF4444)",text:"#fff",badge:"NEW"};
-        else if(month===11&&day>=15)event={icon:"🎄",title:"Spéciales Fêtes",sub:"Cadeaux à prix doux",bg:"linear-gradient(135deg,#DC2626,#16A34A)",text:"#fff"};
-        else event={icon:"🎁",title:"Promo spéciale",sub:"Code WEEKEND15 — -15% restos",bg:"linear-gradient(135deg,#F97316,#EC4899)",text:"#fff",badge:"-15%"};
+        if(month===10&&day>=20&&day<=30)event={icon:"package",title:"Black Friday Lamuka",sub:"Jusqu'à -70% partout",bg:"linear-gradient(135deg,#000,#1F2937)",text:"#fff",badge:"-70%"};
+        else if(month===7&&day>=10&&day<=20)event={icon:"",title:"Indépendance Congo",sub:"Spéciales fête nationale",bg:"linear-gradient(135deg,#10B981,#F97316,#EF4444)",text:"#fff",badge:"NEW"};
+        else if(month===11&&day>=15)event={icon:"",title:"Spéciales Fêtes",sub:"Cadeaux à prix doux",bg:"linear-gradient(135deg,#DC2626,#16A34A)",text:"#fff"};
+        else event={icon:"gift",title:"Promo spéciale",sub:"Code WEEKEND15 — -15% restos",bg:"linear-gradient(135deg,#F97316,#EC4899)",text:"#fff",badge:"-15%"};
         return(
           <div onClick={()=>go("allProducts")} style={{margin:"4px 16px 14px",padding:14,background:event.bg,borderRadius:14,color:event.text,cursor:"pointer",display:"flex",alignItems:"center",gap:12,position:"relative",overflow:"hidden"}}>
             <div style={{position:"absolute",top:-20,right:-20,fontSize:90,opacity:.15}}>{event.icon}</div>
@@ -475,12 +475,12 @@ function HomeScr({go,favs,toggleFav,isFav,userName}){
       </div>
 
       <div className="sec"><h3>{selType==="all"?"Établissements proches":types.find(t=>t.id===selType)?.name+" proches"}</h3><span onClick={()=>go("nearby")}>Voir la carte</span></div>
-      <div className="vlist">{filteredV.slice(0,4).map(v=><div key={v.id} className="vcard" onClick={()=>go("vendor",v)}><div className="vav" style={v.logo?{overflow:"hidden",padding:0}:{}}>{v.logo?<img src={v.logo} style={{width:"100%",height:"100%",objectFit:"cover",objectPosition:"center"}} alt=""/>:v.avatar}</div><div className="vi"><h4>{v.name}{v.verified&&<span className="vf">✓</span>}</h4><div className="vloc">📍 {v.loc}{v.eta&&<span style={{marginLeft:8,color:"#F97316",fontWeight:600}}>🕐 {v.eta}</span>}</div><div className="vst">⭐ <b>{v.rating}</b> · {v.products} {v.type==="restaurant"?"plats":v.type==="service"?"services":"produits"}</div></div><span style={{color:"var(--muted)"}}>›</span></div>)}</div>
+      <div className="vlist">{filteredV.slice(0,4).map(v=><div key={v.id} className="vcard" onClick={()=>go("vendor",v)}><div className="vav" style={v.logo?{overflow:"hidden",padding:0}:{}}>{v.logo?<img src={v.logo} style={{width:"100%",height:"100%",objectFit:"cover",objectPosition:"center"}} alt=""/>:v.avatar}</div><div className="vi"><h4>{v.name}{v.verified&&<span className="vf"></span>}</h4><div className="vloc"><Icon name="location" size={16}/>{" "}{v.loc}{v.eta&&<span style={{marginLeft:8,color:"#F97316",fontWeight:600}}> {v.eta}</span>}</div><div className="vst"><Icon name="star_full" size={16}/>{" "}<b>{v.rating}</b> · {v.products} {v.type==="restaurant"?"plats":v.type==="service"?"services":"produits"}</div></div><span style={{color:"var(--muted)"}}>›</span></div>)}</div>
 
 
       {/* ═══ RECENTLY VIEWED ═══ */}
       {recentlyViewed.length>0&&<>
-        <div className="sec"><h3>🕐 Récemment consultés</h3></div>
+        <div className="sec"><h3> Récemment consultés</h3></div>
         <div style={{display:"flex",gap:8,padding:"0 16px 14px",overflowX:"auto",scrollbarWidth:"none"}}>
           {recentlyViewed.slice(0,6).map(p=><div key={"rv-"+p.id} onClick={()=>go("detail",p)} style={{flexShrink:0,width:100,cursor:"pointer"}}>
             <div style={{width:100,height:80,borderRadius:12,overflow:"hidden",background:"var(--light)",marginBottom:4}}>
@@ -495,7 +495,7 @@ function HomeScr({go,favs,toggleFav,isFav,userName}){
 
 
       <div className="sec"><h3>{selType==="all"?"Populaires":"Populaires en "+types.find(t=>t.id===selType)?.name}</h3><span onClick={()=>go("allProducts")}>Voir tout</span></div>
-      <div className="pgrid stagger-grid">{sortedP.map(p=>{const vp=getVendorPromo(p,VENDORS);const td=totalDisc(p,VENDORS);return(<div key={p.id} className="pcard" onClick={()=>go("detail",p)}><div className="pimg"><Img src={p.photo} emoji={p.img} style={{position:"absolute",inset:0,width:"100%",height:"100%"}} fit="cover"/>{p.old&&<span className="badge">-{disc(p)}%</span>}{vp&&<span className="tag" style={{background:"#F59E0B",color:"#fff"}}>🏷️ {vp.promoName}</span>}{!vp&&p.tags[0]&&<span className="tag">{p.tags[0]}</span>}<span className="fav" onClick={e=>{e.stopPropagation();toggleFav(p.id)}} style={{color:isFav(p.id)?"#EF4444":"var(--muted)",fontSize:14}}>{isFav(p.id)?"♥":"♡"}</span></div><div className="pbody"><h4>{p.name}</h4><div className="pv">{p.va} {p.vendor}{p.eta&&<span style={{marginLeft:4,color:"#F97316",fontSize:10}}>🕐 {p.eta}</span>}</div><div className="pp">{vp?<><span style={{color:"#F97316"}}>{fmt(vp.promoPrice)}</span><span className="po">{fmt(p.price)}</span></>:<>{fmt(p.price)}{p.old&&<span className="po">{fmt(p.old)}</span>}</>}</div><div className="pr" onClick={e=>{e.stopPropagation();go("reviews",p)}}>⭐ {p.rating} ({p.reviews})</div></div></div>)})}</div>
+      <div className="pgrid stagger-grid">{sortedP.map(p=>{const vp=getVendorPromo(p,VENDORS);const td=totalDisc(p,VENDORS);return(<div key={p.id} className="pcard" onClick={()=>go("detail",p)}><div className="pimg"><Img src={p.photo} emoji={p.img} style={{position:"absolute",inset:0,width:"100%",height:"100%"}} fit="cover"/>{p.old&&<span className="badge">-{disc(p)}%</span>}{vp&&<span className="tag" style={{background:"#F59E0B",color:"#fff"}}><Icon name="tag" size={16}/>{" "}{vp.promoName}</span>}{!vp&&p.tags[0]&&<span className="tag">{p.tags[0]}</span>}<span className="fav" onClick={e=>{e.stopPropagation();toggleFav(p.id)}} style={{color:isFav(p.id)?"#EF4444":"var(--muted)",fontSize:14}}>{isFav(p.id)?"":""}</span></div><div className="pbody"><h4>{p.name}</h4><div className="pv">{p.va} {p.vendor}{p.eta&&<span style={{marginLeft:4,color:"#F97316",fontSize:10}}> {p.eta}</span>}</div><div className="pp">{vp?<><span style={{color:"#F97316"}}>{fmt(vp.promoPrice)}</span><span className="po">{fmt(p.price)}</span></>:<>{fmt(p.price)}{p.old&&<span className="po">{fmt(p.old)}</span>}</>}</div><div className="pr" onClick={e=>{e.stopPropagation();go("reviews",p)}}><Icon name="star_full" size={16}/>{" "}{p.rating} ({p.reviews})</div></div></div>)})}</div>
       </>}
     </div></PullToRefresh>
 

@@ -1,4 +1,5 @@
 import { useState } from "react";
+import Icon from "./Icon";
 
 /**
  * Stories carousel — Instagram-style stories at top of Home
@@ -11,7 +12,7 @@ function StoriesCarousel({ vendors, go }) {
   const stories = (vendors || []).slice(0, 8).map((v, i) => ({
     id: v.id,
     name: v.name,
-    avatar: v.logo || v.avatar || "🏪",
+    avatar: v.logo || v.avatar || "",
     isLive: i % 5 === 0,        // every 5th is "LIVE"
     isNew: i % 3 === 0,         // every 3rd has new content
     type: v.type,
@@ -81,13 +82,13 @@ function StoriesCarousel({ vendors, go }) {
                 <div style={{ fontSize: 13, fontWeight: 700, color: "#fff" }}>{s.name}{s.isLive && <span style={{ marginLeft: 6, padding: "1px 6px", borderRadius: 4, background: "#EF4444", color: "#fff", fontSize: 9, fontWeight: 800 }}>LIVE</span>}</div>
                 <div style={{ fontSize: 10, color: "rgba(255,255,255,.6)" }}>il y a 2h</div>
               </div>
-              <button onClick={() => setOpenStoryIdx(null)} style={{ background: "transparent", border: "none", color: "#fff", fontSize: 24, cursor: "pointer" }}>✕</button>
+              <button onClick={() => setOpenStoryIdx(null)} style={{ background: "transparent", border: "none", color: "#fff", fontSize: 24, cursor: "pointer" }}></button>
             </div>
 
             {/* Story content (mock) */}
             <div onClick={() => setOpenStoryIdx(openStoryIdx + 1 < stories.length ? openStoryIdx + 1 : null)} style={{ flex: 1, background: `linear-gradient(135deg,${s.isLive ? "#EF4444" : "#F97316"},#9333EA)`, display: "flex", alignItems: "center", justifyContent: "center", color: "#fff", padding: 32, textAlign: "center", cursor: "pointer" }}>
               <div>
-                <div style={{ fontSize: 64, marginBottom: 16 }}>{s.isLive ? "🔴" : "✨"}</div>
+                <div style={{ fontSize: 64, marginBottom: 16 }}>{s.isLive ? "" : ""}</div>
                 <div style={{ fontSize: 22, fontWeight: 800, marginBottom: 8 }}>
                   {s.isLive ? "Live shopping en cours !" : "Nouveautés du jour"}
                 </div>
@@ -100,7 +101,7 @@ function StoriesCarousel({ vendors, go }) {
             {/* CTA */}
             <div style={{ padding: 16 }}>
               <button onClick={() => { setOpenStoryIdx(null); go("vendor", s.vendor); }} style={{ width: "100%", padding: 14, borderRadius: 14, border: "none", background: "rgba(255,255,255,.2)", color: "#fff", fontSize: 14, fontWeight: 700, cursor: "pointer", fontFamily: "inherit", backdropFilter: "blur(10px)" }}>
-                {s.isLive ? "🔴 Rejoindre le live" : `Voir ${s.name} →`}
+                {s.isLive ? "Rejoindre le live" : `Voir ${s.name} →`}
               </button>
             </div>
           </div>

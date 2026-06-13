@@ -1,5 +1,6 @@
 import { useState } from "react";
 import toast from "../../utils/toast";
+import Icon from "../../components/Icon";
 
 function VAutoDiscountScr({onBack}){
   const [rules,setRules]=useState([
@@ -27,11 +28,11 @@ function VAutoDiscountScr({onBack}){
     else desc=`1ère commande → -${disc}%`;
     setRules(p=>[...p,{id:Date.now(),type:newType,condition:cond,discount:disc,unit:"%",active:true,desc}]);
     setAdding(false);setNewCond("");setNewDisc("");
-    toast.success("Remise ajoutée ✅");
+    toast.success("Remise ajoutée");
   };
 
   return(<div className="scr" style={{padding:16,paddingBottom:20}}>
-    <div className="appbar" style={{padding:0,marginBottom:12}}><button onClick={adding?()=>setAdding(false):onBack}>←</button><h2>💰 Remises auto</h2><div style={{width:38}}/></div>
+    <div className="appbar" style={{padding:0,marginBottom:12}}><button onClick={adding?()=>setAdding(false):onBack}>←</button><h2><Icon name="wallet" size={16}/>{" "}Remises auto</h2><div style={{width:38}}/></div>
     <p style={{fontSize:12,color:"var(--muted)",marginBottom:14}}>Remises appliquées automatiquement au panier du client</p>
 
     {adding?<>
@@ -50,7 +51,7 @@ function VAutoDiscountScr({onBack}){
             <div style={{fontSize:13,fontWeight:600}}>{r.desc}</div>
             <div style={{fontSize:11,color:"var(--muted)",marginTop:2}}>{TYPES[r.type]}</div>
           </div>
-          <button onClick={()=>remove(r.id)} style={{background:"none",border:"none",fontSize:16,cursor:"pointer",color:"var(--muted)"}}>🗑️</button>
+          <button onClick={()=>remove(r.id)} style={{background:"none",border:"none",fontSize:16,cursor:"pointer",color:"var(--muted)"}}>️</button>
         </div>
       ))}
       <button onClick={()=>setAdding(true)} style={{width:"100%",padding:14,borderRadius:14,border:"none",background:"#F97316",color:"#fff",fontSize:15,fontWeight:700,cursor:"pointer",fontFamily:"inherit",marginTop:8}}>+ Nouvelle remise</button>

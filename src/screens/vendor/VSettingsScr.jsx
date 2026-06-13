@@ -28,7 +28,7 @@ function VSettingsScr({onBack,go}){
       <div style={{height:120,borderRadius:"0 0 16px 16px",overflow:"hidden",position:"relative"}}>
         <img src={vsCover} style={{width:"100%",height:"100%",objectFit:"cover",objectPosition:"center"}} alt=""/>
         <label style={{position:"absolute",bottom:8,right:8,padding:"5px 10px",borderRadius:10,background:"rgba(0,0,0,.5)",color:"#fff",fontSize:10,fontWeight:600,cursor:"pointer",display:"flex",alignItems:"center",gap:4}}><Icon name="camera" size={16}/>{" "}Couverture
-          <input type="file" accept="image/*" style={{display:"none"}} onChange={e=>{const f=e.target.files?.[0];if(f){const r=new FileReader();r.onload=()=>{setVsCover(r.result);toast.success("Couverture mise à jour 📸")};r.readAsDataURL(f);e.target.value=""}}}/>
+          <input type="file" accept="image/*" style={{display:"none"}} onChange={e=>{const f=e.target.files?.[0];if(f){const r=new FileReader();r.onload=()=>{setVsCover(r.result);toast.success("Couverture mise à jour")};r.readAsDataURL(f);e.target.value=""}}}/>
         </label>
       </div>
       <div style={{position:"absolute",bottom:-36,left:"50%",transform:"translateX(-50%)"}}>
@@ -50,7 +50,7 @@ function VSettingsScr({onBack,go}){
       <div className="field"><label>Adresse physique</label><input defaultValue="Marché Total, Stand 42, Brazzaville"/></div>
       <div className="field-row"><div className="field"><label>Horaires</label><input defaultValue="8h - 18h"/></div><div className="field"><label>Jours</label><input defaultValue="Lun - Sam"/></div></div>
       <div className="field"><label>Zones de livraison</label><input defaultValue="Brazzaville, Pointe-Noire"/></div>
-      <div style={{fontSize:14,fontWeight:700,margin:"14px 0 8px"}}>🍽️ Paramètres restaurant</div>
+      <div style={{fontSize:14,fontWeight:700,margin:"14px 0 8px"}}><Icon name="utensils" size={16}/>{" "}Paramètres restaurant</div>
       <div style={{display:"flex",alignItems:"center",justifyContent:"space-between",padding:14,background:"var(--card)",border:"1px solid var(--border)",borderRadius:14,marginBottom:10}}>
         <div><div style={{fontSize:13,fontWeight:600}}>Statut du commerce</div><div style={{fontSize:11,color:shopOpen?"#10B981":"#EF4444",fontWeight:600,marginTop:2}}>{shopOpen?"Ouvert — accepte les commandes":"Fermé — commandes suspendues"}</div></div>
         <div className={`toggle ${shopOpen?"on":""}`} onClick={()=>setShopOpen(!shopOpen)}><div/></div>
@@ -71,7 +71,7 @@ function VSettingsScr({onBack,go}){
       <div className="setting-group"><div className="setting-label">Notifications push</div>
         <div className="setting-item"><span className="si-i"><Icon name="package" size={18}/></span><span className="si-t">Nouvelles commandes</span><div className={`toggle ${pushOrder?"on":""}`} onClick={()=>setPushOrder(!pushOrder)}/></div>
         <div className="setting-item"><span className="si-i"><Icon name="star_o" size={18}/></span><span className="si-t">Avis clients</span><div className={`toggle ${pushReview?"on":""}`} onClick={()=>setPushReview(!pushReview)}/></div>
-        <div className="setting-item"><span className="si-i">⚠️</span><span className="si-t">Alertes stock faible</span><div className={`toggle ${pushStock?"on":""}`} onClick={()=>setPushStock(!pushStock)}/></div>
+        <div className="setting-item"><span className="si-i">️</span><span className="si-t">Alertes stock faible</span><div className={`toggle ${pushStock?"on":""}`} onClick={()=>setPushStock(!pushStock)}/></div>
         <div className="setting-item"><span className="si-i"><Icon name="tag" size={18}/></span><span className="si-t">Fin de promotions</span><div className={`toggle ${pushPromo?"on":""}`} onClick={()=>setPushPromo(!pushPromo)}/></div>
         <div className="setting-item"><span className="si-i"><Icon name="bell" size={18}/></span><span className="si-t">Son de notification</span><div className={`toggle ${sound?"on":""}`} onClick={()=>setSound(!sound)}/></div>
       </div>
@@ -82,12 +82,12 @@ function VSettingsScr({onBack,go}){
         <div className="setting-item" onClick={()=>go("password")} style={{cursor:"pointer"}}><span className="si-i"><Icon name="shield" size={18}/></span><span className="si-t">Changer mot de passe</span><span className="mi-c">›</span></div>
       </div>
       <div className="setting-group"><div className="setting-label">Légal</div>
-        <div className="setting-item" onClick={()=>go("terms")} style={{cursor:"pointer"}}><span className="si-i">📄</span><span className="si-t">Conditions générales</span><span className="mi-c">›</span></div>
+        <div className="setting-item" onClick={()=>go("terms")} style={{cursor:"pointer"}}><span className="si-i"></span><span className="si-t">Conditions générales</span><span className="mi-c">›</span></div>
         <div className="setting-item" onClick={()=>go("privacy")} style={{cursor:"pointer"}}><span className="si-i"><Icon name="key" size={18}/></span><span className="si-t">Politique de confidentialité</span><span className="mi-c">›</span></div>
       </div>
     </div>
-    <div style={{padding:"0 20px 20px"}}><button className="btn-primary" onClick={()=>toast.success("Paramètres sauvegardés ✅")}>💾 Enregistrer</button></div>
-    {cropVsLogo&&<ImageCropper src={cropVsLogo} shape="square" onCancel={()=>setCropVsLogo(null)} onConfirm={cropped=>{setVsLogo(cropped);setCropVsLogo(null);toast.success("Logo mis à jour 📸")}}/>}
+    <div style={{padding:"0 20px 20px"}}><button className="btn-primary" onClick={()=>toast.success("Paramètres sauvegardés")}> Enregistrer</button></div>
+    {cropVsLogo&&<ImageCropper src={cropVsLogo} shape="square" onCancel={()=>setCropVsLogo(null)} onConfirm={cropped=>{setVsLogo(cropped);setCropVsLogo(null);toast.success("Logo mis à jour")}}/>}
   </div>);
 }
 

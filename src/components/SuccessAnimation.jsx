@@ -1,4 +1,5 @@
 import { useEffect } from "react";
+import Icon from "./Icon";
 
 /**
  * SuccessAnimation — full-screen animated overlay

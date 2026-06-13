@@ -3,6 +3,7 @@ import toast from "../../utils/toast";
 import { fmt, getVendorPromo } from "../../utils/helpers";
 import Img from "../../components/Img";
 import { useData } from "../../hooks";
+import Icon from "../../components/Icon";
 
 // Cart onboarding tutorial - shows only on first cart open
 const showCartTutorial = () => {
@@ -14,7 +15,7 @@ function CartScr({cart,setCart,go,appliedCoupon,setAppliedCoupon}){
   const [swipeX,setSwipeX]=useState({});
   const [swipeStart,setSwipeStart]=useState(null);
   const [swipeActive,setSwipeActive]=useState(null);
-  const removeItem=(i)=>{const n=[...cart];n.splice(i,1);setCart(n);try{toast.info("🗑️ Article retiré")}catch{}};
+  const removeItem=(i)=>{const n=[...cart];n.splice(i,1);setCart(n);try{toast.info("️ Article retiré")}catch{}};
   const { VENDORS } = useData();
   const getItem=(c)=>c.product||c;
   const getPrice=(c)=>{const p=getItem(c);const vp=getVendorPromo(p,VENDORS);return vp?vp.promoPrice:(p.price||0)};
@@ -53,7 +54,7 @@ function CartScr({cart,setCart,go,appliedCoupon,setAppliedCoupon}){
         <div className="cart-info">
           <h4>{p.name}</h4>
           {c.sides&&c.sides.length>0&&<div style={{fontSize:10,color:"#F97316",marginTop:1}}>{c.sides.map(s=>s.name+(s.qty>1?" ×"+s.qty:"")).join(", ")}</div>}
-          <div className="cv">{p.vendor||""}{vp&&<span style={{marginLeft:6,fontSize:10,color:"#10B981",fontWeight:600}}>🏷️ -{vp.promoDiscount}%</span>}</div>
+          <div className="cv">{p.vendor||""}{vp&&<span style={{marginLeft:6,fontSize:10,color:"#10B981",fontWeight:600}}><Icon name="tag" size={16}/>{" "}-{vp.promoDiscount}%</span>}</div>
           <div className="cart-bot">
             <span className="cp">{fmt((price+(c.sidesTotal||0))*(c.qty||1))}{vp&&<span style={{marginLeft:4,fontSize:10,color:"var(--muted)",textDecoration:"line-through"}}>{fmt(p.price*(c.qty||1))}</span>}</span>
             <div className="qty"><button onClick={()=>updQty(i,-1)}>−</button><span>{c.qty||1}</span><button onClick={()=>updQty(i,1)}>+</button></div>
@@ -63,7 +64,7 @@ function CartScr({cart,setCart,go,appliedCoupon,setAppliedCoupon}){
       </div>)})}
 
     <div onClick={()=>go("groupOrder")} style={{padding:12,background:"rgba(249,115,22,0.04)",border:"1px solid rgba(249,115,22,0.12)",borderRadius:14,marginBottom:10,display:"flex",alignItems:"center",gap:10,cursor:"pointer"}}>
-      <span style={{fontSize:20}}>🤝</span>
+      <span style={{fontSize:20}}><Icon name="handshake" size={18}/></span>
       <div style={{flex:1}}><div style={{fontSize:13,fontWeight:600}}>Commander en groupe</div><div style={{fontSize:11,color:"var(--muted)"}}>Invitez vos amis à ajouter leurs plats</div></div>
       <span style={{color:"#F97316",fontSize:12,fontWeight:600}}>→</span>
     </div>
@@ -73,7 +74,7 @@ function CartScr({cart,setCart,go,appliedCoupon,setAppliedCoupon}){
       {appliedCoupon?(
         <div style={{padding:14,background:"rgba(249,115,22,0.04)",border:"2px solid #10B981",borderRadius:16,display:"flex",alignItems:"center",justifyContent:"space-between"}}>
           <div style={{display:"flex",alignItems:"center",gap:10}}>
-            <span style={{fontSize:20}}>🏷️</span>
+            <span style={{fontSize:20}}><Icon name="tag" size={18}/></span>
             <div>
               <div style={{fontSize:13,fontWeight:700,color:"#F97316"}}>{appliedCoupon.code}</div>
               <div style={{fontSize:11,color:"var(--muted)"}}>
@@ -83,12 +84,12 @@ function CartScr({cart,setCart,go,appliedCoupon,setAppliedCoupon}){
           </div>
           <div style={{display:"flex",gap:6}}>
             <button onClick={()=>go("coupons")} style={{padding:"6px 10px",borderRadius:8,border:"1px solid var(--border)",background:"var(--card)",fontSize:11,fontWeight:600,cursor:"pointer",fontFamily:"inherit"}}>Changer</button>
-            <button onClick={()=>setAppliedCoupon(null)} style={{padding:"6px 10px",borderRadius:8,border:"1px solid rgba(239,68,68,0.3)",background:"transparent",color:"#EF4444",fontSize:11,fontWeight:600,cursor:"pointer",fontFamily:"inherit"}}>✕</button>
+            <button onClick={()=>setAppliedCoupon(null)} style={{padding:"6px 10px",borderRadius:8,border:"1px solid rgba(239,68,68,0.3)",background:"transparent",color:"#EF4444",fontSize:11,fontWeight:600,cursor:"pointer",fontFamily:"inherit"}}></button>
           </div>
         </div>
       ):(
         <div className="coupon" style={{cursor:"pointer"}} onClick={()=>go("coupons")}>
-          <div className="coupon-left" style={{width:50,fontSize:16}}>🏷️</div>
+          <div className="coupon-left" style={{width:50,fontSize:16}}><Icon name="tag" size={18}/></div>
           <div className="coupon-right">
             <h4 style={{fontSize:13}}>Ajouter un code promo</h4>
             <p>Coupons disponibles</p>
@@ -104,7 +105,7 @@ function CartScr({cart,setCart,go,appliedCoupon,setAppliedCoupon}){
 
     {/* Discount line */}
     {discountAmount>0&&<div className="cs-row" style={{color:"#10B981"}}>
-      <span>🏷️ Réduction ({appliedCoupon.code})</span>
+      <span><Icon name="tag" size={16}/>{" "}Réduction ({appliedCoupon.code})</span>
       <b>-{fmt(discountAmount)}</b>
     </div>}
 
@@ -119,7 +120,7 @@ function CartScr({cart,setCart,go,appliedCoupon,setAppliedCoupon}){
     <div className="cs-row tot"><span>Total</span><span className="ctp">{fmt(total)}</span></div>
 
     {(discountAmount>0||freeDelivery)&&<div style={{textAlign:"center",fontSize:11,color:"#10B981",fontWeight:600,marginTop:4}}>
-      🎉 Vous économisez {fmt(discountAmount+(freeDelivery?del:0))} !
+       Vous économisez {fmt(discountAmount+(freeDelivery?del:0))} !
     </div>}
 
     <button className="btn-primary" style={{marginTop:14}} onClick={()=>go("checkout")}>Passer la commande</button>
@@ -129,15 +130,15 @@ function CartScr({cart,setCart,go,appliedCoupon,setAppliedCoupon}){
     <div onClick={e=>e.stopPropagation()} style={{width:"100%",maxWidth:500,margin:"0 auto",background:"var(--card)",borderRadius:"24px 24px 0 0",padding:24}}>
       <div style={{width:36,height:4,borderRadius:2,background:"var(--border)",margin:"0 auto 16px"}}/>
       <div style={{textAlign:"center",marginBottom:18}}>
-        <div style={{fontSize:48,marginBottom:8}}>🛒</div>
+        <div style={{fontSize:48,marginBottom:8}}><Icon name="cart" size={18}/></div>
         <h3 style={{fontSize:18,fontWeight:800,marginBottom:4}}>Bienvenue dans votre panier !</h3>
         <p style={{fontSize:12,color:"var(--muted)"}}>Quelques astuces rapides</p>
       </div>
       {[
-        {icon:"👈",t:"Glisser pour supprimer",d:"Glissez un article vers la gauche pour le retirer du panier"},
-        {icon:"♡",t:"Sauvegarder pour plus tard",d:"Le cœur met de côté sans supprimer du panier"},
-        {icon:"🤝",t:"Commander en groupe",d:"Partagez avec vos amis et payez chacun votre part"},
-        {icon:"💳",t:"Paiement sécurisé",d:"Airtel, MTN, Orange Money ou cash à la livraison"},
+        {icon:"",t:"Glisser pour supprimer",d:"Glissez un article vers la gauche pour le retirer du panier"},
+        {icon:"",t:"Sauvegarder pour plus tard",d:"Le cœur met de côté sans supprimer du panier"},
+        {icon:"handshake",t:"Commander en groupe",d:"Partagez avec vos amis et payez chacun votre part"},
+        {icon:"creditCard",t:"Paiement sécurisé",d:"Airtel, MTN, Orange Money ou cash à la livraison"},
       ].map((it,i)=>(
         <div key={i} style={{display:"flex",gap:12,padding:"10px 0",borderBottom:i<3?"1px solid var(--border)":"none"}}>
           <div style={{fontSize:24}}>{it.icon}</div>
@@ -147,7 +148,7 @@ function CartScr({cart,setCart,go,appliedCoupon,setAppliedCoupon}){
           </div>
         </div>
       ))}
-      <button onClick={()=>{setShowTuto(false);try{localStorage.setItem("lk-cart-tutorial","1")}catch{}}} style={{width:"100%",marginTop:18,padding:14,borderRadius:14,border:"none",background:"#F97316",color:"#fff",fontSize:14,fontWeight:700,cursor:"pointer",fontFamily:"inherit"}}>J'ai compris ✨</button>
+      <button onClick={()=>{setShowTuto(false);try{localStorage.setItem("lk-cart-tutorial","1")}catch{}}} style={{width:"100%",marginTop:18,padding:14,borderRadius:14,border:"none",background:"#F97316",color:"#fff",fontSize:14,fontWeight:700,cursor:"pointer",fontFamily:"inherit"}}>J'ai compris <Icon name="sparkle" size={16}/></button>
     </div>
   </div>}
   </>);

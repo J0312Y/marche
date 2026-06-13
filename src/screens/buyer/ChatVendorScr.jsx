@@ -1,17 +1,18 @@
 import toast from "../../utils/toast";
 import { useState, useEffect, useRef } from "react";
 import { VENDOR_LOGO_DEFAULT } from "../../data/images";
+import Icon from "../../components/Icon";
 
 function ChatVendorScr({onBack,vendorName,vendorAvatar,vendor}){
   const now=()=>{const t=new Date();return `${t.getHours()}:${String(t.getMinutes()).padStart(2,"0")}`};
-  const vName=vendorName||vendor?.vendorName||vendor?.name||"Chez Mama Ngudi";const vAv=vendorAvatar||vendor?.vendorAvatar||vendor?.avatar||"🍽️";
+  const vName=vendorName||vendor?.vendorName||vendor?.name||"Chez Mama Ngudi";const vAv=vendorAvatar||vendor?.vendorAvatar||vendor?.avatar||"";
   const vInfo={name:vName,avatar:vAv,online:true,zone:"Bacongo",lastSeen:"En ligne"};
   const [msgs,setMsgs]=useState([]);
   const [inp,setInp]=useState("");const ref=useRef(null);const fileRef=useRef(null);const [typing,setTyping]=useState(false);
 
   useEffect(()=>{
     const timer=setTimeout(()=>{
-      setMsgs([{from:"bot",text:`Bienvenue chez ${vInfo.name} ! 🎉\nComment puis-je vous aider ?`,time:now(),isWelcome:true}]);
+      setMsgs([{from:"bot",text:`Bienvenue chez ${vInfo.name} ! \nComment puis-je vous aider ?`,time:now(),isWelcome:true}]);
     },600);
     return ()=>clearTimeout(timer);
   },[]);
@@ -22,16 +23,16 @@ function ChatVendorScr({onBack,vendorName,vendorAvatar,vendor}){
 
   const botResponses={
     "Horaires d'ouverture ?":"Nous sommes ouverts de 8h à 22h, 7j/7 ! ⏰",
-    "Vous livrez où ?":"Nous livrons dans tout Brazzaville ! Bacongo, Poto-Poto, Moungali, Ouenzé... 🚚",
-    "Un produit est disponible ?":"Bien sûr ! Quel produit cherchez-vous ? 🔍",
-    "Modes de paiement ?":"Nous acceptons Airtel Money, MTN MoMo et paiement à la livraison 💳",
+    "Vous livrez où ?":"Nous livrons dans tout Brazzaville ! Bacongo, Poto-Poto, Moungali, Ouenzé...",
+    "Un produit est disponible ?":"Bien sûr ! Quel produit cherchez-vous ? ",
+    "Modes de paiement ?":"Nous acceptons Airtel Money, MTN MoMo et paiement à la livraison",
   };
 
   const fallbackResponses=[
-    "Merci pour votre message ! Un membre de notre équipe vous répond bientôt. 😊",
-    "Bonne question ! Laissez-moi vérifier et je reviens vers vous. 🔍",
-    "Bien noté ! On s'en occupe. 👍",
-    "Merci de votre intérêt ! N'hésitez pas à passer commande. 🛍️",
+    "Merci pour votre message ! Un membre de notre équipe vous répond bientôt. ",
+    "Bonne question ! Laissez-moi vérifier et je reviens vers vous. ",
+    "Bien noté ! On s'en occupe. ",
+    "Merci de votre intérêt ! N'hésitez pas à passer commande. ️",
   ];
 
   const send=(text)=>{
@@ -50,16 +51,16 @@ function ChatVendorScr({onBack,vendorName,vendorAvatar,vendor}){
   const handleFileUpload=(e)=>{
     const file=e.target.files?.[0];
     if(!file)return;
-    if(file.size>5*1024*1024){toast.error("Fichier trop volumineux (max 5 Mo) ⚠️");return;}
+    if(file.size>5*1024*1024){toast.error("Fichier trop volumineux (max 5 Mo) ️");return;}
     const reader=new FileReader();
     reader.onload=()=>{
       const isImage=file.type.startsWith("image/");
-      setMsgs(p=>[...p,{from:"user",text:isImage?"":"📎 "+file.name,time:now(),
+      setMsgs(p=>[...p,{from:"user",text:isImage?"":" "+file.name,time:now(),
         attachment:{type:isImage?"image":"file",url:isImage?reader.result:null,name:file.name,size:(file.size/1024).toFixed(0)+" KB"}}]);
       setTyping(true);
       setTimeout(()=>{
         setTyping(false);
-        setMsgs(p=>[...p,{from:"bot",text:isImage?"Photo bien reçue ! 📸":"Document reçu, merci ! 📄",time:now()}]);
+        setMsgs(p=>[...p,{from:"bot",text:isImage?"Photo bien reçue !":"Document reçu, merci ! ",time:now()}]);
       },1000);
     };
     reader.readAsDataURL(file);
@@ -78,12 +79,12 @@ function ChatVendorScr({onBack,vendorName,vendorAvatar,vendor}){
       <div className="ch-info">
         <h4>{vInfo.name}</h4>
         <p style={{display:"flex",alignItems:"center",gap:4,fontSize:11,color:"var(--muted)"}}>
-          <span style={{color:vInfo.online?"#10B981":"var(--muted)",fontWeight:600}}>{vInfo.online?"🟢 En ligne":"⚪ Hors ligne"}</span>
+          <span style={{color:vInfo.online?"#10B981":"var(--muted)",fontWeight:600}}>{vInfo.online?"En ligne":" Hors ligne"}</span>
           <span>·</span>
-          <span>📍 {vInfo.zone}</span>
+          <span><Icon name="location" size={16}/>{" "}{vInfo.zone}</span>
         </p>
       </div>
-      <button className="ch-call" onClick={()=>window.location.href="tel:+242064663469"}>📞</button>
+      <button className="ch-call" onClick={()=>window.location.href="tel:+242064663469"}><Icon name="phone" size={18}/></button>
     </div>
 
     <div className="chat-body" ref={ref}>
@@ -96,7 +97,7 @@ function ChatVendorScr({onBack,vendorName,vendorAvatar,vendor}){
         )}
         {m.attachment&&m.attachment.type==="file"&&(
           <div style={{display:"flex",alignItems:"center",gap:8,padding:"8px 12px",background:m.from==="user"?"rgba(255,255,255,.15)":"rgba(0,0,0,.05)",borderRadius:10,marginBottom:4}}>
-            <span style={{fontSize:20}}>📄</span>
+            <span style={{fontSize:20}}></span>
             <div><div style={{fontSize:12,fontWeight:600}}>{m.attachment.name}</div><div style={{fontSize:10,opacity:.7}}>{m.attachment.size}</div></div>
           </div>
         )}
@@ -116,16 +117,16 @@ function ChatVendorScr({onBack,vendorName,vendorAvatar,vendor}){
     </div>
 
     <div className="chat-input">
-      <button className="chat-attach" onClick={()=>fileRef.current?.click()}>📎</button>
+      <button className="chat-attach" onClick={()=>fileRef.current?.click()}></button>
       <input ref={fileRef} type="file" accept="image/*,.pdf,.doc,.docx" style={{display:"none"}} onChange={handleFileUpload}/>
       <input placeholder="Écrire..." value={inp} onChange={e=>setInp(e.target.value)} onKeyDown={e=>e.key==="Enter"&&send()}/>
-      <button onClick={()=>send()}>➤</button>
+      <button onClick={()=>send()}></button>
     </div>
 
     {viewImg&&(
       <div onClick={()=>setViewImg(null)} style={{position:"fixed",inset:0,background:"rgba(0,0,0,.85)",zIndex:100,display:"flex",alignItems:"center",justifyContent:"center",cursor:"pointer",padding:20}}>
         <img src={viewImg} alt="" style={{maxWidth:"100%",maxHeight:"80vh",borderRadius:12,objectFit:"contain"}}/>
-        <button style={{position:"absolute",top:20,right:20,width:40,height:40,borderRadius:"50%",background:"rgba(255,255,255,.2)",border:"none",color:"#fff",fontSize:20,cursor:"pointer"}} onClick={()=>setViewImg?.(null)}>✕</button>
+        <button style={{position:"absolute",top:20,right:20,width:40,height:40,borderRadius:"50%",background:"rgba(255,255,255,.2)",border:"none",color:"#fff",fontSize:20,cursor:"pointer"}} onClick={()=>setViewImg?.(null)}></button>
       </div>
     )}
   </>);

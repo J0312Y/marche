@@ -31,11 +31,11 @@ function QRScanScr({ onBack, go }) {
     if (!parsed) { toast.error("Code non reconnu"); return; }
     if (parsed.type === "product") {
       const p = P.find(x => x.id === parsed.id);
-      if (p) { setFoundProduct(p); setScanned(true); toast.success("Produit trouvé ! 🎯"); }
+      if (p) { setFoundProduct(p); setScanned(true); toast.success("Produit trouvé !"); }
       else toast.error("Produit introuvable");
     } else if (parsed.type === "vendor") {
       const v = VENDORS.find(x => x.id === parsed.id);
-      if (v) { setFoundVendor(v); setScanned(true); toast.success("Vendeur trouvé ! 🏪"); }
+      if (v) { setFoundVendor(v); setScanned(true); toast.success("Vendeur trouvé !"); }
       else toast.error("Vendeur introuvable");
     } else {
       toast.info("Recherche du produit...");
@@ -68,7 +68,7 @@ function QRScanScr({ onBack, go }) {
           <Icon name="arrow_left" size={20} color="#fff" />
         </button>
         <h2 style={{ fontSize: 16, fontWeight: 700, color: "#fff" }}>Scanner</h2>
-        <button onClick={() => toast.info("Flash activé")} style={{ width: 38, height: 38, borderRadius: 12, background: "rgba(255,255,255,0.1)", border: "none", cursor: "pointer", color: "#fff", fontSize: 16 }}>⚡</button>
+        <button onClick={() => toast.info("Flash activé")} style={{ width: 38, height: 38, borderRadius: 12, background: "rgba(255,255,255,0.1)", border: "none", cursor: "pointer", color: "#fff", fontSize: 16 }}><Icon name="lightning" size={18}/></button>
       </div>
 
       {!scanned && (
@@ -108,7 +108,7 @@ function QRScanScr({ onBack, go }) {
           </>
         ) : foundProduct ? (
           <div onClick={() => { onBack(); setTimeout(() => go("detail", foundProduct), 100); }} style={{ width: "100%", maxWidth: 320, background: "#fff", borderRadius: 20, padding: 20, cursor: "pointer", textAlign: "center" }}>
-            <div style={{ fontSize: 48, marginBottom: 10 }}>✅</div>
+            <div style={{ fontSize: 48, marginBottom: 10 }}><Icon name="check_circle" size={18}/></div>
             <h3 style={{ fontSize: 18, fontWeight: 800, marginBottom: 4 }}>Produit trouvé !</h3>
             <div style={{ fontSize: 11, color: "var(--muted)", marginBottom: 16, fontFamily: "monospace" }}>{generateProductCode(foundProduct.id)}</div>
             <div style={{ background: "var(--light)", borderRadius: 14, padding: 14, display: "flex", gap: 12, alignItems: "center" }}>
@@ -128,7 +128,7 @@ function QRScanScr({ onBack, go }) {
           </div>
         ) : foundVendor ? (
           <div onClick={() => { onBack(); setTimeout(() => go("vendor", foundVendor), 100); }} style={{ width: "100%", maxWidth: 320, background: "#fff", borderRadius: 20, padding: 20, cursor: "pointer", textAlign: "center" }}>
-            <div style={{ fontSize: 48, marginBottom: 10 }}>🏪</div>
+            <div style={{ fontSize: 48, marginBottom: 10 }}><Icon name="store" size={18}/></div>
             <h3 style={{ fontSize: 18, fontWeight: 800, marginBottom: 4 }}>Vendeur trouvé !</h3>
             <div style={{ fontSize: 14, color: "var(--text)", marginTop: 8 }}>{foundVendor.name}</div>
             <button onClick={() => { onBack(); setTimeout(() => go("vendor", foundVendor), 100); }} style={{ marginTop: 16, padding: "12px 24px", borderRadius: 12, border: "none", background: "#F97316", color: "#fff", fontSize: 13, fontWeight: 700, cursor: "pointer", fontFamily: "inherit" }}>Voir la boutique</button>
@@ -136,7 +136,7 @@ function QRScanScr({ onBack, go }) {
         ) : null}
       </div>
 
-      {!scanned && <div style={{ padding: 16, color: "rgba(255,255,255,0.5)", fontSize: 11, textAlign: "center" }}>💡 Astuce : chaque produit Lamuka a un QR code unique</div>}
+      {!scanned && <div style={{ padding: 16, color: "rgba(255,255,255,0.5)", fontSize: 11, textAlign: "center" }}><Icon name="info" size={16}/>{" "}Astuce : chaque produit Lamuka a un QR code unique</div>}
     </div>
   );
 }

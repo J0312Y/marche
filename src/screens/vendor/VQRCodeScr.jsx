@@ -1,9 +1,10 @@
 import toast from "../../utils/toast";
+import Icon from "../../components/Icon";
 function VQRCodeScr({onBack}){
   const url="https://lamuka.market/shop/mode-afrique";
-  const copy=()=>{try{navigator.clipboard.writeText(url);toast.success("Lien copié 📋")}catch(e){toast.info(url)}};
+  const copy=()=>{try{navigator.clipboard.writeText(url);toast.success("Lien copié")}catch(e){toast.info(url)}};
   return(<div className="scr" style={{padding:16,paddingBottom:20}}>
-    <div className="appbar" style={{padding:0,marginBottom:10}}><button onClick={onBack}>←</button><h2>📱 QR Code</h2><div style={{width:38}}/></div>
+    <div className="appbar" style={{padding:0,marginBottom:10}}><button onClick={onBack}>←</button><h2><Icon name="phone" size={16}/>{" "}QR Code</h2><div style={{width:38}}/></div>
     <div style={{textAlign:"center",padding:20}}>
       <p style={{fontSize:13,color:"var(--muted)",marginBottom:20}}>Les clients scannent ce QR code pour accéder directement à votre boutique.</p>
       {/* SVG QR Code placeholder */}
@@ -21,13 +22,13 @@ function VQRCodeScr({onBack}){
       <h3 style={{fontSize:16,fontWeight:700,marginBottom:4}}>Mode Afrique</h3>
       <p style={{fontSize:12,color:"var(--muted)",marginBottom:16}}>{url}</p>
       <div style={{display:"flex",gap:8,maxWidth:280,margin:"0 auto"}}>
-        <button onClick={copy} style={{flex:1,padding:12,borderRadius:12,border:"1px solid var(--border)",background:"var(--card)",fontSize:12,fontWeight:600,cursor:"pointer",fontFamily:"inherit",color:"var(--text)"}}>📋 Copier le lien</button>
-        <button onClick={()=>toast.success("QR téléchargé 📥")} style={{flex:1,padding:12,borderRadius:12,border:"none",background:"#F97316",color:"#fff",fontSize:12,fontWeight:700,cursor:"pointer",fontFamily:"inherit"}}>📥 Télécharger</button>
+        <button onClick={copy} style={{flex:1,padding:12,borderRadius:12,border:"1px solid var(--border)",background:"var(--card)",fontSize:12,fontWeight:600,cursor:"pointer",fontFamily:"inherit",color:"var(--text)"}}><Icon name="document" size={16}/>{" "}Copier le lien</button>
+        <button onClick={()=>toast.success("QR téléchargé ")} style={{flex:1,padding:12,borderRadius:12,border:"none",background:"#F97316",color:"#fff",fontSize:12,fontWeight:700,cursor:"pointer",fontFamily:"inherit"}}> Télécharger</button>
       </div>
     </div>
     <div style={{padding:14,background:"var(--light)",borderRadius:14,margin:"10px 0"}}>
-      <div style={{fontSize:13,fontWeight:700,marginBottom:6}}>💡 Utilisations</div>
-      {[["🏪","Imprimez et collez à l'entrée de votre commerce"],["📦","Ajoutez sur vos emballages et sacs"],["📱","Partagez sur vos réseaux sociaux"],["🧾","Intégrez sur vos cartes de visite"]].map(([i,t])=><div key={t} style={{display:"flex",gap:8,padding:"4px 0",fontSize:12,color:"var(--sub)"}}><span>{i}</span><span>{t}</span></div>)}
+      <div style={{fontSize:13,fontWeight:700,marginBottom:6}}><Icon name="info" size={16}/>{" "}Utilisations</div>
+      {[["","Imprimez et collez à l'entrée de votre commerce"],["","Ajoutez sur vos emballages et sacs"],["","Partagez sur vos réseaux sociaux"],["","Intégrez sur vos cartes de visite"]].map(([i,t])=><div key={t} style={{display:"flex",gap:8,padding:"4px 0",fontSize:12,color:"var(--sub)"}}><span>{i}</span><span>{t}</span></div>)}
     </div>
   </div>);
 }

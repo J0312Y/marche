@@ -1,14 +1,15 @@
 import { useState, useEffect } from "react";
+import Icon from "./Icon";
 
 /**
  * PermissionSheet — bottom sheet asking for permission before accessing device features
  * Usage: <PermissionSheet type="location" onAllow={()=>{}} onDeny={()=>{}} />
  */
 const PERMS = {
-  location: { icon: "📍", title: "Localisation", desc: "Pour trouver les boutiques et livreurs près de vous, et estimer les frais de livraison.", benefit: "Livraison plus rapide et précise" },
-  camera: { icon: "📸", title: "Appareil photo", desc: "Pour scanner les QR codes, prendre des photos de vos produits et documents.", benefit: "Scanner et photographier facilement" },
-  notifications: { icon: "🔔", title: "Notifications", desc: "Pour suivre vos commandes en temps réel, recevoir les promos et offres spéciales.", benefit: "Ne manquez aucune commande" },
-  microphone: { icon: "🎙️", title: "Microphone", desc: "Pour envoyer des messages vocaux dans le chat.", benefit: "Communiquer plus rapidement" },
+  location: { icon: "", title: "Localisation", desc: "Pour trouver les boutiques et livreurs près de vous, et estimer les frais de livraison.", benefit: "Livraison plus rapide et précise" },
+  camera: { icon: "", title: "Appareil photo", desc: "Pour scanner les QR codes, prendre des photos de vos produits et documents.", benefit: "Scanner et photographier facilement" },
+  notifications: { icon: "", title: "Notifications", desc: "Pour suivre vos commandes en temps réel, recevoir les promos et offres spéciales.", benefit: "Ne manquez aucune commande" },
+  microphone: { icon: "️", title: "Microphone", desc: "Pour envoyer des messages vocaux dans le chat.", benefit: "Communiquer plus rapidement" },
 };
 
 function PermissionSheet({ type, onAllow, onDeny }) {
@@ -27,7 +28,7 @@ function PermissionSheet({ type, onAllow, onDeny }) {
         </div>
 
         <div style={{ padding: "10px 14px", background: "rgba(249,115,22,0.04)", borderRadius: 12, border: "1px solid rgba(249,115,22,0.12)", marginBottom: 16, display: "flex", alignItems: "center", gap: 8 }}>
-          <span style={{ fontSize: 16 }}>✨</span>
+          <span style={{ fontSize: 16 }}><Icon name="sparkle" size={18}/></span>
           <span style={{ fontSize: 12, color: "var(--sub)", fontWeight: 500 }}>{perm.benefit}</span>
         </div>
 

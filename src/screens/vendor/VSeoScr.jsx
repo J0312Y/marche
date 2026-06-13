@@ -1,5 +1,6 @@
 import { useState } from "react";
 import toast from "../../utils/toast";
+import Icon from "../../components/Icon";
 
 const PRODUCTS=[
   {id:1,name:"Galaxy A54",slug:"galaxy-a54",title:"Samsung Galaxy A54 5G 128GB | Tech Congo",desc:"Achetez le Samsung Galaxy A54 5G à Brazzaville. Livraison rapide.",score:85},
@@ -18,16 +19,16 @@ function VSeoScr({onBack}){
   const edit=(p)=>{setEditing(p);setTitle(p.title);setDesc(p.desc);setSlug(p.slug)};
   const save=()=>{
     setProducts(prev=>prev.map(p=>p.id===editing.id?{...p,title,desc,slug,score:title&&desc?90:title||desc?60:20}:p));
-    setEditing(null);toast.success("SEO mis à jour ✅");
+    setEditing(null);toast.success("SEO mis à jour");
   };
   const avgScore=Math.round(products.reduce((s,p)=>s+p.score,0)/products.length);
   const scoreColor=(s)=>s>=70?"#10B981":s>=40?"#F59E0B":"#EF4444";
 
   return(<div className="scr" style={{padding:16,paddingBottom:20}}>
-    <div className="appbar" style={{padding:0,marginBottom:12}}><button onClick={editing?()=>setEditing(null):onBack}>←</button><h2>🌍 SEO</h2><div style={{width:38}}/></div>
+    <div className="appbar" style={{padding:0,marginBottom:12}}><button onClick={editing?()=>setEditing(null):onBack}>←</button><h2> SEO</h2><div style={{width:38}}/></div>
 
     {editing?<>
-      <div style={{fontSize:16,fontWeight:700,marginBottom:14}}>✏️ {editing.name}</div>
+      <div style={{fontSize:16,fontWeight:700,marginBottom:14}}><Icon name="edit" size={16}/>{" "}{editing.name}</div>
       <div className="field"><label>Meta Title</label><input value={title} onChange={e=>setTitle(e.target.value)} placeholder={editing.name+" | Ma Boutique | Lamuka Market"}/><div style={{fontSize:10,color:title.length>60?"#EF4444":"var(--muted)",marginTop:4}}>{title.length}/60 caractères</div></div>
       <div className="field"><label>Meta Description</label><textarea rows={3} value={desc} onChange={e=>setDesc(e.target.value)} placeholder="Description courte pour Google..." style={{width:"100%",padding:10,borderRadius:12,border:"1px solid var(--border)",background:"var(--light)",fontSize:13,fontFamily:"inherit",color:"var(--text)",resize:"none"}}/><div style={{fontSize:10,color:desc.length>160?"#EF4444":"var(--muted)",marginTop:4}}>{desc.length}/160 caractères</div></div>
       <div className="field"><label>URL Slug</label>
@@ -60,7 +61,7 @@ function VSeoScr({onBack}){
           <div style={{width:40,height:40,borderRadius:10,background:scoreColor(p.score)+"12",display:"flex",alignItems:"center",justifyContent:"center",fontSize:14,fontWeight:800,color:scoreColor(p.score),flexShrink:0}}>{p.score}</div>
           <div style={{flex:1}}>
             <div style={{fontSize:13,fontWeight:600}}>{p.name}</div>
-            <div style={{fontSize:10,color:"var(--muted)"}}>{p.title?"✅ Title + Desc configurés":"⚠️ SEO non configuré"}</div>
+            <div style={{fontSize:10,color:"var(--muted)"}}>{p.title?"Title + Desc configurés":"️ SEO non configuré"}</div>
           </div>
           <span style={{color:"var(--muted)"}}>›</span>
         </div>

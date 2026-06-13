@@ -1,5 +1,6 @@
 import { useState } from "react";
 import toast from "../../utils/toast";
+import Icon from "../../components/Icon";
 
 const THEMES=[
   {id:"modern",name:"Moderne",preview:"linear-gradient(135deg,#1a1a2e,#16213e)",accent:"#F97316",font:"Inter",desc:"Épuré et professionnel"},
@@ -14,7 +15,7 @@ function VThemesScr({onBack}){
   const [preview,setPreview]=useState(null);
 
   return(<div className="scr" style={{padding:16,paddingBottom:20}}>
-    <div className="appbar" style={{padding:0,marginBottom:12}}><button onClick={onBack}>←</button><h2>🌟 Thèmes</h2><div style={{width:38}}/></div>
+    <div className="appbar" style={{padding:0,marginBottom:12}}><button onClick={onBack}>←</button><h2><Icon name="star_full" size={16}/>{" "}Thèmes</h2><div style={{width:38}}/></div>
     <p style={{fontSize:12,color:"var(--muted)",marginBottom:14}}>Choisissez le thème visuel de votre vitrine en ligne</p>
 
     {THEMES.map(t=>(
@@ -22,7 +23,7 @@ function VThemesScr({onBack}){
         <div style={{display:"flex",gap:12,alignItems:"center"}}>
           <div style={{width:60,height:40,borderRadius:8,background:t.preview,flexShrink:0}}/>
           <div style={{flex:1}}>
-            <div style={{fontSize:14,fontWeight:700}}>{t.name} {active===t.id&&<span style={{fontSize:10,color:"#10B981",fontWeight:600}}>✅ Actif</span>}</div>
+            <div style={{fontSize:14,fontWeight:700}}>{t.name} {active===t.id&&<span style={{fontSize:10,color:"#10B981",fontWeight:600}}><Icon name="check_circle" size={16}/>{" "}Actif</span>}</div>
             <div style={{fontSize:11,color:"var(--muted)"}}>{t.desc} · Police: {t.font}</div>
           </div>
         </div>
@@ -38,7 +39,7 @@ function VThemesScr({onBack}){
         <div style={{padding:16}}>
           <div style={{display:"flex",gap:8}}>
             <button onClick={()=>setPreview(null)} style={{flex:1,padding:12,borderRadius:12,border:"1px solid var(--border)",background:"var(--card)",fontSize:13,fontWeight:600,cursor:"pointer",fontFamily:"inherit"}}>Fermer</button>
-            <button onClick={()=>{setActive(preview.id);setPreview(null);toast.success("Thème "+preview.name+" appliqué ✅")}} style={{flex:1,padding:12,borderRadius:12,border:"none",background:"#F97316",color:"#fff",fontSize:13,fontWeight:700,cursor:"pointer",fontFamily:"inherit"}}>Appliquer</button>
+            <button onClick={()=>{setActive(preview.id);setPreview(null);toast.success("Thème "+preview.name+" appliqué")}} style={{flex:1,padding:12,borderRadius:12,border:"none",background:"#F97316",color:"#fff",fontSize:13,fontWeight:700,cursor:"pointer",fontFamily:"inherit"}}>Appliquer</button>
           </div>
         </div>
       </div>

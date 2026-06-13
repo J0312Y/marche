@@ -5,6 +5,7 @@ import Img from "../../components/Img";
 import BackButton from "../../components/BackButton";
 import { fmt, disc, getVendorPromo } from "../../utils/helpers";
 import { shareVendor } from "../../utils/share";
+import Icon from "../../components/Icon";
 
 const MOCK_FOLLOWERS=[
   {name:"Marie Koumba",avatar:"https://images.unsplash.com/photo-1531123897727-8f129e1688ce?w=80&h=80&fit=crop&crop=face",since:"Jan 2026",zone:"Bacongo"},
@@ -36,7 +37,7 @@ function VendorScr({vendor:vProp,go,onBack}){
   const [viewImg,setViewImg]=useState(null);
   const vpAll=P.filter(p=>p.vendor===v.name);
   const vp=menuTab?vpAll.filter(p=>p.menuCat===menuTab):vpAll;
-  const toggleFollow=()=>{setFollowing(f=>!f);setFC(c=>following?c-1:c+1);toast.success(following?"Désabonné":"Abonné ✅")};
+  const toggleFollow=()=>{setFollowing(f=>!f);setFC(c=>following?c-1:c+1);toast.success(following?"Désabonné":"Abonné")};
 
   const avgRating=MOCK_REVIEWS.reduce((s,r)=>s+r.rating,0)/MOCK_REVIEWS.length;
 
@@ -46,20 +47,20 @@ function VendorScr({vendor:vProp,go,onBack}){
       {v.cover&&<div style={{position:"absolute",inset:0,background:"linear-gradient(transparent 30%,rgba(0,0,0,0.7))"}}/>}
       <div style={{position:"absolute",top:12,left:12,zIndex:2}}><BackButton onClick={onBack} /></div>
       <div className="vp-av" style={v.logo?{overflow:"hidden",padding:0}:{}}>{v.logo?<img src={v.logo} style={{width:"100%",height:"100%",objectFit:"cover"}} alt=""/>:v.avatar}</div>
-      <h2 style={{fontSize:20,fontWeight:700,display:"flex",alignItems:"center",justifyContent:"center",gap:6,position:"relative",zIndex:1}}>{v.name}{v.verified&&<span style={{fontSize:14}}>✓</span>}</h2>
-      <p style={{fontSize:12,opacity:.7,marginTop:3,position:"relative",zIndex:1}}>📍 {v.loc}</p>
+      <h2 style={{fontSize:20,fontWeight:700,display:"flex",alignItems:"center",justifyContent:"center",gap:6,position:"relative",zIndex:1}}>{v.name}{v.verified&&<span style={{fontSize:14}}></span>}</h2>
+      <p style={{fontSize:12,opacity:.7,marginTop:3,position:"relative",zIndex:1}}><Icon name="location" size={16}/>{" "}{v.loc}</p>
     </div>
 
     {/* Stats — clickable to switch tabs */}
     <div className="vp-stats">
       <div className={`vps r`} onClick={()=>setTab("reviews")} style={{cursor:"pointer",borderBottom:tab==="reviews"?"2px solid #F97316":"2px solid transparent",transition:"all .2s"}}>
-        <div className="vsi">⭐</div><b>{v.rating||avgRating.toFixed(1)}</b><span>Note</span>
+        <div className="vsi"><Icon name="star_full" size={18}/></div><b>{v.rating||avgRating.toFixed(1)}</b><span>Note</span>
       </div>
       <div className={`vps p`} onClick={()=>setTab("products")} style={{cursor:"pointer",borderBottom:tab==="products"?"2px solid #F97316":"2px solid transparent",transition:"all .2s"}}>
-        <div className="vsi">🛍️</div><b>{vp.length||v.products}</b><span>Produits</span>
+        <div className="vsi"><Icon name="package" size={18}/></div><b>{vp.length||v.products}</b><span>Produits</span>
       </div>
       <div className={`vps f`} onClick={()=>setTab("followers")} style={{cursor:"pointer",borderBottom:tab==="followers"?"2px solid #F97316":"2px solid transparent",transition:"all .2s"}}>
-        <div className="vsi">👥</div><b>{fCount}</b><span>Abonnés</span>
+        <div className="vsi"></div><b>{fCount}</b><span>Abonnés</span>
       </div>
     </div>
 
@@ -69,9 +70,9 @@ function VendorScr({vendor:vProp,go,onBack}){
     {/* Restaurant info bar */}
     {isFood&&<div style={{padding:"0 16px",marginBottom:14}}>
       <div style={{display:"flex",gap:6,flexWrap:"wrap",marginBottom:8}}>
-        <span style={{padding:"4px 10px",borderRadius:8,background:v.isOpen?"rgba(16,185,129,0.08)":"rgba(239,68,68,0.08)",color:v.isOpen?"#10B981":"#EF4444",fontSize:11,fontWeight:700}}>{v.isOpen?"🟢 Ouvert":"🔴 Fermé"}{v.hours&&" · "+v.hours}</span>
-        {v.eta&&<span style={{padding:"4px 10px",borderRadius:8,background:"var(--light)",fontSize:11,fontWeight:600,color:"var(--text)"}}>🕐 {v.eta}</span>}
-        {v.deliveryFee!==undefined&&<span style={{padding:"4px 10px",borderRadius:8,background:"var(--light)",fontSize:11,fontWeight:600,color:"var(--text)"}}>🚚 {v.deliveryFee===0?"Gratuit":fmt(v.deliveryFee)}</span>}
+        <span style={{padding:"4px 10px",borderRadius:8,background:v.isOpen?"rgba(16,185,129,0.08)":"rgba(239,68,68,0.08)",color:v.isOpen?"#10B981":"#EF4444",fontSize:11,fontWeight:700}}>{v.isOpen?"Ouvert":"Fermé"}{v.hours&&" · "+v.hours}</span>
+        {v.eta&&<span style={{padding:"4px 10px",borderRadius:8,background:"var(--light)",fontSize:11,fontWeight:600,color:"var(--text)"}}> {v.eta}</span>}
+        {v.deliveryFee!==undefined&&<span style={{padding:"4px 10px",borderRadius:8,background:"var(--light)",fontSize:11,fontWeight:600,color:"var(--text)"}}><Icon name="truck" size={16}/>{" "}{v.deliveryFee===0?"Gratuit":fmt(v.deliveryFee)}</span>}
         {v.minOrder&&<span style={{padding:"4px 10px",borderRadius:8,background:"var(--light)",fontSize:11,fontWeight:600,color:"var(--text)"}}>Min. {fmt(v.minOrder)}</span>}
       </div>
 
@@ -84,8 +85,8 @@ function VendorScr({vendor:vProp,go,onBack}){
 
     {/* Buttons */}
     <div className="vp-btns">
-      <button className="vb1" style={following?{background:"var(--card)",color:"#F97316",border:"1px solid #F97316"}:{}} onClick={toggleFollow}>{following?"✓ Suivi":"+ Suivre"}</button>
-      <button className="vb2" onClick={()=>go("chatVendor",v)}>💬 Contacter</button><button className="vb2" style={{flex:"none",width:44}} onClick={()=>shareVendor(v)}>📤</button>
+      <button className="vb1" style={following?{background:"var(--card)",color:"#F97316",border:"1px solid #F97316"}:{}} onClick={toggleFollow}>{following?" Suivi":"+ Suivre"}</button>
+      <button className="vb2" onClick={()=>go("chatVendor",v)}><Icon name="chat" size={16}/>{" "}Contacter</button><button className="vb2" style={{flex:"none",width:44}} onClick={()=>shareVendor(v)}></button>
     </div>
 
     {/* Vendor promo banner */}
@@ -95,12 +96,12 @@ function VendorScr({vendor:vProp,go,onBack}){
         <div style={{fontSize:14,fontWeight:700,color:"#F59E0B"}}>{v.promo.name}</div>
         <div style={{fontSize:11,color:"var(--muted)"}}>Sur tous les articles · Jusqu'au {v.promo.ends}</div>
       </div>
-      <span style={{fontSize:20}}>🏷️</span>
+      <span style={{fontSize:20}}><Icon name="tag" size={18}/></span>
     </div>}
 
     {/* Tab bar */}
     <div style={{display:"flex",borderBottom:"1px solid var(--border)",margin:"0 20px 14px"}}>
-      {[["products","🛍️ Produits"],["reviews","⭐ Avis"],["followers","👥 Abonnés"]].map(([k,l])=>(
+      {[["products","️ Produits"],["reviews","Avis"],["followers"," Abonnés"]].map(([k,l])=>(
         <button key={k} onClick={()=>setTab(k)} style={{flex:1,padding:"10px 0",border:"none",borderBottom:tab===k?"2px solid #F97316":"2px solid transparent",background:"transparent",fontSize:12,fontWeight:tab===k?700:500,color:tab===k?"#F97316":"var(--muted)",cursor:"pointer",fontFamily:"inherit",transition:"all .2s"}}>{l}</button>
       ))}
     </div>
@@ -108,8 +109,8 @@ function VendorScr({vendor:vProp,go,onBack}){
     {/* ═══ PRODUCTS TAB (default) ═══ */}
     {tab==="products"&&<>
       <div style={{padding:"0 16px",marginBottom:10}}><div style={{fontSize:12,color:"var(--muted)"}}>{vp.length}{menuTab?" (filtré)":""} article{vp.length>1?"s":""} disponible{vp.length>1?"s":""}</div></div>
-      <div className="pgrid stagger-grid">{vp.map(p=>{const vpromo=getVendorPromo(p,VENDORS);return(<div key={p.id} className="pcard" onClick={()=>go("detail",p)}><div className="pimg"><Img src={p.photo} emoji={p.img} style={{width:"100%",height:"100%"}} fit="cover"/>{vpromo&&<span className="badge">-{vpromo.promoDiscount}%</span>}{!vpromo&&disc(p)>0&&<span className="badge">-{disc(p)}%</span>}</div><div className="pbody"><h4>{p.name}</h4><div className="pp">{vpromo?<><span style={{color:"#F97316"}}>{fmt(vpromo.promoPrice)}</span><span className="po">{fmt(p.price)}</span></>:<>{fmt(p.price)}</>}</div><div className="pr">⭐ {p.rating}</div></div></div>)})}</div>
-      {vp.length===0&&<div style={{textAlign:"center",padding:"40px 0"}}><div style={{fontSize:36}}>📦</div><div style={{fontSize:13,color:"var(--muted)",marginTop:8}}>Aucun article pour le moment</div></div>}
+      <div className="pgrid stagger-grid">{vp.map(p=>{const vpromo=getVendorPromo(p,VENDORS);return(<div key={p.id} className="pcard" onClick={()=>go("detail",p)}><div className="pimg"><Img src={p.photo} emoji={p.img} style={{width:"100%",height:"100%"}} fit="cover"/>{vpromo&&<span className="badge">-{vpromo.promoDiscount}%</span>}{!vpromo&&disc(p)>0&&<span className="badge">-{disc(p)}%</span>}</div><div className="pbody"><h4>{p.name}</h4><div className="pp">{vpromo?<><span style={{color:"#F97316"}}>{fmt(vpromo.promoPrice)}</span><span className="po">{fmt(p.price)}</span></>:<>{fmt(p.price)}</>}</div><div className="pr"><Icon name="star_full" size={16}/>{" "}{p.rating}</div></div></div>)})}</div>
+      {vp.length===0&&<div style={{textAlign:"center",padding:"40px 0"}}><div style={{fontSize:36}}><Icon name="package" size={18}/></div><div style={{fontSize:13,color:"var(--muted)",marginTop:8}}>Aucun article pour le moment</div></div>}
     </>}
 
     {/* ═══ REVIEWS TAB ═══ */}
@@ -117,7 +118,7 @@ function VendorScr({vendor:vProp,go,onBack}){
       {/* Rating summary */}
       <div style={{textAlign:"center",marginBottom:14}}>
         <div style={{fontSize:36,fontWeight:700}}>{avgRating.toFixed(1)}</div>
-        <div style={{fontSize:16,color:"#F59E0B",marginBottom:2}}>{"★".repeat(Math.floor(avgRating))}{"☆".repeat(5-Math.floor(avgRating))}</div>
+        <div style={{fontSize:16,color:"#F59E0B",marginBottom:2}}>{"".repeat(Math.floor(avgRating))}{"".repeat(5-Math.floor(avgRating))}</div>
         <div style={{fontSize:12,color:"var(--muted)"}}>{MOCK_REVIEWS.length} avis vérifiés</div>
       </div>
 
@@ -128,7 +129,7 @@ function VendorScr({vendor:vProp,go,onBack}){
             <div style={{fontSize:13,fontWeight:700}}>{r.name}</div>
             <div style={{fontSize:11,color:"var(--muted)"}}>{r.date} · {r.product}</div>
           </div>
-          <div style={{fontSize:12,color:"#F59E0B"}}>{"★".repeat(r.rating)}{"☆".repeat(5-r.rating)}</div>
+          <div style={{fontSize:12,color:"#F59E0B"}}>{"".repeat(r.rating)}{"".repeat(5-r.rating)}</div>
         </div>
         <p style={{fontSize:13,color:"var(--sub)",lineHeight:1.5,margin:0}}>{r.text}</p>
         {r.photos&&r.photos.length>0&&<div style={{display:"flex",gap:6,marginTop:8}}>
@@ -146,7 +147,7 @@ function VendorScr({vendor:vProp,go,onBack}){
             <img src={f.avatar} style={{width:"100%",height:"100%",objectFit:"cover"}} alt=""/>
           </div>
           <div style={{fontSize:13,fontWeight:700}}>{f.name}</div>
-          <div style={{fontSize:10,color:"var(--muted)",marginTop:2}}>📍 {f.zone}</div>
+          <div style={{fontSize:10,color:"var(--muted)",marginTop:2}}><Icon name="location" size={16}/>{" "}{f.zone}</div>
           <div style={{fontSize:10,color:"var(--muted)",marginTop:1}}>Depuis {f.since}</div>
           <div style={{display:"flex",alignItems:"center",justifyContent:"center",gap:4,marginTop:6}}>
             <div style={{width:6,height:6,borderRadius:"50%",background:"#10B981"}}/>

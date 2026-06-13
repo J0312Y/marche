@@ -1,4 +1,5 @@
 /**
+import Icon from "./Icon";
  * Badge - Pastille de réduction
  * @param {number} discount - Pourcentage (ex: 15)
  * @param {string} text - Texte personnalisé (si pas discount)

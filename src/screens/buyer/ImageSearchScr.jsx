@@ -2,6 +2,7 @@ import { useState } from "react";
 import { useData } from "../../hooks";
 import Img from "../../components/Img";
 import { fmt } from "../../utils/helpers";
+import Icon from "../../components/Icon";
 
 function ImageSearchScr({onBack,go}){
   const { P } = useData();
@@ -23,11 +24,11 @@ function ImageSearchScr({onBack,go}){
   };
 
   return(<div className="scr" style={{padding:16,paddingBottom:20}}>
-    <div className="appbar" style={{padding:0,marginBottom:12}}><button onClick={onBack}>←</button><h2>🔍 Recherche par image</h2><div style={{width:38}}/></div>
+    <div className="appbar" style={{padding:0,marginBottom:12}}><button onClick={onBack}>←</button><h2> Recherche par image</h2><div style={{width:38}}/></div>
 
     {!photo?<>
       <div onClick={()=>document.getElementById("img-search-upload")?.click()} style={{padding:40,background:"var(--card)",border:"2px dashed var(--border)",borderRadius:20,textAlign:"center",cursor:"pointer"}}>
-        <div style={{fontSize:48,marginBottom:12}}>📷</div>
+        <div style={{fontSize:48,marginBottom:12}}><Icon name="camera" size={18}/></div>
         <div style={{fontSize:15,fontWeight:700}}>Prenez une photo</div>
         <div style={{fontSize:12,color:"var(--muted)",marginTop:4}}>ou choisissez dans votre galerie</div>
       </div>
@@ -40,7 +41,7 @@ function ImageSearchScr({onBack,go}){
           <div style={{width:32,height:32,border:"3px solid rgba(255,255,255,.3)",borderTopColor:"#fff",borderRadius:"50%",animation:"spin 1s linear infinite"}}/>
           <div style={{color:"#fff",fontSize:12,fontWeight:600,marginTop:8}}>Recherche en cours...</div>
         </div>}
-        <button onClick={()=>{setPhoto(null);setResults(null)}} style={{position:"absolute",top:8,right:8,width:28,height:28,borderRadius:8,border:"none",background:"rgba(0,0,0,.5)",color:"#fff",fontSize:14,cursor:"pointer"}}>✕</button>
+        <button onClick={()=>{setPhoto(null);setResults(null)}} style={{position:"absolute",top:8,right:8,width:28,height:28,borderRadius:8,border:"none",background:"rgba(0,0,0,.5)",color:"#fff",fontSize:14,cursor:"pointer"}}></button>
       </div>
 
       {results&&<>

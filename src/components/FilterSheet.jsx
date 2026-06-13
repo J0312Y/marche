@@ -1,4 +1,5 @@
 import { useState } from "react";
+import Icon from "./Icon";
 
 /**
  * FilterSheet — Advanced filters bottom sheet for search
@@ -33,7 +34,7 @@ function FilterSheet({ onClose, onApply, initialFilters = {} }) {
         {/* Tri */}
         <label style={{ display: "block", fontSize: 12, fontWeight: 600, color: "var(--sub)", marginBottom: 8 }}>Trier par</label>
         <div style={{ display: "flex", gap: 6, flexWrap: "wrap", marginBottom: 16 }}>
-          {[["popular", "🔥 Populaires"], ["price_asc", "💰 Prix ↑"], ["price_desc", "💰 Prix ↓"], ["rating", "⭐ Mieux notés"], ["newest", "🆕 Récents"], ["promo", "🏷️ Promos"]].map(([k, l]) => (
+          {[["popular", "Populaires"], ["price_asc", "Prix ↑"], ["price_desc", "Prix ↓"], ["rating", "Mieux notés"], ["newest", "Récents"], ["promo", "Promos"]].map(([k, l]) => (
             <button key={k} onClick={() => setSortBy(k)} style={{
               padding: "8px 14px", borderRadius: 10,
               border: sortBy === k ? "2px solid #F97316" : "1px solid var(--border)",
@@ -75,13 +76,13 @@ function FilterSheet({ onClose, onApply, initialFilters = {} }) {
               background: minRating === r ? "rgba(245,158,11,0.06)" : "var(--card)",
               color: minRating === r ? "#F59E0B" : "var(--sub)",
               fontSize: 12, fontWeight: 600, cursor: "pointer", fontFamily: "inherit",
-            }}>{r === 0 ? "Tous" : `${r}★+`}</button>
+            }}>{r === 0 ? "Tous" : `${r}+`}</button>
           ))}
         </div>
 
         {/* Toggles */}
         <div style={{ display: "flex", flexDirection: "column", gap: 10, marginBottom: 20 }}>
-          {[["promoOnly", "🏷️ En promo uniquement", promoOnly, setPromoOnly], ["freeDelivery", "🚚 Livraison gratuite", freeDelivery, setFreeDelivery]].map(([k, label, val, setVal]) => (
+          {[["promoOnly", "En promo uniquement", promoOnly, setPromoOnly], ["freeDelivery", "Livraison gratuite", freeDelivery, setFreeDelivery]].map(([k, label, val, setVal]) => (
             <div key={k} style={{ display: "flex", justifyContent: "space-between", alignItems: "center", padding: "10px 0" }}>
               <span style={{ fontSize: 13, fontWeight: 500 }}>{label}</span>
               <div className={`toggle${val ? " on" : ""}`} onClick={() => setVal(!val)}><div /></div>

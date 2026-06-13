@@ -1,4 +1,5 @@
 /**
+import Icon from "./Icon";
  * LoadingSpinner — Suspense fallback with skeleton layout
  */
 const S=({w="100%",h=14,r=8,mb=0,style={}})=>(<div style={{width:w,height:h,borderRadius:r,marginBottom:mb,background:"linear-gradient(90deg,#F5F4F1 25%,#E8E6E1 37%,#F5F4F1 63%)",backgroundSize:"400% 100%",animation:"sk-shimmer 1.4s ease infinite",...style}}/>);

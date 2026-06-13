@@ -6,19 +6,20 @@ import { useLoad } from "../../hooks";
 import { vendor } from "../../services";
 import { SkeletonCards } from "../../components/Loading";
 import { fmt } from "../../utils/helpers";
+import Icon from "../../components/Icon";
 
-const ST={new:{bg:"rgba(59,130,246,0.08)",color:"#3B82F6",label:"🆕 Nouvelle"},preparing:{bg:"rgba(245,158,11,0.08)",color:"#F59E0B",label:"🔄 Préparation"},shipped:{bg:"rgba(139,92,246,0.08)",color:"#FB923C",label:"🚚 Expédiée"},delivered:{bg:"rgba(16,185,129,0.08)",color:"#10B981",label:"✅ Livrée"}};
+const ST={new:{bg:"rgba(59,130,246,0.08)",color:"#3B82F6",label:"Nouvelle"},preparing:{bg:"rgba(245,158,11,0.08)",color:"#F59E0B",label:" Préparation"},shipped:{bg:"rgba(139,92,246,0.08)",color:"#FB923C",label:"Expédiée"},delivered:{bg:"rgba(16,185,129,0.08)",color:"#10B981",label:"Livrée"}};
 
 function VOrdersScr({go,onBack}){
   const [filter,setFilter]=useState("all");
   const { data, loading } = useLoad(() => vendor.getOrders(filter), [filter]);
   const orders = data?.orders || [];
   const counts = data?.counts || { all:0, new:0, preparing:0, shipped:0, delivered:0 };
-  return(<PullToRefresh onRefresh={async()=>{toast.success("Commandes actualisées 🛍️")}}><div className="scr">
+  return(<PullToRefresh onRefresh={async()=>{toast.success("Commandes actualisées ️")}}><div className="scr">
     <div className="appbar">{onBack&&<button onClick={onBack}>←</button>}<h2>Commandes ({counts.all})</h2><div style={{width:38}}/></div>
-    <div className="vo-filter">{[["all","Tous",counts.all],["new","🆕",counts.new],["preparing","🔄",counts.preparing],["shipped","🚚",counts.shipped],["delivered","✅",counts.delivered]].map(([k,l,c])=><button key={k} className={filter===k?"on":""} onClick={()=>setFilter(k)}>{l} {c}</button>)}</div>
+    <div className="vo-filter">{[["all","Tous",counts.all],["new","",counts.new],["preparing","",counts.preparing],["shipped","",counts.shipped],["delivered","",counts.delivered]].map(([k,l,c])=><button key={k} className={filter===k?"on":""} onClick={()=>setFilter(k)}>{l} {c}</button>)}</div>
     <div style={{padding:"0 16px 20px"}}>
-      {loading?<SkeletonCards/>:orders.length===0?<div style={{textAlign:"center",padding:"50px 0"}}><div style={{fontSize:40,marginBottom:8}}>📭</div><div style={{fontSize:14,fontWeight:600}}>Aucune commande</div></div>
+      {loading?<SkeletonCards/>:orders.length===0?<div style={{textAlign:"center",padding:"50px 0"}}><div style={{fontSize:40,marginBottom:8}}></div><div style={{fontSize:14,fontWeight:600}}>Aucune commande</div></div>
       :orders.map(o=>{
         const st=ST[o.status]||ST.new;
         return(<div key={o.id} onClick={()=>go("vOrderDetail",o)} style={{padding:14,background:"var(--card)",border:"1px solid var(--border)",borderRadius:16,marginBottom:10,cursor:"pointer",transition:"all .15s"}}>
@@ -28,7 +29,7 @@ function VOrdersScr({go,onBack}){
             <span style={{padding:"4px 10px",borderRadius:8,background:st.bg,color:st.color,fontSize:11,fontWeight:600}}>{st.label}</span>
           </div>
           {/* Client + payment */}
-          <div style={{fontSize:12,color:"var(--sub)",marginBottom:8}}>👤 {o.client}{o.isGroup&&<span style={{marginLeft:6,padding:"2px 6px",borderRadius:4,background:"rgba(59,130,246,0.08)",color:"#3B82F6",fontSize:9,fontWeight:700}}>🤝 Groupe</span>} · {o.payment==="cash"?<span style={{color:"#F59E0B",fontWeight:700}}>💵 Cash à la livraison</span>:o.payment}</div>
+          <div style={{fontSize:12,color:"var(--sub)",marginBottom:8}}><Icon name="user" size={16}/>{" "}{o.client}{o.isGroup&&<span style={{marginLeft:6,padding:"2px 6px",borderRadius:4,background:"rgba(59,130,246,0.08)",color:"#3B82F6",fontSize:9,fontWeight:700}}><Icon name="handshake" size={16}/>{" "}Groupe</span>} · {o.payment==="cash"?<span style={{color:"#F59E0B",fontWeight:700}}><Icon name="wallet" size={16}/>{" "}Cash à la livraison</span>:o.payment}</div>
           {/* Items — compact row with small thumbnails */}
           <div style={{display:"flex",gap:6,marginBottom:10,flexWrap:"wrap"}}>
             {o.items.map((it,i)=>(
@@ -41,9 +42,9 @@ function VOrdersScr({go,onBack}){
             ))}
           </div>
           {o.items.some(it=>it.sides?.length>0)&&<div style={{marginBottom:8,padding:"6px 10px",background:"rgba(249,115,22,0.04)",borderRadius:8,fontSize:10,color:"var(--sub)"}}>
-            🍽️ {o.items.flatMap(it=>it.sides||[]).map(s=>s.name+(s.qty>1?" ×"+s.qty:"")).join(", ")}
+             {o.items.flatMap(it=>it.sides||[]).map(s=>s.name+(s.qty>1?" ×"+s.qty:"")).join(", ")}
           </div>}
-          {o.note&&<div style={{marginBottom:8,padding:"6px 10px",background:"rgba(59,130,246,0.04)",borderRadius:8,fontSize:10,color:"#3B82F6"}}>📝 {o.note}</div>}
+          {o.note&&<div style={{marginBottom:8,padding:"6px 10px",background:"rgba(59,130,246,0.04)",borderRadius:8,fontSize:10,color:"#3B82F6"}}> {o.note}</div>}
           {/* Footer: total + date */}
           <div style={{display:"flex",justifyContent:"space-between",alignItems:"center"}}>
             <span style={{fontSize:15,fontWeight:700,color:"#F97316"}}>{fmt(o.total)}</span>

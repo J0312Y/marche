@@ -1,8 +1,9 @@
 import { useState } from "react";
 import toast from "../../utils/toast";
+import Icon from "../../components/Icon";
 
 function DrRateVendorScr({onBack,vendor}){
-  const v=vendor||{name:"Mode Afrique",avatar:"👔"};
+  const v=vendor||{name:"Mode Afrique",avatar:""};
   const [rating,setRating]=useState(0);
   const [tags,setTags]=useState([]);
   const [comment,setComment]=useState("");
@@ -22,7 +23,7 @@ function DrRateVendorScr({onBack,vendor}){
     {/* Stars */}
     <div style={{display:"flex",justifyContent:"center",gap:8,marginBottom:20}}>
       {[1,2,3,4,5].map(s=>(
-        <div key={s} onClick={()=>setRating(s)} style={{fontSize:36,cursor:"pointer",transition:"transform .15s",transform:rating>=s?"scale(1.1)":"scale(1)",filter:rating>=s?"none":"grayscale(1) opacity(0.3)"}}>⭐</div>
+        <div key={s} onClick={()=>setRating(s)} style={{fontSize:36,cursor:"pointer",transition:"transform .15s",transform:rating>=s?"scale(1.1)":"scale(1)",filter:rating>=s?"none":"grayscale(1) opacity(0.3)"}}><Icon name="star_full" size={18}/></div>
       ))}
     </div>
     {rating>0&&<div style={{textAlign:"center",fontSize:13,color:"var(--muted)",marginBottom:16}}>{["","Très mauvais","Mauvais","Correct","Bon","Excellent"][rating]}</div>}
@@ -40,7 +41,7 @@ function DrRateVendorScr({onBack,vendor}){
         <textarea rows={3} value={comment} onChange={e=>setComment(e.target.value)} placeholder="Détails sur votre expérience..." style={{width:"100%",padding:10,borderRadius:12,border:"1px solid var(--border)",background:"var(--light)",fontSize:13,fontFamily:"inherit",color:"var(--text)",resize:"none",outline:"none"}}/>
       </div>
 
-      <button onClick={()=>{toast.success("Merci pour votre évaluation ⭐");setTimeout(onBack,800)}} style={{width:"100%",padding:14,borderRadius:14,border:"none",background:"#F97316",color:"#fff",fontSize:15,fontWeight:700,cursor:"pointer",fontFamily:"inherit",marginTop:8}}>Envoyer l'évaluation</button>
+      <button onClick={()=>{toast.success("Merci pour votre évaluation");setTimeout(onBack,800)}} style={{width:"100%",padding:14,borderRadius:14,border:"none",background:"#F97316",color:"#fff",fontSize:15,fontWeight:700,cursor:"pointer",fontFamily:"inherit",marginTop:8}}>Envoyer l'évaluation</button>
     </>}
   </div>);
 }

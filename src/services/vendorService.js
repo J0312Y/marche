@@ -78,7 +78,7 @@ export default {
         active: data.is_active !== 0,
         sold: 0,
         variants: data.variants || [],
-        img: "📦",
+        img: "",
       };
       _mockProducts.unshift(article);
       return article;
@@ -152,7 +152,7 @@ export default {
   },
 
   analyzeImage: async (file) => {
-    if (USE_MOCK) { await delay(300); return { analysis: { score: 82, label: "Excellente", brightness: 130, contrast: 45, sharpness: 88, issues: [] }, recommendations: [{ type: "ok", icon: "✅", title: "Excellente qualité !", detail: "" }] }; }
+    if (USE_MOCK) { await delay(300); return { analysis: { score: 82, label: "Excellente", brightness: 130, contrast: 45, sharpness: 88, issues: [] }, recommendations: [{ type: "ok", icon: "", title: "Excellente qualité !", detail: "" }] }; }
     return imagesAPI.analyze(file);
   },
 

@@ -1,4 +1,5 @@
 /**
+import Icon from "./Icon";
  * Field - Champ de formulaire avec label
  * @param {string} label - Label du champ
  * @param {string} type - "text" | "tel" | "email" | "password" | "textarea"

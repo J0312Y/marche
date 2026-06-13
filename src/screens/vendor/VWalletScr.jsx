@@ -2,6 +2,7 @@ import { useLoad } from "../../hooks";
 import { vendor } from "../../services";
 import { SkeletonWallet } from "../../components/Loading";
 import { fmt } from "../../utils/helpers";
+import Icon from "../../components/Icon";
 
 function VWalletScr({go,onBack}){
   const { data, loading } = useLoad(() => vendor.getWallet());
@@ -12,7 +13,7 @@ function VWalletScr({go,onBack}){
       <div style={{fontSize:12,opacity:.8}}>Solde disponible</div>
       <div style={{fontSize:32,fontWeight:800,margin:"6px 0"}}>{fmt(balance)}</div>
       {pending>0&&<div style={{fontSize:12,opacity:.7}}>⏳ {fmt(pending)} en attente</div>}
-      <button style={{marginTop:12,padding:"10px 24px",borderRadius:12,border:"2px solid rgba(255,255,255,.3)",background:"transparent",color:"#fff",fontSize:13,fontWeight:700,cursor:"pointer",fontFamily:"inherit"}} onClick={()=>go("vWithdraw")}>💸 Retirer</button>
+      <button style={{marginTop:12,padding:"10px 24px",borderRadius:12,border:"2px solid rgba(255,255,255,.3)",background:"transparent",color:"#fff",fontSize:13,fontWeight:700,cursor:"pointer",fontFamily:"inherit"}} onClick={()=>go("vWithdraw")}> Retirer</button>
     </div>
     <h3 style={{fontSize:15,fontWeight:700,marginBottom:12}}>Historique</h3>
     {transactions.map(t=><div key={t.id} style={{display:"flex",alignItems:"center",gap:12,padding:"12px 0",borderBottom:"1px solid var(--border)"}}>

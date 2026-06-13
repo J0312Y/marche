@@ -1,4 +1,5 @@
 /**
+import Icon from "./Icon";
  * Tag - Étiquette produit (Best-seller, Promo, Nouveau...)
  * @param {string} label - Texte du tag
  * @param {function} onClick - Action au clic

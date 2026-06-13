@@ -1,7 +1,7 @@
 /**
  * Global toast system — import and call from any component
  * Usage: import toast from '../../utils/toast';
- *        toast.success("Profil mis à jour ✅");
+ *        toast.success("Profil mis à jour ");
  *        toast.error("Erreur de connexion");
  *        toast.info("Chargement...");
  */

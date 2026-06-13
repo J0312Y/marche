@@ -1,4 +1,5 @@
 import P from "../data/products";
+import Icon from "./Icon";
 /**
  * InvoiceView — Receipt/invoice modal (dark mode compatible)
  * Supports: status (delivered, cancelled, failed, refunded)
@@ -24,11 +25,11 @@ function InvoiceView({ order, onClose }) {
   const refundMethod = o.refundMethod; // "wallet" | "momo" | null
   const isNegative = isCancelled || isFailed || isRefunded;
 
-  const paymentLabel = o.payment === "cash" ? "💵 Cash à la livraison"
-    : o.payment === "airtel" ? "📱 Airtel Money"
-    : o.payment === "mtn" ? "📱 MTN MoMo"
-    : o.payment === "kolo" ? "📱 Kolo Pay"
-    : o.payment || "📱 Mobile Money";
+  const paymentLabel = o.payment === "cash" ? "Cash à la livraison"
+    : o.payment === "airtel" ? "Airtel Money"
+    : o.payment === "mtn" ? "MTN MoMo"
+    : o.payment === "kolo" ? "Kolo Pay"
+    : o.payment || "Mobile Money";
 
   return (
     <div onClick={onClose} style={{ position: "fixed", inset: 0, background: "rgba(0,0,0,.5)", zIndex: 150, display: "flex", alignItems: "center", justifyContent: "center", padding: 16, animation: "fadeInFast .2s ease" }}>
@@ -41,9 +42,9 @@ function InvoiceView({ order, onClose }) {
 
         {/* Header */}
         <div style={{ padding: "20px 20px 12px", textAlign: "center", borderBottom: "2px dashed var(--border)" }}>
-          <div style={{ fontSize: 24, marginBottom: 4 }}>🛒</div>
+          <div style={{ fontSize: 24, marginBottom: 4 }}><Icon name="cart" size={18}/></div>
           <h3 style={{ fontSize: 18, fontWeight: 800, color: "var(--text)" }}>Lamuka Market</h3>
-          <p style={{ fontSize: 11, color: "var(--muted)" }}>Le Marketplace du Congo 🇨🇬</p>
+          <p style={{ fontSize: 11, color: "var(--muted)" }}>Le Marketplace du Congo </p>
           <div style={{ marginTop: 8, padding: "4px 12px", background: isNegative ? "rgba(239,68,68,0.08)" : "var(--light)", borderRadius: 8, display: "inline-block", fontSize: 11, fontWeight: 700, color: isNegative ? "#EF4444" : "#F97316" }}>
             {isNegative ? (isCancelled ? "ANNULÉE" : "ÉCHEC") : "REÇU"} {o.id || "#LMK-" + String(Math.floor(Math.random() * 9000) + 1000)}
           </div>
@@ -52,7 +53,7 @@ function InvoiceView({ order, onClose }) {
         {/* Status banner for negative states */}
         {isNegative && <div style={{ margin: "12px 20px 0", padding: 12, borderRadius: 12, background: "rgba(239,68,68,0.06)", border: "1px solid rgba(239,68,68,0.15)" }}>
           <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
-            <span style={{ fontSize: 20 }}>{isCancelled ? "🚫" : isFailed ? "❌" : "💸"}</span>
+            <span style={{ fontSize: 20 }}>{isCancelled ? "" : isFailed ? "" : ""}</span>
             <div>
               <div style={{ fontSize: 13, fontWeight: 700, color: "#EF4444" }}>
                 {isCancelled ? "Commande annulée" : isFailed ? "Livraison échouée" : "Commande remboursée"}
@@ -72,10 +73,10 @@ function InvoiceView({ order, onClose }) {
         {/* Info */}
         <div style={{ padding: "12px 20px", fontSize: 12, color: "var(--muted)" }}>
           {[["Date", date], ["Client", o.client || "Joeldy Tsina"], ["Vendeur", o.vendor || "Mode Afrique"], ["Paiement", paymentLabel],
-            ...(isNegative ? [["Statut", isCancelled ? "🚫 Annulée" : isFailed ? "❌ Échec livraison" : "💸 Remboursé"]]
+            ...(isNegative ? [["Statut", isCancelled ? " Annulée" : isFailed ? "Échec livraison" : " Remboursé"]]
             : o.payment === "cash" && status !== "delivered" ? [["Statut", "⏳ Paiement à la livraison"]]
-            : o.payment === "cash" && status === "delivered" ? [["Statut", "✅ Payé en espèces"]]
-            : [["Statut", "✅ Payé"]])
+            : o.payment === "cash" && status === "delivered" ? [["Statut", "Payé en espèces"]]
+            : [["Statut", "Payé"]])
           ].map(([l, v]) => (
             <div key={l} style={{ display: "flex", justifyContent: "space-between", marginBottom: 4 }}>
               <span>{l}</span>
@@ -86,7 +87,7 @@ function InvoiceView({ order, onClose }) {
 
         {/* Group order info */}
         {o.isGroup&&<div style={{ margin: "0 20px 8px", padding: 10, background: "rgba(59,130,246,0.04)", borderRadius: 10, border: "1px solid rgba(59,130,246,0.1)" }}>
-          <div style={{ fontSize: 11, fontWeight: 700, color: "#3B82F6", marginBottom: 4 }}>🤝 Commande de groupe</div>
+          <div style={{ fontSize: 11, fontWeight: 700, color: "#3B82F6", marginBottom: 4 }}><Icon name="handshake" size={16}/>{" "}Commande de groupe</div>
           <div style={{ fontSize: 10, color: "var(--muted)" }}>{o.groupMembers?.join(", ")||"Plusieurs participants"}</div>
         </div>}
 
@@ -126,7 +127,7 @@ function InvoiceView({ order, onClose }) {
           </div>}
           {isRefunded && refundMethod && <div style={{ marginTop: 8, padding: 10, background: "rgba(16,185,129,0.06)", borderRadius: 10, border: "1px solid rgba(16,185,129,0.15)" }}>
             <div style={{ fontSize: 12, fontWeight: 700, color: "#10B981", marginBottom: 4 }}>
-              {refundMethod === "wallet" ? "💰 Crédité sur votre wallet Lamuka" : "📱 Remboursé via Mobile Money"}
+              {refundMethod === "wallet" ? "Crédité sur votre wallet Lamuka" : "Remboursé via Mobile Money"}
             </div>
             <div style={{ fontSize: 11, color: "var(--muted)" }}>
               {refundMethod === "wallet" 
@@ -154,7 +155,7 @@ function InvoiceView({ order, onClose }) {
         {/* Actions */}
         <div style={{ display: "flex", gap: 8, padding: "0 20px 20px" }}>
           <button onClick={onClose} style={{ flex: 1, padding: 12, borderRadius: 12, border: "1px solid var(--border)", background: "var(--card)", fontSize: 13, fontWeight: 600, cursor: "pointer", fontFamily: "inherit", color: "var(--text)" }}>Fermer</button>
-          <button onClick={() => { window.print?.(); }} style={{ flex: 1, padding: 12, borderRadius: 12, border: "none", background: isNegative ? "var(--muted)" : "#F97316", color: "#fff", fontSize: 13, fontWeight: 700, cursor: "pointer", fontFamily: "inherit" }}>🖨️ Imprimer</button>
+          <button onClick={() => { window.print?.(); }} style={{ flex: 1, padding: 12, borderRadius: 12, border: "none", background: isNegative ? "var(--muted)" : "#F97316", color: "#fff", fontSize: 13, fontWeight: 700, cursor: "pointer", fontFamily: "inherit" }}>️ Imprimer</button>
         </div>
       </div>
     </div>

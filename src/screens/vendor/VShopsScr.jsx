@@ -1,11 +1,12 @@
 import { useState } from "react";
 import { fmt } from "../../utils/helpers";
+import Icon from "../../components/Icon";
 
 function VShopsScr({go,onBack}){
   const [shops,setShops]=useState([
-    {id:"s1",name:"Ma Boutique Congo",type:"boutique",typeIcon:"🏪",location:"Brazzaville, Bacongo",logo:"👔",status:"active",revenue:457800,orders:48,products:32,rating:4.6,views:1240,clients:186,returns:2,created:"Jan 2026"},
-    {id:"s2",name:"Chez Mama Ngudi",type:"restaurant",typeIcon:"🍽️",location:"Pointe-Noire, Centre",logo:"🍽️",status:"active",revenue:285000,orders:31,products:18,rating:4.4,views:890,clients:124,returns:1,created:"Fév 2026"},
-    {id:"s3",name:"Congo Tech Store",type:"boutique",typeIcon:"🏪",location:"Brazzaville, Centre",logo:"💻",status:"pending",revenue:0,orders:0,products:5,rating:0,views:0,clients:0,returns:0,created:"Fév 2026"},
+    {id:"s1",name:"Ma Boutique Congo",type:"boutique",typeIcon:"",location:"Brazzaville, Bacongo",logo:"",status:"active",revenue:457800,orders:48,products:32,rating:4.6,views:1240,clients:186,returns:2,created:"Jan 2026"},
+    {id:"s2",name:"Chez Mama Ngudi",type:"restaurant",typeIcon:"",location:"Pointe-Noire, Centre",logo:"",status:"active",revenue:285000,orders:31,products:18,rating:4.4,views:890,clients:124,returns:1,created:"Fév 2026"},
+    {id:"s3",name:"Congo Tech Store",type:"boutique",typeIcon:"",location:"Brazzaville, Centre",logo:"",status:"pending",revenue:0,orders:0,products:5,rating:0,views:0,clients:0,returns:0,created:"Fév 2026"},
   ]);
   const active=shops.filter(s=>s.status==="active");
   const totalRev=active.reduce((s,sh)=>s+sh.revenue,0);
@@ -28,7 +29,7 @@ function VShopsScr({go,onBack}){
         <div style={{textAlign:"right"}}><div style={{fontSize:18,fontWeight:700}}>{shops.length}</div><div style={{fontSize:11,color:"var(--muted)"}}>boutiques</div></div>
       </div>
       <div style={{display:"grid",gridTemplateColumns:"1fr 1fr 1fr 1fr",gap:6}}>
-        {[["📦",totalOrders,"Cmd"],["🛍️",totalProducts,"Prod."],["👁️",totalViews,"Vues"],["⭐",avgRating,"Note"]].map(([i,v,l])=><div key={l} style={{padding:8,background:"var(--card)",border:"1px solid var(--border)",borderRadius:10,textAlign:"center"}}>
+        {[["",totalOrders,"Cmd"],["️",totalProducts,"Prod."],["️",totalViews,"Vues"],["",avgRating,"Note"]].map(([i,v,l])=><div key={l} style={{padding:8,background:"var(--card)",border:"1px solid var(--border)",borderRadius:10,textAlign:"center"}}>
           <div style={{fontSize:14,fontWeight:700}}>{v}</div>
           <div style={{fontSize:9,color:"var(--muted)"}}>{l}</div>
         </div>)}
@@ -39,10 +40,10 @@ function VShopsScr({go,onBack}){
     {/* Expanded stats */}
     {showStats&&<div style={{margin:"0 20px 14px"}}>
       <div style={{display:"grid",gridTemplateColumns:"1fr 1fr",gap:10,marginBottom:10}}>
-        {[["💰","CA net (après commission)",fmt(totalRev-commission),"↑ 18% vs mois dernier","#10B981"],
-          ["💳","Commission Lamuka (2%)",fmt(commission),"Déduite automatiquement","#F59E0B"],
-          ["👥","Clients uniques",totalClients,"↑ 24%","#F97316"],
-          ["🔄","Retours",totalReturns,totalReturns<5?"Excellent":"À surveiller",totalReturns<5?"#10B981":"#EF4444"],
+        {[["","CA net (après commission)",fmt(totalRev-commission),"↑ 18% vs mois dernier","#10B981"],
+          ["","Commission Lamuka (2%)",fmt(commission),"Déduite automatiquement","#F59E0B"],
+          ["","Clients uniques",totalClients,"↑ 24%","#F97316"],
+          ["","Retours",totalReturns,totalReturns<5?"Excellent":"À surveiller",totalReturns<5?"#10B981":"#EF4444"],
         ].map(([i,l,v,t,c])=><div key={l} style={{padding:12,background:"var(--card)",border:"1px solid var(--border)",borderRadius:14}}>
           <div style={{fontSize:16,marginBottom:4}}>{i}</div>
           <div style={{fontSize:16,fontWeight:700}}>{v}</div>
@@ -56,7 +57,7 @@ function VShopsScr({go,onBack}){
         {active.map(sh=><div key={sh.id} style={{display:"flex",alignItems:"center",gap:10,padding:8,borderBottom:"1px solid var(--border)"}}>
           <span style={{fontSize:16}}>{sh.typeIcon}</span>
           <div style={{flex:1}}><div style={{fontSize:12,fontWeight:600}}>{sh.name}</div></div>
-          <div style={{textAlign:"right"}}><div style={{fontSize:12,fontWeight:700,color:"#F97316"}}>{fmt(sh.revenue)}</div><div style={{fontSize:9,color:"var(--muted)"}}>{sh.orders} cmd · ⭐ {sh.rating}</div></div>
+          <div style={{textAlign:"right"}}><div style={{fontSize:12,fontWeight:700,color:"#F97316"}}>{fmt(sh.revenue)}</div><div style={{fontSize:9,color:"var(--muted)"}}>{sh.orders} cmd ·  {sh.rating}</div></div>
         </div>)}
       </div>
 
@@ -80,12 +81,12 @@ function VShopsScr({go,onBack}){
             <div style={{display:"flex",alignItems:"center",gap:6}}><h4 style={{fontSize:15,fontWeight:700}}>{sh.name}</h4>
               <span style={{padding:"2px 8px",borderRadius:6,background:sh.status==="active"?"rgba(16,185,129,0.1)":"rgba(245,158,11,0.1)",color:sh.status==="active"?"#10B981":"#F59E0B",fontSize:10,fontWeight:700}}>{sh.status==="active"?"Active":"En attente"}</span>
             </div>
-            <p style={{fontSize:12,color:"var(--muted)",marginTop:2}}>{sh.typeIcon} {sh.type==="restaurant"?"Restaurant":"Boutique"} · 📍 {sh.location}</p>
+            <p style={{fontSize:12,color:"var(--muted)",marginTop:2}}>{sh.typeIcon} {sh.type==="restaurant"?"Restaurant":"Boutique"} ·  {sh.location}</p>
           </div>
           <span style={{fontSize:16,color:"var(--muted)"}}>›</span>
         </div>
         {sh.status==="active"&&<div style={{display:"grid",gridTemplateColumns:"1fr 1fr 1fr 1fr",gap:8}}>
-          {[["💰",fmt(sh.revenue),"CA"],["📦",sh.orders,"Cmd"],["🛍️",sh.products,"Prod."],["⭐",sh.rating||"—","Note"]].map(([i,v,l])=><div key={l} style={{textAlign:"center",padding:8,background:"var(--light)",borderRadius:10}}>
+          {[["",fmt(sh.revenue),"CA"],["",sh.orders,"Cmd"],["️",sh.products,"Prod."],["",sh.rating||"—","Note"]].map(([i,v,l])=><div key={l} style={{textAlign:"center",padding:8,background:"var(--light)",borderRadius:10}}>
             <div style={{fontSize:12,fontWeight:700}}>{v}</div>
             <div style={{fontSize:9,color:"var(--muted)"}}>{l}</div>
           </div>)}

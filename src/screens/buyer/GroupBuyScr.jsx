@@ -1,6 +1,7 @@
 import { useState } from "react";
 import toast from "../../utils/toast";
 import { fmt } from "../../utils/helpers";
+import Icon from "../../components/Icon";
 
 const DEALS = [
   { id: "gb1", name: "Galaxy A54", photo: "https://images.unsplash.com/photo-1592899677977-9c10ca588bbd?w=200&h=200&fit=crop", price: 185000, groupPrice: 148000, minPeople: 5, joined: 3, ends: "2j 14h", vendor: "Tech Congo" },
@@ -14,14 +15,14 @@ function GroupBuyScr({ onBack, go }) {
   const join = (deal) => {
     if (joined[deal.id]) return;
     setJoined(p => ({ ...p, [deal.id]: true }));
-    toast.success("Vous avez rejoint l'achat groupé ! 🎉");
+    toast.success("Vous avez rejoint l'achat groupé !");
   };
 
   return (<div className="scr" style={{ padding: 16, paddingBottom: 20 }}>
-    <div className="appbar" style={{ padding: 0, marginBottom: 10 }}><button onClick={onBack}>←</button><h2>🤝 Achats Groupés</h2><div style={{ width: 38 }} /></div>
+    <div className="appbar" style={{ padding: 0, marginBottom: 10 }}><button onClick={onBack}>←</button><h2><Icon name="handshake" size={16}/>{" "}Achats Groupés</h2><div style={{ width: 38 }} /></div>
 
     <div style={{ padding: 14, background: "linear-gradient(135deg,rgba(249,115,22,0.06),rgba(251,146,60,0.06))", border: "1px solid rgba(249,115,22,0.12)", borderRadius: 16, marginBottom: 14 }}>
-      <div style={{ fontSize: 14, fontWeight: 700, marginBottom: 4 }}>💡 Comment ça marche ?</div>
+      <div style={{ fontSize: 14, fontWeight: 700, marginBottom: 4 }}><Icon name="info" size={16}/>{" "}Comment ça marche ?</div>
       <div style={{ fontSize: 12, color: "var(--sub)", lineHeight: 1.6 }}>Rejoignez un groupe d'achat pour obtenir des prix réduits. Plus on est nombreux, moins c'est cher ! Le prix groupé s'applique dès que le nombre minimum est atteint.</div>
     </div>
 
@@ -65,21 +66,21 @@ function GroupBuyScr({ onBack, go }) {
           ))}
           {d.joined > 5 && <span style={{ fontSize: 11, color: "var(--muted)", marginLeft: 4 }}>+{d.joined - 5}</span>}
           <span style={{ flex: 1 }} />
-          {isFull && <span style={{ padding: "3px 8px", borderRadius: 6, background: "rgba(16,185,129,0.08)", color: "#10B981", fontSize: 10, fontWeight: 700 }}>✅ Complet</span>}
+          {isFull && <span style={{ padding: "3px 8px", borderRadius: 6, background: "rgba(16,185,129,0.08)", color: "#10B981", fontSize: 10, fontWeight: 700 }}><Icon name="check_circle" size={16}/>{" "}Complet</span>}
         </div>
 
         {/* Action */}
         {isFull ? (
-          <button style={{ width: "100%", padding: 12, borderRadius: 12, border: "none", background: "#10B981", color: "#fff", fontSize: 13, fontWeight: 700, cursor: "pointer", fontFamily: "inherit" }} onClick={() => toast.success("Commande groupée validée ! 🎉")}>
-            🛍️ Commander au prix groupé — {fmt(d.groupPrice)}
+          <button style={{ width: "100%", padding: 12, borderRadius: 12, border: "none", background: "#10B981", color: "#fff", fontSize: 13, fontWeight: 700, cursor: "pointer", fontFamily: "inherit" }} onClick={() => toast.success("Commande groupée validée !")}>
+            ️ Commander au prix groupé — {fmt(d.groupPrice)}
           </button>
         ) : didJoin ? (
           <div style={{ width: "100%", padding: 12, borderRadius: 12, background: "rgba(249,115,22,0.06)", border: "1px solid rgba(249,115,22,0.15)", textAlign: "center", fontSize: 13, fontWeight: 600, color: "#F97316" }}>
-            ✅ Vous participez — en attente de {d.minPeople - d.joined} personnes
+             Vous participez — en attente de {d.minPeople - d.joined} personnes
           </div>
         ) : (
           <button onClick={() => join(d)} style={{ width: "100%", padding: 12, borderRadius: 12, border: "none", background: "#F97316", color: "#fff", fontSize: 13, fontWeight: 700, cursor: "pointer", fontFamily: "inherit" }}>
-            🤝 Rejoindre · Économisez {fmt(d.price - d.groupPrice)}
+             Rejoindre · Économisez {fmt(d.price - d.groupPrice)}
           </button>
         )}
       </div>);

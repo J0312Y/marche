@@ -1,4 +1,5 @@
 import P from "../data/products";
+import Icon from "./Icon";
 /**
  * CreditNoteView — Avoir / Note de crédit (remboursement)
  * Separate document from original receipt
@@ -27,7 +28,7 @@ function CreditNoteView({ order, onClose, refundMethod }) {
 
         {/* Header */}
         <div style={{ padding: "20px 20px 12px", textAlign: "center", borderBottom: "2px dashed var(--border)", position: "relative", zIndex: 1 }}>
-          <div style={{ fontSize: 24, marginBottom: 4 }}>💸</div>
+          <div style={{ fontSize: 24, marginBottom: 4 }}></div>
           <h3 style={{ fontSize: 18, fontWeight: 800, color: "var(--text)" }}>Lamuka Market</h3>
           <p style={{ fontSize: 11, color: "var(--muted)" }}>Note de crédit / Avoir</p>
           <div style={{ marginTop: 8, padding: "4px 12px", background: "rgba(16,185,129,0.08)", borderRadius: 8, display: "inline-block", fontSize: 11, fontWeight: 700, color: "#10B981" }}>
@@ -37,7 +38,7 @@ function CreditNoteView({ order, onClose, refundMethod }) {
 
         {/* Reference to original */}
         <div style={{ margin: "12px 20px 0", padding: 10, background: "rgba(59,130,246,0.04)", borderRadius: 10, border: "1px solid rgba(59,130,246,0.1)", display: "flex", alignItems: "center", gap: 8 }}>
-          <span style={{ fontSize: 14 }}>📄</span>
+          <span style={{ fontSize: 14 }}></span>
           <div style={{ fontSize: 11, color: "var(--muted)" }}>Réf. commande originale : <b style={{ color: "var(--text)" }}>{o.id || "#LMK-0000"}</b></div>
         </div>
 
@@ -48,7 +49,7 @@ function CreditNoteView({ order, onClose, refundMethod }) {
             ["Client", o.client || "Joeldy Tsina"],
             ["Vendeur", o.vendor || "Mode Afrique"],
             ["Motif", o.cancelReason || "Annulation client"],
-            ["Remboursement", method === "wallet" ? "💰 Wallet Lamuka" : "📱 Mobile Money"],
+            ["Remboursement", method === "wallet" ? "Wallet Lamuka" : "Mobile Money"],
           ].map(([l, v]) => (
             <div key={l} style={{ display: "flex", justifyContent: "space-between", marginBottom: 4 }}>
               <span>{l}</span>
@@ -93,7 +94,7 @@ function CreditNoteView({ order, onClose, refundMethod }) {
         <div style={{ margin: "0 20px 12px", padding: 14, borderRadius: 14, background: method === "wallet" ? "rgba(16,185,129,0.06)" : "rgba(59,130,246,0.06)", border: `1px solid ${method === "wallet" ? "rgba(16,185,129,0.15)" : "rgba(59,130,246,0.15)"}` }}>
           <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
             <div style={{ width: 40, height: 40, borderRadius: 12, background: method === "wallet" ? "rgba(16,185,129,0.1)" : "rgba(59,130,246,0.1)", display: "flex", alignItems: "center", justifyContent: "center", fontSize: 20 }}>
-              {method === "wallet" ? "💰" : "📱"}
+              {method === "wallet" ? "" : ""}
             </div>
             <div style={{ flex: 1 }}>
               <div style={{ fontSize: 13, fontWeight: 700, color: method === "wallet" ? "#10B981" : "#3B82F6" }}>
@@ -115,7 +116,7 @@ function CreditNoteView({ order, onClose, refundMethod }) {
         {/* Actions */}
         <div style={{ display: "flex", gap: 8, padding: "0 20px 20px" }}>
           <button onClick={onClose} style={{ flex: 1, padding: 12, borderRadius: 12, border: "1px solid var(--border)", background: "var(--card)", fontSize: 13, fontWeight: 600, cursor: "pointer", fontFamily: "inherit", color: "var(--text)" }}>Fermer</button>
-          <button onClick={() => { window.print?.(); }} style={{ flex: 1, padding: 12, borderRadius: 12, border: "none", background: "#10B981", color: "#fff", fontSize: 13, fontWeight: 700, cursor: "pointer", fontFamily: "inherit" }}>🖨️ Imprimer</button>
+          <button onClick={() => { window.print?.(); }} style={{ flex: 1, padding: 12, borderRadius: 12, border: "none", background: "#10B981", color: "#fff", fontSize: 13, fontWeight: 700, cursor: "pointer", fontFamily: "inherit" }}>️ Imprimer</button>
         </div>
       </div>
     </div>

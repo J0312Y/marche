@@ -1,10 +1,11 @@
 import { useState } from "react";
+import Icon from "../../components/Icon";
 
 function HelpScr({onBack}){
   const [open,setOpen]=useState(null);
   const [tab,setTab]=useState("all");
   const cats=[
-    ["all","Tout"],["orders","🛍️ Commandes"],["delivery","🚚 Livraison"],["payment","💳 Paiement"],["account","👤 Compte"],["vendor","🏪 Vendeur"],["driver","🛵 Livreur"]
+    ["all","Tout"],["orders","️ Commandes"],["delivery","Livraison"],["payment","Paiement"],["account","Compte"],["vendor","Vendeur"],["driver","Livreur"]
   ];
   const faqs=[
     {q:"Comment passer une commande ?",a:"Parcourez les commerces et produits, ajoutez au panier, puis payez via Mobile Money (Airtel, MTN) ou en espèces à la livraison.",cat:"orders"},
@@ -25,7 +26,7 @@ function HelpScr({onBack}){
   ];
   const shown=tab==="all"?faqs:faqs.filter(f=>f.cat===tab);
   return(<div className="scr"><div className="appbar"><button onClick={onBack}>←</button><h2>Centre d'aide</h2><div style={{width:38}}/></div>
-    <div style={{padding:"0 16px 10px"}}><div className="sbar">🔍 <input placeholder="Rechercher une question..."/></div></div>
+    <div style={{padding:"0 16px 10px"}}><div className="sbar"> <input placeholder="Rechercher une question..."/></div></div>
     <div style={{display:"flex",gap:4,padding:"0 16px 12px",overflowX:"auto",scrollbarWidth:"none"}}>
       {cats.map(([k,l])=><button key={k} onClick={()=>setTab(k)} style={{padding:"6px 12px",borderRadius:10,border:"none",background:tab===k?"#F97316":"var(--light)",color:tab===k?"#fff":"var(--muted)",fontSize:11,fontWeight:600,cursor:"pointer",fontFamily:"inherit",flexShrink:0,transition:"all .2s"}}>{l}</button>)}
     </div>
@@ -42,8 +43,8 @@ function HelpScr({onBack}){
       <div style={{padding:14,background:"rgba(249,115,22,0.04)",border:"1px solid rgba(249,115,22,0.15)",borderRadius:14}}>
         <div style={{fontSize:13,fontWeight:700,marginBottom:6}}>Besoin de plus d'aide ?</div>
         <div style={{display:"flex",gap:8}}>
-          <button onClick={()=>window.open("https://wa.me/242064663469","_blank")} style={{flex:1,padding:10,borderRadius:10,border:"none",background:"#25D366",color:"#fff",fontSize:12,fontWeight:600,cursor:"pointer",fontFamily:"inherit"}}>💬 WhatsApp</button>
-          <button onClick={()=>window.location.href="mailto:support@lamuka.market"} style={{flex:1,padding:10,borderRadius:10,border:"1px solid var(--border)",background:"var(--card)",fontSize:12,fontWeight:600,cursor:"pointer",fontFamily:"inherit",color:"var(--text)"}}>📧 Email</button>
+          <button onClick={()=>window.open("https://wa.me/242064663469","_blank")} style={{flex:1,padding:10,borderRadius:10,border:"none",background:"#25D366",color:"#fff",fontSize:12,fontWeight:600,cursor:"pointer",fontFamily:"inherit"}}><Icon name="chat" size={16}/>{" "}WhatsApp</button>
+          <button onClick={()=>window.location.href="mailto:support@lamuka.market"} style={{flex:1,padding:10,borderRadius:10,border:"1px solid var(--border)",background:"var(--card)",fontSize:12,fontWeight:600,cursor:"pointer",fontFamily:"inherit",color:"var(--text)"}}><Icon name="mail" size={16}/>{" "}Email</button>
         </div>
       </div>
     </div>

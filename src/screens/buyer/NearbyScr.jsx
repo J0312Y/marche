@@ -2,6 +2,7 @@ import PermissionSheet from "../../components/PermissionSheet";
 import { useState } from "react";
 import { useData } from "../../hooks";
 import MapView from "../../components/MapView";
+import Icon from "../../components/Icon";
 
 function NearbyScr({go,onBack}){
   const { VENDORS } = useData();
@@ -10,8 +11,8 @@ function NearbyScr({go,onBack}){
   const [sel,setSel]=useState(VENDORS[0]);
   const markers=VENDORS.filter(v=>v.lat&&v.lng).map(v=>({
     lat:v.lat,lng:v.lng,
-    emoji:v.logo?undefined:(v.type==="restaurant"?"🍽️":"🏪"),
-    popup:`<b>${v.name}</b><br/>⭐ ${v.rating} · ${v.products} articles`,
+    emoji:v.logo?undefined:(v.type==="restaurant"?"":""),
+    popup:`<b>${v.name}</b><br/><Icon name="star_full" size={16}/>{" "}${v.rating} · ${v.products} articles`,
   }));
 
   return(<>
@@ -28,15 +29,15 @@ function NearbyScr({go,onBack}){
           {sel.logo?<img src={sel.logo} style={{width:"100%",height:"100%",objectFit:"cover"}} alt=""/>:sel.avatar}
         </div>
         <div style={{flex:1,minWidth:0}}>
-          <h4 style={{fontSize:13,fontWeight:700,marginBottom:2}}>{sel.name}{sel.verified&&<span style={{color:"#F97316",fontSize:11}}> ✓</span>}</h4>
-          <p style={{fontSize:11,color:"var(--muted)",margin:0}}>⭐ {sel.rating} · {sel.products} {sel.type==="restaurant"?"plats":"articles"}</p>
+          <h4 style={{fontSize:13,fontWeight:700,marginBottom:2}}>{sel.name}{sel.verified&&<span style={{color:"#F97316",fontSize:11}}> </span>}</h4>
+          <p style={{fontSize:11,color:"var(--muted)",margin:0}}><Icon name="star_full" size={16}/>{" "}{sel.rating} · {sel.products} {sel.type==="restaurant"?"plats":"articles"}</p>
         </div>
         <button onClick={()=>go("vendor",sel)} style={{padding:"8px 14px",borderRadius:10,border:"none",background:"#F97316",color:"#fff",fontSize:12,fontWeight:600,cursor:"pointer",fontFamily:"inherit",flexShrink:0}}>Voir</button>
       </div>
     </MapView>
     <div className="scr" style={{padding:16}}>
       <div style={{fontSize:14,fontWeight:600,marginBottom:12}}>{VENDORS.length} commerces à proximité</div>
-      {VENDORS.map(v=><div key={v.id} className="vcard" style={{marginBottom:8}} onClick={()=>{setSel(v);go("vendor",v)}}><div className="vav" style={v.logo?{overflow:"hidden",padding:0}:{}}>{v.logo?<img src={v.logo} style={{width:"100%",height:"100%",objectFit:"cover"}} alt=""/>:v.avatar}</div><div className="vi"><h4>{v.name}{v.verified&&<span className="vf">✓</span>}</h4><div className="vloc">📍 {v.loc}{v.eta&&<span style={{marginLeft:6,color:"#F97316",fontWeight:600}}>🕐 {v.eta}</span>}</div><div className="vst">⭐ <b>{v.rating}</b> · {v.products} {v.type==="restaurant"?"plats":v.type==="service"?"services":"produits"}</div></div></div>)}
+      {VENDORS.map(v=><div key={v.id} className="vcard" style={{marginBottom:8}} onClick={()=>{setSel(v);go("vendor",v)}}><div className="vav" style={v.logo?{overflow:"hidden",padding:0}:{}}>{v.logo?<img src={v.logo} style={{width:"100%",height:"100%",objectFit:"cover"}} alt=""/>:v.avatar}</div><div className="vi"><h4>{v.name}{v.verified&&<span className="vf"></span>}</h4><div className="vloc"><Icon name="location" size={16}/>{" "}{v.loc}{v.eta&&<span style={{marginLeft:6,color:"#F97316",fontWeight:600}}> {v.eta}</span>}</div><div className="vst"><Icon name="star_full" size={16}/>{" "}<b>{v.rating}</b> · {v.products} {v.type==="restaurant"?"plats":v.type==="service"?"services":"produits"}</div></div></div>)}
     </div>
   </>);
 }

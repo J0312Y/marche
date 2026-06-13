@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import { useApp } from "../context/AppContext";
 import { addNotification } from "../utils/notifStore";
+import Icon from "./Icon";
 
 let showPushBanner = null;
 
@@ -14,7 +15,7 @@ function PushBanner() {
 
   useEffect(() => {
     registerPushBanner((d) => {
-      const parsed = typeof d === "string" ? { icon: "🔔", title: "Lamuka Market", body: d } : d;
+      const parsed = typeof d === "string" ? { icon: "", title: "Lamuka Market", body: d } : d;
       setData(parsed);
       addNotification(parsed);
       setVisible(true);
@@ -36,7 +37,7 @@ function PushBanner() {
       boxShadow: "0 4px 20px rgba(0,0,0,.12)",
     }}>
       <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
-        <div style={{ width: 36, height: 36, borderRadius: 10, background: "rgba(249,115,22,0.08)", display: "flex", alignItems: "center", justifyContent: "center", fontSize: 18, flexShrink: 0 }}>{data.icon || "🛒"}</div>
+        <div style={{ width: 36, height: 36, borderRadius: 10, background: "rgba(249,115,22,0.08)", display: "flex", alignItems: "center", justifyContent: "center", fontSize: 18, flexShrink: 0 }}>{data.icon || ""}</div>
         <div style={{ flex: 1, minWidth: 0 }}>
           <div style={{ fontSize: 13, fontWeight: 700, overflow: "hidden", whiteSpace: "nowrap", textOverflow: "ellipsis" }}>{data.title}</div>
           <div style={{ fontSize: 11, color: "var(--muted)", overflow: "hidden", whiteSpace: "nowrap", textOverflow: "ellipsis" }}>{data.body}</div>

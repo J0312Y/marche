@@ -1,4 +1,5 @@
 import { useState, useRef, useEffect, useCallback } from "react";
+import Icon from "./Icon";
 
 /**
  * ImageCropper — drag to reposition, zoom slider, circle/square/rect
@@ -69,7 +70,7 @@ function ImageCropper({ src, onConfirm, onCancel, shape = "square" }) {
       <canvas ref={canvasRef} style={{ display: "none" }} />
 
       <div style={{ color: "#fff", fontSize: 16, fontWeight: 700, marginBottom: 14 }}>
-        {shape === "circle" ? "📷 Ajuster la photo de profil" : shape === "rect" ? "📷 Recadrer la photo" : "📷 Recadrer l'image"}
+        {shape === "circle" ? "Ajuster la photo de profil" : shape === "rect" ? "Recadrer la photo" : "Recadrer l'image"}
       </div>
 
       {/* Crop zone */}
@@ -99,7 +100,7 @@ function ImageCropper({ src, onConfirm, onCancel, shape = "square" }) {
 
       {/* Guide */}
       <div style={{ color: "rgba(255,255,255,.45)", fontSize: 11, marginTop: 8 }}>
-        ☝️ Glissez pour repositionner
+        ️ Glissez pour repositionner
       </div>
 
       {/* Zoom */}
@@ -123,7 +124,7 @@ function ImageCropper({ src, onConfirm, onCancel, shape = "square" }) {
       {/* Buttons */}
       <div style={{ display: "flex", gap: 12 }}>
         <button onClick={onCancel} style={{ padding: "12px 28px", borderRadius: 14, border: "1px solid rgba(255,255,255,.2)", background: "transparent", color: "#fff", fontSize: 14, fontWeight: 600, cursor: "pointer", fontFamily: "inherit" }}>Annuler</button>
-        <button onClick={confirm} style={{ padding: "12px 28px", borderRadius: 14, border: "none", background: "#F97316", color: "#fff", fontSize: 14, fontWeight: 700, cursor: "pointer", fontFamily: "inherit" }}>✅ Confirmer</button>
+        <button onClick={confirm} style={{ padding: "12px 28px", borderRadius: 14, border: "none", background: "#F97316", color: "#fff", fontSize: 14, fontWeight: 700, cursor: "pointer", fontFamily: "inherit" }}><Icon name="check_circle" size={16}/>{" "}Confirmer</button>
       </div>
     </div>
   );

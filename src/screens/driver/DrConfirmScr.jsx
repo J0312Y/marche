@@ -3,6 +3,7 @@ import { fmt } from "../../utils/helpers";
 import toast from "../../utils/toast";
 import SuccessAnimation from "../../components/SuccessAnimation";
 import { validatePayPhone, getPhonePlaceholder, isPayPhoneValid } from "../../utils/phoneValidation";
+import Icon from "../../components/Icon";
 
 function DrConfirmScr({delivery:dl,go,onBack}){
   const [method,setMethod]=useState(null);
@@ -21,7 +22,7 @@ function DrConfirmScr({delivery:dl,go,onBack}){
   if(done&&isCash&&!cashReversed)return(<div className="scr" style={{padding:16}}>
     <div className="appbar" style={{padding:0,marginBottom:12}}><div style={{width:38}}/><h2>Reverser au vendeur</h2><div style={{width:38}}/></div>
     <div style={{textAlign:"center",marginBottom:16}}>
-      <div style={{fontSize:48,marginBottom:6}}>📤</div>
+      <div style={{fontSize:48,marginBottom:6}}></div>
       <h3 style={{fontSize:18,fontWeight:700}}>Envoyez l'argent au vendeur</h3>
       <p style={{fontSize:12,color:"var(--muted)",marginTop:4}}>Vous avez collecté <b style={{color:"#F59E0B"}}>{fmt(dl.total)}</b> en espèces</p>
     </div>
@@ -36,7 +37,7 @@ function DrConfirmScr({delivery:dl,go,onBack}){
     {/* Vendor info */}
     <div style={{padding:14,background:"rgba(249,115,22,0.04)",border:"1px solid rgba(249,115,22,0.15)",borderRadius:14,marginBottom:14}}>
       <div style={{display:"flex",alignItems:"center",gap:10,marginBottom:8}}>
-        <div style={{width:40,height:40,borderRadius:12,background:"linear-gradient(135deg,#F97316,#FB923C)",display:"flex",alignItems:"center",justifyContent:"center",fontSize:18}}>{dl.vendor.avatar||"🏪"}</div>
+        <div style={{width:40,height:40,borderRadius:12,background:"linear-gradient(135deg,#F97316,#FB923C)",display:"flex",alignItems:"center",justifyContent:"center",fontSize:18}}>{dl.vendor.avatar||""}</div>
         <div style={{flex:1}}><div style={{fontSize:14,fontWeight:700}}>{dl.vendor.name}</div><div style={{fontSize:12,color:"var(--muted)"}}>{dl.vendor.phone}</div></div>
       </div>
       <div style={{fontSize:12,color:"var(--muted)",lineHeight:1.5}}>Envoyez <b style={{color:"#F97316"}}>{fmt(vendorAmount)}</b> via Airtel Money ou MTN MoMo au numéro ci-dessus.</div>
@@ -55,24 +56,24 @@ function DrConfirmScr({delivery:dl,go,onBack}){
       {dl.tip>0&&<div style={{fontSize:12,color:"#F59E0B",marginTop:2}}>+ {fmt(dl.tip)} pourboire</div>}
     </div>
 
-    <button className="btn-primary" style={{background:"#10B981"}} onClick={()=>{setCashReversed(true);toast.success("✅ Reversement confirmé — merci !")}}>✅ J'ai envoyé {fmt(vendorAmount)} au vendeur</button>
+    <button className="btn-primary" style={{background:"#10B981"}} onClick={()=>{setCashReversed(true);toast.success("Reversement confirmé — merci !")}}><Icon name="check_circle" size={16}/>{" "}J'ai envoyé {fmt(vendorAmount)} au vendeur</button>
     <div style={{textAlign:"center",marginTop:8}}><span style={{fontSize:10,color:"var(--muted)"}}>Le vendeur confirmera la réception dans son app</span></div>
   </div>);
 
   // Done screen (standard or after cash reversal)
   if(done&&(!isCash||cashReversed))return(<div style={{display:"flex",flexDirection:"column",height:"100%",justifyContent:"center"}}>
     <div style={{textAlign:"center",padding:"40px 24px"}}>
-      <div style={{width:90,height:90,borderRadius:"50%",background:"rgba(16,185,129,0.1)",display:"flex",alignItems:"center",justifyContent:"center",margin:"0 auto 16px",fontSize:48,animation:"splash-pop .5s ease"}}>🎉</div>
+      <div style={{width:90,height:90,borderRadius:"50%",background:"rgba(16,185,129,0.1)",display:"flex",alignItems:"center",justifyContent:"center",margin:"0 auto 16px",fontSize:48,animation:"splash-pop .5s ease"}}><Icon name="sparkle" size={18}/></div>
       <h2 style={{fontSize:24,fontWeight:700,marginBottom:6}}>Livraison terminée !</h2>
       <p style={{fontSize:14,color:"var(--sub)",marginBottom:4}}>{dl.ref} livré à <b>{dl.client.name}</b></p>
-      {isCash&&<div style={{padding:8,background:"rgba(16,185,129,0.06)",borderRadius:10,marginBottom:8,fontSize:12,color:"#10B981",fontWeight:600}}>✅ {fmt(vendorAmount)} reversé à {dl.vendor.name}</div>}
+      {isCash&&<div style={{padding:8,background:"rgba(16,185,129,0.06)",borderRadius:10,marginBottom:8,fontSize:12,color:"#10B981",fontWeight:600}}><Icon name="check_circle" size={16}/>{" "}{fmt(vendorAmount)} reversé à {dl.vendor.name}</div>}
       <div style={{display:"flex",justifyContent:"center",gap:20,margin:"20px 0",padding:16,background:"var(--light)",borderRadius:16}}>
         <div style={{textAlign:"center"}}><div style={{fontSize:20,fontWeight:700,color:"#F97316"}}>{fmt(dl.fee)}</div><div style={{fontSize:11,color:"var(--muted)"}}>Course</div></div>
         {dl.tip>0&&<div style={{textAlign:"center"}}><div style={{fontSize:20,fontWeight:700,color:"#F59E0B"}}>{fmt(dl.tip)}</div><div style={{fontSize:11,color:"var(--muted)"}}>Pourboire</div></div>}
         <div style={{textAlign:"center"}}><div style={{fontSize:20,fontWeight:700,color:"#F97316"}}>{fmt(dl.fee+dl.tip)}</div><div style={{fontSize:11,color:"var(--muted)"}}>Total gagné</div></div>
       </div>
-      <button onClick={()=>go("drRateVendor",{name:dl?.vendor?.name||"Commerce",avatar:dl?.vendor?.avatar||"🏪"})} style={{width:"100%",padding:14,borderRadius:14,border:"1px solid var(--border)",background:"var(--card)",fontSize:14,fontWeight:600,cursor:"pointer",fontFamily:"inherit",color:"var(--text)",marginBottom:8}}>⭐ Évaluer le commerce</button>
-      <button className="btn-primary" style={{background:"#F97316"}} onClick={onBack}>🏠 Retour au dashboard</button>
+      <button onClick={()=>go("drRateVendor",{name:dl?.vendor?.name||"Commerce",avatar:dl?.vendor?.avatar||""})} style={{width:"100%",padding:14,borderRadius:14,border:"1px solid var(--border)",background:"var(--card)",fontSize:14,fontWeight:600,cursor:"pointer",fontFamily:"inherit",color:"var(--text)",marginBottom:8}}><Icon name="star_full" size={16}/>{" "}Évaluer le commerce</button>
+      <button className="btn-primary" style={{background:"#F97316"}} onClick={onBack}> Retour au dashboard</button>
     </div>
   </div>);
 
@@ -80,14 +81,14 @@ function DrConfirmScr({delivery:dl,go,onBack}){
     <div className="appbar"><button onClick={onBack}>←</button><h2>Confirmer livraison</h2><div style={{width:38}}/></div>
     <div className="scr" style={{padding:16}}>
       <div style={{textAlign:"center",marginBottom:14}}>
-        <div style={{fontSize:48,marginBottom:8}}>📦</div>
+        <div style={{fontSize:48,marginBottom:8}}><Icon name="package" size={18}/></div>
         <h3 style={{fontSize:18,fontWeight:700}}>Livraison à {dl.client.name}</h3>
         <p style={{fontSize:13,color:"var(--muted)"}}>{dl.client.addr}</p>
       </div>
 
       <div style={{fontSize:14,fontWeight:700,marginBottom:10}}>Méthode de confirmation</div>
       <div className="dr-confirm-options">
-        {[["code","🔢","Code PIN"],["photo","📸","Photo"],["signature","✍️","Signature"]].map(([k,i,l])=>
+        {[["code","","Code PIN"],["photo","","Photo"],["signature","️","Signature"]].map(([k,i,l])=>
           <div key={k} className={`dr-confirm-opt ${method===k?"on":""}`} onClick={()=>setMethod(k)}>
             <div className="dco-icon">{i}</div><div className="dco-label">{l}</div>
           </div>)}
@@ -103,46 +104,46 @@ function DrConfirmScr({delivery:dl,go,onBack}){
         <input id="dr-photo-confirm" type="file" accept="image/*" capture="environment" style={{display:"none"}} onChange={e=>{
           const f=e.target.files?.[0];if(!f)return;
           const reader=new FileReader();
-          reader.onload=()=>{setPhotoTaken(reader.result);toast.success("Photo prise 📸")};
+          reader.onload=()=>{setPhotoTaken(reader.result);toast.success("Photo prise")};
           reader.readAsDataURL(f);e.target.value="";
         }}/>
         {!photoTaken?<div onClick={()=>document.getElementById("dr-photo-confirm")?.click()} style={{height:160,background:"var(--light,#F5F4F1)",border:"2px dashed var(--border,#E8E6E1)",borderRadius:18,display:"flex",flexDirection:"column",alignItems:"center",justifyContent:"center",cursor:"pointer"}}>
-          <div style={{width:56,height:56,borderRadius:16,background:"rgba(249,115,22,0.08)",display:"flex",alignItems:"center",justifyContent:"center",fontSize:24,marginBottom:6}}>📷</div>
+          <div style={{width:56,height:56,borderRadius:16,background:"rgba(249,115,22,0.08)",display:"flex",alignItems:"center",justifyContent:"center",fontSize:24,marginBottom:6}}><Icon name="camera" size={18}/></div>
           <div style={{fontSize:13,fontWeight:600,color:"var(--muted,#908C82)"}}>Appuyer pour prendre la photo</div>
         </div>
         :<div style={{height:160,borderRadius:18,overflow:"hidden",position:"relative",border:"2px solid #F97316"}}>
           <img src={photoTaken} style={{width:"100%",height:"100%",objectFit:"cover"}} alt=""/>
-          <div style={{position:"absolute",top:8,right:8,padding:"4px 10px",borderRadius:8,background:"#F59E0B",color:"#fff",fontSize:10,fontWeight:700}}>✅ Photo prise</div>
-          <div onClick={()=>setPhotoTaken(false)} style={{position:"absolute",bottom:8,right:8,padding:"4px 10px",borderRadius:8,background:"rgba(239,68,68,.9)",color:"#fff",fontSize:10,fontWeight:600,cursor:"pointer"}}>🗑️ Reprendre</div>
+          <div style={{position:"absolute",top:8,right:8,padding:"4px 10px",borderRadius:8,background:"#F59E0B",color:"#fff",fontSize:10,fontWeight:700}}><Icon name="check_circle" size={16}/>{" "}Photo prise</div>
+          <div onClick={()=>setPhotoTaken(false)} style={{position:"absolute",bottom:8,right:8,padding:"4px 10px",borderRadius:8,background:"rgba(239,68,68,.9)",color:"#fff",fontSize:10,fontWeight:600,cursor:"pointer"}}>️ Reprendre</div>
         </div>}
       </div>}
 
       {method==="signature"&&<div style={{marginTop:14}}>
         <p style={{fontSize:13,color:"var(--muted)",marginBottom:10}}>Le client signe sur l'écran</p>
         {!signed?<div onClick={()=>setSigned(true)} style={{height:140,background:"var(--card)",border:"2px dashed #E8E6E1",borderRadius:18,display:"flex",alignItems:"center",justifyContent:"center",cursor:"pointer"}}>
-          <div style={{fontSize:13,color:"var(--muted)"}}>✍️ Appuyer ici pour signer</div>
+          <div style={{fontSize:13,color:"var(--muted)"}}>️ Appuyer ici pour signer</div>
         </div>
         :<div style={{height:140,background:"rgba(249,115,22,0.04)",border:"2px solid #F97316",borderRadius:18,display:"flex",alignItems:"center",justifyContent:"center",position:"relative"}}>
           <div style={{fontFamily:"cursive",fontSize:24,color:"var(--text)",opacity:.6}}>Marie Koumba</div>
-          <div onClick={()=>setSigned(false)} style={{position:"absolute",bottom:8,right:8,fontSize:11,color:"#EF4444",cursor:"pointer",fontWeight:600}}>🗑️ Effacer</div>
-          <div style={{position:"absolute",top:8,right:8}}><span style={{padding:"3px 8px",borderRadius:6,background:"rgba(249,115,22,0.1)",color:"#F97316",fontSize:10,fontWeight:600}}>✓ Signé</span></div>
+          <div onClick={()=>setSigned(false)} style={{position:"absolute",bottom:8,right:8,fontSize:11,color:"#EF4444",cursor:"pointer",fontWeight:600}}>️ Effacer</div>
+          <div style={{position:"absolute",top:8,right:8}}><span style={{padding:"3px 8px",borderRadius:6,background:"rgba(249,115,22,0.1)",color:"#F97316",fontSize:10,fontWeight:600}}> Signé</span></div>
         </div>}
       </div>}
 
-      {!method&&<div className="info-box yellow" style={{marginTop:14}}><span>💡</span><span>Choisissez une méthode de confirmation pour valider la livraison</span></div>}
+      {!method&&<div className="info-box yellow" style={{marginTop:14}}><span><Icon name="info" size={18}/></span><span>Choisissez une méthode de confirmation pour valider la livraison</span></div>}
 
       {/* Cash collection confirmation */}
       {isCash&&method&&<div style={{marginTop:14,padding:14,background:"rgba(245,158,11,0.06)",border:"1px solid rgba(245,158,11,0.2)",borderRadius:14}}>
-        <div style={{fontSize:13,fontWeight:700,color:"#F59E0B",marginBottom:6}}>💵 Paiement en espèces</div>
+        <div style={{fontSize:13,fontWeight:700,color:"#F59E0B",marginBottom:6}}><Icon name="wallet" size={16}/>{" "}Paiement en espèces</div>
         <div style={{fontSize:12,color:"var(--muted)",marginBottom:10}}>Montant à collecter : <b style={{color:"#F59E0B",fontSize:16}}>{fmt(dl.total)}</b></div>
         <div onClick={()=>setCashCollected(!cashCollected)} style={{display:"flex",alignItems:"center",gap:10,padding:10,background:cashCollected?"rgba(16,185,129,0.06)":"var(--card)",border:cashCollected?"1px solid rgba(16,185,129,0.2)":"1px solid var(--border)",borderRadius:10,cursor:"pointer"}}>
-          <div style={{width:22,height:22,borderRadius:6,border:cashCollected?"none":"2px solid var(--border)",background:cashCollected?"#10B981":"transparent",display:"flex",alignItems:"center",justifyContent:"center",color:"#fff",fontSize:12,fontWeight:700}}>{cashCollected&&"✓"}</div>
+          <div style={{width:22,height:22,borderRadius:6,border:cashCollected?"none":"2px solid var(--border)",background:cashCollected?"#10B981":"transparent",display:"flex",alignItems:"center",justifyContent:"center",color:"#fff",fontSize:12,fontWeight:700}}>{cashCollected&&""}</div>
           <span style={{fontSize:13,fontWeight:600,color:cashCollected?"#10B981":"var(--text)"}}>J'ai bien reçu {fmt(dl.total)} du client</span>
         </div>
       </div>}
 
       <div style={{paddingTop:24,paddingBottom:16}}>
-        <button className="btn-primary" style={{background:method?"#F97316":"var(--border)",color:method?"var(--card)":"var(--muted)"}} onClick={()=>{if(method&&(!isCash||cashCollected)){setDone(true);setShowCelebration(true);toast.success(isCash?"💵 Paiement collecté — Reversez au vendeur":"Livraison confirmée 🎉")}}} disabled={!method||(isCash&&!cashCollected)}>✅ Valider la livraison</button>
+        <button className="btn-primary" style={{background:method?"#F97316":"var(--border)",color:method?"var(--card)":"var(--muted)"}} onClick={()=>{if(method&&(!isCash||cashCollected)){setDone(true);setShowCelebration(true);toast.success(isCash?"Paiement collecté — Reversez au vendeur":"Livraison confirmée")}}} disabled={!method||(isCash&&!cashCollected)}><Icon name="check_circle" size={16}/>{" "}Valider la livraison</button>
       </div>
     </div>
   </>);

@@ -30,7 +30,7 @@ function DrProfileScr({go,onSwitch,onLogout}){
   const [drCover,setDrCover]=useState(DRIVER_COVER);
   const [cropDrSrc,setCropDrSrc]=useState(null);
 
-  return(<PullToRefresh onRefresh={async()=>{toast.success("Profil actualisé 👤")}}><div className="scr" style={{paddingBottom:20}}>
+  return(<PullToRefresh onRefresh={async()=>{toast.success("Profil actualisé")}}><div className="scr" style={{paddingBottom:20}}>
     <div className="appbar"><h2>Mon Profil</h2><button onClick={()=>go("drNotif")}><Icon name="bell" size={18}/></button></div>
 
     {/* Profile header — cover + photo */}
@@ -38,7 +38,7 @@ function DrProfileScr({go,onSwitch,onLogout}){
       <div style={{height:120,borderRadius:"0 0 20px 20px",overflow:"hidden",position:"relative"}}>
         <img src={drCover} style={{width:"100%",height:"100%",objectFit:"cover",objectPosition:"center"}} alt=""/>
         <label style={{position:"absolute",bottom:8,right:8,padding:"5px 10px",borderRadius:10,background:"rgba(0,0,0,.5)",color:"#fff",fontSize:10,fontWeight:600,cursor:"pointer",display:"flex",alignItems:"center",gap:4}}><Icon name="camera" size={16}/>{" "}Couverture
-          <input type="file" accept="image/*" style={{display:"none"}} onChange={e=>{const f=e.target.files?.[0];if(f){const r=new FileReader();r.onload=()=>{setDrCover(r.result);toast.success("Couverture mise à jour 📸")};r.readAsDataURL(f);e.target.value=""}}}/>
+          <input type="file" accept="image/*" style={{display:"none"}} onChange={e=>{const f=e.target.files?.[0];if(f){const r=new FileReader();r.onload=()=>{setDrCover(r.result);toast.success("Couverture mise à jour")};r.readAsDataURL(f);e.target.value=""}}}/>
         </label>
       </div>
       <div style={{position:"absolute",bottom:-38,left:"50%",transform:"translateX(-50%)"}}>
@@ -62,25 +62,25 @@ function DrProfileScr({go,onSwitch,onLogout}){
     <div className="wallet" style={{margin:"0 16px 14px",background:"linear-gradient(135deg,#F97316,#EA580C)"}}><div><p style={{fontSize:11,color:"rgba(255,255,255,.7)"}}>Gains disponibles</p><h3 style={{fontSize:20,fontWeight:700,marginTop:2,color:"#fff"}}>{fmt(D_STATS.month.earned)}</h3></div><button onClick={()=>go("drWallet")}>Retirer</button></div>
 
     {/* ═══ LIVRAISONS ═══ */}
-    <Section icon="📦" title="MES LIVRAISONS">
-      <Item icon="📦" label="Historique" info={D_HISTORY.length+" livraisons"} onClick={()=>go("drHistory")}/>
-      <Item icon="💰" label="Mes gains" info="Février 2026" onClick={()=>go("drWallet")}/>
-      <Item icon="📊" label="Statistiques" info="Cette semaine" onClick={()=>go("drStats")}/>
+    <Section icon="" title="MES LIVRAISONS">
+      <Item icon="" label="Historique" info={D_HISTORY.length+" livraisons"} onClick={()=>go("drHistory")}/>
+      <Item icon="" label="Mes gains" info="Février 2026" onClick={()=>go("drWallet")}/>
+      <Item icon="" label="Statistiques" info="Cette semaine" onClick={()=>go("drStats")}/>
     </Section>
 
     {/* ═══ VÉHICULE & ZONES ═══ */}
-    <Section icon="🛵" title="VÉHICULE & ZONES">
-      <Item icon="🛵" label="Mon véhicule" info="Honda PCX" onClick={()=>go("drVehicle")}/>
-      <Item icon="📄" label="Mes documents" info="5/6 valides" onClick={()=>go("drDocuments")}/>
-      <Item icon="📍" label="Zones actives" info="Bzv Sud, Centre" onClick={()=>go("drZones")}/>
+    <Section icon="" title="VÉHICULE & ZONES">
+      <Item icon="" label="Mon véhicule" info="Honda PCX" onClick={()=>go("drVehicle")}/>
+      <Item icon="" label="Mes documents" info="5/6 valides" onClick={()=>go("drDocuments")}/>
+      <Item icon="" label="Zones actives" info="Bzv Sud, Centre" onClick={()=>go("drZones")}/>
     </Section>
 
     {/* ═══ OUTILS ═══ */}
-    <Section icon="🔧" title="OUTILS & SUPPORT">
-      <Item icon="🔔" label="Notifications" info="3" onClick={()=>go("drNotif")}/>
-      <Item icon="🤖" label="Assistant Lamu" info="IA" onClick={()=>go("drChatBot")}/>
-      <Item icon="⚙️" label="Paramètres" info="Langue, notifs" onClick={()=>go("drSettings")}/>
-      <Item icon="❓" label="Aide & Support" info="FAQ, contact" onClick={()=>go("drHelp")}/>
+    <Section icon="" title="OUTILS & SUPPORT">
+      <Item icon="" label="Notifications" info="3" onClick={()=>go("drNotif")}/>
+      <Item icon="" label="Assistant Lamu" info="IA" onClick={()=>go("drChatBot")}/>
+      <Item icon="" label="Paramètres" info="Langue, notifs" onClick={()=>go("drSettings")}/>
+      <Item icon="" label="Aide & Support" info="FAQ, contact" onClick={()=>go("drHelp")}/>
     </Section>
 
     {/* Switch + Logout */}
@@ -88,7 +88,7 @@ function DrProfileScr({go,onSwitch,onLogout}){
       <button onClick={onSwitch} style={{flex:1,padding:12,borderRadius:14,border:"1px solid var(--border)",background:"var(--card)",fontSize:13,fontWeight:600,cursor:"pointer",fontFamily:"inherit",color:"var(--text)"}}><Icon name="package" size={16}/>{" "}Mode Acheteur</button>
       <button onClick={onLogout} style={{flex:1,padding:12,borderRadius:14,border:"1px solid rgba(239,68,68,0.3)",background:"transparent",color:"#EF4444",fontSize:13,fontWeight:600,cursor:"pointer",fontFamily:"inherit"}}><Icon name="logout" size={16}/>{" "}Déconnexion</button>
     </div>
-  {cropDrSrc&&<ImageCropper src={cropDrSrc} shape="circle" onCancel={()=>setCropDrSrc(null)} onConfirm={cropped=>{setDrPhoto(cropped);setCropDrSrc(null);toast.success("Photo mise à jour 📸")}}/>}
+  {cropDrSrc&&<ImageCropper src={cropDrSrc} shape="circle" onCancel={()=>setCropDrSrc(null)} onConfirm={cropped=>{setDrPhoto(cropped);setCropDrSrc(null);toast.success("Photo mise à jour")}}/>}
   </div></PullToRefresh>);
 }
 

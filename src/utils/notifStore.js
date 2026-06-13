@@ -10,7 +10,7 @@ const store = {
 export function addNotification(notif) {
   const item = {
     id: "push-" + Date.now(),
-    icon: notif.icon || "🔔",
+    icon: notif.icon || "",
     title: notif.title || "Lamuka Market",
     body: notif.body || notif,
     time: new Date().toLocaleTimeString("fr", { hour: "2-digit", minute: "2-digit" }),

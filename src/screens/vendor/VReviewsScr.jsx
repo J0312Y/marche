@@ -4,6 +4,7 @@ import { vendor } from "../../services";
 import { SkeletonList } from "../../components/Loading";
 import { CHAT_AVATARS } from "../../data/images";
 import toast from "../../utils/toast";
+import Icon from "../../components/Icon";
 
 function VReviewsScr({onBack}){
   const { data, loading } = useLoad(() => vendor.getReviews());
@@ -23,7 +24,7 @@ function VReviewsScr({onBack}){
     setReviews(updated);
     setReplyingTo(null);
     setReplyText("");
-    toast.success("Réponse publiée ✅");
+    toast.success("Réponse publiée");
   };
 
   return(<div className="scr" style={{padding:16,paddingBottom:20}}>
@@ -34,7 +35,7 @@ function VReviewsScr({onBack}){
       <div style={{display:"flex",alignItems:"center",gap:14,padding:14,background:"var(--card)",border:"1px solid var(--border)",borderRadius:16,marginBottom:12}}>
         <div style={{textAlign:"center"}}>
           <div style={{fontSize:28,fontWeight:800,color:"var(--text)"}}>{avg}</div>
-          <div style={{fontSize:12,color:"#F59E0B"}}>{"★".repeat(Math.floor(avg))}</div>
+          <div style={{fontSize:12,color:"#F59E0B"}}>{"".repeat(Math.floor(avg))}</div>
         </div>
         <div style={{flex:1,fontSize:12,color:"var(--muted)"}}>
           <div>{items.length} avis au total</div>
@@ -63,12 +64,12 @@ function VReviewsScr({onBack}){
                 <div style={{fontSize:10,color:"var(--muted)"}}>{r.date}</div>
               </div>
             </div>
-            <div style={{color:"#F59E0B",fontSize:12}}>{"★".repeat(r.rating)}{"☆".repeat(5-r.rating)}</div>
+            <div style={{color:"#F59E0B",fontSize:12}}>{"".repeat(r.rating)}{"".repeat(5-r.rating)}</div>
           </div>
 
           {/* Review text */}
           <div style={{fontSize:12,color:"var(--sub)",lineHeight:1.5,marginBottom:6}}>{r.text}</div>
-          <div style={{fontSize:11,color:"var(--muted)",display:"flex",alignItems:"center",gap:4}}>📦 {r.product}</div>
+          <div style={{fontSize:11,color:"var(--muted)",display:"flex",alignItems:"center",gap:4}}><Icon name="package" size={16}/>{" "}{r.product}</div>
 
           {/* Existing reply */}
           {r.replied&&r.reply&&(

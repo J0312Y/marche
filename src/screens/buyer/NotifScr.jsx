@@ -8,14 +8,14 @@ import PullToRefresh from "../../components/PullToRefresh";
 import toast from "../../utils/toast";
 
 const DETAILS = {
-  n1: { full: "Votre commande #LMK-0214 est en cours de livraison.\n\nLivreur : Patrick Moukala\nVéhicule : 🛵 Honda PCX\nEstimation : 15-20 min\n\nArticles :\n• 📱 Galaxy A54 × 1\n• 🥬 Panier Bio × 3\n\nTotal : 231 500 FCFA", action: "tracking", actionLabel: "📍 Suivre la livraison" },
-  n2: { full: "Profitez des soldes de février !\n\n🏪 Tech Congo : -15% sur toute l'électronique\n👔 Mode Afrique : -20% sur les vêtements\n🧁 Pâtisserie La Congolaise : -10% sur les gâteaux\n\nOffre valable jusqu'au 28 Février 2026.", action: "flash", actionLabel: "🛍️ Voir les offres" },
-  n3: { full: "Commande #LMK-0210 livrée avec succès !\n\nArticle : 👜 Sac à Main Cuir\nVendeur : Mode Afrique\nLivré le : 10 Fév 2026 à 14h32\nMontant : 42 000 FCFA\n\nSatisfait ? Laissez un avis pour aider les autres acheteurs.", action: "orders", actionLabel: "📦 Voir mes commandes" },
-  n4: { full: "Mode Afrique vous a répondu :\n\n\"Merci pour votre commande ! Le sac en cuir est disponible en marron et noir. N'hésitez pas à commander.\"", action: "chatVendor", actionLabel: "💬 Voir la conversation" },
-  n5: { full: "Vous avez reçu votre Sac à Main Cuir il y a une semaine.\n\nQu'en pensez-vous ? Votre avis aide les autres acheteurs et le vendeur à s'améliorer.\n\n⭐ Notez de 1 à 5 étoiles\n📸 Ajoutez des photos (optionnel)",
+  n1: { full: "Votre commande #LMK-0214 est en cours de livraison.\n\nLivreur : Patrick Moukala\nVéhicule :  Honda PCX\nEstimation : 15-20 min\n\nArticles :\n•  Galaxy A54 × 1\n•  Panier Bio × 3\n\nTotal : 231 500 FCFA", action: "tracking", actionLabel: "Suivre la livraison" },
+  n2: { full: "Profitez des soldes de février !\n\n Tech Congo : -15% sur toute l'électronique\n Mode Afrique : -20% sur les vêtements\n Pâtisserie La Congolaise : -10% sur les gâteaux\n\nOffre valable jusqu'au 28 Février 2026.", action: "flash", actionLabel: "️ Voir les offres" },
+  n3: { full: "Commande #LMK-0210 livrée avec succès !\n\nArticle :  Sac à Main Cuir\nVendeur : Mode Afrique\nLivré le : 10 Fév 2026 à 14h32\nMontant : 42 000 FCFA\n\nSatisfait ? Laissez un avis pour aider les autres acheteurs.", action: "orders", actionLabel: "Voir mes commandes" },
+  n4: { full: "Mode Afrique vous a répondu :\n\n\"Merci pour votre commande ! Le sac en cuir est disponible en marron et noir. N'hésitez pas à commander.\"", action: "chatVendor", actionLabel: "Voir la conversation" },
+  n5: { full: "Vous avez reçu votre Sac à Main Cuir il y a une semaine.\n\nQu'en pensez-vous ? Votre avis aide les autres acheteurs et le vendeur à s'améliorer.\n\n Notez de 1 à 5 étoiles\n Ajoutez des photos (optionnel)",
     action: "reviews",
-    actionData: {id:"p8",name:"Sac à Main Cuir",price:42000,img:"👜",vendor:"Mode Afrique",va:"👔",rating:4.7,reviews:51,tags:["Artisanal"],type:"boutique",photo:"https://images.unsplash.com/photo-1548036328-c9fa89d128fa?w=400&h=400&fit=crop"},
-    actionLabel: "✏️ Laisser un avis" },
+    actionData: {id:"p8",name:"Sac à Main Cuir",price:42000,img:"package",vendor:"Mode Afrique",va:"",rating:4.7,reviews:51,tags:["Artisanal"],type:"boutique",photo:"https://images.unsplash.com/photo-1548036328-c9fa89d128fa?w=400&h=400&fit=crop"},
+    actionLabel: "Laisser un avis" },
 };
 
 function NotifScr({ onBack, go }) {
@@ -39,7 +39,7 @@ function NotifScr({ onBack, go }) {
   };
 
   const markAllRead = () => {
-    setNotifs((notifs || raw).map(n => ({ ...n, read: true })));markAllPushRead();toast.success('Toutes les notifications lues ✅');
+    setNotifs((notifs || raw).map(n => ({ ...n, read: true })));markAllPushRead();toast.success('Toutes les notifications lues');
   };
 
   const handleClick = (n) => {
@@ -58,7 +58,7 @@ function NotifScr({ onBack, go }) {
   const unreadCount = items.filter(n => !n.read).length;
 
   return (
-    <PullToRefresh onRefresh={async()=>{toast.success("Notifications actualisées 🔔")}}><div className="scr">
+    <PullToRefresh onRefresh={async()=>{toast.success("Notifications actualisées")}}><div className="scr">
       <div className="appbar">
         <button onClick={onBack}>←</button>
         <h2>Notifications {unreadCount > 0 && <span style={{ fontSize: 13, color: "#F97316", fontWeight: 600 }}>({unreadCount})</span>}</h2>
@@ -71,7 +71,7 @@ function NotifScr({ onBack, go }) {
 
       {loading ? <SkeletonList count={5}/> : items.length === 0 ? (
         <div style={{ textAlign: "center", padding: "60px 20px" }}>
-          <div style={{ fontSize: 48, marginBottom: 10 }}>🔔</div>
+          <div style={{ fontSize: 48, marginBottom: 10 }}><Icon name="bell" size={18}/></div>
           <h3 style={{ fontSize: 16, fontWeight: 700, marginBottom: 4 }}>Aucune notification</h3>
           <p style={{ fontSize: 13, color: "var(--muted)" }}>Vous serez notifié des mises à jour de vos commandes</p>
         </div>
@@ -101,7 +101,7 @@ function NotifScr({ onBack, go }) {
                     background: !n.read ? "rgba(249,115,22,0.08)" : "var(--light)",
                     display: "flex", alignItems: "center", justifyContent: "center",
                     fontSize: 20, flexShrink: 0,
-                  }}>{n.icon}</div>
+                  }}><Icon name={n.icon} size={20}/></div>
 
                   {/* Content */}
                   <div style={{ flex: 1, minWidth: 0 }}>

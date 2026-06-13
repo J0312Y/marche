@@ -18,7 +18,7 @@ export async function share({ title, text, url }) {
     // Fallback: copy link
     try {
       await navigator.clipboard.writeText(url || text || title);
-      toast.success("Lien copié ! 📋");
+      toast.success("Lien copié ! ");
     } catch {
       toast.info(url || text);
     }

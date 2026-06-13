@@ -70,7 +70,7 @@ function SearchScr({ go, onBack, fromTab, favs, toggleFav, isFav, defaultTab }) 
   );
 
   const isAllSelected = selectedCatId === "all";
-  const selectedCat = isAllSelected ? { id: "all", name: "Toutes catégories", icon: "📦", count: P.length, photo: "https://images.unsplash.com/photo-1607082348824-0a96f2a4b9da?w=400&h=200&fit=crop", subs: null } : (CATS.find(c => c.id === selectedCatId) || CATS[0]);
+  const selectedCat = isAllSelected ? { id: "all", name: "Toutes catégories", icon: "", count: P.length, photo: "https://images.unsplash.com/photo-1607082348824-0a96f2a4b9da?w=400&h=200&fit=crop", subs: null } : (CATS.find(c => c.id === selectedCatId) || CATS[0]);
   const catProducts = applyFilters(isAllSelected ? P : P.filter(p => p.cat === selectedCat.name));
 
   return (
@@ -99,7 +99,7 @@ function SearchScr({ go, onBack, fromTab, favs, toggleFav, isFav, defaultTab }) 
       {/* Sort & filters bar (when searching) */}
       {isSearching && (
         <div style={{ display: "flex", gap: 6, padding: "8px 14px", overflowX: "auto", scrollbarWidth: "none", background: "var(--card)", borderBottom: "1px solid var(--border)" }}>
-          {[["popular", "🔥 Populaires"], ["rating", "⭐ Mieux notés"], ["priceAsc", "💰 Prix ↑"], ["priceDesc", "💰 Prix ↓"]].map(([k, l]) => (
+          {[["popular", "Populaires"], ["rating", "Mieux notés"], ["priceAsc", "Prix ↑"], ["priceDesc", "Prix ↓"]].map(([k, l]) => (
             <button key={k} onClick={() => setSortBy(k)} style={{ flexShrink: 0, padding: "6px 12px", borderRadius: 16, border: sortBy === k ? "2px solid #F97316" : "1px solid var(--border)", background: sortBy === k ? "rgba(249,115,22,0.06)" : "var(--card)", fontSize: 11, fontWeight: 600, color: sortBy === k ? "#F97316" : "var(--muted)", cursor: "pointer", fontFamily: "inherit" }}>{l}</button>
           ))}
         </div>
@@ -125,7 +125,7 @@ function SearchScr({ go, onBack, fromTab, favs, toggleFav, isFav, defaultTab }) 
                       <div style={{ aspectRatio: "1 / 1", borderRadius: 12, overflow: "hidden", background: "var(--light)", position: "relative" }}>
                         <Img src={p.photo} emoji={p.img} style={{ width: "100%", height: "100%" }} fit="cover" />
                         {p.old && <span style={{ position: "absolute", top: 6, left: 6, padding: "2px 6px", borderRadius: 5, background: "#EF4444", color: "#fff", fontSize: 9, fontWeight: 800 }}>-{Math.round((1 - p.price / p.old) * 100)}%</span>}
-                        <span onClick={e => { e.stopPropagation(); toggleFav(p.id) }} style={{ position: "absolute", top: 6, right: 6, width: 26, height: 26, borderRadius: "50%", background: "rgba(255,255,255,0.95)", display: "flex", alignItems: "center", justifyContent: "center", fontSize: 13, color: isFav(p.id) ? "#EF4444" : "var(--muted)", cursor: "pointer" }}>{isFav(p.id) ? "♥" : "♡"}</span>
+                        <span onClick={e => { e.stopPropagation(); toggleFav(p.id) }} style={{ position: "absolute", top: 6, right: 6, width: 26, height: 26, borderRadius: "50%", background: "rgba(255,255,255,0.95)", display: "flex", alignItems: "center", justifyContent: "center", fontSize: 13, color: isFav(p.id) ? "#EF4444" : "var(--muted)", cursor: "pointer" }}>{isFav(p.id) ? "" : ""}</span>
                       </div>
                       <div style={{ fontSize: 12, fontWeight: 600, marginTop: 6, overflow: "hidden", display: "-webkit-box", WebkitLineClamp: 2, WebkitBoxOrient: "vertical", lineHeight: 1.3, minHeight: 31 }}>{p.name}</div>
                       <div style={{ fontSize: 10, color: "var(--muted)", marginTop: 2, overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>{p.vendor}</div>
@@ -133,7 +133,7 @@ function SearchScr({ go, onBack, fromTab, favs, toggleFav, isFav, defaultTab }) 
                         <span style={{ fontSize: 13, fontWeight: 800, color: "#F97316" }}>{fmt(price)}</span>
                         {p.old && <span style={{ fontSize: 10, color: "var(--muted)", textDecoration: "line-through" }}>{fmt(p.old)}</span>}
                       </div>
-                      <div style={{ fontSize: 10, color: "#F59E0B", marginTop: 2 }}>⭐ {p.rating} ({p.reviews})</div>
+                      <div style={{ fontSize: 10, color: "#F59E0B", marginTop: 2 }}><Icon name="star_full" size={16}/>{" "}{p.rating} ({p.reviews})</div>
                     </div>
                   );
                 })}
@@ -150,11 +150,11 @@ function SearchScr({ go, onBack, fromTab, favs, toggleFav, isFav, defaultTab }) 
                 {vendorResults.map(v => (
                   <div key={v.id} onClick={() => go("vendor", v)} style={{ display: "flex", alignItems: "center", gap: 12, padding: "12px 0", cursor: "pointer", borderBottom: "1px solid var(--border)" }}>
                     <div style={{ width: 50, height: 50, borderRadius: 14, overflow: "hidden", background: "var(--light)", flexShrink: 0 }}>
-                      {v.logo ? <img src={v.logo} alt="" style={{ width: "100%", height: "100%", objectFit: "cover", objectPosition: "center" }} /> : <div style={{ width: "100%", height: "100%", display: "flex", alignItems: "center", justifyContent: "center", fontSize: 22 }}>{v.avatar || "🏪"}</div>}
+                      {v.logo ? <img src={v.logo} alt="" style={{ width: "100%", height: "100%", objectFit: "cover", objectPosition: "center" }} /> : <div style={{ width: "100%", height: "100%", display: "flex", alignItems: "center", justifyContent: "center", fontSize: 22 }}>{v.avatar || ""}</div>}
                     </div>
                     <div style={{ flex: 1, minWidth: 0 }}>
                       <div style={{ fontSize: 14, fontWeight: 700, overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>{v.name}</div>
-                      <div style={{ fontSize: 11, color: "var(--muted)", marginTop: 2, overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>⭐ {v.rating} · {v.type} · {v.eta || "30 min"}</div>
+                      <div style={{ fontSize: 11, color: "var(--muted)", marginTop: 2, overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}><Icon name="star_full" size={16}/>{" "}{v.rating} · {v.type} · {v.eta || "30 min"}</div>
                     </div>
                     <Icon name="chevron_right" size={18} color="var(--muted)" />
                   </div>
@@ -250,7 +250,7 @@ function SearchScr({ go, onBack, fromTab, favs, toggleFav, isFav, defaultTab }) 
                         <div style={{ aspectRatio: "1 / 1", borderRadius: 12, overflow: "hidden", background: "var(--light)", position: "relative" }}>
                           <Img src={p.photo} emoji={p.img} style={{ width: "100%", height: "100%" }} fit="cover" />
                           {p.old && <span style={{ position: "absolute", top: 6, left: 6, padding: "2px 6px", borderRadius: 5, background: "#EF4444", color: "#fff", fontSize: 9, fontWeight: 800 }}>-{Math.round((1 - p.price / p.old) * 100)}%</span>}
-                          <span onClick={e => { e.stopPropagation(); toggleFav(p.id) }} style={{ position: "absolute", top: 6, right: 6, width: 24, height: 24, borderRadius: "50%", background: "rgba(255,255,255,0.95)", display: "flex", alignItems: "center", justifyContent: "center", fontSize: 12, color: isFav(p.id) ? "#EF4444" : "var(--muted)", cursor: "pointer" }}>{isFav(p.id) ? "♥" : "♡"}</span>
+                          <span onClick={e => { e.stopPropagation(); toggleFav(p.id) }} style={{ position: "absolute", top: 6, right: 6, width: 24, height: 24, borderRadius: "50%", background: "rgba(255,255,255,0.95)", display: "flex", alignItems: "center", justifyContent: "center", fontSize: 12, color: isFav(p.id) ? "#EF4444" : "var(--muted)", cursor: "pointer" }}>{isFav(p.id) ? "" : ""}</span>
                         </div>
                         <div style={{ fontSize: 11.5, fontWeight: 600, marginTop: 6, overflow: "hidden", display: "-webkit-box", WebkitLineClamp: 2, WebkitBoxOrient: "vertical", lineHeight: 1.3, minHeight: 30 }}>{p.name}</div>
                         <div style={{ display: "flex", alignItems: "baseline", gap: 4, marginTop: 4 }}>

@@ -1,4 +1,5 @@
 import { useState } from "react";
+import Icon from "../../components/Icon";
 
 const DAYS=["Lu","Ma","Me","Je","Ve","Sa","Di"];
 const ORDERS_DATA={
@@ -31,7 +32,7 @@ function VCalendarScr({onBack}){
   const statusLbl={new:"Nouvelle",prep:"Préparation",done:"Livrée"};
 
   return(<div className="scr" style={{padding:16,paddingBottom:20}}>
-    <div className="appbar" style={{padding:0,marginBottom:12}}><button onClick={onBack}>←</button><h2>📅 Calendrier</h2><div style={{width:38}}/></div>
+    <div className="appbar" style={{padding:0,marginBottom:12}}><button onClick={onBack}>←</button><h2> Calendrier</h2><div style={{width:38}}/></div>
 
     {/* Month nav */}
     <div style={{display:"flex",justifyContent:"space-between",alignItems:"center",marginBottom:12}}>

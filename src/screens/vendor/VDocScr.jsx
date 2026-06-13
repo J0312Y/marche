@@ -1,9 +1,10 @@
 
+import Icon from "../../components/Icon";
 
 function VDocScr({docKey,onBack}){
   const docs={
     guide:{
-      title:"Guide de démarrage",icon:"📘",color:"#F97316",
+      title:"Guide de démarrage",icon:"",color:"#F97316",
       sections:[
         {title:"Introduction",content:"L'API Lamuka permet aux commerçants Enterprise d'intégrer leur établissement avec des systèmes externes : ERP, sites web, applications mobiles, CRM et outils d'inventaire."},
         {title:"Base URL",code:"https://api.lamuka.cg/v2"},
@@ -16,7 +17,7 @@ function VDocScr({docKey,onBack}){
       ]
     },
     products:{
-      title:"Endpoints Produits",icon:"📦",color:"#10B981",
+      title:"Endpoints Produits",icon:"package",color:"#10B981",
       sections:[
         {title:"Lister les produits",content:"Récupérer tous les produits de votre boutique avec filtres optionnels.",code:"GET /v2/products\nGET /v2/products?shop_id=s1&category=Mode\nGET /v2/products?status=active&sort=created_at\n\nParamètres:\n  shop_id    (string)  Filtrer par boutique\n  category   (string)  Filtrer par catégorie\n  status     (string)  active | inactive | draft\n  sort       (string)  created_at | price | name\n  page       (int)     Page (défaut: 1)\n  limit      (int)     Résultats/page (défaut: 20)"},
         {title:"Créer un produit",code:"POST /v2/products\n\nBody:\n{\n  \"name\": \"Robe Wax Ankara\",\n  \"price\": 15000,\n  \"shop_id\": \"s1\",\n  \"category\": \"Mode\",\n  \"description\": \"Robe 100% coton...\",\n  \"stock\": 50,\n  \"images\": [\"base64...\"],\n  \"variants\": [\n    {\"size\": \"M\", \"stock\": 20},\n    {\"size\": \"L\", \"stock\": 30}\n  ],\n  \"active\": true\n}"},
@@ -28,7 +29,7 @@ function VDocScr({docKey,onBack}){
       ]
     },
     orders:{
-      title:"Endpoints Commandes",icon:"🛒",color:"#F59E0B",
+      title:"Endpoints Commandes",icon:"cart",color:"#F59E0B",
       sections:[
         {title:"Lister les commandes",code:"GET /v2/orders\nGET /v2/orders?status=new&shop_id=s1\n\nParamètres:\n  status    new | preparing | shipped | delivered\n  shop_id   Filtrer par boutique\n  from      Date début (ISO 8601)\n  to        Date fin (ISO 8601)\n  sort      created_at | total | status"},
         {title:"Détail commande",code:"GET /v2/orders/:id\n\nRéponse:\n{\n  \"id\": \"ord_0889\",\n  \"ref\": \"#CMD-0889\",\n  \"status\": \"new\",\n  \"client\": {\n    \"name\": \"Celine Nzaba\",\n    \"phone\": \"+242 06X XXX\",\n    \"address\": \"Moungali, Rue 8\"\n  },\n  \"items\": [\n    {\n      \"product_id\": \"prod_abc\",\n      \"name\": \"Robe Wax\",\n      \"qty\": 2,\n      \"price\": 15000\n    }\n  ],\n  \"total\": 42500,\n  \"payment\": \"MTN MoMo\",\n  \"created_at\": \"2026-02-14T09:30:00Z\"\n}"},
@@ -39,7 +40,7 @@ function VDocScr({docKey,onBack}){
       ]
     },
     payments:{
-      title:"Endpoints Paiements",icon:"💳",color:"#EF4444",
+      title:"Endpoints Paiements",icon:"creditCard",color:"#EF4444",
       sections:[
         {title:"Solde & résumé",code:"GET /v2/wallet\n\nRéponse:\n{\n  \"balance\": 457800,\n  \"pending\": 35000,\n  \"currency\": \"XAF\",\n  \"commission_rate\": 0.02,\n  \"this_month\": {\n    \"revenue\": 580000,\n    \"commission\": 11600,\n    \"net\": 568400,\n    \"withdrawals\": 200000\n  }\n}"},
         {title:"Historique transactions",code:"GET /v2/wallet/transactions\nGET /v2/wallet/transactions?type=credit&from=2026-02-01\n\nParamètres:\n  type    credit | debit | commission | withdrawal\n  from    Date début\n  to      Date fin\n\nRéponse:\n{\n  \"transactions\": [\n    {\n      \"id\": \"tx_abc\",\n      \"type\": \"credit\",\n      \"amount\": 42500,\n      \"label\": \"Commande #CMD-0889\",\n      \"date\": \"2026-02-14T09:30:00Z\",\n      \"status\": \"completed\"\n    }\n  ]\n}"},
@@ -49,7 +50,7 @@ function VDocScr({docKey,onBack}){
       ]
     },
     webhooks:{
-      title:"Guide Webhooks",icon:"🔔",color:"#FB923C",
+      title:"Guide Webhooks",icon:"bell",color:"#FB923C",
       sections:[
         {title:"Principe",content:"Les webhooks envoient des notifications HTTP POST en temps réel lorsqu'un événement se produit sur votre boutique. Vous recevez les données directement sur votre serveur."},
         {title:"Événements disponibles",code:"order.created      Nouvelle commande reçue\norder.updated      Statut commande modifié\norder.delivered    Commande livrée\npayment.received   Paiement confirmé\npayment.failed     Paiement échoué\nstock.low          Stock < seuil (5 par défaut)\nreview.created     Nouvel avis client\ndriver.assigned    Livreur assigné"},
@@ -60,7 +61,7 @@ function VDocScr({docKey,onBack}){
       ]
     },
     errors:{
-      title:"Codes d'erreur",icon:"⚠️",color:"#EF4444",
+      title:"Codes d'erreur",icon:"️",color:"#EF4444",
       sections:[
         {title:"Format erreur standard",code:"{\n  \"success\": false,\n  \"error\": {\n    \"code\": \"INVALID_PARAM\",\n    \"message\": \"Le champ 'price' est requis\",\n    \"field\": \"price\"\n  }\n}"},
         {title:"Erreurs HTTP",content:"Codes HTTP retournés par l'API :",code:"200 OK           Succès\n201 Created      Ressource créée\n204 No Content   Suppression réussie\n400 Bad Request  Paramètres invalides\n401 Unauthorized Clé API manquante/invalide\n403 Forbidden    Accès refusé (plan/rôle)\n404 Not Found    Ressource introuvable\n409 Conflict     Conflit (doublon, état)\n429 Too Many     Rate limit dépassé\n500 Server Error Erreur interne"},
@@ -69,7 +70,7 @@ function VDocScr({docKey,onBack}){
       ]
     },
     sdks:{
-      title:"SDKs & Exemples",icon:"🧩",color:"#F97316",
+      title:"SDKs & Exemples",icon:"",color:"#F97316",
       sections:[
         {title:"Node.js",code:"npm install @lamuka/sdk\n\nconst Lamuka = require('@lamuka/sdk');\nconst api = new Lamuka({\n  apiKey: 'lmk_live_ent_XXXX'\n});\n\n// Lister les produits\nconst products = await api.products.list({\n  shop: 's1', status: 'active'\n});\n\n// Créer un produit\nconst newProduct = await api.products.create({\n  name: 'Robe Wax',\n  price: 15000,\n  stock: 50\n});\n\n// Mettre à jour une commande\nawait api.orders.updateStatus(\n  'ord_0889', 'preparing'\n);"},
         {title:"Python",code:"pip install lamuka-sdk\n\nfrom lamuka import LamukaClient\n\nclient = LamukaClient(\n  api_key='lmk_live_ent_XXXX'\n)\n\n# Lister les commandes\norders = client.orders.list(\n  status='new',\n  shop_id='s1'\n)\n\n# Solde wallet\nwallet = client.wallet.balance()\nprint(f\"Solde: {wallet.balance} FCFA\")\n\n# Retrait\nclient.wallet.withdraw(\n  amount=100000,\n  method='mtn_momo',\n  phone='+242064663469'\n)"},
@@ -102,7 +103,7 @@ function VDocScr({docKey,onBack}){
       </div>}
     </div>)}
 
-    <div className="info-box blue" style={{marginTop:6}}><span>💡</span><span style={{fontSize:11}}>Testez en sandbox avant d'utiliser en production. <b>support-enterprise@lamuka.cg</b></span></div>
+    <div className="info-box blue" style={{marginTop:6}}><span><Icon name="info" size={18}/></span><span style={{fontSize:11}}>Testez en sandbox avant d'utiliser en production. <b>support-enterprise@lamuka.cg</b></span></div>
   </div>);
 }
 

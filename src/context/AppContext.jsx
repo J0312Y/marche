@@ -182,7 +182,7 @@ export function AppProvider({ children }) {
       await cartSvc.add(article.id, qty, extras.note || "", extras.sides || []);
       const data = await cartSvc.get();
       setCart(data?.items || []); setCartCount((data?.items || []).reduce((s, i) => s + (i.qty || 1), 0));
-      showToast('Ajouté au panier 🛍️');
+      showToast('Ajouté au panier');
       setScreen(null); setHistory([]); setTab(2);
     } catch (err) {
       showToast(err.message, 'error');
@@ -210,7 +210,7 @@ export function AppProvider({ children }) {
   const toggleFav = useCallback(async (articleId) => {
     try {
       const result = await socialSvc.toggleFavorite(articleId);
-      showToast(result.is_favorite ? 'Ajouté aux favoris ❤️' : 'Retiré des favoris');
+      showToast(result.is_favorite ? 'Ajouté aux favoris' : 'Retiré des favoris');
       setFavs(prev => result.is_favorite
         ? [...prev, articleId]
         : prev.filter(id => id !== articleId)

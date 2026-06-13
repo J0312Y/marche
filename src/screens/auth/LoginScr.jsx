@@ -1,6 +1,7 @@
 import t from "../../utils/i18n";
 import { useState } from "react";
 import { TermsScr, PrivacyScr } from "../common";
+import Icon from "../../components/Icon";
 
 function LoginScr({onDone,onSocial}){
   const [legal,setLegal]=useState(null);
@@ -12,11 +13,11 @@ function LoginScr({onDone,onSocial}){
   if(legal)return legal==="terms"?<TermsScr onBack={()=>setLegal(null)}/>:<PrivacyScr onBack={()=>setLegal(null)}/>;
   return(
     <div className="auth">
-      <div style={{textAlign:"center",margin:"20px 0 30px"}}><span style={{fontSize:48}}>🛒</span></div>
+      <div style={{textAlign:"center",margin:"20px 0 30px"}}><span style={{fontSize:48}}><Icon name="cart" size={18}/></span></div>
       <h2>{isSignup?"Créer un compte":"Bienvenue !"}</h2>
       <div className="sub">{isSignup?"Entrez votre numéro pour vous inscrire":"Connectez-vous pour accéder au marketplace"}</div>
       <div className="phone-input">
-        <div className="prefix">🇨🇬 +242</div>
+        <div className="prefix"> +242</div>
         <input value={phone} onChange={e=>{const v=e.target.value.replace(/[^0-9]/g,"").slice(0,9);setPhone(v);setPhoneErr("")}} placeholder="06X XXX XXX" type="tel" maxLength={11}/>
       </div>
       {phoneErr&&<div style={{fontSize:11,color:"#EF4444",marginTop:-6,marginBottom:8}}>{phoneErr}</div>}

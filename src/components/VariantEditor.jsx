@@ -1,4 +1,5 @@
 import { useState } from "react";
+import Icon from "./Icon";
 
 /**
  * Variant configuration per shop type / category
@@ -8,67 +9,67 @@ const VARIANT_CONFIGS = {
   // ═══ MODE / BOUTIQUE ═══
   boutique: {
     Mode: [
-      { key:"taille", label:"Taille", icon:"📏", presets:["XS","S","M","L","XL","XXL","34","36","38","40","42","44","46"], unit:"", type:"preset" },
-      { key:"couleur", label:"Couleur", icon:"🎨", presets:["Noir","Blanc","Rouge","Bleu","Vert","Jaune","Rose","Orange","Violet","Marron","Gris","Beige","Multicolore"], unit:"", type:"color" },
+      { key:"taille", label:"Taille", icon:"", presets:["XS","S","M","L","XL","XXL","34","36","38","40","42","44","46"], unit:"", type:"preset" },
+      { key:"couleur", label:"Couleur", icon:"", presets:["Noir","Blanc","Rouge","Bleu","Vert","Jaune","Rose","Orange","Violet","Marron","Gris","Beige","Multicolore"], unit:"", type:"color" },
     ],
     Électronique: [
-      { key:"stockage", label:"Stockage", icon:"💾", presets:["32 GB","64 GB","128 GB","256 GB","512 GB","1 TB"], unit:"", type:"preset" },
-      { key:"couleur", label:"Couleur", icon:"🎨", presets:["Noir","Blanc","Bleu","Or","Argent","Rouge"], unit:"", type:"color" },
-      { key:"ram", label:"RAM", icon:"🧠", presets:["2 GB","4 GB","6 GB","8 GB","12 GB","16 GB"], unit:"", type:"preset" },
+      { key:"stockage", label:"Stockage", icon:"", presets:["32 GB","64 GB","128 GB","256 GB","512 GB","1 TB"], unit:"", type:"preset" },
+      { key:"couleur", label:"Couleur", icon:"", presets:["Noir","Blanc","Bleu","Or","Argent","Rouge"], unit:"", type:"color" },
+      { key:"ram", label:"RAM", icon:"", presets:["2 GB","4 GB","6 GB","8 GB","12 GB","16 GB"], unit:"", type:"preset" },
     ],
     Beauté: [
-      { key:"teinte", label:"Teinte", icon:"💄", presets:["Clair","Moyen","Foncé","Nude","Rose","Rouge","Corail","Brun"], unit:"", type:"color" },
-      { key:"contenance", label:"Contenance", icon:"🧴", presets:["30 ml","50 ml","100 ml","150 ml","200 ml","250 ml"], unit:"", type:"preset" },
+      { key:"teinte", label:"Teinte", icon:"package", presets:["Clair","Moyen","Foncé","Nude","Rose","Rouge","Corail","Brun"], unit:"", type:"color" },
+      { key:"contenance", label:"Contenance", icon:"package", presets:["30 ml","50 ml","100 ml","150 ml","200 ml","250 ml"], unit:"", type:"preset" },
     ],
     Maison: [
-      { key:"taille", label:"Dimension", icon:"📐", presets:["Petit","Moyen","Grand","XL"], unit:"", type:"preset" },
-      { key:"couleur", label:"Couleur", icon:"🎨", presets:["Noir","Blanc","Bois","Gris","Beige","Marron"], unit:"", type:"color" },
-      { key:"materiau", label:"Matériau", icon:"🪵", presets:["Bois","Métal","Plastique","Tissu","Verre","Cuir"], unit:"", type:"preset" },
+      { key:"taille", label:"Dimension", icon:"", presets:["Petit","Moyen","Grand","XL"], unit:"", type:"preset" },
+      { key:"couleur", label:"Couleur", icon:"", presets:["Noir","Blanc","Bois","Gris","Beige","Marron"], unit:"", type:"color" },
+      { key:"materiau", label:"Matériau", icon:"", presets:["Bois","Métal","Plastique","Tissu","Verre","Cuir"], unit:"", type:"preset" },
     ],
     _default: [
-      { key:"variante", label:"Variante", icon:"📦", presets:["Standard","Premium"], unit:"", type:"preset" },
-      { key:"couleur", label:"Couleur", icon:"🎨", presets:["Noir","Blanc","Rouge","Bleu","Vert"], unit:"", type:"color" },
+      { key:"variante", label:"Variante", icon:"package", presets:["Standard","Premium"], unit:"", type:"preset" },
+      { key:"couleur", label:"Couleur", icon:"", presets:["Noir","Blanc","Rouge","Bleu","Vert"], unit:"", type:"color" },
     ],
   },
 
   // ═══ RESTAURANT ═══
   restaurant: {
     _default: [
-      { key:"portion", label:"Portion", icon:"🍽️", presets:["Normale","Grande","Familiale"], unit:"", type:"preset" },
-      { key:"accompagnement", label:"Accompagnement", icon:"🥗", presets:["Riz","Frites","Plantain","Fufu","Salade","Attiéké","Semoule","Manioc"], unit:"", type:"multi" },
-      { key:"piment", label:"Piment", icon:"🌶️", presets:["Sans piment","Doux","Moyen","Fort","Très fort"], unit:"", type:"preset" },
-      { key:"boisson", label:"Boisson", icon:"🥤", presets:["Sans boisson","Eau","Jus","Coca","Fanta","Bière"], unit:"", type:"multi" },
+      { key:"portion", label:"Portion", icon:"utensils", presets:["Normale","Grande","Familiale"], unit:"", type:"preset" },
+      { key:"accompagnement", label:"Accompagnement", icon:"utensils", presets:["Riz","Frites","Plantain","Fufu","Salade","Attiéké","Semoule","Manioc"], unit:"", type:"multi" },
+      { key:"piment", label:"Piment", icon:"sparkle", presets:["Sans piment","Doux","Moyen","Fort","Très fort"], unit:"", type:"preset" },
+      { key:"boisson", label:"Boisson", icon:"cupcake", presets:["Sans boisson","Eau","Jus","Coca","Fanta","Bière"], unit:"", type:"multi" },
     ],
   },
 
   // ═══ PÂTISSERIE ═══
   patisserie: {
     _default: [
-      { key:"taille", label:"Taille", icon:"🎂", presets:["Individuel","4 parts","6 parts","8 parts","10 parts","12 parts","20 parts"], unit:"", type:"preset" },
-      { key:"parfum", label:"Parfum", icon:"🍰", presets:["Vanille","Chocolat","Fraise","Citron","Caramel","Red Velvet","Tiramisu","Mangue","Coco","Pistache"], unit:"", type:"multi" },
-      { key:"decoration", label:"Décoration", icon:"✨", presets:["Simple","Chantilly","Fruits","Personnalisée","Photo comestible","Fleurs"], unit:"", type:"preset" },
+      { key:"taille", label:"Taille", icon:"cupcake", presets:["Individuel","4 parts","6 parts","8 parts","10 parts","12 parts","20 parts"], unit:"", type:"preset" },
+      { key:"parfum", label:"Parfum", icon:"", presets:["Vanille","Chocolat","Fraise","Citron","Caramel","Red Velvet","Tiramisu","Mangue","Coco","Pistache"], unit:"", type:"multi" },
+      { key:"decoration", label:"Décoration", icon:"sparkle", presets:["Simple","Chantilly","Fruits","Personnalisée","Photo comestible","Fleurs"], unit:"", type:"preset" },
     ],
   },
 
   // ═══ PHARMACIE ═══
   pharmacie: {
     _default: [
-      { key:"dosage", label:"Dosage", icon:"💊", presets:["100 mg","250 mg","500 mg","1000 mg","5 mg/ml","10 mg/ml"], unit:"", type:"preset" },
-      { key:"conditionnement", label:"Conditionnement", icon:"📦", presets:["Boîte de 10","Boîte de 20","Boîte de 30","Flacon 60 ml","Flacon 100 ml","Flacon 150 ml","Tube 30 g","Tube 50 g"], unit:"", type:"preset" },
-      { key:"forme", label:"Forme", icon:"💉", presets:["Comprimé","Gélule","Sirop","Pommade","Crème","Spray","Suppositoire","Injection"], unit:"", type:"preset" },
+      { key:"dosage", label:"Dosage", icon:"pill", presets:["100 mg","250 mg","500 mg","1000 mg","5 mg/ml","10 mg/ml"], unit:"", type:"preset" },
+      { key:"conditionnement", label:"Conditionnement", icon:"package", presets:["Boîte de 10","Boîte de 20","Boîte de 30","Flacon 60 ml","Flacon 100 ml","Flacon 150 ml","Tube 30 g","Tube 50 g"], unit:"", type:"preset" },
+      { key:"forme", label:"Forme", icon:"", presets:["Comprimé","Gélule","Sirop","Pommade","Crème","Spray","Suppositoire","Injection"], unit:"", type:"preset" },
     ],
   },
 
   // ═══ SUPERMARCHÉ ═══
   supermarche: {
     Alimentation: [
-      { key:"poids", label:"Poids / Volume", icon:"⚖️", presets:["100 g","250 g","500 g","1 kg","2 kg","5 kg","25 cl","50 cl","1 L","1.5 L","2 L","5 L"], unit:"", type:"preset" },
-      { key:"pack", label:"Pack", icon:"📦", presets:["Unité","Lot de 3","Lot de 6","Lot de 12","Carton"], unit:"", type:"preset" },
+      { key:"poids", label:"Poids / Volume", icon:"️", presets:["100 g","250 g","500 g","1 kg","2 kg","5 kg","25 cl","50 cl","1 L","1.5 L","2 L","5 L"], unit:"", type:"preset" },
+      { key:"pack", label:"Pack", icon:"package", presets:["Unité","Lot de 3","Lot de 6","Lot de 12","Carton"], unit:"", type:"preset" },
     ],
     _default: [
-      { key:"poids", label:"Poids / Volume", icon:"⚖️", presets:["100 g","250 g","500 g","1 kg","2 kg","25 cl","50 cl","1 L","1.5 L"], unit:"", type:"preset" },
-      { key:"pack", label:"Pack / Lot", icon:"📦", presets:["Unité","Lot de 2","Lot de 3","Lot de 6","Lot de 12","Carton"], unit:"", type:"preset" },
-      { key:"marque", label:"Marque", icon:"🏷️", presets:[], unit:"", type:"custom" },
+      { key:"poids", label:"Poids / Volume", icon:"️", presets:["100 g","250 g","500 g","1 kg","2 kg","25 cl","50 cl","1 L","1.5 L"], unit:"", type:"preset" },
+      { key:"pack", label:"Pack / Lot", icon:"package", presets:["Unité","Lot de 2","Lot de 3","Lot de 6","Lot de 12","Carton"], unit:"", type:"preset" },
+      { key:"marque", label:"Marque", icon:"tag", presets:[], unit:"", type:"custom" },
     ],
   },
 
@@ -76,8 +77,8 @@ const VARIANT_CONFIGS = {
   service: {
     _default: [
       { key:"duree", label:"Durée", icon:"⏱️", presets:["30 min","1h","1h30","2h","3h","Demi-journée","Journée"], unit:"", type:"preset" },
-      { key:"formule", label:"Formule", icon:"📋", presets:["Basique","Standard","Premium","VIP"], unit:"", type:"preset" },
-      { key:"lieu", label:"Lieu", icon:"📍", presets:["À domicile","En boutique","En ligne","Sur site"], unit:"", type:"preset" },
+      { key:"formule", label:"Formule", icon:"document", presets:["Basique","Standard","Premium","VIP"], unit:"", type:"preset" },
+      { key:"lieu", label:"Lieu", icon:"location", presets:["À domicile","En boutique","En ligne","Sur site"], unit:"", type:"preset" },
     ],
   },
 };
@@ -188,7 +189,7 @@ function VariantEditor({ shopType = "boutique", category = "", value = [], onCha
               color: count > 0 ? "#F97316" : "var(--sub)", transition: "all .2s",
               display: "flex", alignItems: "center", gap: 4,
             }}>
-              {c.icon} {c.label}
+              <Icon name={c.icon} size={20}/> {c.label}
               {count > 0 && <span style={{ background: "#F97316", color: "#fff", borderRadius: 6, padding: "1px 6px", fontSize: 10, fontWeight: 700 }}>{count}</span>}
             </button>
           );
@@ -204,7 +205,7 @@ function VariantEditor({ shopType = "boutique", category = "", value = [], onCha
         return (
           <div key={c.key} style={{ padding: 14, background: "var(--light)", borderRadius: 14, border: "1px solid #E8E6E1", marginBottom: 14 }}>
             <div style={{ fontSize: 13, fontWeight: 700, marginBottom: 10, display: "flex", alignItems: "center", gap: 6 }}>
-              {c.icon} {c.label}
+              <Icon name={c.icon} size={20}/> {c.label}
               <span style={{ fontSize: 11, fontWeight: 500, color: "var(--muted)" }}>— Sélectionnez les options disponibles</span>
             </div>
 
@@ -230,7 +231,7 @@ function VariantEditor({ shopType = "boutique", category = "", value = [], onCha
                         background: colorDot, border: preset === "Blanc" ? "1px solid #E8E6E1" : "none",
                         boxShadow: isSelected ? "0 0 0 2px rgba(249,115,22,0.3)" : "none",
                       }} />}
-                      {isSelected && !colorDot && "✓ "}{preset}
+                      {isSelected && !colorDot && " "}{preset}
                     </button>
                   );
                 })}
@@ -285,7 +286,7 @@ function VariantEditor({ shopType = "boutique", category = "", value = [], onCha
                       width: 22, height: 22, borderRadius: 6, border: "none",
                       background: "rgba(239,68,68,0.08)", color: "#EF4444",
                       fontSize: 10, cursor: "pointer", display: "flex", alignItems: "center", justifyContent: "center", marginLeft: "auto", flexShrink: 0,
-                    }}>✕</button>
+                    }}></button>
                   </div>
                 ))}
               </div>
@@ -298,7 +299,7 @@ function VariantEditor({ shopType = "boutique", category = "", value = [], onCha
       {activeVariants.length >= 2 && (
         <div style={{ padding: 12, background: "rgba(249,115,22,0.04)", borderRadius: 12, border: "1px solid rgba(249,115,22,0.12)", marginBottom: 4 }}>
           <div style={{ fontSize: 11, fontWeight: 700, color: "#F97316", marginBottom: 6 }}>
-            📊 {totalCombinations} combinaison{totalCombinations > 1 ? "s" : ""} générée{totalCombinations > 1 ? "s" : ""}
+             {totalCombinations} combinaison{totalCombinations > 1 ? "s" : ""} générée{totalCombinations > 1 ? "s" : ""}
           </div>
           <div style={{ display: "flex", gap: 4, flexWrap: "wrap" }}>
             {(() => {

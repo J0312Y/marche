@@ -1,4 +1,5 @@
 /**
+import Icon from "./Icon";
  * Button - Bouton réutilisable
  * @param {string} variant - "primary" | "secondary" | "outline" | "ghost"
  * @param {boolean} full - Pleine largeur

@@ -1,4 +1,5 @@
 import { useState, useRef, useEffect } from "react";
+import Icon from "./Icon";
 
 /**
  * Custom Select — replaces native <select> with styled dropdown
@@ -84,9 +85,9 @@ function Select({ value, onChange, options = [], placeholder = "Choisir...", dis
                 onMouseEnter={e => { if (!isSelected) e.currentTarget.style.background = "var(--light)" }}
                 onMouseLeave={e => { if (!isSelected) e.currentTarget.style.background = "transparent" }}
               >
-                {o.icon && <span style={{ fontSize: 16 }}>{o.icon}</span>}
+                {o.icon && <span style={{ fontSize: 16 }}><Icon name={o.icon} size={20}/></span>}
                 <span style={{ flex: 1 }}>{o.label}</span>
-                {isSelected && <span style={{ fontSize: 12, color: "#F97316" }}>✓</span>}
+                {isSelected && <span style={{ fontSize: 12, color: "#F97316" }}></span>}
               </div>
             );
           })}

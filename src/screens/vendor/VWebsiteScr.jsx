@@ -1,6 +1,7 @@
 import { useState } from "react";
 import Select from "../../components/Select";
 import toast from "../../utils/toast";
+import Icon from "../../components/Icon";
 
 const THEMES=[
   {id:"modern",name:"Moderne",colors:["#F97316","#1E1E2E","#F5F4F1"],preview:"linear-gradient(135deg,#F97316,#FDBA74)"},
@@ -11,10 +12,10 @@ const THEMES=[
 ];
 
 const DEFAULT_PAGES=[
-  {id:"home",name:"Accueil",icon:"🏠",blocks:[
+  {id:"home",name:"Accueil",icon:"",blocks:[
     {type:"hero",title:"Bienvenue chez Mode Afrique",subtitle:"Vêtements africains modernes — Wax, Bogolan, Cuir artisanal",image:"https://images.unsplash.com/photo-1590735213920-68192a487bc2?w=800&h=400&fit=crop",cta:"Voir la collection"},
     {type:"products",title:"Nos produits populaires",count:8,layout:"grid"},
-    {type:"promo",title:"🏷️ -10% sur les Wax",desc:"Jusqu'au 31 Mars 2026",color:"#F59E0B"},
+    {type:"promo",title:"-10% sur les Wax",desc:"Jusqu'au 31 Mars 2026",color:"#F59E0B"},
     {type:"testimonials",title:"Avis clients"},
   ],published:true},
   {id:"about",name:"À propos",icon:"ℹ️",blocks:[
@@ -22,27 +23,27 @@ const DEFAULT_PAGES=[
     {type:"gallery",title:"Notre atelier",images:4},
     {type:"team",title:"L'équipe"},
   ],published:true},
-  {id:"contact",name:"Contact",icon:"📧",blocks:[
+  {id:"contact",name:"Contact",icon:"mail",blocks:[
     {type:"contact_form",title:"Nous contacter",fields:["Nom","Email","Téléphone","Message"]},
     {type:"map",title:"Nous trouver",address:"Bacongo, Brazzaville"},
     {type:"hours",title:"Horaires d'ouverture"},
   ],published:true},
-  {id:"blog",name:"Blog",icon:"✍️",blocks:[],published:false},
+  {id:"blog",name:"Blog",icon:"️",blocks:[],published:false},
 ];
 
 const BLOCK_TYPES=[
-  {type:"hero",name:"Bannière héro",icon:"🖼️",desc:"Grande image + titre + bouton"},
-  {type:"products",name:"Grille produits",icon:"🛍️",desc:"Affiche vos articles"},
-  {type:"text",name:"Texte libre",icon:"📝",desc:"Paragraphe personnalisé"},
-  {type:"gallery",name:"Galerie photos",icon:"📸",desc:"Carrousel d'images"},
-  {type:"promo",name:"Bannière promo",icon:"🏷️",desc:"Mise en avant d'une offre"},
-  {type:"testimonials",name:"Avis clients",icon:"⭐",desc:"Témoignages vérifiés"},
-  {type:"video",name:"Vidéo",icon:"🎬",desc:"Intégrer une vidéo"},
-  {type:"contact_form",name:"Formulaire contact",icon:"📧",desc:"Les clients vous écrivent"},
-  {type:"map",name:"Carte / Adresse",icon:"📍",desc:"Localisation Google Maps"},
-  {type:"faq",name:"FAQ",icon:"❓",desc:"Questions fréquentes"},
-  {type:"newsletter",name:"Newsletter",icon:"📬",desc:"Collecte d'emails"},
-  {type:"social",name:"Réseaux sociaux",icon:"📱",desc:"Liens vers vos profils"},
+  {type:"hero",name:"Bannière héro",icon:"️",desc:"Grande image + titre + bouton"},
+  {type:"products",name:"Grille produits",icon:"package",desc:"Affiche vos articles"},
+  {type:"text",name:"Texte libre",icon:"",desc:"Paragraphe personnalisé"},
+  {type:"gallery",name:"Galerie photos",icon:"camera",desc:"Carrousel d'images"},
+  {type:"promo",name:"Bannière promo",icon:"tag",desc:"Mise en avant d'une offre"},
+  {type:"testimonials",name:"Avis clients",icon:"star_full",desc:"Témoignages vérifiés"},
+  {type:"video",name:"Vidéo",icon:"",desc:"Intégrer une vidéo"},
+  {type:"contact_form",name:"Formulaire contact",icon:"mail",desc:"Les clients vous écrivent"},
+  {type:"map",name:"Carte / Adresse",icon:"location",desc:"Localisation Google Maps"},
+  {type:"faq",name:"FAQ",icon:"help",desc:"Questions fréquentes"},
+  {type:"newsletter",name:"Newsletter",icon:"",desc:"Collecte d'emails"},
+  {type:"social",name:"Réseaux sociaux",icon:"phone",desc:"Liens vers vos profils"},
 ];
 
 const BLOG_POSTS=[
@@ -75,15 +76,15 @@ function VWebsiteScr({onBack}){
   const url=site.customDomain||`${site.subdomain}.lamuka.market`;
 
   const tabs=[
-    ["dashboard","📊 Dashboard"],["pages","📄 Pages"],["design","🎨 Design"],
-    ["blog","✍️ Blog"],["seo","🔍 SEO"],["settings","⚙️ Config"],
+    ["dashboard","Dashboard"],["pages"," Pages"],["design"," Design"],
+    ["blog","️ Blog"],["seo"," SEO"],["settings","Config"],
   ];
 
   const addBlock=(pageId,blockType)=>{
     const bt=BLOCK_TYPES.find(b=>b.type===blockType);
     setPages(prev=>prev.map(p=>p.id===pageId?{...p,blocks:[...p.blocks,{type:blockType,title:bt?.name||"Nouveau bloc"}]}:p));
     setAddBlockTo(null);
-    toast.success("Bloc ajouté ✅");
+    toast.success("Bloc ajouté");
   };
 
   const removeBlock=(pageId,blockIdx)=>{
@@ -98,13 +99,13 @@ function VWebsiteScr({onBack}){
 
   const addPage=()=>{
     const id="page-"+Date.now();
-    setPages(prev=>[...prev,{id,name:"Nouvelle page",icon:"📄",blocks:[],published:false}]);
-    toast.success("Page créée ✅");
+    setPages(prev=>[...prev,{id,name:"Nouvelle page",icon:"",blocks:[],published:false}]);
+    toast.success("Page créée");
   };
 
   return(<div className="scr" style={{paddingBottom:20}}>
-    <div className="appbar" style={{padding:"0 16px"}}><button onClick={onBack}>←</button><h2>🌐 Mon Site Web</h2>
-      <button onClick={()=>setShowPreview(true)} style={{fontSize:12,background:"none",border:"1px solid #F97316",borderRadius:8,padding:"4px 10px",color:"#F97316",cursor:"pointer",fontFamily:"inherit",fontWeight:600}}>👁️</button>
+    <div className="appbar" style={{padding:"0 16px"}}><button onClick={onBack}>←</button><h2><Icon name="globe" size={16}/>{" "}Mon Site Web</h2>
+      <button onClick={()=>setShowPreview(true)} style={{fontSize:12,background:"none",border:"1px solid #F97316",borderRadius:8,padding:"4px 10px",color:"#F97316",cursor:"pointer",fontFamily:"inherit",fontWeight:600}}><Icon name="map" size={18}/></button>
     </div>
 
     {/* Tabs */}
@@ -120,15 +121,15 @@ function VWebsiteScr({onBack}){
       <div style={{display:"flex",alignItems:"center",gap:10,padding:12,background:site.enabled?"rgba(16,185,129,0.06)":"rgba(239,68,68,0.06)",border:site.enabled?"1px solid rgba(16,185,129,0.15)":"1px solid rgba(239,68,68,0.15)",borderRadius:14,marginBottom:12}}>
         <div style={{width:10,height:10,borderRadius:"50%",background:site.enabled?"#10B981":"#EF4444"}}/>
         <div style={{flex:1}}>
-          <div style={{fontSize:13,fontWeight:700}}>{site.enabled?"Site en ligne ✅":"Site hors ligne"}</div>
+          <div style={{fontSize:13,fontWeight:700}}>{site.enabled?"Site en ligne":"Site hors ligne"}</div>
           <div style={{fontSize:11,color:"var(--muted)"}}>{url}</div>
         </div>
-        <div className={`toggle ${site.enabled?"on":""}`} onClick={()=>{setSite(s=>({...s,enabled:!s.enabled}));toast.success(site.enabled?"Site désactivé":"Site en ligne ✅")}}/>
+        <div className={`toggle ${site.enabled?"on":""}`} onClick={()=>{setSite(s=>({...s,enabled:!s.enabled}));toast.success(site.enabled?"Site désactivé":"Site en ligne")}}/>
       </div>
 
       {/* Analytics cards */}
       <div style={{display:"grid",gridTemplateColumns:"1fr 1fr 1fr",gap:8,marginBottom:14}}>
-        {[["👥",site.analytics.visitors,"Visiteurs"],["🛍️",site.analytics.orders,"Commandes"],["📈",site.analytics.conversion,"Conversion"]].map(([i,v,l])=>
+        {[["",site.analytics.visitors,"Visiteurs"],["️",site.analytics.orders,"Commandes"],["",site.analytics.conversion,"Conversion"]].map(([i,v,l])=>
           <div key={l} style={{padding:12,background:"var(--card)",border:"1px solid var(--border)",borderRadius:14,textAlign:"center"}}>
             <div style={{fontSize:16}}>{i}</div>
             <div style={{fontSize:18,fontWeight:800,marginTop:2}}>{v}</div>
@@ -139,13 +140,13 @@ function VWebsiteScr({onBack}){
 
       {/* Top pages */}
       <div style={{padding:14,background:"var(--card)",border:"1px solid var(--border)",borderRadius:14,marginBottom:14}}>
-        <div style={{fontSize:13,fontWeight:700,marginBottom:8}}>📊 Pages les plus visitées</div>
+        <div style={{fontSize:13,fontWeight:700,marginBottom:8}}><Icon name="chart_pie" size={16}/>{" "}Pages les plus visitées</div>
         {site.analytics.topPages.map((p,i)=><div key={i} style={{display:"flex",justifyContent:"space-between",padding:"6px 0",borderTop:i?"1px solid var(--border)":"none",fontSize:12}}><span>{i+1}. {p.split(" (")[0]}</span><span style={{color:"#F97316",fontWeight:600}}>{p.match(/\((.+)\)/)?.[1]}</span></div>)}
       </div>
 
       {/* Quick links */}
-      <div style={{fontSize:13,fontWeight:700,marginBottom:8}}>⚡ Actions rapides</div>
-      {[["📄","Gérer les pages",()=>setTab("pages")],["🎨","Changer le design",()=>setTab("design")],["✍️","Écrire un article",()=>setTab("blog")],["🔍","Optimiser le SEO",()=>setTab("seo")]].map(([i,t,fn])=>
+      <div style={{fontSize:13,fontWeight:700,marginBottom:8}}><Icon name="lightning" size={16}/>{" "}Actions rapides</div>
+      {[["","Gérer les pages",()=>setTab("pages")],["","Changer le design",()=>setTab("design")],["️","Écrire un article",()=>setTab("blog")],["","Optimiser le SEO",()=>setTab("seo")]].map(([i,t,fn])=>
         <div key={t} onClick={fn} style={{display:"flex",alignItems:"center",gap:10,padding:12,background:"var(--card)",border:"1px solid var(--border)",borderRadius:12,marginBottom:6,cursor:"pointer"}}>
           <span style={{fontSize:16}}>{i}</span><span style={{flex:1,fontSize:13,fontWeight:600}}>{t}</span><span style={{color:"var(--muted)"}}>›</span>
         </div>
@@ -162,7 +163,7 @@ function VWebsiteScr({onBack}){
       {pages.map(p=><div key={p.id} style={{padding:14,background:"var(--card)",border:"1px solid var(--border)",borderRadius:16,marginBottom:10}}>
         <div style={{display:"flex",justifyContent:"space-between",alignItems:"center",marginBottom:8}}>
           <div style={{display:"flex",alignItems:"center",gap:8}}>
-            <span style={{fontSize:18}}>{p.icon}</span>
+            <span style={{fontSize:18}}><Icon name={p.icon} size={20}/></span>
             <div>
               <div style={{fontSize:14,fontWeight:700}}>{p.name}</div>
               <div style={{fontSize:11,color:"var(--muted)"}}>{p.blocks.length} blocs</div>
@@ -176,9 +177,9 @@ function VWebsiteScr({onBack}){
 
         {/* Blocks list */}
         {p.blocks.map((b,bi)=><div key={bi} style={{display:"flex",alignItems:"center",gap:8,padding:"8px 10px",background:"var(--light)",borderRadius:10,marginBottom:4}}>
-          <span style={{fontSize:12}}>{BLOCK_TYPES.find(bt=>bt.type===b.type)?.icon||"📦"}</span>
+          <span style={{fontSize:12}}>{BLOCK_TYPES.find(bt=>bt.type===b.type)?.icon||""}</span>
           <span style={{flex:1,fontSize:11,fontWeight:600}}>{b.title||b.type}</span>
-          <button onClick={()=>removeBlock(p.id,bi)} style={{fontSize:10,color:"#EF4444",background:"none",border:"none",cursor:"pointer"}}>✕</button>
+          <button onClick={()=>removeBlock(p.id,bi)} style={{fontSize:10,color:"#EF4444",background:"none",border:"none",cursor:"pointer"}}></button>
         </div>)}
 
         {/* Add block button */}
@@ -196,9 +197,9 @@ function VWebsiteScr({onBack}){
 
     {/* ═══════════ DESIGN ═══════════ */}
     {tab==="design"&&<>
-      <div style={{fontSize:14,fontWeight:700,marginBottom:10}}>🎨 Thème du site</div>
+      <div style={{fontSize:14,fontWeight:700,marginBottom:10}}> Thème du site</div>
       <div style={{display:"grid",gridTemplateColumns:"1fr 1fr",gap:8,marginBottom:14}}>
-        {THEMES.map(t=><div key={t.id} onClick={()=>{setSite(s=>({...s,theme:t.id}));toast.success("Thème "+t.name+" appliqué ✅")}} style={{borderRadius:14,overflow:"hidden",border:site.theme===t.id?"3px solid #F97316":"1px solid var(--border)",cursor:"pointer"}}>
+        {THEMES.map(t=><div key={t.id} onClick={()=>{setSite(s=>({...s,theme:t.id}));toast.success("Thème "+t.name+" appliqué")}} style={{borderRadius:14,overflow:"hidden",border:site.theme===t.id?"3px solid #F97316":"1px solid var(--border)",cursor:"pointer"}}>
           <div style={{height:60,background:t.preview}}/>
           <div style={{padding:"8px 10px",background:"var(--card)"}}>
             <div style={{fontSize:12,fontWeight:700}}>{t.name}</div>
@@ -206,12 +207,12 @@ function VWebsiteScr({onBack}){
               {t.colors.map((c,i)=><div key={i} style={{width:14,height:14,borderRadius:4,background:c,border:"1px solid var(--border)"}}/>)}
             </div>
           </div>
-          {site.theme===t.id&&<div style={{textAlign:"center",padding:"4px 0",background:"#F97316",color:"#fff",fontSize:10,fontWeight:700}}>✓ Actif</div>}
+          {site.theme===t.id&&<div style={{textAlign:"center",padding:"4px 0",background:"#F97316",color:"#fff",fontSize:10,fontWeight:700}}> Actif</div>}
         </div>)}
       </div>
 
       {/* Font & Layout */}
-      <div style={{fontSize:14,fontWeight:700,marginBottom:10}}>✏️ Personnalisation</div>
+      <div style={{fontSize:14,fontWeight:700,marginBottom:10}}><Icon name="edit" size={16}/>{" "}Personnalisation</div>
       <div className="field"><label>Police de caractère</label>
         <Select value="Inter" onChange={()=>{}} options={["Inter","Poppins","Montserrat","DM Sans","Playfair Display"]}/>
       </div>
@@ -227,7 +228,7 @@ function VWebsiteScr({onBack}){
       </div>
       <div className="field"><label>Logo de la boutique</label>
         <div onClick={()=>toast.info("Upload du logo")} style={{padding:20,border:"2px dashed var(--border)",borderRadius:14,textAlign:"center",cursor:"pointer",background:"var(--light)"}}>
-          <div style={{fontSize:24}}>🖼️</div>
+          <div style={{fontSize:24}}>️</div>
           <div style={{fontSize:11,color:"var(--muted)",marginTop:4}}>Cliquer pour uploader (PNG, SVG)</div>
         </div>
       </div>
@@ -236,7 +237,7 @@ function VWebsiteScr({onBack}){
     {/* ═══════════ BLOG ═══════════ */}
     {tab==="blog"&&<>
       <div style={{display:"flex",justifyContent:"space-between",alignItems:"center",marginBottom:12}}>
-        <span style={{fontSize:14,fontWeight:700}}>✍️ Articles ({posts.length})</span>
+        <span style={{fontSize:14,fontWeight:700}}>️ Articles ({posts.length})</span>
         <button onClick={()=>setEditPost("new")} style={{padding:"6px 14px",borderRadius:10,border:"none",background:"#F97316",color:"#fff",fontSize:11,fontWeight:700,cursor:"pointer",fontFamily:"inherit"}}>+ Nouvel article</button>
       </div>
 
@@ -244,20 +245,20 @@ function VWebsiteScr({onBack}){
         <div className="field"><label>Titre de l'article</label><input value={newPostTitle} onChange={e=>setNewPostTitle(e.target.value)} placeholder="Comment choisir un bon tissu Wax..."/></div>
         <div className="field"><label>Contenu</label><textarea rows={5} placeholder="Rédigez votre article ici... Vous pourrez ajouter des images, des liens et formater le texte." style={{width:"100%",padding:10,borderRadius:12,border:"1px solid var(--border)",background:"var(--light)",fontSize:12,fontFamily:"inherit",outline:"none",resize:"vertical",boxSizing:"border-box",color:"var(--text)"}}/></div>
         <div className="field"><label>Image de couverture</label>
-          <div onClick={()=>toast.info("Upload d'image")} style={{padding:16,border:"2px dashed var(--border)",borderRadius:12,textAlign:"center",cursor:"pointer",background:"var(--light)"}}><span style={{fontSize:20}}>📷</span><div style={{fontSize:10,color:"var(--muted)",marginTop:2}}>Ajouter une image</div></div>
+          <div onClick={()=>toast.info("Upload d'image")} style={{padding:16,border:"2px dashed var(--border)",borderRadius:12,textAlign:"center",cursor:"pointer",background:"var(--light)"}}><span style={{fontSize:20}}><Icon name="camera" size={18}/></span><div style={{fontSize:10,color:"var(--muted)",marginTop:2}}>Ajouter une image</div></div>
         </div>
         <div style={{display:"flex",gap:8}}>
           <button onClick={()=>{setEditPost(null);setNewPostTitle("")}} style={{flex:1,padding:10,borderRadius:12,border:"1px solid var(--border)",background:"var(--card)",fontSize:12,fontWeight:600,cursor:"pointer",fontFamily:"inherit",color:"var(--text)"}}>Annuler</button>
-          <button onClick={()=>{if(newPostTitle.trim()){setPosts(prev=>[{id:Date.now(),title:newPostTitle,status:"draft",date:"Aujourd'hui",views:0},...prev]);setEditPost(null);setNewPostTitle("");toast.success("Brouillon sauvegardé ✅")}else{toast.error("Ajoutez un titre")}}} style={{flex:1,padding:10,borderRadius:12,border:"1px solid var(--border)",background:"var(--card)",fontSize:12,fontWeight:600,cursor:"pointer",fontFamily:"inherit",color:"var(--text)"}}>📝 Brouillon</button>
-          <button onClick={()=>{if(newPostTitle.trim()){setPosts(prev=>[{id:Date.now(),title:newPostTitle,status:"published",date:"Aujourd'hui",views:0},...prev]);setEditPost(null);setNewPostTitle("");toast.success("Article publié ✅")}else{toast.error("Ajoutez un titre")}}} style={{flex:1,padding:10,borderRadius:12,border:"none",background:"#F97316",color:"#fff",fontSize:12,fontWeight:700,cursor:"pointer",fontFamily:"inherit"}}>🚀 Publier</button>
+          <button onClick={()=>{if(newPostTitle.trim()){setPosts(prev=>[{id:Date.now(),title:newPostTitle,status:"draft",date:"Aujourd'hui",views:0},...prev]);setEditPost(null);setNewPostTitle("");toast.success("Brouillon sauvegardé")}else{toast.error("Ajoutez un titre")}}} style={{flex:1,padding:10,borderRadius:12,border:"1px solid var(--border)",background:"var(--card)",fontSize:12,fontWeight:600,cursor:"pointer",fontFamily:"inherit",color:"var(--text)"}}> Brouillon</button>
+          <button onClick={()=>{if(newPostTitle.trim()){setPosts(prev=>[{id:Date.now(),title:newPostTitle,status:"published",date:"Aujourd'hui",views:0},...prev]);setEditPost(null);setNewPostTitle("");toast.success("Article publié")}else{toast.error("Ajoutez un titre")}}} style={{flex:1,padding:10,borderRadius:12,border:"none",background:"#F97316",color:"#fff",fontSize:12,fontWeight:700,cursor:"pointer",fontFamily:"inherit"}}><Icon name="rocket" size={16}/>{" "}Publier</button>
         </div>
       </div>}
 
       {posts.map(p=><div key={p.id} style={{display:"flex",alignItems:"center",gap:12,padding:12,background:"var(--card)",border:"1px solid var(--border)",borderRadius:14,marginBottom:8}}>
-        <div style={{width:48,height:48,borderRadius:10,background:"var(--light)",display:"flex",alignItems:"center",justifyContent:"center",fontSize:20,flexShrink:0}}>✍️</div>
+        <div style={{width:48,height:48,borderRadius:10,background:"var(--light)",display:"flex",alignItems:"center",justifyContent:"center",fontSize:20,flexShrink:0}}>️</div>
         <div style={{flex:1,minWidth:0}}>
           <div style={{fontSize:13,fontWeight:600,overflow:"hidden",whiteSpace:"nowrap",textOverflow:"ellipsis"}}>{p.title}</div>
-          <div style={{fontSize:11,color:"var(--muted)"}}>{p.date} · 👁️ {p.views} vues</div>
+          <div style={{fontSize:11,color:"var(--muted)"}}>{p.date} · ️ {p.views} vues</div>
         </div>
         <span style={{fontSize:10,padding:"3px 8px",borderRadius:6,background:p.status==="published"?"rgba(16,185,129,0.08)":"rgba(245,158,11,0.08)",color:p.status==="published"?"#10B981":"#F59E0B",fontWeight:600}}>{p.status==="published"?"En ligne":"Brouillon"}</span>
       </div>)}
@@ -265,7 +266,7 @@ function VWebsiteScr({onBack}){
 
     {/* ═══════════ SEO ═══════════ */}
     {tab==="seo"&&<>
-      <div style={{fontSize:14,fontWeight:700,marginBottom:10}}>🔍 Référencement (SEO)</div>
+      <div style={{fontSize:14,fontWeight:700,marginBottom:10}}> Référencement (SEO)</div>
       <p style={{fontSize:12,color:"var(--muted)",marginBottom:14}}>Optimisez votre site pour apparaître dans les résultats Google.</p>
       
       {/* Preview Google */}
@@ -280,11 +281,11 @@ function VWebsiteScr({onBack}){
       <div className="field"><label>Meta description</label><textarea rows={3} defaultValue={site.seo.desc} onChange={e=>setSite(s=>({...s,seo:{...s.seo,desc:e.target.value}}))} style={{width:"100%",padding:10,borderRadius:12,border:"1px solid var(--border)",background:"var(--light)",fontSize:12,fontFamily:"inherit",outline:"none",resize:"vertical",boxSizing:"border-box",color:"var(--text)"}}/></div>
       <div className="field"><label>Mots-clés</label><input defaultValue={site.seo.keywords} onChange={e=>setSite(s=>({...s,seo:{...s.seo,keywords:e.target.value}}))} placeholder="wax, mode africaine, bogolan..."/></div>
       
-      <button onClick={()=>toast.success("SEO mis à jour ✅")} style={{width:"100%",padding:12,borderRadius:12,border:"none",background:"#F97316",color:"#fff",fontSize:13,fontWeight:700,cursor:"pointer",fontFamily:"inherit",marginTop:8}}>💾 Sauvegarder le SEO</button>
+      <button onClick={()=>toast.success("SEO mis à jour")} style={{width:"100%",padding:12,borderRadius:12,border:"none",background:"#F97316",color:"#fff",fontSize:13,fontWeight:700,cursor:"pointer",fontFamily:"inherit",marginTop:8}}> Sauvegarder le SEO</button>
 
       {/* SEO checklist */}
       <div style={{marginTop:14,padding:14,background:"var(--light)",borderRadius:14}}>
-        <div style={{fontSize:13,fontWeight:700,marginBottom:8}}>✅ Checklist SEO</div>
+        <div style={{fontSize:13,fontWeight:700,marginBottom:8}}><Icon name="check_circle" size={16}/>{" "}Checklist SEO</div>
         {[
           [true,"Titre SEO défini ("+site.seo.title.length+"/60 caractères)"],
           [true,"Meta description définie ("+site.seo.desc.length+"/160 caractères)"],
@@ -292,13 +293,13 @@ function VWebsiteScr({onBack}){
           [true,"URL propre ("+url+")"],
           [false,"Ajouter un sitemap XML"],
           [false,"Connecter Google Analytics"],
-        ].map(([done,text],i)=><div key={i} style={{display:"flex",gap:8,padding:"5px 0",fontSize:11,color:done?"#10B981":"var(--muted)"}}><span>{done?"✅":"⬜"}</span><span>{text}</span></div>)}
+        ].map(([done,text],i)=><div key={i} style={{display:"flex",gap:8,padding:"5px 0",fontSize:11,color:done?"#10B981":"var(--muted)"}}><span>{done?"":"⬜"}</span><span>{text}</span></div>)}
       </div>
     </>}
 
     {/* ═══════════ SETTINGS ═══════════ */}
     {tab==="settings"&&<>
-      <div style={{fontSize:14,fontWeight:700,marginBottom:10}}>⚙️ Configuration</div>
+      <div style={{fontSize:14,fontWeight:700,marginBottom:10}}><Icon name="settings" size={16}/>{" "}Configuration</div>
       <div className="field"><label>Nom du site</label><input defaultValue={site.title}/></div>
       <div className="field"><label>Sous-domaine</label>
         <div style={{display:"flex",alignItems:"center",gap:0}}><input defaultValue={site.subdomain} style={{borderRadius:"12px 0 0 12px",borderRight:"none"}}/><span style={{padding:"10px 12px",background:"var(--light)",border:"1px solid var(--border)",borderRadius:"0 12px 12px 0",fontSize:12,color:"var(--muted)"}}>.lamuka.market</span></div>
@@ -307,18 +308,18 @@ function VWebsiteScr({onBack}){
       <div className="field"><label>Description</label><textarea rows={2} defaultValue={site.description} style={{width:"100%",padding:10,borderRadius:12,border:"1px solid var(--border)",background:"var(--light)",fontSize:12,fontFamily:"inherit",outline:"none",resize:"vertical",boxSizing:"border-box",color:"var(--text)"}}/></div>
 
       {/* Navigation */}
-      <div style={{fontSize:13,fontWeight:700,margin:"14px 0 8px"}}>🧭 Menu de navigation</div>
+      <div style={{fontSize:13,fontWeight:700,margin:"14px 0 8px"}}> Menu de navigation</div>
       {site.nav.map((n,i)=><div key={i} style={{display:"flex",alignItems:"center",gap:8,padding:"8px 10px",background:"var(--card)",border:"1px solid var(--border)",borderRadius:10,marginBottom:4}}>
-        <span style={{fontSize:10,color:"var(--muted)",cursor:"grab"}}>☰</span>
+        <span style={{fontSize:10,color:"var(--muted)",cursor:"grab"}}></span>
         <span style={{flex:1,fontSize:12,fontWeight:600}}>{n.label}</span>
         <span style={{fontSize:10,color:"var(--muted)"}}>→ {n.page}</span>
       </div>)}
 
-      <button onClick={()=>toast.success("Configuration sauvegardée ✅")} style={{width:"100%",padding:12,borderRadius:12,border:"none",background:"#F97316",color:"#fff",fontSize:13,fontWeight:700,cursor:"pointer",fontFamily:"inherit",marginTop:14}}>💾 Sauvegarder</button>
+      <button onClick={()=>toast.success("Configuration sauvegardée")} style={{width:"100%",padding:12,borderRadius:12,border:"none",background:"#F97316",color:"#fff",fontSize:13,fontWeight:700,cursor:"pointer",fontFamily:"inherit",marginTop:14}}> Sauvegarder</button>
 
       {/* Danger zone */}
       <div style={{marginTop:14,padding:14,border:"1px solid rgba(239,68,68,0.15)",borderRadius:14}}>
-        <div style={{fontSize:13,fontWeight:700,color:"#EF4444",marginBottom:8}}>⚠️ Zone danger</div>
+        <div style={{fontSize:13,fontWeight:700,color:"#EF4444",marginBottom:8}}>️ Zone danger</div>
         <button onClick={()=>{setSite(s=>({...s,enabled:false}));toast.success("Site désactivé")}} style={{width:"100%",padding:10,borderRadius:12,border:"1px solid rgba(239,68,68,.15)",background:"transparent",fontSize:12,fontWeight:600,cursor:"pointer",fontFamily:"inherit",color:"#EF4444"}}>Mettre le site hors ligne</button>
       </div>
     </>}

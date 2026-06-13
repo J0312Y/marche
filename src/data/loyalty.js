@@ -1,9 +1,9 @@
 // Loyalty system — Lamuka Points
 export const LEVELS = [
-  { id: "bronze", name: "Bronze",   icon: "🥉", color: "#CD7F32", min: 0,      perks: ["1 pt / 100 F dépensé"] },
-  { id: "argent", name: "Argent",   icon: "🥈", color: "#9CA3AF", min: 5000,   perks: ["1 pt / 100 F", "Livraison gratuite > 10 000 F"] },
-  { id: "or",     name: "Or",       icon: "🥇", color: "#F59E0B", min: 15000,  perks: ["1,5 pt / 100 F", "Livraison gratuite > 5 000 F", "Support prioritaire"] },
-  { id: "diamant",name: "Diamant",  icon: "💎", color: "#3B82F6", min: 50000,  perks: ["2 pt / 100 F", "Livraison gratuite illimitée", "Promotions exclusives", "Cadeau anniversaire"] },
+  { id: "bronze", name: "Bronze",   icon: "", color: "#CD7F32", min: 0,      perks: ["1 pt / 100 F dépensé"] },
+  { id: "argent", name: "Argent",   icon: "", color: "#9CA3AF", min: 5000,   perks: ["1 pt / 100 F", "Livraison gratuite > 10 000 F"] },
+  { id: "or",     name: "Or",       icon: "", color: "#F59E0B", min: 15000,  perks: ["1,5 pt / 100 F", "Livraison gratuite > 5 000 F", "Support prioritaire"] },
+  { id: "diamant",name: "Diamant",  icon: "", color: "#3B82F6", min: 50000,  perks: ["2 pt / 100 F", "Livraison gratuite illimitée", "Promotions exclusives", "Cadeau anniversaire"] },
 ];
 
 // Get user's current level based on total points earned (lifetime)

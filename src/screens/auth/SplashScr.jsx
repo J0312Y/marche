@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import Icon from "../../components/Icon";
 
 function SplashScr({onDone}){
   const [show,setShow]=useState(false);
@@ -38,7 +39,7 @@ function SplashScr({onDone}){
         opacity:show?1:0,transform:show?"translateY(0)":"translateY(12px)",
         transition:"all .5s ease .35s",letterSpacing:.3,
       }}>
-        Le Marketplace du Congo 🇨🇬
+        Le Marketplace du Congo 
       </p>
 
       {/* Loader */}

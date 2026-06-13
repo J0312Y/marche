@@ -4,6 +4,7 @@ import { useLoad, useData } from "../../hooks";
 import { user as userSvc } from "../../services";
 import { fmt, getVendorPromo } from "../../utils/helpers";
 import { SkeletonCards } from "../../components/Loading";
+import Icon from "../../components/Icon";
 
 function CouponsScr({onBack,cart=[],appliedCoupon,onApply}){
   const [manualCode,setManualCode]=useState("");
@@ -20,7 +21,7 @@ function CouponsScr({onBack,cart=[],appliedCoupon,onApply}){
     setError("");setVerifying(coupon.code);
     try{
       await userSvc.verifyCoupon(coupon.code,subtotal);
-      onApply(coupon);toast.success("Code promo appliqué 🏷️");
+      onApply(coupon);toast.success("Code promo appliqué");
     }catch(err){
       setError(err.message||"Code invalide");
     }finally{setVerifying(null)}
@@ -32,7 +33,7 @@ function CouponsScr({onBack,cart=[],appliedCoupon,onApply}){
     try{
       const result=await userSvc.verifyCoupon(manualCode.trim().toUpperCase(),subtotal);
       const coupon=(COUPONS||[]).find(c=>c.code===manualCode.trim().toUpperCase())||{code:manualCode.trim().toUpperCase(),discount:result.discount,free:result.free_delivery,desc:`${result.discount}% de réduction`};
-      onApply(coupon);toast.success("Code promo appliqué 🏷️");
+      onApply(coupon);toast.success("Code promo appliqué");
     }catch(err){
       setError(err.message||"Code invalide");
     }finally{setVerifying(null)}
@@ -41,12 +42,12 @@ function CouponsScr({onBack,cart=[],appliedCoupon,onApply}){
   const removeCoupon=()=>{onApply(null);toast.success("Code promo retiré")};
 
   return(<div className="scr" style={{padding:16}}>
-    <div className="appbar" style={{padding:0,marginBottom:12}}><button onClick={onBack}>←</button><h2>🏷️ Codes Promo</h2><div style={{width:38}}/></div>
+    <div className="appbar" style={{padding:0,marginBottom:12}}><button onClick={onBack}>←</button><h2><Icon name="tag" size={16}/>{" "}Codes Promo</h2><div style={{width:38}}/></div>
 
     {/* Applied coupon banner */}
     {appliedCoupon&&<div style={{padding:14,background:"rgba(249,115,22,0.04)",border:"1px solid rgba(249,115,22,0.15)",borderRadius:14,marginBottom:12,display:"flex",alignItems:"center",justifyContent:"space-between"}}>
       <div style={{display:"flex",alignItems:"center",gap:10}}>
-        <span style={{fontSize:22}}>✅</span>
+        <span style={{fontSize:22}}><Icon name="check_circle" size={18}/></span>
         <div>
           <div style={{fontSize:13,fontWeight:700,color:"#F97316"}}>Code appliqué : {appliedCoupon.code}</div>
           <div style={{fontSize:12,color:"var(--muted)"}}>{appliedCoupon.free?"Livraison gratuite":`-${appliedCoupon.discount}% de réduction`}</div>
@@ -65,7 +66,7 @@ function CouponsScr({onBack,cart=[],appliedCoupon,onApply}){
 
     {/* Error */}
     {error&&<div style={{padding:10,background:"rgba(239,68,68,0.06)",border:"1px solid rgba(239,68,68,0.15)",borderRadius:10,marginBottom:14,fontSize:12,fontWeight:600,color:"#EF4444",display:"flex",alignItems:"center",gap:6}}>
-      ⚠️ {error}
+      ️ {error}
     </div>}
 
     {/* Available coupons */}
@@ -78,7 +79,7 @@ function CouponsScr({onBack,cart=[],appliedCoupon,onApply}){
         <div style={{display:"flex",gap:14,alignItems:"flex-start"}}>
           {/* Left badge */}
           <div style={{width:56,minHeight:56,borderRadius:12,background:c.free?"linear-gradient(135deg,#10B981,#059669)":"linear-gradient(135deg,#F97316,#FB923C)",display:"flex",flexDirection:"column",alignItems:"center",justifyContent:"center",color:"#fff",flexShrink:0}}>
-            {c.free?<><span style={{fontSize:16}}>🚚</span><span style={{fontSize:9,fontWeight:600}}>GRATUIT</span></>
+            {c.free?<><span style={{fontSize:16}}><Icon name="truck" size={18}/></span><span style={{fontSize:9,fontWeight:600}}>GRATUIT</span></>
             :<><span style={{fontSize:20,fontWeight:800}}>{c.discount}%</span><span style={{fontSize:9,fontWeight:600}}>REMISE</span></>}
           </div>
 
@@ -99,10 +100,10 @@ function CouponsScr({onBack,cart=[],appliedCoupon,onApply}){
         <div style={{marginTop:12}}>
           {isApplied?(
             <button onClick={removeCoupon} style={{width:"100%",padding:"10px 0",borderRadius:10,border:"1px solid rgba(239,68,68,0.3)",background:"transparent",color:"#EF4444",fontSize:13,fontWeight:600,cursor:"pointer",fontFamily:"inherit"}}>
-              ✕ Retirer ce code
+               Retirer ce code
             </button>
           ):(<button onClick={()=>applyCoupon(c)} disabled={!meetsMin||!!verifying} style={{width:"100%",padding:"10px 0",borderRadius:10,border:"none",background:meetsMin?"#F97316":"var(--border)",color:meetsMin?"var(--card)":"var(--muted)",fontSize:13,fontWeight:700,cursor:meetsMin?"pointer":"not-allowed",fontFamily:"inherit",transition:"all .2s"}}>
-            {verifying===c.code?"⏳ Vérification...":meetsMin?"🏷️ Appliquer ce code":`🔒 Minimum ${fmt(c.min)}`}
+            {verifying===c.code?"⏳ Vérification...":meetsMin?"Appliquer ce code":` Minimum ${fmt(c.min)}`}
           </button>)}
         </div>
       </div>);
@@ -111,7 +112,7 @@ function CouponsScr({onBack,cart=[],appliedCoupon,onApply}){
     {/* Info */}
     <div style={{padding:12,background:"var(--light)",borderRadius:12,marginTop:10}}>
       <div style={{fontSize:11,color:"var(--muted)",lineHeight:1.5}}>
-        💡 Un seul code promo peut être appliqué par commande. Le sous-total actuel du panier est de <b>{fmt(subtotal)}</b>.
+         Un seul code promo peut être appliqué par commande. Le sous-total actuel du panier est de <b>{fmt(subtotal)}</b>.
       </div>
     </div>
   </div>);

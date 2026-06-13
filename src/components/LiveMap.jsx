@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import Icon from "./Icon";
 
 /**
  * LiveMap — Animated map mockup for delivery tracking
@@ -32,7 +33,7 @@ function LiveMap({ pickup, destination, driverPos, status = "delivering", style 
       {/* Pickup point */}
       <div style={{ position: "absolute", left: "12%", bottom: "15%", display: "flex", flexDirection: "column", alignItems: "center" }}>
         <div style={{ padding: "3px 8px", background: "#fff", borderRadius: 8, fontSize: 9, fontWeight: 700, boxShadow: "0 2px 8px rgba(0,0,0,.15)", marginBottom: 4, whiteSpace: "nowrap" }}>
-          {pickup || "📦 Commerce"}
+          {pickup || "Commerce"}
         </div>
         <div style={{ width: 12, height: 12, borderRadius: "50%", background: "#F97316", border: "2px solid #fff", boxShadow: "0 2px 4px rgba(0,0,0,.2)" }} />
       </div>
@@ -40,7 +41,7 @@ function LiveMap({ pickup, destination, driverPos, status = "delivering", style 
       {/* Destination point */}
       <div style={{ position: "absolute", right: "8%", top: "15%", display: "flex", flexDirection: "column", alignItems: "center" }}>
         <div style={{ padding: "3px 8px", background: "#fff", borderRadius: 8, fontSize: 9, fontWeight: 700, boxShadow: "0 2px 8px rgba(0,0,0,.15)", marginBottom: 4, whiteSpace: "nowrap" }}>
-          {destination || "🏠 Livraison"}
+          {destination || " Livraison"}
         </div>
         <div style={{ width: 12, height: 12, borderRadius: "50%", background: "#10B981", border: "2px solid #fff", boxShadow: "0 2px 4px rgba(0,0,0,.2)" }} />
       </div>
@@ -61,14 +62,14 @@ function LiveMap({ pickup, destination, driverPos, status = "delivering", style 
             display: "flex", alignItems: "center", justifyContent: "center",
             fontSize: 18,
           }}>
-            🛵
+            
           </div>
         </div>
       )}
 
       {/* Status badge */}
       <div style={{ position: "absolute", top: 10, left: 10, padding: "4px 10px", background: status === "delivering" ? "#F97316" : status === "delivered" ? "#10B981" : "var(--card)", color: status === "delivering" || status === "delivered" ? "#fff" : "var(--text)", borderRadius: 8, fontSize: 10, fontWeight: 700, boxShadow: "0 2px 8px rgba(0,0,0,.15)" }}>
-        {status === "delivering" ? "🛵 En route" : status === "delivered" ? "✅ Livré" : status === "pickup" ? "📦 Retrait" : "⏳ En attente"}
+        {status === "delivering" ? "En route" : status === "delivered" ? "Livré" : status === "pickup" ? "Retrait" : "⏳ En attente"}
       </div>
     </div>
   );

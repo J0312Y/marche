@@ -1,4 +1,5 @@
 import { useState } from "react";
+import Icon from "./Icon";
 
 /**
  * Interactive photo guide for vendors
@@ -10,55 +11,55 @@ const TIPS = [
     good: "Produit sur fond blanc ou clair, bien détaché",
     bad: "Fond encombré, autres objets visibles",
     icon: "⬜",
-    goodEx: "✅",
-    badEx: "❌",
+    goodEx: "",
+    badEx: "",
     detail: "Placez votre produit sur un drap blanc, une feuille A3, ou un mur clair. Le fond blanc fait ressortir le produit et inspire confiance.",
   },
   {
     title: "Lumière naturelle",
     good: "Photo près d'une fenêtre, lumière douce",
     bad: "Flash direct, ombres dures, photo sombre",
-    icon: "☀️",
-    goodEx: "✅",
-    badEx: "❌",
+    icon: "️",
+    goodEx: "",
+    badEx: "",
     detail: "Photographiez près d'une fenêtre le jour. Évitez le flash du téléphone qui crée des reflets. La lumière naturelle donne les meilleurs résultats.",
   },
   {
     title: "Cadrage centré",
     good: "Produit au centre, rempli 80% du cadre",
     bad: "Produit petit et perdu dans l'image",
-    icon: "🎯",
-    goodEx: "✅",
-    badEx: "❌",
+    icon: "",
+    goodEx: "",
+    badEx: "",
     detail: "Le produit doit occuper la majorité de l'image. Approchez-vous suffisamment. Laissez un petit espace autour pour respirer.",
   },
   {
     title: "Netteté parfaite",
     good: "Image nette, détails visibles",
     bad: "Image floue, bougée, pixelisée",
-    icon: "🔍",
-    goodEx: "✅",
-    badEx: "❌",
+    icon: "",
+    goodEx: "",
+    badEx: "",
     detail: "Posez votre téléphone ou stabilisez vos mains. Tapez sur le produit à l'écran pour faire la mise au point. Évitez de zoomer.",
   },
   {
     title: "Plusieurs angles",
     good: "Face, côté, dessus, détails, porté/en situation",
     bad: "Une seule photo de face",
-    icon: "📐",
-    goodEx: "✅",
-    badEx: "❌",
+    icon: "",
+    goodEx: "",
+    badEx: "",
     detail: "3 à 5 photos minimum : vue principale, profil, détails (texture, étiquette), et si possible en situation d'utilisation.",
   },
 ];
 
 const RULES_BY_TYPE = {
-  boutique: { title:"Mode & Boutique", rules:["Fond blanc obligatoire","Produit seul, sans mannequin si possible","3 photos min: face, dos, détail","Tailles visibles si vêtement"], icon:"👗" },
-  restaurant: { title:"Restaurant", rules:["Vue plongeante (du dessus)","Assiette complète avec accompagnements","Lumière chaude naturelle","Pas de filtres Instagram excessifs"], icon:"🍽️" },
-  patisserie: { title:"Pâtisserie", rules:["Gros plan appétissant","Fond neutre (bois, marbre, blanc)","Montrer la texture et les couches","Photo de la boîte si livraison"], icon:"🧁" },
-  pharmacie: { title:"Pharmacie", rules:["Photo nette du packaging","Texte du produit lisible","Fond blanc uniquement","Pas de médicaments hors boîte"], icon:"💊" },
-  supermarche: { title:"Supermarché", rules:["Fond blanc, produit face caméra","Étiquette/marque visible","Photo du poids/contenu","Lot groupé si pack"], icon:"🛒" },
-  service: { title:"Service", rules:["Photo avant/après si pertinent","Photo de l'équipe au travail","Résultat final visible","Environnement propre"], icon:"🔧" },
+  boutique: { title:"Mode & Boutique", rules:["Fond blanc obligatoire","Produit seul, sans mannequin si possible","3 photos min: face, dos, détail","Tailles visibles si vêtement"], icon:"package" },
+  restaurant: { title:"Restaurant", rules:["Vue plongeante (du dessus)","Assiette complète avec accompagnements","Lumière chaude naturelle","Pas de filtres Instagram excessifs"], icon:"utensils" },
+  patisserie: { title:"Pâtisserie", rules:["Gros plan appétissant","Fond neutre (bois, marbre, blanc)","Montrer la texture et les couches","Photo de la boîte si livraison"], icon:"cupcake" },
+  pharmacie: { title:"Pharmacie", rules:["Photo nette du packaging","Texte du produit lisible","Fond blanc uniquement","Pas de médicaments hors boîte"], icon:"pill" },
+  supermarche: { title:"Supermarché", rules:["Fond blanc, produit face caméra","Étiquette/marque visible","Photo du poids/contenu","Lot groupé si pack"], icon:"cart" },
+  service: { title:"Service", rules:["Photo avant/après si pertinent","Photo de l'équipe au travail","Résultat final visible","Environnement propre"], icon:"tool" },
 };
 
 function PhotoGuide({ onClose, shopType="boutique" }){
@@ -70,8 +71,8 @@ function PhotoGuide({ onClose, shopType="boutique" }){
       <div style={{background:"var(--card)",borderRadius:"24px 24px 0 0",width:"100%",maxWidth:420,maxHeight:"88vh",overflow:"auto",animation:"fadeIn .25s ease"}}>
         {/* Header */}
         <div style={{padding:"20px 20px 0",display:"flex",alignItems:"center",justifyContent:"space-between",position:"sticky",top:0,background:"var(--card)",zIndex:2,paddingBottom:16,borderBottom:"1px solid var(--border)"}}>
-          <h3 style={{fontSize:17,fontWeight:700}}>📸 Guide photo vendeur</h3>
-          <button onClick={onClose} style={{width:32,height:32,borderRadius:10,border:"1px solid var(--border)",background:"var(--card)",cursor:"pointer",fontSize:16,display:"flex",alignItems:"center",justifyContent:"center"}}>✕</button>
+          <h3 style={{fontSize:17,fontWeight:700}}><Icon name="camera" size={16}/>{" "}Guide photo vendeur</h3>
+          <button onClick={onClose} style={{width:32,height:32,borderRadius:10,border:"1px solid var(--border)",background:"var(--card)",cursor:"pointer",fontSize:16,display:"flex",alignItems:"center",justifyContent:"center"}}></button>
         </div>
 
         {/* Tabs */}
@@ -100,11 +101,11 @@ function PhotoGuide({ onClose, shopType="boutique" }){
                   </div>
                   <div style={{display:"flex",gap:8,marginBottom:8}}>
                     <div style={{flex:1,padding:8,borderRadius:8,background:"rgba(16,185,129,0.06)",border:"1px solid rgba(16,185,129,0.15)",fontSize:11}}>
-                      <div style={{fontWeight:700,color:"#10B981",marginBottom:2}}>✅ BON</div>
+                      <div style={{fontWeight:700,color:"#10B981",marginBottom:2}}><Icon name="check_circle" size={16}/>{" "}BON</div>
                       {tip.good}
                     </div>
                     <div style={{flex:1,padding:8,borderRadius:8,background:"rgba(239,68,68,0.04)",border:"1px solid rgba(239,68,68,0.12)",fontSize:11}}>
-                      <div style={{fontWeight:700,color:"#EF4444",marginBottom:2}}>❌ ÉVITER</div>
+                      <div style={{fontWeight:700,color:"#EF4444",marginBottom:2}}><Icon name="x_circle" size={16}/>{" "}ÉVITER</div>
                       {tip.bad}
                     </div>
                   </div>
@@ -127,7 +128,7 @@ function PhotoGuide({ onClose, shopType="boutique" }){
                 </div>
               ))}
               <div style={{marginTop:16,padding:14,background:"rgba(249,115,22,0.04)",borderRadius:14,border:"1px solid rgba(249,115,22,0.12)"}}>
-                <div style={{fontSize:12,fontWeight:700,color:"#F97316",marginBottom:4}}>💡 Astuce Pro</div>
+                <div style={{fontSize:12,fontWeight:700,color:"#F97316",marginBottom:4}}><Icon name="info" size={16}/>{" "}Astuce Pro</div>
                 <p style={{fontSize:11,color:"var(--sub)",margin:0,lineHeight:1.5}}>
                   {shopType==="restaurant"||shopType==="patisserie"
                     ?"Prenez la photo juste après la préparation quand le plat est encore chaud et appétissant. L'éclairage naturel du matin ou de l'après-midi donne les meilleurs résultats."
@@ -141,7 +142,7 @@ function PhotoGuide({ onClose, shopType="boutique" }){
         {/* CTA */}
         <div style={{padding:"0 20px 20px",position:"sticky",bottom:0,background:"var(--card)"}}>
           <button onClick={onClose} style={{width:"100%",padding:14,borderRadius:14,border:"none",background:"#F97316",color:"var(--card)",fontSize:14,fontWeight:600,cursor:"pointer",fontFamily:"inherit"}}>
-            👍 J'ai compris, ajouter mes photos
+             J'ai compris, ajouter mes photos
           </button>
         </div>
       </div>

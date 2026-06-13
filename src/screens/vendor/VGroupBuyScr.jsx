@@ -3,6 +3,7 @@ import { useState } from "react";
 import Select from "../../components/Select";
 import toast from "../../utils/toast";
 import { fmt } from "../../utils/helpers";
+import Icon from "../../components/Icon";
 function VGroupBuyScr({onBack}){
   const [offers,setOffers]=useState([
     {id:1,product:"Pack Ménage Complet",price:8500,discount:20,min:5,current:3,ends:"20 Mars 2026",active:true},
@@ -11,9 +12,9 @@ function VGroupBuyScr({onBack}){
   ]);
   const [creating,setCreating]=useState(false);const [newOffer,setNewOffer]=useState({product:"",discount:15,min:5,ends:""});
   const toggle=(id)=>{setOffers(prev=>prev.map(o=>o.id===id?{...o,active:!o.active}:o));toast.success("Offre mise à jour")};
-  const create=()=>{if(!newOffer.product){toast.error("Sélectionnez un produit");return}setOffers(prev=>[{id:Date.now(),...newOffer,price:0,current:0,active:true},...prev]);setCreating(false);toast.success("Offre groupée créée 👥")};
+  const create=()=>{if(!newOffer.product){toast.error("Sélectionnez un produit");return}setOffers(prev=>[{id:Date.now(),...newOffer,price:0,current:0,active:true},...prev]);setCreating(false);toast.success("Offre groupée créée ")};
   return(<div className="scr" style={{padding:16,paddingBottom:20}}>
-    <div className="appbar" style={{padding:0,marginBottom:10}}><button onClick={onBack}>←</button><h2>👥 Achats groupés</h2><button onClick={()=>setCreating(true)} style={{fontSize:20,background:"none",border:"none",cursor:"pointer",color:"var(--text)"}}>+</button></div>
+    <div className="appbar" style={{padding:0,marginBottom:10}}><button onClick={onBack}>←</button><h2> Achats groupés</h2><button onClick={()=>setCreating(true)} style={{fontSize:20,background:"none",border:"none",cursor:"pointer",color:"var(--text)"}}>+</button></div>
     {creating&&<div style={{padding:14,background:"var(--card)",border:"2px solid #F97316",borderRadius:16,marginBottom:14}}>
       <h4 style={{fontSize:14,fontWeight:700,marginBottom:10}}>Nouvelle offre groupée</h4>
       <div className="field"><label>Produit <span style={{color:"#EF4444"}}>*</span></label><Select value={newOffer.product} onChange={v=>setNewOffer({...newOffer,product:v})} placeholder="— Choisir —" options={["Pack Ménage Complet","Riz Parfumé 25kg","Écouteurs Bluetooth Pro"]}/></div>
@@ -27,10 +28,10 @@ function VGroupBuyScr({onBack}){
         <div className={`toggle ${o.active?"on":""}`} onClick={()=>toggle(o.id)} style={{transform:"scale(.8)"}}/>
       </div>
       <div style={{display:"flex",gap:10,marginBottom:8,fontSize:12,color:"var(--sub)"}}>
-        <span>🏷️ -{o.discount}%</span><span>👥 {o.current}/{o.min}</span><span>📅 {o.ends}</span>
+        <span><Icon name="tag" size={16}/>{" "}-{o.discount}%</span><span> {o.current}/{o.min}</span><span> {o.ends}</span>
       </div>
       <div style={{height:6,background:"var(--border)",borderRadius:3,overflow:"hidden"}}><div style={{width:`${Math.min((o.current/o.min)*100,100)}%`,height:"100%",background:o.current>=o.min?"#10B981":"#F97316",borderRadius:3}}/></div>
-      <div style={{display:"flex",justifyContent:"space-between",fontSize:10,color:"var(--muted)",marginTop:4}}><span>{o.current>=o.min?"✅ Objectif atteint !":"En cours..."}</span><span>{o.min-o.current>0?`${o.min-o.current} restants`:""}</span></div>
+      <div style={{display:"flex",justifyContent:"space-between",fontSize:10,color:"var(--muted)",marginTop:4}}><span>{o.current>=o.min?"Objectif atteint !":"En cours..."}</span><span>{o.min-o.current>0?`${o.min-o.current} restants`:""}</span></div>
     </div>)}
   </div>);
 }

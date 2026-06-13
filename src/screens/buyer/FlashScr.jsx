@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import { useData } from "../../hooks";
 import Img from "../../components/Img";
 import { fmt, disc } from "../../utils/helpers";
+import Icon from "../../components/Icon";
 
 function FlashScr({go,onBack}){
   const { P } = useData();
@@ -11,10 +12,10 @@ function FlashScr({go,onBack}){
   // Fake stock levels for urgency
   const stocks=[15,3,8,22,1,6];
   const maxStock=30;
-  return(<div className="scr"><div className="appbar"><button onClick={onBack}>←</button><h2>⚡ Offres Flash</h2><div style={{width:38}}/></div>
+  return(<div className="scr"><div className="appbar"><button onClick={onBack}>←</button><h2><Icon name="lightning" size={16}/>{" "}Offres Flash</h2><div style={{width:38}}/></div>
     {/* Global timer banner */}
     <div style={{margin:"0 16px 12px",padding:14,background:"linear-gradient(135deg,#EF4444,#DC2626)",borderRadius:16,color:"#fff",display:"flex",alignItems:"center",justifyContent:"space-between"}}>
-      <div><div style={{fontSize:15,fontWeight:700}}>⚡ Vente Flash</div><div style={{fontSize:11,opacity:.8,marginTop:2}}>Se termine bientôt !</div></div>
+      <div><div style={{fontSize:15,fontWeight:700}}><Icon name="lightning" size={16}/>{" "}Vente Flash</div><div style={{fontSize:11,opacity:.8,marginTop:2}}>Se termine bientôt !</div></div>
       <div style={{display:"flex",gap:4}}>
         {[String(t.h).padStart(2,"0"),String(t.m).padStart(2,"0"),String(t.s).padStart(2,"0")].map((v,i)=>(
           <div key={i} style={{display:"flex",alignItems:"center",gap:4}}>
@@ -30,7 +31,7 @@ function FlashScr({go,onBack}){
         const pct=Math.round((stock/maxStock)*100);
         const urgent=stock<=5;
         return(<div key={p.id} onClick={()=>go("detail",p)} style={{display:"flex",gap:12,padding:12,background:"var(--card)",border:urgent?"2px solid rgba(239,68,68,0.3)":"1px solid var(--border)",borderRadius:16,marginBottom:10,cursor:"pointer",position:"relative"}}>
-          {urgent&&<div style={{position:"absolute",top:-6,right:12,padding:"2px 8px",borderRadius:6,background:"#EF4444",color:"#fff",fontSize:9,fontWeight:700}}>🔥 Dernières pièces</div>}
+          {urgent&&<div style={{position:"absolute",top:-6,right:12,padding:"2px 8px",borderRadius:6,background:"#EF4444",color:"#fff",fontSize:9,fontWeight:700}}><Icon name="fire" size={16}/>{" "}Dernières pièces</div>}
           <div style={{width:80,height:80,borderRadius:12,overflow:"hidden",flexShrink:0,position:"relative",background:"var(--light)"}}>
             <Img src={p.photo} emoji={p.img} style={{width:"100%",height:"100%"}} fit="cover"/>
             <div style={{position:"absolute",top:4,left:4,padding:"2px 6px",borderRadius:4,background:"#EF4444",color:"#fff",fontSize:9,fontWeight:700}}>-{disc(p)}%</div>

@@ -1,4 +1,5 @@
 import { useEffect, useRef, useState } from "react";
+import Icon from "./Icon";
 
 /**
  * CountUp — Animated number counter that counts from `from` to `to` over `duration` ms

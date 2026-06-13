@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import { triggerPush } from "../../components/PushBanner";
+import Icon from "../../components/Icon";
 
 function RegStatusScr({onBack,role,plan,vendorStatus,driverStatus}){
   const isVendor = role === "vendor";
@@ -7,15 +8,15 @@ function RegStatusScr({onBack,role,plan,vendorStatus,driverStatus}){
   const planLabel = plan==="starter"?"Starter":plan==="pro"?"Pro":plan==="enterprise"?"Enterprise":"Livreur";
 
   const steps = isVendor ? [
-    {key:"submitted",label:"Demande soumise",icon:"📩",desc:"Vos informations ont été envoyées"},
-    {key:"docs",label:"Vérification documents",icon:"📄",desc:"CNI, RCCM, patente en cours de vérification"},
-    {key:"review",label:"Examen du dossier",icon:"🔍",desc:"L'équipe Lamuka examine votre candidature"},
-    {key:"approved",label:"Compte activé",icon:"✅",desc:"Bienvenue ! Votre espace vendeur est prêt"},
+    {key:"submitted",label:"Demande soumise",icon:"",desc:"Vos informations ont été envoyées"},
+    {key:"docs",label:"Vérification documents",icon:"",desc:"CNI, RCCM, patente en cours de vérification"},
+    {key:"review",label:"Examen du dossier",icon:"",desc:"L'équipe Lamuka examine votre candidature"},
+    {key:"approved",label:"Compte activé",icon:"check_circle",desc:"Bienvenue ! Votre espace vendeur est prêt"},
   ] : [
-    {key:"submitted",label:"Demande soumise",icon:"📩",desc:"Vos informations ont été envoyées"},
-    {key:"docs",label:"Vérification permis & véhicule",icon:"🛵",desc:"Documents et assurance en cours de vérification"},
-    {key:"review",label:"Examen du dossier",icon:"🔍",desc:"L'équipe Lamuka vérifie votre profil"},
-    {key:"approved",label:"Compte activé",icon:"✅",desc:"Vous pouvez commencer à livrer !"},
+    {key:"submitted",label:"Demande soumise",icon:"",desc:"Vos informations ont été envoyées"},
+    {key:"docs",label:"Vérification permis & véhicule",icon:"truck",desc:"Documents et assurance en cours de vérification"},
+    {key:"review",label:"Examen du dossier",icon:"",desc:"L'équipe Lamuka vérifie votre profil"},
+    {key:"approved",label:"Compte activé",icon:"check_circle",desc:"Vous pouvez commencer à livrer !"},
   ];
 
   const currentStep = status === "approved" ? 3 : status === "pending" ? 1 : 0;
@@ -26,7 +27,7 @@ function RegStatusScr({onBack,role,plan,vendorStatus,driverStatus}){
     {/* Header */}
     <div style={{textAlign:"center",marginBottom:20}}>
       <div style={{width:72,height:72,borderRadius:"50%",background:status==="approved"?"rgba(16,185,129,0.1)":"rgba(245,158,11,0.1)",display:"flex",alignItems:"center",justifyContent:"center",margin:"0 auto 12px",fontSize:36}}>
-        {status==="approved"?"🎉":"⏳"}
+        {status==="approved"?"":"⏳"}
       </div>
       <h3 style={{fontSize:20,fontWeight:700}}>{status==="approved"?"Inscription validée !":"Inscription en cours"}</h3>
       <p style={{fontSize:13,color:"var(--muted)",marginTop:4}}>
@@ -50,7 +51,7 @@ function RegStatusScr({onBack,role,plan,vendorStatus,driverStatus}){
               border:active?"2px solid #F59E0B":done?"2px solid #10B981":"2px solid var(--border)",
               zIndex:1
             }}>
-              {done && !active ? "✓" : s.icon}
+              {done && !active ? "" : s.icon}
             </div>
             {/* Content */}
             <div style={{flex:1,paddingTop:2}}>
@@ -65,17 +66,17 @@ function RegStatusScr({onBack,role,plan,vendorStatus,driverStatus}){
 
     {/* Summary card */}
     <div style={{padding:14,background:"var(--card)",border:"1px solid var(--border)",borderRadius:16,marginBottom:16}}>
-      <div style={{fontSize:13,fontWeight:700,marginBottom:10}}>📋 Récapitulatif</div>
+      <div style={{fontSize:13,fontWeight:700,marginBottom:10}}><Icon name="document" size={16}/>{" "}Récapitulatif</div>
       {(isVendor?[
-        ["Rôle","🏪 Commerçant"],
+        ["Rôle","Commerçant"],
         ["Plan",planLabel],
         ["Documents","3/3 soumis"],
-        ["Paiement",plan==="starter"?"Gratuit":"✅ Confirmé"],
+        ["Paiement",plan==="starter"?"Gratuit":"Confirmé"],
       ]:[
-        ["Rôle","🛵 Livreur"],
+        ["Rôle","Livreur"],
         ["Véhicule","Honda PCX"],
         ["Documents","4/4 soumis"],
-        ["Inscription","✅ 5 000 F payé"],
+        ["Inscription","5 000 F payé"],
       ]).map(([l,v])=>(
         <div key={l} style={{display:"flex",justifyContent:"space-between",padding:"6px 0",borderBottom:"1px solid var(--border)",fontSize:13}}>
           <span style={{color:"var(--muted)"}}>{l}</span><b>{v}</b>
@@ -85,7 +86,7 @@ function RegStatusScr({onBack,role,plan,vendorStatus,driverStatus}){
 
     {/* Help */}
     <div style={{padding:14,background:"rgba(59,130,246,0.04)",border:"1px solid rgba(59,130,246,0.15)",borderRadius:14,marginBottom:16}}>
-      <div style={{fontSize:12,fontWeight:600,color:"#3B82F6",marginBottom:4}}>💡 Besoin d'aide ?</div>
+      <div style={{fontSize:12,fontWeight:600,color:"#3B82F6",marginBottom:4}}><Icon name="info" size={16}/>{" "}Besoin d'aide ?</div>
       <div style={{fontSize:11,color:"var(--muted)",lineHeight:1.5}}>Si votre demande prend plus de 48h, contactez-nous sur WhatsApp au +242 064 663 469 ou par email à support@lamuka.market</div>
     </div>
 

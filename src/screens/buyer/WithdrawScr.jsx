@@ -2,18 +2,19 @@ import { useState } from "react";
 import PayLogo from "../../components/PayLogos";
 import { fmt } from "../../utils/helpers";
 import toast from "../../utils/toast";
+import Icon from "../../components/Icon";
 
 function WithdrawScr({onBack,mode}){
   const [method,setMethod]=useState(null);const [amount,setAmount]=useState("");const [done,setDone]=useState(false);
   const color=mode==="driver"?"#10B981":"#F97316";
-  if(done)return(<div className="scr" style={{padding:16,textAlign:"center"}}><div style={{padding:"40px 0"}}><div style={{fontSize:48,marginBottom:10}}>✅</div><h3 style={{fontSize:18,fontWeight:700}}>Demande envoyée</h3><p style={{fontSize:14,color,fontWeight:700,marginTop:8}}>{fmt(parseInt(amount)||0)}</p><p style={{fontSize:13,color:"var(--muted)",marginTop:6}}>Versement sous 24-48h sur votre compte.</p><button className="btn-primary" style={{marginTop:20,background:color}} onClick={onBack}>OK</button></div></div>);
+  if(done)return(<div className="scr" style={{padding:16,textAlign:"center"}}><div style={{padding:"40px 0"}}><div style={{fontSize:48,marginBottom:10}}><Icon name="check_circle" size={18}/></div><h3 style={{fontSize:18,fontWeight:700}}>Demande envoyée</h3><p style={{fontSize:14,color,fontWeight:700,marginTop:8}}>{fmt(parseInt(amount)||0)}</p><p style={{fontSize:13,color:"var(--muted)",marginTop:6}}>Versement sous 24-48h sur votre compte.</p><button className="btn-primary" style={{marginTop:20,background:color}} onClick={onBack}>OK</button></div></div>);
   return(<><div className="appbar"><button onClick={onBack}>←</button><h2>Retrait</h2><div style={{width:38}}/></div>
     <div className="scr" style={{padding:16}}>
       <div className="field"><label>Montant (FCFA)</label><input type="number" value={amount} onChange={e=>setAmount(e.target.value)} placeholder="Ex: 50000"/></div>
       <div style={{display:"flex",gap:8,marginBottom:12}}>{[10000,25000,50000,100000].map(v=><button key={v} style={{flex:1,padding:10,borderRadius:10,border:amount===String(v)?`2px solid ${color}`:"1px solid var(--border)",background:amount===String(v)?`${color}08`:"var(--card)",fontSize:11,fontWeight:600,cursor:"pointer",fontFamily:"inherit"}} onClick={()=>setAmount(String(v))}>{fmt(v)}</button>)}</div>
       <div style={{fontSize:14,fontWeight:700,marginBottom:10}}>Retirer vers</div>
-      {[["airtel","Airtel Money","04X / 05X XXX XXX"],["mtn","MTN MoMo","06X XXX XXX"],["kolo","Kolo Pay","04-06X XXX XXX"]].map(([k,n,p])=><div key={k} className="setting-item" style={{cursor:"pointer",border:method===k?`2px solid ${color}`:"1px solid var(--border)",marginBottom:6}} onClick={()=>setMethod(k)}><PayLogo method={k} size={28}/><div style={{flex:1}}><div style={{fontSize:14,fontWeight:500}}>{n}</div><div style={{fontSize:11,color:"var(--muted)"}}>{p}</div></div>{method===k&&<span style={{color,fontWeight:700}}>✓</span>}</div>)}
-      <div style={{paddingTop:24,paddingBottom:16}}><button className="btn-primary" style={{background:amount&&method?color:"var(--border)",color:amount&&method?"var(--card)":"var(--muted)"}} onClick={()=>{if(amount&&method){setDone(true);toast.success("Retrait effectué 💸")}}}>Retirer {amount?fmt(parseInt(amount)):""}</button></div>
+      {[["airtel","Airtel Money","04X / 05X XXX XXX"],["mtn","MTN MoMo","06X XXX XXX"],["kolo","Kolo Pay","04-06X XXX XXX"]].map(([k,n,p])=><div key={k} className="setting-item" style={{cursor:"pointer",border:method===k?`2px solid ${color}`:"1px solid var(--border)",marginBottom:6}} onClick={()=>setMethod(k)}><PayLogo method={k} size={28}/><div style={{flex:1}}><div style={{fontSize:14,fontWeight:500}}>{n}</div><div style={{fontSize:11,color:"var(--muted)"}}>{p}</div></div>{method===k&&<span style={{color,fontWeight:700}}></span>}</div>)}
+      <div style={{paddingTop:24,paddingBottom:16}}><button className="btn-primary" style={{background:amount&&method?color:"var(--border)",color:amount&&method?"var(--card)":"var(--muted)"}} onClick={()=>{if(amount&&method){setDone(true);toast.success("Retrait effectué ")}}}>Retirer {amount?fmt(parseInt(amount)):""}</button></div>
     </div>
   </>);
 }

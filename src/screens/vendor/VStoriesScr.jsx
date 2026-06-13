@@ -1,12 +1,13 @@
 import { useState, useRef, useEffect, useCallback } from "react";
 import toast from "../../utils/toast";
+import Icon from "../../components/Icon";
 
 function VStoriesScr({onBack}){
   const [stories,setStories]=useState([
-    {id:1,type:"photo",media:"https://images.unsplash.com/photo-1590735213920-68192a487bc2?w=400&h=600&fit=crop",caption:"Nouvelle collection Wax 🌍",date:"Il y a 2h",views:142,duration:null,active:true},
-    {id:2,type:"video",media:null,caption:"Making-of sacs artisanaux 🎬",date:"Il y a 5h",views:214,duration:"0:22",active:true},
-    {id:3,type:"photo",media:"https://images.unsplash.com/photo-1548036328-c9fa89d128fa?w=400&h=600&fit=crop",caption:"Sacs en promo -30% 👜",date:"Il y a 8h",views:89,active:true},
-    {id:4,type:"photo",media:"https://images.unsplash.com/photo-1445205170230-053b83016050?w=400&h=600&fit=crop",caption:"Soldes d'hiver 🏷️",date:"Hier",views:256,active:false},
+    {id:1,type:"photo",media:"https://images.unsplash.com/photo-1590735213920-68192a487bc2?w=400&h=600&fit=crop",caption:"Nouvelle collection Wax ",date:"Il y a 2h",views:142,duration:null,active:true},
+    {id:2,type:"video",media:null,caption:"Making-of sacs artisanaux ",date:"Il y a 5h",views:214,duration:"0:22",active:true},
+    {id:3,type:"photo",media:"https://images.unsplash.com/photo-1548036328-c9fa89d128fa?w=400&h=600&fit=crop",caption:"Sacs en promo -30%",date:"Il y a 8h",views:89,active:true},
+    {id:4,type:"photo",media:"https://images.unsplash.com/photo-1445205170230-053b83016050?w=400&h=600&fit=crop",caption:"Soldes d'hiver",date:"Hier",views:256,active:false},
   ]);
 
   /* ═══ STORY VIEWER ═══ */
@@ -104,7 +105,7 @@ function VStoriesScr({onBack}){
     };
     setStories(prev=>[newStory,...prev]);
     setCreating(false);setCaption("");setPreview(null);setVideoDuration(null);setMediaType("photo");
-    toast.success(mediaType==="video"?"Vidéo publiée ! 🎬":"Story publiée ! 📸");
+    toast.success(mediaType==="video"?"Vidéo publiée ! ":"Story publiée !");
   };
 
   const del=(id)=>{setStories(prev=>prev.filter(s=>s.id!==id));toast.success("Story supprimée")};
@@ -116,7 +117,7 @@ function VStoriesScr({onBack}){
   return(<div className="scr" style={{padding:16,paddingBottom:20}}>
     <div className="appbar" style={{padding:0,marginBottom:10}}>
       <button onClick={onBack}>←</button>
-      <h2>📸 Stories ({activeCount})</h2>
+      <h2><Icon name="camera" size={16}/>{" "}Stories ({activeCount})</h2>
       <button onClick={()=>setCreating(true)} style={{fontSize:20,background:"none",border:"none",cursor:"pointer",color:"var(--text)"}}>+</button>
     </div>
 
@@ -126,7 +127,7 @@ function VStoriesScr({onBack}){
     {creating&&<div style={{padding:14,background:"var(--card)",border:"2px solid #F97316",borderRadius:16,marginBottom:14}}>
       {/* Media type toggle */}
       <div style={{display:"flex",gap:0,marginBottom:12,background:"var(--light)",borderRadius:10,padding:3}}>
-        {[["photo","📷 Photo"],["video","🎬 Vidéo (30s)"]].map(([k,l])=>(
+        {[["photo","Photo"],["video"," Vidéo (30s)"]].map(([k,l])=>(
           <button key={k} onClick={()=>{setMediaType(k);setPreview(null);setVideoDuration(null)}} style={{flex:1,padding:"8px 0",borderRadius:8,border:"none",background:mediaType===k?"var(--card)":"transparent",color:mediaType===k?"var(--text)":"var(--muted)",fontSize:11,fontWeight:mediaType===k?700:500,cursor:"pointer",fontFamily:"inherit",boxShadow:mediaType===k?"0 1px 4px rgba(0,0,0,.06)":"none"}}>{l}</button>
         ))}
       </div>
@@ -149,7 +150,7 @@ function VStoriesScr({onBack}){
           )
         ):(
           <div style={{textAlign:"center"}}>
-            <div style={{fontSize:32}}>{mediaType==="video"?"🎬":"📷"}</div>
+            <div style={{fontSize:32}}>{mediaType==="video"?"":""}</div>
             <div style={{fontSize:11,color:"var(--muted)",marginTop:4}}>
               {mediaType==="video"?"Ajouter une vidéo (max 30s, 50 MB)":"Ajouter une photo (max 10 MB)"}
             </div>
@@ -164,7 +165,7 @@ function VStoriesScr({onBack}){
       {/* Buttons */}
       <div style={{display:"flex",gap:8}}>
         <button onClick={reset} style={{flex:1,padding:10,borderRadius:12,border:"1px solid var(--border)",background:"var(--card)",fontSize:12,fontWeight:600,cursor:"pointer",fontFamily:"inherit",color:"var(--text)"}}>Annuler</button>
-        <button onClick={addStory} style={{flex:1,padding:10,borderRadius:12,border:"none",background:"#F97316",color:"#fff",fontSize:12,fontWeight:700,cursor:"pointer",fontFamily:"inherit"}}>{mediaType==="video"?"🎬 Publier":"📸 Publier"}</button>
+        <button onClick={addStory} style={{flex:1,padding:10,borderRadius:12,border:"none",background:"#F97316",color:"#fff",fontSize:12,fontWeight:700,cursor:"pointer",fontFamily:"inherit"}}>{mediaType==="video"?" Publier":"Publier"}</button>
       </div>
     </div>}
 
@@ -174,7 +175,7 @@ function VStoriesScr({onBack}){
       <div onClick={()=>setViewIdx(idx)} style={{width:60,height:80,borderRadius:12,overflow:"hidden",flexShrink:0,position:"relative",background:"var(--light)",cursor:"pointer"}}>
         {s.type==="video"?(
           <>
-            {s.media?<video src={s.media} style={{width:"100%",height:"100%",objectFit:"cover"}} muted/>:<div style={{width:"100%",height:"100%",background:"linear-gradient(135deg,#F97316,#FB923C)",display:"flex",alignItems:"center",justifyContent:"center"}}><span style={{fontSize:24}}>🎬</span></div>}
+            {s.media?<video src={s.media} style={{width:"100%",height:"100%",objectFit:"cover"}} muted/>:<div style={{width:"100%",height:"100%",background:"linear-gradient(135deg,#F97316,#FB923C)",display:"flex",alignItems:"center",justifyContent:"center"}}><span style={{fontSize:24}}></span></div>}
             <div style={{position:"absolute",inset:0,display:"flex",alignItems:"center",justifyContent:"center"}}>
               <div style={{width:24,height:24,borderRadius:"50%",background:"rgba(0,0,0,.5)",display:"flex",alignItems:"center",justifyContent:"center"}}>
                 <div style={{width:0,height:0,borderLeft:"8px solid #fff",borderTop:"5px solid transparent",borderBottom:"5px solid transparent",marginLeft:2}}/>
@@ -190,10 +191,10 @@ function VStoriesScr({onBack}){
       {/* Info - clickable to view */}
       <div style={{flex:1,cursor:"pointer"}} onClick={()=>setViewIdx(idx)}>
         <div style={{display:"flex",alignItems:"center",gap:4,marginBottom:2}}>
-          <span style={{fontSize:10,padding:"1px 6px",borderRadius:4,background:s.type==="video"?"rgba(249,115,22,0.08)":"rgba(16,185,129,0.08)",color:s.type==="video"?"#F97316":"#10B981",fontWeight:700}}>{s.type==="video"?"🎬 Vidéo":"📷 Photo"}</span>
+          <span style={{fontSize:10,padding:"1px 6px",borderRadius:4,background:s.type==="video"?"rgba(249,115,22,0.08)":"rgba(16,185,129,0.08)",color:s.type==="video"?"#F97316":"#10B981",fontWeight:700}}>{s.type==="video"?" Vidéo":"Photo"}</span>
         </div>
         <div style={{fontSize:13,fontWeight:600,marginBottom:2}}>{s.caption}</div>
-        <div style={{fontSize:11,color:"var(--muted)"}}>{s.date} · 👁️ {s.views} vues{s.duration?` · ${s.duration}`:""}</div>
+        <div style={{fontSize:11,color:"var(--muted)"}}>{s.date} · ️ {s.views} vues{s.duration?` · ${s.duration}`:""}</div>
         <div style={{display:"flex",alignItems:"center",gap:6,marginTop:4}}>
           <div style={{width:8,height:8,borderRadius:"50%",background:s.active?"#10B981":"var(--border)"}}/>
           <span style={{fontSize:10,color:s.active?"#10B981":"var(--muted)"}}>{s.active?"Active (24h)":"Expirée"}</span>
@@ -202,12 +203,12 @@ function VStoriesScr({onBack}){
 
       {/* Actions */}
       <div style={{display:"flex",flexDirection:"column",gap:6,alignSelf:"flex-start"}}>
-        <button onClick={()=>setViewIdx(idx)} style={{fontSize:11,color:"#F97316",background:"none",border:"none",cursor:"pointer",fontFamily:"inherit",fontWeight:600}}>👁️</button>
-        <button onClick={()=>del(s.id)} style={{fontSize:11,color:"#EF4444",background:"none",border:"none",cursor:"pointer",fontFamily:"inherit"}}>🗑️</button>
+        <button onClick={()=>setViewIdx(idx)} style={{fontSize:11,color:"#F97316",background:"none",border:"none",cursor:"pointer",fontFamily:"inherit",fontWeight:600}}><Icon name="map" size={18}/></button>
+        <button onClick={()=>del(s.id)} style={{fontSize:11,color:"#EF4444",background:"none",border:"none",cursor:"pointer",fontFamily:"inherit"}}>️</button>
       </div>
     </div>)}
 
-    {stories.length===0&&<div style={{textAlign:"center",padding:"40px 0"}}><div style={{fontSize:36}}>📸</div><div style={{fontSize:13,color:"var(--muted)",marginTop:6}}>Aucune story</div><div style={{fontSize:11,color:"var(--sub)",marginTop:4}}>Publiez des photos et vidéos pour attirer les clients</div></div>}
+    {stories.length===0&&<div style={{textAlign:"center",padding:"40px 0"}}><div style={{fontSize:36}}><Icon name="camera" size={18}/></div><div style={{fontSize:13,color:"var(--muted)",marginTop:6}}>Aucune story</div><div style={{fontSize:11,color:"var(--sub)",marginTop:4}}>Publiez des photos et vidéos pour attirer les clients</div></div>}
 
     {/* ═══ FULLSCREEN STORY VIEWER ═══ */}
     {viewing&&currentStory&&<div style={{position:"fixed",inset:0,zIndex:200,background:"#000",display:"flex",flexDirection:"column"}}>
@@ -230,8 +231,8 @@ function VStoriesScr({onBack}){
           </div>
         </div>
         <div style={{display:"flex",gap:12,alignItems:"center"}}>
-          <span style={{fontSize:10,color:"rgba(255,255,255,.7)"}}>👁️ {currentStory.views}</span>
-          <button onClick={closeViewer} style={{background:"none",border:"none",color:"#fff",fontSize:20,cursor:"pointer",padding:4}}>✕</button>
+          <span style={{fontSize:10,color:"rgba(255,255,255,.7)"}}><Icon name="map" size={16}/>{" "}{currentStory.views}</span>
+          <button onClick={closeViewer} style={{background:"none",border:"none",color:"#fff",fontSize:20,cursor:"pointer",padding:4}}></button>
         </div>
       </div>
 
@@ -252,7 +253,7 @@ function VStoriesScr({onBack}){
           currentStory.media?(
             <img src={currentStory.media} style={{width:"100%",height:"100%",objectFit:"contain"}} alt=""/>
           ):(
-            <div style={{fontSize:56,opacity:.3}}>📷</div>
+            <div style={{fontSize:56,opacity:.3}}><Icon name="camera" size={18}/></div>
           )
         )}
 
@@ -260,7 +261,7 @@ function VStoriesScr({onBack}){
         <div style={{position:"absolute",bottom:0,left:0,right:0,padding:"40px 16px 20px",background:"linear-gradient(transparent,rgba(0,0,0,.7))"}}>
           <div style={{fontSize:15,fontWeight:600,color:"#fff",textShadow:"0 1px 4px rgba(0,0,0,.5)"}}>{currentStory.caption}</div>
           <div style={{display:"flex",alignItems:"center",gap:8,marginTop:6}}>
-            <span style={{fontSize:10,padding:"3px 8px",borderRadius:6,background:currentStory.type==="video"?"rgba(249,115,22,.6)":"rgba(16,185,129,.6)",color:"#fff",fontWeight:600}}>{currentStory.type==="video"?"🎬 Vidéo":"📷 Photo"}</span>
+            <span style={{fontSize:10,padding:"3px 8px",borderRadius:6,background:currentStory.type==="video"?"rgba(249,115,22,.6)":"rgba(16,185,129,.6)",color:"#fff",fontWeight:600}}>{currentStory.type==="video"?" Vidéo":"Photo"}</span>
             {currentStory.duration&&<span style={{fontSize:10,color:"rgba(255,255,255,.7)"}}>{currentStory.duration}</span>}
             <span style={{fontSize:10,color:"rgba(255,255,255,.5)"}}>{viewIdx+1}/{stories.length}</span>
           </div>

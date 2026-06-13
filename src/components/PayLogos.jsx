@@ -1,4 +1,5 @@
 // Payment method logos — official brand assets
+import Icon from "./Icon";
 
 function AirtelLogo({size=24}) {
   return <svg width={size} height={size} viewBox="0 0 64 64" fill="none">

@@ -7,21 +7,21 @@ const PHOTOS={
   "Écharpe Kente":"https://images.unsplash.com/photo-1601924638867-3a6de6b7a500?w=200&h=200&fit=crop",
 };
 const V_ORDERS=[
-  {id:"vo1",ref:"#CMD-0891",client:"Marie Koumba",phone:"+242 06X XXX",addr:"Bacongo, Rue 14",items:[{name:"Robe Wax Moderne",qty:2,price:25000,img:"👗",photo:PHOTOS["Robe Wax Moderne"]},{name:"Sac à Main Cuir",qty:1,price:42000,img:"👜",photo:PHOTOS["Sac à Main Cuir"]}],total:92000,status:"new",date:"14 Fév 14:42",payment:"Airtel Money"},
-  {id:"vo5",ref:"#CMD-0887",client:"Bruno Tsaty",phone:"+242 064 663 469",addr:"Talangaï, Av. Marien Ngouabi",items:[{name:"Poulet DG",qty:2,price:5500,img:"🍗",sides:[{name:"Coca-Cola 33cl",qty:2,price:500,img:"🥤"},{name:"Frites",qty:1,price:800,img:"🍟"},{name:"Piment fort",qty:1,price:0,img:"🌶️"}]}],total:12800,status:"new",date:"15 Fév 09:30",payment:"cash",note:"Bien cuit, sans oignon"},
-  {id:"vo2",ref:"#CMD-0890",client:"Patrick Mbemba",phone:"+242 06X XXX",addr:"Poto-Poto, Av. de la Paix",items:[{name:"Chemise Bogolan",qty:1,price:18000,img:"👔",photo:PHOTOS["Chemise Bogolan"]}],total:18000,status:"preparing",date:"14 Fév 11:20",payment:"MTN MoMo"},
-  {id:"vo3",ref:"#CMD-0889",client:"Celine Nzaba",phone:"+242 06X XXX",addr:"Moungali, Rue 8",items:[{name:"Robe Wax Moderne",qty:1,price:25000,img:"👗",photo:PHOTOS["Robe Wax Moderne"]}],total:25000,status:"shipped",date:"13 Fév 16:05",payment:"MTN MoMo"},
-  {id:"vo4",ref:"#CMD-0885",client:"David Tsaty",phone:"+242 06X XXX",addr:"Talangaï",items:[{name:"Sac à Main Cuir",qty:1,price:42000,img:"👜",photo:PHOTOS["Sac à Main Cuir"]},{name:"Chemise Bogolan",qty:2,price:18000,img:"👔",photo:PHOTOS["Chemise Bogolan"]}],total:78000,status:"delivered",date:"12 Fév 09:30",payment:"Airtel Money"},
-  {id:"vo6",ref:"#GRP-4521",client:"Joeldy Tsina + 2",phone:"+242 064 663 469",addr:"Bacongo, Rue 14",isGroup:true,groupMembers:[{name:"Joeldy Tsina",items:[{name:"Poulet DG",qty:1,price:5500,img:"🍗",photo:"https://images.unsplash.com/photo-1598515214211-89d3c73ae83b?w=400&h=400&fit=crop"}]},{name:"Marie K.",items:[{name:"Poulet DG",qty:1,price:5500,img:"🍗",photo:"https://images.unsplash.com/photo-1598515214211-89d3c73ae83b?w=400&h=400&fit=crop"},{name:"Poisson Braisé",qty:1,price:4000,img:"🐟",photo:"https://images.unsplash.com/photo-1580476262798-bddd9f4b7369?w=400&h=400&fit=crop"}]},{name:"Patrick M.",items:[{name:"Gâteau Forêt Noire",qty:2,price:12000,img:"🎂",photo:"https://images.unsplash.com/photo-1578985545062-69928b1d9587?w=400&h=400&fit=crop"}]}],items:[{name:"Poulet DG",qty:2,price:5500,img:"🍗",photo:"https://images.unsplash.com/photo-1598515214211-89d3c73ae83b?w=400&h=400&fit=crop"},{name:"Poisson Braisé",qty:1,price:4000,img:"🐟",photo:"https://images.unsplash.com/photo-1580476262798-bddd9f4b7369?w=400&h=400&fit=crop"},{name:"Gâteau Forêt Noire",qty:2,price:12000,img:"🎂",photo:"https://images.unsplash.com/photo-1578985545062-69928b1d9587?w=400&h=400&fit=crop"}],total:39000,status:"new",date:"15 Fév 12:15",payment:"Airtel Money",note:"Commande de groupe — livrer ensemble"},
-  {id:"vo5",ref:"#CMD-0880",client:"Grace Mouanda",phone:"+242 06X XXX",addr:"Bacongo",items:[{name:"Robe Wax Moderne",qty:3,price:25000,img:"👗",photo:PHOTOS["Robe Wax Moderne"]}],total:75000,status:"delivered",date:"10 Fév 15:12",payment:"MTN MoMo"},
+  {id:"vo1",ref:"#CMD-0891",client:"Marie Koumba",phone:"+242 06X XXX",addr:"Bacongo, Rue 14",items:[{name:"Robe Wax Moderne",qty:2,price:25000,img:"package",photo:PHOTOS["Robe Wax Moderne"]},{name:"Sac à Main Cuir",qty:1,price:42000,img:"package",photo:PHOTOS["Sac à Main Cuir"]}],total:92000,status:"new",date:"14 Fév 14:42",payment:"Airtel Money"},
+  {id:"vo5",ref:"#CMD-0887",client:"Bruno Tsaty",phone:"+242 064 663 469",addr:"Talangaï, Av. Marien Ngouabi",items:[{name:"Poulet DG",qty:2,price:5500,img:"utensils",sides:[{name:"Coca-Cola 33cl",qty:2,price:500,img:"cupcake"},{name:"Frites",qty:1,price:800,img:"utensils"},{name:"Piment fort",qty:1,price:0,img:"sparkle"}]}],total:12800,status:"new",date:"15 Fév 09:30",payment:"cash",note:"Bien cuit, sans oignon"},
+  {id:"vo2",ref:"#CMD-0890",client:"Patrick Mbemba",phone:"+242 06X XXX",addr:"Poto-Poto, Av. de la Paix",items:[{name:"Chemise Bogolan",qty:1,price:18000,img:"package",photo:PHOTOS["Chemise Bogolan"]}],total:18000,status:"preparing",date:"14 Fév 11:20",payment:"MTN MoMo"},
+  {id:"vo3",ref:"#CMD-0889",client:"Celine Nzaba",phone:"+242 06X XXX",addr:"Moungali, Rue 8",items:[{name:"Robe Wax Moderne",qty:1,price:25000,img:"package",photo:PHOTOS["Robe Wax Moderne"]}],total:25000,status:"shipped",date:"13 Fév 16:05",payment:"MTN MoMo"},
+  {id:"vo4",ref:"#CMD-0885",client:"David Tsaty",phone:"+242 06X XXX",addr:"Talangaï",items:[{name:"Sac à Main Cuir",qty:1,price:42000,img:"package",photo:PHOTOS["Sac à Main Cuir"]},{name:"Chemise Bogolan",qty:2,price:18000,img:"package",photo:PHOTOS["Chemise Bogolan"]}],total:78000,status:"delivered",date:"12 Fév 09:30",payment:"Airtel Money"},
+  {id:"vo6",ref:"#GRP-4521",client:"Joeldy Tsina + 2",phone:"+242 064 663 469",addr:"Bacongo, Rue 14",isGroup:true,groupMembers:[{name:"Joeldy Tsina",items:[{name:"Poulet DG",qty:1,price:5500,img:"utensils",photo:"https://images.unsplash.com/photo-1598515214211-89d3c73ae83b?w=400&h=400&fit=crop"}]},{name:"Marie K.",items:[{name:"Poulet DG",qty:1,price:5500,img:"utensils",photo:"https://images.unsplash.com/photo-1598515214211-89d3c73ae83b?w=400&h=400&fit=crop"},{name:"Poisson Braisé",qty:1,price:4000,img:"utensils",photo:"https://images.unsplash.com/photo-1580476262798-bddd9f4b7369?w=400&h=400&fit=crop"}]},{name:"Patrick M.",items:[{name:"Gâteau Forêt Noire",qty:2,price:12000,img:"cupcake",photo:"https://images.unsplash.com/photo-1578985545062-69928b1d9587?w=400&h=400&fit=crop"}]}],items:[{name:"Poulet DG",qty:2,price:5500,img:"utensils",photo:"https://images.unsplash.com/photo-1598515214211-89d3c73ae83b?w=400&h=400&fit=crop"},{name:"Poisson Braisé",qty:1,price:4000,img:"utensils",photo:"https://images.unsplash.com/photo-1580476262798-bddd9f4b7369?w=400&h=400&fit=crop"},{name:"Gâteau Forêt Noire",qty:2,price:12000,img:"cupcake",photo:"https://images.unsplash.com/photo-1578985545062-69928b1d9587?w=400&h=400&fit=crop"}],total:39000,status:"new",date:"15 Fév 12:15",payment:"Airtel Money",note:"Commande de groupe — livrer ensemble"},
+  {id:"vo5",ref:"#CMD-0880",client:"Grace Mouanda",phone:"+242 06X XXX",addr:"Bacongo",items:[{name:"Robe Wax Moderne",qty:3,price:25000,img:"package",photo:PHOTOS["Robe Wax Moderne"]}],total:75000,status:"delivered",date:"10 Fév 15:12",payment:"MTN MoMo"},
 ];
 const V_PRODUCTS=[
-  {id:"vp1",name:"Robe Wax Moderne",price:25000,stock:23,sold:45,img:"👗",photo:PHOTOS["Robe Wax Moderne"],active:true,cat:"Mode"},
-  {id:"vp2",name:"Chemise Bogolan",price:18000,stock:8,sold:33,img:"👔",photo:PHOTOS["Chemise Bogolan"],active:true,cat:"Mode"},
-  {id:"vp3",name:"Sac à Main Cuir",price:42000,stock:3,sold:51,img:"👜",photo:PHOTOS["Sac à Main Cuir"],active:true,cat:"Mode"},
-  {id:"vp4",name:"Bracelet Perles",price:8500,stock:0,sold:12,img:"📿",photo:PHOTOS["Bracelet Perles"],active:false,cat:"Beauté"},
-  {id:"vp5",name:"Sandales Cuir",price:15000,stock:15,sold:28,img:"👡",photo:PHOTOS["Sandales Cuir"],active:true,cat:"Mode"},
-  {id:"vp6",name:"Écharpe Kente",price:12000,stock:20,sold:19,img:"🧣",photo:PHOTOS["Écharpe Kente"],active:true,cat:"Mode"},
+  {id:"vp1",name:"Robe Wax Moderne",price:25000,stock:23,sold:45,img:"package",photo:PHOTOS["Robe Wax Moderne"],active:true,cat:"Mode"},
+  {id:"vp2",name:"Chemise Bogolan",price:18000,stock:8,sold:33,img:"package",photo:PHOTOS["Chemise Bogolan"],active:true,cat:"Mode"},
+  {id:"vp3",name:"Sac à Main Cuir",price:42000,stock:3,sold:51,img:"package",photo:PHOTOS["Sac à Main Cuir"],active:true,cat:"Mode"},
+  {id:"vp4",name:"Bracelet Perles",price:8500,stock:0,sold:12,img:"package",photo:PHOTOS["Bracelet Perles"],active:false,cat:"Beauté"},
+  {id:"vp5",name:"Sandales Cuir",price:15000,stock:15,sold:28,img:"package",photo:PHOTOS["Sandales Cuir"],active:true,cat:"Mode"},
+  {id:"vp6",name:"Écharpe Kente",price:12000,stock:20,sold:19,img:"package",photo:PHOTOS["Écharpe Kente"],active:true,cat:"Mode"},
 ];
 const V_WALLET=[
   {id:"w1",type:"+",label:"Commande #CMD-0891",amount:92000,date:"14 Fév",status:"En attente"},
@@ -58,11 +58,11 @@ const V_STATS={
   ]
 };
 const V_NOTIFS=[
-  {icon:"🆕",title:"Nouvelle commande !",desc:"Marie Koumba — 92 000 FCFA",time:"Il y a 18 min",read:false},
-  {icon:"💰",title:"Paiement reçu",desc:"#CMD-0890 confirmé par MTN MoMo",time:"Il y a 3h",read:false},
-  {icon:"⭐",title:"Nouvel avis",desc:"Marie K. a laissé 5 étoiles",time:"Il y a 5h",read:true},
-  {icon:"⚠️",title:"Stock faible",desc:"Sac à Main Cuir — 3 restants",time:"Hier",read:true},
-  {icon:"📊",title:"Rapport hebdomadaire",desc:"Vos ventes ont augmenté de 23%",time:"Il y a 2 jours",read:true},
+  {icon:"sparkle",title:"Nouvelle commande !",desc:"Marie Koumba — 92 000 FCFA",time:"Il y a 18 min",read:false},
+  {icon:"wallet",title:"Paiement reçu",desc:"#CMD-0890 confirmé par MTN MoMo",time:"Il y a 3h",read:false},
+  {icon:"star_full",title:"Nouvel avis",desc:"Marie K. a laissé 5 étoiles",time:"Il y a 5h",read:true},
+  {icon:"️",title:"Stock faible",desc:"Sac à Main Cuir — 3 restants",time:"Hier",read:true},
+  {icon:"chart_pie",title:"Rapport hebdomadaire",desc:"Vos ventes ont augmenté de 23%",time:"Il y a 2 jours",read:true},
 ];
 
 export { V_ORDERS, V_PRODUCTS, V_WALLET, V_REVIEWS, V_PROMOS, V_STATS, V_NOTIFS };
