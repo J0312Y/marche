@@ -155,7 +155,7 @@ function HomeScr({go,favs,toggleFav,isFav,userName}){
       {/* ── SEARCH RESULTS MODE ── */}
       {imgPreview?<div style={{padding:"0 16px 20px"}}>
         <div style={{position:"relative",marginBottom:12}}>
-          <img src={imgPreview} style={{width:"100%",height:140,objectFit:"cover",borderRadius:14}} alt=""/>
+          <img src={imgPreview} style={{width:"100%",height:140,objectFit:"cover",objectPosition:"center",borderRadius:14}} alt=""/>
           {imgSearching&&<div style={{position:"absolute",inset:0,background:"rgba(0,0,0,.4)",borderRadius:14,display:"flex",alignItems:"center",justifyContent:"center",flexDirection:"column"}}>
             <div style={{width:28,height:28,border:"3px solid rgba(255,255,255,.3)",borderTopColor:"#fff",borderRadius:"50%",animation:"spin 1s linear infinite"}}/>
             <div style={{color:"#fff",fontSize:11,fontWeight:600,marginTop:6}}>Recherche en cours...</div>
@@ -204,7 +204,7 @@ function HomeScr({go,favs,toggleFav,isFav,userName}){
           <div style={{background:"var(--card)",borderRadius:18,overflow:"hidden",boxShadow:"0 2px 10px rgba(0,0,0,.04)"}}>
             {CATS.map((c,i)=><div key={c.id} onClick={()=>doSearch(c.name)} style={{display:"flex",alignItems:"center",gap:14,padding:"12px 16px",cursor:"pointer",borderBottom:i<CATS.length-1?"1px solid var(--border)":"none",transition:"background .12s"}}>
               <div style={{width:48,height:48,borderRadius:12,overflow:"hidden",flexShrink:0,background:"var(--border)"}}>
-                <img src={c.photo} alt={c.name} style={{width:"100%",height:"100%",objectFit:"cover"}}/>
+                <img src={c.photo} alt={c.name} style={{width:"100%",height:"100%",objectFit:"cover",objectPosition:"center"}}/>
               </div>
               <div style={{flex:1,minWidth:0}}>
                 <div style={{fontSize:15,fontWeight:600,color:"var(--text)"}}>{c.name}</div>
@@ -233,7 +233,7 @@ function HomeScr({go,favs,toggleFav,isFav,userName}){
       <div style={{position:"relative",margin:"0 16px 14px",height:140,borderRadius:16,overflow:"hidden"}}>
           {promos.map((pr,i)=>(
             <div key={i} onClick={()=>go(pr.action)} style={{position:"absolute",inset:0,borderRadius:16,overflow:"hidden",cursor:"pointer",opacity:promoSlide===i?1:0,transform:promoSlide===i?"translateX(0)":"translateX(40px)",transition:"all .5s ease",pointerEvents:promoSlide===i?"auto":"none"}}>
-              <img src={pr.img} alt={pr.title} style={{width:"100%",height:"100%",objectFit:"cover"}}/>
+              <img src={pr.img} alt={pr.title} style={{width:"100%",height:"100%",objectFit:"cover",objectPosition:"center"}}/>
               <div style={{position:"absolute",inset:0,background:"linear-gradient(90deg,rgba(0,0,0,.65) 0%,rgba(0,0,0,.2) 60%,transparent 100%)"}}/>
               <div style={{position:"absolute",top:0,left:0,bottom:0,padding:18,display:"flex",flexDirection:"column",justifyContent:"center"}}>
                 <div style={{fontSize:20,fontWeight:800,color:"#fff",marginBottom:4,textShadow:"0 2px 8px rgba(0,0,0,.3)"}}>{pr.title}</div>
@@ -303,7 +303,7 @@ function HomeScr({go,favs,toggleFav,isFav,userName}){
         <span style={{color:"#F97316",fontSize:16}}>›</span>
       </div>
 
-      {/* Restos à la une */}
+      {/* Restos à la une */}}
       {(selType==="all"||selType==="restaurant")&&nearbyRestos.length>0&&<>
       {/* Events / promos banner */}
       {(()=>{
@@ -332,7 +332,7 @@ function HomeScr({go,favs,toggleFav,isFav,userName}){
         <div className="marquee-wrap"><div className="marquee-track-resto">
           {[...nearbyRestos,...nearbyRestos].map((v,i)=><div key={v.id+"-"+i} style={{minWidth:170,padding:12,background:"var(--card)",border:"1px solid var(--border)",borderRadius:14,cursor:"pointer",flexShrink:0}} onClick={()=>go("vendor",v)}>
             <div style={{display:"flex",alignItems:"center",gap:8,marginBottom:6}}>
-              <div style={{width:36,height:36,borderRadius:10,overflow:"hidden",background:"linear-gradient(135deg,#F59E0B,#D97706)",display:"flex",alignItems:"center",justifyContent:"center",fontSize:18}}>{v.logo?<img src={v.logo} style={{width:"100%",height:"100%",objectFit:"cover"}} alt=""/>:v.avatar}</div>
+              <div style={{width:36,height:36,borderRadius:10,overflow:"hidden",background:"linear-gradient(135deg,#F59E0B,#D97706)",display:"flex",alignItems:"center",justifyContent:"center",fontSize:18}}>{v.logo?<img src={v.logo} style={{width:"100%",height:"100%",objectFit:"cover",objectPosition:"center"}} alt=""/>:v.avatar}</div>
               <div><div style={{fontSize:12,fontWeight:700}}>{v.name}{v.verified&&<span style={{color:"#F97316"}}> ✓</span>}</div><div style={{fontSize:10,color:"var(--muted)"}}>📍 {v.loc}</div></div>
             </div>
             <div style={{display:"flex",justifyContent:"space-between",fontSize:10}}><span>⭐ <b>{v.rating}</b></span><span style={{color:"#F97316",fontWeight:600}}>🕐 {v.eta}</span></div>
@@ -341,7 +341,7 @@ function HomeScr({go,favs,toggleFav,isFav,userName}){
       </>}
 
       <div className="sec"><h3>{selType==="all"?"Établissements proches":types.find(t=>t.id===selType)?.name+" proches"}</h3><span onClick={()=>go("nearby")}>Voir la carte</span></div>
-      <div className="vlist">{filteredV.slice(0,4).map(v=><div key={v.id} className="vcard" onClick={()=>go("vendor",v)}><div className="vav" style={v.logo?{overflow:"hidden",padding:0}:{}}>{v.logo?<img src={v.logo} style={{width:"100%",height:"100%",objectFit:"cover"}} alt=""/>:v.avatar}</div><div className="vi"><h4>{v.name}{v.verified&&<span className="vf">✓</span>}</h4><div className="vloc">📍 {v.loc}{v.eta&&<span style={{marginLeft:8,color:"#F97316",fontWeight:600}}>🕐 {v.eta}</span>}</div><div className="vst">⭐ <b>{v.rating}</b> · {v.products} {v.type==="restaurant"?"plats":v.type==="service"?"services":"produits"}</div></div><span style={{color:"var(--muted)"}}>›</span></div>)}</div>
+      <div className="vlist">{filteredV.slice(0,4).map(v=><div key={v.id} className="vcard" onClick={()=>go("vendor",v)}><div className="vav" style={v.logo?{overflow:"hidden",padding:0}:{}}>{v.logo?<img src={v.logo} style={{width:"100%",height:"100%",objectFit:"cover",objectPosition:"center"}} alt=""/>:v.avatar}</div><div className="vi"><h4>{v.name}{v.verified&&<span className="vf">✓</span>}</h4><div className="vloc">📍 {v.loc}{v.eta&&<span style={{marginLeft:8,color:"#F97316",fontWeight:600}}>🕐 {v.eta}</span>}</div><div className="vst">⭐ <b>{v.rating}</b> · {v.products} {v.type==="restaurant"?"plats":v.type==="service"?"services":"produits"}</div></div><span style={{color:"var(--muted)"}}>›</span></div>)}</div>
 
 
       {/* ═══ RECENTLY VIEWED ═══ */}

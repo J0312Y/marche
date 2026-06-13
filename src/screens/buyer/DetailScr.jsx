@@ -542,7 +542,7 @@ function DetailScr({product:rawP,onBack,onAddCart,go,favs,toggleFav,isFav}){
       <img src={allPhotos[photoIdx]||p.photo} style={{maxWidth:"95%",maxHeight:"80vh",objectFit:"contain",borderRadius:8}} alt=""/>
       <div style={{display:"flex",gap:8,marginTop:12}}>
         {allPhotos.map((_,i)=><div key={i} onClick={e=>{e.stopPropagation();setPhotoIdx(i)}} style={{width:48,height:48,borderRadius:8,overflow:"hidden",border:photoIdx===i?"2px solid #F97316":"2px solid rgba(255,255,255,.2)",cursor:"pointer",opacity:photoIdx===i?1:.5}}>
-          <img src={allPhotos[i]} style={{width:"100%",height:"100%",objectFit:"cover"}} alt=""/>
+          <img src={allPhotos[i]} style={{width:"100%",height:"100%",objectFit:"cover",objectPosition:"center"}} alt=""/>
         </div>)}
       </div>
       <div style={{color:"rgba(255,255,255,.5)",fontSize:11,marginTop:8}}>{photoIdx+1}/{allPhotos.length} · Appuyez pour fermer</div>

@@ -77,7 +77,7 @@ function SearchScr({ go, onBack, fromTab, favs, toggleFav, isFav, defaultTab }) 
     <div className="scr" style={{ padding: 0, display: "flex", flexDirection: "column" }}>
 
       {/* Top search bar */}
-      <div style={{ padding: "12px 14px", background: "var(--card)", display: "flex", alignItems: "center", gap: 8, borderBottom: "1px solid var(--border)" }}>
+      <div style={{ padding: "12px 14px", background: "var(--card)", display: "flex", alignItems: "center", gap: 7, borderBottom: "1px solid var(--border)" }}>
         {!fromTab && <button onClick={onBack} style={{ width: 32, height: 32, border: "none", background: "transparent", cursor: "pointer", display: "flex", alignItems: "center", justifyContent: "center" }}><Icon name="arrow_left" size={20} /></button>}
         <div style={{ flex: 1, height: 40, background: "var(--light)", border: "1.5px solid #F97316", borderRadius: 22, display: "flex", alignItems: "center", padding: "0 14px", gap: 8 }}>
           <Icon name="search" size={16} color="var(--muted)" />
@@ -122,7 +122,7 @@ function SearchScr({ go, onBack, fromTab, favs, toggleFav, isFav, defaultTab }) 
                   const price = vp ? vp.promoPrice : p.price;
                   return (
                     <div key={p.id} onClick={() => go("detail", p)} style={{ cursor: "pointer" }}>
-                      <div style={{ aspectRatio: "1", borderRadius: 12, overflow: "hidden", background: "var(--light)", position: "relative" }}>
+                      <div style={{ aspectRatio: "1 / 1", borderRadius: 12, overflow: "hidden", background: "var(--light)", position: "relative" }}>
                         <Img src={p.photo} emoji={p.img} style={{ width: "100%", height: "100%" }} fit="cover" />
                         {p.old && <span style={{ position: "absolute", top: 6, left: 6, padding: "2px 6px", borderRadius: 5, background: "#EF4444", color: "#fff", fontSize: 9, fontWeight: 800 }}>-{Math.round((1 - p.price / p.old) * 100)}%</span>}
                         <span onClick={e => { e.stopPropagation(); toggleFav(p.id) }} style={{ position: "absolute", top: 6, right: 6, width: 26, height: 26, borderRadius: "50%", background: "rgba(255,255,255,0.95)", display: "flex", alignItems: "center", justifyContent: "center", fontSize: 13, color: isFav(p.id) ? "#EF4444" : "var(--muted)", cursor: "pointer" }}>{isFav(p.id) ? "♥" : "♡"}</span>
@@ -150,7 +150,7 @@ function SearchScr({ go, onBack, fromTab, favs, toggleFav, isFav, defaultTab }) 
                 {vendorResults.map(v => (
                   <div key={v.id} onClick={() => go("vendor", v)} style={{ display: "flex", alignItems: "center", gap: 12, padding: "12px 0", cursor: "pointer", borderBottom: "1px solid var(--border)" }}>
                     <div style={{ width: 50, height: 50, borderRadius: 14, overflow: "hidden", background: "var(--light)", flexShrink: 0 }}>
-                      {v.logo ? <img src={v.logo} alt="" style={{ width: "100%", height: "100%", objectFit: "cover" }} /> : <div style={{ width: "100%", height: "100%", display: "flex", alignItems: "center", justifyContent: "center", fontSize: 22 }}>{v.avatar || "🏪"}</div>}
+                      {v.logo ? <img src={v.logo} alt="" style={{ width: "100%", height: "100%", objectFit: "cover", objectPosition: "center" }} /> : <div style={{ width: "100%", height: "100%", display: "flex", alignItems: "center", justifyContent: "center", fontSize: 22 }}>{v.avatar || "🏪"}</div>}
                     </div>
                     <div style={{ flex: 1, minWidth: 0 }}>
                       <div style={{ fontSize: 14, fontWeight: 700, overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>{v.name}</div>
@@ -171,7 +171,7 @@ function SearchScr({ go, onBack, fromTab, favs, toggleFav, isFav, defaultTab }) 
       ) : (
         /* BROWSE MODE — sidebar + content */
         <div style={{ flex: 1, display: "flex", overflow: "hidden" }}>
-          <div style={{ width: 92, background: "var(--light)", overflowY: "auto", flexShrink: 0, scrollbarWidth: "none" }} className="hide-scroll">
+          <div style={{ width: 78, background: "var(--light)", overflowY: "auto", flexShrink: 0, scrollbarWidth: "none" }} className="hide-scroll">
             {/* "Toutes" as first item */}
             {(() => {
               const active = selectedCatId === "all";
@@ -191,10 +191,10 @@ function SearchScr({ go, onBack, fromTab, favs, toggleFav, isFav, defaultTab }) 
             })}
           </div>
 
-          <div style={{ flex: 1, overflowY: "auto", background: "var(--card)", padding: "14px 14px 30px", scrollbarWidth: "none" }} className="hide-scroll">
+          <div style={{ flex: 1, overflowY: "auto", background: "var(--card)", padding: "12px 10px 30px", scrollbarWidth: "none" }} className="hide-scroll">
             {/* Category banner */}
-            <div style={{ borderRadius: 12, overflow: "hidden", marginBottom: 14, position: "relative", aspectRatio: "21/9" }}>
-              <img src={selectedCat.photo} alt="" style={{ width: "100%", height: "100%", objectFit: "cover" }} />
+            <div style={{ borderRadius: 12, overflow: "hidden", marginBottom: 14, position: "relative", aspectRatio: "16 / 8" }}>
+              <img src={selectedCat.photo} alt="" style={{ width: "100%", height: "100%", objectFit: "cover", objectPosition: "center" }} />
               <div style={{ position: "absolute", inset: 0, background: "linear-gradient(to right, rgba(0,0,0,0.5) 0%, rgba(0,0,0,0.1) 70%)", padding: 14, display: "flex", alignItems: "center" }}>
                 <div>
                   <div style={{ fontSize: 16, fontWeight: 800, color: "#fff", letterSpacing: -.3 }}>{selectedCat.name}</div>
@@ -207,11 +207,11 @@ function SearchScr({ go, onBack, fromTab, favs, toggleFav, isFav, defaultTab }) 
             {isAllSelected ? (
               <>
                 <div style={{ fontSize: 13, fontWeight: 800, marginBottom: 10 }}>Toutes les catégories</div>
-                <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr 1fr", gap: 8, marginBottom: 18 }}>
+                <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr 1fr", gap: 7, marginBottom: 16 }}>
                   {CATS.map(c => (
                     <div key={c.id} onClick={() => setSelectedCatId(c.id)} style={{ textAlign: "center", cursor: "pointer" }}>
-                      <div style={{ width: "100%", aspectRatio: "1", borderRadius: 10, overflow: "hidden", background: "var(--light)" }}>
-                        <img src={c.photo} alt="" style={{ width: "100%", height: "100%", objectFit: "cover" }} />
+                      <div style={{ width: "100%", aspectRatio: "1 / 1", borderRadius: 10, overflow: "hidden", background: "var(--light)" }}>
+                        <img src={c.photo} alt="" style={{ width: "100%", height: "100%", objectFit: "cover", objectPosition: "center" }} />
                       </div>
                       <div style={{ fontSize: 10.5, fontWeight: 600, marginTop: 5, color: "var(--text)", overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>{c.name}</div>
                     </div>
@@ -221,11 +221,11 @@ function SearchScr({ go, onBack, fromTab, favs, toggleFav, isFav, defaultTab }) 
             ) : selectedCat.subs && (
               <>
                 <div style={{ fontSize: 13, fontWeight: 800, marginBottom: 10 }}>Catégories populaires</div>
-                <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr 1fr", gap: 8, marginBottom: 18 }}>
+                <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr 1fr", gap: 7, marginBottom: 16 }}>
                   {selectedCat.subs.map((s, i) => (
                     <div key={i} onClick={() => setQ(s.name)} style={{ textAlign: "center", cursor: "pointer" }}>
-                      <div style={{ width: "100%", aspectRatio: "1", borderRadius: 10, overflow: "hidden", background: "var(--light)" }}>
-                        <img src={s.photo} alt="" style={{ width: "100%", height: "100%", objectFit: "cover" }} />
+                      <div style={{ width: "100%", aspectRatio: "1 / 1", borderRadius: 10, overflow: "hidden", background: "var(--light)" }}>
+                        <img src={s.photo} alt="" style={{ width: "100%", height: "100%", objectFit: "cover", objectPosition: "center" }} />
                       </div>
                       <div style={{ fontSize: 10.5, fontWeight: 600, marginTop: 5, color: "var(--text)", overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>{s.name}</div>
                     </div>
@@ -247,7 +247,7 @@ function SearchScr({ go, onBack, fromTab, favs, toggleFav, isFav, defaultTab }) 
                     const price = vp ? vp.promoPrice : p.price;
                     return (
                       <div key={p.id} onClick={() => go("detail", p)} style={{ cursor: "pointer" }}>
-                        <div style={{ aspectRatio: "1", borderRadius: 12, overflow: "hidden", background: "var(--light)", position: "relative" }}>
+                        <div style={{ aspectRatio: "1 / 1", borderRadius: 12, overflow: "hidden", background: "var(--light)", position: "relative" }}>
                           <Img src={p.photo} emoji={p.img} style={{ width: "100%", height: "100%" }} fit="cover" />
                           {p.old && <span style={{ position: "absolute", top: 6, left: 6, padding: "2px 6px", borderRadius: 5, background: "#EF4444", color: "#fff", fontSize: 9, fontWeight: 800 }}>-{Math.round((1 - p.price / p.old) * 100)}%</span>}
                           <span onClick={e => { e.stopPropagation(); toggleFav(p.id) }} style={{ position: "absolute", top: 6, right: 6, width: 24, height: 24, borderRadius: "50%", background: "rgba(255,255,255,0.95)", display: "flex", alignItems: "center", justifyContent: "center", fontSize: 12, color: isFav(p.id) ? "#EF4444" : "var(--muted)", cursor: "pointer" }}>{isFav(p.id) ? "♥" : "♡"}</span>
