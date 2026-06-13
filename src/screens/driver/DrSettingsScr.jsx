@@ -3,6 +3,7 @@ import { useState } from "react";
 import Select from "../../components/Select";
 import { useApp } from "../../context/AppContext";
 import toast from "../../utils/toast";
+import Icon from "../../components/Icon";
 
 function DrSettingsScr({onBack,go}){
   const { darkMode, toggleDark } = useApp();
@@ -11,24 +12,24 @@ function DrSettingsScr({onBack,go}){
   return(<div className="scr" style={{paddingBottom:20}}><div className="appbar"><button onClick={onBack}>←</button><h2>Paramètres</h2><div style={{width:38}}/></div>
     <div style={{padding:"0 16px"}}>
       <div className="setting-group"><div className="setting-label">Général</div>
-        <div className="setting-item"><span className="si-i">🌐</span><span className="si-t">Langue</span><Select value={lang} onChange={v=>{setLang(v);setLanguage(v);ctxSetLang(v)}} options={[{value:"fr",label:"🇫🇷 Français"},{value:"en",label:"🇬🇧 English"},{value:"ln",label:"🇨🇬 Lingala"}]}/></div>
-        <div className="setting-item"><span className="si-i">🌙</span><span className="si-t">Mode sombre</span><div className={`toggle ${darkMode?"on":""}`} onClick={()=>{toggleDark();toast.success(darkMode?"Mode clair ☀️":"Mode sombre 🌙")}}/></div>
+        <div className="setting-item"><span className="si-i"><Icon name="globe" size={18}/></span><span className="si-t">Langue</span><Select value={lang} onChange={v=>{setLang(v);setLanguage(v);ctxSetLang(v)}} options={[{value:"fr",label:"FR Français"},{value:"en",label:"GB English"},{value:"ln",label:"CG Lingala"}]}/></div>
+        <div className="setting-item"><span className="si-i"><Icon name="moon" size={18}/></span><span className="si-t">Mode sombre</span><div className={`toggle ${darkMode?"on":""}`} onClick={()=>{toggleDark();toast.success(darkMode?"Mode clair ☀️":"Mode sombre 🌙")}}/></div>
       </div>
       <div className="setting-group"><div className="setting-label">Notifications</div>
-        <div className="setting-item"><span className="si-i">🔔</span><span className="si-t">Notifications push</span><div className={`toggle ${pushN?"on":""}`} onClick={()=>{setPushN(!pushN);toast.success(!pushN?'Notifications activées 🔔':'Notifications désactivées')}}/></div>
-        <div className="setting-item"><span className="si-i">🔊</span><span className="si-t">Son nouvelles commandes</span><div className={`toggle ${sound?"on":""}`} onClick={()=>{setSound(!sound);toast.success(!sound?'Son activé 🔊':'Son désactivé')}}/></div>
+        <div className="setting-item"><span className="si-i"><Icon name="bell" size={18}/></span><span className="si-t">Notifications push</span><div className={`toggle ${pushN?"on":""}`} onClick={()=>{setPushN(!pushN);toast.success(!pushN?'Notifications activées 🔔':'Notifications désactivées')}}/></div>
+        <div className="setting-item"><span className="si-i"><Icon name="bell" size={18}/></span><span className="si-t">Son nouvelles commandes</span><div className={`toggle ${sound?"on":""}`} onClick={()=>{setSound(!sound);toast.success(!sound?'Son activé 🔊':'Son désactivé')}}/></div>
       </div>
       <div className="setting-group"><div className="setting-label">Livraison</div>
-        <div className="setting-item"><span className="si-i">⚡</span><span className="si-t">Acceptation automatique</span><div className={`toggle ${autoAccept?"on":""}`} onClick={()=>{setAutoAccept(!autoAccept);toast.success(!autoAccept?'Acceptation auto activée ⚡':'Désactivée')}}/></div>
-        <div className="info-box yellow" style={{margin:"8px 0"}}><span>💡</span><span>Si activé, les livraisons proches seront acceptées automatiquement.</span></div>
+        <div className="setting-item"><span className="si-i"><Icon name="lightning" size={18}/></span><span className="si-t">Acceptation automatique</span><div className={`toggle ${autoAccept?"on":""}`} onClick={()=>{setAutoAccept(!autoAccept);toast.success(!autoAccept?'Acceptation auto activée ⚡':'Désactivée')}}/></div>
+        <div className="info-box yellow" style={{margin:"8px 0"}}><span><Icon name="info" size={18}/></span><span>Si activé, les livraisons proches seront acceptées automatiquement.</span></div>
       </div>
       <div className="setting-group"><div className="setting-label">Sécurité</div>
-        <div className="setting-item" onClick={()=>go("password")} style={{cursor:"pointer"}}><span className="si-i">🔒</span><span className="si-t">Changer mot de passe</span><span className="mi-c">›</span></div>
+        <div className="setting-item" onClick={()=>go("password")} style={{cursor:"pointer"}}><span className="si-i"><Icon name="shield" size={18}/></span><span className="si-t">Changer mot de passe</span><span className="mi-c">›</span></div>
         <div className="setting-item"><span className="si-i">🆔</span><span className="si-t">Vérification d'identité</span><span style={{padding:"3px 8px",borderRadius:6,background:"rgba(249,115,22,0.1)",color:"#F97316",fontSize:11,fontWeight:600}}>Vérifié</span></div>
       </div>
       <div className="setting-group"><div className="setting-label">Légal</div>
-        <div className="setting-item" onClick={()=>go("terms")} style={{cursor:"pointer"}}><span className="si-i">📋</span><span className="si-t">Conditions d'utilisation</span><span className="mi-c">›</span></div>
-        <div className="setting-item" onClick={()=>go("privacy")} style={{cursor:"pointer"}}><span className="si-i">🔐</span><span className="si-t">Politique de confidentialité</span><span className="mi-c">›</span></div>
+        <div className="setting-item" onClick={()=>go("terms")} style={{cursor:"pointer"}}><span className="si-i"><Icon name="document" size={18}/></span><span className="si-t">Conditions d'utilisation</span><span className="mi-c">›</span></div>
+        <div className="setting-item" onClick={()=>go("privacy")} style={{cursor:"pointer"}}><span className="si-i"><Icon name="key" size={18}/></span><span className="si-t">Politique de confidentialité</span><span className="mi-c">›</span></div>
       </div>
     </div>
   </div>);

@@ -3,6 +3,7 @@ import PullToRefresh from "../../components/PullToRefresh";
 import toast from "../../utils/toast";
 import ImageCropper from "../../components/ImageCropper";
 import { VENDOR_LOGO_DEFAULT, VENDOR_COVER } from "../../data/images";
+import Icon from "../../components/Icon";
 
 function VProfileScr({go,onSwitch,vendorPlan,onLogout}){
   const planInfo=vendorPlan==="starter"?{name:"Starter",color:"var(--muted)",badge:"Gratuit",icon:"🆓"}:vendorPlan==="pro"?{name:"Pro",color:"#F97316",badge:"Pro ✓",icon:"⭐"}:{name:"Enterprise",color:"#F59E0B",badge:"Enterprise ★",icon:"🚀"};
@@ -18,7 +19,7 @@ function VProfileScr({go,onSwitch,vendorPlan,onLogout}){
       <span style={{fontSize:20,width:22,textAlign:"center"}}>{icon}</span>
       <span style={{flex:1,fontSize:14,fontWeight:500,color:"var(--text)"}}>{label}</span>
       {info&&<span style={{fontSize:12,color:"var(--muted)",fontWeight:500}}>{info}</span>}
-      {locked?<span style={{padding:"2px 8px",borderRadius:6,background:plan==="enterprise"?"rgba(245,158,11,0.08)":"rgba(249,115,22,0.08)",color:plan==="enterprise"?"#F59E0B":"#F97316",fontSize:9,fontWeight:700}}>🔒 {plan==="enterprise"?"Enterprise":"Pro"}</span>
+      {locked?<span style={{padding:"2px 8px",borderRadius:6,background:plan==="enterprise"?"rgba(245,158,11,0.08)":"rgba(249,115,22,0.08)",color:plan==="enterprise"?"#F59E0B":"#F97316",fontSize:9,fontWeight:700}}><Icon name="shield" size={16}/>{" "}{plan==="enterprise"?"Enterprise":"Pro"}</span>
       :<svg width="7" height="12" viewBox="0 0 7 12" fill="none" style={{flexShrink:0,opacity:.3}}><path d="M1 1l5 5-5 5" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/></svg>}
     </div>
   );
@@ -35,14 +36,14 @@ function VProfileScr({go,onSwitch,vendorPlan,onLogout}){
   const handleLocked=(item)=>setLockPopup(item);
 
   return(<PullToRefresh onRefresh={async()=>{toast.success("Espace actualisé 🏪")}}><div className="scr" style={{paddingBottom:20}}>
-    <div className="appbar"><h2>Mon Espace</h2><button onClick={()=>go("vSettings")}>⚙️</button></div>
+    <div className="appbar"><h2>Mon Espace</h2><button onClick={()=>go("vSettings")}><Icon name="settings" size={18}/></button></div>
 
     {/* Profile header — cover + logo */}
     <div style={{position:"relative",marginBottom:50}}>
       {/* Cover */}
       <div style={{height:130,borderRadius:"0 0 20px 20px",overflow:"hidden",position:"relative"}}>
         <img src={vCover} style={{width:"100%",height:"100%",objectFit:"cover",objectPosition:"center"}} alt=""/>
-        <label style={{position:"absolute",bottom:8,right:8,padding:"5px 10px",borderRadius:10,background:"rgba(0,0,0,.5)",color:"#fff",fontSize:10,fontWeight:600,cursor:"pointer",display:"flex",alignItems:"center",gap:4}}>📷 Couverture
+        <label style={{position:"absolute",bottom:8,right:8,padding:"5px 10px",borderRadius:10,background:"rgba(0,0,0,.5)",color:"#fff",fontSize:10,fontWeight:600,cursor:"pointer",display:"flex",alignItems:"center",gap:4}}><Icon name="camera" size={16}/>{" "}Couverture
           <input type="file" accept="image/*" style={{display:"none"}} onChange={e=>{const f=e.target.files?.[0];if(f){const r=new FileReader();r.onload=()=>{setVCover(r.result);toast.success("Couverture mise à jour 📸")};r.readAsDataURL(f);e.target.value=""}}}/>
         </label>
       </div>
@@ -50,7 +51,7 @@ function VProfileScr({go,onSwitch,vendorPlan,onLogout}){
       <div style={{position:"absolute",bottom:-40,left:"50%",transform:"translateX(-50%)"}}>
         <div style={{width:80,height:80,borderRadius:22,overflow:"hidden",border:"3px solid var(--bg)",boxShadow:"0 2px 12px rgba(0,0,0,.12)",position:"relative",cursor:"pointer"}} onClick={()=>document.getElementById("vp-logo-up")?.click()}>
           <img src={vLogo} style={{width:"100%",height:"100%",objectFit:"cover"}} alt=""/>
-          <div style={{position:"absolute",bottom:0,left:0,right:0,padding:"3px 0",background:"rgba(0,0,0,.45)",textAlign:"center"}}><span style={{fontSize:9,color:"#fff"}}>📷</span></div>
+          <div style={{position:"absolute",bottom:0,left:0,right:0,padding:"3px 0",background:"rgba(0,0,0,.45)",textAlign:"center"}}><span style={{fontSize:9,color:"#fff"}}><Icon name="camera" size={18}/></span></div>
         </div>
         <input id="vp-logo-up" type="file" accept="image/*" style={{display:"none"}} onChange={e=>{const f=e.target.files?.[0];if(f){const r=new FileReader();r.onload=()=>setCropLogoSrc(r.result);r.readAsDataURL(f);e.target.value=""}}}/>
       </div>
@@ -135,14 +136,14 @@ function VProfileScr({go,onSwitch,vendorPlan,onLogout}){
 
     {/* Switch + Logout */}
     <div style={{padding:"0 16px",display:"flex",gap:10,marginBottom:20}}>
-      <button onClick={onSwitch} style={{flex:1,padding:12,borderRadius:14,border:"1px solid var(--border)",background:"var(--card)",fontSize:13,fontWeight:600,cursor:"pointer",fontFamily:"inherit",color:"var(--text)"}}>🛍️ Mode Acheteur</button>
-      <button onClick={onLogout} style={{flex:1,padding:12,borderRadius:14,border:"1px solid rgba(239,68,68,0.3)",background:"transparent",color:"#EF4444",fontSize:13,fontWeight:600,cursor:"pointer",fontFamily:"inherit"}}>🚪 Déconnexion</button>
+      <button onClick={onSwitch} style={{flex:1,padding:12,borderRadius:14,border:"1px solid var(--border)",background:"var(--card)",fontSize:13,fontWeight:600,cursor:"pointer",fontFamily:"inherit",color:"var(--text)"}}><Icon name="package" size={16}/>{" "}Mode Acheteur</button>
+      <button onClick={onLogout} style={{flex:1,padding:12,borderRadius:14,border:"1px solid rgba(239,68,68,0.3)",background:"transparent",color:"#EF4444",fontSize:13,fontWeight:600,cursor:"pointer",fontFamily:"inherit"}}><Icon name="logout" size={16}/>{" "}Déconnexion</button>
     </div>
 
     {/* Lock popup */}
     {lockPopup&&<div style={{position:"fixed",inset:0,background:"rgba(0,0,0,.4)",zIndex:100,display:"flex",alignItems:"center",justifyContent:"center",padding:20}} onClick={()=>setLockPopup(null)}>
       <div style={{background:"var(--card)",borderRadius:20,padding:24,maxWidth:320,width:"100%",textAlign:"center",animation:"scaleIn .25s cubic-bezier(.4,0,.2,1)"}} onClick={e=>e.stopPropagation()}>
-        <div style={{fontSize:48,marginBottom:10}}>🔒</div>
+        <div style={{fontSize:48,marginBottom:10}}><Icon name="shield" size={18}/></div>
         <h3 style={{fontSize:17,fontWeight:700,marginBottom:6}}>{lockPopup.title}</h3>
         <p style={{fontSize:13,color:"var(--muted)",marginBottom:14,lineHeight:1.5}}>
           Cette fonctionnalité nécessite le plan <b style={{color:lockPopup.requiredPlan==="enterprise"?"#F59E0B":"#F97316"}}>{lockPopup.requiredPlan==="enterprise"?"Enterprise":"Pro"}</b>.

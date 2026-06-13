@@ -5,6 +5,7 @@ import { useApp } from "../../context/AppContext";
 import { VENDOR_LOGO_DEFAULT, VENDOR_COVER } from "../../data/images";
 import toast from "../../utils/toast";
 import ImageCropper from "../../components/ImageCropper";
+import Icon from "../../components/Icon";
 
 function VSettingsScr({onBack,go}){
   const { darkMode, toggleDark } = useApp();
@@ -26,14 +27,14 @@ function VSettingsScr({onBack,go}){
     <div style={{position:"relative",marginBottom:50}}>
       <div style={{height:120,borderRadius:"0 0 16px 16px",overflow:"hidden",position:"relative"}}>
         <img src={vsCover} style={{width:"100%",height:"100%",objectFit:"cover",objectPosition:"center"}} alt=""/>
-        <label style={{position:"absolute",bottom:8,right:8,padding:"5px 10px",borderRadius:10,background:"rgba(0,0,0,.5)",color:"#fff",fontSize:10,fontWeight:600,cursor:"pointer",display:"flex",alignItems:"center",gap:4}}>📷 Couverture
+        <label style={{position:"absolute",bottom:8,right:8,padding:"5px 10px",borderRadius:10,background:"rgba(0,0,0,.5)",color:"#fff",fontSize:10,fontWeight:600,cursor:"pointer",display:"flex",alignItems:"center",gap:4}}><Icon name="camera" size={16}/>{" "}Couverture
           <input type="file" accept="image/*" style={{display:"none"}} onChange={e=>{const f=e.target.files?.[0];if(f){const r=new FileReader();r.onload=()=>{setVsCover(r.result);toast.success("Couverture mise à jour 📸")};r.readAsDataURL(f);e.target.value=""}}}/>
         </label>
       </div>
       <div style={{position:"absolute",bottom:-36,left:"50%",transform:"translateX(-50%)"}}>
         <div style={{width:72,height:72,borderRadius:20,overflow:"hidden",border:"3px solid var(--bg)",boxShadow:"0 2px 12px rgba(0,0,0,.12)",position:"relative",cursor:"pointer"}} onClick={()=>document.getElementById("vset-logo")?.click()}>
           <img src={vsLogo} style={{width:"100%",height:"100%",objectFit:"cover"}} alt=""/>
-          <div style={{position:"absolute",bottom:0,left:0,right:0,padding:"2px 0",background:"rgba(0,0,0,.45)",textAlign:"center"}}><span style={{fontSize:8,color:"#fff"}}>📷</span></div>
+          <div style={{position:"absolute",bottom:0,left:0,right:0,padding:"2px 0",background:"rgba(0,0,0,.45)",textAlign:"center"}}><span style={{fontSize:8,color:"#fff"}}><Icon name="camera" size={18}/></span></div>
         </div>
         <input id="vset-logo" type="file" accept="image/*" style={{display:"none"}} onChange={e=>{const f=e.target.files?.[0];if(f){const r=new FileReader();r.onload=()=>setCropVsLogo(r.result);r.readAsDataURL(f);e.target.value=""}}}/>
       </div>
@@ -51,7 +52,7 @@ function VSettingsScr({onBack,go}){
       <div className="field"><label>Zones de livraison</label><input defaultValue="Brazzaville, Pointe-Noire"/></div>
       <div style={{fontSize:14,fontWeight:700,margin:"14px 0 8px"}}>🍽️ Paramètres restaurant</div>
       <div style={{display:"flex",alignItems:"center",justifyContent:"space-between",padding:14,background:"var(--card)",border:"1px solid var(--border)",borderRadius:14,marginBottom:10}}>
-        <div><div style={{fontSize:13,fontWeight:600}}>Statut du commerce</div><div style={{fontSize:11,color:shopOpen?"#10B981":"#EF4444",fontWeight:600,marginTop:2}}>{shopOpen?"🟢 Ouvert — accepte les commandes":"🔴 Fermé — commandes suspendues"}</div></div>
+        <div><div style={{fontSize:13,fontWeight:600}}>Statut du commerce</div><div style={{fontSize:11,color:shopOpen?"#10B981":"#EF4444",fontWeight:600,marginTop:2}}>{shopOpen?"Ouvert — accepte les commandes":"Fermé — commandes suspendues"}</div></div>
         <div className={`toggle ${shopOpen?"on":""}`} onClick={()=>setShopOpen(!shopOpen)}><div/></div>
       </div>
       <div className="field-row">
@@ -65,24 +66,24 @@ function VSettingsScr({onBack,go}){
     </div>
     <div>
       <div className="setting-group"><div className="setting-label">Général</div>
-        <div className="setting-item"><span className="si-i">🌐</span><span className="si-t">Langue</span><Select value={lang} onChange={v=>{setLang(v);setLanguage(v);ctxSetLang(v)}} options={[{value:"fr",label:"🇫🇷 Français"},{value:"en",label:"🇬🇧 English"},{value:"ln",label:"🇨🇬 Lingala"}]}/></div>
+        <div className="setting-item"><span className="si-i"><Icon name="globe" size={18}/></span><span className="si-t">Langue</span><Select value={lang} onChange={v=>{setLang(v);setLanguage(v);ctxSetLang(v)}} options={[{value:"fr",label:"FR Français"},{value:"en",label:"GB English"},{value:"ln",label:"CG Lingala"}]}/></div>
       </div>
       <div className="setting-group"><div className="setting-label">Notifications push</div>
-        <div className="setting-item"><span className="si-i">📦</span><span className="si-t">Nouvelles commandes</span><div className={`toggle ${pushOrder?"on":""}`} onClick={()=>setPushOrder(!pushOrder)}/></div>
-        <div className="setting-item"><span className="si-i">⭐</span><span className="si-t">Avis clients</span><div className={`toggle ${pushReview?"on":""}`} onClick={()=>setPushReview(!pushReview)}/></div>
+        <div className="setting-item"><span className="si-i"><Icon name="package" size={18}/></span><span className="si-t">Nouvelles commandes</span><div className={`toggle ${pushOrder?"on":""}`} onClick={()=>setPushOrder(!pushOrder)}/></div>
+        <div className="setting-item"><span className="si-i"><Icon name="star_o" size={18}/></span><span className="si-t">Avis clients</span><div className={`toggle ${pushReview?"on":""}`} onClick={()=>setPushReview(!pushReview)}/></div>
         <div className="setting-item"><span className="si-i">⚠️</span><span className="si-t">Alertes stock faible</span><div className={`toggle ${pushStock?"on":""}`} onClick={()=>setPushStock(!pushStock)}/></div>
-        <div className="setting-item"><span className="si-i">🏷️</span><span className="si-t">Fin de promotions</span><div className={`toggle ${pushPromo?"on":""}`} onClick={()=>setPushPromo(!pushPromo)}/></div>
-        <div className="setting-item"><span className="si-i">🔊</span><span className="si-t">Son de notification</span><div className={`toggle ${sound?"on":""}`} onClick={()=>setSound(!sound)}/></div>
+        <div className="setting-item"><span className="si-i"><Icon name="tag" size={18}/></span><span className="si-t">Fin de promotions</span><div className={`toggle ${pushPromo?"on":""}`} onClick={()=>setPushPromo(!pushPromo)}/></div>
+        <div className="setting-item"><span className="si-i"><Icon name="bell" size={18}/></span><span className="si-t">Son de notification</span><div className={`toggle ${sound?"on":""}`} onClick={()=>setSound(!sound)}/></div>
       </div>
       <div className="setting-group"><div className="setting-label">Email</div>
-        <div className="setting-item"><span className="si-i">📧</span><span className="si-t">Rapport hebdomadaire</span><div className={`toggle ${emailReport?"on":""}`} onClick={()=>setEmailReport(!emailReport)}/></div>
+        <div className="setting-item"><span className="si-i"><Icon name="mail" size={18}/></span><span className="si-t">Rapport hebdomadaire</span><div className={`toggle ${emailReport?"on":""}`} onClick={()=>setEmailReport(!emailReport)}/></div>
       </div>
       <div className="setting-group"><div className="setting-label">Sécurité</div>
-        <div className="setting-item" onClick={()=>go("password")} style={{cursor:"pointer"}}><span className="si-i">🔒</span><span className="si-t">Changer mot de passe</span><span className="mi-c">›</span></div>
+        <div className="setting-item" onClick={()=>go("password")} style={{cursor:"pointer"}}><span className="si-i"><Icon name="shield" size={18}/></span><span className="si-t">Changer mot de passe</span><span className="mi-c">›</span></div>
       </div>
       <div className="setting-group"><div className="setting-label">Légal</div>
         <div className="setting-item" onClick={()=>go("terms")} style={{cursor:"pointer"}}><span className="si-i">📄</span><span className="si-t">Conditions générales</span><span className="mi-c">›</span></div>
-        <div className="setting-item" onClick={()=>go("privacy")} style={{cursor:"pointer"}}><span className="si-i">🔐</span><span className="si-t">Politique de confidentialité</span><span className="mi-c">›</span></div>
+        <div className="setting-item" onClick={()=>go("privacy")} style={{cursor:"pointer"}}><span className="si-i"><Icon name="key" size={18}/></span><span className="si-t">Politique de confidentialité</span><span className="mi-c">›</span></div>
       </div>
     </div>
     <div style={{padding:"0 20px 20px"}}><button className="btn-primary" onClick={()=>toast.success("Paramètres sauvegardés ✅")}>💾 Enregistrer</button></div>

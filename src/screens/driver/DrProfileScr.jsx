@@ -5,6 +5,7 @@ import toast from "../../utils/toast";
 import ImageCropper from "../../components/ImageCropper";
 import { DRIVER_PHOTO, DRIVER_COVER } from "../../data/images";
 import { fmt } from "../../utils/helpers";
+import Icon from "../../components/Icon";
 
 function DrProfileScr({go,onSwitch,onLogout}){
   const Item=({icon,label,info,onClick})=>(
@@ -30,29 +31,29 @@ function DrProfileScr({go,onSwitch,onLogout}){
   const [cropDrSrc,setCropDrSrc]=useState(null);
 
   return(<PullToRefresh onRefresh={async()=>{toast.success("Profil actualisé 👤")}}><div className="scr" style={{paddingBottom:20}}>
-    <div className="appbar"><h2>Mon Profil</h2><button onClick={()=>go("drNotif")}>🔔</button></div>
+    <div className="appbar"><h2>Mon Profil</h2><button onClick={()=>go("drNotif")}><Icon name="bell" size={18}/></button></div>
 
     {/* Profile header — cover + photo */}
     <div style={{position:"relative",marginBottom:50}}>
       <div style={{height:120,borderRadius:"0 0 20px 20px",overflow:"hidden",position:"relative"}}>
         <img src={drCover} style={{width:"100%",height:"100%",objectFit:"cover",objectPosition:"center"}} alt=""/>
-        <label style={{position:"absolute",bottom:8,right:8,padding:"5px 10px",borderRadius:10,background:"rgba(0,0,0,.5)",color:"#fff",fontSize:10,fontWeight:600,cursor:"pointer",display:"flex",alignItems:"center",gap:4}}>📷 Couverture
+        <label style={{position:"absolute",bottom:8,right:8,padding:"5px 10px",borderRadius:10,background:"rgba(0,0,0,.5)",color:"#fff",fontSize:10,fontWeight:600,cursor:"pointer",display:"flex",alignItems:"center",gap:4}}><Icon name="camera" size={16}/>{" "}Couverture
           <input type="file" accept="image/*" style={{display:"none"}} onChange={e=>{const f=e.target.files?.[0];if(f){const r=new FileReader();r.onload=()=>{setDrCover(r.result);toast.success("Couverture mise à jour 📸")};r.readAsDataURL(f);e.target.value=""}}}/>
         </label>
       </div>
       <div style={{position:"absolute",bottom:-38,left:"50%",transform:"translateX(-50%)"}}>
         <div style={{width:76,height:76,borderRadius:"50%",overflow:"hidden",border:"3px solid var(--bg)",boxShadow:"0 2px 12px rgba(0,0,0,.12)",position:"relative",cursor:"pointer"}} onClick={()=>document.getElementById("dr-photo-up")?.click()}>
           <img src={drPhoto} style={{width:"100%",height:"100%",objectFit:"cover"}} alt=""/>
-          <div style={{position:"absolute",bottom:0,left:0,right:0,padding:"2px 0",background:"rgba(0,0,0,.45)",textAlign:"center"}}><span style={{fontSize:8,color:"#fff"}}>📷</span></div>
+          <div style={{position:"absolute",bottom:0,left:0,right:0,padding:"2px 0",background:"rgba(0,0,0,.45)",textAlign:"center"}}><span style={{fontSize:8,color:"#fff"}}><Icon name="camera" size={18}/></span></div>
         </div>
         <input id="dr-photo-up" type="file" accept="image/*" style={{display:"none"}} onChange={e=>{const f=e.target.files?.[0];if(f){const r=new FileReader();r.onload=()=>setCropDrSrc(r.result);r.readAsDataURL(f);e.target.value=""}}}/>
       </div>
     </div>
     <div style={{textAlign:"center",paddingTop:6}}>
       <h2 style={{fontSize:20,fontWeight:700}}>Patrick Moukala</h2>
-      <p style={{fontSize:13,color:"var(--muted)"}}>🛵 Honda PCX · BZ-4521</p>
+      <p style={{fontSize:13,color:"var(--muted)"}}><Icon name="truck" size={16}/>{" "}Honda PCX · BZ-4521</p>
       <div style={{display:"flex",justifyContent:"center",gap:6,marginTop:8}}>
-        <span style={{padding:"4px 12px",borderRadius:8,background:"rgba(249,115,22,0.1)",color:"#F97316",fontSize:12,fontWeight:600}}>⭐ 4.8</span>
+        <span style={{padding:"4px 12px",borderRadius:8,background:"rgba(249,115,22,0.1)",color:"#F97316",fontSize:12,fontWeight:600}}><Icon name="star_o" size={16}/>{" "}4.8</span>
         <span style={{padding:"4px 12px",borderRadius:8,background:"rgba(249,115,22,0.1)",color:"#F97316",fontSize:12,fontWeight:600}}>342 livraisons</span>
       </div>
     </div>
@@ -84,8 +85,8 @@ function DrProfileScr({go,onSwitch,onLogout}){
 
     {/* Switch + Logout */}
     <div style={{padding:"6px 16px 20px",display:"flex",gap:10}}>
-      <button onClick={onSwitch} style={{flex:1,padding:12,borderRadius:14,border:"1px solid var(--border)",background:"var(--card)",fontSize:13,fontWeight:600,cursor:"pointer",fontFamily:"inherit",color:"var(--text)"}}>🛍️ Mode Acheteur</button>
-      <button onClick={onLogout} style={{flex:1,padding:12,borderRadius:14,border:"1px solid rgba(239,68,68,0.3)",background:"transparent",color:"#EF4444",fontSize:13,fontWeight:600,cursor:"pointer",fontFamily:"inherit"}}>🚪 Déconnexion</button>
+      <button onClick={onSwitch} style={{flex:1,padding:12,borderRadius:14,border:"1px solid var(--border)",background:"var(--card)",fontSize:13,fontWeight:600,cursor:"pointer",fontFamily:"inherit",color:"var(--text)"}}><Icon name="package" size={16}/>{" "}Mode Acheteur</button>
+      <button onClick={onLogout} style={{flex:1,padding:12,borderRadius:14,border:"1px solid rgba(239,68,68,0.3)",background:"transparent",color:"#EF4444",fontSize:13,fontWeight:600,cursor:"pointer",fontFamily:"inherit"}}><Icon name="logout" size={16}/>{" "}Déconnexion</button>
     </div>
   {cropDrSrc&&<ImageCropper src={cropDrSrc} shape="circle" onCancel={()=>setCropDrSrc(null)} onConfirm={cropped=>{setDrPhoto(cropped);setCropDrSrc(null);toast.success("Photo mise à jour 📸")}}/>}
   </div></PullToRefresh>);
