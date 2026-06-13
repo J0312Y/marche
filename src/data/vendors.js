@@ -3,7 +3,12 @@ export const V=[
     promo:{name:"Soldes Tech",discount:15,ends:"15 Mars 2026"},
     cover:"https://images.unsplash.com/photo-1491933382434-500287f9b54b?w=800&h=300&fit=crop",
     logo:"https://images.unsplash.com/photo-1531297484001-80022131f5a1?w=100&h=100&fit=crop"},
-  {id:"v2",name:"Mode Afrique",avatar:"👔",desc:"Vêtements africains modernes",loc:"Pointe-Noire",rating:4.6,products:78,followers:890,verified:true,badge:"top",plan:"pro",lat:-4.271,lng:15.289,type:"boutique",
+  {id:"v2",name:"Mode Afrique",avatar:"👔",desc:"Vêtements africains modernes — chaîne multi-boutiques",loc:"Brazzaville",rating:4.6,products:178,followers:2890,verified:true,badge:"top",plan:"enterprise",lat:-4.271,lng:15.289,type:"boutique",
+    shops:[
+      {id:"s1",name:"Mode Afrique — Bacongo",loc:"Bacongo, Brazzaville",addr:"Av. Marien Ngouabi #45",rating:4.7,isOpen:true,todayRevenue:684000,todayOrders:47,avgBasket:14555,goal:800000,products:65,staff:4,phone:"+242 064 663 469",hours:"08:00-20:00",cover:"https://images.unsplash.com/photo-1441986300917-64674bd600d8?w=400&h=200&fit=crop"},
+      {id:"s2",name:"Mode Afrique — Poto-Poto",loc:"Poto-Poto, Brazzaville",addr:"Av. de la Paix #12",rating:4.5,isOpen:true,todayRevenue:412000,todayOrders:28,avgBasket:14714,goal:600000,products:54,staff:3,phone:"+242 064 663 470",hours:"08:00-19:00",cover:"https://images.unsplash.com/photo-1483985988355-763728e1935b?w=400&h=200&fit=crop"},
+      {id:"s3",name:"Mode Afrique — Pointe-Noire",loc:"Centre-ville, Pointe-Noire",addr:"Bd. Charles de Gaulle #88",rating:4.6,isOpen:false,todayRevenue:298000,todayOrders:19,avgBasket:15684,goal:500000,products:59,staff:3,phone:"+242 064 663 471",hours:"09:00-19:00",cover:"https://images.unsplash.com/photo-1567401893414-76b7b1e5a7a5?w=400&h=200&fit=crop"}
+    ],
     promo:{name:"Soldes Février",discount:20,ends:"28 Fév 2026"},
     cover:"https://images.unsplash.com/photo-1558618666-fcd25c85f82e?w=800&h=300&fit=crop",
     logo:"https://images.unsplash.com/photo-1445205170230-053b83016050?w=100&h=100&fit=crop"},
