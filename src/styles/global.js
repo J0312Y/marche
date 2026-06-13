@@ -749,6 +749,11 @@ input,textarea,select{font-size:16px !important}
   0%,100% { transform: translateY(0) }
   50% { transform: translateY(-8px) }
 }
+
+@keyframes pulse-dot {
+  0%, 100% { opacity: 1; transform: scale(1); }
+  50% { opacity: 0.4; transform: scale(1.3); }
+}
 `;
 
 export default CSS;

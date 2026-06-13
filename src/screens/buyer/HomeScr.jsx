@@ -328,16 +328,103 @@ function HomeScr({go,favs,toggleFav,isFav,userName}){
         );
       })()}
 
-        <div className="sec"><h3>🍽️ Commander à manger</h3><span onClick={()=>go("restoList")}>Voir tout</span></div>
-        <div className="marquee-wrap"><div className="marquee-track-resto">
-          {[...nearbyRestos,...nearbyRestos].map((v,i)=><div key={v.id+"-"+i} style={{minWidth:170,padding:12,background:"var(--card)",border:"1px solid var(--border)",borderRadius:14,cursor:"pointer",flexShrink:0}} onClick={()=>go("vendor",v)}>
-            <div style={{display:"flex",alignItems:"center",gap:8,marginBottom:6}}>
-              <div style={{width:36,height:36,borderRadius:10,overflow:"hidden",background:"linear-gradient(135deg,#F59E0B,#D97706)",display:"flex",alignItems:"center",justifyContent:"center",fontSize:18}}>{v.logo?<img src={v.logo} style={{width:"100%",height:"100%",objectFit:"cover",objectPosition:"center"}} alt=""/>:v.avatar}</div>
-              <div><div style={{fontSize:12,fontWeight:700}}>{v.name}{v.verified&&<span style={{color:"#F97316"}}> ✓</span>}</div><div style={{fontSize:10,color:"var(--muted)"}}>📍 {v.loc}</div></div>
+        {/* ═══ COMMANDER À MANGER — Uber Eats / Glovo style ═══ */}
+        <div style={{padding:"6px 16px 0",display:"flex",justifyContent:"space-between",alignItems:"flex-end"}}>
+          <div>
+            <h3 style={{fontSize:18,fontWeight:800,letterSpacing:-.3,color:"var(--text)"}}>Commander à manger 🍽️</h3>
+            <div style={{fontSize:11,color:"var(--muted)",marginTop:2}}>Livraison rapide près de toi</div>
+          </div>
+          <span onClick={()=>go("restoList")} style={{fontSize:12,color:"#F97316",fontWeight:700,cursor:"pointer"}}>Voir tout →</span>
+        </div>
+
+        {/* Food category chips */}
+        <div style={{display:"flex",gap:8,overflowX:"auto",padding:"12px 16px 14px",scrollbarWidth:"none"}} className="hide-scroll">
+          {[
+            {label:"🔥 Populaire",q:"populaire"},
+            {label:"Cuisine congolaise",q:"congolaise"},
+            {label:"Pizza 🍕",q:"pizza"},
+            {label:"Burger 🍔",q:"burger"},
+            {label:"Grillades 🥩",q:"grillade"},
+            {label:"Asiatique 🍜",q:"asiatique"},
+            {label:"Boissons 🥤",q:"boisson"},
+          ].map((c,i)=>(
+            <button key={i} onClick={()=>doSearch(c.q)} style={{flexShrink:0,padding:"7px 14px",borderRadius:18,border:"1px solid var(--border)",background:"var(--card)",fontSize:12,fontWeight:600,color:"var(--text)",cursor:"pointer",whiteSpace:"nowrap",fontFamily:"inherit"}}>{c.label}</button>
+          ))}
+        </div>
+
+        {/* Featured restaurant — big hero card */}
+        {nearbyRestos[0]&&(()=>{
+          const feat=nearbyRestos[0];
+          // Find a signature dish for this restaurant
+          const dish=P.find(p=>p.vendor===feat.name&&p.photo)||P.find(p=>p.type==="restaurant"&&p.photo);
+          return(
+            <div onClick={()=>go("vendor",feat)} style={{margin:"0 16px 14px",borderRadius:18,overflow:"hidden",position:"relative",cursor:"pointer",aspectRatio:"16 / 9",background:"#222"}}>
+              <img src={dish?.photo||feat.cover} alt={feat.name} style={{width:"100%",height:"100%",objectFit:"cover",objectPosition:"center"}}/>
+              {/* Top badges */}
+              <div style={{position:"absolute",top:12,left:12,display:"flex",gap:6}}>
+                <span style={{padding:"4px 9px",background:"rgba(255,255,255,0.95)",borderRadius:6,fontSize:10,fontWeight:800,color:"#F97316"}}>⭐ EN VEDETTE</span>
+                {feat.promo&&<span style={{padding:"4px 9px",background:"#EF4444",color:"#fff",borderRadius:6,fontSize:10,fontWeight:800}}>-{feat.promo.discount}%</span>}
+              </div>
+              {/* Live badge if open */}
+              {feat.isOpen&&<div style={{position:"absolute",top:12,right:12,padding:"4px 9px",background:"rgba(16,185,129,0.95)",color:"#fff",borderRadius:6,fontSize:10,fontWeight:800,display:"flex",alignItems:"center",gap:4}}>
+                <div style={{width:6,height:6,borderRadius:3,background:"#fff",animation:"pulse-dot 1.5s ease-in-out infinite"}}/>OUVERT
+              </div>}
+              {/* Bottom info — dark gradient */}
+              <div style={{position:"absolute",left:0,right:0,bottom:0,padding:"40px 14px 14px",background:"linear-gradient(to top, rgba(0,0,0,0.85) 30%, transparent)",color:"#fff"}}>
+                <div style={{display:"flex",alignItems:"flex-end",gap:12}}>
+                  <div style={{width:44,height:44,borderRadius:12,overflow:"hidden",border:"2px solid #fff",flexShrink:0,background:"#fff"}}>
+                    {feat.logo?<img src={feat.logo} style={{width:"100%",height:"100%",objectFit:"cover"}} alt=""/>:<div style={{width:"100%",height:"100%",display:"flex",alignItems:"center",justifyContent:"center",fontSize:22}}>{feat.avatar}</div>}
+                  </div>
+                  <div style={{flex:1,minWidth:0}}>
+                    <div style={{fontSize:16,fontWeight:800,letterSpacing:-.2,display:"flex",alignItems:"center",gap:4}}>{feat.name}{feat.verified&&<span style={{color:"#F97316",fontSize:14}}>✓</span>}</div>
+                    <div style={{fontSize:11,opacity:.85,marginTop:2,overflow:"hidden",textOverflow:"ellipsis",whiteSpace:"nowrap"}}>{feat.desc}</div>
+                    <div style={{display:"flex",gap:10,fontSize:11,marginTop:6}}>
+                      <span>⭐ <b>{feat.rating}</b></span>
+                      <span style={{color:"#FCD34D"}}>🕐 {feat.eta}</span>
+                      <span>💰 Min {feat.minOrder?.toLocaleString("fr")} F</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
             </div>
-            <div style={{display:"flex",justifyContent:"space-between",fontSize:10}}><span>⭐ <b>{v.rating}</b></span><span style={{color:"#F97316",fontWeight:600}}>🕐 {v.eta}</span></div>
-          </div>)}
-        </div></div>
+          );
+        })()}
+
+        {/* Horizontal carousel — restaurants with food photos */}
+        <div style={{display:"flex",gap:10,overflowX:"auto",padding:"0 16px 18px",scrollbarWidth:"none"}} className="hide-scroll">
+          {nearbyRestos.slice(0,8).map(v=>{
+            const dish=P.find(p=>p.vendor===v.name&&p.photo)||P.find(p=>p.type==="restaurant"&&p.photo);
+            return(
+              <div key={v.id} onClick={()=>go("vendor",v)} style={{minWidth:200,flexShrink:0,background:"var(--card)",border:"1px solid var(--border)",borderRadius:14,overflow:"hidden",cursor:"pointer",boxShadow:"0 2px 8px rgba(0,0,0,0.04)"}}>
+                {/* Food photo */}
+                <div style={{width:"100%",aspectRatio:"16 / 10",position:"relative",overflow:"hidden",background:"var(--light)"}}>
+                  <img src={dish?.photo||v.cover} alt={v.name} style={{width:"100%",height:"100%",objectFit:"cover",objectPosition:"center"}}/>
+                  {/* Promo badge */}
+                  {v.promo&&<span style={{position:"absolute",top:8,left:8,padding:"3px 7px",background:"#EF4444",color:"#fff",borderRadius:5,fontSize:9,fontWeight:800}}>-{v.promo.discount}%</span>}
+                  {/* New / Top badge */}
+                  {v.badge==="new"&&<span style={{position:"absolute",top:8,right:8,padding:"3px 7px",background:"#F97316",color:"#fff",borderRadius:5,fontSize:9,fontWeight:800}}>NOUVEAU</span>}
+                  {v.badge==="top"&&!v.promo&&<span style={{position:"absolute",top:8,right:8,padding:"3px 7px",background:"rgba(255,255,255,0.95)",color:"#F97316",borderRadius:5,fontSize:9,fontWeight:800}}>★ TOP</span>}
+                  {/* ETA chip bottom-left */}
+                  <span style={{position:"absolute",bottom:8,left:8,padding:"3px 8px",background:"rgba(0,0,0,0.7)",backdropFilter:"blur(8px)",color:"#fff",borderRadius:5,fontSize:10,fontWeight:700}}>🕐 {v.eta}</span>
+                </div>
+                {/* Info */}
+                <div style={{padding:"10px 12px"}}>
+                  <div style={{display:"flex",alignItems:"center",gap:6,marginBottom:3}}>
+                    <div style={{width:22,height:22,borderRadius:6,overflow:"hidden",background:"var(--light)",flexShrink:0}}>
+                      {v.logo?<img src={v.logo} style={{width:"100%",height:"100%",objectFit:"cover"}} alt=""/>:<div style={{width:"100%",height:"100%",display:"flex",alignItems:"center",justifyContent:"center",fontSize:11}}>{v.avatar}</div>}
+                    </div>
+                    <div style={{fontSize:13,fontWeight:700,color:"var(--text)",overflow:"hidden",textOverflow:"ellipsis",whiteSpace:"nowrap",flex:1}}>{v.name}{v.verified&&<span style={{color:"#F97316",marginLeft:3}}>✓</span>}</div>
+                  </div>
+                  <div style={{fontSize:10,color:"var(--muted)",overflow:"hidden",textOverflow:"ellipsis",whiteSpace:"nowrap"}}>{v.desc}</div>
+                  <div style={{display:"flex",justifyContent:"space-between",alignItems:"center",marginTop:6,fontSize:10}}>
+                    <span style={{color:"#F59E0B",fontWeight:600}}>⭐ {v.rating}</span>
+                    <span style={{color:"var(--muted)"}}>Livraison {v.deliveryFee?v.deliveryFee.toLocaleString("fr")+" F":"gratuite"}</span>
+                  </div>
+                </div>
+              </div>
+            );
+          })}
+        </div>
       </>}
 
       <div className="sec"><h3>{selType==="all"?"Établissements proches":types.find(t=>t.id===selType)?.name+" proches"}</h3><span onClick={()=>go("nearby")}>Voir la carte</span></div>
