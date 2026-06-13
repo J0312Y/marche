@@ -40,7 +40,7 @@ function HomeScr({go,favs,toggleFav,isFav,userName}){
   if(dataLoading || P.length===0) return <div className="scr"><SkeletonHome/></div>;
 
   const trending=["iPhone","Samsung","Wax","Pâtisserie","Braisé","Pharmacie","Livraison","Promo"];
-  const types=[{id:"all",icon:"🏠",name:"Tout"},{id:"restaurant",icon:"🍽️",name:"Restos"},{id:"patisserie",icon:"🧁",name:"Pâtisseries"},{id:"supermarche",icon:"🛒",name:"Courses"},{id:"pharmacie",icon:"💊",name:"Pharma"},{id:"boutique",icon:"🏪",name:"Boutiques"},{id:"service",icon:"🔧",name:"Services"}];
+  const types=[{id:"all",svg:"home",name:"Tout"},{id:"restaurant",svg:"utensils",name:"Restos"},{id:"patisserie",svg:"cupcake",name:"Pâtisseries"},{id:"supermarche",svg:"cart",name:"Courses"},{id:"pharmacie",svg:"pill",name:"Pharma"},{id:"boutique",svg:"store",name:"Boutiques"},{id:"service",svg:"tool",name:"Services"}];
   const typeFilter=filterType!=="all"?filterType:selType;
   const filteredP=typeFilter==="all"?P:P.filter(p=>p.type===typeFilter);
   const filteredV=typeFilter==="all"?VENDORS:VENDORS.filter(v=>v.type===typeFilter);
@@ -144,7 +144,7 @@ function HomeScr({go,favs,toggleFav,isFav,userName}){
         </div>
         <div style={{fontSize:12,fontWeight:600,color:"var(--muted)",marginBottom:8}}>Type de commerce</div>
         <div style={{display:"flex",gap:6,flexWrap:"wrap",marginBottom:14}}>
-          {types.map(t=><div key={t.id} onClick={()=>{setFilterType(t.id);setSelType(t.id);setShowFilter(false)}} style={{padding:"6px 12px",borderRadius:20,border:filterType===t.id?"2px solid #F97316":"1px solid var(--border)",background:filterType===t.id?"rgba(249,115,22,0.06)":"var(--card)",cursor:"pointer",fontSize:11,fontWeight:600,color:filterType===t.id?"#F97316":"var(--sub)"}}>{t.icon} {t.name}</div>)}
+          {types.map(t=><div key={t.id} onClick={()=>{setFilterType(t.id);setSelType(t.id);setShowFilter(false)}} style={{padding:"6px 12px",borderRadius:20,border:filterType===t.id?"2px solid #F97316":"1px solid var(--border)",background:filterType===t.id?"rgba(249,115,22,0.06)":"var(--card)",cursor:"pointer",fontSize:11,fontWeight:600,color:filterType===t.id?"#F97316":"var(--sub)",display:"inline-flex",alignItems:"center",gap:5}}><Icon name={t.svg} size={12} color={filterType===t.id?"#F97316":"var(--sub)"}/> {t.name}</div>)}
         </div>
         <div style={{fontSize:12,fontWeight:600,color:"var(--muted)",marginBottom:8}}>Trier par</div>
         <div style={{display:"flex",gap:6}}>
@@ -328,60 +328,66 @@ function HomeScr({go,favs,toggleFav,isFav,userName}){
         );
       })()}
 
-        {/* ═══ COMMANDER À MANGER — Uber Eats / Glovo style ═══ */}
+        {/* ═══ COMMANDER À MANGER — clean icons, no emojis ═══ */}
         <div style={{padding:"6px 16px 0",display:"flex",justifyContent:"space-between",alignItems:"flex-end"}}>
           <div>
-            <h3 style={{fontSize:18,fontWeight:800,letterSpacing:-.3,color:"var(--text)"}}>Commander à manger 🍽️</h3>
+            <h3 style={{fontSize:17,fontWeight:800,letterSpacing:-.3,color:"var(--text)"}}>Commander à manger</h3>
             <div style={{fontSize:11,color:"var(--muted)",marginTop:2}}>Livraison rapide près de toi</div>
           </div>
-          <span onClick={()=>go("restoList")} style={{fontSize:12,color:"#F97316",fontWeight:700,cursor:"pointer"}}>Voir tout →</span>
+          <span onClick={()=>go("restoList")} style={{fontSize:12,color:"#F97316",fontWeight:700,cursor:"pointer",display:"flex",alignItems:"center",gap:3}}>Voir tout <Icon name="chevron_right" size={14} color="#F97316"/></span>
         </div>
 
-        {/* Food category chips */}
+        {/* Food category chips — clean, no emojis */}
         <div style={{display:"flex",gap:8,overflowX:"auto",padding:"12px 16px 14px",scrollbarWidth:"none"}} className="hide-scroll">
           {[
-            {label:"🔥 Populaire",q:"populaire"},
+            {label:"Populaire",q:"populaire"},
             {label:"Cuisine congolaise",q:"congolaise"},
-            {label:"Pizza 🍕",q:"pizza"},
-            {label:"Burger 🍔",q:"burger"},
-            {label:"Grillades 🥩",q:"grillade"},
-            {label:"Asiatique 🍜",q:"asiatique"},
-            {label:"Boissons 🥤",q:"boisson"},
+            {label:"Pizza",q:"pizza"},
+            {label:"Burger",q:"burger"},
+            {label:"Grillades",q:"grillade"},
+            {label:"Asiatique",q:"asiatique"},
+            {label:"Boissons",q:"boisson"},
           ].map((c,i)=>(
             <button key={i} onClick={()=>doSearch(c.q)} style={{flexShrink:0,padding:"7px 14px",borderRadius:18,border:"1px solid var(--border)",background:"var(--card)",fontSize:12,fontWeight:600,color:"var(--text)",cursor:"pointer",whiteSpace:"nowrap",fontFamily:"inherit"}}>{c.label}</button>
           ))}
         </div>
 
-        {/* Featured restaurant — big hero card */}
+        {/* Featured restaurant — hero card */}
         {nearbyRestos[0]&&(()=>{
           const feat=nearbyRestos[0];
-          // Find a signature dish for this restaurant
           const dish=P.find(p=>p.vendor===feat.name&&p.photo)||P.find(p=>p.type==="restaurant"&&p.photo);
           return(
-            <div onClick={()=>go("vendor",feat)} style={{margin:"0 16px 14px",borderRadius:18,overflow:"hidden",position:"relative",cursor:"pointer",aspectRatio:"16 / 9",background:"#222"}}>
+            <div onClick={()=>go("vendor",feat)} style={{margin:"0 16px 14px",borderRadius:18,overflow:"hidden",position:"relative",cursor:"pointer",aspectRatio:"16 / 11",background:"#222"}}>
               <img src={dish?.photo||feat.cover} alt={feat.name} style={{width:"100%",height:"100%",objectFit:"cover",objectPosition:"center"}}/>
-              {/* Top badges */}
+              {/* Badges */}
               <div style={{position:"absolute",top:12,left:12,display:"flex",gap:6}}>
-                <span style={{padding:"4px 9px",background:"rgba(255,255,255,0.95)",borderRadius:6,fontSize:10,fontWeight:800,color:"#F97316"}}>⭐ EN VEDETTE</span>
+                <span style={{padding:"4px 9px",background:"rgba(255,255,255,0.95)",borderRadius:6,fontSize:10,fontWeight:800,color:"#F97316",display:"flex",alignItems:"center",gap:4}}>
+                  <svg width="11" height="11" viewBox="0 0 24 24" fill="#F97316"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+                  EN VEDETTE
+                </span>
                 {feat.promo&&<span style={{padding:"4px 9px",background:"#EF4444",color:"#fff",borderRadius:6,fontSize:10,fontWeight:800}}>-{feat.promo.discount}%</span>}
               </div>
-              {/* Live badge if open */}
               {feat.isOpen&&<div style={{position:"absolute",top:12,right:12,padding:"4px 9px",background:"rgba(16,185,129,0.95)",color:"#fff",borderRadius:6,fontSize:10,fontWeight:800,display:"flex",alignItems:"center",gap:4}}>
                 <div style={{width:6,height:6,borderRadius:3,background:"#fff",animation:"pulse-dot 1.5s ease-in-out infinite"}}/>OUVERT
               </div>}
-              {/* Bottom info — dark gradient */}
               <div style={{position:"absolute",left:0,right:0,bottom:0,padding:"40px 14px 14px",background:"linear-gradient(to top, rgba(0,0,0,0.85) 30%, transparent)",color:"#fff"}}>
                 <div style={{display:"flex",alignItems:"flex-end",gap:12}}>
                   <div style={{width:44,height:44,borderRadius:12,overflow:"hidden",border:"2px solid #fff",flexShrink:0,background:"#fff"}}>
-                    {feat.logo?<img src={feat.logo} style={{width:"100%",height:"100%",objectFit:"cover"}} alt=""/>:<div style={{width:"100%",height:"100%",display:"flex",alignItems:"center",justifyContent:"center",fontSize:22}}>{feat.avatar}</div>}
+                    {feat.logo?<img src={feat.logo} style={{width:"100%",height:"100%",objectFit:"cover"}} alt=""/>:<div style={{width:"100%",height:"100%",display:"flex",alignItems:"center",justifyContent:"center",background:"linear-gradient(135deg,#F97316,#EA580C)",color:"#fff",fontSize:18,fontWeight:800}}>{feat.name.charAt(0)}</div>}
                   </div>
                   <div style={{flex:1,minWidth:0}}>
-                    <div style={{fontSize:16,fontWeight:800,letterSpacing:-.2,display:"flex",alignItems:"center",gap:4}}>{feat.name}{feat.verified&&<span style={{color:"#F97316",fontSize:14}}>✓</span>}</div>
+                    <div style={{fontSize:16,fontWeight:800,letterSpacing:-.2,display:"flex",alignItems:"center",gap:4}}>{feat.name}{feat.verified&&<svg width="14" height="14" viewBox="0 0 24 24" fill="#F97316"><path d="M9 12l2 2 4-4M21 12a9 9 0 11-18 0 9 9 0 0118 0z" stroke="#fff" strokeWidth="2" fill="#F97316"/></svg>}</div>
                     <div style={{fontSize:11,opacity:.85,marginTop:2,overflow:"hidden",textOverflow:"ellipsis",whiteSpace:"nowrap"}}>{feat.desc}</div>
-                    <div style={{display:"flex",gap:10,fontSize:11,marginTop:6}}>
-                      <span>⭐ <b>{feat.rating}</b></span>
-                      <span style={{color:"#FCD34D"}}>🕐 {feat.eta}</span>
-                      <span>💰 Min {feat.minOrder?.toLocaleString("fr")} F</span>
+                    <div style={{display:"flex",gap:12,fontSize:11,marginTop:6,alignItems:"center"}}>
+                      <span style={{display:"flex",alignItems:"center",gap:3}}>
+                        <svg width="11" height="11" viewBox="0 0 24 24" fill="#FCD34D"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+                        <b>{feat.rating}</b>
+                      </span>
+                      <span style={{display:"flex",alignItems:"center",gap:3,color:"#FCD34D"}}>
+                        <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="#FCD34D" strokeWidth="2.4" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="12" r="9"/><polyline points="12 7 12 12 15 14"/></svg>
+                        {feat.eta}
+                      </span>
+                      <span style={{display:"flex",alignItems:"center",gap:3}}>Min {feat.minOrder?.toLocaleString("fr")} F</span>
                     </div>
                   </div>
                 </div>
@@ -390,34 +396,36 @@ function HomeScr({go,favs,toggleFav,isFav,userName}){
           );
         })()}
 
-        {/* Horizontal carousel — restaurants with food photos */}
+        {/* Horizontal carousel — skip the featured restaurant to avoid duplicate */}
         <div style={{display:"flex",gap:10,overflowX:"auto",padding:"0 16px 18px",scrollbarWidth:"none"}} className="hide-scroll">
-          {nearbyRestos.slice(0,8).map(v=>{
+          {nearbyRestos.slice(1,9).concat(nearbyRestos.length<2?nearbyRestos.slice(0,1):[]).map(v=>{
             const dish=P.find(p=>p.vendor===v.name&&p.photo)||P.find(p=>p.type==="restaurant"&&p.photo);
             return(
               <div key={v.id} onClick={()=>go("vendor",v)} style={{minWidth:200,flexShrink:0,background:"var(--card)",border:"1px solid var(--border)",borderRadius:14,overflow:"hidden",cursor:"pointer",boxShadow:"0 2px 8px rgba(0,0,0,0.04)"}}>
-                {/* Food photo */}
                 <div style={{width:"100%",aspectRatio:"16 / 10",position:"relative",overflow:"hidden",background:"var(--light)"}}>
                   <img src={dish?.photo||v.cover} alt={v.name} style={{width:"100%",height:"100%",objectFit:"cover",objectPosition:"center"}}/>
-                  {/* Promo badge */}
                   {v.promo&&<span style={{position:"absolute",top:8,left:8,padding:"3px 7px",background:"#EF4444",color:"#fff",borderRadius:5,fontSize:9,fontWeight:800}}>-{v.promo.discount}%</span>}
-                  {/* New / Top badge */}
                   {v.badge==="new"&&<span style={{position:"absolute",top:8,right:8,padding:"3px 7px",background:"#F97316",color:"#fff",borderRadius:5,fontSize:9,fontWeight:800}}>NOUVEAU</span>}
-                  {v.badge==="top"&&!v.promo&&<span style={{position:"absolute",top:8,right:8,padding:"3px 7px",background:"rgba(255,255,255,0.95)",color:"#F97316",borderRadius:5,fontSize:9,fontWeight:800}}>★ TOP</span>}
-                  {/* ETA chip bottom-left */}
-                  <span style={{position:"absolute",bottom:8,left:8,padding:"3px 8px",background:"rgba(0,0,0,0.7)",backdropFilter:"blur(8px)",color:"#fff",borderRadius:5,fontSize:10,fontWeight:700}}>🕐 {v.eta}</span>
+                  {v.badge==="top"&&!v.promo&&<span style={{position:"absolute",top:8,right:8,padding:"3px 7px",background:"rgba(255,255,255,0.95)",color:"#F97316",borderRadius:5,fontSize:9,fontWeight:800,display:"flex",alignItems:"center",gap:3}}>
+                    <svg width="10" height="10" viewBox="0 0 24 24" fill="#F97316"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>TOP
+                  </span>}
+                  <span style={{position:"absolute",bottom:8,left:8,padding:"3px 8px",background:"rgba(0,0,0,0.7)",backdropFilter:"blur(8px)",color:"#fff",borderRadius:5,fontSize:10,fontWeight:700,display:"flex",alignItems:"center",gap:4}}>
+                    <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="#fff" strokeWidth="2.4" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="12" r="9"/><polyline points="12 7 12 12 15 14"/></svg>{v.eta}
+                  </span>
                 </div>
-                {/* Info */}
                 <div style={{padding:"10px 12px"}}>
                   <div style={{display:"flex",alignItems:"center",gap:6,marginBottom:3}}>
                     <div style={{width:22,height:22,borderRadius:6,overflow:"hidden",background:"var(--light)",flexShrink:0}}>
-                      {v.logo?<img src={v.logo} style={{width:"100%",height:"100%",objectFit:"cover"}} alt=""/>:<div style={{width:"100%",height:"100%",display:"flex",alignItems:"center",justifyContent:"center",fontSize:11}}>{v.avatar}</div>}
+                      {v.logo?<img src={v.logo} style={{width:"100%",height:"100%",objectFit:"cover"}} alt=""/>:<div style={{width:"100%",height:"100%",display:"flex",alignItems:"center",justifyContent:"center",background:"linear-gradient(135deg,#F97316,#EA580C)",color:"#fff",fontSize:10,fontWeight:800}}>{v.name.charAt(0)}</div>}
                     </div>
-                    <div style={{fontSize:13,fontWeight:700,color:"var(--text)",overflow:"hidden",textOverflow:"ellipsis",whiteSpace:"nowrap",flex:1}}>{v.name}{v.verified&&<span style={{color:"#F97316",marginLeft:3}}>✓</span>}</div>
+                    <div style={{fontSize:13,fontWeight:700,color:"var(--text)",overflow:"hidden",textOverflow:"ellipsis",whiteSpace:"nowrap",flex:1,display:"flex",alignItems:"center",gap:3}}>{v.name}{v.verified&&<svg width="11" height="11" viewBox="0 0 24 24" fill="#F97316"><path d="M9 12l2 2 4-4M21 12a9 9 0 11-18 0 9 9 0 0118 0z" stroke="#fff" strokeWidth="2.5" fill="#F97316"/></svg>}</div>
                   </div>
                   <div style={{fontSize:10,color:"var(--muted)",overflow:"hidden",textOverflow:"ellipsis",whiteSpace:"nowrap"}}>{v.desc}</div>
                   <div style={{display:"flex",justifyContent:"space-between",alignItems:"center",marginTop:6,fontSize:10}}>
-                    <span style={{color:"#F59E0B",fontWeight:600}}>⭐ {v.rating}</span>
+                    <span style={{color:"#F59E0B",fontWeight:600,display:"flex",alignItems:"center",gap:3}}>
+                      <svg width="10" height="10" viewBox="0 0 24 24" fill="#F59E0B"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+                      {v.rating}
+                    </span>
                     <span style={{color:"var(--muted)"}}>Livraison {v.deliveryFee?v.deliveryFee.toLocaleString("fr")+" F":"gratuite"}</span>
                   </div>
                 </div>
@@ -426,6 +434,45 @@ function HomeScr({go,favs,toggleFav,isFav,userName}){
           })}
         </div>
       </>}
+
+      {/* Boutiques tendance — marketplace identity reminder */}
+      <div style={{padding:"6px 16px 0",display:"flex",justifyContent:"space-between",alignItems:"flex-end"}}>
+        <div>
+          <h3 style={{fontSize:17,fontWeight:800,letterSpacing:-.3,color:"var(--text)"}}>Boutiques tendance</h3>
+          <div style={{fontSize:11,color:"var(--muted)",marginTop:2}}>Mode, électronique, beauté & plus</div>
+        </div>
+        <span onClick={()=>go("nearby")} style={{fontSize:12,color:"#F97316",fontWeight:700,cursor:"pointer",display:"flex",alignItems:"center",gap:3}}>Voir tout <Icon name="chevron_right" size={14} color="#F97316"/></span>
+      </div>
+      <div style={{display:"flex",gap:10,overflowX:"auto",padding:"12px 16px 18px",scrollbarWidth:"none"}} className="hide-scroll">
+        {VENDORS.filter(v=>v.type==="boutique"||v.type==="supermarche"||v.type==="pharmacie").slice(0,8).map(v=>{
+          const featured=P.find(p=>p.vendor===v.name&&p.photo);
+          return(
+            <div key={v.id} onClick={()=>go("vendor",v)} style={{minWidth:180,flexShrink:0,background:"var(--card)",border:"1px solid var(--border)",borderRadius:14,overflow:"hidden",cursor:"pointer",boxShadow:"0 2px 8px rgba(0,0,0,0.04)"}}>
+              <div style={{width:"100%",aspectRatio:"16 / 10",position:"relative",overflow:"hidden",background:"var(--light)"}}>
+                <img src={featured?.photo||v.cover} alt={v.name} style={{width:"100%",height:"100%",objectFit:"cover",objectPosition:"center"}}/>
+                {v.promo&&<span style={{position:"absolute",top:8,left:8,padding:"3px 7px",background:"#EF4444",color:"#fff",borderRadius:5,fontSize:9,fontWeight:800}}>-{v.promo.discount}%</span>}
+                {v.badge==="new"&&<span style={{position:"absolute",top:8,right:8,padding:"3px 7px",background:"#F97316",color:"#fff",borderRadius:5,fontSize:9,fontWeight:800}}>NOUVEAU</span>}
+              </div>
+              <div style={{padding:"10px 12px"}}>
+                <div style={{display:"flex",alignItems:"center",gap:6,marginBottom:3}}>
+                  <div style={{width:22,height:22,borderRadius:6,overflow:"hidden",background:"var(--light)",flexShrink:0}}>
+                    {v.logo?<img src={v.logo} style={{width:"100%",height:"100%",objectFit:"cover"}} alt=""/>:<div style={{width:"100%",height:"100%",display:"flex",alignItems:"center",justifyContent:"center",background:"linear-gradient(135deg,#F97316,#EA580C)",color:"#fff",fontSize:10,fontWeight:800}}>{v.name.charAt(0)}</div>}
+                  </div>
+                  <div style={{fontSize:13,fontWeight:700,color:"var(--text)",overflow:"hidden",textOverflow:"ellipsis",whiteSpace:"nowrap",flex:1,display:"flex",alignItems:"center",gap:3}}>{v.name}{v.verified&&<svg width="11" height="11" viewBox="0 0 24 24" fill="#F97316"><path d="M9 12l2 2 4-4M21 12a9 9 0 11-18 0 9 9 0 0118 0z" stroke="#fff" strokeWidth="2.5" fill="#F97316"/></svg>}</div>
+                </div>
+                <div style={{fontSize:10,color:"var(--muted)",overflow:"hidden",textOverflow:"ellipsis",whiteSpace:"nowrap"}}>{v.desc}</div>
+                <div style={{display:"flex",justifyContent:"space-between",alignItems:"center",marginTop:6,fontSize:10}}>
+                  <span style={{color:"#F59E0B",fontWeight:600,display:"flex",alignItems:"center",gap:3}}>
+                    <svg width="10" height="10" viewBox="0 0 24 24" fill="#F59E0B"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+                    {v.rating}
+                  </span>
+                  <span style={{color:"var(--muted)"}}>{v.products} articles</span>
+                </div>
+              </div>
+            </div>
+          );
+        })}
+      </div>
 
       <div className="sec"><h3>{selType==="all"?"Établissements proches":types.find(t=>t.id===selType)?.name+" proches"}</h3><span onClick={()=>go("nearby")}>Voir la carte</span></div>
       <div className="vlist">{filteredV.slice(0,4).map(v=><div key={v.id} className="vcard" onClick={()=>go("vendor",v)}><div className="vav" style={v.logo?{overflow:"hidden",padding:0}:{}}>{v.logo?<img src={v.logo} style={{width:"100%",height:"100%",objectFit:"cover",objectPosition:"center"}} alt=""/>:v.avatar}</div><div className="vi"><h4>{v.name}{v.verified&&<span className="vf">✓</span>}</h4><div className="vloc">📍 {v.loc}{v.eta&&<span style={{marginLeft:8,color:"#F97316",fontWeight:600}}>🕐 {v.eta}</span>}</div><div className="vst">⭐ <b>{v.rating}</b> · {v.products} {v.type==="restaurant"?"plats":v.type==="service"?"services":"produits"}</div></div><span style={{color:"var(--muted)"}}>›</span></div>)}</div>

@@ -66,6 +66,7 @@ function DetailScr({product:rawP,onBack,onAddCart,go,favs,toggleFav,isFav}){
   const [qty,setQty]=useState(1);
   const [cartAnim,setCartAnim]=useState(false);
   const [cartAdded,setCartAdded]=useState(false);
+  const [showQRModal,setShowQRModal]=useState(false);
   const [photoIdx,setPhotoIdx]=useState(0);
   const [zoomOpen,setZoomOpen]=useState(false);
   const allPhotos=p.photos||[p.photo];
@@ -435,8 +436,8 @@ function DetailScr({product:rawP,onBack,onAddCart,go,favs,toggleFav,isFav}){
             <div style={{fontSize:13,fontWeight:800,fontFamily:"monospace",overflow:"hidden",textOverflow:"ellipsis",whiteSpace:"nowrap",marginTop:2}}>LMK-PROD-{p.id}</div>
             <div style={{fontSize:10,color:"var(--muted)",marginTop:6,lineHeight:1.4}}>Scannez ce QR avec l'app Lamuka pour ouvrir directement ce produit</div>
             <div style={{display:"flex",gap:6,marginTop:8}}>
-              <button onClick={()=>{const code="LMK-PROD-"+p.id;navigator.clipboard?.writeText(code).then(()=>toast.success("Code copié"))}} style={{padding:"5px 10px",fontSize:10,fontWeight:700,border:"1px solid var(--border)",background:"var(--card)",borderRadius:6,cursor:"pointer",fontFamily:"inherit"}}>📋 Copier</button>
-              <button onClick={()=>{const url=`https://api.qrserver.com/v1/create-qr-code/?size=400x400&margin=2&data=${encodeURIComponent("LMK-PROD-"+p.id)}`;window.open(url,"_blank")}} style={{padding:"5px 10px",fontSize:10,fontWeight:700,border:"1px solid #F97316",background:"rgba(249,115,22,0.06)",color:"#F97316",borderRadius:6,cursor:"pointer",fontFamily:"inherit"}}>🔍 Agrandir</button>
+              <button onClick={()=>{const code="LMK-PROD-"+p.id;navigator.clipboard?.writeText(code).then(()=>toast.success("Code copié"))}} style={{padding:"5px 10px",fontSize:10,fontWeight:700,border:"1px solid var(--border)",background:"var(--card)",borderRadius:6,cursor:"pointer",fontFamily:"inherit",display:"flex",alignItems:"center",gap:4}}><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.4" strokeLinecap="round" strokeLinejoin="round"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/></svg>Copier</button>
+              <button onClick={()=>setShowQRModal(true)} style={{padding:"5px 10px",fontSize:10,fontWeight:700,border:"1px solid #F97316",background:"rgba(249,115,22,0.06)",color:"#F97316",borderRadius:6,cursor:"pointer",fontFamily:"inherit",display:"flex",alignItems:"center",gap:4}}><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="#F97316" strokeWidth="2.4" strokeLinecap="round" strokeLinejoin="round"><polyline points="15 3 21 3 21 9"/><polyline points="9 21 3 21 3 15"/><line x1="21" y1="3" x2="14" y2="10"/><line x1="3" y1="21" x2="10" y2="14"/></svg>Agrandir</button>
             </div>
           </div>
         </div>
