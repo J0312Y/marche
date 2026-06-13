@@ -191,7 +191,7 @@ function SearchScr({ go, onBack, fromTab, favs, toggleFav, isFav, defaultTab }) 
             })}
           </div>
 
-          <div style={{ flex: 1, overflowY: "auto", background: "var(--card)", padding: "12px 10px 30px", scrollbarWidth: "none" }} className="hide-scroll">
+          <div style={{ flex: 1, overflowY: "auto", overflowX: "hidden", background: "var(--card)", padding: "12px 12px 30px", scrollbarWidth: "none", boxSizing: "border-box", minWidth: 0 }} className="hide-scroll">
             {/* Category banner */}
             <div style={{ borderRadius: 12, overflow: "hidden", marginBottom: 14, position: "relative", aspectRatio: "16 / 8" }}>
               <img src={selectedCat.photo} alt="" style={{ width: "100%", height: "100%", objectFit: "cover", objectPosition: "center" }} />
@@ -207,13 +207,13 @@ function SearchScr({ go, onBack, fromTab, favs, toggleFav, isFav, defaultTab }) 
             {isAllSelected ? (
               <>
                 <div style={{ fontSize: 13, fontWeight: 800, marginBottom: 10 }}>Toutes les catégories</div>
-                <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr 1fr", gap: 7, marginBottom: 16 }}>
+                <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 10, marginBottom: 18 }}>
                   {CATS.map(c => (
                     <div key={c.id} onClick={() => setSelectedCatId(c.id)} style={{ textAlign: "center", cursor: "pointer" }}>
                       <div style={{ width: "100%", aspectRatio: "1 / 1", borderRadius: 10, overflow: "hidden", background: "var(--light)" }}>
                         <img src={c.photo} alt="" style={{ width: "100%", height: "100%", objectFit: "cover", objectPosition: "center" }} />
                       </div>
-                      <div style={{ fontSize: 10.5, fontWeight: 600, marginTop: 5, color: "var(--text)", overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>{c.name}</div>
+                      <div style={{ fontSize: 12, fontWeight: 600, marginTop: 6, color: "var(--text)", lineHeight: 1.3 }}>{c.name}</div>
                     </div>
                   ))}
                 </div>
@@ -221,13 +221,13 @@ function SearchScr({ go, onBack, fromTab, favs, toggleFav, isFav, defaultTab }) 
             ) : selectedCat.subs && (
               <>
                 <div style={{ fontSize: 13, fontWeight: 800, marginBottom: 10 }}>Catégories populaires</div>
-                <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr 1fr", gap: 7, marginBottom: 16 }}>
+                <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 10, marginBottom: 18 }}>
                   {selectedCat.subs.map((s, i) => (
                     <div key={i} onClick={() => setQ(s.name)} style={{ textAlign: "center", cursor: "pointer" }}>
                       <div style={{ width: "100%", aspectRatio: "1 / 1", borderRadius: 10, overflow: "hidden", background: "var(--light)" }}>
                         <img src={s.photo} alt="" style={{ width: "100%", height: "100%", objectFit: "cover", objectPosition: "center" }} />
                       </div>
-                      <div style={{ fontSize: 10.5, fontWeight: 600, marginTop: 5, color: "var(--text)", overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>{s.name}</div>
+                      <div style={{ fontSize: 12, fontWeight: 600, marginTop: 6, color: "var(--text)", lineHeight: 1.3 }}>{s.name}</div>
                     </div>
                   ))}
                 </div>
