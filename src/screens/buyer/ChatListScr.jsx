@@ -10,14 +10,14 @@ import { SkeletonList } from "../../components/Loading";
 function ChatListScr({go}){
   const { isGuest, exitGuestToLogin, setTab } = useApp();
   if (isGuest) return (
-    <div className="scr" style={{display:"flex",flexDirection:"column",alignItems:"center",justifyContent:"center",padding:"60px 24px",textAlign:"center",minHeight:"100vh"}}>
+    <div className="scr" style={{display:"flex",flexDirection:"column",alignItems:"center",padding:"60px 24px 100px",textAlign:"center",minHeight:"100%",boxSizing:"border-box"}}>
       <div style={{width:80,height:80,borderRadius:24,background:"rgba(249,115,22,0.1)",display:"flex",alignItems:"center",justifyContent:"center",marginBottom:20,color:"#F97316"}}>
         <Icon name="chat" size={36} color="#F97316"/>
       </div>
       <h2 style={{fontSize:20,fontWeight:800,letterSpacing:-.4,marginBottom:10}}>Connexion requise</h2>
       <p style={{fontSize:13,color:"var(--muted)",marginBottom:24,maxWidth:280,lineHeight:1.5}}>Connectez-vous pour discuter avec vendeurs et livreurs.</p>
       <button onClick={()=>exitGuestToLogin()} style={{padding:"12px 28px",borderRadius:14,border:"none",background:"#F97316",color:"#fff",fontSize:13,fontWeight:700,cursor:"pointer",fontFamily:"inherit"}}>Se connecter</button>
-      <button onClick={()=>setTab(0)} style={{marginTop:10,padding:"10px",border:"none",background:"transparent",color:"var(--muted)",fontSize:12,fontWeight:600,cursor:"pointer",fontFamily:"inherit"}}>Retour à l\'accueil</button>
+      <button onClick={()=>setTab(0)} style={{marginTop:14,padding:"12px 24px",borderRadius:14,border:"1px solid var(--border)",background:"var(--card)",color:"var(--text)",fontSize:13,fontWeight:700,cursor:"pointer",fontFamily:"inherit",display:"inline-flex",alignItems:"center",gap:8}}><Icon name="home" size={16}/>Retour à l&apos;accueil</button>
     </div>
   );
 

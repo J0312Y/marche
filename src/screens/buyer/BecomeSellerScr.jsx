@@ -6,7 +6,7 @@ import Icon from "../../components/Icon";
 function BecomeSellerScr({ onBack, go }) {
   const { isGuest, exitGuestToLogin } = useApp();
   if (isGuest) return (
-    <div className="scr" style={{display:"flex",flexDirection:"column",alignItems:"center",justifyContent:"center",padding:"60px 24px",textAlign:"center",minHeight:"100vh"}}>
+    <div className="scr" style={{display:"flex",flexDirection:"column",alignItems:"center",padding:"60px 24px 100px",textAlign:"center",minHeight:"100%",boxSizing:"border-box"}}>
       <div style={{width:80,height:80,borderRadius:24,background:"rgba(249,115,22,0.1)",display:"flex",alignItems:"center",justifyContent:"center",marginBottom:20,color:"#F97316"}}>
         <Icon name="store" size={36} color="#F97316"/>
       </div>
