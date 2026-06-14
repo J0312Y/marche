@@ -64,7 +64,7 @@ function VReviewsScr({onBack}){
                 <div style={{fontSize:10,color:"var(--muted)"}}>{r.date}</div>
               </div>
             </div>
-            <div style={{color:"#F59E0B",fontSize:12}}>{"".repeat(r.rating)}{"".repeat(5-r.rating)}</div>
+            <div style={{color:"#F59E0B",fontSize:12}}>{"⭐".repeat(r.rating)}{"☆".repeat(5-r.rating)}</div>
           </div>
 
           {/* Review text */}

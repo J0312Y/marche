@@ -56,7 +56,7 @@ function ChatVendorScr({onBack,vendorName,vendorAvatar,vendor}){
     reader.onload=()=>{
       const isImage=file.type.startsWith("image/");
       setMsgs(p=>[...p,{from:"user",text:isImage?"":" "+file.name,time:now(),
-        attachment:{type:isImage?"image":"file",url:isImage?reader.result:null,name:file.name,size:(file.size/1024).toFixed(0)+" KB"}}]);
+        attachment:{type:isImage?"image":"file",url:isImage?reader.result:null,name:file.name,size:(file.size/1024).toFixed(0)+"KB"}}]);
       setTyping(true);
       setTimeout(()=>{
         setTyping(false);
@@ -79,7 +79,7 @@ function ChatVendorScr({onBack,vendorName,vendorAvatar,vendor}){
       <div className="ch-info">
         <h4>{vInfo.name}</h4>
         <p style={{display:"flex",alignItems:"center",gap:4,fontSize:11,color:"var(--muted)"}}>
-          <span style={{color:vInfo.online?"#10B981":"var(--muted)",fontWeight:600}}>{vInfo.online?"En ligne":" Hors ligne"}</span>
+          <span style={{color:vInfo.online?"#10B981":"var(--muted)",fontWeight:600}}>{vInfo.online?"En ligne":"Hors ligne"}</span>
           <span>·</span>
           <span><Icon name="location" size={16}/>{" "}{vInfo.zone}</span>
         </p>

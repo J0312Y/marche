@@ -1,7 +1,7 @@
 import { useState } from "react";
 import Icon from "../../components/Icon";
 
-const fmt = (n) => n?.toLocaleString("fr-FR") + " FCFA";
+const fmt = (n) => n?.toLocaleString("fr-FR") + "FCFA";
 
 function MyStatsScr({ onBack }) {
   const stats = {

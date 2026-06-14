@@ -49,7 +49,7 @@ function VEmailScr({onBack}){
         <div key={c.id} style={{padding:14,background:"var(--card)",border:"1px solid var(--border)",borderRadius:14,marginBottom:8}}>
           <div style={{display:"flex",justifyContent:"space-between",alignItems:"center",marginBottom:4}}>
             <span style={{fontSize:14,fontWeight:700}}>{c.name}</span>
-            <span style={{fontSize:10,padding:"2px 8px",borderRadius:6,background:c.status==="sent"?"rgba(16,185,129,0.08)":"rgba(245,158,11,0.08)",color:c.status==="sent"?"#10B981":"#F59E0B",fontWeight:600}}>{c.status==="sent"?"Envoyée":" Brouillon"}</span>
+            <span style={{fontSize:10,padding:"2px 8px",borderRadius:6,background:c.status==="sent"?"rgba(16,185,129,0.08)":"rgba(245,158,11,0.08)",color:c.status==="sent"?"#10B981":"#F59E0B",fontWeight:600}}>{c.status==="sent"?"Envoyée":"Brouillon"}</span>
           </div>
           <div style={{fontSize:11,color:"var(--muted)"}}>{c.date} {c.sent>0&&`· ${c.sent} envoyés · ${c.opened} ouverts · ${c.clicked} clics`}</div>
           {c.sent>0&&<div style={{marginTop:6,height:4,borderRadius:2,background:"var(--light)"}}>

@@ -127,7 +127,7 @@ function VStoriesScr({onBack}){
     {creating&&<div style={{padding:14,background:"var(--card)",border:"2px solid #F97316",borderRadius:16,marginBottom:14}}>
       {/* Media type toggle */}
       <div style={{display:"flex",gap:0,marginBottom:12,background:"var(--light)",borderRadius:10,padding:3}}>
-        {[["photo","Photo"],["video"," Vidéo (30s)"]].map(([k,l])=>(
+        {[["photo","Photo"],["video","Vidéo (30s)"]].map(([k,l])=>(
           <button key={k} onClick={()=>{setMediaType(k);setPreview(null);setVideoDuration(null)}} style={{flex:1,padding:"8px 0",borderRadius:8,border:"none",background:mediaType===k?"var(--card)":"transparent",color:mediaType===k?"var(--text)":"var(--muted)",fontSize:11,fontWeight:mediaType===k?700:500,cursor:"pointer",fontFamily:"inherit",boxShadow:mediaType===k?"0 1px 4px rgba(0,0,0,.06)":"none"}}>{l}</button>
         ))}
       </div>
@@ -165,7 +165,7 @@ function VStoriesScr({onBack}){
       {/* Buttons */}
       <div style={{display:"flex",gap:8}}>
         <button onClick={reset} style={{flex:1,padding:10,borderRadius:12,border:"1px solid var(--border)",background:"var(--card)",fontSize:12,fontWeight:600,cursor:"pointer",fontFamily:"inherit",color:"var(--text)"}}>Annuler</button>
-        <button onClick={addStory} style={{flex:1,padding:10,borderRadius:12,border:"none",background:"#F97316",color:"#fff",fontSize:12,fontWeight:700,cursor:"pointer",fontFamily:"inherit"}}>{mediaType==="video"?" Publier":"Publier"}</button>
+        <button onClick={addStory} style={{flex:1,padding:10,borderRadius:12,border:"none",background:"#F97316",color:"#fff",fontSize:12,fontWeight:700,cursor:"pointer",fontFamily:"inherit"}}>{mediaType==="video"?"Publier":"Publier"}</button>
       </div>
     </div>}
 
@@ -191,7 +191,7 @@ function VStoriesScr({onBack}){
       {/* Info - clickable to view */}
       <div style={{flex:1,cursor:"pointer"}} onClick={()=>setViewIdx(idx)}>
         <div style={{display:"flex",alignItems:"center",gap:4,marginBottom:2}}>
-          <span style={{fontSize:10,padding:"1px 6px",borderRadius:4,background:s.type==="video"?"rgba(249,115,22,0.08)":"rgba(16,185,129,0.08)",color:s.type==="video"?"#F97316":"#10B981",fontWeight:700}}>{s.type==="video"?" Vidéo":"Photo"}</span>
+          <span style={{fontSize:10,padding:"1px 6px",borderRadius:4,background:s.type==="video"?"rgba(249,115,22,0.08)":"rgba(16,185,129,0.08)",color:s.type==="video"?"#F97316":"#10B981",fontWeight:700}}>{s.type==="video"?"Vidéo":"Photo"}</span>
         </div>
         <div style={{fontSize:13,fontWeight:600,marginBottom:2}}>{s.caption}</div>
         <div style={{fontSize:11,color:"var(--muted)"}}>{s.date} · ️ {s.views} vues{s.duration?` · ${s.duration}`:""}</div>
@@ -261,7 +261,7 @@ function VStoriesScr({onBack}){
         <div style={{position:"absolute",bottom:0,left:0,right:0,padding:"40px 16px 20px",background:"linear-gradient(transparent,rgba(0,0,0,.7))"}}>
           <div style={{fontSize:15,fontWeight:600,color:"#fff",textShadow:"0 1px 4px rgba(0,0,0,.5)"}}>{currentStory.caption}</div>
           <div style={{display:"flex",alignItems:"center",gap:8,marginTop:6}}>
-            <span style={{fontSize:10,padding:"3px 8px",borderRadius:6,background:currentStory.type==="video"?"rgba(249,115,22,.6)":"rgba(16,185,129,.6)",color:"#fff",fontWeight:600}}>{currentStory.type==="video"?" Vidéo":"Photo"}</span>
+            <span style={{fontSize:10,padding:"3px 8px",borderRadius:6,background:currentStory.type==="video"?"rgba(249,115,22,.6)":"rgba(16,185,129,.6)",color:"#fff",fontWeight:600}}>{currentStory.type==="video"?"Vidéo":"Photo"}</span>
             {currentStory.duration&&<span style={{fontSize:10,color:"rgba(255,255,255,.7)"}}>{currentStory.duration}</span>}
             <span style={{fontSize:10,color:"rgba(255,255,255,.5)"}}>{viewIdx+1}/{stories.length}</span>
           </div>

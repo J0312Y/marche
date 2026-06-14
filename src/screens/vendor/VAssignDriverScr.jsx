@@ -6,7 +6,7 @@ function VAssignDriverScr({order:o,onBack,go}){
   const drivers=[
     {id:"d1",name:"Patrick Moukala",vehicle:"Honda PCX",plate:"BZ-4521",rating:4.8,deliveries:342,eta:"12 min",zone:"Bacongo, Makélékélé",photo:"https://images.unsplash.com/photo-1506277886164-e25aa3f4ef7f?w=80&h=80&fit=crop&crop=face",status:"available"},
     {id:"d3",name:"Grace Okemba",vehicle:"Yamaha NMAX",plate:"BZ-2190",rating:4.9,deliveries:267,eta:"18 min",zone:"Poto-Poto, Moungali",photo:"https://images.unsplash.com/photo-1531123897727-8f129e1688ce?w=80&h=80&fit=crop&crop=face",status:"available"},
-    {id:"d2",name:"Jean Mbemba",vehicle:" Toyota Vitz",plate:"BZ-7803",rating:4.5,deliveries:128,eta:"25 min",zone:"Talangaï, Mfilou",photo:"https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=80&h=80&fit=crop&crop=face",status:"busy"},
+    {id:"d2",name:"Jean Mbemba",vehicle:"Toyota Vitz",plate:"BZ-7803",rating:4.5,deliveries:128,eta:"25 min",zone:"Talangaï, Mfilou",photo:"https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=80&h=80&fit=crop&crop=face",status:"busy"},
   ];
   const [selected,setSelected]=useState(null);
   const [step,setStep]=useState(0); // 0=choose, 1=confirm, 2=success
@@ -50,7 +50,7 @@ function VAssignDriverScr({order:o,onBack,go}){
           <div style={{display:"flex",alignItems:"center",gap:12}}>
             <div style={{width:48,height:48,borderRadius:14,overflow:"hidden",background:selected===d.id?"linear-gradient(135deg,#F97316,#FB923C)":"var(--light)",display:"flex",alignItems:"center",justifyContent:"center",fontSize:24,transition:"all .2s"}}>{d.photo?<img src={d.photo} style={{width:"100%",height:"100%",objectFit:"cover"}} alt=""/>:d.avatar}</div>
             <div style={{flex:1}}>
-              <div style={{display:"flex",alignItems:"center",gap:6}}><span style={{fontSize:14,fontWeight:700}}>{d.name}</span><span className={`del-status ${d.status}`} style={d.status==="busy"?{}:{}}>{d.status==="available"?"Dispo":" Occupé"}</span></div>
+              <div style={{display:"flex",alignItems:"center",gap:6}}><span style={{fontSize:14,fontWeight:700}}>{d.name}</span><span className={`del-status ${d.status}`} style={d.status==="busy"?{}:{}}>{d.status==="available"?"Dispo":"Occupé"}</span></div>
               <div style={{fontSize:12,color:"var(--muted)",marginTop:2}}>{d.vehicle} · {d.plate}</div>
               <div style={{display:"flex",gap:10,marginTop:4,fontSize:11,color:"var(--muted)"}}><span><Icon name="star_full" size={16}/>{" "}{d.rating}</span><span><Icon name="package" size={16}/>{" "}{d.deliveries} livrais.</span><span><Icon name="location" size={16}/>{" "}{d.zone}</span></div>
             </div>

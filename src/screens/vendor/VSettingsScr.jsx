@@ -79,7 +79,7 @@ function VSettingsScr({onBack,go}){
         <div className="setting-item"><span className="si-i"><Icon name="mail" size={18}/></span><span className="si-t">Rapport hebdomadaire</span><div className={`toggle ${emailReport?"on":""}`} onClick={()=>setEmailReport(!emailReport)}/></div>
       </div>
       <div className="setting-group"><div className="setting-label">Sécurité</div>
-        <div className="setting-item" onClick={()=>go("password")} style={{cursor:"pointer"}}><span className="si-i"><Icon name="shield" size={18}/></span><span className="si-t">Changer mot de passe</span><span className="mi-c">›</span></div>
+        <div className="setting-item" onClick={()=>toast.info("Fonctionnalité bientôt disponible")} style={{cursor:"pointer"}}><span className="si-i"><Icon name="shield" size={18}/></span><span className="si-t">Changer mot de passe</span><span className="mi-c">›</span></div>
       </div>
       <div className="setting-group"><div className="setting-label">Légal</div>
         <div className="setting-item" onClick={()=>go("terms")} style={{cursor:"pointer"}}><span className="si-i"></span><span className="si-t">Conditions générales</span><span className="mi-c">›</span></div>

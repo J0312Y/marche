@@ -1,9 +1,23 @@
 import toast from "../../utils/toast";
+import { useApp } from "../../context/AppContext";
+import Icon from "../../components/Icon";
 import { useState, useEffect, useRef } from "react";
 import { DRIVER_PHOTO } from "../../data/images";
-import Icon from "../../components/Icon";
 
-function ChatScr({onBack}){
+function ChatScr({onBack,go}){
+  const { isGuest, exitGuestToLogin } = useApp();
+  if (isGuest) return (
+    <div className="scr" style={{display:"flex",flexDirection:"column",alignItems:"center",justifyContent:"center",padding:"60px 24px",textAlign:"center",minHeight:"100vh"}}>
+      <div style={{width:80,height:80,borderRadius:24,background:"rgba(249,115,22,0.1)",display:"flex",alignItems:"center",justifyContent:"center",marginBottom:20,color:"#F97316"}}>
+        <Icon name="chat" size={36} color="#F97316"/>
+      </div>
+      <h2 style={{fontSize:20,fontWeight:800,letterSpacing:-.4,marginBottom:10}}>Connexion requise</h2>
+      <p style={{fontSize:13,color:"var(--muted)",marginBottom:24,maxWidth:280,lineHeight:1.5}}>Connectez-vous pour discuter avec vendeurs et livreurs.</p>
+      <button onClick={()=>exitGuestToLogin()} style={{padding:"12px 28px",borderRadius:14,border:"none",background:"#F97316",color:"#fff",fontSize:13,fontWeight:700,cursor:"pointer",fontFamily:"inherit"}}>Se connecter</button>
+      <button onClick={()=>onBack&&onBack()} style={{marginTop:10,padding:"10px",border:"none",background:"transparent",color:"var(--muted)",fontSize:12,fontWeight:600,cursor:"pointer",fontFamily:"inherit"}}>Retour</button>
+    </div>
+  );
+
   const now=()=>{const t=new Date();return `${t.getHours()}:${String(t.getMinutes()).padStart(2,"0")}`};
 
   const driver={name:"Patrick Moukala",avatar:"https://images.unsplash.com/photo-1506277886164-e25aa3f4ef7f?w=80&h=80&fit=crop&crop=face",vehicle:"Honda PCX",online:true,zone:"Bacongo",lastSeen:"En ligne"};
@@ -54,7 +68,7 @@ function ChatScr({onBack}){
     reader.onload=()=>{
       const isImage=file.type.startsWith("image/");
       setMsgs(p=>[...p,{from:"user",text:isImage?"":" "+file.name,time:now(),
-        attachment:{type:isImage?"image":"file",url:isImage?reader.result:null,name:file.name,size:(file.size/1024).toFixed(0)+" KB"}}]);
+        attachment:{type:isImage?"image":"file",url:isImage?reader.result:null,name:file.name,size:(file.size/1024).toFixed(0)+"KB"}}]);
       // Bot reply
       setTyping(true);
       setTimeout(()=>{
@@ -71,7 +85,7 @@ function ChatScr({onBack}){
   return(<>
     {/* Header with online status + zone */}
     <div className="chat-head">
-      <button onClick={onBack} style={{width:36,height:36,borderRadius:10,border:"1px solid var(--border)",background:"var(--card)",cursor:"pointer",display:"flex",alignItems:"center",justifyContent:"center"}}><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><path d="M19 12H5M12 19l-7-7 7-7"/></svg></button>
+      <button onClick={()=>onBack&&onBack()} style={{width:36,height:36,borderRadius:10,border:"1px solid var(--border)",background:"var(--card)",cursor:"pointer",display:"flex",alignItems:"center",justifyContent:"center"}}><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><path d="M19 12H5M12 19l-7-7 7-7"/></svg></button>
       <div style={{position:"relative"}}>
         <div className="ch-av" style={{overflow:"hidden",padding:0}}><img src={DRIVER_PHOTO} style={{width:"100%",height:"100%",objectFit:"cover"}} alt=""/></div>
         <div style={{position:"absolute",bottom:-1,right:-1,width:10,height:10,borderRadius:"50%",background:driver.online?"#10B981":"var(--muted)",border:"2px solid #fff"}}/>
@@ -79,7 +93,7 @@ function ChatScr({onBack}){
       <div className="ch-info">
         <h4>{driver.name}</h4>
         <p style={{display:"flex",alignItems:"center",gap:4,fontSize:11,color:"var(--muted)"}}>
-          <span style={{color:driver.online?"#10B981":"var(--muted)",fontWeight:600}}>{driver.online?"En ligne":" Hors ligne"}</span>
+          <span style={{color:driver.online?"#10B981":"var(--muted)",fontWeight:600}}>{driver.online?"En ligne":"Hors ligne"}</span>
           <span>·</span>
           <span><Icon name="location" size={16}/>{" "}{driver.zone}</span>
           <span>·</span>

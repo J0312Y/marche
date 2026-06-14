@@ -1,8 +1,22 @@
 import { useState } from "react";
+import { useApp } from "../../context/AppContext";
 import toast from "../../utils/toast";
 import Icon from "../../components/Icon";
 
 function BecomeSellerScr({ onBack, go }) {
+  const { isGuest, exitGuestToLogin } = useApp();
+  if (isGuest) return (
+    <div className="scr" style={{display:"flex",flexDirection:"column",alignItems:"center",justifyContent:"center",padding:"60px 24px",textAlign:"center",minHeight:"100vh"}}>
+      <div style={{width:80,height:80,borderRadius:24,background:"rgba(249,115,22,0.1)",display:"flex",alignItems:"center",justifyContent:"center",marginBottom:20,color:"#F97316"}}>
+        <Icon name="store" size={36} color="#F97316"/>
+      </div>
+      <h2 style={{fontSize:20,fontWeight:800,letterSpacing:-.4,marginBottom:10}}>Compte requis</h2>
+      <p style={{fontSize:13,color:"var(--muted)",marginBottom:24,maxWidth:280,lineHeight:1.5}}>Pour ouvrir une boutique sur Lamuka, créez d'abord votre compte personnel.</p>
+      <button onClick={()=>exitGuestToLogin()} style={{padding:"12px 28px",borderRadius:14,border:"none",background:"#F97316",color:"#fff",fontSize:13,fontWeight:700,cursor:"pointer",fontFamily:"inherit"}}>Se connecter / Créer un compte</button>
+      <button onClick={()=>onBack&&onBack()} style={{marginTop:10,padding:"10px",border:"none",background:"transparent",color:"var(--muted)",fontSize:12,fontWeight:600,cursor:"pointer",fontFamily:"inherit"}}>Retour</button>
+    </div>
+  );
+  
   const [contactSent, setContactSent] = useState(false);
 
   return (
@@ -10,7 +24,7 @@ function BecomeSellerScr({ onBack, go }) {
       {/* Hero */}
       <div style={{ background: "linear-gradient(135deg,#F97316,#EA580C)", borderRadius: "0 0 32px 32px", padding: "20px 20px 32px", textAlign: "center", position: "relative", color: "#fff" }}>
         <div style={{ position: "absolute", top: 16, left: 16 }}>
-          <button onClick={onBack} style={{ width: 36, height: 36, borderRadius: 12, border: "none", background: "rgba(255,255,255,.2)", cursor: "pointer", display: "flex", alignItems: "center", justifyContent: "center", color: "#fff", fontSize: 16 }}>←</button>
+          <button onClick={()=>onBack&&onBack()} style={{ width: 36, height: 36, borderRadius: 12, border: "none", background: "rgba(255,255,255,.2)", cursor: "pointer", display: "flex", alignItems: "center", justifyContent: "center", color: "#fff", fontSize: 16 }}>←</button>
         </div>
         <div style={{ width: 72, height: 72, borderRadius: "50%", background: "rgba(255,255,255,.15)", display: "flex", alignItems: "center", justifyContent: "center", margin: "24px auto 16px" }}>
           <svg width="36" height="36" viewBox="0 0 64 64" fill="none"><path d="M20 20h3l5 22h14l5-16H26" stroke="#fff" strokeWidth="3.5" strokeLinecap="round" strokeLinejoin="round"/><circle cx="29" cy="48" r="3" fill="#fff"/><circle cx="41" cy="48" r="3" fill="#fff"/></svg>

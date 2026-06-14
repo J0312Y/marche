@@ -170,7 +170,7 @@ function VariantEditor({ shopType = "boutique", category = "", value = [], onCha
         <div style={{ fontSize: 14, fontWeight: 700 }}>Variantes</div>
         {activeVariants.length > 0 && (
           <span style={{ fontSize: 11, color: "#F97316", fontWeight: 600 }}>
-            {activeVariants.map(v => v.values.length).join(" × ")} = {totalCombinations} combinaison{totalCombinations > 1 ? "s" : ""}
+            {activeVariants.map(v => v.values.length).join("× ")} = {totalCombinations} combinaison{totalCombinations > 1 ? "s" : ""}
           </span>
         )}
       </div>

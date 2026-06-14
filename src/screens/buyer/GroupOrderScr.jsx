@@ -34,11 +34,11 @@ function GroupOrderScr({onBack,go}){
     if(step!=="waiting")return;
     const t1=setTimeout(()=>{
       setFriends(p=>p.map(f=>f.id==="f1"?{...f,status:"joined",items:[{...P[2],qty:1},{...P[5],qty:1}]}:f));
-      toast.success(" Marie a rejoint le groupe !");
+      toast.success("Marie a rejoint le groupe !");
     },3000);
     const t2=setTimeout(()=>{
       setFriends(p=>p.map(f=>f.id==="f2"?{...f,status:"joined",items:[{...P[4],qty:2}]}:f));
-      toast.success(" Patrick a rejoint le groupe !");
+      toast.success("Patrick a rejoint le groupe !");
       setStep("active");
     },6000);
     return()=>{clearTimeout(t1);clearTimeout(t2)};
@@ -118,7 +118,7 @@ function GroupOrderScr({onBack,go}){
 
     <div style={{padding:12,background:"var(--light)",borderRadius:12,marginBottom:14,display:"flex",alignItems:"center",gap:8}}>
       <span style={{flex:1,fontSize:11,color:"var(--muted)",overflow:"hidden",whiteSpace:"nowrap",textOverflow:"ellipsis"}}>{link}</span>
-      <button onClick={()=>{navigator.clipboard?.writeText(link);toast.success("Lien copié")}} style={{padding:"6px 12px",borderRadius:8,border:"none",background:"#F97316",color:"#fff",fontSize:11,fontWeight:700,cursor:"pointer",fontFamily:"inherit",flexShrink:0}}>Copier</button>
+      <button onClick={()=>{navigator.clipboard?.writeText(link);toast.success("📋 Lien copié")}} style={{padding:"6px 12px",borderRadius:8,border:"none",background:"#F97316",color:"#fff",fontSize:11,fontWeight:700,cursor:"pointer",fontFamily:"inherit",flexShrink:0}}>Copier</button>
     </div>
 
     <div style={{fontSize:14,fontWeight:700,marginBottom:8}}>Participants</div>
@@ -157,7 +157,7 @@ function GroupOrderScr({onBack,go}){
         <span style={{flex:1,fontSize:12,fontWeight:500}}>{it.name} ×{it.qty}</span>
         <span style={{fontSize:12,fontWeight:700,color:"#F97316"}}>{fmt((it.price+(it.sidesTotal||0))*(it.qty||1))}</span>
       </div>
-      {it.sides?.length>0&&<div style={{paddingLeft:40,marginTop:4}}>{it.sides.map((s,si)=><div key={si} style={{fontSize:10,color:"var(--muted)"}}>↳ {s.img} {s.name}{s.qty>1?" ×"+s.qty:""}</div>)}</div>}
+      {it.sides?.length>0&&<div style={{paddingLeft:40,marginTop:4}}>{it.sides.map((s,si)=><div key={si} style={{fontSize:10,color:"var(--muted)"}}>↳ {s.img} {s.name}{s.qty>1?"×"+s.qty:""}</div>)}</div>}
       {it.note&&<div style={{paddingLeft:40,marginTop:2,fontSize:10,color:"#3B82F6"}}> {it.note}</div>}
     </div>)}
 
@@ -274,7 +274,7 @@ function GroupOrderScr({onBack,go}){
 
     {/* Payment mode */}
     <div style={{fontSize:14,fontWeight:700,margin:"10px 0 8px"}}><Icon name="creditCard" size={16}/>{" "}Mode de paiement</div>
-    {[["one","Une seule personne paie tout","L'organisateur règle la totalité"],["split"," Chacun paie sa part","Paiement séparé par participant"]].map(([k,t,d])=>(
+    {[["one","Une seule personne paie tout","L'organisateur règle la totalité"],["split","Chacun paie sa part","Paiement séparé par participant"]].map(([k,t,d])=>(
       <div key={k} onClick={()=>setSplitMode(k)} style={{display:"flex",alignItems:"center",gap:10,padding:12,borderRadius:14,border:splitMode===k?"2px solid #F97316":"1px solid var(--border)",background:splitMode===k?"rgba(249,115,22,0.04)":"var(--card)",marginBottom:6,cursor:"pointer"}}>
         <div style={{width:20,height:20,borderRadius:10,border:splitMode===k?"none":"2px solid var(--border)",background:splitMode===k?"#F97316":"transparent",display:"flex",alignItems:"center",justifyContent:"center",flexShrink:0}}>{splitMode===k&&<span style={{color:"#fff",fontSize:10}}></span>}</div>
         <div style={{flex:1}}><div style={{fontSize:13,fontWeight:splitMode===k?700:500}}>{t}</div><div style={{fontSize:11,color:"var(--muted)"}}>{d}</div></div>

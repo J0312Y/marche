@@ -16,7 +16,7 @@ function VProfileScr({go,onSwitch,vendorPlan,onLogout}){
 
   const Item=({icon,label,info,onClick,locked,plan})=>(
     <div onClick={locked?()=>handleLocked({icon,title:label,requiredPlan:plan}):onClick} style={{display:"flex",alignItems:"center",gap:14,padding:"12px 16px",cursor:"pointer",borderBottom:"1px solid var(--border)",opacity:locked?.6:1}}>
-      <span style={{fontSize:20,width:22,textAlign:"center"}}>{icon}</span>
+      <span style={{width:28,height:28,display:"flex",alignItems:"center",justifyContent:"center",color:"var(--text)",flexShrink:0}}>{(icon)?<Icon name={icon} size={20}/>:null}</span>
       <span style={{flex:1,fontSize:14,fontWeight:500,color:"var(--text)"}}>{label}</span>
       {info&&<span style={{fontSize:12,color:"var(--muted)",fontWeight:500}}>{info}</span>}
       {locked?<span style={{padding:"2px 8px",borderRadius:6,background:plan==="enterprise"?"rgba(245,158,11,0.08)":"rgba(249,115,22,0.08)",color:plan==="enterprise"?"#F59E0B":"#F97316",fontSize:9,fontWeight:700}}><Icon name="shield" size={16}/>{" "}{plan==="enterprise"?"Enterprise":"Pro"}</span>
@@ -59,7 +59,7 @@ function VProfileScr({go,onSwitch,vendorPlan,onLogout}){
     <div style={{textAlign:"center",paddingTop:8}}>
       <h3 style={{fontSize:18,fontWeight:700}}>Mon Commerce</h3>
       <div style={{display:"inline-flex",alignItems:"center",gap:6,padding:"4px 12px",borderRadius:20,background:isEnt?"rgba(245,158,11,0.08)":isPro?"rgba(249,115,22,0.08)":"var(--light)",marginTop:6}}>
-        <span style={{fontSize:12}}>{planInfo.icon}</span>
+        <span style={{fontSize:12}}><Icon name={planInfo.icon} size={20}/></span>
         <span style={{fontSize:12,fontWeight:700,color:planInfo.color}}>Plan {planInfo.badge}</span>
       </div>
     </div>
@@ -68,57 +68,57 @@ function VProfileScr({go,onSwitch,vendorPlan,onLogout}){
     <div className="wallet" style={{margin:"0 16px 14px"}}><div><p style={{fontSize:11,color:"var(--muted)"}}>Solde disponible</p><h3 style={{fontSize:20,fontWeight:700,marginTop:2}}>457 800 FCFA</h3></div><button onClick={()=>go("vWallet")}>Retirer</button></div>
 
     {/* ═══ VENTES & COMMANDES ═══ */}
-    <Section icon="" title="VENTES & COMMANDES">
-      <Item icon="" label="Statistiques" info={isPro?"Analytics":"—"} onClick={isPro?()=>go("vStats"):null} locked={!isPro} plan="pro"/>
-      <Item icon="" label="Avis clients" info="4.6 / 5" onClick={()=>go("vReviews")}/>
-      <Item icon="" label="Questions clients" info="3" onClick={()=>go("vQA")}/>
+    <Section icon={"money"} title="VENTES & COMMANDES">
+      <Item icon="chart_pie" label="Statistiques" info={isPro?"Analytics":"—"} onClick={isPro?()=>go("vStats"):null} locked={!isPro} plan="pro"/>
+      <Item icon="star_full" label="Avis clients" info="4.6 / 5" onClick={()=>go("vReviews")}/>
+      <Item icon="help" label="Questions clients" info="3" onClick={()=>go("vQA")}/>
       <Item icon="↩️" label="Retours" info="1" onClick={()=>go("vReturns")}/>
-      <Item icon="" label="Factures" info="3" onClick={()=>go("vInvoice")}/>
-      <Item icon="" label="Calendrier" info="Agenda" onClick={()=>go("vCalendar")}/>
+      <Item icon="receipt" label="Factures" info="3" onClick={()=>go("vInvoice")}/>
+      <Item icon="clock" label="Calendrier" info="Agenda" onClick={()=>go("vCalendar")}/>
     </Section>
 
     {/* ═══ PRODUITS & STOCK ═══ */}
-    <Section icon="️" title="PRODUITS & STOCK">
-      <Item icon="" label="Gestion Stock" info="2 alertes" onClick={()=>go("vStock")}/>
-      <Item icon="" label="Promotions" info={isPro?"2 actives":"—"} onClick={isPro?()=>go("vPromos"):null} locked={!isPro} plan="pro"/>
-      <Item icon="" label="Stories" info="2 actives" onClick={()=>go("vStories")}/>
-      <Item icon="" label="Achats groupés" info="2 offres" onClick={()=>go("vGroupBuy")}/>
-      <Item icon="" label="Remises auto" info={isEnt?"3 règles":"—"} onClick={isEnt?()=>go("vAutoDiscount"):null} locked={!isEnt} plan="enterprise"/>
+    <Section icon={"️"} title="PRODUITS & STOCK">
+      <Item icon="package" label="Gestion Stock" info="2 alertes" onClick={()=>go("vStock")}/>
+      <Item icon="tag" label="Promotions" info={isPro?"2 actives":"—"} onClick={isPro?()=>go("vPromos"):null} locked={!isPro} plan="pro"/>
+      <Item icon="camera" label="Stories" info="2 actives" onClick={()=>go("vStories")}/>
+      <Item icon="handshake" label="Achats groupés" info="2 offres" onClick={()=>go("vGroupBuy")}/>
+      <Item icon="fire" label="Remises auto" info={isEnt?"3 règles":"—"} onClick={isEnt?()=>go("vAutoDiscount"):null} locked={!isEnt} plan="enterprise"/>
     </Section>
 
     {/* ═══ MARKETING & CROISSANCE ═══ */}
-    <Section icon="" title="MARKETING & CROISSANCE">
-      <Item icon="" label="Live Shopping" info={isPro?"En direct":"—"} onClick={isPro?()=>go("vLive"):null} locked={!isPro} plan="pro"/>
-      <Item icon="" label="Publicités" info={isPro?"2 campagnes":"—"} onClick={isPro?()=>go("vAds"):null} locked={!isPro} plan="pro"/>
-      <Item icon="" label="Classement" info={isPro?"#6":"—"} onClick={isPro?()=>go("vRanking"):null} locked={!isPro} plan="pro"/>
-      <Item icon="" label="IA Description" info={isPro?"Auto":"—"} onClick={isPro?()=>go("vAIDesc"):null} locked={!isPro} plan="pro"/>
-      <Item icon="" label="Business Advisor" info={isPro?"Conseils":"—"} onClick={isPro?()=>go("vAdvisor"):null} locked={!isPro} plan="pro"/>
-      <Item icon="" label="Email Marketing" info={isEnt?"Campagnes":"—"} onClick={isEnt?()=>go("vEmail"):null} locked={!isEnt} plan="enterprise"/>
+    <Section icon={"trendUp"} title="MARKETING & CROISSANCE">
+      <Item icon="lightning" label="Live Shopping" info={isPro?"En direct":"—"} onClick={isPro?()=>go("vLive"):null} locked={!isPro} plan="pro"/>
+      <Item icon="trendUp" label="Publicités" info={isPro?"2 campagnes":"—"} onClick={isPro?()=>go("vAds"):null} locked={!isPro} plan="pro"/>
+      <Item icon="crown" label="Classement" info={isPro?"#6":"—"} onClick={isPro?()=>go("vRanking"):null} locked={!isPro} plan="pro"/>
+      <Item icon="sparkle" label="IA Description" info={isPro?"Auto":"—"} onClick={isPro?()=>go("vAIDesc"):null} locked={!isPro} plan="pro"/>
+      <Item icon="headphones" label="Business Advisor" info={isPro?"Conseils":"—"} onClick={isPro?()=>go("vAdvisor"):null} locked={!isPro} plan="pro"/>
+      <Item icon="mail" label="Email Marketing" info={isEnt?"Campagnes":"—"} onClick={isEnt?()=>go("vEmail"):null} locked={!isEnt} plan="enterprise"/>
     </Section>
 
     {/* ═══ BOUTIQUE EN LIGNE ═══ */}
-    <Section icon="" title="BOUTIQUE EN LIGNE">
-      <Item icon="" label="Boutique certifiée" info={isEnt?"Or/Diamant":"—"} onClick={isEnt?()=>go("vCertified"):null} locked={!isEnt} plan="enterprise"/>
-      <Item icon="" label="Thèmes" info={isEnt?"5 thèmes":"—"} onClick={isEnt?()=>go("vThemes"):null} locked={!isEnt} plan="enterprise"/>
-      <Item icon="" label="Mon site web" info={isEnt?"En ligne":"—"} onClick={isEnt?()=>go("vWebsite"):null} locked={!isEnt} plan="enterprise"/>
-      <Item icon="" label="Domaine" info={isEnt?".lamuka.cg":"—"} onClick={isEnt?()=>go("vDomain"):null} locked={!isEnt} plan="enterprise"/>
-      <Item icon="" label="SEO produits" info={isEnt?"Optimisé":"—"} onClick={isEnt?()=>go("vSeo"):null} locked={!isEnt} plan="enterprise"/>
-      <Item icon="" label="QR Code" info="Partager" onClick={()=>go("vQRCode")}/>
+    <Section icon={"store"} title="BOUTIQUE EN LIGNE">
+      <Item icon="shield" label="Boutique certifiée" info={isEnt?"Or/Diamant":"—"} onClick={isEnt?()=>go("vCertified"):null} locked={!isEnt} plan="enterprise"/>
+      <Item icon="photo" label="Thèmes" info={isEnt?"5 thèmes":"—"} onClick={isEnt?()=>go("vThemes"):null} locked={!isEnt} plan="enterprise"/>
+      <Item icon="globe" label="Mon site web" info={isEnt?"En ligne":"—"} onClick={isEnt?()=>go("vWebsite"):null} locked={!isEnt} plan="enterprise"/>
+      <Item icon="globe" label="Domaine" info={isEnt?".lamuka.cg":"—"} onClick={isEnt?()=>go("vDomain"):null} locked={!isEnt} plan="enterprise"/>
+      <Item icon="search" label="SEO produits" info={isEnt?"Optimisé":"—"} onClick={isEnt?()=>go("vSeo"):null} locked={!isEnt} plan="enterprise"/>
+      <Item icon="qrcode" label="QR Code" info="Partager" onClick={()=>go("vQRCode")}/>
     </Section>
 
     {/* ═══ LOGISTIQUE ═══ */}
-    <Section icon="" title="LOGISTIQUE">
-      <Item icon="" label="Livraison" info="3 livreurs" onClick={()=>go("vDelivery")}/>
-      <Item icon="" label="Établissements" info={isEnt?"3":"—"} onClick={isEnt?()=>go("vShops"):null} locked={!isEnt} plan="enterprise"/>
-      <Item icon="" label="Import / Export" info={isEnt?"CSV":"—"} onClick={isEnt?()=>go("vImport"):null} locked={!isEnt} plan="enterprise"/>
+    <Section icon={"truck"} title="LOGISTIQUE">
+      <Item icon="truck" label="Livraison" info="3 livreurs" onClick={()=>go("vDelivery")}/>
+      <Item icon="store" label="Établissements" info={isEnt?"3":"—"} onClick={isEnt?()=>go("vShops"):null} locked={!isEnt} plan="enterprise"/>
+      <Item icon="repeat" label="Import / Export" info={isEnt?"CSV":"—"} onClick={isEnt?()=>go("vImport"):null} locked={!isEnt} plan="enterprise"/>
     </Section>
 
     {/* ═══ OUTILS & TECHNIQUE ═══ */}
-    <Section icon="" title="OUTILS & SUPPORT">
-      <Item icon="" label="Rapports" info={isPro?"Fév 2026":"—"} onClick={isPro?()=>go("vReports"):null} locked={!isPro} plan="pro"/>
-      <Item icon="" label="Analytics avancés" info={isEnt?"Trafic":"—"} onClick={isEnt?()=>go("vAnalytics"):null} locked={!isEnt} plan="enterprise"/>
-      <Item icon="" label="API & Intégrations" info={isEnt?"Active":"—"} onClick={isEnt?()=>go("vApi"):null} locked={!isEnt} plan="enterprise"/>
-      <Item icon="" label="Assistant Lamu" info="IA" onClick={()=>go("vChatBot")}/>
+    <Section icon={"tool"} title="OUTILS & SUPPORT">
+      <Item icon="document" label="Rapports" info={isPro?"Fév 2026":"—"} onClick={isPro?()=>go("vReports"):null} locked={!isPro} plan="pro"/>
+      <Item icon="chart_pie" label="Analytics avancés" info={isEnt?"Trafic":"—"} onClick={isEnt?()=>go("vAnalytics"):null} locked={!isEnt} plan="enterprise"/>
+      <Item icon="tool" label="API & Intégrations" info={isEnt?"Active":"—"} onClick={isEnt?()=>go("vApi"):null} locked={!isEnt} plan="enterprise"/>
+      <Item icon="headphones" label="Assistant Lamu" info="IA" onClick={()=>go("vChatBot")}/>
       <Item icon="🆘" label="Support" info={isEnt?"Manager dédié":"Centre d'aide"} onClick={()=>go("vSupport")}/>
     </Section>
 

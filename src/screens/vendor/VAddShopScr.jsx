@@ -56,7 +56,7 @@ function VAddShopScr({onBack}){
   if(done)return(<div className="scr" style={{textAlign:"center",padding:20,display:"flex",alignItems:"center",justifyContent:"center"}}><div style={{padding:"40px 0"}}>
     <div style={{fontSize:48,marginBottom:10}}><Icon name="sparkle" size={18}/></div>
     <h3 style={{fontSize:18,fontWeight:700}}>Boutique créée !</h3>
-    <p style={{fontSize:14,fontWeight:600,color:"#F97316",marginTop:4}}>{shopTypes.find(t=>t.id===shopType)?.icon} {shopName||"Nouvelle boutique"}</p>
+    <p style={{fontSize:14,fontWeight:600,color:"#F97316",marginTop:4}}><Icon name={shopTypes.find(t=>t.id===shopType)?.icon} size={20}/> {shopName||"Nouvelle boutique"}</p>
     <p style={{fontSize:13,color:"var(--muted)",marginTop:6,lineHeight:1.6}}>En cours de vérification · Validation sous 24-48h.</p>
     <button className="btn-primary" style={{marginTop:20}} onClick={onBack}>← Retour aux boutiques</button>
   </div></div>);
@@ -83,7 +83,7 @@ function VAddShopScr({onBack}){
       {/* Step 1: Info */}
       {step===1&&<>
         <h3 style={{fontSize:16,fontWeight:700,marginBottom:4}}>Informations</h3>
-        <p style={{fontSize:11,color:"var(--muted)",marginBottom:14}}>{shopTypes.find(t=>t.id===shopType)?.icon} {shopTypes.find(t=>t.id===shopType)?.name}</p>
+        <p style={{fontSize:11,color:"var(--muted)",marginBottom:14}}><Icon name={shopTypes.find(t=>t.id===shopType)?.icon} size={20}/> {shopTypes.find(t=>t.id===shopType)?.name}</p>
         <div className="vr-upload"><div className="vu-icon">️</div><b>{shopType==="restaurant"?"Photo du restaurant":shopType==="patisserie"?"Photo de la pâtisserie":"Logo de la boutique"}</b><p>PNG, JPG · Max 2MB</p></div>
         <div className="field"><label>Nom {shopType==="restaurant"?"du restaurant":shopType==="patisserie"?"de la pâtisserie":"de la boutique"} <span style={{color:"#EF4444"}}>*</span></label><input value={shopName} onChange={e=>setShopName(e.target.value)} placeholder={shopType==="restaurant"?"Ex: Chez Mama Ngudi":shopType==="patisserie"?"Ex: Pâtisserie La Congolaise":"Ex: Congo Tech Store"}/></div>
         <div className="field"><label>Description <span style={{color:"#EF4444"}}>*</span></label><textarea rows={2} placeholder={shopType==="restaurant"?"Type de cuisine, spécialités, ambiance...":shopType==="patisserie"?"Vos spécialités, horaires de cuisson...":"Décrivez votre activité..."}/></div>
@@ -102,11 +102,11 @@ function VAddShopScr({onBack}){
       {step===2&&<>
         <h3 style={{fontSize:16,fontWeight:700,marginBottom:14}}>Documents requis</h3>
         <div className="info-box blue" style={{marginBottom:14}}><span>ℹ️</span><span style={{fontSize:11}}>Les documents sont vérifiés séparément pour chaque {shopType==="restaurant"?"restaurant":shopType==="patisserie"?"pâtisserie":"boutique"}.</span></div>
-        {[["","Pièce d'identité du responsable","Carte ou passeport","id"],
-          ["","RCCM / Patente","Registre de commerce (optionnel)","rccm"],
-          ["",shopType==="restaurant"?"Photo du restaurant":shopType==="patisserie"?"Photo de la pâtisserie":"Photo de l'établissement","Façade et intérieur","photo"],
-          ...(shopType==="restaurant"?[["","Certificat d'hygiène","Délivré par la mairie (si disponible)","hygiene"]]:[]),
-        ].map(([i,t,d,k])=><div key={k} className="vr-doc" onClick={()=>setDocs({...docs,[k]:true})}><span className="vdi">{i}</span><div className="vdt"><h5>{t}</h5><p>{d}</p></div><span className={`vds ${docs[k]?"up":"pend"}`}>{docs[k]?" Envoyé":"À envoyer"}</span></div>)}
+        {[["user", "Pièce d'identité du responsable", "Carte ou passeport", "id"],
+          ["document", "RCCM / Patente", "Registre de commerce (optionnel)", "rccm"],
+          ["camera",shopType==="restaurant"?"Photo du restaurant":shopType==="patisserie"?"Photo de la pâtisserie":"Photo de l'établissement","Façade et intérieur","photo"],
+          ...(shopType==="restaurant"?[["shield", "Certificat d'hygiène", "Délivré par la mairie (si disponible)", "hygiene"]]:[]),
+        ].map(([i,t,d,k])=><div key={k} className="vr-doc" onClick={()=>setDocs({...docs,[k]:true})}><span className="vdi">{i}</span><div className="vdt"><h5>{t}</h5><p>{d}</p></div><span className={`vds ${docs[k]?"up":"pend"}`}>{docs[k]?"Envoyé":"À envoyer"}</span></div>)}
       </>}
 
       {/* Step 3: Summary */}
@@ -114,7 +114,7 @@ function VAddShopScr({onBack}){
         <h3 style={{fontSize:16,fontWeight:700,marginBottom:14}}>Résumé</h3>
         <div style={{padding:16,background:"var(--card)",border:"1px solid var(--border)",borderRadius:16,marginBottom:14}}>
           <div style={{textAlign:"center",marginBottom:12}}>
-            <span style={{fontSize:36}}>{shopTypes.find(t=>t.id===shopType)?.icon}</span>
+            <span style={{fontSize:36}}><Icon name={shopTypes.find(t=>t.id===shopType)?.icon} size={20}/></span>
             <div style={{fontSize:15,fontWeight:700,marginTop:4}}>{shopName||"Nouvelle boutique"}</div>
           </div>
           {[["Type",shopTypes.find(t=>t.id===shopType)?.name],["Ville",(shopCity||"—")+", "+(shopArea||"—")],["Catégories",selCats.join(", ")||"—"],["Documents",`${Object.values(docs).filter(Boolean).length}/${shopType==="restaurant"?4:3}`],["Plan","Enterprise  (partagé)"],["Commission","2%"]].map(([l,v])=><div key={l} className="vs-row"><span>{l}</span><b>{v}</b></div>)}

@@ -17,6 +17,7 @@ import {
 import ChatBotScr from "../screens/common/ChatBotScr";
 import { WithdrawScr } from "../screens/buyer";
 import { SettingsScr, HelpScr, AboutScr, TermsScr, PrivacyScr } from "../screens/common";
+import Icon from "../components/Icon";
 
 export default function VendorScreens() {
   const { screen, vTab, setVTab, go, pop, switchTo, vendorPlan, setVendorPlan, logout, lang } = useApp();
@@ -53,6 +54,7 @@ export default function VendorScreens() {
     case "vTrackDelivery": return <VTrackDeliveryScr delivery={data} go={go} onBack={back} />;
     case "vDriverChat": return <VDriverChatScr delivery={data} onBack={back} />;
     case "vNotif": return <VNotifScr onBack={back} go={go} />;
+    case "vMessages": return <VMessagesScr go={go} onBack={back} />;
     case "vSettings": return <VSettingsScr onBack={back} go={go} />;
     case "vReports": return <VReportsScr onBack={back} />;
     case "vLive": return <VLiveScr onBack={back} />;

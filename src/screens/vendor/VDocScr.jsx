@@ -85,7 +85,7 @@ function VDocScr({docKey,onBack}){
   if(!doc)return(<div className="scr" style={{padding:16}}><div className="appbar" style={{padding:0}}><button onClick={onBack}>←</button><h2>Documentation</h2><div style={{width:38}}/></div><p>Document introuvable.</p></div>);
 
   return(<div className="scr" style={{padding:16}}>
-    <div className="appbar" style={{padding:0,marginBottom:12}}><button onClick={onBack}>←</button><h2 style={{fontSize:15}}>{doc.icon} {doc.title}</h2><div style={{width:38}}/></div>
+    <div className="appbar" style={{padding:0,marginBottom:12}}><button onClick={onBack}>←</button><h2 style={{fontSize:15}}><Icon name={doc.icon} size={20}/> {doc.title}</h2><div style={{width:38}}/></div>
 
     <div style={{padding:12,background:`${doc.color}08`,border:`1px solid ${doc.color}20`,borderRadius:14,marginBottom:12}}>
       <div style={{fontSize:13,fontWeight:700,color:doc.color}}>API Lamuka v2.0 — {doc.title}</div>

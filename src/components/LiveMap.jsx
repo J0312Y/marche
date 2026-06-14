@@ -41,7 +41,7 @@ function LiveMap({ pickup, destination, driverPos, status = "delivering", style 
       {/* Destination point */}
       <div style={{ position: "absolute", right: "8%", top: "15%", display: "flex", flexDirection: "column", alignItems: "center" }}>
         <div style={{ padding: "3px 8px", background: "#fff", borderRadius: 8, fontSize: 9, fontWeight: 700, boxShadow: "0 2px 8px rgba(0,0,0,.15)", marginBottom: 4, whiteSpace: "nowrap" }}>
-          {destination || " Livraison"}
+          {destination || "Livraison"}
         </div>
         <div style={{ width: 12, height: 12, borderRadius: "50%", background: "#10B981", border: "2px solid #fff", boxShadow: "0 2px 4px rgba(0,0,0,.2)" }} />
       </div>

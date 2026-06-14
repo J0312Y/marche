@@ -1,11 +1,25 @@
 import { useState } from "react";
+import { useApp } from "../../context/AppContext";
+import Icon from "../../components/Icon";
 import toast from "../../utils/toast";
 import { fmt } from "../../utils/helpers";
 import { USER_SUBSCRIPTIONS, FREQUENCY_LABELS } from "../../data/subscriptions";
 import SuccessAnimation from "../../components/SuccessAnimation";
-import Icon from "../../components/Icon";
 
 function SubscriptionsScr({ onBack, go }) {
+  const { isGuest, exitGuestToLogin } = useApp();
+  if (isGuest) return (
+    <div className="scr" style={{display:"flex",flexDirection:"column",alignItems:"center",justifyContent:"center",padding:"60px 24px",textAlign:"center",minHeight:"100vh"}}>
+      <div style={{width:80,height:80,borderRadius:24,background:"rgba(249,115,22,0.1)",display:"flex",alignItems:"center",justifyContent:"center",marginBottom:20,color:"#F97316"}}>
+        <Icon name="user" size={36} color="#F97316"/>
+      </div>
+      <h2 style={{fontSize:20,fontWeight:800,letterSpacing:-.4,marginBottom:10}}>Connexion requise</h2>
+      <p style={{fontSize:13,color:"var(--muted)",marginBottom:24,maxWidth:280,lineHeight:1.5}}>Connectez-vous pour accéder à cette section de votre profil.</p>
+      <button onClick={()=>exitGuestToLogin()} style={{padding:"12px 28px",borderRadius:14,border:"none",background:"#F97316",color:"#fff",fontSize:13,fontWeight:700,cursor:"pointer",fontFamily:"inherit"}}>Se connecter</button>
+      <button onClick={()=>onBack&&onBack()} style={{marginTop:10,padding:"10px",border:"none",background:"transparent",color:"var(--muted)",fontSize:12,fontWeight:600,cursor:"pointer",fontFamily:"inherit"}}>Retour</button>
+    </div>
+  );
+
   const [subs, setSubs] = useState(USER_SUBSCRIPTIONS);
   const [showActionsFor, setShowActionsFor] = useState(null);
   const [action, setAction] = useState(null);
@@ -47,7 +61,7 @@ function SubscriptionsScr({ onBack, go }) {
   return (
     <div className="scr" style={{ paddingBottom: 100 }}>
       <div style={{ padding: "16px", display: "flex", alignItems: "center", gap: 10 }}>
-        <button onClick={onBack} style={{ width: 38, height: 38, borderRadius: 12, background: "var(--card)", border: "1px solid var(--border)", cursor: "pointer", fontSize: 14 }}>←</button>
+        <button onClick={()=>onBack&&onBack()} style={{ width: 38, height: 38, borderRadius: 12, background: "var(--card)", border: "1px solid var(--border)", cursor: "pointer", fontSize: 14 }}>←</button>
         <h2 style={{ fontSize: 18, fontWeight: 800, flex: 1 }}>Mes abonnements</h2>
       </div>
 
@@ -103,7 +117,7 @@ function SubscriptionsScr({ onBack, go }) {
                   <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 10, padding: "10px 0", borderTop: "1px solid var(--border)" }}>
                     <div>
                       <div style={{ fontSize: 9, color: "var(--muted)", fontWeight: 700, letterSpacing: .5 }}>FRÉQUENCE</div>
-                      <div style={{ fontSize: 12, fontWeight: 700, marginTop: 2 }}>{freq.icon} {freq.short}</div>
+                      <div style={{ fontSize: 12, fontWeight: 700, marginTop: 2 }}><Icon name={freq.icon} size={20}/> {freq.short}</div>
                     </div>
                     <div>
                       <div style={{ fontSize: 9, color: "var(--muted)", fontWeight: 700, letterSpacing: .5 }}>MONTANT</div>

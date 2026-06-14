@@ -43,7 +43,7 @@ function PromosScr({ onBack, go }) {
       <div style={{ display: "flex", gap: 6, padding: "0 16px 12px", overflowX: "auto", scrollbarWidth: "none" }} className="hide-scroll">
         {[
           ["all", "Toutes", COUPONS.length],
-          ["personal", " Personnelles", COUPONS.filter(c => c.isPersonal).length],
+          ["personal", "Personnelles", COUPONS.filter(c => c.isPersonal).length],
           ["active", "⏰ Expirent bientôt", COUPONS.filter(c => (c.expiresIn || 99) <= 14).length],
         ].map(([k, l, n]) => (
           <button key={k} onClick={() => setFilter(k)} style={{ flexShrink: 0, padding: "6px 12px", borderRadius: 20, border: filter === k ? "2px solid #F97316" : "1px solid var(--border)", background: filter === k ? "rgba(249,115,22,0.06)" : "var(--card)", color: filter === k ? "#F97316" : "var(--sub)", fontSize: 11, fontWeight: 600, cursor: "pointer", fontFamily: "inherit" }}>{l} <span style={{ opacity: .6 }}>({n})</span></button>
@@ -89,7 +89,7 @@ function PromosScr({ onBack, go }) {
                   <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", gap: 8 }}>
                     <div onClick={() => copyCode(c.code)} style={{ flex: 1, padding: "6px 10px", border: `1px dashed ${color}`, borderRadius: 8, background: color + "08", display: "flex", alignItems: "center", gap: 6, cursor: "pointer", minWidth: 0 }}>
                       <span style={{ fontSize: 11, fontWeight: 800, color, letterSpacing: 1, fontFamily: "monospace", overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>{c.code}</span>
-                      <span style={{ fontSize: 10, color: "var(--muted)", marginLeft: "auto", flexShrink: 0 }}>{copied === c.code ? " Copié" : ""}</span>
+                      <span style={{ fontSize: 10, color: "var(--muted)", marginLeft: "auto", flexShrink: 0 }}>{copied === c.code ? "Copié" : ""}</span>
                     </div>
                     {c.expiresIn && (
                       <div style={{ fontSize: 9, color: expiresUrgent ? "#EF4444" : "var(--muted)", fontWeight: 700, whiteSpace: "nowrap" }}>

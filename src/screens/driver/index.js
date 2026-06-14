@@ -21,3 +21,4 @@ export { default as DrRateVendorScr } from './DrRateVendorScr';
 export { default as DrDocumentsScr } from './DrDocumentsScr';
 
 export { default as DrBriefingScr } from "./DrBriefingScr";
+export { default as DrDeliveriesScr } from './DrDeliveriesScr';

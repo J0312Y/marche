@@ -12,7 +12,7 @@ const DETAILS = {
   1: { full: "Paiement confirmé par MTN MoMo.\n\nCommande : #CMD-0890\nMontant : 18 000 FCFA\nClient : Patrick Mbemba\nFrais Lamuka (4%) : 720 FCFA\nNet reçu : 17 280 FCFA\n\nLe montant sera disponible dans votre portefeuille sous 24h.", action: "vWallet", actionLabel: "Voir le portefeuille" },
   2: { full: "Marie K. a noté votre boutique :\n\n (5/5)\n\"Robe magnifique ! Qualité au top. Je recommande cette boutique à 100%.\"\n\nProduit : Robe Wax Moderne\nDate : 14 Fév 2026", action: "vReviews", actionLabel: "Voir les avis" },
   3: { full: "Attention ! Le produit suivant est bientôt en rupture :\n\n Sac à Main Cuir\nStock actuel : 3 unités\nVentes ce mois : 12 unités\n\nAu rythme actuel, rupture estimée dans 5 jours. Pensez à réapprovisionner.", action: "vProducts", actionLabel: "Gérer le stock" },
-  4: { full: "Résumé de la semaine (7-14 Fév) :\n\n Revenus : 583 000 FCFA (+23%)\n Commandes : 14 (+18%)\n️ Visiteurs : 412 (+12%)\n Note : 4.6/5\n\n Meilleur article : Sac à Main Cuir (8 ventes)\n Votre boutique est dans le Top 5 de Brazzaville !", action: "vStats", actionLabel: " Voir les statistiques" },
+  4: { full: "Résumé de la semaine (7-14 Fév) :\n\n Revenus : 583 000 FCFA (+23%)\n Commandes : 14 (+18%)\n️ Visiteurs : 412 (+12%)\n Note : 4.6/5\n\n Meilleur article : Sac à Main Cuir (8 ventes)\n Votre boutique est dans le Top 5 de Brazzaville !", action: "vStats", actionLabel: "Voir les statistiques" },
 };
 
 function VNotifScr({onBack,go}){

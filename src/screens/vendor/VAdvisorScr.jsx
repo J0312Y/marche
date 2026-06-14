@@ -4,9 +4,9 @@ import Icon from "../../components/Icon";
 const TRENDS=[
   {name:"Smartphones",growth:"+32%",volume:"Très élevé",opportunity:"Fort"},
   {name:"Mode Wax",growth:"+28%",volume:"Élevé",opportunity:"Fort"},
-  {name:"Livraison repas",growth:"+45%",volume:"Très élevé",opportunity:" Moyen"},
+  {name:"Livraison repas",growth:"+45%",volume:"Très élevé",opportunity:"Moyen"},
   {name:"Cosmétiques bio",growth:"+18%",volume:"Moyen",opportunity:"Fort"},
-  {name:"Électroménager",growth:"+12%",volume:"Moyen",opportunity:" Moyen"},
+  {name:"Électroménager",growth:"+12%",volume:"Moyen",opportunity:"Moyen"},
 ];
 const COMPETITORS=[
   {name:"Tech Congo",products:50,rating:4.9,avgPrice:"95 000 F",strength:"Prix compétitifs"},
@@ -28,7 +28,7 @@ function VAdvisorScr({onBack,vendorPlan}){
     <div className="appbar" style={{padding:0,marginBottom:12}}><button onClick={onBack}>←</button><h2><Icon name="chart_pie" size={16}/>{" "}Business Advisor</h2><div style={{width:38}}/></div>
 
     <div style={{display:"flex",gap:4,marginBottom:14,background:"var(--light)",borderRadius:12,padding:3}}>
-      {["Conseils"," Tendances","Concurrents"].map((t,i)=>(
+      {["Conseils","Tendances","Concurrents"].map((t,i)=>(
         <button key={t} onClick={()=>setTab(i)} style={{flex:1,padding:8,borderRadius:10,border:"none",background:tab===i?"var(--card)":"transparent",fontSize:11,fontWeight:600,cursor:"pointer",fontFamily:"inherit",color:tab===i?"var(--text)":"var(--muted)",boxShadow:tab===i?"0 1px 3px rgba(0,0,0,.08)":"none"}}>{t}</button>
       ))}
     </div>

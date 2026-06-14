@@ -5,20 +5,21 @@
 import { useApp } from "../context/AppContext";
 import {
   DrDashboardScr, DrDeliveryScr, DrBriefingScr, DrConfirmScr, DrNavigationScr,
-  DrChatVendorScr, DrChatClientScr, DrHistoryScr, DrWalletScr,
+  DrChatVendorScr, DrChatClientScr, DrHistoryScr, DrDeliveriesScr, DrWalletScr,
   DrNotifScr, DrProfileScr, DrVehicleScr, DrZonesScr, DrChecklistScr, DrRateVendorScr,
   DrStatsScr, DrSettingsScr, DrHelpScr, DrDocumentsScr
 } from "../screens/driver";
 import { WithdrawScr, PasswordScr } from "../screens/buyer";
 import ChatBotScr from "../screens/common/ChatBotScr";
 import { SettingsScr, HelpScr, AboutScr, TermsScr, PrivacyScr } from "../screens/common";
+import Icon from "../components/Icon";
 
 export default function DriverScreens() {
   const { screen, dTab, setDTab, go, pop, switchTo, logout, setScreen, setHistory , lang } = useApp();
 
   if (!screen) {
     if (dTab === 0) return <DrDashboardScr go={go} />;
-    if (dTab === 1) return <DrHistoryScr onBack={() => setDTab(0)} />;
+    if (dTab === 1) return <DrDeliveriesScr go={go} onBack={() => setDTab(0)} />;
     if (dTab === 2) return <DrWalletScr go={go} onBack={() => setDTab(0)} />;
     if (dTab === 3) return <DrNotifScr onBack={() => setDTab(0)} />;
     return <DrProfileScr go={go} onSwitch={() => switchTo("buyer")} onLogout={logout} />;

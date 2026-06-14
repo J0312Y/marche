@@ -4,14 +4,14 @@ import InvoiceView from "../../components/InvoiceView";
 import Icon from "../../components/Icon";
 
 const INVOICES = [
-  {id:"INV-001",ref:"#LMK-2026-0214",client:"Marie Koumba",date:"14 Fév 2026",total:231500,items:[{name:"Galaxy A54",qty:1,price:185000},{name:" Panier Bio",qty:3,price:4500}],payment:"Airtel Money",status:"paid"},
+  {id:"INV-001",ref:"#LMK-2026-0214",client:"Marie Koumba",date:"14 Fév 2026",total:231500,items:[{name:"Galaxy A54",qty:1,price:185000},{name:"Panier Bio",qty:3,price:4500}],payment:"Airtel Money",status:"paid"},
   {id:"INV-002",ref:"#LMK-2026-0210",client:"Paul Ngoma",date:"10 Fév 2026",total:42000,items:[{name:"Sac Cuir",qty:1,price:42000}],payment:"MTN MoMo",status:"paid"},
   {id:"INV-003",ref:"#LMK-2026-0205",client:"Grace Okemba",date:"5 Fév 2026",total:18000,items:[{name:"Chemise Bogolan",qty:1,price:18000}],payment:"Kolo Pay",status:"pending"},
 ];
 
 function VInvoiceScr({onBack}){
   const [viewInvoice,setViewInvoice]=useState(null);
-  const fmt=(n)=>n?.toLocaleString("fr-FR")+" F";
+  const fmt=(n)=>n?.toLocaleString("fr-FR")+"F";
   return(<div className="scr" style={{padding:16,paddingBottom:20}}>
     <div className="appbar" style={{padding:0,marginBottom:12}}><button onClick={onBack}>←</button><h2><Icon name="receipt" size={16}/>{" "}Factures</h2><div style={{width:38}}/></div>
 

@@ -77,7 +77,7 @@ function VShopDetailScr({shop:sh,go,onBack}){
         </div>
 
         <div className="info-box yellow" style={{marginBottom:10}}><span>️</span><span style={{fontSize:11}}>Les modifications sont appliquées immédiatement sur le marketplace.</span></div>
-        <button className="btn-primary" style={{background:saved?"#10B981":"#F97316"}} onClick={doSave}>{saved?"Modifications enregistrées":" Enregistrer les modifications"}</button>
+        <button className="btn-primary" style={{background:saved?"#10B981":"#F97316"}} onClick={doSave}>{saved?"Modifications enregistrées":"Enregistrer les modifications"}</button>
       </div>}
 
       {/* Tab 2: Équipe */}

@@ -1,4 +1,5 @@
 import Icon from "../../components/Icon";
+import { useApp } from "../../context/AppContext";
 import { fmt } from "../../utils/helpers";
 import { getLevel } from "../../data/loyalty";
 
@@ -8,6 +9,54 @@ import t from "../../utils/i18n";
 
 import { USER_AVATAR } from "../../data/images";
 function ProfileScr({go,userRole,vendorPlan,vendorStatus,driverStatus,onLogout,onRoleApproved}){
+  const { isGuest, exitGuestToLogin } = useApp();
+  
+  // Guest mode — show prompt to login/register
+  if (isGuest) return (
+    <div className="scr" style={{minHeight:"100vh",background:"linear-gradient(180deg, #FFF7ED 0%, #FFFFFF 100%)",paddingBottom:80}}>
+      <div style={{display:"flex",flexDirection:"column",alignItems:"center",padding:"40px 24px 24px",textAlign:"center"}}>
+      <div style={{width:96,height:96,borderRadius:28,background:"linear-gradient(135deg,#F97316,#EA580C)",display:"flex",alignItems:"center",justifyContent:"center",marginBottom:24,boxShadow:"0 12px 30px rgba(249,115,22,0.3)"}}>
+        <Icon name="user" size={48} color="#fff"/>
+      </div>
+      <h1 style={{fontSize:24,fontWeight:800,letterSpacing:-.5,color:"#1A1F2E",marginBottom:8}}>Bienvenue chez Lamuka</h1>
+      <p style={{fontSize:14,color:"var(--muted)",lineHeight:1.5,maxWidth:300,marginBottom:28}}>Vous explorez en mode visiteur. Connectez-vous pour accéder à votre profil, vos commandes et passer commande.</p>
+      
+      <button onClick={()=>exitGuestToLogin()} style={{width:"100%",maxWidth:320,padding:"14px 16px",borderRadius:14,border:"none",background:"#F97316",color:"#fff",fontSize:14,fontWeight:700,cursor:"pointer",fontFamily:"inherit",marginBottom:10}}>
+        Se connecter / Créer un compte
+      </button>
+      
+      <div style={{width:"100%",maxWidth:320,padding:"14px",background:"#fff",border:"1px solid var(--border)",borderRadius:14,marginTop:20}}>
+        <div style={{fontSize:12,color:"var(--muted)",fontWeight:600,marginBottom:10,letterSpacing:.3}}>EN VISITEUR, VOUS POUVEZ</div>
+        <div style={{display:"flex",alignItems:"center",gap:10,padding:"6px 0",fontSize:13}}>
+          <div style={{width:24,height:24,borderRadius:8,background:"rgba(16,185,129,0.1)",display:"flex",alignItems:"center",justifyContent:"center",color:"#10B981"}}><Icon name="check" size={14}/></div>
+          Parcourir tout le catalogue
+        </div>
+        <div style={{display:"flex",alignItems:"center",gap:10,padding:"6px 0",fontSize:13}}>
+          <div style={{width:24,height:24,borderRadius:8,background:"rgba(16,185,129,0.1)",display:"flex",alignItems:"center",justifyContent:"center",color:"#10B981"}}><Icon name="check" size={14}/></div>
+          Ajouter au panier et liker
+        </div>
+        <div style={{display:"flex",alignItems:"center",gap:10,padding:"6px 0",fontSize:13}}>
+          <div style={{width:24,height:24,borderRadius:8,background:"rgba(16,185,129,0.1)",display:"flex",alignItems:"center",justifyContent:"center",color:"#10B981"}}><Icon name="check" size={14}/></div>
+          Lire les avis et fiches produit
+        </div>
+        <div style={{fontSize:12,color:"var(--muted)",fontWeight:600,marginTop:14,marginBottom:8,letterSpacing:.3}}>VOUS DEVEZ VOUS CONNECTER POUR</div>
+        <div style={{display:"flex",alignItems:"center",gap:10,padding:"6px 0",fontSize:13}}>
+          <div style={{width:24,height:24,borderRadius:8,background:"rgba(239,68,68,0.1)",display:"flex",alignItems:"center",justifyContent:"center",color:"#EF4444"}}><Icon name="close" size={14}/></div>
+          Passer commande
+        </div>
+        <div style={{display:"flex",alignItems:"center",gap:10,padding:"6px 0",fontSize:13}}>
+          <div style={{width:24,height:24,borderRadius:8,background:"rgba(239,68,68,0.1)",display:"flex",alignItems:"center",justifyContent:"center",color:"#EF4444"}}><Icon name="close" size={14}/></div>
+          Chater avec les vendeurs
+        </div>
+        <div style={{display:"flex",alignItems:"center",gap:10,padding:"6px 0",fontSize:13}}>
+          <div style={{width:24,height:24,borderRadius:8,background:"rgba(239,68,68,0.1)",display:"flex",alignItems:"center",justifyContent:"center",color:"#EF4444"}}><Icon name="close" size={14}/></div>
+          Laisser des avis
+        </div>
+      </div>
+      </div>
+    </div>
+  );
+  
   const hasVendor=(userRole==="vendor"||userRole==="both")&&vendorStatus==="approved";
   const hasDriver=(userRole==="driver"||userRole==="both")&&driverStatus==="approved";
 
@@ -22,7 +71,7 @@ function ProfileScr({go,userRole,vendorPlan,vendorStatus,driverStatus,onLogout,o
 
   const Item=({icon,label,info,onClick})=>(
     <div onClick={onClick} style={{display:"flex",alignItems:"center",gap:14,padding:"12px 16px",cursor:"pointer",borderBottom:"1px solid var(--border)"}}>
-      <span style={{fontSize:20,width:22,textAlign:"center"}}>{icon}</span>
+      <span style={{width:28,height:28,display:"flex",alignItems:"center",justifyContent:"center",color:"var(--text)",flexShrink:0}}>{icon?<Icon name={icon} size={20}/>:null}</span>
       <span style={{flex:1,fontSize:14,fontWeight:500,color:"var(--text)"}}>{label}</span>
       {info&&<span style={{fontSize:12,color:"var(--muted)",fontWeight:500}}>{info}</span>}
       <svg width="7" height="12" viewBox="0 0 7 12" fill="none" style={{flexShrink:0,opacity:.3}}><path d="M1 1l5 5-5 5" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/></svg>
@@ -82,7 +131,7 @@ function ProfileScr({go,userRole,vendorPlan,vendorStatus,driverStatus,onLogout,o
     {/* Lamuka Points hero card */}
     {(()=>{const lp=(()=>{try{return JSON.parse(localStorage.getItem("lk-loyalty")||"{}")}catch{return{}}})();const pts=lp.points??2450;const lvl=getLevel(lp.lifetimePoints??8200);return(
     <div className="lamuka-points-card" onClick={()=>go("loyalty")} style={{margin:"0 16px 14px",padding:16,background:`linear-gradient(135deg, ${lvl.color}22 0%, ${lvl.color}08 100%)`,border:`2px solid ${lvl.color}33`,borderRadius:16,cursor:"pointer",display:"flex",alignItems:"center",gap:12}}>
-      <div style={{fontSize:32}}>{lvl.icon}</div>
+      <div style={{fontSize:32}}><Icon name={lvl.icon} size={20}/></div>
       <div style={{flex:1}}>
         <div style={{fontSize:10,color:lvl.color,fontWeight:800,letterSpacing:.5}}>NIVEAU {lvl.name.toUpperCase()}</div>
         <div style={{fontSize:20,fontWeight:800,color:lvl.color,marginTop:2}}>{pts.toLocaleString()} pts</div>
@@ -95,35 +144,35 @@ function ProfileScr({go,userRole,vendorPlan,vendorStatus,driverStatus,onLogout,o
     {/* ══════ SECTIONS ══════ */}
 
     <Section title="Mes achats">
-      <Item icon="️" label={t("profile.orders")} info="3" onClick={()=>go("orders")}/>
-      <Item icon="" label="Abonnements" info="2 actifs" onClick={()=>go("subscriptions")}/>
-      <Item icon="" label={t("profile.favorites")} info="5" onClick={()=>go("wishlist")}/>
-      <Item icon="" label={t("profile.payment_history")} info="7" onClick={()=>go("paymentHistory")}/>
+      <Item icon="package" label={t("profile.orders")} info="3" onClick={()=>go("orders")}/>
+      <Item icon="repeat" label="Abonnements" info="2 actifs" onClick={()=>go("subscriptions")}/>
+      <Item icon="heart" label={t("profile.favorites")} info="5" onClick={()=>go("wishlist")}/>
+      <Item icon="creditCard" label={t("profile.payment_history")} info="7" onClick={()=>go("paymentHistory")}/>
     </Section>
 
     <Section title="Mon compte">
-      <Item icon="" label="Fidélité" info="3 450 pts" onClick={()=>go("loyalty")}/>
-      <Item icon="" label="Mes promos" info="6 codes" onClick={()=>go("promos")}/>
-      <Item icon="" label="Parrainage" info="4 000 F gagnés" onClick={()=>go("referral")}/>
-      <Item icon="" label="Cartes cadeaux" onClick={()=>go("giftCard")}/>
+      <Item icon="star_full" label="Fidélité" info="3 450 pts" onClick={()=>go("loyalty")}/>
+      <Item icon="tag" label="Mes promos" info="6 codes" onClick={()=>go("promos")}/>
+      <Item icon="gift" label="Parrainage" info="4 000 F gagnés" onClick={()=>go("referral")}/>
+      <Item icon="creditCard" label="Cartes cadeaux" onClick={()=>go("giftCard")}/>
     </Section>
 
     <Section title="️ Outils">
-      <Item icon="" label={t("profile.messages")} info="2" onClick={()=>go("chatList")}/>
-      <Item icon="" label={t("profile.addresses")} info="2" onClick={()=>go("addresses")}/>
-      <Item icon="" label={t("profile.notifications")} info="3" onClick={()=>go("notif")}/>
-      <Item icon="" label={t("profile.price_alerts")} info="3" onClick={()=>go("priceAlerts")}/>
+      <Item icon="chat" label={t("profile.messages")} info="2" onClick={()=>go("chatList")}/>
+      <Item icon="location" label={t("profile.addresses")} info="2" onClick={()=>go("addresses")}/>
+      <Item icon="bell" label={t("profile.notifications")} info="3" onClick={()=>go("notif")}/>
+      <Item icon="trendUp" label={t("profile.price_alerts")} info="3" onClick={()=>go("priceAlerts")}/>
     </Section>
 
     <Section title="Découvrir">
-      <Item icon="" label={t("profile.group_buys")} info="3 offres" onClick={()=>go("groupBuy")}/>
-      <Item icon="" label={t("profile.stats")} onClick={()=>go("myStats")}/>
-      <Item icon="" label={t("profile.rewards")} info="Roue, missions" onClick={()=>go("gamification")}/>
-      <Item icon="" label={t("profile.assistant")} onClick={()=>go("chatBot")}/>
-      <Item icon="" label="Centre d'aide" info="FAQ" onClick={()=>go("help")}/>
-      <Item icon="" label="Livraison & Retours" onClick={()=>go("deliveryPolicy")}/>
-      <Item icon="ℹ️" label="À propos" onClick={()=>go("about")}/>
-      <Item icon="" label={t("profile.qr_scan")} onClick={()=>go("qrScan")}/>
+      <Item icon="handshake" label={t("profile.group_buys")} info="3 offres" onClick={()=>go("groupBuy")}/>
+      <Item icon="chart_pie" label={t("profile.stats")} onClick={()=>go("myStats")}/>
+      <Item icon="target" label={t("profile.rewards")} info="Roue, missions" onClick={()=>go("gamification")}/>
+      <Item icon="headphones" label={t("profile.assistant")} onClick={()=>go("chatBot")}/>
+      <Item icon="help" label="Centre d'aide" info="FAQ" onClick={()=>go("help")}/>
+      <Item icon="truck" label="Livraison & Retours" onClick={()=>go("deliveryPolicy")}/>
+      <Item icon="info" label="À propos" onClick={()=>go("about")}/>
+      <Item icon="qrcode" label={t("profile.qr_scan")} onClick={()=>go("qrScan")}/>
 
     </Section>
 

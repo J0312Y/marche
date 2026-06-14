@@ -76,8 +76,8 @@ function VWebsiteScr({onBack}){
   const url=site.customDomain||`${site.subdomain}.lamuka.market`;
 
   const tabs=[
-    ["dashboard","Dashboard"],["pages"," Pages"],["design"," Design"],
-    ["blog","️ Blog"],["seo"," SEO"],["settings","Config"],
+    ["dashboard","Dashboard"],["pages","Pages"],["design","Design"],
+    ["blog","️ Blog"],["seo","SEO"],["settings","Config"],
   ];
 
   const addBlock=(pageId,blockType)=>{

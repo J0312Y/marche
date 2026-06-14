@@ -6,6 +6,7 @@ import { createContext, useContext, useState, useEffect, useCallback } from 'rea
 import { setToken, getToken, isAuthenticated, onAuthExpired } from '../api/client';
 import { auth, cart as cartSvc, social as socialSvc } from '../services';
 import { setToastListener } from '../utils/toast';
+import Icon from '../components/Icon';
 
 const AppContext = createContext(null);
 
@@ -37,6 +38,25 @@ export function AppProvider({ children }) {
   const [userRole, setUserRole] = useState('client');
   const [userName, setUserName] = useState('');
   const [vendorPlan, setVendorPlan] = useState('starter');
+  const [isGuest, setIsGuest] = useState(false);
+  
+  // Called when user chooses "Continuer en visite"
+  const continueAsGuest = useCallback(() => {
+    setIsGuest(true);
+  }, []);
+  
+  // Exit guest mode and go back to login screen
+  const exitGuestToLogin = useCallback(() => {
+    setIsGuest(false);
+    setAuthStep('login');
+  }, []);
+  
+  // Called after successful login — disable guest mode and merge local data
+  const upgradeFromGuest = useCallback(() => {
+    setIsGuest(false);
+    // Local cart and favorites persist automatically via localStorage
+    // They'll be visible in the now-authenticated session
+  }, []);
   const [vendorStatus, setVendorStatus] = useState('none');
   const [driverStatus, setDriverStatus] = useState('none');
 
@@ -182,8 +202,8 @@ export function AppProvider({ children }) {
       await cartSvc.add(article.id, qty, extras.note || "", extras.sides || []);
       const data = await cartSvc.get();
       setCart(data?.items || []); setCartCount((data?.items || []).reduce((s, i) => s + (i.qty || 1), 0));
-      showToast('Ajouté au panier');
-      setScreen(null); setHistory([]); setTab(2);
+      showToast('🛍️ Ajouté au panier');
+      // Stay on current screen — user can tap cart icon to view cart
     } catch (err) {
       showToast(err.message, 'error');
     }
@@ -210,7 +230,7 @@ export function AppProvider({ children }) {
   const toggleFav = useCallback(async (articleId) => {
     try {
       const result = await socialSvc.toggleFavorite(articleId);
-      showToast(result.is_favorite ? 'Ajouté aux favoris' : 'Retiré des favoris');
+      showToast(result.is_favorite ? '❤️ Ajouté aux favoris' : '💔 Retiré des favoris');
       setFavs(prev => result.is_favorite
         ? [...prev, articleId]
         : prev.filter(id => id !== articleId)
@@ -251,7 +271,7 @@ export function AppProvider({ children }) {
     cart, setCart, cartCount, addToCart, updateCartQty, clearCart,
     appliedCoupon, setAppliedCoupon,
     favs, toggleFav, isFav,
-    userRole, vendorPlan, setVendorPlan, vendorStatus, setVendorStatus, driverStatus, setDriverStatus,
+    userRole, vendorPlan, setVendorPlan, isGuest, setIsGuest, continueAsGuest, upgradeFromGuest, exitGuestToLogin, vendorStatus, setVendorStatus, driverStatus, setDriverStatus,
     onRoleApproved, hasVendor, hasDriver,
     unreadCount, setUnreadCount,
     toast, showToast,
@@ -276,7 +296,7 @@ export function useApp() {
       cart:[],setCart:()=>{},cartCount:0,addToCart:()=>{},updateCartQty:()=>{},clearCart:()=>{},
       appliedCoupon:null,setAppliedCoupon:()=>{},
       favs:[],toggleFav:()=>{},isFav:()=>false,
-      userRole:'client',vendorPlan:'starter',setVendorPlan:()=>{},vendorStatus:'none',setVendorStatus:()=>{},driverStatus:'none',setDriverStatus:()=>{},
+      userRole:'client',vendorPlan:'starter',setVendorPlan:()=>{},isGuest:false,setIsGuest:()=>{},continueAsGuest:()=>{},upgradeFromGuest:()=>{},exitGuestToLogin:()=>{},vendorStatus:'none',setVendorStatus:()=>{},driverStatus:'none',setDriverStatus:()=>{},
       onRoleApproved:()=>{},hasVendor:false,hasDriver:false,
       unreadCount:0,setUnreadCount:()=>{},
       toast:null,showToast:()=>{},

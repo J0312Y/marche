@@ -7,6 +7,15 @@ function Icon({ name, size = 18, color = "currentColor", strokeWidth = 2 }) {
   const stroke = color;
   const sw = strokeWidth;
 
+  // If name is an emoji (or any non-ascii character), render as text
+  if (name && typeof name === "string") {
+    // Check first code point - emojis are usually > 0xFF
+    const cp = name.codePointAt(0);
+    if (cp && cp > 255 && cp !== 0x200D) {  // skip ZWJ
+      return <span style={{ fontSize: size, lineHeight: 1, display: "inline-flex", alignItems: "center", justifyContent: "center" }}>{name}</span>;
+    }
+  }
+
   const icons = {
     filter: (
       <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke={stroke} strokeWidth={sw} strokeLinecap="round" strokeLinejoin="round">
@@ -446,6 +455,42 @@ function Icon({ name, size = 18, color = "currentColor", strokeWidth = 2 }) {
     handshake: (
       <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke={stroke} strokeWidth={sw} strokeLinecap="round" strokeLinejoin="round">
         <path d="M11 17l-5-5 6-6 5 5"/><path d="M19 17l-3-3"/><path d="M3 7l9 9"/>
+      </svg>
+    ),
+    tag: (
+      <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke={stroke} strokeWidth={sw} strokeLinecap="round" strokeLinejoin="round">
+        <path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"/>
+        <line x1="7" y1="7" x2="7.01" y2="7"/>
+      </svg>
+    ),
+    lightning: (
+      <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke={stroke} strokeWidth={sw} strokeLinecap="round" strokeLinejoin="round">
+        <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/>
+      </svg>
+    ),
+    tool: (
+      <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke={stroke} strokeWidth={sw} strokeLinecap="round" strokeLinejoin="round">
+        <path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"/>
+      </svg>
+    ),
+    trendUp: (
+      <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke={stroke} strokeWidth={sw} strokeLinecap="round" strokeLinejoin="round">
+        <polyline points="23 6 13.5 15.5 8.5 10.5 1 18"/>
+        <polyline points="17 6 23 6 23 12"/>
+      </svg>
+    ),
+    pill: (
+      <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke={stroke} strokeWidth={sw} strokeLinecap="round" strokeLinejoin="round">
+        <path d="M10.5 20.5a7.07 7.07 0 0 1-5-12.07L13.5 0.93a7.07 7.07 0 0 1 10 10L15.57 18.93a7.07 7.07 0 0 1-5.07 1.57z" transform="scale(0.85) translate(2,2)"/>
+        <line x1="8.5" y1="8.5" x2="15.5" y2="15.5"/>
+      </svg>
+    ),
+    cupcake: (
+      <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke={stroke} strokeWidth={sw} strokeLinecap="round" strokeLinejoin="round">
+        <path d="M6 13h12l-1.5 8h-9z"/>
+        <path d="M6 13a4 4 0 0 1 2-3.5 3 3 0 0 1 4 0 3 3 0 0 1 4 0 4 4 0 0 1 2 3.5"/>
+        <line x1="12" y1="3" x2="12" y2="6"/>
+        <line x1="10" y1="4.5" x2="14" y2="4.5"/>
       </svg>
     ),
     close: (

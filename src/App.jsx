@@ -20,6 +20,7 @@ function AppInner() {
     screen, setScreen, setHistory, go,
     cart, cartCount, hasVendor, hasDriver,
     login, completeProfile, toast, darkMode, setUserName, lang,
+    isGuest, continueAsGuest,
   } = useApp();
 
   /* ── Auth step mapping: splash=0, onboarding=1, login=2, otp=3, profile=4, ready=5 ── */
@@ -73,7 +74,7 @@ function AppInner() {
           {auth === -1 ? <LoadingSpinner />
             : auth === 0 ? <SplashScr onDone={() => setAuthStep('login')} />
             : auth === 1 ? <OnboardingScr onDone={() => setAuthStep('ready')} />
-            : auth === 2 ? <LoginScr onDone={(signup) => { setIsNewUser(!!signup); setAuthStep('otp'); }} onSocial={(p, signup) => { setSocialProvider(p); setIsNewUser(!!signup); setAuthStep('otp'); }} />
+            : auth === 2 ? <LoginScr onDone={(signup) => { setIsNewUser(!!signup); setAuthStep('otp'); }} onSocial={(p, signup) => { setSocialProvider(p); setIsNewUser(!!signup); setAuthStep('otp'); }} onGuest={() => { continueAsGuest(); setAuthStep('ready'); }} />
             : auth === 3 ? <OTPScr provider={socialProvider} onDone={() => setAuthStep(isNewUser ? 'profile' : 'ready')} />
             : auth === 4 ? <ProfileCompletionScr provider={socialProvider} setUserName={setUserName} onDone={() => setAuthStep('onboarding')} />
             : <>
@@ -102,7 +103,7 @@ function AppInner() {
           {/* Toast */}
           <PushBanner/>
           <ShareSheet/>
-          {toast && <div style={{ position: "absolute", bottom: 80, left: 16, right: 16, padding: "14px 18px", borderRadius: 16, background: toast.type === 'error' ? '#EF4444' : toast.type === 'info' ? '#F97316' : '#10B981', color: "#fff", fontSize: 13, fontWeight: 600, textAlign: "center", zIndex: 999, boxShadow: "0 8px 30px rgba(0,0,0,.2)", display: "flex", alignItems: "center", justifyContent: "center", gap: 8, animation: "toastIn .35s cubic-bezier(.4,0,.2,1)" }}><span style={{ fontSize: 16 }}>{toast.type === 'error' ? '' : toast.type === 'info' ? 'ℹ️' : ''}</span>{toast.message}</div>}
+          {toast && <div style={{ position: "absolute", bottom: 80, left: 16, right: 16, padding: "14px 18px", borderRadius: 16, background: toast.type === 'error' ? '#EF4444' : toast.type === 'info' ? '#F97316' : '#10B981', color: "#fff", fontSize: 13, fontWeight: 600, textAlign: "center", zIndex: 999, boxShadow: "0 8px 30px rgba(0,0,0,.2)", display: "flex", alignItems: "center", justifyContent: "center", gap: 8, animation: "toastIn .35s cubic-bezier(.4,0,.2,1)" }}><Icon name={toast.type === 'error' ? 'x_circle' : toast.type === 'info' ? 'info' : 'check_circle'} size={18} color="#fff"/>{toast.message}</div>}
 
           {/* Home Indicator */}
           <div style={{ flexShrink: 0, display: "flex", justifyContent: "center", paddingBottom: 4, paddingTop: 2, background: "transparent" }}>

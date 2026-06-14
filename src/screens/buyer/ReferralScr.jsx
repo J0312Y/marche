@@ -1,9 +1,23 @@
 import { useState } from "react";
+import { useApp } from "../../context/AppContext";
+import Icon from "../../components/Icon";
 import toast from "../../utils/toast";
 import { fmt } from "../../utils/helpers";
-import Icon from "../../components/Icon";
 
-function ReferralScr({ onBack }) {
+function ReferralScr({ onBack,go}) {
+  const { isGuest, exitGuestToLogin } = useApp();
+  if (isGuest) return (
+    <div className="scr" style={{display:"flex",flexDirection:"column",alignItems:"center",justifyContent:"center",padding:"60px 24px",textAlign:"center",minHeight:"100vh"}}>
+      <div style={{width:80,height:80,borderRadius:24,background:"rgba(249,115,22,0.1)",display:"flex",alignItems:"center",justifyContent:"center",marginBottom:20,color:"#F97316"}}>
+        <Icon name="user" size={36} color="#F97316"/>
+      </div>
+      <h2 style={{fontSize:20,fontWeight:800,letterSpacing:-.4,marginBottom:10}}>Connexion requise</h2>
+      <p style={{fontSize:13,color:"var(--muted)",marginBottom:24,maxWidth:280,lineHeight:1.5}}>Connectez-vous pour accéder à cette section de votre profil.</p>
+      <button onClick={()=>exitGuestToLogin()} style={{padding:"12px 28px",borderRadius:14,border:"none",background:"#F97316",color:"#fff",fontSize:13,fontWeight:700,cursor:"pointer",fontFamily:"inherit"}}>Se connecter</button>
+      <button onClick={()=>onBack&&onBack()} style={{marginTop:10,padding:"10px",border:"none",background:"transparent",color:"var(--muted)",fontSize:12,fontWeight:600,cursor:"pointer",fontFamily:"inherit"}}>Retour</button>
+    </div>
+  );
+
   const [referralCode] = useState("JOELDY2026");
   const [stats] = useState({
     invited: 7,
@@ -28,7 +42,7 @@ function ReferralScr({ onBack }) {
   return (
     <div className="scr" style={{ paddingBottom: 80 }}>
       <div style={{ padding: "16px", display: "flex", alignItems: "center", gap: 10 }}>
-        <button onClick={onBack} style={{ width: 38, height: 38, borderRadius: 12, background: "var(--card)", border: "1px solid var(--border)", cursor: "pointer", fontSize: 14 }}>←</button>
+        <button onClick={()=>onBack&&onBack()} style={{ width: 38, height: 38, borderRadius: 12, background: "var(--card)", border: "1px solid var(--border)", cursor: "pointer", fontSize: 14 }}>←</button>
         <h2 style={{ fontSize: 18, fontWeight: 800, flex: 1 }}>Parrainage</h2>
       </div>
 

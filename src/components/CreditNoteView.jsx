@@ -13,7 +13,7 @@ function CreditNoteView({ order, onClose, refundMethod }) {
   const delivery = o.delivery || 1500;
   const discount = o.discount || 0;
   const total = subtotal + delivery - discount;
-  const fmt = (n) => n?.toLocaleString("fr-FR") + " F";
+  const fmt = (n) => n?.toLocaleString("fr-FR") + "F";
   const now = new Date();
   const date = now.toLocaleDateString("fr-FR", { day: "2-digit", month: "long", year: "numeric" });
   const refId = (o.id || "#LMK-0000").replace("#LMK-", "#AVR-").replace("#CMD-", "#AVR-");
@@ -72,7 +72,7 @@ function CreditNoteView({ order, onClose, refundMethod }) {
             </div>
             {it.sides&&it.sides.length>0&&it.sides.map((si,si_i)=>(
               <div key={"s"+si_i} style={{ display: "flex", justifyContent: "space-between", padding: "3px 0 3px 16px", fontSize: 11, color: "var(--muted)" }}>
-                <span style={{ flex: 2 }}>↳ {si.name}{si.qty>1?" ×"+si.qty:""}</span>
+                <span style={{ flex: 2 }}>↳ {si.name}{si.qty>1?"×"+si.qty:""}</span>
                 <span style={{ flex: 0.5 }}></span>
                 <span style={{ flex: 1, textAlign: "right" }}>-{si.price>0?fmt(si.price*(si.qty||1)):"Gratuit"}</span>
               </div>

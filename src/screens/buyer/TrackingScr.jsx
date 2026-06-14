@@ -112,7 +112,7 @@ function TrackingScr({onBack,go}){
       <div className="quick-actions-tracking" style={{display:"grid",gridTemplateColumns:"1fr 1fr 1fr",gap:6,marginBottom:12}}>
         <button onClick={()=>setShowNote(true)} style={{padding:"10px 6px",borderRadius:12,border:"1px solid var(--border)",background:"var(--card)",cursor:"pointer",fontSize:11,fontWeight:600,fontFamily:"inherit"}}><div style={{marginTop:4}}>Note</div></button>
         <button onClick={()=>setShowTip(true)} style={{padding:"10px 6px",borderRadius:12,border:"1px solid var(--border)",background:"var(--card)",cursor:"pointer",fontSize:11,fontWeight:600,fontFamily:"inherit"}}><div style={{marginTop:4}}>Pourboire</div></button>
-        <button onClick={()=>{navigator.share?navigator.share({title:"Suivez ma livraison",text:`Mon livreur Patrick arrive dans ${Math.ceil(eta)} min`}):toast.info("Lien copié")}} style={{padding:"10px 6px",borderRadius:12,border:"1px solid var(--border)",background:"var(--card)",cursor:"pointer",fontSize:11,fontWeight:600,fontFamily:"inherit"}}><div style={{marginTop:4}}>Partager</div></button>
+        <button onClick={()=>{navigator.share?navigator.share({title:"Suivez ma livraison",text:`Mon livreur Patrick arrive dans ${Math.ceil(eta)} min`}):toast.info("📋 Lien copié")}} style={{padding:"10px 6px",borderRadius:12,border:"1px solid var(--border)",background:"var(--card)",cursor:"pointer",fontSize:11,fontWeight:600,fontFamily:"inherit"}}><div style={{marginTop:4}}>Partager</div></button>
       </div>
 
       {/* Progress bar */}
@@ -218,12 +218,12 @@ function TrackingScr({onBack,go}){
         <div style={{width:36,height:4,borderRadius:2,background:"var(--border)",margin:"0 auto 16px"}}/>
         <h3 style={{fontSize:17,fontWeight:800,marginBottom:12}}> Note pour Patrick</h3>
         <div style={{display:"flex",gap:6,marginBottom:10,flexWrap:"wrap"}}>
-          {["Sonnez fort","Appelez en arrivant"," Laissez à la porte","2ème étage"].map(t=>(
+          {["Sonnez fort","Appelez en arrivant","Laissez à la porte","2ème étage"].map(t=>(
             <button key={t} onClick={()=>setNoteToDriver(t)} style={{padding:"5px 10px",borderRadius:8,border:"1px solid var(--border)",background:noteToDriver===t?"rgba(249,115,22,0.06)":"var(--card)",fontSize:11,fontWeight:600,cursor:"pointer",fontFamily:"inherit"}}>{t}</button>
           ))}
         </div>
         <textarea value={noteToDriver} onChange={e=>setNoteToDriver(e.target.value)} placeholder="Ou écrivez votre propre note..." rows={3} style={{width:"100%",padding:10,borderRadius:10,border:"1px solid var(--border)",fontSize:13,fontFamily:"inherit",resize:"vertical",outline:"none",boxSizing:"border-box",marginBottom:12}}/>
-        <button onClick={()=>{toast.success(" Note envoyée au livreur !");setShowNote(false)}} style={{width:"100%",padding:14,borderRadius:12,border:"none",background:"#F97316",color:"#fff",fontSize:14,fontWeight:700,cursor:"pointer",fontFamily:"inherit"}}>Envoyer la note</button>
+        <button onClick={()=>{toast.success("Note envoyée au livreur !");setShowNote(false)}} style={{width:"100%",padding:14,borderRadius:12,border:"none",background:"#F97316",color:"#fff",fontSize:14,fontWeight:700,cursor:"pointer",fontFamily:"inherit"}}>Envoyer la note</button>
       </div>
     </div>}
   </>);

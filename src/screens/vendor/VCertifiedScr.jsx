@@ -14,7 +14,7 @@ function VCertifiedScr({onBack}){
     <div className="appbar" style={{padding:0,marginBottom:12}}><button onClick={onBack}>←</button><h2> Boutique Certifiée</h2><div style={{width:38}}/></div>
 
     <div style={{textAlign:"center",padding:"16px 0 20px"}}>
-      <div style={{fontSize:48,marginBottom:8}}>{sel.icon}</div>
+      <div style={{fontSize:48,marginBottom:8}}><Icon name={sel.icon} size={20}/></div>
       <h3 style={{fontSize:20,fontWeight:800,color:sel.color}}>Badge {sel.name}</h3>
       <p style={{fontSize:12,color:"var(--muted)",marginTop:4}}>Démarquez-vous de la concurrence</p>
     </div>
@@ -43,11 +43,11 @@ function VCertifiedScr({onBack}){
       <div style={{fontSize:12,color:"var(--muted)",marginBottom:10}}>Voici comment votre boutique apparaîtra</div>
       <div style={{display:"flex",alignItems:"center",gap:10,padding:12,background:"var(--light)",borderRadius:12}}>
         <div style={{width:40,height:40,borderRadius:12,background:sel.color+"20",display:"flex",alignItems:"center",justifyContent:"center",fontSize:18}}><Icon name="store" size={18}/></div>
-        <div><div style={{fontSize:14,fontWeight:700}}>Ma Boutique <span style={{color:sel.color}}>{sel.icon}</span></div><div style={{fontSize:11,color:"var(--muted)"}}>Boutique certifiée {sel.name} ·  4.8</div></div>
+        <div><div style={{fontSize:14,fontWeight:700}}>Ma Boutique <span style={{color:sel.color}}><Icon name={sel.icon} size={20}/></span></div><div style={{fontSize:11,color:"var(--muted)"}}>Boutique certifiée {sel.name} ·  4.8</div></div>
       </div>
     </div>
 
-    <button onClick={()=>toast.success(sel.icon+" Badge "+sel.name+" activé !")} style={{width:"100%",padding:14,borderRadius:14,border:"none",background:sel.color,color:"#fff",fontSize:15,fontWeight:700,cursor:"pointer",fontFamily:"inherit"}}>Activer le badge {sel.name}</button>
+    <button onClick={()=>toast.success(sel.icon+"Badge "+sel.name+" activé !")} style={{width:"100%",padding:14,borderRadius:14,border:"none",background:sel.color,color:"#fff",fontSize:15,fontWeight:700,cursor:"pointer",fontFamily:"inherit"}}>Activer le badge {sel.name}</button>
   </div>);
 }
 export default VCertifiedScr;

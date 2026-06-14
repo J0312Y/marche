@@ -160,14 +160,14 @@ function RoleRegScr({onBack,onDone,forceRole,onPending}){
     <div style={{textAlign:"left",maxWidth:300,margin:"16px auto",padding:16,background:"var(--card)",border:"1px solid var(--border)",borderRadius:16}}>
       <div style={{fontSize:13,fontWeight:700,marginBottom:12}}><Icon name="document" size={16}/>{" "}Prochaines étapes</div>
       {[
-        ["","Demande soumise","Maintenant","done"],
-        ["⏳","Vérification en cours","Notre équipe examine vos documents","pending"],
-        ["","Notification de validation","Sous 24-48h par SMS et in-app","waiting"],
-        [role==="vendor"?"":"",role==="vendor"?"Accès mode vendeur":"Accès mode livreur","Après validation","waiting"],
+        ["check_circle","Demande soumise","Maintenant","done"],
+        ["clock","Vérification en cours","Notre équipe examine vos documents","pending"],
+        ["bell","Notification de validation","Sous 24-48h par SMS et in-app","waiting"],
+        [role==="vendor"?"store":"truck",role==="vendor"?"Accès mode vendeur":"Accès mode livreur","Après validation","waiting"],
       ].map(([ic,title,desc,status],i)=>(
         <div key={i} style={{display:"flex",gap:10,marginBottom:i<3?12:0,position:"relative"}}>
           {i<3&&<div style={{position:"absolute",left:13,top:28,width:2,height:16,background:status==="done"?"#10B981":"var(--border)"}}/>}
-          <div style={{width:28,height:28,borderRadius:8,background:status==="done"?"rgba(16,185,129,0.1)":status==="pending"?"rgba(249,115,22,0.1)":"var(--light)",display:"flex",alignItems:"center",justifyContent:"center",fontSize:14,flexShrink:0}}>{ic}</div>
+          <div style={{width:28,height:28,borderRadius:8,background:status==="done"?"rgba(16,185,129,0.1)":status==="pending"?"rgba(249,115,22,0.1)":"var(--light)",display:"flex",alignItems:"center",justifyContent:"center",flexShrink:0,color:status==="done"?"#10B981":status==="pending"?"#F97316":"var(--muted)"}}><Icon name={ic} size={14}/></div>
           <div>
             <div style={{fontSize:12,fontWeight:600,color:status==="done"?"#10B981":status==="pending"?"#F97316":"var(--muted)"}}>{title}</div>
             <div style={{fontSize:10,color:"var(--muted)"}}>{desc}</div>
@@ -180,7 +180,7 @@ function RoleRegScr({onBack,onDone,forceRole,onPending}){
 
     <div style={{maxWidth:300,margin:"16px auto 0",display:"flex",flexDirection:"column",gap:8}}>
       <button className="btn-primary" onClick={()=>{toast.success("Demande enregistrée ! Vous serez notifié sous 24-48h ");
-        setTimeout(()=>triggerPush(" Votre demande de "+(role==="vendor"?"commerçant":"livreur")+" est en cours de vérification. Réponse sous 24-48h."),3000);
+        setTimeout(()=>triggerPush("Votre demande de "+(role==="vendor"?"commerçant":"livreur")+" est en cours de vérification. Réponse sous 24-48h."),3000);
         if(onPending) onPending(role);
         setTimeout(()=>{
           triggerPush("Félicitations ! Votre demande de "+(role==="vendor"?"commerçant":"livreur")+" a été approuvée ! Accédez à votre espace dans le Profil.");
@@ -227,18 +227,18 @@ function RoleRegScr({onBack,onDone,forceRole,onPending}){
       {step===1&&role==="vendor"&&<><h3 style={{fontSize:16,fontWeight:700,marginBottom:14}}>Votre Établissement</h3>
         <label style={{display:"block",fontSize:12,fontWeight:600,color:"var(--sub)",marginBottom:8}}>Type de commerce <span style={{color:"#EF4444"}}>*</span></label>
         <div style={{display:"grid",gridTemplateColumns:"1fr 1fr 1fr",gap:8,marginBottom:14}}>
-          {[["","Boutique","boutique"],["","Restaurant","restaurant"],["","Pâtisserie","patisserie"],["","Supermarché","supermarche"],["","Pharmacie","pharmacie"],["","Service","service"]].map(([icon,label,val])=>{const sel=selCats.includes(val);return<div key={val} onClick={(e)=>{e.stopPropagation();setSC(p=>{const types=["boutique","restaurant","patisserie","supermarche","pharmacie","service"];const filtered=p.filter(x=>!types.includes(x));return sel?filtered:[...filtered,val]});}} style={{padding:"12px 8px",borderRadius:12,border:sel?"2px solid #F97316":"2px solid var(--border)",background:sel?"rgba(249,115,22,0.08)":"var(--card)",cursor:"pointer",textAlign:"center",transition:"all .15s",position:"relative",WebkitTapHighlightColor:"transparent",userSelect:"none"}}>
-            {sel&&<div style={{position:"absolute",top:4,right:4,width:16,height:16,borderRadius:"50%",background:"#F97316",display:"flex",alignItems:"center",justifyContent:"center",fontSize:9,color:"#fff"}}></div>}
-            <div style={{fontSize:22,marginBottom:2}}>{icon}</div>
+          {[["store","Boutique","boutique"],["utensils","Restaurant","restaurant"],["cupcake","Pâtisserie","patisserie"],["cart","Supermarché","supermarche"],["pill","Pharmacie","pharmacie"],["tool","Service","service"]].map(([icon,label,val])=>{const sel=selCats.includes(val);return<div key={val} onClick={(e)=>{e.stopPropagation();setSC(p=>{const types=["boutique","restaurant","patisserie","supermarche","pharmacie","service"];const filtered=p.filter(x=>!types.includes(x));return sel?filtered:[...filtered,val]});}} style={{padding:"14px 8px",borderRadius:14,border:sel?"2px solid #F97316":"2px solid var(--border)",background:sel?"rgba(249,115,22,0.08)":"var(--card)",cursor:"pointer",textAlign:"center",transition:"all .15s",position:"relative",WebkitTapHighlightColor:"transparent",userSelect:"none"}}>
+            {sel&&<div style={{position:"absolute",top:6,right:6,width:18,height:18,borderRadius:"50%",background:"#F97316",display:"flex",alignItems:"center",justifyContent:"center",color:"#fff"}}><Icon name="check" size={12} color="#fff"/></div>}
+            <div style={{display:"flex",justifyContent:"center",alignItems:"center",marginBottom:6,color:sel?"#F97316":"var(--text)"}}><Icon name={icon} size={26} color={sel?"#F97316":"var(--text)"}/></div>
             <div style={{fontSize:11,fontWeight:700,color:sel?"#F97316":"var(--sub)"}}>{label}</div>
           </div>})}
         </div>
-        <div className="vr-upload" onClick={()=>document.getElementById("reg-upload")?.click()} style={{cursor:"pointer"}}><div className="vu-icon" id="vu-preview">️</div><b>Logo / Photo <span style={{color:"#EF4444",fontWeight:400}}>*</span></b><p>PNG, JPG · Max 2MB</p><input id="reg-upload" type="file" accept="image/*" style={{display:"none"}} onChange={e=>{const f=e.target.files?.[0];if(f){const r=new FileReader();r.onload=()=>setCropLogSrc(r.result);r.readAsDataURL(f);e.target.value=""}}}/></div>
+        <div className="vr-upload" onClick={()=>document.getElementById("reg-upload")?.click()} style={{cursor:"pointer"}}><div className="vu-icon" id="vu-preview" style={{color:"var(--muted)"}}><svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg></div><b>Logo / Photo <span style={{color:"#EF4444",fontWeight:400}}>*</span></b><p>PNG, JPG · Max 2MB</p><input id="reg-upload" type="file" accept="image/*" style={{display:"none"}} onChange={e=>{const f=e.target.files?.[0];if(f){const r=new FileReader();r.onload=()=>setCropLogSrc(r.result);r.readAsDataURL(f);e.target.value=""}}}/></div>
         <div className="field"><label>Nom de l'établissement <span style={{color:"#EF4444"}}>*</span></label><input value={fShopName} onChange={e=>{setFShopName(e.target.value);clrR("shopName")}} placeholder="Ex: Chez Mama Ngudi, Congo Tech..."/>{regErrors.shopName&&<div className="err-msg">{regErrors.shopName}</div>}</div>
         <div className="field"><label>Description <span style={{color:"#EF4444"}}>*</span></label><textarea value={fShopDesc} onChange={e=>{setFShopDesc(e.target.value);clrR("desc")}} placeholder="Votre activité, spécialités..." rows={3} style={{resize:"none"}}/>{regErrors.desc&&<div className="err-msg">{regErrors.desc}</div>}</div>
         {/* Horaires — restos, pâtisseries, pharmacies, supermarchés */}
         {["restaurant","patisserie","pharmacie","supermarche"].some(t=>selCats.includes(t))&&<div style={{marginTop:10,marginBottom:14}}>
-          <div style={{fontSize:14,fontWeight:700,marginBottom:8}}> Horaires d'ouverture</div>
+          <div style={{fontSize:14,fontWeight:700,marginBottom:8,display:"flex",alignItems:"center",gap:6}}><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="12" r="9"/><polyline points="12 7 12 12 15 14"/></svg>Horaires d'ouverture</div>
           <div className="field-row">
             <div className="field"><label>Ouverture</label><input type="time" value={fOpenTime} onChange={e=>setFOpenTime(e.target.value)} style={{padding:12}}/></div>
             <div className="field"><label>Fermeture</label><input type="time" value={fCloseTime} onChange={e=>setFCloseTime(e.target.value)} style={{padding:12}}/></div>
@@ -249,18 +249,35 @@ function RoleRegScr({onBack,onDone,forceRole,onPending}){
               <button key={d} onClick={()=>setFOpenDays(p=>sel?p.filter(x=>x!==d):[...p,d])} style={{padding:"6px 10px",borderRadius:8,border:sel?"2px solid "+color:"1px solid var(--border)",background:sel?"rgba(249,115,22,0.06)":"var(--card)",color:sel?color:"var(--muted)",fontSize:11,fontWeight:sel?700:500,cursor:"pointer",fontFamily:"inherit"}}>{d}</button>
             )})}
           </div>
-          <div style={{marginTop:8,padding:8,background:"rgba(249,115,22,0.04)",borderRadius:8,fontSize:11,color:"var(--sub)"}}>
-             {fOpenDays.join(", ")} · {fOpenTime} — {fCloseTime}
-          </div>
+          <div style={{marginTop:8,padding:8,background:"rgba(249,115,22,0.04)",borderRadius:8,fontSize:11,color:"var(--sub)",display:"flex",alignItems:"center",gap:6}}><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="12" r="9"/><polyline points="12 7 12 12 15 14"/></svg>{fOpenDays.join(", ")} · {fOpenTime} — {fCloseTime}</div>
         </div>}
 
         <label style={{display:"block",fontSize:12,fontWeight:600,color:"var(--sub)",margin:"14px 0 8px"}}>Sous-catégories</label>
-        <div className="vr-cat-grid">{CATS.map(c=><div key={c.id} className={`vr-cat ${selCats.includes(c.name)?"on":""}`} onClick={()=>toggleCat(c.name)}><div className="vci"><Icon name={c.icon} size={20}/></div><div className="vcn">{c.name}</div></div>)}</div>
+        <div style={{display:"grid",gridTemplateColumns:"1fr 1fr 1fr",gap:8}}>{CATS.map(c=>{const sel=selCats.includes(c.name);return(
+          <div key={c.id} onClick={()=>toggleCat(c.name)} style={{padding:8,borderRadius:14,border:sel?"2px solid #F97316":"2px solid var(--border)",background:sel?"rgba(249,115,22,0.08)":"var(--card)",cursor:"pointer",textAlign:"center",position:"relative",transition:"all .15s",WebkitTapHighlightColor:"transparent"}}>
+            {sel&&<div style={{position:"absolute",top:6,right:6,width:18,height:18,borderRadius:"50%",background:"#F97316",display:"flex",alignItems:"center",justifyContent:"center",zIndex:2}}><Icon name="check" size={12} color="#fff"/></div>}
+            <div style={{width:"100%",aspectRatio:"1 / 1",borderRadius:10,overflow:"hidden",background:"var(--light)",marginBottom:6}}>
+              {c.photo ? <img src={c.photo} alt={c.name} style={{width:"100%",height:"100%",objectFit:"cover"}}/> : <div style={{width:"100%",height:"100%",display:"flex",alignItems:"center",justifyContent:"center",color:"var(--muted)"}}><Icon name="package" size={24}/></div>}
+            </div>
+            <div style={{fontSize:10,fontWeight:700,color:sel?"#F97316":"var(--sub)",lineHeight:1.2}}>{c.name}</div>
+          </div>
+        )})}</div>
       </>}
 
       {/* STEP 1 DRIVER: Véhicule */}
       {step===1&&role==="driver"&&<><h3 style={{fontSize:16,fontWeight:700,marginBottom:14}}>Votre Véhicule</h3>
-        <div className="field"><label>Type de véhicule <span style={{color:"#EF4444"}}>*</span></label><Select value={fVehType} onChange={v=>setFVehType(v)} options={[{value:"moto",label:"Moto"},{value:"voiture",label:" Voiture"},{value:"velo",label:"Vélo"}]}/></div>
+        <div style={{marginBottom:14}}>
+          <label style={{display:"block",fontSize:12,fontWeight:600,color:"var(--sub)",marginBottom:8}}>Type de véhicule <span style={{color:"#EF4444"}}>*</span></label>
+          <div style={{display:"grid",gridTemplateColumns:"1fr 1fr 1fr",gap:8}}>
+            {[["truck","Moto","moto"],["car","Voiture","voiture"],["activity","Vélo","velo"]].map(([icon,label,val])=>{const sel=fVehType===val;return(
+              <div key={val} onClick={()=>setFVehType(val)} style={{padding:"14px 8px",borderRadius:14,border:sel?"2px solid #10B981":"2px solid var(--border)",background:sel?"rgba(16,185,129,0.08)":"var(--card)",cursor:"pointer",textAlign:"center",transition:"all .15s",position:"relative",WebkitTapHighlightColor:"transparent",userSelect:"none"}}>
+                {sel&&<div style={{position:"absolute",top:6,right:6,width:18,height:18,borderRadius:"50%",background:"#10B981",display:"flex",alignItems:"center",justifyContent:"center"}}><Icon name="check" size={12} color="#fff"/></div>}
+                <div style={{display:"flex",justifyContent:"center",alignItems:"center",marginBottom:6,color:sel?"#10B981":"var(--text)"}}><Icon name={icon} size={26} color={sel?"#10B981":"var(--text)"}/></div>
+                <div style={{fontSize:11,fontWeight:700,color:sel?"#10B981":"var(--sub)"}}>{label}</div>
+              </div>
+            )})}
+          </div>
+        </div>
         <div className="field-row"><div className="field"><label>Marque <span style={{color:"#EF4444"}}>*</span></label><input value={fVehMarque} onChange={e=>{setFVehMarque(e.target.value);clrR("marque")}} placeholder="Honda PCX"/>{regErrors.marque&&<div className="err-msg">{regErrors.marque}</div>}</div><div className="field"><label>Année <span style={{color:"#EF4444"}}>*</span></label><input value={fVehAnnee} onChange={e=>{setFVehAnnee(e.target.value);clrR("annee")}} placeholder="2023"/>{regErrors.annee&&<div className="err-msg">{regErrors.annee}</div>}</div></div>
         <div className="field-row"><div className="field"><label>Plaque <span style={{color:"#EF4444"}}>*</span></label><input value={fVehPlaque} onChange={e=>{setFVehPlaque(e.target.value);clrR("plaque")}} placeholder="BZ-4521"/>{regErrors.plaque&&<div className="err-msg">{regErrors.plaque}</div>}</div><div className="field"><label>Couleur <span style={{color:"#EF4444"}}>*</span></label><input value={fVehCouleur} onChange={e=>setFVehCouleur(e.target.value)} placeholder="Noir"/></div></div>
         {/* Vehicle photo */}
@@ -292,8 +309,8 @@ function RoleRegScr({onBack,onDone,forceRole,onPending}){
       {step===2&&<><h3 style={{fontSize:16,fontWeight:700,marginBottom:6}}>Documents requis</h3>
         <p style={{fontSize:12,color:"var(--muted)",lineHeight:1.5,marginBottom:14}}>Uploadez vos documents pour vérification. Formats acceptés : JPG, PNG, PDF. Max 5 MB par fichier.</p>
         {(role==="vendor"?
-          [["","Pièce d'identité","Carte nationale ou passeport (obligatoire)","id","image/*,.pdf"],["","RCCM / Patente","Registre de commerce (optionnel)","rccm","image/*,.pdf"],["","Photo de l'établissement","Votre espace de vente (obligatoire)","photo","image/*"]]
-          :[["","Pièce d'identité","Carte nationale ou passeport (obligatoire)","id","image/*,.pdf"],["","Permis de conduire","Obligatoire pour moto/voiture","permit","image/*,.pdf"],["","Photo du véhicule","Vue claire du véhicule (obligatoire)","vehicle","image/*"]]
+          [["user","Pièce d'identité","Carte nationale ou passeport (obligatoire)","id","image/*,.pdf"],["document","RCCM / Patente","Registre de commerce (optionnel)","rccm","image/*,.pdf"],["store","Photo de l'établissement","Votre espace de vente (obligatoire)","photo","image/*"]]
+          :[["user","Pièce d'identité","Carte nationale ou passeport (obligatoire)","id","image/*,.pdf"],["key","Permis de conduire","Obligatoire pour moto/voiture","permit","image/*,.pdf"],["car","Photo du véhicule","Vue claire du véhicule (obligatoire)","vehicle","image/*"]]
         ).map(([icon,title,desc,key,accept])=>(
           <div key={key} style={{padding:14,background:"var(--card,#fff)",border:docs[key]?"2px solid "+color:"1px solid var(--border,#E8E6E1)",borderRadius:16,marginBottom:10,position:"relative"}}>
             <input id={`doc-${key}`} type="file" accept={accept} style={{display:"none"}} onChange={e=>{
@@ -309,12 +326,12 @@ function RoleRegScr({onBack,onDone,forceRole,onPending}){
 
             {!docs[key]?(
               <div onClick={()=>document.getElementById(`doc-${key}`)?.click()} style={{cursor:"pointer",display:"flex",alignItems:"center",gap:12}}>
-                <div style={{width:48,height:48,borderRadius:14,background:role==="vendor"?"rgba(249,115,22,0.06)":"rgba(16,185,129,0.06)",display:"flex",alignItems:"center",justifyContent:"center",fontSize:22,flexShrink:0}}>{icon}</div>
+                <div style={{width:48,height:48,borderRadius:14,background:role==="vendor"?"rgba(249,115,22,0.06)":"rgba(16,185,129,0.06)",display:"flex",alignItems:"center",justifyContent:"center",flexShrink:0,color:role==="vendor"?"#F97316":"#10B981"}}><Icon name={icon} size={24}/></div>
                 <div style={{flex:1}}>
                   <div style={{fontSize:13,fontWeight:700}}>{title}</div>
                   <div style={{fontSize:11,color:"var(--muted,#908C82)",marginTop:2}}>{desc}</div>
                 </div>
-                <div style={{padding:"8px 14px",borderRadius:10,border:`1px dashed ${color}`,color:color,fontSize:11,fontWeight:600,flexShrink:0}}> Upload</div>
+                <div style={{padding:"8px 14px",borderRadius:10,border:`1px dashed ${color}`,color:color,fontSize:11,fontWeight:600,flexShrink:0,display:"flex",alignItems:"center",gap:4}}><Icon name="plus" size={12} color={color}/>Upload</div>
               </div>
             ):(
               <div>
@@ -325,7 +342,7 @@ function RoleRegScr({onBack,onDone,forceRole,onPending}){
                       <img src={docs[key].preview} style={{width:"100%",height:"100%",objectFit:"cover"}} alt=""/>
                     </div>
                   ):(
-                    <div style={{width:48,height:48,borderRadius:14,background:"rgba(249,115,22,0.04)",display:"flex",alignItems:"center",justifyContent:"center",fontSize:18,flexShrink:0}}></div>
+                    <div style={{width:48,height:48,borderRadius:14,background:"rgba(249,115,22,0.04)",display:"flex",alignItems:"center",justifyContent:"center",flexShrink:0,color:"#F97316"}}><Icon name="document" size={22}/></div>
                   )}
                   <div style={{flex:1,minWidth:0}}>
                     <div style={{fontSize:13,fontWeight:700,color:"#10B981",display:"flex",alignItems:"center",gap:4}}><Icon name="check_circle" size={16}/>{" "}{title}</div>
@@ -475,7 +492,7 @@ function RoleRegScr({onBack,onDone,forceRole,onPending}){
           <div style={{display:"flex",gap:8}}>
             <button onClick={()=>setShowPayment(false)} disabled={paying} style={{flex:1,padding:12,borderRadius:12,border:"1px solid var(--border)",background:"var(--card)",fontSize:13,fontWeight:600,cursor:"pointer",fontFamily:"inherit",color:"var(--text)"}}>Annuler</button>
             <button onClick={processPayment} disabled={paying||!isPayPhoneValid(payPhone,payMethod)} style={{flex:1,padding:12,borderRadius:12,border:"none",background:isPayPhoneValid(payPhone,payMethod)?"#F97316":"var(--border)",color:isPayPhoneValid(payPhone,payMethod)?"#fff":"var(--muted)",fontSize:13,fontWeight:700,cursor:isPayPhoneValid(payPhone,payMethod)?"pointer":"not-allowed",fontFamily:"inherit"}}>
-              {paying?"⏳ Validation...":"Payer "+payAmount.toLocaleString("fr-FR")+" F"}
+              {paying?"⏳ Validation...":"Payer "+payAmount.toLocaleString("fr-FR")+"F"}
             </button>
           </div>
         </>}

@@ -2,6 +2,7 @@ import DatePicker from "../../components/DatePicker";
 import { useState } from "react";
 import Select from "../../components/Select";
 import toast from "../../utils/toast";
+import { useGuestGate } from "../../hooks/useGuestGate";
 import SuccessAnimation from "../../components/SuccessAnimation";
 import PayLogo from "../../components/PayLogos";
 import { validatePayPhone, getPhonePlaceholder } from "../../utils/phoneValidation";
@@ -9,7 +10,8 @@ import { fmt, getVendorPromo } from "../../utils/helpers";
 import { useData } from "../../hooks";
 import Icon from "../../components/Icon";
 
-function CheckoutScr({onBack,onDone,cart=[],clearCart,appliedCoupon,setAppliedCoupon}){
+function CheckoutScr({onBack,onDone,cart=[],clearCart,appliedCoupon,setAppliedCoupon,go}){
+  const { gate, GateUI } = useGuestGate(go);
   const [step,setStep]=useState(0);const [momo,setMomo]=useState("airtel");const [ok,setOk]=useState(false);
   const [okAnimShown,setOkAnimShown]=useState(false);
   const [ckAddr,setCkAddr]=useState("");
@@ -56,7 +58,7 @@ function CheckoutScr({onBack,onDone,cart=[],clearCart,appliedCoupon,setAppliedCo
 
   return(<>
     <div className="appbar"><button onClick={()=>step>0?setStep(step-1):onBack?.()}>←</button><h2>Paiement</h2><div style={{width:38}}/></div>
-    <div className="steps">{["Adresse","Paiement","Confirmer"].map((s,i)=><div key={s} style={{display:"contents"}}>{i>0&&<div className={`sline ${step>=i?"on":""}`}/>}<div className="step-col"><div className={`sdot ${step>i?"on":step>=i?"on":""}`}>{step>i?"":i+1}</div><div className={`slbl ${step>=i?"on":""}`}>{s}</div></div></div>)}</div>
+    <div className="steps">{["Adresse","Paiement","Confirmer"].map((s,i)=><div key={s} style={{display:"contents"}}>{i>0&&<div className={`sline ${step>=i?"on":""}`}/>}<div className="step-col"><div className={`sdot ${step>i?"on":step>=i?"on":""}`}>{step>i?"":i+1}</div><div className={`slbl ${step>=i?"on":""}`}>{s}<GateUI/></div></div></div>)}</div>
     <div className="scr" style={{padding:16}}>
       {step===0&&<><h3 style={{fontSize:18,fontWeight:700,marginBottom:14}}>Adresse de livraison</h3>
         <div className="field"><label>Nom complet <span style={{color:"#EF4444"}}>*</span></label><input defaultValue="Joeldy Tsina"/></div>
@@ -65,7 +67,7 @@ function CheckoutScr({onBack,onDone,cart=[],clearCart,appliedCoupon,setAppliedCo
         <div className="field-row"><div className="field"><label>Ville <span style={{color:"#EF4444"}}>*</span></label><input defaultValue="Brazzaville"/></div><div className="field"><label>Pays</label><input defaultValue="Congo "/></div></div>
         <div style={{marginTop:12,fontSize:13,fontWeight:700,marginBottom:8}}> Quand livrer ?</div>
         <div style={{display:"flex",gap:6,marginBottom:8}}>
-          {[["now","Maintenant"],["later"," Programmer"]].map(([k,l])=><button key={k} onClick={()=>setSchedule(k)} style={{flex:1,padding:10,borderRadius:12,border:schedule===k?"2px solid #F97316":"1px solid var(--border)",background:schedule===k?"rgba(249,115,22,0.06)":"var(--card)",fontSize:12,fontWeight:schedule===k?700:500,color:schedule===k?"#F97316":"var(--text)",cursor:"pointer",fontFamily:"inherit"}}>{l}</button>)}
+          {[["now","Maintenant"],["later","Programmer"]].map(([k,l])=><button key={k} onClick={()=>setSchedule(k)} style={{flex:1,padding:10,borderRadius:12,border:schedule===k?"2px solid #F97316":"1px solid var(--border)",background:schedule===k?"rgba(249,115,22,0.06)":"var(--card)",fontSize:12,fontWeight:schedule===k?700:500,color:schedule===k?"#F97316":"var(--text)",cursor:"pointer",fontFamily:"inherit"}}>{l}</button>)}
         </div>
         {schedule==="later"&&<div className="field-row"><div className="field"><label>Date</label><DatePicker value={schedDate} onChange={setSchedDate}/></div><div className="field"><label>Créneau</label><Select value={schedTime} onChange={setSchedTime} options={["08:00-10:00","10:00-12:00","12:00-14:00","14:00-16:00","16:00-18:00","18:00-20:00"]}/></div></div>}
         <div style={{display:"flex",alignItems:"center",gap:8,marginTop:4}}><div className={`toggle ${saveAddr?"on":""}`} onClick={()=>setSaveAddr(!saveAddr)} style={{transform:"scale(.8)"}}/><span style={{fontSize:12,color:"var(--muted)"}}>Sauvegarder cette adresse</span></div></>}
@@ -122,7 +124,7 @@ function CheckoutScr({onBack,onDone,cart=[],clearCart,appliedCoupon,setAppliedCo
           {(discountAmount>0||freeDelivery)&&<div style={{textAlign:"center",fontSize:11,color:"#F59E0B",fontWeight:600,marginTop:4}}><Icon name="sparkle" size={16}/>{" "}Économie : {fmt(discountAmount+(freeDelivery?del:0))}</div>}
         </div></>}
 
-      <div style={{paddingTop:24,paddingBottom:16}}><button className="btn-primary" onClick={()=>{if(step===0&&!validateStep0())return;if(step===1&&momo!=="cash"){const err=validatePayPhone(ckPhone,momo);if(err){setCkPhoneErr(err);return}}if(step===2){if(validateCheckout())handleConfirm()}else setStep(step+1)}}>{step===2?"Confirmer le paiement":"Continuer"}</button></div>
+      <div style={{paddingTop:24,paddingBottom:16}}><button className="btn-primary" onClick={()=>{if(step===0&&!validateStep0())return;if(step===1&&momo!=="cash"){const err=validatePayPhone(ckPhone,momo);if(err){setCkPhoneErr(err);return}}if(step===2){if(validateCheckout())gate("checkout",()=>handleConfirm())}else setStep(step+1)}}>{step===2?"Confirmer le paiement":"Continuer"}</button></div>
     </div>
 
     {ok&&!okAnimShown&&<SuccessAnimation title="Commande confirmée !" subtitle={"Total : "+fmt(total)} hint={`+${window.__lastPointsEarned||Math.floor(total/100)} Lamuka Points gagnés ! `} duration={2000} onDone={()=>setOkAnimShown(true)}/>}

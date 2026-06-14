@@ -10,7 +10,7 @@ import Icon from "../../components/Icon";
 function DrProfileScr({go,onSwitch,onLogout}){
   const Item=({icon,label,info,onClick})=>(
     <div onClick={onClick} style={{display:"flex",alignItems:"center",gap:14,padding:"12px 16px",cursor:"pointer",borderBottom:"1px solid var(--border)"}}>
-      <span style={{fontSize:20,width:22,textAlign:"center"}}>{icon}</span>
+      <span style={{width:28,height:28,display:"flex",alignItems:"center",justifyContent:"center",color:"var(--text)",flexShrink:0}}>{(icon)?<Icon name={icon} size={20}/>:null}</span>
       <span style={{flex:1,fontSize:14,fontWeight:500,color:"var(--text)"}}>{label}</span>
       {info&&<span style={{fontSize:12,color:"var(--muted)",fontWeight:500}}>{info}</span>}
       <svg width="7" height="12" viewBox="0 0 7 12" fill="none" style={{flexShrink:0,opacity:.3}}><path d="M1 1l5 5-5 5" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/></svg>
@@ -62,25 +62,25 @@ function DrProfileScr({go,onSwitch,onLogout}){
     <div className="wallet" style={{margin:"0 16px 14px",background:"linear-gradient(135deg,#F97316,#EA580C)"}}><div><p style={{fontSize:11,color:"rgba(255,255,255,.7)"}}>Gains disponibles</p><h3 style={{fontSize:20,fontWeight:700,marginTop:2,color:"#fff"}}>{fmt(D_STATS.month.earned)}</h3></div><button onClick={()=>go("drWallet")}>Retirer</button></div>
 
     {/* ═══ LIVRAISONS ═══ */}
-    <Section icon="" title="MES LIVRAISONS">
-      <Item icon="" label="Historique" info={D_HISTORY.length+" livraisons"} onClick={()=>go("drHistory")}/>
-      <Item icon="" label="Mes gains" info="Février 2026" onClick={()=>go("drWallet")}/>
-      <Item icon="" label="Statistiques" info="Cette semaine" onClick={()=>go("drStats")}/>
+    <Section icon="truck" title="MES LIVRAISONS">
+      <Item icon="clock" label="Historique" info={D_HISTORY.length+" livraisons"} onClick={()=>go("drHistory")}/>
+      <Item icon="wallet" label="Mes gains" info="Février 2026" onClick={()=>go("drWallet")}/>
+      <Item icon="chart_pie" label="Statistiques" info="Cette semaine" onClick={()=>go("drStats")}/>
     </Section>
 
     {/* ═══ VÉHICULE & ZONES ═══ */}
-    <Section icon="" title="VÉHICULE & ZONES">
-      <Item icon="" label="Mon véhicule" info="Honda PCX" onClick={()=>go("drVehicle")}/>
-      <Item icon="" label="Mes documents" info="5/6 valides" onClick={()=>go("drDocuments")}/>
-      <Item icon="" label="Zones actives" info="Bzv Sud, Centre" onClick={()=>go("drZones")}/>
+    <Section icon="car" title="VÉHICULE & ZONES">
+      <Item icon="car" label="Mon véhicule" info="Honda PCX" onClick={()=>go("drVehicle")}/>
+      <Item icon="document" label="Mes documents" info="5/6 valides" onClick={()=>go("drDocuments")}/>
+      <Item icon="map" label="Zones actives" info="Bzv Sud, Centre" onClick={()=>go("drZones")}/>
     </Section>
 
     {/* ═══ OUTILS ═══ */}
-    <Section icon="" title="OUTILS & SUPPORT">
-      <Item icon="" label="Notifications" info="3" onClick={()=>go("drNotif")}/>
-      <Item icon="" label="Assistant Lamu" info="IA" onClick={()=>go("drChatBot")}/>
-      <Item icon="" label="Paramètres" info="Langue, notifs" onClick={()=>go("drSettings")}/>
-      <Item icon="" label="Aide & Support" info="FAQ, contact" onClick={()=>go("drHelp")}/>
+    <Section icon="tool" title="OUTILS & SUPPORT">
+      <Item icon="bell" label="Notifications" info="3" onClick={()=>go("drNotif")}/>
+      <Item icon="headphones" label="Assistant Lamu" info="IA" onClick={()=>go("drChatBot")}/>
+      <Item icon="settings" label="Paramètres" info="Langue, notifs" onClick={()=>go("drSettings")}/>
+      <Item icon="help" label="Aide & Support" info="FAQ, contact" onClick={()=>go("drHelp")}/>
     </Section>
 
     {/* Switch + Logout */}

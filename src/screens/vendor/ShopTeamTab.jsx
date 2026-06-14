@@ -62,7 +62,7 @@ function ShopTeamTab(){
       <div className="info-box blue" style={{marginBottom:10,padding:"6px 10px"}}><span><Icon name="mail" size={18}/></span><span style={{fontSize:11}}>Un email d'invitation sera envoyé à cette adresse</span></div>
       <div style={{display:"flex",gap:8}}>
         <button style={{flex:1,padding:12,borderRadius:12,border:"1px solid var(--border)",background:"var(--card)",fontSize:13,fontWeight:600,cursor:"pointer",fontFamily:"inherit"}} onClick={()=>{setShowInvite(false);setInvName("");setInvEmail("")}}>Annuler</button>
-        <button className="btn-primary" style={{flex:2,background:invited?"#10B981":(invName&&invEmail)?"#F97316":"var(--border)",color:(invName&&invEmail)||invited?"var(--card)":"var(--muted)"}} onClick={doInvite}>{invited?"Invitation envoyée !":" Envoyer l'invitation"}</button>
+        <button className="btn-primary" style={{flex:2,background:invited?"#10B981":(invName&&invEmail)?"#F97316":"var(--border)",color:(invName&&invEmail)||invited?"var(--card)":"var(--muted)"}} onClick={doInvite}>{invited?"Invitation envoyée !":"Envoyer l'invitation"}</button>
       </div>
     </div>
     :<button className="btn-primary" onClick={()=>setShowInvite(true)}>+ Inviter un collaborateur</button>}

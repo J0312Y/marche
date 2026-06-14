@@ -55,7 +55,7 @@ function DrDocumentsScr({onBack}){
       const st=statusInfo[doc.status];
       return(<div key={key} style={{padding:14,background:"var(--card)",border:"1px solid var(--border)",borderRadius:14,marginBottom:10}}>
         <div style={{display:"flex",alignItems:"center",gap:10,marginBottom:doc.status!=="valid"?10:0}}>
-          <div style={{width:40,height:40,borderRadius:12,background:st.bg,display:"flex",alignItems:"center",justifyContent:"center",fontSize:18}}>{st.icon}</div>
+          <div style={{width:40,height:40,borderRadius:12,background:st.bg,display:"flex",alignItems:"center",justifyContent:"center",fontSize:18}}><Icon name={st.icon} size={20}/></div>
           <div style={{flex:1}}>
             <div style={{fontSize:13,fontWeight:600}}>{doc.name}</div>
             <div style={{display:"flex",alignItems:"center",gap:6,marginTop:2}}>
@@ -69,7 +69,7 @@ function DrDocumentsScr({onBack}){
         {(doc.status==="expiring"||doc.status==="expired")&&<div style={{display:"flex",gap:8}}>
           <input id={`doc-${key}`} type="file" accept="image/*,.pdf" style={{display:"none"}} onChange={()=>handleUpload(key)}/>
           <button onClick={()=>document.getElementById(`doc-${key}`)?.click()} disabled={uploading===key} style={{flex:1,padding:10,borderRadius:10,border:"none",background:doc.status==="expired"?"#EF4444":"#F59E0B",color:"#fff",fontSize:12,fontWeight:600,cursor:"pointer",fontFamily:"inherit"}}>
-            {uploading===key?"⏳ Envoi...":" Mettre à jour"}
+            {uploading===key?"⏳ Envoi...":"Mettre à jour"}
           </button>
         </div>}
 

@@ -119,7 +119,7 @@ function VPromosScr({go,onBack}){
         </div>
 
         <button onClick={saveEdit} disabled={!editPromo.name} style={{width:"100%",padding:14,borderRadius:14,border:"none",background:editPromo.name?"#F97316":"var(--border)",color:editPromo.name?"var(--card)":"var(--muted)",fontSize:14,fontWeight:700,cursor:editPromo.name?"pointer":"not-allowed",fontFamily:"inherit"}}>
-          {editPromo.id?" Enregistrer les modifications":"Créer la promotion"}
+          {editPromo.id?"Enregistrer les modifications":"Créer la promotion"}
         </button>
       </div>
     </div>}

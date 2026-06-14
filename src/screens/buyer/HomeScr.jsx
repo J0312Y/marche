@@ -1,4 +1,5 @@
 import Icon from "../../components/Icon";
+import GuestBanner from "../../components/GuestBanner";
 import StoriesCarousel from "../../components/StoriesCarousel";
 import { useState, useEffect } from "react";
 import Img from "../../components/Img";
@@ -112,7 +113,7 @@ function HomeScr({go,favs,toggleFav,isFav,userName}){
       {/* Active filter indicator */}
       {!showFilter&&(filterType!=="all"||filterSort!=="popular")&&<div style={{display:"flex",alignItems:"center",gap:6,padding:"0 16px 8px"}}>
         <span style={{fontSize:11,color:"var(--muted)"}}>Filtres :</span>
-        {filterType!=="all"&&<span onClick={()=>{setFilterType("all");setSelType("all")}} style={{padding:"3px 8px",borderRadius:6,background:"rgba(249,115,22,0.08)",color:"#F97316",fontSize:10,fontWeight:600,cursor:"pointer"}}>{types.find(t=>t.id===filterType)?.icon} {types.find(t=>t.id===filterType)?.name} </span>}
+        {filterType!=="all"&&<span onClick={()=>{setFilterType("all");setSelType("all")}} style={{padding:"3px 8px",borderRadius:6,background:"rgba(249,115,22,0.08)",color:"#F97316",fontSize:10,fontWeight:600,cursor:"pointer"}}><Icon name={types.find(t=>t.id===filterType)?.icon} size={14}/> {types.find(t=>t.id===filterType)?.name} </span>}
         {filterSort!=="popular"&&<span onClick={()=>setFilterSort("popular")} style={{padding:"3px 8px",borderRadius:6,background:"rgba(59,130,246,0.08)",color:"#3B82F6",fontSize:10,fontWeight:600,cursor:"pointer"}}>{filterSort==="rating"?"Notés":"Prix"} </span>}
       </div>}
 
@@ -303,7 +304,7 @@ function HomeScr({go,favs,toggleFav,isFav,userName}){
         <span style={{color:"#F97316",fontSize:16}}>›</span>
       </div>
 
-      {/* Restos à la une */}}
+      {/* Restos à la une */}
       {(selType==="all"||selType==="restaurant")&&nearbyRestos.length>0&&<>
       {/* Events / promos banner */}
       {(()=>{
@@ -317,8 +318,8 @@ function HomeScr({go,favs,toggleFav,isFav,userName}){
         else event={icon:"gift",title:"Promo spéciale",sub:"Code WEEKEND15 — -15% restos",bg:"linear-gradient(135deg,#F97316,#EC4899)",text:"#fff",badge:"-15%"};
         return(
           <div onClick={()=>go("allProducts")} style={{margin:"4px 16px 14px",padding:14,background:event.bg,borderRadius:14,color:event.text,cursor:"pointer",display:"flex",alignItems:"center",gap:12,position:"relative",overflow:"hidden"}}>
-            <div style={{position:"absolute",top:-20,right:-20,fontSize:90,opacity:.15}}>{event.icon}</div>
-            <div style={{fontSize:32,zIndex:1}}>{event.icon}</div>
+            <div style={{position:"absolute",top:-20,right:-20,fontSize:90,opacity:.15}}><Icon name={event.icon} size={20}/></div>
+            <div style={{fontSize:32,zIndex:1}}><Icon name={event.icon} size={20}/></div>
             <div style={{flex:1,zIndex:1,minWidth:0}}>
               <div style={{fontSize:14,fontWeight:800}}>{event.title}</div>
               <div style={{fontSize:11,opacity:.9,marginTop:2}}>{event.sub}</div>
@@ -426,7 +427,7 @@ function HomeScr({go,favs,toggleFav,isFav,userName}){
                       <svg width="10" height="10" viewBox="0 0 24 24" fill="#F59E0B"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
                       {v.rating}
                     </span>
-                    <span style={{color:"var(--muted)"}}>Livraison {v.deliveryFee?v.deliveryFee.toLocaleString("fr")+" F":"gratuite"}</span>
+                    <span style={{color:"var(--muted)"}}>Livraison {v.deliveryFee?v.deliveryFee.toLocaleString("fr")+"F":"gratuite"}</span>
                   </div>
                 </div>
               </div>
@@ -495,7 +496,7 @@ function HomeScr({go,favs,toggleFav,isFav,userName}){
 
 
       <div className="sec"><h3>{selType==="all"?"Populaires":"Populaires en "+types.find(t=>t.id===selType)?.name}</h3><span onClick={()=>go("allProducts")}>Voir tout</span></div>
-      <div className="pgrid stagger-grid">{sortedP.map(p=>{const vp=getVendorPromo(p,VENDORS);const td=totalDisc(p,VENDORS);return(<div key={p.id} className="pcard" onClick={()=>go("detail",p)}><div className="pimg"><Img src={p.photo} emoji={p.img} style={{position:"absolute",inset:0,width:"100%",height:"100%"}} fit="cover"/>{p.old&&<span className="badge">-{disc(p)}%</span>}{vp&&<span className="tag" style={{background:"#F59E0B",color:"#fff"}}><Icon name="tag" size={16}/>{" "}{vp.promoName}</span>}{!vp&&p.tags[0]&&<span className="tag">{p.tags[0]}</span>}<span className="fav" onClick={e=>{e.stopPropagation();toggleFav(p.id)}} style={{color:isFav(p.id)?"#EF4444":"var(--muted)",fontSize:14}}>{isFav(p.id)?"":""}</span></div><div className="pbody"><h4>{p.name}</h4><div className="pv">{p.va} {p.vendor}{p.eta&&<span style={{marginLeft:4,color:"#F97316",fontSize:10}}> {p.eta}</span>}</div><div className="pp">{vp?<><span style={{color:"#F97316"}}>{fmt(vp.promoPrice)}</span><span className="po">{fmt(p.price)}</span></>:<>{fmt(p.price)}{p.old&&<span className="po">{fmt(p.old)}</span>}</>}</div><div className="pr" onClick={e=>{e.stopPropagation();go("reviews",p)}}><Icon name="star_full" size={16}/>{" "}{p.rating} ({p.reviews})</div></div></div>)})}</div>
+      <div className="pgrid stagger-grid">{sortedP.map(p=>{const vp=getVendorPromo(p,VENDORS);const td=totalDisc(p,VENDORS);return(<div key={p.id} className="pcard" onClick={()=>go("detail",p)}><div className="pimg"><Img src={p.photo} emoji={p.img} style={{position:"absolute",inset:0,width:"100%",height:"100%"}} fit="cover"/>{p.old&&<span className="badge">-{disc(p)}%</span>}{vp&&<span className="tag" style={{background:"#F59E0B",color:"#fff"}}><Icon name="tag" size={16}/>{" "}{vp.promoName}</span>}{!vp&&p.tags[0]&&<span className="tag">{p.tags[0]}</span>}<span className="fav" onClick={e=>{e.stopPropagation();toggleFav(p.id)}} style={{color:isFav(p.id)?"#EF4444":"var(--muted)",fontSize:14}}>{isFav(p.id) ? <svg width="14" height="14" viewBox="0 0 24 24" fill="#EF4444"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg> : <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#6B7280" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>}</span></div><div className="pbody"><h4>{p.name}</h4><div className="pv">{p.va} {p.vendor}{p.eta&&<span style={{marginLeft:4,color:"#F97316",fontSize:10}}> {p.eta}</span>}</div><div className="pp">{vp?<><span style={{color:"#F97316"}}>{fmt(vp.promoPrice)}</span><span className="po">{fmt(p.price)}</span></>:<>{fmt(p.price)}{p.old&&<span className="po">{fmt(p.old)}</span>}</>}</div><div className="pr" onClick={e=>{e.stopPropagation();go("reviews",p)}}><Icon name="star_full" size={16}/>{" "}{p.rating} ({p.reviews})</div></div></div>)})}</div>
       </>}
     </div></PullToRefresh>
 

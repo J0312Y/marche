@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { useGuestGate } from "../../hooks/useGuestGate";
 import toast from "../../utils/toast";
 import { useData } from "../../hooks";
 import Img from "../../components/Img";
@@ -27,6 +28,7 @@ const MOCK_REVIEWS=[
 ];
 
 function VendorScr({vendor:vProp,go,onBack}){
+  const { gate, GateUI } = useGuestGate(go);
   const { P, VENDORS } = useData();
   const v = VENDORS.find(x => x.name === vProp?.name || x.id === vProp?.id) || vProp || {};
   const [following,setFollowing]=useState(false);
@@ -85,7 +87,7 @@ function VendorScr({vendor:vProp,go,onBack}){
 
     {/* Buttons */}
     <div className="vp-btns">
-      <button className="vb1" style={following?{background:"var(--card)",color:"#F97316",border:"1px solid #F97316"}:{}} onClick={toggleFollow}>{following?" Suivi":"+ Suivre"}</button>
+      <button className="vb1" style={following?{background:"var(--card)",color:"#F97316",border:"1px solid #F97316"}:{}} onClick={toggleFollow}>{following?"Suivi":"+ Suivre"}</button>
       <button className="vb2" onClick={()=>go("chatVendor",v)}><Icon name="chat" size={16}/>{" "}Contacter</button><button className="vb2" style={{flex:"none",width:44}} onClick={()=>shareVendor(v)}></button>
     </div>
 
@@ -101,7 +103,7 @@ function VendorScr({vendor:vProp,go,onBack}){
 
     {/* Tab bar */}
     <div style={{display:"flex",borderBottom:"1px solid var(--border)",margin:"0 20px 14px"}}>
-      {[["products","️ Produits"],["reviews","Avis"],["followers"," Abonnés"]].map(([k,l])=>(
+      {[["products","️ Produits"],["reviews","Avis"],["followers","Abonnés"]].map(([k,l])=>(
         <button key={k} onClick={()=>setTab(k)} style={{flex:1,padding:"10px 0",border:"none",borderBottom:tab===k?"2px solid #F97316":"2px solid transparent",background:"transparent",fontSize:12,fontWeight:tab===k?700:500,color:tab===k?"#F97316":"var(--muted)",cursor:"pointer",fontFamily:"inherit",transition:"all .2s"}}>{l}</button>
       ))}
     </div>
@@ -118,7 +120,7 @@ function VendorScr({vendor:vProp,go,onBack}){
       {/* Rating summary */}
       <div style={{textAlign:"center",marginBottom:14}}>
         <div style={{fontSize:36,fontWeight:700}}>{avgRating.toFixed(1)}</div>
-        <div style={{fontSize:16,color:"#F59E0B",marginBottom:2}}>{"".repeat(Math.floor(avgRating))}{"".repeat(5-Math.floor(avgRating))}</div>
+        <div style={{fontSize:16,color:"#F59E0B",marginBottom:2}}>{"⭐".repeat(Math.floor(avgRating))}{"☆".repeat(5-Math.floor(avgRating))}</div>
         <div style={{fontSize:12,color:"var(--muted)"}}>{MOCK_REVIEWS.length} avis vérifiés</div>
       </div>
 
@@ -129,7 +131,7 @@ function VendorScr({vendor:vProp,go,onBack}){
             <div style={{fontSize:13,fontWeight:700}}>{r.name}</div>
             <div style={{fontSize:11,color:"var(--muted)"}}>{r.date} · {r.product}</div>
           </div>
-          <div style={{fontSize:12,color:"#F59E0B"}}>{"".repeat(r.rating)}{"".repeat(5-r.rating)}</div>
+          <div style={{fontSize:12,color:"#F59E0B"}}>{"⭐".repeat(r.rating)}{"☆".repeat(5-r.rating)}</div>
         </div>
         <p style={{fontSize:13,color:"var(--sub)",lineHeight:1.5,margin:0}}>{r.text}</p>
         {r.photos&&r.photos.length>0&&<div style={{display:"flex",gap:6,marginTop:8}}>
@@ -161,6 +163,7 @@ function VendorScr({vendor:vProp,go,onBack}){
     {viewImg&&<div onClick={()=>setViewImg(null)} style={{position:"fixed",inset:0,background:"rgba(0,0,0,.85)",zIndex:100,display:"flex",alignItems:"center",justifyContent:"center",cursor:"pointer",padding:20}}>
       <img src={viewImg} alt="" style={{maxWidth:"100%",maxHeight:"80vh",borderRadius:12,objectFit:"contain"}}/>
     </div>}
+    <GateUI/>
   </div>);
 }
 

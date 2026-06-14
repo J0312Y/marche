@@ -141,7 +141,7 @@ function VSupportScr({go,onBack,vendorPlan}){
     {/* Tabs */}
     {!search&&<>
       <div style={{display:"flex",gap:0,margin:"0 20px 14px",background:"var(--light)",borderRadius:14,padding:4}}>
-        {[" Guides","FAQ","Contact"].map((t,i)=><button key={t} onClick={()=>setTab(i)} style={{flex:1,padding:"10px 4px",borderRadius:11,border:"none",fontSize:11,fontWeight:600,cursor:"pointer",fontFamily:"inherit",background:tab===i?"#F97316":"transparent",color:tab===i?"var(--card)":"var(--muted)"}}>{t}</button>)}
+        {["Guides","FAQ","Contact"].map((t,i)=><button key={t} onClick={()=>setTab(i)} style={{flex:1,padding:"10px 4px",borderRadius:11,border:"none",fontSize:11,fontWeight:600,cursor:"pointer",fontFamily:"inherit",background:tab===i?"#F97316":"transparent",color:tab===i?"var(--card)":"var(--muted)"}}>{t}</button>)}
       </div>
 
       {/* Tab 0: Guides */}
@@ -149,7 +149,7 @@ function VSupportScr({go,onBack,vendorPlan}){
         {guides.map(g=><div key={g.id}>
           <div style={{padding:14,background:"var(--card)",border:guideOpen===g.id?"2px solid #F97316":"1px solid var(--border)",borderRadius:14,marginBottom:10,cursor:"pointer"}} onClick={()=>setGuideOpen(guideOpen===g.id?null:g.id)}>
             <div style={{display:"flex",alignItems:"center",gap:10}}>
-              <span style={{fontSize:22}}>{g.icon}</span>
+              <span style={{fontSize:22}}><Icon name={g.icon} size={20}/></span>
               <div style={{flex:1}}>
                 <div style={{fontSize:14,fontWeight:700}}>{g.title}</div>
                 <div style={{fontSize:11,color:"var(--muted)"}}>{g.desc}</div>
@@ -177,7 +177,7 @@ function VSupportScr({go,onBack,vendorPlan}){
       {/* Tab 1: FAQ */}
       {tab===1&&<div style={{padding:"0 16px 20px"}}>
         {faqCats.map((cat,ci)=><div key={cat.cat} style={{marginBottom:12}}>
-          <div style={{display:"flex",alignItems:"center",gap:6,marginBottom:8}}><span style={{fontSize:16}}>{cat.icon}</span><h4 style={{fontSize:14,fontWeight:700}}>{cat.cat}</h4><span style={{fontSize:11,color:"var(--muted)"}}>({cat.items.length})</span></div>
+          <div style={{display:"flex",alignItems:"center",gap:6,marginBottom:8}}><span style={{fontSize:16}}><Icon name={cat.icon} size={20}/></span><h4 style={{fontSize:14,fontWeight:700}}>{cat.cat}</h4><span style={{fontSize:11,color:"var(--muted)"}}>({cat.items.length})</span></div>
           {cat.items.map((f,fi)=>{const k=`${ci}-${fi}`;return(<div key={k} style={{padding:12,background:"var(--card)",border:open===k?"1px solid #F97316":"1px solid var(--border)",borderRadius:12,marginBottom:6,cursor:"pointer"}} onClick={()=>setOpen(open===k?null:k)}>
             <div style={{display:"flex",alignItems:"center",justifyContent:"space-between"}}>
               <span style={{fontSize:13,fontWeight:600,flex:1}}>{f.q}</span>

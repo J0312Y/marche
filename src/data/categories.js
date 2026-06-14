@@ -1,6 +1,6 @@
 const CATS = [
   // Fashion
-  { id:"1", name:"Mode Femme", icon:"package", count:124, type:"boutique", photo:"https://images.unsplash.com/photo-1483985988355-763728e1935b?w=200&h=200&fit=crop",
+  { id:"1", name:"Mode Femme", icon:"🛍️", count:124, type:"boutique", photo:"https://images.unsplash.com/photo-1483985988355-763728e1935b?w=200&h=200&fit=crop",
     subs:[
       { name:"Robes", photo:"https://images.unsplash.com/photo-1591348278863-a8fb3887e2aa?w=200&h=200&fit=crop" },
       { name:"Hauts & T-shirts", photo:"https://images.unsplash.com/photo-1581655353564-df123a1eb820?w=200&h=200&fit=crop" },
@@ -10,7 +10,7 @@ const CATS = [
       { name:"Tenues de fête", photo:"https://images.unsplash.com/photo-1566174053879-31528523f8ae?w=200&h=200&fit=crop" },
     ]
   },
-  { id:"2", name:"Mode Homme", icon:"package", count:78, type:"boutique", photo:"https://images.unsplash.com/photo-1490578474895-699cd4e2cf59?w=200&h=200&fit=crop",
+  { id:"2", name:"Mode Homme", icon:"🛍️", count:78, type:"boutique", photo:"https://images.unsplash.com/photo-1490578474895-699cd4e2cf59?w=200&h=200&fit=crop",
     subs:[
       { name:"Chemises", photo:"https://images.unsplash.com/photo-1602810318383-e386cc2a3ccf?w=200&h=200&fit=crop" },
       { name:"T-shirts", photo:"https://images.unsplash.com/photo-1521572163474-6864f9cf17ab?w=200&h=200&fit=crop" },
@@ -20,7 +20,7 @@ const CATS = [
       { name:"Boubous", photo:"https://images.unsplash.com/photo-1605518216938-7c31b7b14ad0?w=200&h=200&fit=crop" },
     ]
   },
-  { id:"3", name:"Chaussures Femme", icon:"package", count:45, type:"boutique", photo:"https://images.unsplash.com/photo-1543163521-1bf539c55dd2?w=200&h=200&fit=crop",
+  { id:"3", name:"Chaussures Femme", icon:"🛍️", count:45, type:"boutique", photo:"https://images.unsplash.com/photo-1543163521-1bf539c55dd2?w=200&h=200&fit=crop",
     subs:[
       { name:"Talons", photo:"https://images.unsplash.com/photo-1535043934128-cf0b28d52f95?w=200&h=200&fit=crop" },
       { name:"Sandales", photo:"https://images.unsplash.com/photo-1603487742131-4160ec999306?w=200&h=200&fit=crop" },
@@ -28,7 +28,7 @@ const CATS = [
       { name:"Bottines", photo:"https://images.unsplash.com/photo-1605812860427-4024433a70fd?w=200&h=200&fit=crop" },
     ]
   },
-  { id:"4", name:"Chaussures Homme", icon:"package", count:38, type:"boutique", photo:"https://images.unsplash.com/photo-1614252369475-531eba835eb1?w=200&h=200&fit=crop",
+  { id:"4", name:"Chaussures Homme", icon:"🛍️", count:38, type:"boutique", photo:"https://images.unsplash.com/photo-1614252369475-531eba835eb1?w=200&h=200&fit=crop",
     subs:[
       { name:"Sneakers", photo:"https://images.unsplash.com/photo-1542291026-7eec264c27ff?w=200&h=200&fit=crop" },
       { name:"Chaussures de ville", photo:"https://images.unsplash.com/photo-1614252369475-531eba835eb1?w=200&h=200&fit=crop" },
@@ -36,7 +36,7 @@ const CATS = [
       { name:"Sandales", photo:"https://images.unsplash.com/photo-1603487742131-4160ec999306?w=200&h=200&fit=crop" },
     ]
   },
-  { id:"5", name:"Sacs & Bagages", icon:"package", count:62, type:"boutique", photo:"https://images.unsplash.com/photo-1548036328-c9fa89d128fa?w=200&h=200&fit=crop",
+  { id:"5", name:"Sacs & Bagages", icon:"🛍️", count:62, type:"boutique", photo:"https://images.unsplash.com/photo-1548036328-c9fa89d128fa?w=200&h=200&fit=crop",
     subs:[
       { name:"Sacs à main", photo:"https://images.unsplash.com/photo-1548036328-c9fa89d128fa?w=200&h=200&fit=crop" },
       { name:"Sacs à dos", photo:"https://images.unsplash.com/photo-1553062407-98eeb64c6a62?w=200&h=200&fit=crop" },
@@ -54,7 +54,7 @@ const CATS = [
     ]
   },
   // Beauty
-  { id:"7", name:"Beauté", icon:"package", count:89, type:"boutique", photo:"https://images.unsplash.com/photo-1596462502278-27bfdc403348?w=200&h=200&fit=crop",
+  { id:"7", name:"Beauté", icon:"🛍️", count:89, type:"boutique", photo:"https://images.unsplash.com/photo-1596462502278-27bfdc403348?w=200&h=200&fit=crop",
     subs:[
       { name:"Maquillage", photo:"https://images.unsplash.com/photo-1522335789203-aaa2c1c0fde7?w=200&h=200&fit=crop" },
       { name:"Soins visage", photo:"https://images.unsplash.com/photo-1556228720-195a672e8a03?w=200&h=200&fit=crop" },
@@ -65,7 +65,7 @@ const CATS = [
     ]
   },
   // Restaurants
-  { id:"8", name:"Restaurants", icon:"utensils", count:96, type:"restaurant", photo:"https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?w=200&h=200&fit=crop",
+  { id:"8", name:"Restaurants", icon:"🍽️", count:96, type:"restaurant", photo:"https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?w=200&h=200&fit=crop",
     subs:[
       { name:"Cuisine congolaise", photo:"https://images.unsplash.com/photo-1546069901-ba9599a7e63c?w=200&h=200&fit=crop" },
       { name:"Pizza", photo:"https://images.unsplash.com/photo-1565299624946-b28f40a0ae38?w=200&h=200&fit=crop" },
@@ -76,7 +76,7 @@ const CATS = [
     ]
   },
   // Patisseries
-  { id:"9", name:"Pâtisseries", icon:"cupcake", count:48, type:"patisserie", photo:"https://images.unsplash.com/photo-1517433670267-08bbd4be890f?w=200&h=200&fit=crop",
+  { id:"9", name:"Pâtisseries", icon:"🧁", count:48, type:"patisserie", photo:"https://images.unsplash.com/photo-1517433670267-08bbd4be890f?w=200&h=200&fit=crop",
     subs:[
       { name:"Gâteaux", photo:"https://images.unsplash.com/photo-1578985545062-69928b1d9587?w=200&h=200&fit=crop" },
       { name:"Viennoiseries", photo:"https://images.unsplash.com/photo-1486427944299-d1955d23e34d?w=200&h=200&fit=crop" },
@@ -86,7 +86,7 @@ const CATS = [
     ]
   },
   // Supermarché
-  { id:"10", name:"Supermarché", icon:"cart", count:184, type:"supermarche", photo:"https://images.unsplash.com/photo-1604719312566-8912e9227c6a?w=200&h=200&fit=crop",
+  { id:"10", name:"Supermarché", icon:"🛒", count:184, type:"supermarche", photo:"https://images.unsplash.com/photo-1604719312566-8912e9227c6a?w=200&h=200&fit=crop",
     subs:[
       { name:"Fruits & Légumes", photo:"https://images.unsplash.com/photo-1542838132-92c53300491e?w=200&h=200&fit=crop" },
       { name:"Viandes & Poissons", photo:"https://images.unsplash.com/photo-1607623814075-e51df1bdc82f?w=200&h=200&fit=crop" },
@@ -97,7 +97,7 @@ const CATS = [
     ]
   },
   // Pharmacie
-  { id:"11", name:"Pharmacie", icon:"pill", count:67, type:"pharmacie", photo:"https://images.unsplash.com/photo-1585435557343-3b092031a831?w=200&h=200&fit=crop",
+  { id:"11", name:"Pharmacie", icon:"💊", count:67, type:"pharmacie", photo:"https://images.unsplash.com/photo-1585435557343-3b092031a831?w=200&h=200&fit=crop",
     subs:[
       { name:"Médicaments", photo:"https://images.unsplash.com/photo-1471864190281-a93a3070b6de?w=200&h=200&fit=crop" },
       { name:"Soins du corps", photo:"https://images.unsplash.com/photo-1556228720-195a672e8a03?w=200&h=200&fit=crop" },
@@ -107,7 +107,7 @@ const CATS = [
     ]
   },
   // Electronique
-  { id:"12", name:"Électronique", icon:"phone", count:142, type:"boutique", photo:"https://images.unsplash.com/photo-1498049794561-7780e7231661?w=200&h=200&fit=crop",
+  { id:"12", name:"Électronique", icon:"📱", count:142, type:"boutique", photo:"https://images.unsplash.com/photo-1498049794561-7780e7231661?w=200&h=200&fit=crop",
     subs:[
       { name:"Téléphones", photo:"https://images.unsplash.com/photo-1511707171634-5f897ff02aa9?w=200&h=200&fit=crop" },
       { name:"Ordinateurs", photo:"https://images.unsplash.com/photo-1496181133206-80ce9b88a853?w=200&h=200&fit=crop" },
@@ -147,7 +147,7 @@ const CATS = [
     ]
   },
   // Bébé & Enfant
-  { id:"16", name:"Bébé & Enfant", icon:"package", count:92, type:"boutique", photo:"https://images.unsplash.com/photo-1515488764276-beab7607c1e6?w=200&h=200&fit=crop",
+  { id:"16", name:"Bébé & Enfant", icon:"🛍️", count:92, type:"boutique", photo:"https://images.unsplash.com/photo-1515488764276-beab7607c1e6?w=200&h=200&fit=crop",
     subs:[
       { name:"Couches & Hygiène", photo:"https://images.unsplash.com/photo-1515488764276-beab7607c1e6?w=200&h=200&fit=crop" },
       { name:"Alimentation bébé", photo:"https://images.unsplash.com/photo-1492725764893-90b379c2b6e7?w=200&h=200&fit=crop" },
@@ -157,7 +157,7 @@ const CATS = [
     ]
   },
   // Vetements Enfant
-  { id:"17", name:"Mode Enfant", icon:"user", count:64, type:"boutique", photo:"https://images.unsplash.com/photo-1518831959646-742c3a14ebf7?w=200&h=200&fit=crop",
+  { id:"17", name:"Mode Enfant", icon:"👤", count:64, type:"boutique", photo:"https://images.unsplash.com/photo-1518831959646-742c3a14ebf7?w=200&h=200&fit=crop",
     subs:[
       { name:"Fille", photo:"https://images.unsplash.com/photo-1518831959646-742c3a14ebf7?w=200&h=200&fit=crop" },
       { name:"Garçon", photo:"https://images.unsplash.com/photo-1519278409-1f56fdda7fe5?w=200&h=200&fit=crop" },
@@ -166,7 +166,7 @@ const CATS = [
     ]
   },
   // Sport
-  { id:"18", name:"Sport & Loisirs", icon:"package", count:58, type:"boutique", photo:"https://images.unsplash.com/photo-1517649763962-0c623066013b?w=200&h=200&fit=crop",
+  { id:"18", name:"Sport & Loisirs", icon:"🛍️", count:58, type:"boutique", photo:"https://images.unsplash.com/photo-1517649763962-0c623066013b?w=200&h=200&fit=crop",
     subs:[
       { name:"Football", photo:"https://images.unsplash.com/photo-1517649763962-0c623066013b?w=200&h=200&fit=crop" },
       { name:"Fitness", photo:"https://images.unsplash.com/photo-1571902943202-507ec2618e8f?w=200&h=200&fit=crop" },
@@ -175,7 +175,7 @@ const CATS = [
     ]
   },
   // Hygiene
-  { id:"19", name:"Hygiène & Entretien", icon:"package", count:48, type:"boutique", photo:"https://images.unsplash.com/photo-1556909114-f6e7ad7d3136?w=200&h=200&fit=crop",
+  { id:"19", name:"Hygiène & Entretien", icon:"🛍️", count:48, type:"boutique", photo:"https://images.unsplash.com/photo-1556909114-f6e7ad7d3136?w=200&h=200&fit=crop",
     subs:[
       { name:"Détergents", photo:"https://images.unsplash.com/photo-1556909114-f6e7ad7d3136?w=200&h=200&fit=crop" },
       { name:"Hygiène corporelle", photo:"https://images.unsplash.com/photo-1556228720-195a672e8a03?w=200&h=200&fit=crop" },
@@ -184,7 +184,7 @@ const CATS = [
     ]
   },
   // Services
-  { id:"20", name:"Services", icon:"tool", count:32, type:"service", photo:"https://images.unsplash.com/photo-1581578731548-c64695cc6952?w=200&h=200&fit=crop",
+  { id:"20", name:"Services", icon:"🔧", count:32, type:"service", photo:"https://images.unsplash.com/photo-1581578731548-c64695cc6952?w=200&h=200&fit=crop",
     subs:[
       { name:"Plomberie", photo:"https://images.unsplash.com/photo-1607472586893-edb57bdc0e39?w=200&h=200&fit=crop" },
       { name:"Électricité", photo:"https://images.unsplash.com/photo-1573164574572-cb89e39749b4?w=200&h=200&fit=crop" },

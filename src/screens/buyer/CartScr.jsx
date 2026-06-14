@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { useGuestGate } from "../../hooks/useGuestGate";
 import toast from "../../utils/toast";
 import { fmt, getVendorPromo } from "../../utils/helpers";
 import Img from "../../components/Img";
@@ -11,6 +12,7 @@ const showCartTutorial = () => {
 };
 
 function CartScr({cart,setCart,go,appliedCoupon,setAppliedCoupon}){
+  const { gate, GateUI } = useGuestGate(go);
   const [showTuto,setShowTuto]=useState(showCartTutorial());
   const [swipeX,setSwipeX]=useState({});
   const [swipeStart,setSwipeStart]=useState(null);
@@ -35,14 +37,14 @@ function CartScr({cart,setCart,go,appliedCoupon,setAppliedCoupon}){
     {cart.length===0?<div style={{textAlign:"center",padding:"60px 0"}}><div style={{width:72,height:72,borderRadius:20,background:"rgba(249,115,22,0.08)",display:"flex",alignItems:"center",justifyContent:"center",margin:"0 auto"}}><svg width="40" height="40" viewBox="0 0 64 64" fill="none"><path d="M16 16h5l6 26h16l6-20H24" stroke="#F97316" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round" opacity=".4"/><circle cx="28" cy="50" r="3" fill="#F97316" opacity=".4"/><circle cx="42" cy="50" r="3" fill="#F97316" opacity=".4"/></svg></div><h3 style={{marginTop:14,fontSize:18,fontWeight:700}}>Votre panier est vide</h3><p style={{fontSize:13,color:"var(--muted)",marginTop:6}}>Découvrez nos produits</p></div>
     :cart.map((c,i)=>{const p=getItem(c);const vp=getVendorPromo(p,VENDORS);const price=vp?vp.promoPrice:(p.price||0);
     return(
-      <div key={i} style={{position:"relative",marginBottom:10,overflow:"hidden",borderRadius:14}}>
+      <div key={i} style={{position:"relative",marginBottom:10,overflow:"hidden",borderRadius:16}}>
         {/* Red delete background revealed when swiping */}
-        <div style={{position:"absolute",inset:0,background:"#EF4444",display:"flex",alignItems:"center",justifyContent:"flex-end",paddingRight:24,color:"#fff",fontWeight:700,fontSize:13,gap:8}}>
+        <div style={{position:"absolute",inset:0,background:"#EF4444",display:"flex",alignItems:"center",justifyContent:"flex-end",paddingRight:24,color:"#fff",fontWeight:700,fontSize:13,gap:8,borderRadius:16}}>
           <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#fff" strokeWidth="2.4" strokeLinecap="round" strokeLinejoin="round"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-2 14a2 2 0 0 1-2 2H9a2 2 0 0 1-2-2L5 6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></svg>
           Supprimer
         </div>
         {/* Foreground item — translates left on touch */}
-        <div className="cart-item" style={{margin:0,position:"relative",background:"var(--card)",transform:`translateX(${swipeX[i]||0}px)`,transition:swipeActive===i?"none":"transform .25s ease"}}
+        <div className="cart-item" style={{margin:0,position:"relative",background:"var(--card)",borderRadius:16,transform:`translateX(${swipeX[i]||0}px)`,transition:swipeActive===i?"none":"transform .25s ease"}}
           onTouchStart={e=>{setSwipeStart(e.touches[0].clientX);setSwipeActive(i)}}
           onTouchMove={e=>{if(swipeStart==null)return;const dx=e.touches[0].clientX-swipeStart;if(dx<0)setSwipeX(p=>({...p,[i]:Math.max(dx,-120)}))}}
           onTouchEnd={()=>{const x=swipeX[i]||0;if(x<-80){removeItem(i);setSwipeX(p=>({...p,[i]:0}))}else{setSwipeX(p=>({...p,[i]:0}))}setSwipeStart(null);setSwipeActive(null)}}
@@ -53,7 +55,7 @@ function CartScr({cart,setCart,go,appliedCoupon,setAppliedCoupon}){
         <div className="cart-img"><Img src={p.photo} emoji={p.img} style={{width:"100%",height:"100%",borderRadius:12}} fit="cover"/></div>
         <div className="cart-info">
           <h4>{p.name}</h4>
-          {c.sides&&c.sides.length>0&&<div style={{fontSize:10,color:"#F97316",marginTop:1}}>{c.sides.map(s=>s.name+(s.qty>1?" ×"+s.qty:"")).join(", ")}</div>}
+          {c.sides&&c.sides.length>0&&<div style={{fontSize:10,color:"#F97316",marginTop:1}}>{c.sides.map(s=>s.name+(s.qty>1?"×"+s.qty:"")).join(", ")}</div>}
           <div className="cv">{p.vendor||""}{vp&&<span style={{marginLeft:6,fontSize:10,color:"#10B981",fontWeight:600}}><Icon name="tag" size={16}/>{" "}-{vp.promoDiscount}%</span>}</div>
           <div className="cart-bot">
             <span className="cp">{fmt((price+(c.sidesTotal||0))*(c.qty||1))}{vp&&<span style={{marginLeft:4,fontSize:10,color:"var(--muted)",textDecoration:"line-through"}}>{fmt(p.price*(c.qty||1))}</span>}</span>
@@ -123,7 +125,7 @@ function CartScr({cart,setCart,go,appliedCoupon,setAppliedCoupon}){
        Vous économisez {fmt(discountAmount+(freeDelivery?del:0))} !
     </div>}
 
-    <button className="btn-primary" style={{marginTop:14}} onClick={()=>go("checkout")}>Passer la commande</button>
+    <button className="btn-primary" style={{marginTop:14}} onClick={()=>gate("checkout", ()=>go("checkout"))}>Passer la commande</button>
   </div>}
 
   {showTuto&&<div onClick={()=>{setShowTuto(false);try{localStorage.setItem("lk-cart-tutorial","1")}catch{}}} style={{position:"fixed",inset:0,background:"rgba(0,0,0,.7)",zIndex:9999,display:"flex",alignItems:"flex-end"}}>
@@ -141,7 +143,7 @@ function CartScr({cart,setCart,go,appliedCoupon,setAppliedCoupon}){
         {icon:"creditCard",t:"Paiement sécurisé",d:"Airtel, MTN, Orange Money ou cash à la livraison"},
       ].map((it,i)=>(
         <div key={i} style={{display:"flex",gap:12,padding:"10px 0",borderBottom:i<3?"1px solid var(--border)":"none"}}>
-          <div style={{fontSize:24}}>{it.icon}</div>
+          <div style={{fontSize:24}}><Icon name={it.icon} size={20}/></div>
           <div>
             <div style={{fontSize:13,fontWeight:700}}>{it.t}</div>
             <div style={{fontSize:11,color:"var(--muted)",marginTop:2}}>{it.d}</div>
@@ -151,6 +153,7 @@ function CartScr({cart,setCart,go,appliedCoupon,setAppliedCoupon}){
       <button onClick={()=>{setShowTuto(false);try{localStorage.setItem("lk-cart-tutorial","1")}catch{}}} style={{width:"100%",marginTop:18,padding:14,borderRadius:14,border:"none",background:"#F97316",color:"#fff",fontSize:14,fontWeight:700,cursor:"pointer",fontFamily:"inherit"}}>J'ai compris <Icon name="sparkle" size={16}/></button>
     </div>
   </div>}
+  <GateUI/>
   </>);
 }
 

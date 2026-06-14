@@ -13,7 +13,7 @@ function DrDeliveryScr({delivery:dl,go,onBack}){
   const [failPhoto,setFailPhoto]=useState(null);
   const [failDone,setFailDone]=useState(false);
   const stepLabels=["Accepté","Au retrait","En route","Arrivé"];
-  const stepActions=["En route vers le vendeur","Colis récupéré"," Arrivé chez le client","Confirmer livraison"];
+  const stepActions=["En route vers le vendeur","Colis récupéré","Arrivé chez le client","Confirmer livraison"];
   const pickup={lat:-4.262,lng:15.278};
   const client=dl.client?.lat?{lat:dl.client.lat,lng:dl.client.lng}:{lat:-4.277,lng:15.283};
   const driverPos=step<2?{lat:-4.265,lng:15.280}:{lat:(pickup.lat+client.lat)/2,lng:(pickup.lng+client.lng)/2};
@@ -46,7 +46,7 @@ function DrDeliveryScr({delivery:dl,go,onBack}){
 
       {/* Current destination */}
       <div style={{padding:16,background:step<2?"rgba(249,115,22,0.04)":"rgba(16,185,129,0.04)",border:"1px solid "+(step<2?"rgba(249,115,22,0.15)":"rgba(16,185,129,0.15)"),borderRadius:16,marginBottom:14}}>
-        <div style={{fontSize:12,fontWeight:600,color:"#F97316",marginBottom:8}}>{step<2?"RETRAIT":" LIVRAISON"}</div>
+        <div style={{fontSize:12,fontWeight:600,color:"#F97316",marginBottom:8}}>{step<2?"RETRAIT":"LIVRAISON"}</div>
         {step<2?<>
           <div style={{fontSize:15,fontWeight:700,marginBottom:2}}>{dl.pickup}</div>
           <div style={{fontSize:13,color:"var(--muted)"}}>{dl.vendor.name} · {dl.ref}</div>
@@ -77,7 +77,7 @@ function DrDeliveryScr({delivery:dl,go,onBack}){
       <div style={{padding:14,background:"var(--card)",border:"1px solid var(--border)",borderRadius:14,marginBottom:14}}>
         <div style={{fontSize:13,fontWeight:700,marginBottom:8}}><Icon name="package" size={16}/>{" "}Commande {dl.ref}</div>
         {dl.items.map((it,i)=><div key={i}><div style={{display:"flex",alignItems:"center",gap:8,padding:"4px 0",fontSize:12}}><Img src={it.photo} emoji={it.img} style={{width:24,height:24,borderRadius:4,flexShrink:0}} fit="cover"/><span style={{flex:1}}>{it.name} x{it.qty}</span></div>
-          {it.sides?.length>0&&<div style={{paddingLeft:32,marginBottom:4}}>{it.sides.map((s,si)=><div key={si} style={{fontSize:10,color:"var(--muted)",padding:"1px 0"}}>↳ {s.img} {s.name}{s.qty>1?" ×"+s.qty:""}</div>)}</div>}</div>)}
+          {it.sides?.length>0&&<div style={{paddingLeft:32,marginBottom:4}}>{it.sides.map((s,si)=><div key={si} style={{fontSize:10,color:"var(--muted)",padding:"1px 0"}}>↳ {s.img} {s.name}{s.qty>1?"×"+s.qty:""}</div>)}</div>}</div>)}
         {dl.note&&<div style={{padding:"6px 10px",background:"rgba(59,130,246,0.04)",borderRadius:8,marginTop:6,fontSize:11,color:"#3B82F6"}}> {dl.note}</div>}
         <div style={{display:"flex",justifyContent:"space-between",paddingTop:8,borderTop:"1px solid var(--border)",marginTop:6,fontSize:13}}><span style={{color:"var(--muted)"}}>Total commande</span><b style={{color:"#F97316"}}>{fmt(dl.total)}</b></div>
         <div style={{display:"flex",justifyContent:"space-between",paddingTop:4,fontSize:12}}><span style={{color:"var(--muted)"}}>Votre gain</span><b style={{color:"#F97316"}}>{fmt(dl.fee+dl.tip)}{dl.tip>0?` (dont ${fmt(dl.tip)} pourboire)`:""}</b></div>

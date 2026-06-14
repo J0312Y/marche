@@ -5,6 +5,19 @@ import MapView from "../../components/MapView";
 import Icon from "../../components/Icon";
 
 function DrNavigationScr({delivery:dl,go,onBack}){
+  // Safe fallback if no delivery was passed
+  if (!dl) {
+    return (
+      <div className="scr" style={{display:"flex",flexDirection:"column",alignItems:"center",justifyContent:"center",padding:"60px 24px",textAlign:"center",minHeight:"100vh"}}>
+        <div style={{width:80,height:80,borderRadius:24,background:"rgba(16,185,129,0.1)",display:"flex",alignItems:"center",justifyContent:"center",marginBottom:20,color:"#10B981"}}>
+          <Icon name="map" size={36} color="#10B981"/>
+        </div>
+        <h2 style={{fontSize:20,fontWeight:800,letterSpacing:-.4,marginBottom:10}}>Aucune course active</h2>
+        <p style={{fontSize:13,color:"var(--muted)",marginBottom:24,maxWidth:280,lineHeight:1.5}}>Sélectionnez une course en cours pour ouvrir la navigation.</p>
+        <button onClick={()=>onBack&&onBack()} style={{padding:"12px 28px",borderRadius:14,border:"none",background:"#10B981",color:"#fff",fontSize:13,fontWeight:700,cursor:"pointer",fontFamily:"inherit"}}>Retour</button>
+      </div>
+    );
+  }
   const client=dl.client?.lat?{lat:dl.client.lat,lng:dl.client.lng}:{lat:-4.277,lng:15.283};
   const [driverPos,setDriverPos]=useState({lat:-4.265,lng:15.280});
 

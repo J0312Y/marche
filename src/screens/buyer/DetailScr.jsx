@@ -14,38 +14,38 @@ import P from "../../data/products";
 const getSpecs=(p)=>{
   if(p.type==="restaurant"||p.type==="patisserie") return [
     ["⏱️","Temps de préparation",p.eta||"30-45 min"],
-    ["‍","Cuisine",p.type==="patisserie"?"Pâtisserie artisanale":"Congolaise traditionnelle"],
-    ["","Portions","1 personne"],
-    ["️","Service","Chaud, prêt à déguster"],
-    ["","Allergènes","Peut contenir des traces de gluten, arachides"],
+    ["utensils", "Cuisine",p.type==="patisserie"?"Pâtisserie artisanale":"Congolaise traditionnelle"],
+    ["utensils", "Portions","1 personne"],
+    ["fire", "Service","Chaud, prêt à déguster"],
+    ["info", "Allergènes","Peut contenir des traces de gluten, arachides"],
   ];
   if(p.type==="pharmacie") return [
-    ["","Forme","Comprimé / Gélule"],
-    ["","Dosage",p.name.match(/\d+mg/)?p.name.match(/\d+mg/)[0]:"Standard"],
-    ["","Conditionnement",p.name.match(/x\d+/)?p.name.match(/x\d+/)[0]:"Boîte"],
-    ["️","Ordonnance","Non requise"],
-    ["","Péremption","2027"],
+    ["pill", "Forme","Comprimé / Gélule"],
+    ["pill", "Dosage",p.name.match(/\d+mg/)?p.name.match(/\d+mg/)[0]:"Standard"],
+    ["package", "Conditionnement",p.name.match(/x\d+/)?p.name.match(/x\d+/)[0]:"Boîte"],
+    ["shield", "Ordonnance","Non requise"],
+    ["clock", "Péremption","2027"],
   ];
   if(p.cat==="Électronique") return [
-    ["","Marque",p.name.includes("Samsung")?"Samsung":p.name.includes("iPhone")?"Apple":"Générique"],
-    ["","Stockage","128 GB"],
-    ["","Batterie","5000 mAh"],
-    ["","Réseau","4G / 5G"],
-    ["️","Poids","195g"],
-    ["️","Garantie","12 mois"],
+    ["tag", "Marque",p.name.includes("Samsung")?"Samsung":p.name.includes("iPhone")?"Apple":"Générique"],
+    ["package", "Stockage","128 GB"],
+    ["lightning", "Batterie","5000 mAh"],
+    ["globe", "Réseau","4G / 5G"],
+    ["package", "Poids","195g"],
+    ["shield", "Garantie","12 mois"],
   ];
   if(p.cat==="Mode") return [
-    ["","Tailles disponibles","S, M, L, XL"],
-    ["","Couleurs","Multicolore / Wax"],
-    ["","Matière",p.name.includes("Cuir")?"Cuir véritable":"100% Coton Wax"],
+    ["package", "Tailles disponibles","S, M, L, XL"],
+    ["sparkle", "Couleurs","Multicolore / Wax"],
+    ["package", "Matière",p.name.includes("Cuir")?"Cuir véritable":"100% Coton Wax"],
     ["","Fabrication","Artisanat congolais"],
     ["","Entretien","Lavage à 30°C"],
   ];
   return [
-    ["","Conditionnement","Standard"],
-    ["","Dimensions","Variable"],
-    ["️","Poids","Variable"],
-    ["️","Garantie","Selon vendeur"],
+    ["package", "Conditionnement","Standard"],
+    ["package", "Dimensions","Variable"],
+    ["package", "Poids","Variable"],
+    ["shield", "Garantie","Selon vendeur"],
   ];
 };
 
@@ -123,7 +123,7 @@ function DetailScr({product:rawP,onBack,onAddCart,go,favs,toggleFav,isFav}){
   const vp=getVendorPromo(p,VENDORS);
   const finalPrice=vp?vp.promoPrice:p.price;
 
-  if(cartAdded)return<SuccessAnimation title="Ajouté au panier !" subtitle={p.name+" ×"+qty} hint={"Total : "+fmt(finalPrice*qty+sidesTotalPrice)} duration={1300} onDone={()=>{setCartAdded(false);onBack&&onBack()}}/>;
+  if(cartAdded)return<SuccessAnimation title="Ajouté au panier !" subtitle={p.name+"×"+qty} hint={"Total : "+fmt(finalPrice*qty+sidesTotalPrice)} duration={1300} onDone={()=>{setCartAdded(false);onBack&&onBack()}}/>;
 
   return(<>
     <div className="scr">
@@ -183,7 +183,7 @@ function DetailScr({product:rawP,onBack,onAddCart,go,favs,toggleFav,isFav}){
 
         {/* Rating */}
         <div className="det-stars" style={{cursor:"pointer"}} onClick={()=>go("reviews",p)}>
-          {"".repeat(Math.floor(p.rating))}{"".repeat(5-Math.floor(p.rating))}
+          {"⭐".repeat(Math.floor(p.rating))}{"☆".repeat(5-Math.floor(p.rating))}
           <span className="rc">({p.reviews} avis) →</span>
         </div>
 
@@ -345,7 +345,7 @@ function DetailScr({product:rawP,onBack,onAddCart,go,favs,toggleFav,isFav}){
         {activeTab==="specs"&&<div style={{marginBottom:12}}>
           {specs.map(([icon,label,value],i)=>(
             <div key={i} style={{display:"flex",alignItems:"center",gap:12,padding:"12px 0",borderBottom:i<specs.length-1?"1px solid var(--border)":"none"}}>
-              <span style={{fontSize:16,width:24,textAlign:"center"}}>{icon}</span>
+              <span style={{width:28,height:28,display:"flex",alignItems:"center",justifyContent:"center",color:"var(--text)",flexShrink:0}}><Icon name={icon} size={18}/></span>
               <span style={{flex:1,fontSize:13,color:"var(--muted)"}}>{label}</span>
               <span style={{fontSize:13,fontWeight:600,color:"var(--text)"}}>{value}</span>
             </div>
@@ -436,7 +436,7 @@ function DetailScr({product:rawP,onBack,onAddCart,go,favs,toggleFav,isFav}){
             <div style={{fontSize:13,fontWeight:800,fontFamily:"monospace",overflow:"hidden",textOverflow:"ellipsis",whiteSpace:"nowrap",marginTop:2}}>LMK-PROD-{p.id}</div>
             <div style={{fontSize:10,color:"var(--muted)",marginTop:6,lineHeight:1.4}}>Scannez ce QR avec l'app Lamuka pour ouvrir directement ce produit</div>
             <div style={{display:"flex",gap:6,marginTop:8}}>
-              <button onClick={()=>{const code="LMK-PROD-"+p.id;navigator.clipboard?.writeText(code).then(()=>toast.success("Code copié"))}} style={{padding:"5px 10px",fontSize:10,fontWeight:700,border:"1px solid var(--border)",background:"var(--card)",borderRadius:6,cursor:"pointer",fontFamily:"inherit",display:"flex",alignItems:"center",gap:4}}><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.4" strokeLinecap="round" strokeLinejoin="round"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/></svg>Copier</button>
+              <button onClick={()=>{const code="LMK-PROD-"+p.id;navigator.clipboard?.writeText(code).then(()=>toast.success("📋 Code copié"))}} style={{padding:"5px 10px",fontSize:10,fontWeight:700,border:"1px solid var(--border)",background:"var(--card)",borderRadius:6,cursor:"pointer",fontFamily:"inherit",display:"flex",alignItems:"center",gap:4}}><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.4" strokeLinecap="round" strokeLinejoin="round"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/></svg>Copier</button>
               <button onClick={()=>setShowQRModal(true)} style={{padding:"5px 10px",fontSize:10,fontWeight:700,border:"1px solid #F97316",background:"rgba(249,115,22,0.06)",color:"#F97316",borderRadius:6,cursor:"pointer",fontFamily:"inherit",display:"flex",alignItems:"center",gap:4}}><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="#F97316" strokeWidth="2.4" strokeLinecap="round" strokeLinejoin="round"><polyline points="15 3 21 3 21 9"/><polyline points="9 21 3 21 3 15"/><line x1="21" y1="3" x2="14" y2="10"/><line x1="3" y1="21" x2="10" y2="14"/></svg>Agrandir</button>
             </div>
           </div>
@@ -461,7 +461,7 @@ function DetailScr({product:rawP,onBack,onAddCart,go,favs,toggleFav,isFav}){
                       <div style={{width:140,height:140,borderRadius:14,overflow:"hidden",background:"var(--light)",position:"relative"}}>
                         <Img src={r.photo} emoji={r.img} style={{width:"100%",height:"100%"}} fit="cover"/>
                         {r.old&&<span style={{position:"absolute",top:8,left:8,padding:"3px 7px",borderRadius:6,background:"#EF4444",color:"#fff",fontSize:10,fontWeight:800}}>-{Math.round((1-r.price/r.old)*100)}%</span>}
-                        <span onClick={e=>{e.stopPropagation();toggleFav(r.id)}} style={{position:"absolute",top:8,right:8,width:28,height:28,borderRadius:"50%",background:"rgba(255,255,255,0.95)",display:"flex",alignItems:"center",justifyContent:"center",fontSize:14,color:isFav(r.id)?"#EF4444":"var(--muted)",cursor:"pointer"}}>{isFav(r.id)?"":""}</span>
+                        <span onClick={e=>{e.stopPropagation();toggleFav(r.id)}} style={{position:"absolute",top:8,right:8,width:28,height:28,borderRadius:"50%",background:"rgba(255,255,255,0.95)",display:"flex",alignItems:"center",justifyContent:"center",fontSize:14,color:isFav(r.id)?"#EF4444":"var(--muted)",cursor:"pointer"}}>{isFav(r.id) ? <svg width="14" height="14" viewBox="0 0 24 24" fill="#EF4444"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg> : <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#6B7280" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>}</span>
                       </div>
                       <div style={{padding:"8px 4px 0"}}>
                         <h4 style={{fontSize:12,fontWeight:600,lineHeight:1.3,overflow:"hidden",textOverflow:"ellipsis",display:"-webkit-box",WebkitLineClamp:2,WebkitBoxOrient:"vertical",height:32}}>{r.name}</h4>
@@ -571,7 +571,7 @@ function DetailScr({product:rawP,onBack,onAddCart,go,favs,toggleFav,isFav}){
           </div>
           <div style={{fontSize:12,fontWeight:700,fontFamily:"monospace",textAlign:"center",marginTop:8,padding:"8px 12px",background:"#F5F5F7",borderRadius:8,color:"#1A1F2E"}}>LMK-PROD-{p.id}</div>
           <div style={{display:"flex",gap:8,marginTop:14}}>
-            <button onClick={()=>{const code="LMK-PROD-"+p.id;navigator.clipboard?.writeText(code).then(()=>toast.success("Code copié"))}} style={{flex:1,padding:"10px 12px",fontSize:12,fontWeight:700,border:"1px solid #EDEDF0",background:"#fff",color:"#1A1F2E",borderRadius:10,cursor:"pointer",fontFamily:"inherit"}}>Copier le code</button>
+            <button onClick={()=>{const code="LMK-PROD-"+p.id;navigator.clipboard?.writeText(code).then(()=>toast.success("📋 Code copié"))}} style={{flex:1,padding:"10px 12px",fontSize:12,fontWeight:700,border:"1px solid #EDEDF0",background:"#fff",color:"#1A1F2E",borderRadius:10,cursor:"pointer",fontFamily:"inherit"}}>Copier le code</button>
             <button onClick={()=>{if(navigator.share){navigator.share({title:p.name,text:"Voici "+p.name+" sur Lamuka : LMK-PROD-"+p.id,url:window.location.href}).catch(()=>{})}else{const code="LMK-PROD-"+p.id;navigator.clipboard?.writeText(code).then(()=>toast.success("Code copié — partage non disponible"))}}} style={{flex:1,padding:"10px 12px",fontSize:12,fontWeight:700,border:"none",background:"#F97316",color:"#fff",borderRadius:10,cursor:"pointer",fontFamily:"inherit"}}>Partager</button>
           </div>
         </div>

@@ -39,14 +39,21 @@ function FavButton({ active, onClick, style = {} }) {
         boxShadow: "0 4px 16px rgba(0,0,0,0.12)",
         cursor: "pointer",
         display: "flex", alignItems: "center", justifyContent: "center",
-        color: active ? "#EF4444" : "var(--muted)",
-        fontSize: 17,
+        color: active ? "#EF4444" : "#6B7280",
         transition: "all .15s",
         flexShrink: 0,
         ...style,
       }}
     >
-      {active ? "" : ""}
+      {active ? (
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="#EF4444" stroke="#EF4444" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+          <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/>
+        </svg>
+      ) : (
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#6B7280" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
+          <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/>
+        </svg>
+      )}
     </button>
   );
 }

@@ -14,15 +14,15 @@ function VDeliveryScr({go,onBack}){
   ];
   // Manually added by vendor
   const [manualDrivers,setManualDrivers]=useState([
-    {id:"d2",name:"Jean Mbemba",vehicle:" Toyota Vitz",plate:"BZ-7803",phone:"+242 06X XXX",status:"busy",rating:4.5,deliveries:128,zone:"Brazzaville Nord",photo:"https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=80&h=80&fit=crop&crop=face",source:"manual"},
-    {id:"d4",name:"Michel Ngoma",vehicle:" Suzuki Alto",plate:"BZ-5541",phone:"+242 06X XXX",status:"offline",rating:4.2,deliveries:89,zone:"Pointe-Noire",photo:"https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=80&h=80&fit=crop&crop=face",source:"manual"},
+    {id:"d2",name:"Jean Mbemba",vehicle:"Toyota Vitz",plate:"BZ-7803",phone:"+242 06X XXX",status:"busy",rating:4.5,deliveries:128,zone:"Brazzaville Nord",photo:"https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=80&h=80&fit=crop&crop=face",source:"manual"},
+    {id:"d4",name:"Michel Ngoma",vehicle:"Suzuki Alto",plate:"BZ-5541",phone:"+242 06X XXX",status:"offline",rating:4.2,deliveries:89,zone:"Pointe-Noire",photo:"https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=80&h=80&fit=crop&crop=face",source:"manual"},
   ]);
   const allDrivers=[...platformDrivers,...manualDrivers];
   const [showAdd,setShowAdd]=useState(false);
   const [addName,setAddName]=useState("");const [addPhone,setAddPhone]=useState("");const [addVehicle,setAddVehicle]=useState("moto");
   const doAddManual=()=>{
     if(!addName||!addPhone)return;
-    setManualDrivers([...manualDrivers,{id:"dm"+Date.now(),name:addName,vehicle:addVehicle==="moto"?"Moto":addVehicle==="voiture"?" Voiture":"Vélo",plate:"—",phone:addPhone,status:"offline",rating:0,deliveries:0,zone:"Brazzaville",photo:"https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=80&h=80&fit=crop&crop=face",source:"manual"}]);
+    setManualDrivers([...manualDrivers,{id:"dm"+Date.now(),name:addName,vehicle:addVehicle==="moto"?"Moto":addVehicle==="voiture"?"Voiture":"Vélo",plate:"—",phone:addPhone,status:"offline",rating:0,deliveries:0,zone:"Brazzaville",photo:"https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=80&h=80&fit=crop&crop=face",source:"manual"}]);
     setAddName("");setAddPhone("");setShowAdd(false);
   };
   const removeManual=id=>setManualDrivers(manualDrivers.filter(d=>d.id!==id));
@@ -107,7 +107,7 @@ function VDeliveryScr({go,onBack}){
         <div className="field"><label>Nom complet</label><input value={addName} onChange={e=>setAddName(e.target.value)} placeholder="Ex: Patrick Moukala"/></div>
         <div className="field"><label>Téléphone</label><input value={addPhone} onChange={e=>{const v=e.target.value.replace(/[^0-9]/g,"").slice(0,9);setAddPhone(v)}} placeholder="06X XXX XXX" maxLength={11} type="tel"/></div>
         <div className="field"><label>Véhicule</label>
-          <div style={{display:"flex",gap:6}}>{[["moto","Moto"],["voiture"," Voiture"],["velo","Vélo"]].map(([k,l])=><button key={k} onClick={()=>setAddVehicle(k)} style={{flex:1,padding:8,borderRadius:8,border:addVehicle===k?"2px solid #F97316":"1px solid var(--border)",background:addVehicle===k?"rgba(249,115,22,0.04)":"var(--card)",fontSize:11,fontWeight:600,cursor:"pointer",fontFamily:"inherit"}}>{l}</button>)}</div>
+          <div style={{display:"flex",gap:6}}>{[["moto","Moto"],["voiture","Voiture"],["velo","Vélo"]].map(([k,l])=><button key={k} onClick={()=>setAddVehicle(k)} style={{flex:1,padding:8,borderRadius:8,border:addVehicle===k?"2px solid #F97316":"1px solid var(--border)",background:addVehicle===k?"rgba(249,115,22,0.04)":"var(--card)",fontSize:11,fontWeight:600,cursor:"pointer",fontFamily:"inherit"}}>{l}</button>)}</div>
         </div>
         <div className="info-box yellow" style={{marginBottom:10,padding:"6px 10px"}}><span><Icon name="phone" size={18}/></span><span style={{fontSize:11}}>Un SMS sera envoyé pour l'inviter à créer un compte Lamuka</span></div>
         <div style={{display:"flex",gap:8}}>

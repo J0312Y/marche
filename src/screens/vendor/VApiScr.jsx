@@ -30,11 +30,11 @@ function VApiScr({go,onBack}){
     <div style={{padding:14,background:"var(--light)",borderRadius:14,marginBottom:6}}>
       <div style={{fontFamily:"monospace",fontSize:12,wordBreak:"break-all",color:showKey?"var(--text)":"var(--muted)",marginBottom:8}}>{showKey?apiKey:"lmk_live_ent_••••••••••••••••"}</div>
       <div style={{display:"flex",gap:8}}>
-        <button style={{flex:1,padding:8,borderRadius:8,border:"1px solid var(--border)",background:"var(--card)",fontSize:11,fontWeight:600,cursor:"pointer",fontFamily:"inherit"}} onClick={()=>setShowKey(!showKey)}>{showKey?" Masquer":"️ Afficher"}</button>
+        <button style={{flex:1,padding:8,borderRadius:8,border:"1px solid var(--border)",background:"var(--card)",fontSize:11,fontWeight:600,cursor:"pointer",fontFamily:"inherit"}} onClick={()=>setShowKey(!showKey)}>{showKey?"Masquer":"️ Afficher"}</button>
         <button style={{flex:1,padding:8,borderRadius:8,border:"none",background:"#F97316",color:"#fff",fontSize:11,fontWeight:600,cursor:"pointer",fontFamily:"inherit"}} onClick={()=>{setCopied(true);setTimeout(()=>setCopied(false),2000)}}>{copied?"Copié !":"Copier"}</button>
       </div>
     </div>
-    <button style={{width:"100%",padding:8,borderRadius:8,border:"1px solid rgba(239,68,68,0.2)",background:"var(--card)",color:"#EF4444",fontSize:11,fontWeight:600,cursor:"pointer",fontFamily:"inherit",marginBottom:12}} onClick={()=>{setRegen(true);setTimeout(()=>setRegen(false),2500)}}>{regen?"Nouvelle clé générée":" Régénérer la clé"}</button>
+    <button style={{width:"100%",padding:8,borderRadius:8,border:"1px solid rgba(239,68,68,0.2)",background:"var(--card)",color:"#EF4444",fontSize:11,fontWeight:600,cursor:"pointer",fontFamily:"inherit",marginBottom:12}} onClick={()=>{setRegen(true);setTimeout(()=>setRegen(false),2500)}}>{regen?"Nouvelle clé générée":"Régénérer la clé"}</button>
 
     {/* Webhooks */}
     <div style={{fontSize:14,fontWeight:700,marginBottom:10}}>Webhooks</div>

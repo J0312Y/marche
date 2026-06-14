@@ -8,7 +8,7 @@ function VUpgradePlanScr({onBack,onUpgrade,currentPlan="starter"}){
   const plans=[
     ["starter","Starter","Gratuit","Pour démarrer",["10 articles max","8% commission","Support email","Stats basiques"]],
     ["pro","Pro","15 000 FCFA/mois","Le plus populaire",["Articles illimités","4% commission","Analytics avancés","Badge vérifié ","Support prioritaire","Promotions"]],
-    ["enterprise","Enterprise","45 000 FCFA/mois","Pour les grandes boutiques",["Multi-établissements","2% commission","API complète","Site web","Manager dédié","Thèmes","Email Marketing","Remises auto","Analytics"," Domaine custom"," Import/Export"," SEO"]]
+    ["enterprise","Enterprise","45 000 FCFA/mois","Pour les grandes boutiques",["Multi-établissements","2% commission","API complète","Site web","Manager dédié","Thèmes","Email Marketing","Remises auto","Analytics","Domaine custom","Import/Export","SEO"]]
   ];
   const planOrder={starter:0,pro:1,enterprise:2};
   const upgradeable=plans.filter(([k])=>planOrder[k]>planOrder[currentPlan]);
@@ -74,7 +74,7 @@ function VUpgradePlanScr({onBack,onUpgrade,currentPlan="starter"}){
           <div style={{display:"flex",gap:8}}>
             <button onClick={()=>setShowPay(false)} disabled={paying} style={{flex:1,padding:11,borderRadius:12,border:"1px solid var(--border)",background:"var(--card)",fontSize:13,fontWeight:600,cursor:"pointer",fontFamily:"inherit",color:"var(--text)"}}>Annuler</button>
             <button onClick={()=>{const err=validatePayPhone(payPhone,payMethod);if(err){setPayPhoneErr(err);return}setPaying(true);setTimeout(()=>{setPaying(false);setPayDone(true);setTimeout(()=>{setShowPay(false);setDone(true)},1500)},3000)}} disabled={paying||!isPayPhoneValid(payPhone,payMethod)} style={{flex:1,padding:11,borderRadius:12,border:"none",background:isPayPhoneValid(payPhone,payMethod)?(plan==="enterprise"?"linear-gradient(135deg,#F59E0B,#D97706)":"#F97316"):"var(--border)",color:isPayPhoneValid(payPhone,payMethod)?"#fff":"var(--muted)",fontSize:13,fontWeight:700,cursor:isPayPhoneValid(payPhone,payMethod)?"pointer":"not-allowed",fontFamily:"inherit"}}>
-              {paying?"⏳ Validation...":"Payer "+(plan==="pro"?"15 000":"45 000")+" F"}
+              {paying?"⏳ Validation...":"Payer "+(plan==="pro"?"15 000":"45 000")+"F"}
             </button>
           </div>
         </>}

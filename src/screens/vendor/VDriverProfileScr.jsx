@@ -16,7 +16,7 @@ function VDriverProfileScr({driver:d,go,onBack}){
       <h2 style={{fontSize:20,fontWeight:700}}>{d.name}</h2>
       <p style={{fontSize:13,color:"var(--muted)",marginTop:2}}>{d.vehicle} · {d.plate}</p>
       <p style={{fontSize:12,color:"var(--muted)"}}><Icon name="location" size={16}/>{" "}{d.zone} ·  {d.phone}</p>
-      <span className={`del-status ${d.status==="available"?"available":d.status==="busy"?"busy":""}`} style={d.status==="offline"?{background:"rgba(0,0,0,0.05)",color:"var(--muted)",display:"inline-block",marginTop:8}:{display:"inline-block",marginTop:8}}>{d.status==="available"?"Disponible":d.status==="busy"?" Occupé":" Hors ligne"}</span>
+      <span className={`del-status ${d.status==="available"?"available":d.status==="busy"?"busy":""}`} style={d.status==="offline"?{background:"rgba(0,0,0,0.05)",color:"var(--muted)",display:"inline-block",marginTop:8}:{display:"inline-block",marginTop:8}}>{d.status==="available"?"Disponible":d.status==="busy"?"Occupé":"Hors ligne"}</span>
     </div>
     <div className="vp-stats" style={{padding:"0 16px",marginBottom:12}}>
       <div className="vps r"><div className="vsi"><Icon name="star_full" size={18}/></div><b>{d.rating}</b><span>Note</span></div>

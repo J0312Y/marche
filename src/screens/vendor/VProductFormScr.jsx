@@ -299,7 +299,7 @@ function VProductFormScr({product:p,onBack,shopType="boutique"}){
     {/* ═══ SUBMIT ═══ */}
     <button className="btn-primary" style={{marginBottom:14,opacity:submitting?.7:1}} onClick={handleSubmit} disabled={submitting}>
       {submitting?<span style={{display:"flex",alignItems:"center",justifyContent:"center",gap:8}}><span className="spinner"/>  {isEdit?"Enregistrement...":"Ajout en cours..."}</span>
-        :(isEdit?" Enregistrer les modifications":" Ajouter l'article")}
+        :(isEdit?"Enregistrer les modifications":"Ajouter l'article")}
     </button>
 
     {isEdit&&!showDelete&&<button className="btn-outline" style={{color:"#EF4444",borderColor:"rgba(239,68,68,.3)"}} onClick={()=>setShowDelete(true)}>️ Supprimer cet article</button>}

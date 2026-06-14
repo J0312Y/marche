@@ -21,7 +21,7 @@ function VImportScr({onBack}){
     <div className="appbar" style={{padding:0,marginBottom:12}}><button onClick={onBack}>←</button><h2> Import / Export</h2><div style={{width:38}}/></div>
 
     <div style={{display:"flex",gap:6,marginBottom:14}}>
-      {[["import"," Importer"],["export"," Exporter"]].map(([k,l])=><button key={k} onClick={()=>setTab(k)} style={{flex:1,padding:10,borderRadius:10,border:tab===k?"2px solid #F97316":"1px solid var(--border)",background:tab===k?"rgba(249,115,22,0.06)":"var(--card)",fontSize:13,fontWeight:600,cursor:"pointer",fontFamily:"inherit",color:tab===k?"#F97316":"var(--text)"}}>{l}</button>)}
+      {[["import","Importer"],["export","Exporter"]].map(([k,l])=><button key={k} onClick={()=>setTab(k)} style={{flex:1,padding:10,borderRadius:10,border:tab===k?"2px solid #F97316":"1px solid var(--border)",background:tab===k?"rgba(249,115,22,0.06)":"var(--card)",fontSize:13,fontWeight:600,cursor:"pointer",fontFamily:"inherit",color:tab===k?"#F97316":"var(--text)"}}>{l}</button>)}
     </div>
 
     {tab==="import"?<>
@@ -41,7 +41,7 @@ function VImportScr({onBack}){
         </div>
       </div>
 
-      {file&&<button onClick={doImport} disabled={importing} style={{width:"100%",padding:14,borderRadius:14,border:"none",background:"#F97316",color:"#fff",fontSize:15,fontWeight:700,cursor:"pointer",fontFamily:"inherit"}}>{importing?"⏳ Import en cours...":" Importer les produits"}</button>}
+      {file&&<button onClick={doImport} disabled={importing} style={{width:"100%",padding:14,borderRadius:14,border:"none",background:"#F97316",color:"#fff",fontSize:15,fontWeight:700,cursor:"pointer",fontFamily:"inherit"}}>{importing?"⏳ Import en cours...":"Importer les produits"}</button>}
 
       {result&&<div style={{marginTop:14,padding:14,background:"var(--card)",border:"1px solid var(--border)",borderRadius:14}}>
         <div style={{fontSize:14,fontWeight:700,marginBottom:8}}>Résultat de l'import</div>

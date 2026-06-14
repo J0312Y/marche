@@ -1,11 +1,13 @@
 import { useState, useRef } from "react";
+import { useGuestGate } from "../../hooks/useGuestGate";
 import { CHAT_AVATARS } from "../../data/images";
 import toast from "../../utils/toast";
 import { useLoad } from "../../hooks";
 import { social } from "../../services";
 import Icon from "../../components/Icon";
 
-function ReviewsScr({product:p,onBack}){
+function ReviewsScr({product:p,onBack,go}){
+  const { gate, GateUI } = useGuestGate(go);
   const { data: reviewData } = useLoad(() => social.getArticleReviews(p.id));
   const REVIEWS = reviewData?.reviews || reviewData || [];
   
@@ -62,7 +64,7 @@ function ReviewsScr({product:p,onBack}){
   return(<div className="scr" style={{padding:16}}><div className="appbar" style={{padding:0,marginBottom:12}}><button onClick={onBack}>←</button><h2>Avis ({p.reviews+userReviews.length})</h2><div style={{width:38}}/></div>
     <div style={{textAlign:"center",marginBottom:14}}>
       <div style={{fontSize:40,fontWeight:700,color:"var(--text)"}}>{avg}</div>
-      <div style={{fontSize:16,color:"#F59E0B",marginBottom:4}}>{"".repeat(Math.floor(avg))}{"".repeat(5-Math.floor(avg))}</div>
+      <div style={{fontSize:16,color:"#F59E0B",marginBottom:4}}>{"⭐".repeat(Math.floor(avg))}{"☆".repeat(5-Math.floor(avg))}</div>
       <div style={{fontSize:12,color:"var(--muted)"}}>{p.reviews+userReviews.length} avis vérifiés</div>
     </div>
     <div style={{marginBottom:14}}>{dist.map((d,i)=><div key={i} style={{display:"flex",alignItems:"center",gap:8,marginBottom:4}}><span style={{fontSize:12,width:12}}>{5-i}</span><span style={{fontSize:12}}><Icon name="star_full" size={18}/></span><div style={{flex:1,height:6,background:"var(--border)",borderRadius:3,overflow:"hidden"}}><div style={{width:`${d}%`,height:"100%",background:d>0?"#F59E0B":"var(--border)",borderRadius:3,transition:"width .3s"}}/></div><span style={{fontSize:11,color:"var(--muted)",width:30,textAlign:"right"}}>{d}%</span></div>)}</div>
@@ -124,7 +126,7 @@ function ReviewsScr({product:p,onBack}){
 
     {/* Review filters */}
     <div className="review-filters" style={{display:"flex",gap:6,padding:"4px 0 12px",overflowX:"auto",scrollbarWidth:"none"}} className="hide-scroll">
-      {[["all","Tous",allReviewsRaw.length],["photos","Avec photos",allReviewsRaw.filter(r=>r.photos?.length>0).length],["5stars","5 étoiles",allReviewsRaw.filter(r=>r.rating===5).length],["recent"," Récents",allReviewsRaw.length]].map(([k,l,n])=>(
+      {[["all","Tous",allReviewsRaw.length],["photos","Avec photos",allReviewsRaw.filter(r=>r.photos?.length>0).length],["5stars","5 étoiles",allReviewsRaw.filter(r=>r.rating===5).length],["recent","Récents",allReviewsRaw.length]].map(([k,l,n])=>(
         <button key={k} onClick={()=>setFilter(k)} style={{flexShrink:0,padding:"6px 12px",borderRadius:20,border:filter===k?"2px solid #F97316":"1px solid var(--border)",background:filter===k?"rgba(249,115,22,0.06)":"var(--card)",color:filter===k?"#F97316":"var(--sub)",fontSize:11,fontWeight:600,cursor:"pointer",fontFamily:"inherit"}}>{l} <span style={{opacity:.6}}>({n})</span></button>
       ))}
     </div>
@@ -140,7 +142,7 @@ function ReviewsScr({product:p,onBack}){
         </h4></div>
         <span className="rd">{r.date}</span>
       </div>
-      <div className="review-stars">{"".repeat(r.rating)}{"".repeat(5-r.rating)}</div>
+      <div className="review-stars">{"⭐".repeat(r.rating)}{"☆".repeat(5-r.rating)}</div>
       {r.text&&<div className="review-text">{r.text}</div>}
       {/* Review photos */}
       {r.photos&&r.photos.length>0&&(
@@ -164,7 +166,7 @@ function ReviewsScr({product:p,onBack}){
         <button style={{position:"absolute",top:20,right:20,width:40,height:40,borderRadius:"50%",background:"rgba(255,255,255,.2)",border:"none",color:"#fff",fontSize:20,cursor:"pointer"}} onClick={()=>setViewImg?.(null)}></button>
       </div>
     )}
-  </div>);
+  <GateUI/></div>);
 }
 
 export default ReviewsScr;

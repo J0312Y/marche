@@ -15,6 +15,7 @@ import {
   ReferralScr, LoyaltyScr, SubscriptionsScr, PromosScr, ReturnScr, GiftCardScr, QRScanScr, ChatBotScr, MyStatsScr, BecomeSellerScr, PriceAlertScr, ImageSearchScr, GamificationScr, GroupBuyScr
 } from "../screens/buyer";
 import { SettingsScr, HelpScr, AboutScr, TermsScr, PrivacyScr, DeliveryPolicyScr } from "../screens/common";
+import Icon from "../components/Icon";
 
 // Redirect component — defers setState to useEffect
 function Redirect({ action }) {
@@ -49,7 +50,7 @@ export default function BuyerScreens() {
     case "detail": return <DetailScr product={data} onBack={back} onAddCart={addToCart} go={go} favs={favs} toggleFav={toggleFav} isFav={isFav} />;
     case "gallery": return <GalleryScr product={data} onClose={back} />;
     case "compare": return <CompareScr product={data} onBack={back} />;
-    case "reviews": return <ReviewsScr product={data} onBack={back} />;
+    case "reviews": return <ReviewsScr product={data} onBack={back} go={go} />;
     case "vendor": return <VendorScr vendor={data} go={go} onBack={back} />;
     case "cats": return <CategoriesScr go={go} onBack={back} />;
     case "restoList": return <RestoListScr go={go} onBack={back} favs={favs} toggleFav={toggleFav} isFav={isFav} />;
@@ -57,7 +58,7 @@ export default function BuyerScreens() {
     case "flash": return <FlashScr go={go} onBack={back} favs={favs} toggleFav={toggleFav} isFav={isFav} />;
     case "nearby": return <NearbyScr go={go} onBack={back} />;
     case "coupons": return <CouponsScr onBack={back} cart={cart} appliedCoupon={appliedCoupon} onApply={(c)=>{setAppliedCoupon(c);back()}} />;
-    case "checkout": return <CheckoutScr onBack={back} onDone={goHome} cart={cart} clearCart={clearCart} appliedCoupon={appliedCoupon} setAppliedCoupon={setAppliedCoupon} />;
+    case "checkout": return <CheckoutScr onBack={back} onDone={goHome} cart={cart} clearCart={clearCart} appliedCoupon={appliedCoupon} setAppliedCoupon={setAppliedCoupon} go={go} />;
     case "cart": return <Redirect action={() => { setTab(2); setScreen(null); }} />;
     case "orders": return <Redirect action={() => { setTab(3); setScreen(null); }} />;
     case "search": return <SearchScr go={go} onBack={back} favs={favs} toggleFav={toggleFav} isFav={isFav} defaultTab={data?.tab} />;

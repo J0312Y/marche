@@ -33,7 +33,7 @@ function DeliveryPolicyScr({onBack}){
       "Les services ne sont pas remboursables après exécution",
       "Photo du produit requise pour toute demande de retour",
     ]},
-    {title:" Remboursements",items:[
+    {title:"Remboursements",items:[
       "Choix entre crédit sur Wallet Lamuka (instantané) ou Mobile Money (24-48h)",
       "Un avoir (note de crédit) est émis séparément du reçu original",
       "Le reçu original n'est jamais modifié",

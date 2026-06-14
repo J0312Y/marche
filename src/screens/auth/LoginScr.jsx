@@ -3,7 +3,7 @@ import { useState } from "react";
 import { TermsScr, PrivacyScr } from "../common";
 import Icon from "../../components/Icon";
 
-function LoginScr({onDone,onSocial}){
+function LoginScr({onDone,onSocial,onGuest}){
   const [legal,setLegal]=useState(null);
   const [phone,setPhone]=useState("");
   const [phoneErr,setPhoneErr]=useState("");
@@ -30,7 +30,22 @@ function LoginScr({onDone,onSocial}){
         <button className="social-btn" onClick={()=>doSocial("facebook")} style={socialLoading==="facebook"?{background:"rgba(24,119,242,0.08)",borderColor:"#1877F2"}:{}}>{socialLoading==="facebook"?<span style={{display:"flex",alignItems:"center",gap:6}}><span className="loader" style={{width:14,height:14,borderWidth:2}}/>Connexion...</span>:<><svg width="18" height="18" viewBox="0 0 24 24" fill="#1877F2"><path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/></svg> <span>Facebook</span></>}</button>
       </div>
       <p style={{textAlign:"center",fontSize:13,color:"var(--muted)",marginTop:20}}>{isSignup?"Déjà un compte ? ":"Pas de compte ? "}<b style={{color:"#F97316",cursor:"pointer"}} onClick={()=>setIsSignup(!isSignup)}>{isSignup?"Se connecter":"Créer un compte"}</b></p>
-      <p style={{textAlign:"center",fontSize:12,color:"var(--muted)",marginTop:10}}>En continuant, vous acceptez nos <b style={{color:"var(--sub)",cursor:"pointer"}} onClick={()=>setLegal("terms")}>Conditions</b> et <b style={{color:"var(--sub)",cursor:"pointer"}} onClick={()=>setLegal("privacy")}>Politique de confidentialité</b></p>
+      
+      {/* GUEST BROWSING - explore without account */}
+      {onGuest && <>
+        <div style={{display:"flex",alignItems:"center",gap:10,margin:"18px 0 12px"}}>
+          <div style={{flex:1,height:1,background:"var(--border)"}}/>
+          <span style={{fontSize:11,color:"var(--muted)",fontWeight:600}}>OU</span>
+          <div style={{flex:1,height:1,background:"var(--border)"}}/>
+        </div>
+        <button onClick={onGuest} style={{width:"100%",padding:"13px 16px",border:"1.5px solid var(--border)",borderRadius:14,background:"transparent",color:"var(--text)",fontSize:13,fontWeight:700,cursor:"pointer",fontFamily:"inherit",display:"flex",alignItems:"center",justifyContent:"center",gap:8}}>
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+          Continuer en visiteur
+        </button>
+        <p style={{textAlign:"center",fontSize:10,color:"var(--muted)",marginTop:6,lineHeight:1.4}}>Explorez le catalogue sans compte (achat impossible)</p>
+      </>}
+      
+      <p style={{textAlign:"center",fontSize:12,color:"var(--muted)",marginTop:14}}>En continuant, vous acceptez nos <b style={{color:"var(--sub)",cursor:"pointer"}} onClick={()=>setLegal("terms")}>Conditions</b> et <b style={{color:"var(--sub)",cursor:"pointer"}} onClick={()=>setLegal("privacy")}>Politique de confidentialité</b></p>
     </div>
   );
 }

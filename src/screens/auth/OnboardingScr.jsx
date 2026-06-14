@@ -122,7 +122,7 @@ function OnboardingScr({onDone}){
           display:"flex",alignItems:"center",justifyContent:"center",fontSize:26,
           boxShadow:"0 4px 20px rgba(0,0,0,.08)",
           opacity:animating?0:1,transition:"opacity .2s",
-        }}>{slide.icon}</div>
+        }}><Icon name={slide.icon} size={20}/></div>
       </div>
 
       {/* ═══ TEXT SECTION — 40% on white ═══ */}

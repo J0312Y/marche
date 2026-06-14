@@ -1,12 +1,26 @@
 import { useState } from "react";
+import { useApp } from "../../context/AppContext";
+import Icon from "../../components/Icon";
 import toast from "../../utils/toast";
 import { LEVELS, STREAK_REWARDS, getLevel, getNextLevel } from "../../data/loyalty";
 import { fmt } from "../../utils/helpers";
 import CountUp from "../../components/CountUp";
 import SuccessAnimation from "../../components/SuccessAnimation";
-import Icon from "../../components/Icon";
 
 function LoyaltyScr({ onBack, go }) {
+  const { isGuest, exitGuestToLogin } = useApp();
+  if (isGuest) return (
+    <div className="scr" style={{display:"flex",flexDirection:"column",alignItems:"center",justifyContent:"center",padding:"60px 24px",textAlign:"center",minHeight:"100vh"}}>
+      <div style={{width:80,height:80,borderRadius:24,background:"rgba(249,115,22,0.1)",display:"flex",alignItems:"center",justifyContent:"center",marginBottom:20,color:"#F97316"}}>
+        <Icon name="user" size={36} color="#F97316"/>
+      </div>
+      <h2 style={{fontSize:20,fontWeight:800,letterSpacing:-.4,marginBottom:10}}>Connexion requise</h2>
+      <p style={{fontSize:13,color:"var(--muted)",marginBottom:24,maxWidth:280,lineHeight:1.5}}>Connectez-vous pour accéder à cette section de votre profil.</p>
+      <button onClick={()=>exitGuestToLogin()} style={{padding:"12px 28px",borderRadius:14,border:"none",background:"#F97316",color:"#fff",fontSize:13,fontWeight:700,cursor:"pointer",fontFamily:"inherit"}}>Se connecter</button>
+      <button onClick={()=>onBack&&onBack()} style={{marginTop:10,padding:"10px",border:"none",background:"transparent",color:"var(--muted)",fontSize:12,fontWeight:600,cursor:"pointer",fontFamily:"inherit"}}>Retour</button>
+    </div>
+  );
+
   // Read from localStorage or default
   const [loyalty, setLoyalty] = useState(() => {
     try {
@@ -56,13 +70,13 @@ function LoyaltyScr({ onBack, go }) {
     <div className="scr" style={{ paddingBottom: 80 }}>
       {/* Header */}
       <div style={{ padding: "16px", display: "flex", alignItems: "center", gap: 10 }}>
-        <button onClick={onBack} style={{ width: 38, height: 38, borderRadius: 12, background: "var(--card)", border: "1px solid var(--border)", cursor: "pointer", fontSize: 14 }}>←</button>
+        <button onClick={()=>onBack&&onBack()} style={{ width: 38, height: 38, borderRadius: 12, background: "var(--card)", border: "1px solid var(--border)", cursor: "pointer", fontSize: 14 }}>←</button>
         <h2 style={{ fontSize: 18, fontWeight: 800, flex: 1 }}>Lamuka Points</h2>
       </div>
 
       {/* Hero card with level + points */}
       <div style={{ margin: "0 16px 14px", padding: 20, background: `linear-gradient(135deg, ${level.color}22 0%, ${level.color}08 100%)`, border: `2px solid ${level.color}33`, borderRadius: 20, position: "relative", overflow: "hidden" }}>
-        <div style={{ position: "absolute", top: -20, right: -20, fontSize: 100, opacity: .15 }}>{level.icon}</div>
+        <div style={{ position: "absolute", top: -20, right: -20, fontSize: 100, opacity: .15 }}><Icon name={level.icon} size={20}/></div>
         <div style={{ position: "relative" }}>
           <div style={{ fontSize: 10, color: level.color, fontWeight: 800, letterSpacing: 1, marginBottom: 4 }}>NIVEAU {level.name.toUpperCase()}</div>
           <div style={{ display: "flex", alignItems: "baseline", gap: 6, marginBottom: 4 }}>
@@ -77,7 +91,7 @@ function LoyaltyScr({ onBack, go }) {
           {!isMaxLevel && <div>
             <div style={{ display: "flex", justifyContent: "space-between", fontSize: 11, marginBottom: 6 }}>
               <span style={{ color: "var(--muted)" }}>{lifetime} / {next.min} pts vers</span>
-              <span style={{ color: next.color, fontWeight: 700 }}>{next.icon} {next.name}</span>
+              <span style={{ color: next.color, fontWeight: 700 }}><Icon name={next.icon} size={20}/> {next.name}</span>
             </div>
             <div style={{ height: 8, background: "rgba(0,0,0,.06)", borderRadius: 4, overflow: "hidden" }}>
               <div style={{ width: `${progress}%`, height: "100%", background: `linear-gradient(90deg, ${level.color}, ${next.color})`, borderRadius: 4, transition: "width 1s ease" }} />

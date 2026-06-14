@@ -1,18 +1,32 @@
 import { useState } from "react";
+import { useApp } from "../../context/AppContext";
+import Icon from "../../components/Icon";
 import toast from "../../utils/toast";
 import P from "../../data/products";
 import PullToRefresh from "../../components/PullToRefresh";
-import Icon from "../../components/Icon";
 
 const findPhoto=(itemStr)=>{const name=itemStr.split(" ").slice(1).join(" ").replace(/ x\d+$/,"");const p=P.find(x=>x.name.includes(name)||name.includes(x.name));return p?.photo||null};
 
 function OrdersScr({go}){
+  const { isGuest, exitGuestToLogin, setTab: setAppTab } = useApp();
+  if (isGuest) return (
+    <div className="scr" style={{display:"flex",flexDirection:"column",alignItems:"center",justifyContent:"center",padding:"60px 24px",textAlign:"center",minHeight:"100vh"}}>
+      <div style={{width:80,height:80,borderRadius:24,background:"rgba(249,115,22,0.1)",display:"flex",alignItems:"center",justifyContent:"center",marginBottom:20,color:"#F97316"}}>
+        <Icon name="package" size={36} color="#F97316"/>
+      </div>
+      <h2 style={{fontSize:20,fontWeight:800,letterSpacing:-.4,marginBottom:10}}>Connexion requise</h2>
+      <p style={{fontSize:13,color:"var(--muted)",marginBottom:24,maxWidth:280,lineHeight:1.5}}>Connectez-vous pour voir l'historique de vos commandes.</p>
+      <button onClick={()=>exitGuestToLogin()} style={{padding:"12px 28px",borderRadius:14,border:"none",background:"#F97316",color:"#fff",fontSize:13,fontWeight:700,cursor:"pointer",fontFamily:"inherit"}}>Se connecter</button>
+      <button onClick={()=>setAppTab(0)} style={{marginTop:14,padding:"12px 24px",borderRadius:14,border:"1px solid var(--border)",background:"var(--card)",color:"var(--text)",fontSize:13,fontWeight:700,cursor:"pointer",fontFamily:"inherit",display:"inline-flex",alignItems:"center",gap:8}}><Icon name="home" size={16}/>Retour à l&apos;accueil</button>
+    </div>
+  );
+
   const [orders,setOrders]=useState([
-    {ref:"#LMK-2026-0214",date:"14 Fév 2026",status:"En livraison",sc:"ship",total:"231 500",vendor:"Tech Congo",items:["Galaxy A54"," Panier Bio x3"],prog:[1,1,1,0]},
+    {ref:"#LMK-2026-0214",date:"14 Fév 2026",status:"En livraison",sc:"ship",total:"231 500",vendor:"Tech Congo",items:["Galaxy A54","Panier Bio x3"],prog:[1,1,1,0]},
     {ref:"#LMK-2026-0210",date:"10 Fév 2026",status:"Livré",sc:"done",total:"42 000",vendor:"Mode Afrique",items:["Sac Cuir"],prog:[1,1,1,1]},
     {ref:"#LMK-2026-0205",date:"5 Fév 2026",status:"Livré",sc:"done",total:"18 000",vendor:"Mode Afrique",items:["Chemise Bogolan"],prog:[1,1,1,1]},
     {ref:"#LMK-2026-0201",date:"1 Fév 2026",status:"En préparation",sc:"prep",total:"5 500",vendor:"Chez Mama Ngudi",items:["Poulet DG"],prog:[1,1,0,0],payment:"cash"},
-    {ref:"#LMK-2026-0198",date:"28 Jan 2026",status:"Annulée",sc:"cancel",total:"15 000",vendor:"Tech Congo",items:[" Écouteurs Bluetooth"],prog:[1,0,0,0],payment:"mtn"},
+    {ref:"#LMK-2026-0198",date:"28 Jan 2026",status:"Annulée",sc:"cancel",total:"15 000",vendor:"Tech Congo",items:["Écouteurs Bluetooth"],prog:[1,0,0,0],payment:"mtn"},
     {ref:"#GRP-4521",date:"15 Fév 2026",status:"En livraison",sc:"ship",total:"39 000",vendor:"Chez Mama Ngudi",items:["Poulet DG x2","Poisson Braisé","Gâteau F.N. x2"],prog:[1,1,1,0],payment:"airtel",isGroup:true,groupMembers:["Joeldy","Marie K.","Patrick M."],groupSides:[{name:"Coca-Cola",qty:2},{name:"Frites",qty:1},{name:"Piment fort",qty:1}]},
     {ref:"#GRP-3817",date:"10 Fév 2026",status:"Livré",sc:"done",total:"22 500",vendor:"Le Braiseur du Congo",items:["Poisson Braisé x3","Bière Ngok x3"],prog:[1,1,1,1],payment:"mtn",isGroup:true,groupMembers:["Joeldy","David T."]},
   ]);
