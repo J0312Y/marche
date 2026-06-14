@@ -304,7 +304,7 @@ function HomeScr({go,favs,toggleFav,isFav,userName}){
         <span style={{color:"#F97316",fontSize:16}}>›</span>
       </div>
 
-      {/* Restos à la une */}
+      {/* Restos à la une */}}
       {(selType==="all"||selType==="restaurant")&&nearbyRestos.length>0&&<>
       {/* Events / promos banner */}
       {(()=>{
@@ -495,8 +495,109 @@ function HomeScr({go,favs,toggleFav,isFav,userName}){
 
 
 
-      <div className="sec"><h3>{selType==="all"?"Populaires":"Populaires en "+types.find(t=>t.id===selType)?.name}</h3><span onClick={()=>go("allProducts")}>Voir tout</span></div>
-      <div className="pgrid stagger-grid">{sortedP.map(p=>{const vp=getVendorPromo(p,VENDORS);const td=totalDisc(p,VENDORS);return(<div key={p.id} className="pcard" onClick={()=>go("detail",p)}><div className="pimg"><Img src={p.photo} emoji={p.img} style={{position:"absolute",inset:0,width:"100%",height:"100%"}} fit="cover"/>{p.old&&<span className="badge">-{disc(p)}%</span>}{vp&&<span className="tag" style={{background:"#F59E0B",color:"#fff"}}><Icon name="tag" size={16}/>{" "}{vp.promoName}</span>}{!vp&&p.tags[0]&&<span className="tag">{p.tags[0]}</span>}<span className="fav" onClick={e=>{e.stopPropagation();toggleFav(p.id)}} style={{color:isFav(p.id)?"#EF4444":"var(--muted)",fontSize:14}}>{isFav(p.id) ? <svg width="14" height="14" viewBox="0 0 24 24" fill="#EF4444"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg> : <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#6B7280" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>}</span></div><div className="pbody"><h4>{p.name}</h4><div className="pv">{p.va} {p.vendor}{p.eta&&<span style={{marginLeft:4,color:"#F97316",fontSize:10}}> {p.eta}</span>}</div><div className="pp">{vp?<><span style={{color:"#F97316"}}>{fmt(vp.promoPrice)}</span><span className="po">{fmt(p.price)}</span></>:<>{fmt(p.price)}{p.old&&<span className="po">{fmt(p.old)}</span>}</>}</div><div className="pr" onClick={e=>{e.stopPropagation();go("reviews",p)}}><Icon name="star_full" size={16}/>{" "}{p.rating} ({p.reviews})</div></div></div>)})}</div>
+      {/* ═══ POPULAIRES — top sellers across all categories ═══ */}
+      <div className="sec"><h3>Populaires cette semaine</h3><span onClick={()=>go("allProducts")}>Voir tout</span></div>
+      <div style={{display:"flex",gap:10,overflowX:"auto",padding:"4px 16px 18px",scrollbarWidth:"none"}} className="hide-scroll">
+        {sortedP.slice(0,8).map(p=>{const vp=getVendorPromo(p,VENDORS);const td=totalDisc(p,VENDORS);return(
+          <div key={"pop-"+p.id} onClick={()=>go("detail",p)} style={{minWidth:148,maxWidth:148,flexShrink:0,background:"var(--card)",border:"1px solid var(--border)",borderRadius:12,overflow:"hidden",cursor:"pointer"}}>
+            <div style={{width:"100%",aspectRatio:"1 / 1",position:"relative",overflow:"hidden",background:"var(--light)"}}>
+              <Img src={p.photo} emoji={p.img} style={{width:"100%",height:"100%"}} fit="cover"/>
+              {p.old&&<span style={{position:"absolute",top:6,left:6,padding:"2px 6px",background:"#EF4444",color:"#fff",borderRadius:4,fontSize:9,fontWeight:800}}>-{disc(p)}%</span>}
+              <span onClick={e=>{e.stopPropagation();toggleFav(p.id)}} style={{position:"absolute",top:6,right:6,width:26,height:26,borderRadius:"50%",background:"rgba(255,255,255,0.95)",display:"flex",alignItems:"center",justifyContent:"center",cursor:"pointer"}}>{isFav(p.id) ? <svg width="13" height="13" viewBox="0 0 24 24" fill="#EF4444"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg> : <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#6B7280" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>}</span>
+            </div>
+            <div style={{padding:"8px 10px"}}>
+              <div style={{fontSize:11,fontWeight:600,overflow:"hidden",textOverflow:"ellipsis",whiteSpace:"nowrap",color:"var(--text)"}}>{p.name}</div>
+              <div style={{display:"flex",alignItems:"baseline",gap:4,marginTop:3}}>
+                {vp ? <><span style={{fontSize:13,fontWeight:800,color:"#F97316"}}>{fmt(vp.promoPrice)}</span><span style={{fontSize:9,color:"var(--muted)",textDecoration:"line-through"}}>{fmt(p.price)}</span></> : <span style={{fontSize:13,fontWeight:800,color:"#F97316"}}>{fmt(p.price)}</span>}
+              </div>
+              <div style={{display:"flex",alignItems:"center",gap:3,marginTop:3,fontSize:10,color:"var(--muted)"}}>
+                <Icon name="star_full" size={11}/>{p.rating} ({p.reviews})
+              </div>
+            </div>
+          </div>
+        )})}
+      </div>
+
+      {/* ═══ PROMOS EN COURS — carousel ═══ */}
+      {(()=>{const promoProds=P.filter(p=>p.old&&p.price<p.old).slice(0,8);return promoProds.length>=3?(<>
+        <div className="sec"><h3 style={{display:"flex",alignItems:"center",gap:6}}><Icon name="fire" size={18} color="#EF4444"/>Promos en cours</h3><span onClick={()=>go("allProducts")}>Voir tout</span></div>
+        <div style={{display:"flex",gap:10,overflowX:"auto",padding:"4px 16px 18px",scrollbarWidth:"none"}} className="hide-scroll">
+          {promoProds.map(p=>(
+            <div key={"promo-"+p.id} onClick={()=>go("detail",p)} style={{minWidth:148,maxWidth:148,flexShrink:0,background:"var(--card)",border:"1px solid var(--border)",borderRadius:12,overflow:"hidden",cursor:"pointer"}}>
+              <div style={{width:"100%",aspectRatio:"1 / 1",position:"relative",overflow:"hidden",background:"var(--light)"}}>
+                <Img src={p.photo} emoji={p.img} style={{width:"100%",height:"100%"}} fit="cover"/>
+                <span style={{position:"absolute",top:6,left:6,padding:"2px 7px",background:"linear-gradient(135deg,#EF4444,#DC2626)",color:"#fff",borderRadius:4,fontSize:10,fontWeight:800}}>-{disc(p)}%</span>
+              </div>
+              <div style={{padding:"8px 10px"}}>
+                <div style={{fontSize:11,fontWeight:600,overflow:"hidden",textOverflow:"ellipsis",whiteSpace:"nowrap"}}>{p.name}</div>
+                <div style={{display:"flex",alignItems:"baseline",gap:4,marginTop:3}}>
+                  <span style={{fontSize:13,fontWeight:800,color:"#EF4444"}}>{fmt(p.price)}</span>
+                  <span style={{fontSize:9,color:"var(--muted)",textDecoration:"line-through"}}>{fmt(p.old)}</span>
+                </div>
+              </div>
+            </div>
+          ))}
+        </div>
+      </>):null})()}
+
+      {/* ═══ CAROUSELS PAR CATÉGORIE ═══ */}
+      {["Mode Femme","Électronique","Beauté","Maison & Déco","Mode Homme","Bébé & Enfant"].map(catName=>{
+        const catProducts=P.filter(p=>p.cat===catName).slice(0,8);
+        if(catProducts.length<3)return null;
+        const catInfo=CATS.find(c=>c.name===catName);
+        return(
+          <div key={"cat-"+catName}>
+            <div style={{padding:"6px 16px 0",display:"flex",justifyContent:"space-between",alignItems:"center",marginBottom:8}}>
+              <div style={{display:"flex",alignItems:"center",gap:10}}>
+                {catInfo?.photo&&<div style={{width:30,height:30,borderRadius:8,overflow:"hidden",flexShrink:0}}><img src={catInfo.photo} alt={catName} style={{width:"100%",height:"100%",objectFit:"cover"}}/></div>}
+                <h3 style={{fontSize:16,fontWeight:800,letterSpacing:-.3,color:"var(--text)"}}>{catName}</h3>
+              </div>
+              <span onClick={()=>{doSearch(catName)}} style={{fontSize:12,color:"#F97316",fontWeight:700,cursor:"pointer",display:"flex",alignItems:"center",gap:3}}>Voir tout <Icon name="chevron_right" size={14} color="#F97316"/></span>
+            </div>
+            <div style={{display:"flex",gap:10,overflowX:"auto",padding:"4px 16px 18px",scrollbarWidth:"none"}} className="hide-scroll">
+              {catProducts.map(p=>{const vp=getVendorPromo(p,VENDORS);return(
+                <div key={"cp-"+p.id} onClick={()=>go("detail",p)} style={{minWidth:148,maxWidth:148,flexShrink:0,background:"var(--card)",border:"1px solid var(--border)",borderRadius:12,overflow:"hidden",cursor:"pointer"}}>
+                  <div style={{width:"100%",aspectRatio:"1 / 1",position:"relative",overflow:"hidden",background:"var(--light)"}}>
+                    <Img src={p.photo} emoji={p.img} style={{width:"100%",height:"100%"}} fit="cover"/>
+                    {p.old&&<span style={{position:"absolute",top:6,left:6,padding:"2px 6px",background:"#EF4444",color:"#fff",borderRadius:4,fontSize:9,fontWeight:800}}>-{disc(p)}%</span>}
+                    <span onClick={e=>{e.stopPropagation();toggleFav(p.id)}} style={{position:"absolute",top:6,right:6,width:26,height:26,borderRadius:"50%",background:"rgba(255,255,255,0.95)",display:"flex",alignItems:"center",justifyContent:"center",cursor:"pointer"}}>{isFav(p.id) ? <svg width="13" height="13" viewBox="0 0 24 24" fill="#EF4444"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg> : <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#6B7280" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>}</span>
+                  </div>
+                  <div style={{padding:"8px 10px"}}>
+                    <div style={{fontSize:11,fontWeight:600,overflow:"hidden",textOverflow:"ellipsis",whiteSpace:"nowrap"}}>{p.name}</div>
+                    <div style={{display:"flex",alignItems:"baseline",gap:4,marginTop:3}}>
+                      {vp ? <><span style={{fontSize:13,fontWeight:800,color:"#F97316"}}>{fmt(vp.promoPrice)}</span><span style={{fontSize:9,color:"var(--muted)",textDecoration:"line-through"}}>{fmt(p.price)}</span></> : <span style={{fontSize:13,fontWeight:800,color:"#F97316"}}>{fmt(p.price)}</span>}
+                    </div>
+                    <div style={{display:"flex",alignItems:"center",gap:3,marginTop:3,fontSize:10,color:"var(--muted)"}}>
+                      <Icon name="star_full" size={11}/>{p.rating}
+                    </div>
+                  </div>
+                </div>
+              )})}
+              {/* "Voir tout" card at the end */}
+              <div onClick={()=>doSearch(catName)} style={{minWidth:148,maxWidth:148,flexShrink:0,background:"linear-gradient(135deg,rgba(249,115,22,0.06),rgba(249,115,22,0.02))",border:"1.5px dashed rgba(249,115,22,0.3)",borderRadius:12,cursor:"pointer",display:"flex",flexDirection:"column",alignItems:"center",justifyContent:"center",padding:16}}>
+                <div style={{width:44,height:44,borderRadius:14,background:"rgba(249,115,22,0.1)",display:"flex",alignItems:"center",justifyContent:"center",color:"#F97316",marginBottom:8}}>
+                  <Icon name="chevron_right" size={22} color="#F97316"/>
+                </div>
+                <div style={{fontSize:12,fontWeight:800,color:"#F97316",textAlign:"center"}}>Voir tout</div>
+                <div style={{fontSize:10,color:"var(--muted)",marginTop:2}}>{P.filter(p=>p.cat===catName).length} articles</div>
+              </div>
+            </div>
+          </div>
+        );
+      })}
+
+      {/* End of feed marker */}
+      <div style={{padding:"30px 24px",textAlign:"center"}}>
+        <div style={{width:60,height:60,borderRadius:18,background:"linear-gradient(135deg,#F97316,#EA580C)",display:"flex",alignItems:"center",justifyContent:"center",margin:"0 auto 12px",color:"#fff"}}>
+          <Icon name="check_circle" size={28} color="#fff"/>
+        </div>
+        <h3 style={{fontSize:16,fontWeight:800,letterSpacing:-.3}}>Vous avez tout vu !</h3>
+        <p style={{fontSize:12,color:"var(--muted)",marginTop:4,maxWidth:240,margin:"4px auto 14px"}}>{P.length} articles disponibles · {VENDORS.length} boutiques</p>
+        <div style={{display:"flex",gap:8,justifyContent:"center",flexWrap:"wrap"}}>
+          <button onClick={()=>go("allProducts")} style={{padding:"10px 18px",borderRadius:10,border:"1px solid var(--border)",background:"var(--card)",color:"var(--text)",fontSize:12,fontWeight:700,cursor:"pointer",fontFamily:"inherit"}}>Tous les articles</button>
+          <button onClick={()=>go("nearby")} style={{padding:"10px 18px",borderRadius:10,border:"none",background:"#F97316",color:"#fff",fontSize:12,fontWeight:700,cursor:"pointer",fontFamily:"inherit"}}>Vendeurs proches</button>
+        </div>
+      </div>
       </>}
     </div></PullToRefresh>
 
