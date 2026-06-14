@@ -125,7 +125,7 @@ function ReviewsScr({product:p,onBack,go}){
 
 
     {/* Review filters */}
-    <div className="review-filters" style={{display:"flex",gap:6,padding:"4px 0 12px",overflowX:"auto",scrollbarWidth:"none"}} className="hide-scroll">
+    <div className="review-filters hide-scroll" style={{display:"flex",gap:6,padding:"4px 0 12px",overflowX:"auto",scrollbarWidth:"none"}}>
       {[["all","Tous",allReviewsRaw.length],["photos","Avec photos",allReviewsRaw.filter(r=>r.photos?.length>0).length],["5stars","5 étoiles",allReviewsRaw.filter(r=>r.rating===5).length],["recent","Récents",allReviewsRaw.length]].map(([k,l,n])=>(
         <button key={k} onClick={()=>setFilter(k)} style={{flexShrink:0,padding:"6px 12px",borderRadius:20,border:filter===k?"2px solid #F97316":"1px solid var(--border)",background:filter===k?"rgba(249,115,22,0.06)":"var(--card)",color:filter===k?"#F97316":"var(--sub)",fontSize:11,fontWeight:600,cursor:"pointer",fontFamily:"inherit"}}>{l} <span style={{opacity:.6}}>({n})</span></button>
       ))}
