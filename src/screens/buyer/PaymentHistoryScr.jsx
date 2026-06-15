@@ -1,6 +1,7 @@
 import { fmt } from "../../utils/helpers";
 import { useApp } from "../../context/AppContext";
 import Icon from "../../components/Icon";
+import GuestBlockedView from "../../components/GuestBlockedView";
 
 const PAYMENTS=[
   {id:"pay1",type:"+",label:"Recharge Airtel Money",amount:50000,date:"14 Fév 2026",status:"Effectué",icon:""},
@@ -14,17 +15,14 @@ const PAYMENTS=[
 
 function PaymentHistoryScr({onBack,go}){
   const { isGuest, exitGuestToLogin } = useApp();
-  if (isGuest) return (
-    <div className="scr" style={{display:"flex",flexDirection:"column",alignItems:"center",padding:"60px 24px 100px",textAlign:"center",minHeight:"100%",boxSizing:"border-box"}}>
-      <div style={{width:80,height:80,borderRadius:24,background:"rgba(249,115,22,0.1)",display:"flex",alignItems:"center",justifyContent:"center",marginBottom:20,color:"#F97316"}}>
-        <Icon name="wallet" size={36} color="#F97316"/>
-      </div>
-      <h2 style={{fontSize:20,fontWeight:800,letterSpacing:-.4,marginBottom:10}}>Connexion requise</h2>
-      <p style={{fontSize:13,color:"var(--muted)",marginBottom:24,maxWidth:280,lineHeight:1.5}}>Connectez-vous pour accéder à votre portefeuille et solde.</p>
-      <button onClick={()=>exitGuestToLogin()} style={{padding:"12px 28px",borderRadius:14,border:"none",background:"#F97316",color:"#fff",fontSize:13,fontWeight:700,cursor:"pointer",fontFamily:"inherit"}}>Se connecter</button>
-      <button onClick={()=>onBack&&onBack()} style={{marginTop:10,padding:"10px",border:"none",background:"transparent",color:"var(--muted)",fontSize:12,fontWeight:600,cursor:"pointer",fontFamily:"inherit"}}>Retour</button>
-    </div>
-  );
+  if (isGuest) return (<GuestBlockedView
+      icon="wallet"
+      title="Vos paiements en un coup d\'œil"
+      subtitle="Connectez-vous pour consulter l\'historique de vos paiements et factures."
+      benefits={["Historique complet", "Factures téléchargeables", "Remboursements suivis"]}
+      accent="#F97316"
+      onGoHome={()=>onBack&&onBack()}
+    />);
 
   const income=PAYMENTS.filter(p=>p.type==="+").reduce((s,p)=>s+p.amount,0);
   const spent=PAYMENTS.filter(p=>p.type==="-").reduce((s,p)=>s+p.amount,0);

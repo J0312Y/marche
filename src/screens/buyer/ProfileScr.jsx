@@ -1,4 +1,5 @@
 import Icon from "../../components/Icon";
+import GuestBlockedView from "../../components/GuestBlockedView";
 import { useApp } from "../../context/AppContext";
 import { fmt } from "../../utils/helpers";
 import { getLevel } from "../../data/loyalty";
@@ -11,50 +12,15 @@ import { USER_AVATAR } from "../../data/images";
 function ProfileScr({go,userRole,vendorPlan,vendorStatus,driverStatus,onLogout,onRoleApproved}){
   const { isGuest, exitGuestToLogin } = useApp();
   
-  // Guest mode — show prompt to login/register
+  // Guest mode — show pro guest welcome screen
   if (isGuest) return (
-    <div className="scr" style={{minHeight:"100vh",background:"linear-gradient(180deg, #FFF7ED 0%, #FFFFFF 100%)",paddingBottom:80}}>
-      <div style={{display:"flex",flexDirection:"column",alignItems:"center",padding:"40px 24px 24px",textAlign:"center"}}>
-      <div style={{width:96,height:96,borderRadius:28,background:"linear-gradient(135deg,#F97316,#EA580C)",display:"flex",alignItems:"center",justifyContent:"center",marginBottom:24,boxShadow:"0 12px 30px rgba(249,115,22,0.3)"}}>
-        <Icon name="user" size={48} color="#fff"/>
-      </div>
-      <h1 style={{fontSize:24,fontWeight:800,letterSpacing:-.5,color:"#1A1F2E",marginBottom:8}}>Bienvenue chez Lamuka</h1>
-      <p style={{fontSize:14,color:"var(--muted)",lineHeight:1.5,maxWidth:300,marginBottom:28}}>Vous explorez en mode visiteur. Connectez-vous pour accéder à votre profil, vos commandes et passer commande.</p>
-      
-      <button onClick={()=>exitGuestToLogin()} style={{width:"100%",maxWidth:320,padding:"14px 16px",borderRadius:14,border:"none",background:"#F97316",color:"#fff",fontSize:14,fontWeight:700,cursor:"pointer",fontFamily:"inherit",marginBottom:10}}>
-        Se connecter / Créer un compte
-      </button>
-      
-      <div style={{width:"100%",maxWidth:320,padding:"14px",background:"#fff",border:"1px solid var(--border)",borderRadius:14,marginTop:20}}>
-        <div style={{fontSize:12,color:"var(--muted)",fontWeight:600,marginBottom:10,letterSpacing:.3}}>EN VISITEUR, VOUS POUVEZ</div>
-        <div style={{display:"flex",alignItems:"center",gap:10,padding:"6px 0",fontSize:13}}>
-          <div style={{width:24,height:24,borderRadius:8,background:"rgba(16,185,129,0.1)",display:"flex",alignItems:"center",justifyContent:"center",color:"#10B981"}}><Icon name="check" size={14}/></div>
-          Parcourir tout le catalogue
-        </div>
-        <div style={{display:"flex",alignItems:"center",gap:10,padding:"6px 0",fontSize:13}}>
-          <div style={{width:24,height:24,borderRadius:8,background:"rgba(16,185,129,0.1)",display:"flex",alignItems:"center",justifyContent:"center",color:"#10B981"}}><Icon name="check" size={14}/></div>
-          Ajouter au panier et liker
-        </div>
-        <div style={{display:"flex",alignItems:"center",gap:10,padding:"6px 0",fontSize:13}}>
-          <div style={{width:24,height:24,borderRadius:8,background:"rgba(16,185,129,0.1)",display:"flex",alignItems:"center",justifyContent:"center",color:"#10B981"}}><Icon name="check" size={14}/></div>
-          Lire les avis et fiches produit
-        </div>
-        <div style={{fontSize:12,color:"var(--muted)",fontWeight:600,marginTop:14,marginBottom:8,letterSpacing:.3}}>VOUS DEVEZ VOUS CONNECTER POUR</div>
-        <div style={{display:"flex",alignItems:"center",gap:10,padding:"6px 0",fontSize:13}}>
-          <div style={{width:24,height:24,borderRadius:8,background:"rgba(239,68,68,0.1)",display:"flex",alignItems:"center",justifyContent:"center",color:"#EF4444"}}><Icon name="close" size={14}/></div>
-          Passer commande
-        </div>
-        <div style={{display:"flex",alignItems:"center",gap:10,padding:"6px 0",fontSize:13}}>
-          <div style={{width:24,height:24,borderRadius:8,background:"rgba(239,68,68,0.1)",display:"flex",alignItems:"center",justifyContent:"center",color:"#EF4444"}}><Icon name="close" size={14}/></div>
-          Chater avec les vendeurs
-        </div>
-        <div style={{display:"flex",alignItems:"center",gap:10,padding:"6px 0",fontSize:13}}>
-          <div style={{width:24,height:24,borderRadius:8,background:"rgba(239,68,68,0.1)",display:"flex",alignItems:"center",justifyContent:"center",color:"#EF4444"}}><Icon name="close" size={14}/></div>
-          Laisser des avis
-        </div>
-      </div>
-      </div>
-    </div>
+    <GuestBlockedView
+      icon="user"
+      title="Bienvenue chez Lamuka"
+      subtitle="Vous explorez en mode visiteur. Créez un compte gratuit pour passer des commandes et profiter de tous les avantages."
+      benefits={["Passer commande et payer", "Discuter avec les vendeurs", "Suivre vos livraisons", "Gagner des points fidélité"]}
+      accent="#F97316"
+    />
   );
   
   const hasVendor=(userRole==="vendor"||userRole==="both")&&vendorStatus==="approved";

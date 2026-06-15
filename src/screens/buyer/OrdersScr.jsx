@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { useApp } from "../../context/AppContext";
 import Icon from "../../components/Icon";
+import GuestBlockedView from "../../components/GuestBlockedView";
 import toast from "../../utils/toast";
 import P from "../../data/products";
 import PullToRefresh from "../../components/PullToRefresh";
@@ -9,17 +10,14 @@ const findPhoto=(itemStr)=>{const name=itemStr.split(" ").slice(1).join(" ").rep
 
 function OrdersScr({go}){
   const { isGuest, exitGuestToLogin, setTab: setAppTab } = useApp();
-  if (isGuest) return (
-    <div className="scr" style={{display:"flex",flexDirection:"column",alignItems:"center",padding:"60px 24px 100px",textAlign:"center",minHeight:"100%",boxSizing:"border-box"}}>
-      <div style={{width:80,height:80,borderRadius:24,background:"rgba(249,115,22,0.1)",display:"flex",alignItems:"center",justifyContent:"center",marginBottom:20,color:"#F97316"}}>
-        <Icon name="package" size={36} color="#F97316"/>
-      </div>
-      <h2 style={{fontSize:20,fontWeight:800,letterSpacing:-.4,marginBottom:10}}>Connexion requise</h2>
-      <p style={{fontSize:13,color:"var(--muted)",marginBottom:24,maxWidth:280,lineHeight:1.5}}>Connectez-vous pour voir l'historique de vos commandes.</p>
-      <button onClick={()=>exitGuestToLogin()} style={{padding:"12px 28px",borderRadius:14,border:"none",background:"#F97316",color:"#fff",fontSize:13,fontWeight:700,cursor:"pointer",fontFamily:"inherit"}}>Se connecter</button>
-      <button onClick={()=>setAppTab(0)} style={{marginTop:14,padding:"12px 24px",borderRadius:14,border:"1px solid var(--border)",background:"var(--card)",color:"var(--text)",fontSize:13,fontWeight:700,cursor:"pointer",fontFamily:"inherit",display:"inline-flex",alignItems:"center",gap:8}}><Icon name="home" size={16}/>Retour à l&apos;accueil</button>
-    </div>
-  );
+  if (isGuest) return (<GuestBlockedView
+      icon="package"
+      title="Suivez vos commandes"
+      subtitle="Créez un compte pour suivre vos commandes en temps réel et consulter votre historique."
+      benefits={["Suivi de livraison en direct", "Historique complet", "Notifications de statut"]}
+      accent="#F97316"
+      onGoHome={()=>setAppTab(0)}
+    />);
 
   const [orders,setOrders]=useState([
     {ref:"#LMK-2026-0214",date:"14 Fév 2026",status:"En livraison",sc:"ship",total:"231 500",vendor:"Tech Congo",items:["Galaxy A54","Panier Bio x3"],prog:[1,1,1,0]},
