@@ -70,6 +70,7 @@ function VProfileScr({go,onSwitch,vendorPlan,onLogout}){
     {/* ═══ VENTES & COMMANDES ═══ */}
     <Section icon={"money"} title="VENTES & COMMANDES">
       <Item icon="chart_pie" label="Statistiques" info={isPro?"Analytics":"—"} onClick={isPro?()=>go("vStats"):null} locked={!isPro} plan="pro"/>
+      <Item icon="user" label="Mes clients" info="12.4K" onClick={()=>go("vClients")}/>
       <Item icon="star_full" label="Avis clients" info="4.6 / 5" onClick={()=>go("vReviews")}/>
       <Item icon="help" label="Questions clients" info="3" onClick={()=>go("vQA")}/>
       <Item icon="↩️" label="Retours" info="1" onClick={()=>go("vReturns")}/>

@@ -68,3 +68,5 @@ export { default as VAdvisorScr } from './VAdvisorScr';
 export { default as VCertifiedScr } from './VCertifiedScr';
 
 export { default as VWebCMSScr } from './VWebCMSScr';
+
+export { default as VClientsScr } from './VClientsScr';

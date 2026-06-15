@@ -5,7 +5,8 @@
 import { useApp } from "../context/AppContext";
 import {
   VDashboardScr, VOrdersScr, VOrderDetailScr, VProductsScr, VProductFormScr,
-  VWalletScr, VStatsScr, VMessagesScr, VChatScr, VReviewsScr,
+  VWalletScr, VStatsScr, VMessagesScr,
+  VClientsScr, VChatScr, VReviewsScr,
   VPromosScr, VCreatePromoScr, VAssignDriverScr, VDeliveryScr,
   VAddDriverScr, VDriverProfileScr, VTrackDeliveryScr, VDriverChatScr,
   VNotifScr, VSettingsScr, VReportsScr, VSupportScr, VProfileScr,
@@ -56,6 +57,7 @@ export default function VendorScreens() {
     case "vDriverChat": return <VDriverChatScr delivery={data} onBack={back} />;
     case "vNotif": return <VNotifScr onBack={back} go={go} />;
     case "vMessages": return <VMessagesScr go={go} onBack={back} />;
+    case "vClients": return <VClientsScr go={go} onBack={back} />;
     case "vWebCMS": return <VWebCMSScr go={go} onBack={back} />;
     case "vSettings": return <VSettingsScr onBack={back} go={go} />;
     case "vReports": return <VReportsScr onBack={back} />;

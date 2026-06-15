@@ -164,7 +164,7 @@ function HomeScr({go,favs,toggleFav,isFav,userName}){
             <div style={{width:28,height:28,border:"3px solid rgba(255,255,255,.3)",borderTopColor:"#fff",borderRadius:"50%",animation:"spin 1s linear infinite"}}/>
             <div style={{color:"#fff",fontSize:11,fontWeight:600,marginTop:6}}>Recherche en cours...</div>
           </div>}
-          <button onClick={clearImgSearch} style={{position:"absolute",top:6,right:6,width:24,height:24,borderRadius:8,border:"none",background:"rgba(0,0,0,.5)",color:"#fff",fontSize:12,cursor:"pointer"}}></button>
+          <button onClick={clearImgSearch} style={{position:"absolute",top:6,right:6,width:24,height:24,borderRadius:8,border:"none",background:"rgba(0,0,0,.5)",color:"#fff",fontSize:12,cursor:"pointer"}}><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button>
         </div>
         {imgResults&&<>
           <div style={{fontSize:13,fontWeight:700,marginBottom:8}}>{imgResults.length} produits similaires</div>
@@ -307,7 +307,7 @@ function HomeScr({go,favs,toggleFav,isFav,userName}){
         <span style={{color:"#F97316",fontSize:16}}>›</span>
       </div>
 
-      {/* Restos à la une */}
+      {/* Restos à la une */} 
       {(selType==="all"||selType==="restaurant")&&nearbyRestos.length>0&&<>
       {/* Events / promos banner */}
       {(()=>{

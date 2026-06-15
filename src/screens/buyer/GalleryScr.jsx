@@ -43,7 +43,7 @@ function GalleryScr({product:p,onClose}){
     <div style={{display:"flex",justifyContent:"space-between",alignItems:"center",padding:"12px 16px",color:"#fff",flexShrink:0}}>
       <span style={{fontSize:13,fontWeight:600}}>{idx+1} / {photos.length}</span>
       <span style={{fontSize:13,fontWeight:500,opacity:.7}}>{p.name}</span>
-      <button onClick={onClose} style={{width:36,height:36,borderRadius:12,background:"rgba(255,255,255,.15)",border:"none",color:"#fff",fontSize:16,cursor:"pointer",display:"flex",alignItems:"center",justifyContent:"center"}}></button>
+      <button onClick={onClose} style={{width:36,height:36,borderRadius:12,background:"rgba(255,255,255,.15)",border:"none",color:"#fff",fontSize:16,cursor:"pointer",display:"flex",alignItems:"center",justifyContent:"center"}}><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.4" strokeLinecap="round" strokeLinejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button>
     </div>
 
     {/* Image area */}
