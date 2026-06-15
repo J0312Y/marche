@@ -60,7 +60,7 @@ function GamificationScr({onBack}){
     <div style={{fontSize:14,fontWeight:700,marginBottom:10}}><Icon name="target" size={16}/>{" "}Missions</div>
     {missions.map(m=>(
       <div key={m.id} style={{padding:12,background:"var(--card)",border:"1px solid var(--border)",borderRadius:14,marginBottom:6,display:"flex",alignItems:"center",gap:10,opacity:m.done?.6:1}}>
-        <div style={{width:36,height:36,borderRadius:10,background:m.done?"rgba(16,185,129,0.08)":"rgba(249,115,22,0.08)",display:"flex",alignItems:"center",justifyContent:"center",fontSize:16}}>{m.done?"":""}</div>
+        <div style={{width:36,height:36,borderRadius:10,background:m.done?"rgba(16,185,129,0.08)":"rgba(249,115,22,0.08)",display:"flex",alignItems:"center",justifyContent:"center",fontSize:16}}><></></div>
         <div style={{flex:1}}>
           <div style={{fontSize:13,fontWeight:600,textDecoration:m.done?"line-through":"none"}}>{m.name}</div>
           <div style={{fontSize:10,color:"var(--muted)"}}>{m.desc}{m.progress&&!m.done?` · ${m.progress}`:""}</div>

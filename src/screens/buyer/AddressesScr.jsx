@@ -36,7 +36,7 @@ function AddressesScr({onBack,go}){
   if(loading) return <div className="scr" style={{padding:16}}><div className="appbar" style={{padding:0,marginBottom:12}}><button onClick={()=>onBack&&onBack()}>←</button><h2>Mes adresses</h2><div style={{width:38}}/></div><SkeletonList count={3}/></div>;
   return(<div className="scr" style={{padding:16}}><div className="appbar" style={{padding:0,marginBottom:12}}><button onClick={()=>onBack&&onBack()}>←</button><h2>Mes adresses</h2><div style={{width:38}}/></div>
     {list.map(a=><div key={a.id} className={`addr-card ${a.def?"def":""}`}>
-      <div className="ai">{a.def?"":""}</div>
+      <div className="ai"><></></div>
       <div className="ab"><h4>{a.label}{a.def&&<span className="def-badge">Par défaut</span>}</h4><p>{a.addr}<br/>{a.city}, Congo</p></div>
       <div style={{display:"flex",flexDirection:"column",gap:4}}>
         {!a.def&&<button style={{padding:"4px 8px",borderRadius:6,border:"1px solid var(--border)",background:"var(--card)",fontSize:10,cursor:"pointer",fontFamily:"inherit"}} onClick={()=>setDefault(a.id)}>Par défaut</button>}

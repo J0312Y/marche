@@ -81,7 +81,7 @@ function DrHistoryScr({onBack}){
         const isOpen=expanded===i;
         return(<div key={i} onClick={()=>setExpanded(isOpen?null:i)} style={{padding:14,background:"var(--card)",border:"1px solid var(--border)",borderRadius:14,marginBottom:8,cursor:"pointer"}}>
           <div style={{display:"flex",alignItems:"center",gap:10}}>
-            <div style={{width:40,height:40,borderRadius:12,background:h.status==="done"?"rgba(16,185,129,0.08)":"rgba(239,68,68,0.08)",display:"flex",alignItems:"center",justifyContent:"center",fontSize:18,flexShrink:0}}>{h.status==="done"?"":""}</div>
+            <div style={{width:40,height:40,borderRadius:12,background:h.status==="done"?"rgba(16,185,129,0.08)":"rgba(239,68,68,0.08)",display:"flex",alignItems:"center",justifyContent:"center",flexShrink:0,color:h.status==="done"?"#10B981":"#EF4444"}}>{h.status==="done" ? <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#10B981" strokeWidth="2.4" strokeLinecap="round" strokeLinejoin="round"><polyline points="20 6 9 17 4 12"/></svg> : <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#EF4444" strokeWidth="2.4" strokeLinecap="round" strokeLinejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>}</div>
             <div style={{flex:1,minWidth:0}}>
               <div style={{fontSize:13,fontWeight:600,overflow:"hidden",whiteSpace:"nowrap",textOverflow:"ellipsis"}}>{h.ref} · {h.client}</div>
               <div style={{fontSize:11,color:"var(--muted)",marginTop:1}}>{h.vendor} · {h.date}</div>

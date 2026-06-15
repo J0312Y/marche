@@ -17,7 +17,7 @@ function VReturnsScr({onBack}){
     <div style={{display:"flex",gap:0,marginBottom:12,background:"var(--light)",borderRadius:12,padding:3}}>
       {[["pending","En attente ("+tabs.pending.length+")"],["approved","Approuvés"],["refused","Refusés"]].map(([k,l])=><button key={k} onClick={()=>setTab(k)} style={{flex:1,padding:"8px 0",borderRadius:10,border:"none",background:tab===k?"var(--card)":"transparent",color:tab===k?"var(--text)":"var(--muted)",fontSize:11,fontWeight:tab===k?700:500,cursor:"pointer",fontFamily:"inherit",boxShadow:tab===k?"0 1px 4px rgba(0,0,0,.06)":"none"}}>{l}</button>)}
     </div>
-    {shown.length===0&&<div style={{textAlign:"center",padding:"40px 0"}}><div style={{fontSize:36}}>{tab==="pending"?"":""}</div><div style={{fontSize:13,color:"var(--muted)",marginTop:6}}>Aucun retour {tab}</div></div>}
+    {shown.length===0&&<div style={{textAlign:"center",padding:"40px 0"}}><div style={{fontSize:36}}><></></div><div style={{fontSize:13,color:"var(--muted)",marginTop:6}}>Aucun retour {tab}</div></div>}
     {shown.map(r=><div key={r.id} style={{padding:14,background:"var(--card)",border:"1px solid var(--border)",borderRadius:16,marginBottom:10}}>
       <div style={{display:"flex",justifyContent:"space-between",marginBottom:8}}><span style={{fontSize:12,fontWeight:700}}>{r.ref}</span><span style={{padding:"3px 8px",borderRadius:6,background:r.status==="pending"?"rgba(245,158,11,0.08)":r.status==="approved"?"rgba(16,185,129,0.08)":"rgba(239,68,68,0.08)",color:r.status==="pending"?"#F59E0B":r.status==="approved"?"#10B981":"#EF4444",fontSize:10,fontWeight:700}}>{r.status==="pending"?"En attente":r.status==="approved"?"Approuvé":"Refusé"}</span></div>
       <div style={{fontSize:13,fontWeight:600,marginBottom:4}}>{r.product}</div>

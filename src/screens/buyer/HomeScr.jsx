@@ -541,7 +541,7 @@ function HomeScr({go,favs,toggleFav,isFav,userName}){
       </>):null})()}
 
       {/* ═══ CAROUSELS PAR CATÉGORIE ═══ */}
-      {["Mode Femme","Électronique","Beauté","Maison & Déco","Mode Homme","Bébé & Enfant"].map(catName=>{
+      {["Restaurants","Pâtisseries","Supermarché","Pharmacie","Mode Femme","Électronique","Beauté","Maison & Déco","Mode Homme","Bébé & Enfant"].map(catName=>{
         const catProducts=P.filter(p=>p.cat===catName).slice(0,8);
         if(catProducts.length<3)return null;
         const catInfo=CATS.find(c=>c.name===catName);

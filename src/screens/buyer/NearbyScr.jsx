@@ -11,7 +11,7 @@ function NearbyScr({go,onBack}){
   const [sel,setSel]=useState(VENDORS[0]);
   const markers=VENDORS.filter(v=>v.lat&&v.lng).map(v=>({
     lat:v.lat,lng:v.lng,
-    emoji:v.logo?undefined:(v.type==="restaurant"?"":""),
+    emoji:v.logo?undefined:(v.type==="restaurant"?"utensils":"store"),
     popup:`<b>${v.name}</b><br/><Icon name="star_full" size={16}/>{" "}${v.rating} · ${v.products} articles`,
   }));
 

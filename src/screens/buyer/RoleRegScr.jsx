@@ -212,7 +212,7 @@ function RoleRegScr({onBack,onDone,forceRole,onPending}){
 
   return(<>
     <div className="appbar"><button onClick={()=>step>0?setStep(step-1):forceRole?onBack():setStep(-1)}>←</button><h2>{role==="vendor"?"Devenir Commerçant":"Devenir Livreur"}</h2><div style={{width:38}}/></div>
-    <div className="vr-steps">{steps.map((s,i)=><div key={s} style={{display:"contents"}}>{i>0&&<div className={`vr-line ${step>=i?"on":""}`} style={step>=i?{background:color}:{}}/>}<div className="step-col"><div className={`vr-dot ${step>i?"done":step>=i?"on":""}`} style={step>=i?{background:color,color:"#fff"}:{}}>{step>i?"":i+1}</div><div className={`vr-lbl ${step>=i?"on":""}`}>{s}</div></div></div>)}</div>
+    <div className="vr-steps">{steps.map((s,i)=><div key={s} style={{display:"contents"}}>{i>0&&<div className={`vr-line ${step>=i?"on":""}`} style={step>=i?{background:color}:{}}/>}<div className="step-col"><div className={`vr-dot ${step>i?"done":step>=i?"on":""}`} style={step>=i?{background:color,color:"#fff"}:{}}>{step>i ? <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#fff" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round"><polyline points="20 6 9 17 4 12"/></svg> : i+1}</div><div className={`vr-lbl ${step>=i?"on":""}`}>{s}</div></div></div>)}</div>
     <div className="scr" style={{padding:16}}>
 
       {/* STEP 0: Infos personnelles (both) */}
@@ -426,7 +426,7 @@ function RoleRegScr({onBack,onDone,forceRole,onPending}){
         <div style={{padding:16,background:"var(--card)",border:"1px solid var(--border)",borderRadius:16,marginBottom:14}}>
           {[["Rôle",role==="vendor"?"Commerçant":"Livreur"],
             ["Nom",fName||"—"],
-            ...(role==="vendor"?[["Établissement",fShopName||"—"],["Type",{boutique:"Boutique",restaurant:"Restaurant",patisserie:"Pâtisserie",supermarche:"Supermarché",pharmacie:"Pharmacie",service:"Service"}[selCats.find(c=>["boutique","restaurant","patisserie","supermarche","pharmacie","service"].includes(c))]||"—"]]:[["Véhicule",fVehType==="moto"?"":""+" "+fVehMarque],["Plaque",fVehPlaque||"—"],["Inscription","5 000 FCFA (unique)"],["Commission","15% par livraison"],["Zones",selZones.join(", ")||"—"]]),
+            ...(role==="vendor"?[["Établissement",fShopName||"—"],["Type",{boutique:"Boutique",restaurant:"Restaurant",patisserie:"Pâtisserie",supermarche:"Supermarché",pharmacie:"Pharmacie",service:"Service"}[selCats.find(c=>["boutique","restaurant","patisserie","supermarche","pharmacie","service"].includes(c))]||"—"]]:[["Véhicule",(fVehType==="moto"?"Moto":fVehType==="voiture"?"Voiture":fVehType==="velo"?"Vélo":"")+" "+fVehMarque],["Plaque",fVehPlaque||"—"],["Inscription","5 000 FCFA (unique)"],["Commission","15% par livraison"],["Zones",selZones.join(", ")||"—"]]),
             ...(["restaurant","patisserie","pharmacie","supermarche"].some(t=>selCats.includes(t))?[["Horaires",fOpenDays.join(", ")+" · "+fOpenTime+"—"+fCloseTime]]:[]),
             ["Documents",`${Object.values(docs).filter(v=>v&&v!==true&&v!==false).length}/${Object.keys(docs).length}`],
             ...(role==="vendor"?[["Plan",plan==="starter"?"Starter (Gratuit)":plan==="pro"?"Pro (15k/mois)":"Enterprise (45k/mois)"]]:[])]

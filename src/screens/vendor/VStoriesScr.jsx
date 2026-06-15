@@ -150,7 +150,7 @@ function VStoriesScr({onBack}){
           )
         ):(
           <div style={{textAlign:"center"}}>
-            <div style={{fontSize:32}}>{mediaType==="video"?"":""}</div>
+            <div style={{fontSize:32}}><></></div>
             <div style={{fontSize:11,color:"var(--muted)",marginTop:4}}>
               {mediaType==="video"?"Ajouter une vidéo (max 30s, 50 MB)":"Ajouter une photo (max 10 MB)"}
             </div>

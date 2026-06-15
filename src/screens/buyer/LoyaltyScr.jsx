@@ -103,7 +103,7 @@ function LoyaltyScr({ onBack, go }) {
         <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 12 }}>
           <div>
             <div style={{ fontSize: 14, fontWeight: 700, display: "flex", alignItems: "center", gap: 6 }}><Icon name="fire" size={16}/>{" "}Connexion quotidienne</div>
-            <div style={{ fontSize: 11, color: "var(--muted)", marginTop: 2 }}>Streak : {streak} jour{streak > 1 ? "s" : ""} {streak >= 7 ? "" : ""}</div>
+            <div style={{ fontSize: 11, color: "var(--muted)", marginTop: 2 }}>Streak : {streak} jour{streak > 1 ? "s" : ""}</div>
           </div>
           {canCheckIn ? (
             <button onClick={handleCheckIn} style={{ padding: "8px 16px", borderRadius: 10, border: "none", background: "#F97316", color: "#fff", fontSize: 12, fontWeight: 700, cursor: "pointer", fontFamily: "inherit" }}>Récupérer</button>
@@ -123,7 +123,7 @@ function LoyaltyScr({ onBack, go }) {
                 border: isToday ? "2px solid #F97316" : "1px solid transparent",
               }}>
                 <div style={{ fontSize: 8, fontWeight: 700, color: "var(--muted)", marginBottom: 2 }}>J{i + 1}</div>
-                <div style={{ fontSize: 13 }}>{completed ? "" : reward >= 1000 ? "" : ""}</div>
+                <div style={{ display: "inline-flex", alignItems: "center" }}>{completed ? <Icon name="check_circle" size={16} color="#10B981"/> : reward >= 1000 ? <Icon name="gift" size={16} color="#F97316"/> : <Icon name="star_full" size={16} color="#F59E0B"/>}</div>
                 <div style={{ fontSize: 8, fontWeight: 700, color: completed ? "#10B981" : isToday ? "#F97316" : "var(--muted)", marginTop: 2 }}>+{reward}</div>
               </div>
             );

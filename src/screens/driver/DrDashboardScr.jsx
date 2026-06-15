@@ -129,7 +129,7 @@ function DrDashboardScr({go}){
 
     {/* Boost card */}
     <div style={{margin:"0 16px 10px",padding:12,background:boosted?"linear-gradient(135deg,rgba(245,158,11,0.1),rgba(245,158,11,0.03))":"var(--card)",border:boosted?"1px solid rgba(245,158,11,0.25)":"1px solid var(--border)",borderRadius:14,display:"flex",alignItems:"center",gap:10}}>
-      <div style={{width:36,height:36,borderRadius:10,background:boosted?"#F59E0B":"var(--light)",display:"flex",alignItems:"center",justifyContent:"center",fontSize:16}}>{boosted?"":""}</div>
+      <div style={{width:36,height:36,borderRadius:10,background:boosted?"#F59E0B":"var(--light)",display:"flex",alignItems:"center",justifyContent:"center",color:boosted?"#fff":"var(--text)"}}><Icon name={boosted?"lightning":"rocket"} size={18} color={boosted?"#fff":"var(--text)"}/></div>
       <div style={{flex:1}}>
         <div style={{fontSize:12,fontWeight:700,color:boosted?"#F59E0B":"var(--text)"}}>{boosted?"Boost actif — Priorité max":"Boost · Commandes prioritaires"}</div>
         <div style={{fontSize:10,color:"var(--muted)",marginTop:1}}>{boosted?"Expire ce soir à 23h59":"1 000 FCFA/jour"}</div>
@@ -142,7 +142,7 @@ function DrDashboardScr({go}){
     {allActive.length>1&&<div style={{margin:"0 16px 10px",padding:12,background:"rgba(249,115,22,0.04)",border:"1px solid rgba(249,115,22,0.15)",borderRadius:14}}>
       <div style={{fontSize:13,fontWeight:700,color:"#F97316",marginBottom:8}}><Icon name="package" size={16}/>{" "}{allActive.length} livraisons en cours</div>
       {allActive.map((dl,i)=><div key={dl.id} onClick={()=>go("drDelivery",dl)} style={{display:"flex",alignItems:"center",gap:10,padding:8,background:"var(--card)",borderRadius:10,marginBottom:i<allActive.length-1?6:0,cursor:"pointer",border:"1px solid var(--border)"}}>
-        <span style={{fontSize:16}}>{dl.payment==="cash"?"":""}</span>
+        <span style={{display:"inline-flex",alignItems:"center"}}><Icon name={dl.payment==="cash"?"money":"creditCard"} size={16}/></span>
         <div style={{flex:1,minWidth:0}}>
           <div style={{fontSize:12,fontWeight:600,overflow:"hidden",whiteSpace:"nowrap",textOverflow:"ellipsis"}}>{dl.vendor.name} → {dl.client.name}</div>
           <div style={{fontSize:10,color:"var(--muted)"}}>{dl.distance} · {dl.eta}</div>

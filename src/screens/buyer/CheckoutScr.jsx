@@ -58,7 +58,7 @@ function CheckoutScr({onBack,onDone,cart=[],clearCart,appliedCoupon,setAppliedCo
 
   return(<>
     <div className="appbar"><button onClick={()=>step>0?setStep(step-1):onBack?.()}>←</button><h2>Paiement</h2><div style={{width:38}}/></div>
-    <div className="steps">{["Adresse","Paiement","Confirmer"].map((s,i)=><div key={s} style={{display:"contents"}}>{i>0&&<div className={`sline ${step>=i?"on":""}`}/>}<div className="step-col"><div className={`sdot ${step>i?"on":step>=i?"on":""}`}>{step>i?"":i+1}</div><div className={`slbl ${step>=i?"on":""}`}>{s}<GateUI/></div></div></div>)}</div>
+    <div className="steps">{["Adresse","Paiement","Confirmer"].map((s,i)=><div key={s} style={{display:"contents"}}>{i>0&&<div className={`sline ${step>=i?"on":""}`}/>}<div className="step-col"><div className={`sdot ${step>i?"on":step>=i?"on":""}`}>{step>i ? <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#fff" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round"><polyline points="20 6 9 17 4 12"/></svg> : i+1}</div><div className={`slbl ${step>=i?"on":""}`}>{s}<GateUI/></div></div></div>)}</div>
     <div className="scr" style={{padding:16}}>
       {step===0&&<><h3 style={{fontSize:18,fontWeight:700,marginBottom:14}}>Adresse de livraison</h3>
         <div className="field"><label>Nom complet <span style={{color:"#EF4444"}}>*</span></label><input defaultValue="Joeldy Tsina"/></div>
@@ -83,7 +83,7 @@ function CheckoutScr({onBack,onDone,cart=[],clearCart,appliedCoupon,setAppliedCo
 
       {step===2&&<><h3 style={{fontSize:18,fontWeight:700,marginBottom:14}}>Résumé</h3>
         <div className="confirm-card" style={{cursor:"pointer"}} onClick={()=>setStep(0)}><span className="cci"><Icon name="location" size={18}/></span><div className="ccb"><small>Livraison {schedule==="later"?`· ${schedDate} ${schedTime}`:""}</small><p>Brazzaville, Congo </p></div><span className="cce" style={{color:"#F97316",fontWeight:600}}><Icon name="edit" size={18}/></span></div>
-        <div className="confirm-card" style={{cursor:"pointer"}} onClick={()=>setStep(1)}><span className="cci">{momo==="cash"?"":""}</span><div className="ccb"><small>Paiement</small><p>{momos.find(m=>m.k===momo)?.n}</p></div><span className="cce" style={{color:"#F97316",fontWeight:600}}><Icon name="edit" size={18}/></span></div>
+        <div className="confirm-card" style={{cursor:"pointer"}} onClick={()=>setStep(1)}><span className="cci"><></></span><div className="ccb"><small>Paiement</small><p>{momos.find(m=>m.k===momo)?.n}</p></div><span className="cce" style={{color:"#F97316",fontWeight:600}}><Icon name="edit" size={18}/></span></div>
 
         {/* Applied coupon */}
         {/* Gift card code input */}

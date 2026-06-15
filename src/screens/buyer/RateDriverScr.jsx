@@ -40,7 +40,7 @@ function RateDriverScr({onBack,onDone,driver={}}){
       <div style={{fontSize:14,fontWeight:600,marginBottom:10}}>Comment était la livraison ?</div>
       <div style={{display:"flex",justifyContent:"center",gap:8}}>
         {[1,2,3,4,5].map(s=>(
-          <button key={s} onClick={()=>setRating(s)} style={{width:48,height:48,borderRadius:14,border:rating>=s?"2px solid #F59E0B":"1px solid var(--border)",background:rating>=s?"rgba(245,158,11,0.08)":"var(--card)",cursor:"pointer",fontSize:22,display:"flex",alignItems:"center",justifyContent:"center",transition:"all .15s"}}>{rating>=s?"":""}</button>
+          <button key={s} onClick={()=>setRating(s)} style={{width:48,height:48,borderRadius:14,border:rating>=s?"2px solid #F59E0B":"1px solid var(--border)",background:rating>=s?"rgba(245,158,11,0.08)":"var(--card)",cursor:"pointer",fontSize:22,display:"flex",alignItems:"center",justifyContent:"center",transition:"all .15s"}}><></></button>
         ))}
       </div>
       {rating>0&&<div style={{fontSize:13,color:"#F59E0B",fontWeight:600,marginTop:8}}>{["","Mauvais ","Passable ","Bien ","Très bien ","Excellent "][rating]}</div>}

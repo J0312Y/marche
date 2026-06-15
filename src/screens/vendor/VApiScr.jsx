@@ -46,7 +46,7 @@ function VApiScr({go,onBack}){
       {whTab===k&&<div style={{marginTop:10,paddingTop:10,borderTop:"1px solid var(--border)"}} onClick={e=>e.stopPropagation()}>
         <div className="field" style={{marginBottom:8}}><label style={{fontSize:11}}>URL du webhook</label><input value={whUrl[k]} onChange={e=>setWhUrl({...whUrl,[k]:e.target.value})} placeholder="https://votre-site.com/api/webhook" style={{fontFamily:"monospace",fontSize:11}}/></div>
         <div style={{display:"flex",gap:8}}>
-          <button style={{flex:1,padding:8,borderRadius:8,border:"1px solid var(--border)",background:"var(--card)",fontSize:11,fontWeight:600,cursor:"pointer",fontFamily:"inherit"}} onClick={()=>{setWhSaved(true);setTimeout(()=>{setWhSaved(false);setWhTab(null)},1500)}}>{whSaved?"":""} Sauver</button>
+          <button style={{flex:1,padding:8,borderRadius:8,border:"1px solid var(--border)",background:"var(--card)",fontSize:11,fontWeight:600,cursor:"pointer",fontFamily:"inherit"}} onClick={()=>{setWhSaved(true);setTimeout(()=>{setWhSaved(false);setWhTab(null)},1500)}}><></> Sauver</button>
           <button style={{padding:"8px 12px",borderRadius:8,border:"1px solid rgba(249,115,22,0.2)",background:"var(--card)",color:"#F97316",fontSize:11,fontWeight:600,cursor:"pointer",fontFamily:"inherit"}} onClick={()=>toast.success("Test webhook envoyé")}> Tester</button>
         </div>
       </div>}

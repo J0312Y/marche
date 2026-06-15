@@ -34,7 +34,7 @@ function DrDeliveryScr({delivery:dl,go,onBack}){
     <div className="scr" style={{padding:16}}>
       {/* Step bar */}
       <div className="dr-step-bar" style={{marginBottom:4}}>
-        {stepLabels.map((_,i)=><div key={i} style={{display:"contents"}}>{i>0&&<div className={`dr-step-line ${step>=i?"done":""}`}/>}<div className={`dr-step-dot ${step>i?"done":step===i?"cur":""}`}>{step>i?"":i+1}</div></div>)}
+        {stepLabels.map((_,i)=><div key={i} style={{display:"contents"}}>{i>0&&<div className={`dr-step-line ${step>=i?"done":""}`}/>}<div className={`dr-step-dot ${step>i?"done":step===i?"cur":""}`}>{step>i ? <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#fff" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round"><polyline points="20 6 9 17 4 12"/></svg> : i+1}</div></div>)}
       </div>
       <div style={{display:"flex",justifyContent:"space-between",fontSize:10,color:"var(--muted)",marginBottom:12}}>{stepLabels.map((l,i)=><span key={l} style={step===i?{color:"#F97316",fontWeight:700}:{}}>{l}</span>)}</div>
 
