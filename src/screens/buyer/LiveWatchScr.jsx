@@ -1,3 +1,4 @@
+import { useGuestGate } from "../../hooks/useGuestGate";
 import { useState, useEffect, useRef } from "react";
 import Img from "../../components/Img";
 import { fmt } from "../../utils/helpers";
@@ -5,6 +6,7 @@ import toast from "../../utils/toast";
 import Icon from "../../components/Icon";
 
 function LiveWatchScr({onBack,go,liveData}){
+  const { gate, GateUI } = useGuestGate(go);
   const vendor=liveData?.vendor||{name:"Mode Afrique",avatar:""};
   const products=liveData?.products||[];
   const [pinned,setPinned]=useState(products[0]||null);
@@ -126,8 +128,8 @@ function LiveWatchScr({onBack,go,liveData}){
       {/* Comment input + actions */}
       <div style={{display:"flex",gap:6}}>
         <div style={{flex:1,display:"flex",alignItems:"center",gap:6,padding:"0 10px",border:"1px solid var(--border)",borderRadius:10,background:"var(--light)"}}>
-          <input value={myComment} onChange={e=>setMyComment(e.target.value)} onKeyDown={e=>e.key==="Enter"&&sendComment()} placeholder="Commenter..." style={{flex:1,border:"none",background:"transparent",fontSize:12,outline:"none",fontFamily:"inherit",color:"var(--text)",padding:"8px 0"}}/>
-          <button onClick={sendComment} style={{background:"none",border:"none",fontSize:14,cursor:"pointer"}}></button>
+          <input value={myComment} onChange={e=>setMyComment(e.target.value)} onKeyDown={e=>e.key==="Enter"&&gate("comment",()=>sendComment())} placeholder="Commenter..." style={{flex:1,border:"none",background:"transparent",fontSize:12,outline:"none",fontFamily:"inherit",color:"var(--text)",padding:"8px 0"}}/>
+          <button onClick={()=>gate("comment",()=>sendComment())} style={{background:"none",border:"none",fontSize:14,cursor:"pointer"}}></button>
         </div>
         <button onClick={sendHeart} style={{width:40,height:40,borderRadius:20,border:"none",background:myHeart?"#EF4444":"var(--light)",color:myHeart?"#fff":"#EF4444",fontSize:18,cursor:"pointer",transition:"all .15s"}}>️</button>
         <button onClick={()=>{if(pinned)toast.success(pinned.name+" ajouté au panier")}} style={{width:40,height:40,borderRadius:20,border:"none",background:"#F97316",color:"#fff",fontSize:16,cursor:"pointer"}}><Icon name="cart" size={18}/></button>

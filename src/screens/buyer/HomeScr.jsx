@@ -1,7 +1,8 @@
+import { useEffect, useState } from "react";
 import Icon from "../../components/Icon";
+import SkeletonCard, { SkeletonRow, SkeletonSectionHeader } from "../../components/SkeletonCard";
 import GuestBanner from "../../components/GuestBanner";
 import StoriesCarousel from "../../components/StoriesCarousel";
-import { useState, useEffect } from "react";
 import Img from "../../components/Img";
 import { useData } from "../../hooks";
 import { useApp } from "../../context/AppContext";
@@ -12,6 +13,8 @@ import t from "../../utils/i18n";
 import { fmt, disc, getVendorPromo, totalDisc, effectivePrice } from "../../utils/helpers";
 
 function HomeScr({go,favs,toggleFav,isFav,userName}){
+  const [isLoading, setIsLoading] = useState(true);
+  useEffect(() => { const t = setTimeout(() => setIsLoading(false), 600); return () => clearTimeout(t); }, []);
   const { P, VENDORS, CATS, loading: dataLoading, reload } = useData();
   const { cartCount, lang, recentlyViewed } = useApp();
   const [selCat,setSC]=useState(0);
@@ -496,8 +499,8 @@ function HomeScr({go,favs,toggleFav,isFav,userName}){
 
 
       {/* ═══ POPULAIRES — top sellers across all categories ═══ */}
-      <div className="sec"><h3>Populaires cette semaine</h3><span onClick={()=>go("allProducts")}>Voir tout</span></div>
-      <div style={{display:"flex",gap:10,overflowX:"auto",padding:"4px 16px 18px",scrollbarWidth:"none"}} className="hide-scroll">
+      <div className="sec"><h3>Populaires cette semaine</h3>{!isLoading&&<span onClick={()=>go("allProducts")}>Voir tout</span>}</div>
+      {isLoading ? <SkeletonRow count={6}/> : <div style={{display:"flex",gap:10,overflowX:"auto",padding:"4px 16px 18px",scrollbarWidth:"none"}} className="hide-scroll">
         {sortedP.slice(0,8).map(p=>{const vp=getVendorPromo(p,VENDORS);const td=totalDisc(p,VENDORS);return(
           <div key={"pop-"+p.id} onClick={()=>go("detail",p)} style={{minWidth:148,maxWidth:148,flexShrink:0,background:"var(--card)",border:"1px solid var(--border)",borderRadius:12,overflow:"hidden",cursor:"pointer"}}>
             <div style={{width:"100%",aspectRatio:"1 / 1",position:"relative",overflow:"hidden",background:"var(--light)"}}>
@@ -516,7 +519,7 @@ function HomeScr({go,favs,toggleFav,isFav,userName}){
             </div>
           </div>
         )})}
-      </div>
+      </div>}
 
       {/* ═══ PROMOS EN COURS — carousel ═══ */}
       {(()=>{const promoProds=P.filter(p=>p.old&&p.price<p.old).slice(0,8);return promoProds.length>=3?(<>

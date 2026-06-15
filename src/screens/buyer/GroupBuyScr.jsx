@@ -2,6 +2,7 @@ import { useState } from "react";
 import toast from "../../utils/toast";
 import { fmt } from "../../utils/helpers";
 import Icon from "../../components/Icon";
+import { useGuestGate } from "../../hooks/useGuestGate";
 
 const DEALS = [
   { id: "gb1", name: "Galaxy A54", photo: "https://images.unsplash.com/photo-1592899677977-9c10ca588bbd?w=200&h=200&fit=crop", price: 185000, groupPrice: 148000, minPeople: 5, joined: 3, ends: "2j 14h", vendor: "Tech Congo" },
@@ -10,6 +11,7 @@ const DEALS = [
 ];
 
 function GroupBuyScr({ onBack, go }) {
+  const { gate, GateUI } = useGuestGate(go);
   const [joined, setJoined] = useState({});
 
   const join = (deal) => {
@@ -79,12 +81,13 @@ function GroupBuyScr({ onBack, go }) {
              Vous participez — en attente de {d.minPeople - d.joined} personnes
           </div>
         ) : (
-          <button onClick={() => join(d)} style={{ width: "100%", padding: 12, borderRadius: 12, border: "none", background: "#F97316", color: "#fff", fontSize: 13, fontWeight: 700, cursor: "pointer", fontFamily: "inherit" }}>
+          <button onClick={() => gate("group_buy", () => join(d))} style={{ width: "100%", padding: 12, borderRadius: 12, border: "none", background: "#F97316", color: "#fff", fontSize: 13, fontWeight: 700, cursor: "pointer", fontFamily: "inherit" }}>
              Rejoindre · Économisez {fmt(d.price - d.groupPrice)}
           </button>
         )}
       </div>);
     })}
+      <GateUI/>
   </div>);
 }
 

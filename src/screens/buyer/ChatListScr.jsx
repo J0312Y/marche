@@ -8,7 +8,7 @@ import { CHAT_AVATARS } from "../../data/images";
 import { social } from "../../services";
 import { SkeletonList } from "../../components/Loading";
 
-function ChatListScr({go}){
+function ChatListScr({go,onBack}){
   const { isGuest, exitGuestToLogin, setTab } = useApp();
   if (isGuest) return (<GuestBlockedView
       icon="chat"

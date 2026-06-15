@@ -12,7 +12,8 @@ import {
   VShopsScr, ShopTeamTab, VShopDetailScr, VAddShopScr,
   VApiScr, VDocScr, VUpgradePlanScr, VWebsiteScr,
   VQAScr, VReturnsScr, VInvoiceScr, VStockScr, VCalendarScr, VThemesScr, VEmailScr, VAutoDiscountScr, VAnalyticsScr, VDomainScr, VImportScr, VSeoScr, VStoriesScr, VGroupBuyScr, VQRCodeScr,
-  VLiveScr, VAdsScr, VRankingScr, VAIDescScr, VAdvisorScr, VCertifiedScr
+  VLiveScr, VAdsScr, VRankingScr, VAIDescScr, VAdvisorScr, VCertifiedScr,
+  VWebCMSScr
 } from "../screens/vendor";
 import ChatBotScr from "../screens/common/ChatBotScr";
 import { WithdrawScr } from "../screens/buyer";
@@ -55,6 +56,7 @@ export default function VendorScreens() {
     case "vDriverChat": return <VDriverChatScr delivery={data} onBack={back} />;
     case "vNotif": return <VNotifScr onBack={back} go={go} />;
     case "vMessages": return <VMessagesScr go={go} onBack={back} />;
+    case "vWebCMS": return <VWebCMSScr go={go} onBack={back} />;
     case "vSettings": return <VSettingsScr onBack={back} go={go} />;
     case "vReports": return <VReportsScr onBack={back} />;
     case "vLive": return <VLiveScr onBack={back} />;

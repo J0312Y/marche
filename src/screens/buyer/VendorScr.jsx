@@ -87,7 +87,7 @@ function VendorScr({vendor:vProp,go,onBack}){
 
     {/* Buttons */}
     <div className="vp-btns">
-      <button className="vb1" style={following?{background:"var(--card)",color:"#F97316",border:"1px solid #F97316"}:{}} onClick={toggleFollow}>{following?"Suivi":"+ Suivre"}</button>
+      <button className="vb1" style={following?{background:"var(--card)",color:"#F97316",border:"1px solid #F97316"}:{}} onClick={()=>gate("follow",()=>toggleFollow())}>{following?"Suivi":"+ Suivre"}</button>
       <button className="vb2" onClick={()=>go("chatVendor",v)}><Icon name="chat" size={16}/>{" "}Contacter</button><button className="vb2" style={{flex:"none",width:44}} onClick={()=>shareVendor(v)}></button>
     </div>
 
