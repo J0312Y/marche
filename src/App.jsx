@@ -20,7 +20,7 @@ function AppInner() {
     screen, setScreen, setHistory, go,
     cart, cartCount, hasVendor, hasDriver,
     login, completeProfile, toast, darkMode, setUserName, lang,
-    isGuest, continueAsGuest,
+    isGuest, continueAsGuest, guestPromptReason, closeGuestPrompt, exitGuestToLogin,
   } = useApp();
 
   /* ── Auth step mapping: splash=0, onboarding=1, login=2, otp=3, profile=4, ready=5 ── */
@@ -44,6 +44,8 @@ function AppInner() {
   return (
     <div style={{ display: "flex", justifyContent: "center", alignItems: "center", minHeight: "100vh", background: darkMode ? "#000" : "linear-gradient(160deg,#e0ddd8 0%,#c9c5bf 100%)", padding: 16 }}>
       <style>{CSS}</style>
+      {/* Global guest gate sheet */}
+      {guestPromptReason && <GuestPrompt reason={guestPromptReason} onClose={closeGuestPrompt} onLogin={()=>{closeGuestPrompt();exitGuestToLogin();}}/>}
 
       <div style={{ position: "relative", borderRadius: 51 }}>
         <div style={{ position: "absolute", inset: -2, borderRadius: 51, background: "linear-gradient(180deg,#8a8985 0%,#6b6966 20%,#4a4845 50%,#6b6966 80%,#8a8985 100%)", boxShadow: "0 50px 100px rgba(0,0,0,.3),0 0 0 1px rgba(255,255,255,.08) inset", zIndex: -1 }} />

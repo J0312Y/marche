@@ -19,6 +19,16 @@ const REASONS = {
     desc: "Créez un compte gratuit en 30 secondes pour finaliser votre commande.",
     icon: "creditCard",
   },
+  favorite: {
+    title: "Connectez-vous pour aimer",
+    desc: "Créez un compte gratuit pour sauvegarder vos articles préférés et les retrouver sur tous vos appareils.",
+    icon: "heart",
+  },
+  follow: {
+    title: "Connectez-vous pour suivre",
+    desc: "Créez un compte pour suivre cette boutique et être notifié des nouveautés et promos.",
+    icon: "store",
+  },
   chat: {
     title: "Connectez-vous pour discuter",
     desc: "Vous devez avoir un compte pour échanger avec un vendeur ou un livreur.",

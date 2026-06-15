@@ -127,8 +127,8 @@ function DetailScr({product:rawP,onBack,onAddCart,go,favs,toggleFav,isFav}){
 
   return(<>
     <div className="scr">
-      {/* Gallery — full bleed, no rounded corners */}
-      <div onClick={()=>setZoomOpen(true)} style={{position:"relative",width:"100%",aspectRatio:"1/1",background:"var(--light)",overflow:"hidden",cursor:"zoom-in"}}>
+      {/* Gallery — full width, rounded bottom corners */}
+      <div onClick={()=>setZoomOpen(true)} style={{position:"relative",width:"100%",aspectRatio:"1/1",background:"var(--light)",borderRadius:"0 0 28px 28px",overflow:"hidden",cursor:"zoom-in",boxShadow:"0 12px 24px rgba(0,0,0,0.08)"}}>
         <Img src={allPhotos[photoIdx]||p.photo} emoji={p.img} style={{width:"100%",height:"100%",position:"absolute",inset:0}} fit="cover"/>
 
         {/* Top bar overlay */}
@@ -140,8 +140,8 @@ function DetailScr({product:rawP,onBack,onAddCart,go,favs,toggleFav,isFav}){
           </div>
         </div>
 
-        {/* Thumbnails floating LEFT (under top bar) */}
-        {allPhotos.length>1&&<div style={{position:"absolute",top:60,left:12,display:"flex",flexDirection:"column",gap:8,zIndex:5}}>
+        {/* Thumbnails floating right */}
+        {allPhotos.length>1&&<div style={{position:"absolute",top:60,right:12,display:"flex",flexDirection:"column",gap:8,zIndex:5}}>
           {allPhotos.slice(0,4).map((ph,i)=>{const isActive=photoIdx===i;return(
             <div key={i} onClick={e=>{e.stopPropagation();setPhotoIdx(i)}} style={{width:54,height:54,borderRadius:14,overflow:"hidden",cursor:"pointer",position:"relative",border:isActive?"2.5px solid #fff":"2px solid rgba(255,255,255,0.7)",transition:"all .2s",boxShadow:isActive?"0 4px 14px rgba(0,0,0,0.2)":"0 2px 8px rgba(0,0,0,0.12)",background:"#fff"}}>
               <Img src={ph} emoji={p.img} style={{width:"100%",height:"100%"}} fit="cover"/>
@@ -151,11 +151,9 @@ function DetailScr({product:rawP,onBack,onAddCart,go,favs,toggleFav,isFav}){
           )})}
         </div>}
 
-        {disc(p)>0&&<span className="badge" style={{position:"absolute",bottom:34,left:14,zIndex:5}}>-{disc(p)}%</span>}
+        {disc(p)>0&&<span className="badge" style={{position:"absolute",bottom:22,left:14,zIndex:5}}>-{disc(p)}%</span>}
+        {allPhotos.length>1&&<div style={{position:"absolute",bottom:22,right:14,background:"rgba(0,0,0,.55)",color:"#fff",padding:"4px 10px",borderRadius:8,fontSize:11,fontWeight:600,backdropFilter:"blur(8px)",zIndex:5}}>{photoIdx+1}/{allPhotos.length}</div>}
       </div>
-
-      {/* Content card that overlaps the image with top-only rounded corners */}
-      <div style={{background:"var(--card)",borderRadius:"24px 24px 0 0",marginTop:-24,position:"relative",zIndex:7,boxShadow:"0 -2px 12px rgba(0,0,0,0.04)",paddingTop:8}}>
 
           {/* FOMO badges — urgency + social proof */}
     {(()=>{
@@ -543,7 +541,6 @@ function DetailScr({product:rawP,onBack,onAddCart,go,favs,toggleFav,isFav}){
         </div>
       </div>
     </div>}
-    </div>{/* end content card */}
 
     {/* Zoom Modal */}
     {zoomOpen&&<div onClick={()=>setZoomOpen(false)} style={{position:"fixed",inset:0,background:"rgba(0,0,0,.9)",zIndex:9999,display:"flex",flexDirection:"column",alignItems:"center",justifyContent:"center",animation:"fadeInFast .2s ease"}}>
@@ -554,7 +551,7 @@ function DetailScr({product:rawP,onBack,onAddCart,go,favs,toggleFav,isFav}){
           <img src={allPhotos[i]} style={{width:"100%",height:"100%",objectFit:"cover",objectPosition:"center"}} alt=""/>
         </div>)}
       </div>
-      <div style={{color:"rgba(255,255,255,.5)",fontSize:11,marginTop:8}}>Appuyez pour fermer</div>
+      <div style={{color:"rgba(255,255,255,.5)",fontSize:11,marginTop:8}}>{photoIdx+1}/{allPhotos.length} · Appuyez pour fermer</div>
     </div>}
 
     {/* QR Code modal — show enlarged within the app */}

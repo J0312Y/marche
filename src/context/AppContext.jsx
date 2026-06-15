@@ -45,6 +45,15 @@ export function AppProvider({ children }) {
     setIsGuest(true);
   }, []);
   
+  // Global guest action gate - any component can call this to block an action
+  const [guestPromptReason, setGuestPromptReason] = useState(null);
+  const triggerGuestPrompt = useCallback((reason) => {
+    setGuestPromptReason(reason);
+  }, []);
+  const closeGuestPrompt = useCallback(() => {
+    setGuestPromptReason(null);
+  }, []);
+  
   // Exit guest mode and go back to login screen
   const exitGuestToLogin = useCallback(() => {
     setIsGuest(false);
@@ -228,6 +237,11 @@ export function AppProvider({ children }) {
   // ══════════════════════════════════
 
   const toggleFav = useCallback(async (articleId) => {
+    // Gate favorites for guests
+    if (isGuest) {
+      setGuestPromptReason("favorite");
+      return;
+    }
     try {
       const result = await socialSvc.toggleFavorite(articleId);
       showToast(result.is_favorite ? '❤️ Ajouté aux favoris' : '💔 Retiré des favoris');
@@ -236,7 +250,7 @@ export function AppProvider({ children }) {
         : prev.filter(id => id !== articleId)
       );
     } catch {}
-  }, []);
+  }, [isGuest]);
 
   const isFav = useCallback((articleId) => favs.includes(articleId), [favs]);
 
@@ -271,7 +285,7 @@ export function AppProvider({ children }) {
     cart, setCart, cartCount, addToCart, updateCartQty, clearCart,
     appliedCoupon, setAppliedCoupon,
     favs, toggleFav, isFav,
-    userRole, vendorPlan, setVendorPlan, isGuest, setIsGuest, continueAsGuest, upgradeFromGuest, exitGuestToLogin, vendorStatus, setVendorStatus, driverStatus, setDriverStatus,
+    userRole, vendorPlan, setVendorPlan, isGuest, setIsGuest, continueAsGuest, upgradeFromGuest, exitGuestToLogin, triggerGuestPrompt, guestPromptReason, closeGuestPrompt, vendorStatus, setVendorStatus, driverStatus, setDriverStatus,
     onRoleApproved, hasVendor, hasDriver,
     unreadCount, setUnreadCount,
     toast, showToast,
@@ -296,7 +310,7 @@ export function useApp() {
       cart:[],setCart:()=>{},cartCount:0,addToCart:()=>{},updateCartQty:()=>{},clearCart:()=>{},
       appliedCoupon:null,setAppliedCoupon:()=>{},
       favs:[],toggleFav:()=>{},isFav:()=>false,
-      userRole:'client',vendorPlan:'starter',setVendorPlan:()=>{},isGuest:false,setIsGuest:()=>{},continueAsGuest:()=>{},upgradeFromGuest:()=>{},exitGuestToLogin:()=>{},vendorStatus:'none',setVendorStatus:()=>{},driverStatus:'none',setDriverStatus:()=>{},
+      userRole:'client',vendorPlan:'starter',setVendorPlan:()=>{},isGuest:false,setIsGuest:()=>{},continueAsGuest:()=>{},upgradeFromGuest:()=>{},exitGuestToLogin:()=>{},triggerGuestPrompt:()=>{},guestPromptReason:null,closeGuestPrompt:()=>{},vendorStatus:'none',setVendorStatus:()=>{},driverStatus:'none',setDriverStatus:()=>{},
       onRoleApproved:()=>{},hasVendor:false,hasDriver:false,
       unreadCount:0,setUnreadCount:()=>{},
       toast:null,showToast:()=>{},
