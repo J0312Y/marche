@@ -6,7 +6,11 @@ import { AppProvider, useApp } from "./context/AppContext";
 import { SplashScr, OnboardingScr, LoginScr, OTPScr, ProfileCompletionScr } from "./screens/auth";
 import ShareSheet from "./components/ShareSheet";
 import PushBanner, { triggerPush } from "./components/PushBanner";
+import OfflineBanner from "./components/OfflineBanner";
+import GuestPrompt from "./components/GuestPrompt";
 import { NoNetwork, ServerError } from "./components/ErrorStates";
+import ErrorBoundary from "./components/ErrorBoundary";
+import { registerGlobalErrors } from "./utils/errorHandler";
 import LoadingSpinner from "./components/ui/LoadingSpinner";
 
 import BuyerScreens from "./modes/BuyerScreens";
@@ -14,6 +18,9 @@ import VendorScreens from "./modes/VendorScreens";
 import DriverScreens from "./modes/DriverScreens";
 
 function AppInner() {
+  // Register global error handlers (network, offline, uncaught)
+  if (typeof window !== "undefined") registerGlobalErrors();
+
   const {
     authStep, setAuthStep, socialProvider, setSocialProvider, isNewUser, setIsNewUser,
     mode, tab, setTab, vTab, setVTab, dTab, setDTab,
@@ -44,6 +51,7 @@ function AppInner() {
   return (
     <div style={{ display: "flex", justifyContent: "center", alignItems: "center", minHeight: "100vh", background: darkMode ? "#000" : "linear-gradient(160deg,#e0ddd8 0%,#c9c5bf 100%)", padding: 16 }}>
       <style>{CSS}</style>
+      <OfflineBanner/>
       {/* Global guest gate sheet */}
       {guestPromptReason && <GuestPrompt reason={guestPromptReason} onClose={closeGuestPrompt} onLogin={()=>{closeGuestPrompt();exitGuestToLogin();}}/>}
 
@@ -119,8 +127,10 @@ function AppInner() {
 
 export default function App() {
   return (
-    <AppProvider>
-      <AppInner />
-    </AppProvider>
+    <ErrorBoundary>
+      <AppProvider>
+        <AppInner />
+      </AppProvider>
+    </ErrorBoundary>
   );
 }

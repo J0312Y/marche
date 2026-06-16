@@ -224,7 +224,10 @@ export function AppProvider({ children }) {
       else { await cartSvc.updateQty(id, quantity); }
       const data = await cartSvc.get();
       setCart(data?.items || []); setCartCount((data?.items || []).reduce((s, i) => s + (i.qty || 1), 0));
-    } catch {}
+    } catch (err) {
+      const msg = !navigator.onLine ? "Pas de connexion Internet" : "Impossible de mettre à jour le panier";
+      showToast(msg, 'error');
+    }
   }, []);
 
   const clearCart = useCallback(async () => {
@@ -249,7 +252,10 @@ export function AppProvider({ children }) {
         ? [...prev, articleId]
         : prev.filter(id => id !== articleId)
       );
-    } catch {}
+    } catch (err) {
+      const msg = !navigator.onLine ? "Pas de connexion Internet" : "Impossible d'ajouter aux favoris";
+      showToast(msg, 'error');
+    }
   }, [isGuest]);
 
   const isFav = useCallback((articleId) => favs.includes(articleId), [favs]);

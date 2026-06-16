@@ -546,8 +546,8 @@ function DetailScr({product:rawP,onBack,onAddCart,go,favs,toggleFav,isFav}){
     </div>{/* end content card */}
 
     {/* Zoom Modal */}
-    {zoomOpen&&<div onClick={()=>setZoomOpen(false)} style={{position:"fixed",inset:0,background:"rgba(0,0,0,.9)",zIndex:9999,display:"flex",flexDirection:"column",alignItems:"center",justifyContent:"center",animation:"fadeInFast .2s ease"}}>
-      <button onClick={()=>setZoomOpen(false)} style={{position:"absolute",top:16,right:16,width:40,height:40,borderRadius:20,background:"rgba(255,255,255,.15)",border:"none",color:"#fff",fontSize:20,cursor:"pointer",zIndex:10}}></button>
+    {zoomOpen&&<div onClick={()=>setZoomOpen(false)} style={{position:"fixed",inset:0,background:"rgba(0,0,0,.92)",zIndex:9999,display:"flex",flexDirection:"column",alignItems:"center",justifyContent:"center",animation:"fadeInFast .2s ease"}}>
+      <button onClick={(e)=>{e.stopPropagation();setZoomOpen(false)}} style={{position:"absolute",top:20,right:20,width:44,height:44,borderRadius:22,background:"#fff",border:"none",cursor:"pointer",zIndex:10,display:"flex",alignItems:"center",justifyContent:"center",boxShadow:"0 4px 16px rgba(0,0,0,0.3)"}} aria-label="Fermer"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#1F2937" strokeWidth="2.8" strokeLinecap="round" strokeLinejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button>
       <img src={allPhotos[photoIdx]||p.photo} style={{maxWidth:"95%",maxHeight:"80vh",objectFit:"contain",borderRadius:8}} alt=""/>
       <div style={{display:"flex",gap:8,marginTop:12}}>
         {allPhotos.map((_,i)=><div key={i} onClick={e=>{e.stopPropagation();setPhotoIdx(i)}} style={{width:48,height:48,borderRadius:8,overflow:"hidden",border:photoIdx===i?"2px solid #F97316":"2px solid rgba(255,255,255,.2)",cursor:"pointer",opacity:photoIdx===i?1:.5}}>
