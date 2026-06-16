@@ -1,5 +1,6 @@
 import toast from "../../utils/toast";
 import { useState } from "react";
+import Select from "../../components/Select";
 import Icon from "../../components/Icon";
 
 function VSupportScr({go,onBack,vendorPlan}){
@@ -8,6 +9,7 @@ function VSupportScr({go,onBack,vendorPlan}){
   const [search,setSearch]=useState("");
   const [contactDone,setContactDone]=useState(false);
   const [ticketMsg,setTicketMsg]=useState("");
+  const [ticketCat,setTicketCat]=useState("Problème technique");
   const isEnt=vendorPlan==="enterprise";
   const isPro=vendorPlan==="pro"||isEnt;
 
@@ -220,7 +222,21 @@ function VSupportScr({go,onBack,vendorPlan}){
           {contactDone
             ?<div style={{textAlign:"center",padding:"20px 0"}}><div style={{fontSize:36,marginBottom:8}}><Icon name="check_circle" size={18}/></div><div style={{fontSize:14,fontWeight:700}}>Ticket envoyé !</div><div style={{fontSize:12,color:"var(--muted)",marginTop:4}}>Réponse {isEnt?"sous 2h":"sous 24h"} · Réf: #TK-{Math.floor(Math.random()*9000)+1000}</div><button style={{marginTop:12,padding:"8px 20px",borderRadius:8,border:"1px solid var(--border)",background:"var(--card)",fontSize:12,fontWeight:600,cursor:"pointer",fontFamily:"inherit"}} onClick={()=>{setContactDone(false);setTicketMsg("")}}>Nouveau ticket</button></div>
             :<>
-              <div className="field"><label>Catégorie <span style={{color:"#EF4444"}}>*</span></label><select><option>Problème technique</option><option>Paiement / Facturation</option><option>Commande spécifique</option><option>Livreur / Livraison</option><option>Suggestion / Feedback</option>{isEnt&&<option>API / Intégration</option>}{isEnt&&<option>Multi-boutiques</option>}</select></div>
+              <div className="field">
+                <label>Catégorie <span style={{color:"#EF4444"}}>*</span></label>
+                <Select
+                  value={ticketCat}
+                  onChange={setTicketCat}
+                  options={[
+                    "Problème technique",
+                    "Paiement / Facturation",
+                    "Commande spécifique",
+                    "Livreur / Livraison",
+                    "Suggestion / Feedback",
+                    ...(isEnt ? ["API / Intégration","Multi-boutiques"] : [])
+                  ]}
+                />
+              </div>
               <div className="field"><label>Sujet <span style={{color:"#EF4444"}}>*</span></label><input placeholder="Décrivez brièvement le problème"/></div>
               <div className="field"><label>Message</label><textarea rows={3} value={ticketMsg} onChange={e=>setTicketMsg(e.target.value)} placeholder="Donnez-nous tous les détails pour vous aider au mieux..."/></div>
               <div className="field"><label>Pièce jointe (optionnel)</label><div style={{padding:16,border:"1px dashed #E8E6E1",borderRadius:12,textAlign:"center",color:"var(--muted)",fontSize:12,cursor:"pointer"}}> Cliquez pour joindre un fichier (capture d'écran, document...)</div></div>

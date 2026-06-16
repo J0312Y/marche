@@ -74,7 +74,7 @@ function VDashboardScr({ go, currentVendor }){
       return {
         revenue: selectedShop.todayRevenue,
         orders: selectedShop.todayOrders,
-        goal: selectedShop.goal,
+        goal: getStoredGoal(selectedShop.id, selectedShop.goal),
         rating: selectedShop.rating,
         avgBasket: selectedShop.avgBasket
       };
@@ -82,10 +82,46 @@ function VDashboardScr({ go, currentVendor }){
     return {
       revenue: data?.stats?.revenue || 684000,
       orders: data?.stats?.orders || 47,
-      goal: 800000,
+      goal: getStoredGoal("default", 800000),
       rating: 4.8,
       avgBasket: 14555
     };
+  };
+
+  // Daily goal persistence
+  const STORAGE_KEY_GOAL = "vendor-daily-goals";
+  function loadGoals() {
+    try { return JSON.parse(localStorage.getItem(STORAGE_KEY_GOAL) || "{}"); } catch { return {}; }
+  }
+  function getStoredGoal(shopId, fallback) {
+    const goals = loadGoals();
+    return goals[shopId] != null ? goals[shopId] : fallback;
+  }
+  function setStoredGoal(shopId, goal) {
+    const goals = loadGoals();
+    goals[shopId] = goal;
+    localStorage.setItem(STORAGE_KEY_GOAL, JSON.stringify(goals));
+  }
+
+  const [showGoalEdit, setShowGoalEdit] = useState(false);
+  const [editGoalTargetId, setEditGoalTargetId] = useState(null);
+  const [editGoalValue, setEditGoalValue] = useState("");
+  const [goalsVersion, setGoalsVersion] = useState(0); // force re-render on save
+
+  const openGoalEdit = (shopId, currentGoal) => {
+    setEditGoalTargetId(shopId);
+    setEditGoalValue(String(currentGoal));
+    setShowGoalEdit(true);
+  };
+
+  const saveGoalEdit = () => {
+    const value = parseInt(editGoalValue, 10);
+    if (!value || value < 1000) {
+      return; // silent reject
+    }
+    setStoredGoal(editGoalTargetId, value);
+    setShowGoalEdit(false);
+    setGoalsVersion(v => v + 1);
   };
 
   const stats = getStats();
@@ -204,7 +240,17 @@ function VDashboardScr({ go, currentVendor }){
 
       <div style={{display:"flex", justifyContent:"space-between", fontSize:11, marginBottom:8}}>
         <span style={{color:"rgba(255,255,255,0.7)"}}>Objectif du jour</span>
-        <span style={{fontWeight:700}}>{fmt(todayRevenue)} / {fmt(dailyGoal)} · {Math.round(goalProgress)}%</span>
+        <span style={{fontWeight:700, display:"flex", alignItems:"center", gap:6}}>
+          {fmt(todayRevenue)} / {fmt(dailyGoal)} · {Math.round(goalProgress)}%
+          <button onClick={(e)=>{e.stopPropagation();openGoalEdit(selectedShopId==="overview"?"default":(selectedShop?.id||"default"), dailyGoal)}} style={{
+            width:22, height:22, padding:0,
+            borderRadius:6, border:"1px solid var(--border)",
+            background:"var(--card)", cursor:"pointer",
+            display:"flex", alignItems:"center", justifyContent:"center"
+          }} aria-label="Modifier l'objectif">
+            <Icon name="edit" size={11}/>
+          </button>
+        </span>
       </div>
       <div style={{width:"100%", height:6, background:"rgba(255,255,255,0.12)", borderRadius:3, overflow:"hidden"}}>
         <div style={{width:`${goalProgress}%`, height:"100%", background:"linear-gradient(90deg,#10B981,#34D399)", borderRadius:3}}/>
@@ -239,7 +285,8 @@ function VDashboardScr({ go, currentVendor }){
         </div>
         <div style={{padding:"0 16px 14px"}}>
           {shops.map(s=>{
-            const sProgress = Math.min(100, (s.todayRevenue/s.goal)*100);
+            const shopGoal = getStoredGoal(s.id, s.goal);
+            const sProgress = shopGoal > 0 ? Math.min(100, (s.todayRevenue/shopGoal)*100) : 0;
             return(
               <div key={s.id} onClick={()=>setSelectedShopId(s.id)} style={{padding:14, background:"var(--card)", border:"1px solid var(--border)", borderRadius:14, marginBottom:10, cursor:"pointer"}}>
                 <div style={{display:"flex", alignItems:"center", gap:12, marginBottom:10}}>
@@ -264,7 +311,17 @@ function VDashboardScr({ go, currentVendor }){
                   <div style={{width:`${sProgress}%`, height:"100%", background:"linear-gradient(90deg,#10B981,#34D399)"}}/>
                 </div>
                 <div style={{display:"flex", justifyContent:"space-between", fontSize:10, color:"var(--muted)", marginTop:4}}>
-                  <span>{Math.round(sProgress)}% de l'objectif</span>
+                  <span style={{display:"flex",alignItems:"center",gap:5}}>
+                    {Math.round(sProgress)}% de l'objectif ({fmt(shopGoal)})
+                    <button onClick={(e)=>{e.stopPropagation();openGoalEdit(s.id, shopGoal)}} style={{
+                      width:18, height:18, padding:0,
+                      borderRadius:5, border:"1px solid var(--border)",
+                      background:"var(--card)", cursor:"pointer",
+                      display:"flex", alignItems:"center", justifyContent:"center"
+                    }} aria-label="Modifier l'objectif">
+                      <Icon name="edit" size={9}/>
+                    </button>
+                  </span>
                   <span style={{display:"flex", alignItems:"center", gap:3}}>{Svg.star} {s.rating}</span>
                 </div>
               </div>
@@ -488,6 +545,131 @@ function VDashboardScr({ go, currentVendor }){
           <div onClick={()=>{setShowShopPicker(false);go("vAddShop")}} style={{margin:"6px 16px 12px", padding:14, background:"#fff", border:"1.5px dashed #F97316", borderRadius:14, cursor:"pointer", display:"flex", alignItems:"center", justifyContent:"center", gap:8, color:"#F97316"}}>
             {Svg.plusIcon}
             <span style={{fontSize:13, fontWeight:700}}>Ajouter une nouvelle boutique</span>
+          </div>
+        </div>
+      </div>
+    )}
+
+    {/* ═══ GOAL EDIT MODAL ═══ */}
+    {showGoalEdit && (
+      <div onClick={()=>setShowGoalEdit(false)} style={{
+        position:"absolute", inset:0,
+        background:"rgba(0,0,0,0.5)", zIndex:200,
+        display:"flex", alignItems:"center", justifyContent:"center",
+        padding:20, animation:"fadeInFast .2s ease"
+      }}>
+        <div onClick={e=>e.stopPropagation()} style={{
+          width:"100%", maxWidth:340,
+          background:"var(--card)", borderRadius:18,
+          padding:"20px 18px",
+          boxShadow:"0 10px 40px rgba(0,0,0,0.2)",
+          animation:"slideUp .25s ease"
+        }}>
+          <style>{`@keyframes slideUp{from{transform:translateY(10px);opacity:0}to{transform:translateY(0);opacity:1}}`}</style>
+
+          <div style={{textAlign:"center", marginBottom:16}}>
+            <div style={{
+              width:48, height:48, borderRadius:14,
+              background:"linear-gradient(135deg,#10B981,#059669)",
+              display:"inline-flex", alignItems:"center", justifyContent:"center",
+              marginBottom:10
+            }}>
+              <Icon name="target" size={22} color="#fff"/>
+            </div>
+            <div style={{fontSize:15, fontWeight:800, color:"var(--text)", letterSpacing:-0.2}}>
+              Objectif journalier
+            </div>
+            <div style={{fontSize:11, color:"var(--muted)", marginTop:3}}>
+              Définissez votre objectif de chiffre d'affaires
+            </div>
+          </div>
+
+          <div style={{fontSize:10, fontWeight:700, color:"var(--muted)", letterSpacing:0.5, marginBottom:6}}>
+            MONTANT EN FCFA
+          </div>
+          <div style={{position:"relative", marginBottom:14}}>
+            <input
+              type="text"
+              value={editGoalValue}
+              onChange={e=>{
+                const v = e.target.value.replace(/\D/g,"").slice(0,8);
+                setEditGoalValue(v);
+              }}
+              placeholder="800000"
+              autoFocus
+              style={{
+                width:"100%", padding:"12px 60px 12px 14px",
+                border:"1.5px solid var(--border)", borderRadius:12,
+                background:"var(--light)", color:"var(--text)",
+                fontSize:18, fontWeight:800, fontFamily:"inherit",
+                outline:"none", boxSizing:"border-box",
+              }}
+            />
+            <div style={{
+              position:"absolute", right:14, top:"50%", transform:"translateY(-50%)",
+              fontSize:11, fontWeight:600, color:"var(--muted)"
+            }}>FCFA</div>
+          </div>
+
+          {/* Quick presets */}
+          <div style={{fontSize:10, fontWeight:700, color:"var(--muted)", letterSpacing:0.5, marginBottom:6}}>
+            VALEURS RAPIDES
+          </div>
+          <div style={{display:"grid", gridTemplateColumns:"1fr 1fr 1fr", gap:6, marginBottom:16}}>
+            {[200000, 500000, 800000, 1000000, 1500000, 2000000].map(preset=>(
+              <button key={preset} onClick={()=>setEditGoalValue(String(preset))} style={{
+                padding:"8px 4px", borderRadius:8,
+                border: parseInt(editGoalValue,10)===preset ? "1.5px solid #10B981" : "1px solid var(--border)",
+                background: parseInt(editGoalValue,10)===preset ? "rgba(16,185,129,0.06)" : "var(--card)",
+                color: parseInt(editGoalValue,10)===preset ? "#10B981" : "var(--text)",
+                fontSize:10, fontWeight:700, fontFamily:"inherit",
+                cursor:"pointer"
+              }}>
+                {fmt(preset)}
+              </button>
+            ))}
+          </div>
+
+          {/* Info banner */}
+          <div style={{
+            padding:"10px 12px", borderRadius:10,
+            background:"rgba(16,185,129,0.06)",
+            border:"1px solid rgba(16,185,129,0.15)",
+            marginBottom:14,
+            display:"flex", alignItems:"flex-start", gap:8,
+          }}>
+            <Icon name="info" size={13} color="#10B981"/>
+            <div style={{fontSize:10, color:"#047857", lineHeight:1.5}}>
+              Vous serez notifié quand votre objectif sera atteint. Vous pouvez modifier ce montant à tout moment.
+            </div>
+          </div>
+
+          {/* Actions */}
+          <div style={{display:"flex", gap:8}}>
+            <button onClick={()=>setShowGoalEdit(false)} style={{
+              flex:1, padding:"11px 0", borderRadius:10,
+              border:"1px solid var(--border)", background:"var(--card)",
+              color:"var(--text)", fontSize:12, fontWeight:600,
+              cursor:"pointer", fontFamily:"inherit"
+            }}>
+              Annuler
+            </button>
+            <button
+              onClick={saveGoalEdit}
+              disabled={!editGoalValue || parseInt(editGoalValue,10) < 1000}
+              style={{
+                flex:1.5, padding:"11px 0", borderRadius:10,
+                border:"none",
+                background: (!editGoalValue || parseInt(editGoalValue,10)<1000) ? "#E5E7EB" : "linear-gradient(135deg,#10B981,#059669)",
+                color: (!editGoalValue || parseInt(editGoalValue,10)<1000) ? "var(--muted)" : "#fff",
+                fontSize:12, fontWeight:700,
+                cursor: (!editGoalValue || parseInt(editGoalValue,10)<1000) ? "not-allowed" : "pointer",
+                fontFamily:"inherit",
+                boxShadow: (!editGoalValue || parseInt(editGoalValue,10)<1000) ? "none" : "0 4px 12px rgba(16,185,129,0.25)"
+              }}
+            >
+              Enregistrer
+            </button>
           </div>
         </div>
       </div>

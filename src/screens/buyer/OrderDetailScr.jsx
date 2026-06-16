@@ -20,8 +20,79 @@ function OrderDetailScr({order:o,onBack,go}){
   const [stars,setStars]=useState(0);
   const [refundMethod,setRefundMethod]=useState(null);
   const [refundPhone,setRefundPhone]=useState("");
+
   const status=cancelled?"Annulée":(o.status||"");
   const sc=cancelled?"cancel":(o.sc||"");
+
+  // ═══ MODIFY ORDER STATE ═══
+  const [showModify,setShowModify]=useState(false);
+  const [modifyItems,setModifyItems]=useState([]);
+  const [modifyConfirming,setModifyConfirming]=useState(false);
+  const [modifyDone,setModifyDone]=useState(false);
+  const [modifyPayMethod,setModifyPayMethod]=useState(null);
+
+  // Can modify if order is active and not yet delivered
+  const canModify=!cancelled && (sc==="prep"||sc==="ship"||sc==="confirmed"||sc==="");
+
+  // Parse items: "Pain x3" -> {name:"Pain", qty:3, origQty:3}
+  const parseItemStr=(str)=>{
+    const m=str.match(/^(.+?)\s+x(\d+)\s*$/);
+    if(m) return {name:m[1].trim(), qty:parseInt(m[2],10), origQty:parseInt(m[2],10)};
+    return {name:str.trim(), qty:1, origQty:1};
+  };
+
+  // Estimate unit price = total / total units (rough but workable)
+  const totalNum=parseInt(String(o.total||"0").replace(/\s/g,""))||0;
+  const itemsParsed=(o.items||[]).map(parseItemStr);
+  const totalUnits=itemsParsed.reduce((s,i)=>s+i.origQty,0)||1;
+  const unitPrice=Math.round(totalNum/totalUnits);
+
+  // Modification fee depends on order status
+  const getModifyFee=()=>{
+    if(sc==="ship") return 1500; // En livraison — le livreur fait demi-tour
+    if(sc==="prep") return 500;  // En préparation — le vendeur ajuste
+    return 0;                    // Confirmée — gratuit
+  };
+
+  const openModify=()=>{
+    setModifyItems(itemsParsed.map(i=>({...i})));
+    setModifyPayMethod(o.payment||null);
+    setShowModify(true);
+  };
+
+  const adjustQty=(idx,delta)=>{
+    setModifyItems(prev=>prev.map((it,i)=>{
+      if(i!==idx) return it;
+      const newQty=Math.max(0,it.qty+delta);
+      return {...it,qty:newQty};
+    }));
+  };
+
+  // Compute new totals
+  const newSubtotal=modifyItems.reduce((s,it)=>s+(it.qty*unitPrice),0);
+  const modifyFee=getModifyFee();
+  const newTotal=newSubtotal+modifyFee;
+  const diff=newTotal-totalNum;
+  // Sign: positive = client owes, negative = refund
+
+  const confirmModify=()=>{
+    if(diff>0 && !modifyPayMethod){
+      toast.error("Choisissez un moyen de paiement");
+      return;
+    }
+    setModifyConfirming(true);
+    setTimeout(()=>{
+      setModifyConfirming(false);
+      setModifyDone(true);
+      setTimeout(()=>{
+        setShowModify(false);
+        setModifyDone(false);
+        toast.success(diff>0 ? `Commande modifiée — ${fmtNum(diff)} FCFA débités` : diff<0 ? `Commande modifiée — Remboursement de ${fmtNum(-diff)} FCFA en cours` : "Commande modifiée");
+      },1100);
+    },1100);
+  };
+
+  const fmtNum=(n)=>n.toLocaleString("fr-FR").replace(/,/g," ");
 
   const currentStep=o.prog?o.prog.filter(x=>x===1).length:0;
   const canCancel=!cancelled&&(sc==="ship"||sc==="prep");
@@ -112,8 +183,151 @@ function OrderDetailScr({order:o,onBack,go}){
       {cancelled&&<button onClick={()=>setShowCreditNote(true)} style={{padding:14,borderRadius:14,border:"1px solid rgba(16,185,129,0.3)",background:"rgba(16,185,129,0.04)",fontSize:14,fontWeight:600,cursor:"pointer",fontFamily:"inherit",color:"#10B981"}}> Voir l'avoir (remboursement)</button>}
       {showInvoice&&<InvoiceView order={{id:o.ref,client:"Joeldy Tsina",vendor:o.vendor||"Lamuka Market",amount:parseInt(String(o.total).replace(/\s/g,""))||0,items:o.items?.map(it=>{const parts=it.split(" x");const name=parts[0].replace(/^[^a-zA-ZÀ-ÿ]+ /,"");const qty=parts[1]?parseInt(parts[1]):1;return{name,qty,price:Math.round((parseInt(String(o.total).replace(/\s/g,""))||0)/o.items.length)}})||[{name:"Article",qty:1,price:parseInt(String(o.total).replace(/\s/g,""))||0}],delivery:1500,payment:o.payment||"airtel",status:o.sc==="cancel"?"cancelled":o.sc==="fail"?"failed":o.sc==="done"?"delivered":"preparing",isGroup:o.isGroup,groupMembers:o.groupMembers,refundMethod:refundMethod||null}} onClose={()=>setShowInvoice(false)}/>}
       {showCreditNote&&<CreditNoteView order={{id:o.ref,client:"Joeldy Tsina",vendor:o.vendor||"Lamuka Market",amount:parseInt(String(o.total).replace(/\s/g,""))||0,items:o.items?.map(it=>{const parts=it.split(" x");const name=parts[0].replace(/^[^a-zA-ZÀ-ÿ]+ /,"");const qty=parts[1]?parseInt(parts[1]):1;return{name,qty,price:Math.round((parseInt(String(o.total).replace(/\s/g,""))||0)/o.items.length)}})||[{name:"Article",qty:1,price:parseInt(String(o.total).replace(/\s/g,""))||0}],delivery:1500,payment:o.payment||"airtel",cancelReason:"Annulation client"}} refundMethod={refundMethod} onClose={()=>setShowCreditNote(false)}/>}
+      {canModify&&<button onClick={openModify} style={{padding:14,borderRadius:14,border:"1px solid rgba(59,130,246,0.3)",background:"rgba(59,130,246,0.04)",color:"#3B82F6",fontSize:14,fontWeight:600,cursor:"pointer",fontFamily:"inherit",display:"flex",alignItems:"center",justifyContent:"center",gap:6}}><Icon name="edit" size={14} color="#3B82F6"/> Modifier la commande{(sc==="prep"||sc==="ship")&&<span style={{fontSize:10,padding:"2px 6px",background:"rgba(59,130,246,0.12)",borderRadius:4,fontWeight:700}}>+{getModifyFee()} F</span>}</button>}
       {canCancel&&<button onClick={()=>setShowCancel(true)} style={{padding:14,borderRadius:14,border:"1px solid rgba(239,68,68,0.3)",background:"transparent",color:"#EF4444",fontSize:14,fontWeight:600,cursor:"pointer",fontFamily:"inherit"}}> Annuler la commande</button>}
     </div>
+
+    {/* ═══ MODIFY ORDER MODAL ═══ */}
+    {showModify&&<div onClick={()=>!modifyConfirming&&!modifyDone&&setShowModify(false)} style={{position:"absolute",inset:0,background:"rgba(0,0,0,.5)",zIndex:120,display:"flex",alignItems:"flex-end",justifyContent:"center",animation:"fadeInFast .2s ease"}}>
+      <div onClick={e=>e.stopPropagation()} style={{background:"var(--card)",borderRadius:"20px 20px 0 0",padding:"16px 18px 20px",width:"100%",maxWidth:500,maxHeight:"92%",overflowY:"auto",animation:"slideUp .25s cubic-bezier(.4,0,.2,1)",boxSizing:"border-box"}}>
+        <style>{`@keyframes slideUp{from{transform:translateY(20px);opacity:0}to{transform:translateY(0);opacity:1}}`}</style>
+
+        {modifyDone ? (
+          <div style={{padding:"30px 16px",textAlign:"center"}}>
+            <div style={{width:64,height:64,borderRadius:20,background:"linear-gradient(135deg,#10B981,#059669)",display:"inline-flex",alignItems:"center",justifyContent:"center",marginBottom:14,boxShadow:"0 8px 24px rgba(16,185,129,0.3)"}}>
+              <Icon name="check" size={32} color="#fff"/>
+            </div>
+            <div style={{fontSize:16,fontWeight:800,color:"var(--text)",marginBottom:4}}>Modification confirmée</div>
+            <div style={{fontSize:12,color:"var(--muted)"}}>Le vendeur a été notifié</div>
+          </div>
+        ) : (<>
+          {/* Drag handle */}
+          <div style={{width:36,height:4,borderRadius:2,background:"var(--border)",margin:"0 auto 14px"}}/>
+
+          {/* Header */}
+          <div style={{display:"flex",alignItems:"center",gap:10,marginBottom:14}}>
+            <div style={{width:42,height:42,borderRadius:12,background:"linear-gradient(135deg,#3B82F6,#2563EB)",display:"flex",alignItems:"center",justifyContent:"center",flexShrink:0}}>
+              <Icon name="edit" size={20} color="#fff"/>
+            </div>
+            <div style={{flex:1}}>
+              <div style={{fontSize:15,fontWeight:800,color:"var(--text)",letterSpacing:-0.2}}>Modifier la commande</div>
+              <div style={{fontSize:11,color:"var(--muted)"}}>Ajustez les quantités</div>
+            </div>
+            <button onClick={()=>setShowModify(false)} style={{width:32,height:32,borderRadius:8,border:"1px solid var(--border)",background:"var(--card)",cursor:"pointer",display:"flex",alignItems:"center",justifyContent:"center"}} aria-label="Fermer">
+              <Icon name="close" size={14}/>
+            </button>
+          </div>
+
+          {/* Status warning if prep or ship */}
+          {(sc==="prep"||sc==="ship") && (
+            <div style={{padding:"10px 12px",borderRadius:10,background:sc==="ship"?"rgba(245,158,11,0.08)":"rgba(59,130,246,0.06)",border:`1px solid ${sc==="ship"?"rgba(245,158,11,0.2)":"rgba(59,130,246,0.15)"}`,marginBottom:12,display:"flex",alignItems:"flex-start",gap:8}}>
+              <Icon name={sc==="ship"?"alert_triangle":"info"} size={14} color={sc==="ship"?"#F59E0B":"#3B82F6"}/>
+              <div style={{fontSize:11,color:sc==="ship"?"#B45309":"#1D4ED8",lineHeight:1.5,flex:1}}>
+                {sc==="ship"
+                  ? <>Votre commande est en route. Modifier maintenant entraînera des <b>frais supplémentaires de {fmtNum(getModifyFee())} FCFA</b> (le livreur devra faire demi-tour).</>
+                  : <>Votre commande est en préparation. La modification coûte <b>{fmtNum(getModifyFee())} FCFA</b>.</>
+                }
+              </div>
+            </div>
+          )}
+
+          {/* Items list */}
+          <div style={{fontSize:10,fontWeight:700,color:"var(--muted)",letterSpacing:0.5,marginBottom:6}}>ARTICLES</div>
+          <div style={{background:"var(--light)",borderRadius:12,padding:10,marginBottom:12}}>
+            {modifyItems.map((it,idx)=>{
+              const removed=it.qty===0;
+              const changed=it.qty!==it.origQty;
+              return(
+                <div key={idx} style={{display:"flex",alignItems:"center",gap:10,padding:"8px 6px",borderBottom:idx<modifyItems.length-1?"1px solid var(--border)":"none",opacity:removed?0.5:1}}>
+                  <div style={{flex:1,minWidth:0}}>
+                    <div style={{fontSize:12,fontWeight:600,color:"var(--text)",overflow:"hidden",textOverflow:"ellipsis",whiteSpace:"nowrap",textDecoration:removed?"line-through":"none"}}>{it.name}</div>
+                    <div style={{fontSize:10,color:"var(--muted)",marginTop:1}}>
+                      {fmtNum(unitPrice)} F l'unité
+                      {changed&&<span style={{marginLeft:6,padding:"1px 5px",background:removed?"rgba(239,68,68,0.12)":"rgba(59,130,246,0.12)",color:removed?"#DC2626":"#3B82F6",borderRadius:3,fontSize:9,fontWeight:700}}>
+                        {removed?"SUPPRIMÉ":it.qty>it.origQty?`+${it.qty-it.origQty}`:`-${it.origQty-it.qty}`}
+                      </span>}
+                    </div>
+                  </div>
+                  <div style={{display:"flex",alignItems:"center",gap:6,flexShrink:0}}>
+                    <button onClick={()=>adjustQty(idx,-1)} disabled={it.qty<=0} style={{width:28,height:28,borderRadius:8,border:"1px solid var(--border)",background:"var(--card)",cursor:it.qty<=0?"not-allowed":"pointer",display:"flex",alignItems:"center",justifyContent:"center",opacity:it.qty<=0?0.4:1,fontFamily:"inherit",fontWeight:700,color:"var(--text)"}}>−</button>
+                    <div style={{width:24,textAlign:"center",fontSize:13,fontWeight:700,color:"var(--text)"}}>{it.qty}</div>
+                    <button onClick={()=>adjustQty(idx,1)} style={{width:28,height:28,borderRadius:8,border:"1px solid var(--border)",background:"var(--card)",cursor:"pointer",display:"flex",alignItems:"center",justifyContent:"center",fontFamily:"inherit",fontWeight:700,color:"var(--text)"}}>+</button>
+                  </div>
+                </div>
+              );
+            })}
+          </div>
+
+          {/* Pricing summary */}
+          <div style={{background:"var(--card)",border:"1px solid var(--border)",borderRadius:12,padding:12,marginBottom:12}}>
+            <div style={{display:"flex",justifyContent:"space-between",fontSize:11,color:"var(--muted)",marginBottom:6}}>
+              <span>Ancien total</span>
+              <span>{fmtNum(totalNum)} F</span>
+            </div>
+            <div style={{display:"flex",justifyContent:"space-between",fontSize:11,color:"var(--text)",marginBottom:6}}>
+              <span>Nouveau sous-total</span>
+              <span style={{fontWeight:600}}>{fmtNum(newSubtotal)} F</span>
+            </div>
+            {modifyFee>0&&<div style={{display:"flex",justifyContent:"space-between",fontSize:11,color:"#F59E0B",marginBottom:6}}>
+              <span>Frais de modification</span>
+              <span style={{fontWeight:600}}>+{fmtNum(modifyFee)} F</span>
+            </div>}
+            <div style={{display:"flex",justifyContent:"space-between",fontSize:13,fontWeight:800,color:"var(--text)",borderTop:"1px solid var(--border)",paddingTop:8,marginTop:2}}>
+              <span>Nouveau total</span>
+              <span>{fmtNum(newTotal)} F</span>
+            </div>
+            <div style={{display:"flex",justifyContent:"space-between",fontSize:12,fontWeight:700,color:diff>0?"#EF4444":diff<0?"#10B981":"var(--muted)",marginTop:6,padding:"6px 10px",background:diff>0?"rgba(239,68,68,0.06)":diff<0?"rgba(16,185,129,0.06)":"var(--light)",borderRadius:8}}>
+              <span>{diff>0?"À payer en plus":diff<0?"Remboursement":"Pas de différence"}</span>
+              <span>{diff>0?"+":diff<0?"−":""}{fmtNum(Math.abs(diff))} F</span>
+            </div>
+          </div>
+
+          {/* Payment method if extra to pay */}
+          {diff>0 && (<>
+            <div style={{fontSize:10,fontWeight:700,color:"var(--muted)",letterSpacing:0.5,marginBottom:6}}>PAYER LE SUPPLÉMENT VIA</div>
+            <div style={{display:"grid",gridTemplateColumns:"1fr 1fr 1fr",gap:6,marginBottom:14}}>
+              {[
+                {id:"airtel",label:"Airtel",color:"#EF4444"},
+                {id:"mtn",label:"MTN",color:"#F59E0B"},
+                {id:"cash",label:"Cash",color:"#10B981"},
+              ].map(m=>{
+                const selected=modifyPayMethod===m.id;
+                return(
+                  <button key={m.id} onClick={()=>setModifyPayMethod(m.id)} style={{padding:"9px 4px",borderRadius:9,border:selected?`1.5px solid ${m.color}`:"1px solid var(--border)",background:selected?`${m.color}10`:"var(--card)",color:selected?m.color:"var(--text)",fontSize:11,fontWeight:selected?700:600,cursor:"pointer",fontFamily:"inherit"}}>
+                    {m.label}
+                  </button>
+                );
+              })}
+            </div>
+          </>)}
+
+          {/* Buttons */}
+          <div style={{display:"flex",gap:8}}>
+            <button onClick={()=>setShowModify(false)} disabled={modifyConfirming} style={{flex:1,padding:"12px 0",borderRadius:12,border:"1px solid var(--border)",background:"var(--card)",color:"var(--text)",fontSize:12,fontWeight:600,cursor:modifyConfirming?"not-allowed":"pointer",fontFamily:"inherit",opacity:modifyConfirming?0.5:1}}>
+              Annuler
+            </button>
+            <button
+              onClick={confirmModify}
+              disabled={modifyConfirming || (diff>0 && !modifyPayMethod) || modifyItems.every((it,i)=>it.qty===it.origQty)}
+              style={{
+                flex:1.5,padding:"12px 0",borderRadius:12,border:"none",
+                background:(modifyConfirming||(diff>0 && !modifyPayMethod)||modifyItems.every((it,i)=>it.qty===it.origQty))?"#E5E7EB":"#3B82F6",
+                color:(modifyConfirming||(diff>0 && !modifyPayMethod)||modifyItems.every((it,i)=>it.qty===it.origQty))?"var(--muted)":"#fff",
+                fontSize:12,fontWeight:700,
+                cursor:(modifyConfirming||(diff>0 && !modifyPayMethod)||modifyItems.every((it,i)=>it.qty===it.origQty))?"not-allowed":"pointer",
+                fontFamily:"inherit",
+                display:"flex",alignItems:"center",justifyContent:"center",gap:6,
+              }}
+            >
+              {modifyConfirming ? <><div className="spinner" style={{width:13,height:13}}/>Traitement...</> :
+               diff>0 ? <>Confirmer et payer {fmtNum(diff)} F</> :
+               diff<0 ? <>Confirmer (remboursement {fmtNum(-diff)} F)</> :
+               <>Confirmer</>}
+            </button>
+          </div>
+        </>)}
+      </div>
+    </div>}
 
     {/* Cancel modal */}
     {showCancel&&<div style={{position:"fixed",inset:0,background:"rgba(0,0,0,.4)",zIndex:100,display:"flex",alignItems:"flex-end",justifyContent:"center",animation:"fadeInFast .2s ease"}} onClick={()=>setShowCancel(false)}>

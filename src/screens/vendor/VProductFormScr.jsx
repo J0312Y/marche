@@ -277,7 +277,16 @@ function VProductFormScr({product:p,onBack,shopType="boutique"}){
       <div className="field"><label>Prix barré <span style={{color:"var(--muted)",fontWeight:400}}>(optionnel)</span></label><input type="number" value={oldPrice} onChange={e=>{setOldPrice(e.target.value);clearErr("oldPrice")}} placeholder="Optionnel" style={fieldStyle("oldPrice")}/>{errMsg("oldPrice")}</div>
     </div>
     <div className="field-row">
-      <div className="field"><label>Catégorie *</label><select value={selectedCat} onChange={e=>{setSelectedCat(e.target.value);clearErr("cat")}} style={fieldStyle("cat")}><option value="">Choisir...</option>{CATS.map(c=><option key={c.id} value={c.name}><Icon name={c.icon} size={20}/> {c.name}</option>)}</select>{errMsg("cat")}</div>
+      <div className="field">
+        <label>Catégorie *</label>
+        <Select
+          value={selectedCat}
+          onChange={v=>{setSelectedCat(v);clearErr("cat")}}
+          options={CATS.map(c=>({value:c.name, label:c.name, icon:c.icon}))}
+          placeholder="Choisir..."
+        />
+        {errMsg("cat")}
+      </div>
       <div className="field"><label>Stock <span style={{color:"var(--muted)",fontWeight:400}}>(optionnel, 0 = illimité)</span></label><input type="number" value={stock} onChange={e=>setStock(e.target.value)} placeholder="0 = illimité"/></div>
     </div>
 
