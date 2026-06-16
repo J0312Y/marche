@@ -7,11 +7,23 @@ function OTPScr({ onDone, provider, onEditNumber }) {
   const [code, setCode] = useState(["", "", "", "", "", ""]);
   const [error, setError] = useState("");
   const [verifying, setVerifying] = useState(false);
+  
+  // Phone number editing (in-place, no page navigation)
+  const [phoneNumber, setPhoneNumber] = useState("064 XXX XXX");
+  const [showEditPhone, setShowEditPhone] = useState(false);
+  const [editingPhone, setEditingPhone] = useState("");
+  const [updatingPhone, setUpdatingPhone] = useState(false);
 
   useEffect(() => {
     const t = setInterval(() => setTimer(p => p > 0 ? p - 1 : 0), 1000);
     return () => clearInterval(t);
   }, []);
+
+  useEffect(() => {
+    if (showEditPhone) {
+      setEditingPhone(phoneNumber);
+    }
+  }, [showEditPhone, phoneNumber]);
 
   const isSocial = !!provider;
   const providerName = provider === "google" ? "Google" : provider === "apple" ? "Apple" : provider === "facebook" ? "Facebook" : "";
@@ -29,7 +41,7 @@ function OTPScr({ onDone, provider, onEditNumber }) {
     }
   };
 
-  const handlePaste = (e, idx) => {
+  const handlePaste = (e) => {
     e.preventDefault();
     const pasted = e.clipboardData.getData("text").replace(/\D/g, "").slice(0, 6);
     if (pasted.length === 6) {
@@ -60,7 +72,29 @@ function OTPScr({ onDone, provider, onEditNumber }) {
     document.querySelector(`[data-otp="0"]`)?.focus();
   };
 
-  const targetDisplay = isSocial ? providerEmail : "+242 064 XXX XXX";
+  const handleConfirmEditPhone = () => {
+    // Format and validate phone
+    const cleaned = editingPhone.replace(/\D/g, "");
+    if (cleaned.length < 9) {
+      toast.error("Numéro invalide (9 chiffres requis)");
+      return;
+    }
+    setUpdatingPhone(true);
+    setTimeout(() => {
+      // Format: 064 XXX XXX
+      const formatted = `${cleaned.slice(0, 3)} ${cleaned.slice(3, 6)} ${cleaned.slice(6, 9)}`;
+      setPhoneNumber(formatted);
+      setShowEditPhone(false);
+      setUpdatingPhone(false);
+      setTimer(45);
+      setCode(["", "", "", "", "", ""]);
+      setError("");
+      toast.success(`Code envoyé au +242 ${formatted}`);
+      setTimeout(() => document.querySelector(`[data-otp="0"]`)?.focus(), 100);
+    }, 700);
+  };
+
+  const targetDisplay = isSocial ? providerEmail : `+242 ${phoneNumber}`;
 
   return (
     <div className="auth">
@@ -119,8 +153,8 @@ function OTPScr({ onDone, provider, onEditNumber }) {
           {isSocial ? "Un code de vérification a été envoyé à votre email" : "Nous avons envoyé un code à 6 chiffres au"}<br/>
           <b style={{ color: "var(--text)", fontWeight: 700 }}>{targetDisplay}</b>
         </div>
-        {!isSocial && onEditNumber && (
-          <button onClick={onEditNumber} style={{
+        {!isSocial && (
+          <button onClick={() => setShowEditPhone(true)} style={{
             marginTop: 8, padding: "5px 12px",
             background: "rgba(249,115,22,0.08)", border: "none",
             borderRadius: 7, fontSize: 11, color: "#F97316", fontWeight: 700,
@@ -289,6 +323,166 @@ function OTPScr({ onDone, provider, onEditNumber }) {
           Code chiffré · Expire dans 10 min
         </span>
       </div>
+
+      {/* ═══ EDIT PHONE BOTTOM SHEET ═══ */}
+      {showEditPhone && (
+        <div onClick={() => !updatingPhone && setShowEditPhone(false)} style={{
+          position: "absolute",
+          inset: 0,
+          background: "rgba(0,0,0,0.5)",
+          zIndex: 100,
+          display: "flex",
+          alignItems: "flex-end",
+          animation: "fadeInFast .2s ease",
+        }}>
+          <div onClick={e => e.stopPropagation()} style={{
+            width: "100%",
+            background: "var(--card)",
+            borderRadius: "20px 20px 0 0",
+            padding: "16px 20px 24px",
+            animation: "slideUp .25s ease",
+            maxHeight: "85%",
+            overflowY: "auto",
+          }}>
+            <style>{`@keyframes slideUp{from{transform:translateY(20px);opacity:0}to{transform:translateY(0);opacity:1}}`}</style>
+            
+            {/* Drag handle */}
+            <div style={{ width: 36, height: 4, borderRadius: 2, background: "var(--border)", margin: "0 auto 14px" }}/>
+            
+            {/* Header */}
+            <div style={{ textAlign: "center", marginBottom: 16 }}>
+              <div style={{
+                width: 52, height: 52, borderRadius: 16,
+                background: "linear-gradient(135deg, #F97316, #EA580C)",
+                display: "inline-flex", alignItems: "center", justifyContent: "center",
+                marginBottom: 10,
+                boxShadow: "0 6px 20px rgba(249,115,22,0.25)",
+              }}>
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#fff" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                  <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/>
+                  <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/>
+                </svg>
+              </div>
+              <div style={{ fontSize: 17, fontWeight: 800, color: "var(--text)", letterSpacing: -0.3 }}>
+                Modifier le numéro
+              </div>
+              <div style={{ fontSize: 11, color: "var(--muted)", marginTop: 3 }}>
+                Un nouveau code sera envoyé
+              </div>
+            </div>
+
+            {/* Phone input with country code */}
+            <div style={{ marginBottom: 14 }}>
+              <div style={{ fontSize: 10, fontWeight: 700, color: "var(--muted)", letterSpacing: 0.5, marginBottom: 6 }}>
+                NUMÉRO DE TÉLÉPHONE
+              </div>
+              <div style={{
+                display: "flex", gap: 8,
+                background: "var(--light)",
+                border: "1.5px solid var(--border)",
+                borderRadius: 12,
+                padding: "4px 4px 4px 12px",
+                alignItems: "center",
+              }}>
+                {/* Country code */}
+                <div style={{
+                  display: "flex", alignItems: "center", gap: 6,
+                  paddingRight: 10, borderRight: "1px solid var(--border)",
+                }}>
+                  <span style={{ fontSize: 18 }}>🇨🇬</span>
+                  <span style={{ fontSize: 14, fontWeight: 700, color: "var(--text)" }}>+242</span>
+                </div>
+                {/* Phone input */}
+                <input
+                  type="tel"
+                  value={editingPhone}
+                  onChange={e => {
+                    let v = e.target.value.replace(/\D/g, "").slice(0, 9);
+                    // Auto-format: XXX XXX XXX
+                    if (v.length > 6) v = `${v.slice(0, 3)} ${v.slice(3, 6)} ${v.slice(6)}`;
+                    else if (v.length > 3) v = `${v.slice(0, 3)} ${v.slice(3)}`;
+                    setEditingPhone(v);
+                  }}
+                  placeholder="064 123 456"
+                  autoFocus
+                  style={{
+                    flex: 1, padding: "10px 4px",
+                    border: "none", background: "transparent",
+                    fontSize: 15, fontWeight: 600,
+                    color: "var(--text)", fontFamily: "inherit",
+                    outline: "none",
+                  }}
+                />
+              </div>
+              <div style={{ fontSize: 10, color: "var(--muted)", marginTop: 6, display: "flex", alignItems: "center", gap: 4 }}>
+                <Icon name="info" size={11} color="var(--muted)"/>
+                Saisissez votre numéro à 9 chiffres
+              </div>
+            </div>
+
+            {/* Operators reminder */}
+            <div style={{
+              padding: "10px 12px",
+              background: "rgba(59,130,246,0.05)",
+              border: "1px solid rgba(59,130,246,0.15)",
+              borderRadius: 10,
+              marginBottom: 16,
+            }}>
+              <div style={{ fontSize: 10, fontWeight: 700, color: "#1D4ED8", marginBottom: 5, letterSpacing: 0.3 }}>
+                OPÉRATEURS SUPPORTÉS
+              </div>
+              <div style={{ display: "flex", gap: 6, flexWrap: "wrap" }}>
+                {[
+                  { label: "Airtel", color: "#EF4444", prefix: "05" },
+                  { label: "MTN", color: "#F59E0B", prefix: "06" },
+                ].map(op => (
+                  <div key={op.label} style={{
+                    display: "inline-flex", alignItems: "center", gap: 4,
+                    padding: "3px 8px",
+                    background: "var(--card)",
+                    border: "1px solid var(--border)",
+                    borderRadius: 6,
+                    fontSize: 10, fontWeight: 600, color: "var(--text)",
+                  }}>
+                    <span style={{ width: 7, height: 7, borderRadius: "50%", background: op.color }}/>
+                    {op.label} ({op.prefix})
+                  </div>
+                ))}
+              </div>
+            </div>
+
+            {/* Buttons */}
+            <div style={{ display: "flex", gap: 8 }}>
+              <button onClick={() => !updatingPhone && setShowEditPhone(false)} disabled={updatingPhone} style={{
+                flex: 1, padding: "12px 0", borderRadius: 12,
+                border: "1px solid var(--border)", background: "var(--card)",
+                color: "var(--text)", fontSize: 13, fontWeight: 600,
+                cursor: updatingPhone ? "not-allowed" : "pointer", fontFamily: "inherit",
+                opacity: updatingPhone ? 0.5 : 1,
+              }}>
+                Annuler
+              </button>
+              <button onClick={handleConfirmEditPhone} disabled={updatingPhone || editingPhone.replace(/\D/g, "").length < 9} style={{
+                flex: 1.5, padding: "12px 0", borderRadius: 12,
+                border: "none",
+                background: (updatingPhone || editingPhone.replace(/\D/g, "").length < 9) ? "#E5E7EB" : "#F97316",
+                color: (updatingPhone || editingPhone.replace(/\D/g, "").length < 9) ? "var(--muted)" : "#fff",
+                fontSize: 13, fontWeight: 700,
+                cursor: (updatingPhone || editingPhone.replace(/\D/g, "").length < 9) ? "not-allowed" : "pointer",
+                fontFamily: "inherit",
+                display: "flex", alignItems: "center", justifyContent: "center", gap: 6,
+                boxShadow: (updatingPhone || editingPhone.replace(/\D/g, "").length < 9) ? "none" : "0 4px 14px rgba(249,115,22,0.25)",
+              }}>
+                {updatingPhone ? (
+                  <><div className="spinner" style={{ width: 13, height: 13 }}/>Envoi...</>
+                ) : (
+                  <><Icon name="check" size={13} color="#fff"/>Envoyer le code</>
+                )}
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }
