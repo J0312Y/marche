@@ -587,7 +587,7 @@ function VClientsScr({ onBack, go }) {
   };
 
   return (
-    <div className="scr" style={{ background: "#F9FAFB", minHeight: "100vh", paddingBottom: 80 }}>
+    <div className="scr" style={{ background: "#F9FAFB", paddingBottom: 120 }}>
       
       <div style={{
         position: "sticky", top: 0, zIndex: 10,

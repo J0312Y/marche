@@ -31,9 +31,10 @@ class ErrorBoundary extends Component {
     if (this.state.hasError) {
       return (
         <div style={{
-          minHeight: "100vh",
+          width: "100%", height: "100%",
           display: "flex", alignItems: "center", justifyContent: "center",
           padding: 24, background: "var(--bg, #F9FAFB)",
+          boxSizing: "border-box",
         }}>
           <div style={{
             maxWidth: 360, textAlign: "center",

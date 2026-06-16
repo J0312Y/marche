@@ -32,7 +32,7 @@ function OfflineBanner() {
 
   return (
     <div style={{
-      position: "fixed",
+      position: "absolute",
       top: 0, left: 0, right: 0,
       zIndex: 9998,
       background: online ? "#10B981" : "#EF4444",

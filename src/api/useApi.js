@@ -1,5 +1,5 @@
 /**
- * useApi Hook — Generic async data fetching
+ * useApi Hook — Generic async data fetching with graceful error handling
  *
  * Usage:
  *   const { data, loading, error, reload } = useApi(() => articlesAPI.getPopular());
@@ -9,6 +9,9 @@ import { useState, useEffect, useCallback } from 'react';
 
 /**
  * Auto-fetch on mount (GET requests)
+ * Returns { data, loading, error, reload, setData }
+ * Error is an object {message, code, status} or null
+ * Component should render <ErrorState onRetry={reload}/> when error
  */
 export function useApi(fetcher, deps = []) {
   const [data, setData] = useState(null);
@@ -22,7 +25,14 @@ export function useApi(fetcher, deps = []) {
       const result = await fetcher();
       setData(result);
     } catch (err) {
-      setError(err.message || 'Erreur');
+      // Catch ALL errors silently — never let them propagate to React render
+      console.warn("[useApi] fetch failed:", err);
+      setError({
+        message: err.message || 'Erreur de connexion',
+        code: err.code,
+        status: err.status,
+      });
+      // Keep last successful data if available (don't wipe it on retry failure)
     } finally {
       setLoading(false);
     }

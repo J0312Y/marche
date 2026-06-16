@@ -51,9 +51,6 @@ function AppInner() {
   return (
     <div style={{ display: "flex", justifyContent: "center", alignItems: "center", minHeight: "100vh", background: darkMode ? "#000" : "linear-gradient(160deg,#e0ddd8 0%,#c9c5bf 100%)", padding: 16 }}>
       <style>{CSS}</style>
-      <OfflineBanner/>
-      {/* Global guest gate sheet */}
-      {guestPromptReason && <GuestPrompt reason={guestPromptReason} onClose={closeGuestPrompt} onLogin={()=>{closeGuestPrompt();exitGuestToLogin();}}/>}
 
       <div style={{ position: "relative", borderRadius: 51 }}>
         <div style={{ position: "absolute", inset: -2, borderRadius: 51, background: "linear-gradient(180deg,#8a8985 0%,#6b6966 20%,#4a4845 50%,#6b6966 80%,#8a8985 100%)", boxShadow: "0 50px 100px rgba(0,0,0,.3),0 0 0 1px rgba(255,255,255,.08) inset", zIndex: -1 }} />
@@ -63,6 +60,9 @@ function AppInner() {
         <div style={{ position: "absolute", right: -3, top: 195, width: 4, height: 72, background: "linear-gradient(180deg,#7a7874,#5a5855,#7a7874)", borderRadius: "0 3px 3px 0", boxShadow: "1px 0 2px rgba(0,0,0,.3)" }} />
 
         <div className={`phone${darkMode?" dark":""}`}>
+          {/* Banners and overlays — INSIDE phone, position absolute relative to .phone */}
+          <OfflineBanner/>
+          {guestPromptReason && <GuestPrompt reason={guestPromptReason} onClose={closeGuestPrompt} onLogin={()=>{closeGuestPrompt();exitGuestToLogin();}}/>}
           {/* Status Bar + Dynamic Island */}
           <div style={{ position: "relative", padding: "10px 22px 4px", flexShrink: 0, background: "transparent", zIndex: 20 }}>
             <div style={{ position: "absolute", top: 12, left: "50%", transform: "translateX(-50%)", width: 124, height: 36, background: "#000", borderRadius: 20, zIndex: 30, display: "flex", alignItems: "center", justifyContent: "center", boxShadow: "0 1px 3px rgba(0,0,0,.15) inset" }}>
@@ -127,10 +127,10 @@ function AppInner() {
 
 export default function App() {
   return (
-    <ErrorBoundary>
-      <AppProvider>
+    <AppProvider>
+      <ErrorBoundary>
         <AppInner />
-      </AppProvider>
-    </ErrorBoundary>
+      </ErrorBoundary>
+    </AppProvider>
   );
 }
