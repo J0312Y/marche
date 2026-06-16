@@ -1,13 +1,22 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { D_DELIVERIES } from "../../data/driverData";
 import { fmt } from "../../utils/helpers";
 import PullToRefresh from "../../components/PullToRefresh";
 import Icon from "../../components/Icon";
 import toast from "../../utils/toast";
+import { loadAllMods } from "../../utils/orderMods";
 
 function DrDeliveriesScr({ go, onBack }) {
-  const [filter, setFilter] = useState("active"); // active | pending | done
+  const [filter, setFilter] = useState("active");
   const [accepting, setAccepting] = useState(null);
+
+  // Track modifications
+  const [mods, setMods] = useState(() => loadAllMods());
+  useEffect(() => {
+    const handler = () => setMods(loadAllMods());
+    window.addEventListener("order-mod-updated", handler);
+    return () => window.removeEventListener("order-mod-updated", handler);
+  }, []);
 
   const pending = D_DELIVERIES.filter(x => x.status === "pending");
   const active = D_DELIVERIES.filter(x => x.status === "active");
@@ -88,10 +97,13 @@ function DrDeliveriesScr({ go, onBack }) {
           )}
 
           {/* ACTIVE - in progress */}
-          {filter === "active" && list.map(d => (
-            <div key={d.id} onClick={() => go("drDelivery", d)} style={{ padding: 16, background: "var(--card)", border: "2px solid #10B981", borderRadius: 16, marginBottom: 12, cursor: "pointer", position: "relative", overflow: "hidden" }}>
-              <div style={{ position: "absolute", top: 0, left: 0, right: 0, padding: "4px 12px", background: "linear-gradient(90deg,#10B981,#059669)", color: "#fff", fontSize: 9, fontWeight: 800, letterSpacing: 1, textAlign: "center" }}>
-                EN COURS · LIVRAISON
+          {filter === "active" && list.map(d => {
+            const orderMod = mods[d.ref] || mods["#" + d.id];
+            const hasMod = orderMod && (orderMod.status === "pending" || orderMod.status === "vendor_ack");
+            return (
+            <div key={d.id} onClick={() => go("drDelivery", d)} style={{ padding: 16, background: "var(--card)", border: hasMod ? "2px solid #F59E0B" : "2px solid #10B981", borderRadius: 16, marginBottom: 12, cursor: "pointer", position: "relative", overflow: "hidden" }}>
+              <div style={{ position: "absolute", top: 0, left: 0, right: 0, padding: "4px 12px", background: hasMod ? "linear-gradient(90deg,#F59E0B,#D97706)" : "linear-gradient(90deg,#10B981,#059669)", color: "#fff", fontSize: 9, fontWeight: 800, letterSpacing: 1, textAlign: "center", display:"flex", alignItems:"center", justifyContent:"center", gap:5 }}>
+                {hasMod ? <><Icon name="alert_triangle" size={10} color="#fff"/>COMMANDE MODIFIÉE · ACTION REQUISE</> : <>EN COURS · LIVRAISON</>}
               </div>
               <div style={{ marginTop: 16, display: "flex", justifyContent: "space-between", alignItems: "flex-start", marginBottom: 12 }}>
                 <div>
@@ -131,7 +143,8 @@ function DrDeliveriesScr({ go, onBack }) {
                 <span style={{ fontSize: 11, color: "#059669", fontWeight: 700 }}>Continuer →</span>
               </div>
             </div>
-          ))}
+          );
+          })}
 
           {/* PENDING - new requests */}
           {filter === "pending" && list.map(d => (

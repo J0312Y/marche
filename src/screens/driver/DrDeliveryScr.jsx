@@ -1,9 +1,10 @@
 import toast from "../../utils/toast";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Img from "../../components/Img";
 import MapView from "../../components/MapView";
 import { fmt } from "../../utils/helpers";
 import Icon from "../../components/Icon";
+import { getMod, updateModStatus, computeDiff, timeAgo } from "../../utils/orderMods";
 
 function DrDeliveryScr({delivery:dl,go,onBack}){
   const [step,setStep]=useState(dl.status==="active"?2:0);
@@ -12,6 +13,28 @@ function DrDeliveryScr({delivery:dl,go,onBack}){
   const [failComment,setFailComment]=useState("");
   const [failPhoto,setFailPhoto]=useState(null);
   const [failDone,setFailDone]=useState(false);
+
+  // ═══ ORDER MODIFICATION ═══
+  const [mod, setMod] = useState(() => getMod(dl.ref));
+  const [showModDetails, setShowModDetails] = useState(false);
+
+  useEffect(() => {
+    const handler = (e) => {
+      if (e.detail?.ref === dl.ref) setMod(getMod(dl.ref));
+    };
+    window.addEventListener("order-mod-updated", handler);
+    return () => window.removeEventListener("order-mod-updated", handler);
+  }, [dl.ref]);
+
+  const ackMod = () => {
+    updateModStatus(dl.ref, "driver_ack");
+    setMod(getMod(dl.ref));
+    toast.success("Retour à la boutique en cours");
+    // Reset to step 0 (heading back to vendor)
+    setStep(0);
+  };
+
+  const fmtNum = (n) => n.toLocaleString("fr-FR").replace(/,/g, " ");
   const stepLabels=["Accepté","Au retrait","En route","Arrivé"];
   const stepActions=["En route vers le vendeur","Colis récupéré","Arrivé chez le client","Confirmer livraison"];
   const pickup={lat:-4.262,lng:15.278};
@@ -32,6 +55,108 @@ function DrDeliveryScr({delivery:dl,go,onBack}){
     </MapView>
 
     <div className="scr" style={{padding:16}}>
+
+      {/* ═══ MODIFICATION ALERT — URGENT ═══ */}
+      {mod && (mod.status === "vendor_ack" || mod.status === "pending") && (() => {
+        const diff = computeDiff(mod.oldItems || [], mod.newItems || []);
+        const driverBonus = Math.round((mod.modifyFee || 0) * 0.4);
+        return (
+          <div style={{
+            padding:14, borderRadius:14, marginBottom:14,
+            background:"linear-gradient(135deg, #F59E0B 0%, #D97706 100%)",
+            color:"#fff",
+            boxShadow:"0 6px 20px rgba(245,158,11,0.35)",
+            animation:"shake-alert 0.4s ease, glow-alert 2s ease-in-out infinite",
+          }}>
+            <style>{`
+              @keyframes shake-alert{0%,100%{transform:translateX(0)}25%{transform:translateX(-3px)}75%{transform:translateX(3px)}}
+              @keyframes glow-alert{0%,100%{box-shadow:0 6px 20px rgba(245,158,11,0.35)}50%{box-shadow:0 6px 28px rgba(245,158,11,0.55)}}
+            `}</style>
+            <div style={{display:"flex",alignItems:"center",gap:10,marginBottom:10}}>
+              <div style={{width:38,height:38,borderRadius:12,background:"rgba(255,255,255,0.22)",display:"flex",alignItems:"center",justifyContent:"center",flexShrink:0}}>
+                <Icon name="alert_triangle" size={18} color="#fff"/>
+              </div>
+              <div style={{flex:1}}>
+                <div style={{fontSize:13,fontWeight:800,letterSpacing:-0.2}}>Commande modifiée par le client</div>
+                <div style={{fontSize:11,opacity:0.9}}>{timeAgo(mod.modifiedAt)} · Retour boutique requis</div>
+              </div>
+            </div>
+
+            {/* Changes summary */}
+            <div style={{background:"rgba(255,255,255,0.18)",borderRadius:10,padding:10,marginBottom:10}}>
+              {diff.updated.map((u, i) => (
+                <div key={"u"+i} style={{display:"flex",alignItems:"center",gap:6,fontSize:11,padding:"2px 0"}}>
+                  <span style={{padding:"1px 5px",background:"rgba(0,0,0,0.18)",borderRadius:3,fontSize:9,fontWeight:700,minWidth:22,textAlign:"center"}}>{u.change}</span>
+                  <span style={{flex:1}}>{u.name}</span>
+                  <span style={{opacity:0.85,fontSize:10}}>{u.oldQty}→{u.newQty}</span>
+                </div>
+              ))}
+              {diff.removed.map((r, i) => (
+                <div key={"r"+i} style={{display:"flex",alignItems:"center",gap:6,fontSize:11,padding:"2px 0",textDecoration:"line-through",opacity:0.75}}>
+                  <span style={{padding:"1px 5px",background:"rgba(0,0,0,0.25)",borderRadius:3,fontSize:9,fontWeight:700,minWidth:22,textAlign:"center"}}>−</span>
+                  <span style={{flex:1}}>{r.name}</span>
+                  <span style={{fontSize:10}}>SUPPR</span>
+                </div>
+              ))}
+              {diff.added.map((a, i) => (
+                <div key={"a"+i} style={{display:"flex",alignItems:"center",gap:6,fontSize:11,padding:"2px 0"}}>
+                  <span style={{padding:"1px 5px",background:"rgba(0,0,0,0.18)",borderRadius:3,fontSize:9,fontWeight:700,minWidth:22,textAlign:"center"}}>+</span>
+                  <span style={{flex:1}}>{a.name}</span>
+                  <span style={{fontSize:10}}>x{a.qty}</span>
+                </div>
+              ))}
+            </div>
+
+            {/* Bonus for the detour */}
+            {driverBonus > 0 && (
+              <div style={{display:"flex",alignItems:"center",gap:6,padding:"8px 10px",background:"rgba(255,255,255,0.2)",borderRadius:8,marginBottom:10}}>
+                <Icon name="coin" size={13} color="#fff"/>
+                <div style={{fontSize:11,fontWeight:700,flex:1}}>Bonus détour</div>
+                <div style={{fontSize:13,fontWeight:800}}>+{fmtNum(driverBonus)} F</div>
+              </div>
+            )}
+
+            {/* Acknowledge button */}
+            {mod.status === "vendor_ack" ? (
+              <button onClick={ackMod} style={{
+                width:"100%", padding:"11px 0", borderRadius:10,
+                border:"none", background:"#fff",
+                color:"#D97706", fontSize:12, fontWeight:800,
+                cursor:"pointer", fontFamily:"inherit",
+                display:"flex", alignItems:"center", justifyContent:"center", gap:6,
+              }}>
+                <Icon name="check" size={13} color="#D97706"/>
+                OK, retour à la boutique
+              </button>
+            ) : (
+              <div style={{
+                padding:"9px 0", borderRadius:10,
+                background:"rgba(255,255,255,0.18)",
+                fontSize:11, fontWeight:700,
+                textAlign:"center", letterSpacing:0.3,
+              }}>
+                ⏳ En attente de validation par le vendeur...
+              </div>
+            )}
+          </div>
+        );
+      })()}
+
+      {/* Modification accepted by driver — confirmation */}
+      {mod && mod.status === "driver_ack" && (
+        <div style={{
+          padding:"10px 12px", borderRadius:10, marginBottom:14,
+          background:"rgba(16,185,129,0.08)",
+          border:"1px solid rgba(16,185,129,0.2)",
+          display:"flex", alignItems:"center", gap:8,
+        }}>
+          <Icon name="check_circle" size={14} color="#10B981"/>
+          <div style={{flex:1,fontSize:11,color:"#047857",fontWeight:600}}>
+            Modification confirmée · Nouveau colis à récupérer
+          </div>
+        </div>
+      )}
+
       {/* Step bar */}
       <div className="dr-step-bar" style={{marginBottom:4}}>
         {stepLabels.map((_,i)=><div key={i} style={{display:"contents"}}>{i>0&&<div className={`dr-step-line ${step>=i?"done":""}`}/>}<div className={`dr-step-dot ${step>i?"done":step===i?"cur":""}`}>{step>i ? <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#fff" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round"><polyline points="20 6 9 17 4 12"/></svg> : i+1}</div></div>)}

@@ -1,11 +1,12 @@
 import InvoiceView from "../../components/InvoiceView";
 import CreditNoteView from "../../components/CreditNoteView";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Img from "../../components/Img";
 import { fmt } from "../../utils/helpers";
 import toast from "../../utils/toast";
 import SuccessAnimation from "../../components/SuccessAnimation";
 import Icon from "../../components/Icon";
+import { getMod, updateModStatus, computeDiff, timeAgo } from "../../utils/orderMods";
 
 function VOrderDetailScr({order:o,onBack,go}){
   const [acceptingOrder,setAcceptingOrder]=useState(false);
@@ -14,7 +15,34 @@ function VOrderDetailScr({order:o,onBack,go}){
   const [showCreditNote,setShowCreditNote]=useState(false);
   const [status,setStatus]=useState(o.status);
   const [showRefuse,setShowRefuse]=useState(false);
-  const [cashStatus,setCashStatus]=useState(null); // null | "received" | "pending" | "dispute"
+  const [cashStatus,setCashStatus]=useState(null);
+
+  // ═══ MODIFICATION FROM CLIENT ═══
+  const [mod, setMod] = useState(() => getMod(o.ref));
+  const [showModDetails, setShowModDetails] = useState(false);
+
+  useEffect(() => {
+    const handler = (e) => {
+      if (e.detail?.ref === o.ref) setMod(getMod(o.ref));
+    };
+    window.addEventListener("order-mod-updated", handler);
+    return () => window.removeEventListener("order-mod-updated", handler);
+  }, [o.ref]);
+
+  const acceptMod = () => {
+    updateModStatus(o.ref, "vendor_ack");
+    setMod(getMod(o.ref));
+    toast.success("Modification acceptée — Le livreur est notifié");
+  };
+
+  const refuseMod = () => {
+    updateModStatus(o.ref, "refused");
+    setMod(getMod(o.ref));
+    toast.error("Modification refusée — Le client sera remboursé");
+  };
+
+  const fmtNum = (n) => n.toLocaleString("fr-FR").replace(/,/g, " ");
+
   const statusMap={new:"Nouvelle",preparing:"En préparation",shipped:"Expédiée",delivered:"Livrée",refused:"Refusée"};
   const next={new:"preparing",preparing:"shipped",shipped:"delivered"};
   const nextLabel={new:"Accepter",preparing:"Marquer prête",shipped:"Confirmer livraison"};
@@ -36,6 +64,107 @@ function VOrderDetailScr({order:o,onBack,go}){
 
   return(<div className="scr" style={{padding:16}}><div className="appbar" style={{padding:0,marginBottom:12}}><button onClick={onBack}>←</button><h2>{o.ref}</h2><div style={{width:38}}/></div>
     <div style={{display:"flex",justifyContent:"space-between",alignItems:"center",marginBottom:12}}><span className={`vo-status ${status}`} style={{fontSize:13}}>{statusMap[status]}</span><span style={{fontSize:12,color:"var(--muted)"}}>{o.date}</span></div>
+
+    {/* ═══ MODIFICATION BANNER ═══ */}
+    {mod && mod.status === "pending" && (() => {
+      const diff = computeDiff(mod.oldItems || [], mod.newItems || []);
+      return (
+        <div style={{
+          padding:14, borderRadius:14, marginBottom:14,
+          background:"linear-gradient(135deg, rgba(59,130,246,0.08), rgba(59,130,246,0.02))",
+          border:"1.5px solid rgba(59,130,246,0.3)",
+        }}>
+          <div style={{display:"flex",alignItems:"center",gap:10,marginBottom:10}}>
+            <div style={{width:36,height:36,borderRadius:11,background:"linear-gradient(135deg,#3B82F6,#2563EB)",display:"flex",alignItems:"center",justifyContent:"center",flexShrink:0}}>
+              <Icon name="edit" size={17} color="#fff"/>
+            </div>
+            <div style={{flex:1}}>
+              <div style={{fontSize:13,fontWeight:800,color:"#1D4ED8",letterSpacing:-0.2}}>Le client a modifié la commande</div>
+              <div style={{fontSize:11,color:"#3B82F6"}}>{timeAgo(mod.modifiedAt)}</div>
+            </div>
+          </div>
+
+          {/* Diff summary */}
+          <div style={{background:"var(--card)",borderRadius:10,padding:10,marginBottom:10}}>
+            {diff.updated.length > 0 && diff.updated.map((u, i) => (
+              <div key={"u"+i} style={{display:"flex",alignItems:"center",gap:6,fontSize:11,color:"var(--text)",padding:"3px 0"}}>
+                <span style={{padding:"1px 6px",background:u.change.startsWith("+")?"rgba(59,130,246,0.12)":"rgba(245,158,11,0.12)",color:u.change.startsWith("+")?"#3B82F6":"#B45309",borderRadius:4,fontSize:9,fontWeight:700,minWidth:24,textAlign:"center"}}>{u.change}</span>
+                <span style={{flex:1}}>{u.name}</span>
+                <span style={{color:"var(--muted)",fontSize:10}}>{u.oldQty} → {u.newQty}</span>
+              </div>
+            ))}
+            {diff.removed.length > 0 && diff.removed.map((r, i) => (
+              <div key={"r"+i} style={{display:"flex",alignItems:"center",gap:6,fontSize:11,color:"var(--text)",padding:"3px 0"}}>
+                <span style={{padding:"1px 6px",background:"rgba(239,68,68,0.12)",color:"#DC2626",borderRadius:4,fontSize:9,fontWeight:700,minWidth:24,textAlign:"center"}}>−</span>
+                <span style={{flex:1,textDecoration:"line-through"}}>{r.name}</span>
+                <span style={{color:"#DC2626",fontSize:10}}>SUPPRIMÉ</span>
+              </div>
+            ))}
+            {diff.added.length > 0 && diff.added.map((a, i) => (
+              <div key={"a"+i} style={{display:"flex",alignItems:"center",gap:6,fontSize:11,color:"var(--text)",padding:"3px 0"}}>
+                <span style={{padding:"1px 6px",background:"rgba(16,185,129,0.12)",color:"#10B981",borderRadius:4,fontSize:9,fontWeight:700,minWidth:24,textAlign:"center"}}>+</span>
+                <span style={{flex:1}}>{a.name}</span>
+                <span style={{color:"#10B981",fontSize:10}}>NOUVEAU x{a.qty}</span>
+              </div>
+            ))}
+          </div>
+
+          {/* Money summary */}
+          <div style={{display:"flex",justifyContent:"space-between",fontSize:11,marginBottom:6,color:"var(--text)"}}>
+            <span style={{color:"var(--muted)"}}>Ancien total</span>
+            <span>{fmtNum(mod.oldTotal)} F</span>
+          </div>
+          <div style={{display:"flex",justifyContent:"space-between",fontSize:11,marginBottom:6,color:"var(--text)"}}>
+            <span style={{color:"var(--muted)"}}>Nouveau total</span>
+            <span style={{fontWeight:700}}>{fmtNum(mod.newTotal)} F</span>
+          </div>
+          {mod.modifyFee > 0 && (
+            <div style={{display:"flex",justifyContent:"space-between",fontSize:11,marginBottom:8,padding:"6px 8px",background:"rgba(245,158,11,0.08)",borderRadius:6}}>
+              <span style={{color:"#B45309",fontWeight:600}}>💰 Frais de modif (votre part)</span>
+              <span style={{color:"#B45309",fontWeight:700}}>+{fmtNum(Math.round(mod.modifyFee * 0.5))} F</span>
+            </div>
+          )}
+
+          {/* Actions */}
+          <div style={{display:"flex",gap:6,marginTop:10}}>
+            <button onClick={refuseMod} style={{
+              flex:1, padding:"10px 0", borderRadius:10,
+              border:"1px solid rgba(239,68,68,0.3)", background:"transparent",
+              color:"#DC2626", fontSize:11, fontWeight:700,
+              cursor:"pointer", fontFamily:"inherit"
+            }}>
+              Refuser
+            </button>
+            <button onClick={acceptMod} style={{
+              flex:2, padding:"10px 0", borderRadius:10,
+              border:"none", background:"#3B82F6",
+              color:"#fff", fontSize:11, fontWeight:700,
+              cursor:"pointer", fontFamily:"inherit",
+              display:"flex", alignItems:"center", justifyContent:"center", gap:5,
+              boxShadow:"0 2px 8px rgba(59,130,246,0.25)"
+            }}>
+              <Icon name="check" size={12} color="#fff"/>
+              Accepter la modification
+            </button>
+          </div>
+        </div>
+      );
+    })()}
+
+    {/* Modification already accepted banner */}
+    {mod && (mod.status === "vendor_ack" || mod.status === "driver_ack" || mod.status === "complete") && (
+      <div style={{
+        padding:"10px 12px", borderRadius:10, marginBottom:14,
+        background:"rgba(16,185,129,0.06)",
+        border:"1px solid rgba(16,185,129,0.2)",
+        display:"flex", alignItems:"center", gap:8,
+      }}>
+        <Icon name="check_circle" size={14} color="#10B981"/>
+        <div style={{flex:1,fontSize:11,color:"#047857",fontWeight:600}}>
+          Modification acceptée · Nouveau total : {fmtNum(mod.newTotal)} F
+        </div>
+      </div>
+    )}
     <div style={{padding:16,background:"var(--card)",border:"1px solid var(--border)",borderRadius:16,marginBottom:14}}>
       <div style={{fontSize:14,fontWeight:700,marginBottom:10}}><Icon name="user" size={16}/>{" "}Client</div>
       {[["Nom",o.client],["Téléphone",o.phone],["Adresse",o.addr],["Paiement",o.payment==="cash"?"Cash à la livraison":o.payment]].map(([l,v])=><div key={l} style={{display:"flex",justifyContent:"space-between",padding:"6px 0",borderBottom:"1px solid var(--border)",fontSize:13}}><span style={{color:"var(--muted)"}}>{l}</span><b>{v}</b></div>)}

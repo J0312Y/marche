@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import PullToRefresh from "../../components/PullToRefresh";
 import toast from "../../utils/toast";
 import Img from "../../components/Img";
@@ -7,6 +7,7 @@ import { vendor } from "../../services";
 import { SkeletonCards } from "../../components/Loading";
 import { fmt } from "../../utils/helpers";
 import Icon from "../../components/Icon";
+import { loadAllMods } from "../../utils/orderMods";
 
 const ST={new:{bg:"rgba(59,130,246,0.08)",color:"#3B82F6",label:"Nouvelle"},preparing:{bg:"rgba(245,158,11,0.08)",color:"#F59E0B",label:"Préparation"},shipped:{bg:"rgba(139,92,246,0.08)",color:"#FB923C",label:"Expédiée"},delivered:{bg:"rgba(16,185,129,0.08)",color:"#10B981",label:"Livrée"}};
 
@@ -15,18 +16,49 @@ function VOrdersScr({go,onBack}){
   const { data, loading } = useLoad(() => vendor.getOrders(filter), [filter]);
   const orders = data?.orders || [];
   const counts = data?.counts || { all:0, new:0, preparing:0, shipped:0, delivered:0 };
+
+  // Track which orders have client modifications
+  const [mods, setMods] = useState(() => loadAllMods());
+  useEffect(() => {
+    const handler = () => setMods(loadAllMods());
+    window.addEventListener("order-mod-updated", handler);
+    return () => window.removeEventListener("order-mod-updated", handler);
+  }, []);
+  const pendingModsCount = Object.values(mods).filter(m => m.status === "pending").length;
   return(<PullToRefresh onRefresh={async()=>{toast.success("Commandes actualisées ️")}}><div className="scr">
     <div className="appbar">{onBack&&<button onClick={onBack}>←</button>}<h2>Commandes ({counts.all})</h2><div style={{width:38}}/></div>
+
+    {pendingModsCount > 0 && (
+      <div style={{margin:"0 16px 10px",padding:"10px 12px",borderRadius:10,background:"linear-gradient(135deg, rgba(59,130,246,0.08), rgba(59,130,246,0.02))",border:"1px solid rgba(59,130,246,0.2)",display:"flex",alignItems:"center",gap:8}}>
+        <div style={{width:28,height:28,borderRadius:8,background:"#3B82F6",display:"flex",alignItems:"center",justifyContent:"center",flexShrink:0}}>
+          <Icon name="edit" size={13} color="#fff"/>
+        </div>
+        <div style={{flex:1,fontSize:11,color:"#1D4ED8"}}>
+          <b>{pendingModsCount} modification{pendingModsCount>1?"s":""} en attente</b> · Les clients ont changé leur commande
+        </div>
+      </div>
+    )}
+
+    <style>{`@keyframes pulse-mod{0%,100%{opacity:1}50%{opacity:0.65}}`}</style>
     <div className="vo-filter">{[["all","Tous",counts.all],["new","",counts.new],["preparing","",counts.preparing],["shipped","",counts.shipped],["delivered","",counts.delivered]].map(([k,l,c])=><button key={k} className={filter===k?"on":""} onClick={()=>setFilter(k)}>{l} {c}</button>)}</div>
     <div style={{padding:"0 16px 20px"}}>
       {loading?<SkeletonCards/>:orders.length===0?<div style={{textAlign:"center",padding:"50px 0"}}><div style={{fontSize:40,marginBottom:8}}></div><div style={{fontSize:14,fontWeight:600}}>Aucune commande</div></div>
       :orders.map(o=>{
         const st=ST[o.status]||ST.new;
-        return(<div key={o.id} onClick={()=>go("vOrderDetail",o)} style={{padding:14,background:"var(--card)",border:"1px solid var(--border)",borderRadius:16,marginBottom:10,cursor:"pointer",transition:"all .15s"}}>
+        const orderMod = mods[o.ref];
+        const hasPendingMod = orderMod && orderMod.status === "pending";
+        return(<div key={o.id} onClick={()=>go("vOrderDetail",o)} style={{padding:14,background:"var(--card)",border:hasPendingMod?"1.5px solid rgba(59,130,246,0.4)":"1px solid var(--border)",borderRadius:16,marginBottom:10,cursor:"pointer",transition:"all .15s",boxShadow:hasPendingMod?"0 2px 12px rgba(59,130,246,0.12)":"none"}}>
           {/* Header: ref + status */}
-          <div style={{display:"flex",justifyContent:"space-between",alignItems:"center",marginBottom:8}}>
+          <div style={{display:"flex",justifyContent:"space-between",alignItems:"center",marginBottom:8,gap:6,flexWrap:"wrap"}}>
             <span style={{fontSize:13,fontWeight:700,fontFamily:"monospace"}}>{o.ref}</span>
-            <span style={{padding:"4px 10px",borderRadius:8,background:st.bg,color:st.color,fontSize:11,fontWeight:600}}>{st.label}</span>
+            <div style={{display:"flex",gap:5,alignItems:"center"}}>
+              {hasPendingMod && (
+                <span style={{padding:"3px 8px",borderRadius:6,background:"#3B82F6",color:"#fff",fontSize:9,fontWeight:800,letterSpacing:0.3,display:"flex",alignItems:"center",gap:3,animation:"pulse-mod 2s ease-in-out infinite"}}>
+                  <Icon name="edit" size={10} color="#fff"/>MODIFIÉE
+                </span>
+              )}
+              <span style={{padding:"4px 10px",borderRadius:8,background:st.bg,color:st.color,fontSize:11,fontWeight:600}}>{st.label}</span>
+            </div>
           </div>
           {/* Client + payment */}
           <div style={{fontSize:12,color:"var(--sub)",marginBottom:8}}><Icon name="user" size={16}/>{" "}{o.client}{o.isGroup&&<span style={{marginLeft:6,padding:"2px 6px",borderRadius:4,background:"rgba(59,130,246,0.08)",color:"#3B82F6",fontSize:9,fontWeight:700}}><Icon name="handshake" size={16}/>{" "}Groupe</span>} · {o.payment==="cash"?<span style={{color:"#F59E0B",fontWeight:700}}><Icon name="wallet" size={16}/>{" "}Cash à la livraison</span>:o.payment}</div>

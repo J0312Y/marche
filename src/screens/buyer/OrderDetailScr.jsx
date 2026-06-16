@@ -5,6 +5,7 @@ import SuccessAnimation from "../../components/SuccessAnimation";
 import { useState } from "react";
 import toast from "../../utils/toast";
 import Icon from "../../components/Icon";
+import { saveMod } from "../../utils/orderMods";
 
 const STEPS=["Confirmée","En préparation","En livraison","Livrée"];
 
@@ -82,6 +83,23 @@ function OrderDetailScr({order:o,onBack,go}){
     }
     setModifyConfirming(true);
     setTimeout(()=>{
+      // Save modification to shared storage so vendor + driver can see it
+      saveMod(o.ref, {
+        modifiedAt: new Date().toISOString(),
+        orderRef: o.ref,
+        vendor: o.vendor,
+        oldItems: itemsParsed,
+        newItems: modifyItems,
+        oldTotal: totalNum,
+        newSubtotal,
+        modifyFee,
+        newTotal,
+        diff,
+        paymentMethod: modifyPayMethod,
+        orderStatus: sc, // prep / ship / etc
+        status: "pending", // pending → vendor_ack → driver_ack → complete
+      });
+
       setModifyConfirming(false);
       setModifyDone(true);
       setTimeout(()=>{

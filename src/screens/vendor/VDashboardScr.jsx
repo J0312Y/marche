@@ -56,6 +56,12 @@ function VDashboardScr({ go, currentVendor }){
   const [shopOpen, setShopOpen] = useState(selectedShop?.isOpen ?? myVendor?.isOpen !== false);
   const [prepTime, setPrepTime] = useState(20);
 
+  // ═══ Daily goal editing state — must be declared before any early return ═══
+  const [showGoalEdit, setShowGoalEdit] = useState(false);
+  const [editGoalTargetId, setEditGoalTargetId] = useState(null);
+  const [editGoalValue, setEditGoalValue] = useState("");
+  const [goalsVersion, setGoalsVersion] = useState(0);
+
   const { data, loading, reload } = useLoad(() => vendor.getDashboard("today"), []);
   if(loading || !data) return <div className="scr" style={{padding:16}}><h2 style={{marginBottom:12}}>Tableau de bord</h2><SkeletonDashboard/></div>;
 
@@ -102,11 +108,6 @@ function VDashboardScr({ go, currentVendor }){
     goals[shopId] = goal;
     localStorage.setItem(STORAGE_KEY_GOAL, JSON.stringify(goals));
   }
-
-  const [showGoalEdit, setShowGoalEdit] = useState(false);
-  const [editGoalTargetId, setEditGoalTargetId] = useState(null);
-  const [editGoalValue, setEditGoalValue] = useState("");
-  const [goalsVersion, setGoalsVersion] = useState(0); // force re-render on save
 
   const openGoalEdit = (shopId, currentGoal) => {
     setEditGoalTargetId(shopId);
