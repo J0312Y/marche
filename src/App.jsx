@@ -85,7 +85,7 @@ function AppInner() {
             : auth === 0 ? <SplashScr onDone={() => setAuthStep('login')} />
             : auth === 1 ? <OnboardingScr onDone={() => setAuthStep('ready')} />
             : auth === 2 ? <LoginScr onDone={(signup) => { setIsNewUser(!!signup); setAuthStep('otp'); }} onSocial={(p, signup) => { setSocialProvider(p); setIsNewUser(!!signup); setAuthStep('otp'); }} onGuest={() => { continueAsGuest(); setAuthStep('ready'); }} />
-            : auth === 3 ? <OTPScr provider={socialProvider} onDone={() => setAuthStep(isNewUser ? 'profile' : 'ready')} />
+            : auth === 3 ? <OTPScr provider={socialProvider} onDone={() => setAuthStep(isNewUser ? 'profile' : 'ready')} onEditNumber={() => setAuthStep('login')} />
             : auth === 4 ? <ProfileCompletionScr provider={socialProvider} setUserName={setUserName} onDone={() => setAuthStep('onboarding')} />
             : <>
               {renderScreen()}

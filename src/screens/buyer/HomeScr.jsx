@@ -590,15 +590,15 @@ function HomeScr({go,favs,toggleFav,isFav,userName}){
       })}
 
       {/* End of feed marker */}
-      <div style={{padding:"30px 24px",textAlign:"center"}}>
-        <div style={{width:60,height:60,borderRadius:18,background:"linear-gradient(135deg,#F97316,#EA580C)",display:"flex",alignItems:"center",justifyContent:"center",margin:"0 auto 12px",color:"#fff"}}>
-          <Icon name="check_circle" size={28} color="#fff"/>
+      <div style={{padding:"10px 24px 24px",textAlign:"center"}}>
+        <div style={{width:48,height:48,borderRadius:14,background:"linear-gradient(135deg,#F97316,#EA580C)",display:"flex",alignItems:"center",justifyContent:"center",margin:"0 auto 10px",color:"#fff"}}>
+          <Icon name="check_circle" size={22} color="#fff"/>
         </div>
-        <h3 style={{fontSize:16,fontWeight:800,letterSpacing:-.3}}>Vous avez tout vu !</h3>
-        <p style={{fontSize:12,color:"var(--muted)",marginTop:4,maxWidth:240,margin:"4px auto 14px"}}>{P.length} articles disponibles · {VENDORS.length} boutiques</p>
+        <h3 style={{fontSize:14,fontWeight:800,letterSpacing:-.3,margin:0}}>Vous avez tout vu !</h3>
+        <p style={{fontSize:11,color:"var(--muted)",maxWidth:240,margin:"3px auto 12px"}}>{P.length} articles disponibles · {VENDORS.length} boutiques</p>
         <div style={{display:"flex",gap:8,justifyContent:"center",flexWrap:"wrap"}}>
-          <button onClick={()=>go("allProducts")} style={{padding:"10px 18px",borderRadius:10,border:"1px solid var(--border)",background:"var(--card)",color:"var(--text)",fontSize:12,fontWeight:700,cursor:"pointer",fontFamily:"inherit"}}>Tous les articles</button>
-          <button onClick={()=>go("nearby")} style={{padding:"10px 18px",borderRadius:10,border:"none",background:"#F97316",color:"#fff",fontSize:12,fontWeight:700,cursor:"pointer",fontFamily:"inherit"}}>Vendeurs proches</button>
+          <button onClick={()=>go("allProducts")} style={{padding:"9px 16px",borderRadius:10,border:"1px solid var(--border)",background:"var(--card)",color:"var(--text)",fontSize:11,fontWeight:700,cursor:"pointer",fontFamily:"inherit"}}>Tous les articles</button>
+          <button onClick={()=>go("nearby")} style={{padding:"9px 16px",borderRadius:10,border:"none",background:"#F97316",color:"#fff",fontSize:11,fontWeight:700,cursor:"pointer",fontFamily:"inherit"}}>Vendeurs proches</button>
         </div>
       </div>
       </>}
