@@ -79,72 +79,70 @@ function DetailScr({product:rawP,onBack,onAddCart,go,favs,toggleFav,isFav}){
     localStorage.setItem("lk-recent",JSON.stringify(filtered.slice(0,20)));
   },[p.id]);
 
+  // ═══ Refs for 3D fold effect ═══
+  const scrRef = useRef(null);
+  const imgFoldRef = useRef(null);
+  const foldShadowRef = useRef(null);
+  const stickyHeaderRef = useRef(null);
+  const stickyTitleRef = useRef(null);
+
   // ═══ 3D FOLD EFFECT ON SCROLL ═══
   useEffect(()=>{
-    let rafId=null;
-    const update=()=>{
-      const scr=window.__detailScr;
-      const imgFold=window.__detailImgFold;
-      const foldShadow=window.__detailFoldShadow;
-      const header=window.__detailHeader;
-      const headerTitle=window.__detailHeaderTitle;
-      if(!scr||!imgFold)return;
+    const scr = scrRef.current;
+    if (!scr) return;
+    
+    let rafId = null;
+    
+    const update = () => {
+      const imgFold = imgFoldRef.current;
+      const foldShadow = foldShadowRef.current;
+      const header = stickyHeaderRef.current;
+      const headerTitle = stickyTitleRef.current;
+      if (!imgFold) return;
       
-      const scrollY=scr.scrollTop;
-      const imageHeight=scr.clientWidth; // aspectRatio 1/1
+      const scrollY = scr.scrollTop;
+      const imageHeight = scr.clientWidth; // aspectRatio 1/1
       
       // 3D folding rotation (0 to 70 degrees)
-      const foldProgress=Math.min(1,Math.max(0,scrollY/imageHeight));
-      const rotateDeg=foldProgress*70;
-      imgFold.style.transform=`rotateX(-${rotateDeg}deg)`;
+      const foldProgress = Math.min(1, Math.max(0, scrollY / imageHeight));
+      const rotateDeg = foldProgress * 70;
+      imgFold.style.transform = `rotateX(-${rotateDeg}deg)`;
       
       // Shadow on folded image
-      if(foldShadow)foldShadow.style.opacity=foldProgress*0.65;
+      if (foldShadow) foldShadow.style.opacity = foldProgress * 0.65;
       
       // Sticky header fade
-      if(header){
-        const fadeStart=imageHeight*0.45;
-        const fadeEnd=imageHeight*0.85;
-        if(scrollY>fadeStart){
-          const progress=Math.min(1,(scrollY-fadeStart)/(fadeEnd-fadeStart));
-          header.style.background=`rgba(255,255,255,${progress*0.98})`;
-          header.style.boxShadow=progress>0.5?`0 1px 8px rgba(0,0,0,${progress*0.08})`:"none";
-          if(headerTitle)headerTitle.style.opacity=progress;
-        }else{
-          header.style.background="rgba(255,255,255,0)";
-          header.style.boxShadow="none";
-          if(headerTitle)headerTitle.style.opacity=0;
+      if (header) {
+        const fadeStart = imageHeight * 0.45;
+        const fadeEnd = imageHeight * 0.85;
+        if (scrollY > fadeStart) {
+          const progress = Math.min(1, (scrollY - fadeStart) / (fadeEnd - fadeStart));
+          header.style.background = `rgba(255,255,255,${progress * 0.98})`;
+          header.style.boxShadow = progress > 0.5 ? `0 1px 8px rgba(0,0,0,${progress * 0.08})` : "none";
+          header.style.pointerEvents = progress > 0.5 ? "auto" : "none";
+          if (headerTitle) headerTitle.style.opacity = progress;
+        } else {
+          header.style.background = "rgba(255,255,255,0)";
+          header.style.boxShadow = "none";
+          header.style.pointerEvents = "none";
+          if (headerTitle) headerTitle.style.opacity = 0;
         }
       }
     };
     
-    const onScroll=()=>{
-      if(rafId)cancelAnimationFrame(rafId);
-      rafId=requestAnimationFrame(update);
+    const onScroll = () => {
+      if (rafId) cancelAnimationFrame(rafId);
+      rafId = requestAnimationFrame(update);
     };
     
-    // Defer attaching listener until DOM ready
-    const t=setTimeout(()=>{
-      const scr=window.__detailScr;
-      if(scr){
-        scr.addEventListener("scroll",onScroll,{passive:true});
-        update();
-      }
-    },50);
+    scr.addEventListener("scroll", onScroll, { passive: true });
+    update(); // Initial call
     
-    return()=>{
-      clearTimeout(t);
-      if(rafId)cancelAnimationFrame(rafId);
-      const scr=window.__detailScr;
-      if(scr)scr.removeEventListener("scroll",onScroll);
-      // Cleanup refs
-      window.__detailScr=null;
-      window.__detailImgFold=null;
-      window.__detailFoldShadow=null;
-      window.__detailHeader=null;
-      window.__detailHeaderTitle=null;
+    return () => {
+      if (rafId) cancelAnimationFrame(rafId);
+      scr.removeEventListener("scroll", onScroll);
     };
-  },[p.id]);
+  }, [p.id]);
   const [selSize,setSelSize]=useState(p.sizes?.[0]||null);
   const [selColor,setSelColor]=useState(p.colors?.[0]||null);
   const [selVariant,setSelVariant]=useState(p.variants?.[0]||null);
@@ -194,33 +192,34 @@ function DetailScr({product:rawP,onBack,onAddCart,go,favs,toggleFav,isFav}){
 
   return(<>
     {/* ═══ STICKY HEADER (appears when image folds away) ═══ */}
-    <div ref={(el)=>(window.__detailHeader=el)} style={{
-      position:"absolute",top:0,left:0,right:0,zIndex:50,
+    <div ref={stickyHeaderRef} style={{
+      position:"fixed",top:0,left:0,right:0,zIndex:50,
       padding:"10px 12px",display:"flex",alignItems:"center",gap:8,
       background:"rgba(255,255,255,0)",
       boxShadow:"none",
-      transition:"background 0.2s ease, box-shadow 0.2s ease",
+      transition:"background 0.15s ease, box-shadow 0.15s ease",
       pointerEvents:"none",
+      maxWidth:"100%",
     }}>
-      <div style={{width:40}}/>
-      <div ref={(el)=>(window.__detailHeaderTitle=el)} style={{flex:1,opacity:0,transition:"opacity 0.2s ease",minWidth:0,padding:"0 4px",textAlign:"center"}}>
+      <div style={{width:48}}/>
+      <div ref={stickyTitleRef} style={{flex:1,opacity:0,transition:"opacity 0.15s ease",minWidth:0,padding:"0 4px",textAlign:"center"}}>
         <div style={{fontSize:10,color:"var(--muted)",lineHeight:1.2,whiteSpace:"nowrap",overflow:"hidden",textOverflow:"ellipsis"}}>{p.vendor||"Vendeur"}</div>
         <div style={{fontSize:13,fontWeight:700,color:"var(--text)",whiteSpace:"nowrap",overflow:"hidden",textOverflow:"ellipsis"}}>{p.name}</div>
       </div>
-      <div style={{width:40}}/>
+      <div style={{width:96}}/>
     </div>
 
-    <div className="scr" ref={(el)=>(window.__detailScr=el)} style={{perspective:"900px"}}>
+    <div className="scr" ref={scrRef} style={{perspective:"900px"}}>
       {/* Gallery — full bleed, no rounded corners, 3D FOLD */}
       <div onClick={()=>setZoomOpen(true)} style={{position:"relative",width:"100%",aspectRatio:"1/1",background:"#1a1a1a",overflow:"hidden",cursor:"zoom-in",transformStyle:"preserve-3d"}}>
         
         {/* Image content that folds in 3D */}
-        <div ref={(el)=>(window.__detailImgFold=el)} style={{position:"absolute",inset:0,transformOrigin:"top center",backfaceVisibility:"hidden",willChange:"transform"}}>
+        <div ref={imgFoldRef} style={{position:"absolute",inset:0,transformOrigin:"top center",backfaceVisibility:"hidden",willChange:"transform"}}>
           <Img src={allPhotos[photoIdx]||p.photo} emoji={p.img} style={{width:"100%",height:"100%",position:"absolute",inset:0}} fit="cover"/>
         </div>
         
         {/* Shadow that appears as image folds (gives 3D depth feel) */}
-        <div ref={(el)=>(window.__detailFoldShadow=el)} style={{position:"absolute",inset:0,background:"linear-gradient(180deg, rgba(0,0,0,0.5) 0%, rgba(0,0,0,0) 50%)",opacity:0,pointerEvents:"none",willChange:"opacity",zIndex:3}}/>
+        <div ref={foldShadowRef} style={{position:"absolute",inset:0,background:"linear-gradient(180deg, rgba(0,0,0,0.5) 0%, rgba(0,0,0,0) 50%)",opacity:0,pointerEvents:"none",willChange:"opacity",zIndex:3}}/>
 
         {/* Top bar overlay (stays in place, doesn't fold) */}
         <div style={{position:"absolute",top:12,left:12,right:12,display:"flex",justifyContent:"space-between",zIndex:6}}>
