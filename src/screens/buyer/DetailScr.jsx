@@ -1,5 +1,5 @@
 import Icon from "../../components/Icon";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import Img from "../../components/Img";
 import { BackButton, FavButton } from "../../components/BackButton";
 import { useData } from "../../hooks";
@@ -78,6 +78,73 @@ function DetailScr({product:rawP,onBack,onAddCart,go,favs,toggleFav,isFav}){
     filtered.unshift({id:p.id,name:p.name,price:p.price,img:p.img,photo:p.photo,vendor:p.vendor,va:p.va,rating:p.rating});
     localStorage.setItem("lk-recent",JSON.stringify(filtered.slice(0,20)));
   },[p.id]);
+
+  // ═══ 3D FOLD EFFECT ON SCROLL ═══
+  useEffect(()=>{
+    let rafId=null;
+    const update=()=>{
+      const scr=window.__detailScr;
+      const imgFold=window.__detailImgFold;
+      const foldShadow=window.__detailFoldShadow;
+      const header=window.__detailHeader;
+      const headerTitle=window.__detailHeaderTitle;
+      if(!scr||!imgFold)return;
+      
+      const scrollY=scr.scrollTop;
+      const imageHeight=scr.clientWidth; // aspectRatio 1/1
+      
+      // 3D folding rotation (0 to 70 degrees)
+      const foldProgress=Math.min(1,Math.max(0,scrollY/imageHeight));
+      const rotateDeg=foldProgress*70;
+      imgFold.style.transform=`rotateX(-${rotateDeg}deg)`;
+      
+      // Shadow on folded image
+      if(foldShadow)foldShadow.style.opacity=foldProgress*0.65;
+      
+      // Sticky header fade
+      if(header){
+        const fadeStart=imageHeight*0.45;
+        const fadeEnd=imageHeight*0.85;
+        if(scrollY>fadeStart){
+          const progress=Math.min(1,(scrollY-fadeStart)/(fadeEnd-fadeStart));
+          header.style.background=`rgba(255,255,255,${progress*0.98})`;
+          header.style.boxShadow=progress>0.5?`0 1px 8px rgba(0,0,0,${progress*0.08})`:"none";
+          if(headerTitle)headerTitle.style.opacity=progress;
+        }else{
+          header.style.background="rgba(255,255,255,0)";
+          header.style.boxShadow="none";
+          if(headerTitle)headerTitle.style.opacity=0;
+        }
+      }
+    };
+    
+    const onScroll=()=>{
+      if(rafId)cancelAnimationFrame(rafId);
+      rafId=requestAnimationFrame(update);
+    };
+    
+    // Defer attaching listener until DOM ready
+    const t=setTimeout(()=>{
+      const scr=window.__detailScr;
+      if(scr){
+        scr.addEventListener("scroll",onScroll,{passive:true});
+        update();
+      }
+    },50);
+    
+    return()=>{
+      clearTimeout(t);
+      if(rafId)cancelAnimationFrame(rafId);
+      const scr=window.__detailScr;
+      if(scr)scr.removeEventListener("scroll",onScroll);
+      // Cleanup refs
+      window.__detailScr=null;
+      window.__detailImgFold=null;
+      window.__detailFoldShadow=null;
+      window.__detailHeader=null;
+      window.__detailHeaderTitle=null;
+    };
+  },[p.id]);
   const [selSize,setSelSize]=useState(p.sizes?.[0]||null);
   const [selColor,setSelColor]=useState(p.colors?.[0]||null);
   const [selVariant,setSelVariant]=useState(p.variants?.[0]||null);
@@ -126,12 +193,36 @@ function DetailScr({product:rawP,onBack,onAddCart,go,favs,toggleFav,isFav}){
   if(cartAdded)return<SuccessAnimation title="Ajouté au panier !" subtitle={p.name+"×"+qty} hint={"Total : "+fmt(finalPrice*qty+sidesTotalPrice)} duration={1300} onDone={()=>{setCartAdded(false);onBack&&onBack()}}/>;
 
   return(<>
-    <div className="scr">
-      {/* Gallery — full bleed, no rounded corners */}
-      <div onClick={()=>setZoomOpen(true)} style={{position:"relative",width:"100%",aspectRatio:"1/1",background:"var(--light)",overflow:"hidden",cursor:"zoom-in"}}>
-        <Img src={allPhotos[photoIdx]||p.photo} emoji={p.img} style={{width:"100%",height:"100%",position:"absolute",inset:0}} fit="cover"/>
+    {/* ═══ STICKY HEADER (appears when image folds away) ═══ */}
+    <div ref={(el)=>(window.__detailHeader=el)} style={{
+      position:"absolute",top:0,left:0,right:0,zIndex:50,
+      padding:"10px 12px",display:"flex",alignItems:"center",gap:8,
+      background:"rgba(255,255,255,0)",
+      boxShadow:"none",
+      transition:"background 0.2s ease, box-shadow 0.2s ease",
+      pointerEvents:"none",
+    }}>
+      <div style={{width:40}}/>
+      <div ref={(el)=>(window.__detailHeaderTitle=el)} style={{flex:1,opacity:0,transition:"opacity 0.2s ease",minWidth:0,padding:"0 4px",textAlign:"center"}}>
+        <div style={{fontSize:10,color:"var(--muted)",lineHeight:1.2,whiteSpace:"nowrap",overflow:"hidden",textOverflow:"ellipsis"}}>{p.vendor||"Vendeur"}</div>
+        <div style={{fontSize:13,fontWeight:700,color:"var(--text)",whiteSpace:"nowrap",overflow:"hidden",textOverflow:"ellipsis"}}>{p.name}</div>
+      </div>
+      <div style={{width:40}}/>
+    </div>
 
-        {/* Top bar overlay */}
+    <div className="scr" ref={(el)=>(window.__detailScr=el)} style={{perspective:"900px"}}>
+      {/* Gallery — full bleed, no rounded corners, 3D FOLD */}
+      <div onClick={()=>setZoomOpen(true)} style={{position:"relative",width:"100%",aspectRatio:"1/1",background:"#1a1a1a",overflow:"hidden",cursor:"zoom-in",transformStyle:"preserve-3d"}}>
+        
+        {/* Image content that folds in 3D */}
+        <div ref={(el)=>(window.__detailImgFold=el)} style={{position:"absolute",inset:0,transformOrigin:"top center",backfaceVisibility:"hidden",willChange:"transform"}}>
+          <Img src={allPhotos[photoIdx]||p.photo} emoji={p.img} style={{width:"100%",height:"100%",position:"absolute",inset:0}} fit="cover"/>
+        </div>
+        
+        {/* Shadow that appears as image folds (gives 3D depth feel) */}
+        <div ref={(el)=>(window.__detailFoldShadow=el)} style={{position:"absolute",inset:0,background:"linear-gradient(180deg, rgba(0,0,0,0.5) 0%, rgba(0,0,0,0) 50%)",opacity:0,pointerEvents:"none",willChange:"opacity",zIndex:3}}/>
+
+        {/* Top bar overlay (stays in place, doesn't fold) */}
         <div style={{position:"absolute",top:12,left:12,right:12,display:"flex",justifyContent:"space-between",zIndex:6}}>
           <BackButton onClick={e=>{e.stopPropagation();onBack()}} />
           <div style={{display:"flex",gap:8}}>
@@ -140,7 +231,7 @@ function DetailScr({product:rawP,onBack,onAddCart,go,favs,toggleFav,isFav}){
           </div>
         </div>
 
-        {/* Thumbnails floating LEFT (under top bar) */}
+        {/* Thumbnails floating LEFT */}
         {allPhotos.length>1&&<div style={{position:"absolute",top:60,left:12,display:"flex",flexDirection:"column",gap:8,zIndex:5}}>
           {allPhotos.slice(0,4).map((ph,i)=>{const isActive=photoIdx===i;return(
             <div key={i} onClick={e=>{e.stopPropagation();setPhotoIdx(i)}} style={{width:54,height:54,borderRadius:14,overflow:"hidden",cursor:"pointer",position:"relative",border:isActive?"2.5px solid #fff":"2px solid rgba(255,255,255,0.7)",transition:"all .2s",boxShadow:isActive?"0 4px 14px rgba(0,0,0,0.2)":"0 2px 8px rgba(0,0,0,0.12)",background:"#fff"}}>
