@@ -307,7 +307,7 @@ function HomeScr({go,favs,toggleFav,isFav,userName}){
         <span style={{color:"#F97316",fontSize:16}}>›</span>
       </div>
 
-      {/* Restos à la une */}
+      {/* Restos à la une */}}
       {(selType==="all"||selType==="restaurant")&&nearbyRestos.length>0&&<>
       {/* Events / promos banner */}
       {(()=>{
@@ -595,7 +595,7 @@ function HomeScr({go,favs,toggleFav,isFav,userName}){
           <Icon name="check_circle" size={22} color="#fff"/>
         </div>
         <h3 style={{fontSize:14,fontWeight:800,letterSpacing:-.3,margin:0}}>Vous avez tout vu !</h3>
-        <p style={{fontSize:11,color:"var(--muted)",maxWidth:240,margin:"3px auto 12px"}}>{P.length} articles disponibles · {VENDORS.length} boutiques</p>
+        <p style={{fontSize:11,color:"var(--muted)",maxWidth:240,margin:"3px auto 12px"}}>{P.length} articles disponibles · {Math.max(VENDORS.length, new Set(P.map(p=>p.vendor).filter(Boolean)).size)} boutiques</p>
         <div style={{display:"flex",gap:8,justifyContent:"center",flexWrap:"wrap"}}>
           <button onClick={()=>go("allProducts")} style={{padding:"9px 16px",borderRadius:10,border:"1px solid var(--border)",background:"var(--card)",color:"var(--text)",fontSize:11,fontWeight:700,cursor:"pointer",fontFamily:"inherit"}}>Tous les articles</button>
           <button onClick={()=>go("nearby")} style={{padding:"9px 16px",borderRadius:10,border:"none",background:"#F97316",color:"#fff",fontSize:11,fontWeight:700,cursor:"pointer",fontFamily:"inherit"}}>Vendeurs proches</button>
