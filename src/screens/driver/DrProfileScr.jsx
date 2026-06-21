@@ -58,8 +58,8 @@ function DrProfileScr({go,onSwitch,onLogout}){
       </div>
     </div>
 
-    {/* Wallet */}
-    <div className="wallet" style={{margin:"0 16px 14px",background:"linear-gradient(135deg,#F97316,#EA580C)"}}><div><p style={{fontSize:11,color:"rgba(255,255,255,.7)"}}>Gains disponibles</p><h3 style={{fontSize:20,fontWeight:700,marginTop:2,color:"#fff"}}>{fmt(D_STATS.month.earned)}</h3></div><button onClick={()=>go("drWallet")}>Retirer</button></div>
+    {/* Gains du mois */}
+    <div className="wallet" style={{margin:"0 16px 14px",background:"linear-gradient(135deg,#F97316,#EA580C)"}}><div><p style={{fontSize:11,color:"rgba(255,255,255,.7)"}}>Gains du mois (cash collecté)</p><h3 style={{fontSize:20,fontWeight:700,marginTop:2,color:"#fff"}}>{fmt(D_STATS.month.earned)}</h3></div><button onClick={()=>go("drWallet")}>Détails</button></div>
 
     {/* ═══ LIVRAISONS ═══ */}
     <Section icon="truck" title="MES LIVRAISONS">

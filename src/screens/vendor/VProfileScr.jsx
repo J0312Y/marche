@@ -64,8 +64,8 @@ function VProfileScr({go,onSwitch,vendorPlan,onLogout}){
       </div>
     </div>
 
-    {/* Wallet */}
-    <div className="wallet" style={{margin:"0 16px 14px"}}><div><p style={{fontSize:11,color:"var(--muted)"}}>Solde disponible</p><h3 style={{fontSize:20,fontWeight:700,marginTop:2}}>457 800 FCFA</h3></div><button onClick={()=>go("vWallet")}>Retirer</button></div>
+    {/* Revenus du mois */}
+    <div className="wallet" style={{margin:"0 16px 14px"}}><div><p style={{fontSize:11,color:"var(--muted)"}}>Revenus du mois (cash collecté)</p><h3 style={{fontSize:20,fontWeight:700,marginTop:2}}>1 305 000 FCFA</h3></div><button onClick={()=>go("vWallet")}>Détails</button></div>
 
     {/* ═══ VENTES & COMMANDES ═══ */}
     <Section icon={"money"} title="VENTES & COMMANDES">

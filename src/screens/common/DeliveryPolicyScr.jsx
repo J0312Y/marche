@@ -34,7 +34,7 @@ function DeliveryPolicyScr({onBack}){
       "Photo du produit requise pour toute demande de retour",
     ]},
     {title:"Remboursements",items:[
-      "Choix entre crédit sur Wallet Lamuka (instantané) ou Mobile Money (24-48h)",
+      "Crédit Lamuka utilisable sur prochain achat (instantané) ou remboursement en cash si livraison non effectuée (24-48h)",
       "Un avoir (note de crédit) est émis séparément du reçu original",
       "Le reçu original n'est jamais modifié",
       "Délai de traitement : 3 à 5 jours ouvrés après validation",

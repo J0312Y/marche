@@ -6,13 +6,13 @@ import Icon from "../../components/Icon";
 const LOCAL = {
   "commande":{r:"Pour suivre votre commande : **Commandes** > cliquez dessus > **Suivre la livraison**. Donnez-moi le numéro (#LMK-XXXX) pour plus de détails."},
   "livraison":{r:"Livraison standard : 1-3 jours à Brazzaville.\n• Bacongo/Poto-Poto : 1 500 F\n• Moungali/Ouenzé : 2 000 F\n• Talangaï/Mfilou : 2 500 F\nGratuite dès 15 000 FCFA !"},
-  "paiement":{r:"Modes de paiement :\n• Airtel Money\n• MTN Mobile Money\n• Kolo Pay (wallet intégré)\nTout est sécurisé et instantané."},
+  "paiement":{r:"Mode de paiement : **Cash à la livraison** uniquement pour le moment. Préparez le montant exact pour le livreur. D'autres options arriveront bientôt !"},
   "retour":{r:"↩️ Retours possibles sous 7 jours. Allez dans **Commandes** > commande concernée > **Retour / Remboursement**. Remboursement sous 48h."},
   "vendeur":{r:"Pour devenir vendeur :\n1. **Profil** > Devenir commerçant\n2. Remplissez vos infos\n3. Uploadez vos documents\n4. Choisissez un plan\nValidation sous 24-48h !"},
   "promo":{r:"Les promos sont dans l'onglet **Recherche** et la section **Ventes Flash** sur l'accueil. Utilisez un code promo dans le panier."},
   "contact":{r:"Contactez-nous :\n• WhatsApp : +242 064 663 469\n• Email : support@lamuka.market\n• Chat : ici même !\nDisponible Lun-Sam, 8h-20h."},
   "prix":{r:"Les prix sont en FCFA et fixés par chaque vendeur. Utilisez les **Alertes de prix** pour être notifié quand un article baisse."},
-  "kolo":{r:"Kolo Pay est le wallet intégré de Lamuka. Rechargez via Airtel/MTN et payez en un clic. Bonus : cashback sur certains achats !"},
+  "kolo":{r:"Le wallet intégré Kolo Pay n'est pas encore disponible — il arrivera dans une future version. Pour le moment, le paiement se fait en cash à la livraison."},
   "groupe":{r:"Les **achats groupés** permettent d'obtenir -20% quand 5 personnes achètent le même produit. Partagez le lien pour recruter !"},
   "fidélité":{r:"Programme fidélité : gagnez des points à chaque achat. 100 pts = 1 000 FCFA de réduction. Consultez vos points dans **Profil** > **Fidélité**."},
   "carte cadeau":{r:"Offrez une carte cadeau Lamuka ! Montant au choix, le destinataire l'utilise comme bon de réduction."},
@@ -50,7 +50,7 @@ const SYSTEM = `Tu es Lamu, l'assistant IA de Lamuka Market — le marketplace #
 
 CONTEXTE:
 - Lamuka Market est une app mobile de e-commerce pour Brazzaville et Pointe-Noire
-- Modes de paiement : Airtel Money, MTN Mobile Money, Kolo Pay (wallet intégré)
+- Mode de paiement : Cash à la livraison uniquement (autres options à venir)
 - Monnaie : FCFA
 - Livraison : 1-3 jours, frais 1 500 - 2 500 F selon la zone, gratuite dès 15 000 F
 - Catégories : restaurants, boutiques, pharmacies, pâtisseries, supermarchés, services
@@ -71,7 +71,7 @@ RÈGLES:
 /* ═══ QUICK REPLIES ═══ */
 const QUICK_BUYER = [["","Suivre ma commande"],["","Frais de livraison"],["","Paiement"],["↩️","Retour"],["","Promos"],["","Contact"]];
 const QUICK_VENDOR = [["","Mes statistiques"],["","Gérer commandes"],["","Créer une promo"],["","Importer produits"],["","Retirer mes gains"],["🆘","Problème commande"]];
-const QUICK_DRIVER = [["","Mes gains"],["","Changer de zone"],["","Problème véhicule"],["","Problème livraison"],["","Retrait Mobile Money"],["","Contact support"]];
+const QUICK_DRIVER = [["","Mes gains"],["","Changer de zone"],["","Problème véhicule"],["","Problème livraison"],["","Mon abonnement"],["","Contact support"]];
 
 function ChatBotScr({ onBack, mode = "buyer" }) {
   const MODE_CONTEXT = {
