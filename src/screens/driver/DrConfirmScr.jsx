@@ -1,13 +1,18 @@
-import { useState } from "react";
+import { useState, useRef } from "react";
 import { fmt } from "../../utils/helpers";
 import toast from "../../utils/toast";
 import SuccessAnimation from "../../components/SuccessAnimation";
 import { validatePayPhone, getPhonePlaceholder, isPayPhoneValid } from "../../utils/phoneValidation";
 import Icon from "../../components/Icon";
+import { verifyOrderPin, getOrderPin } from "../../utils/deliveryPin";
 
 function DrConfirmScr({delivery:dl,go,onBack}){
   const [method,setMethod]=useState(null);
   const [code,setCode]=useState("");
+  const [pinAttempts,setPinAttempts]=useState(0);
+  const [pinError,setPinError]=useState(false);
+  const [pinShake,setPinShake]=useState(false);
+  const pinInputRefs = useRef([]);
   const [photoTaken,setPhotoTaken]=useState(false);
   const [signed,setSigned]=useState(false);
   const [done,setDone]=useState(false);
@@ -16,6 +21,59 @@ function DrConfirmScr({delivery:dl,go,onBack}){
   const [cashReversed,setCashReversed]=useState(false);
   const isCash=dl.payment==="cash";
   const vendorAmount=dl.total-(dl.fee||2000);
+
+  // PIN verification state
+  const pinComplete = code.length === 4;
+  const pinValid = pinComplete && verifyOrderPin(dl.ref, code);
+  const pinInvalid = pinComplete && !pinValid;
+
+  // Handle each digit input
+  const handlePinChange = (idx, val) => {
+    const digit = val.replace(/\D/g, "").slice(-1); // take last char only
+    const arr = code.padEnd(4, " ").split("").slice(0, 4);
+    arr[idx] = digit;
+    const newCode = arr.join("").trim();
+    setCode(newCode);
+    setPinError(false);
+    // Auto-focus next
+    if (digit && idx < 3) {
+      pinInputRefs.current[idx + 1]?.focus();
+    }
+    // Auto-verify when 4 digits entered
+    if (newCode.length === 4 && idx === 3) {
+      setTimeout(() => {
+        if (!verifyOrderPin(dl.ref, newCode)) {
+          setPinError(true);
+          setPinShake(true);
+          setPinAttempts(a => a + 1);
+          setTimeout(() => setPinShake(false), 400);
+        }
+      }, 100);
+    }
+  };
+
+  const handlePinPaste = (e) => {
+    e.preventDefault();
+    const pasted = e.clipboardData.getData("text").replace(/\D/g, "").slice(0, 4);
+    if (pasted.length > 0) {
+      setCode(pasted);
+      setPinError(false);
+      if (pasted.length === 4) {
+        if (!verifyOrderPin(dl.ref, pasted)) {
+          setPinError(true);
+          setPinShake(true);
+          setPinAttempts(a => a + 1);
+          setTimeout(() => setPinShake(false), 400);
+        }
+      }
+    }
+  };
+
+  const handlePinKey = (idx, e) => {
+    if (e.key === "Backspace" && !code[idx] && idx > 0) {
+      pinInputRefs.current[idx - 1]?.focus();
+    }
+  };
 
   // Cash reversal screen
   if(showCelebration)return(<SuccessAnimation title="Livraison réussie !" subtitle={`+${fmt(dl.fee||0)} gagnés`} hint={isCash?"Encaissement en cours...":"Bravo !"} duration={2000} onDone={()=>setShowCelebration(false)}/>);
@@ -95,8 +153,109 @@ function DrConfirmScr({delivery:dl,go,onBack}){
       </div>
 
       {method==="code"&&<div style={{marginTop:14}}>
-        <p style={{fontSize:13,color:"var(--muted)",marginBottom:10}}>Demandez le code à 4 chiffres au client</p>
-        <div className="otp-inputs">{[0,1,2,3].map(i=><input key={i} className="otp-box" maxLength={1} onChange={e=>{const v=code.split("");v[i]=e.target.value;setCode(v.join(""))}} style={{width:52,height:58,borderColor:code.length>=4?"#F97316":"var(--border)"}}/>)}</div>
+        <div style={{padding:"10px 12px",background:"rgba(249,115,22,0.05)",border:"1px solid rgba(249,115,22,0.15)",borderRadius:10,marginBottom:12,display:"flex",alignItems:"flex-start",gap:8}}>
+          <Icon name="info" size={13} color="#F97316"/>
+          <div style={{fontSize:11,color:"var(--text)",lineHeight:1.5,flex:1}}>
+            Demandez le <b>code à 4 chiffres</b> au client. Il le voit dans son app sur la page de suivi.
+          </div>
+        </div>
+
+        <style>{`@keyframes shake-pin{0%,100%{transform:translateX(0)}25%{transform:translateX(-6px)}50%{transform:translateX(6px)}75%{transform:translateX(-4px)}}`}</style>
+
+        <div style={{
+          display:"flex",
+          gap:8,
+          justifyContent:"center",
+          marginBottom:10,
+          animation: pinShake ? "shake-pin 0.4s ease" : "none",
+        }}>
+          {[0,1,2,3].map(i=>{
+            const digit = code[i] || "";
+            return(
+              <input
+                key={i}
+                ref={el => pinInputRefs.current[i] = el}
+                value={digit}
+                onChange={e => handlePinChange(i, e.target.value)}
+                onKeyDown={e => handlePinKey(i, e)}
+                onPaste={i === 0 ? handlePinPaste : undefined}
+                inputMode="numeric"
+                maxLength={1}
+                autoComplete="off"
+                style={{
+                  width:54, height:62,
+                  borderRadius:14,
+                  border:`2.5px solid ${pinValid ? "#10B981" : pinInvalid ? "#EF4444" : digit ? "#F97316" : "var(--border)"}`,
+                  background: pinValid ? "rgba(16,185,129,0.06)" : pinInvalid ? "rgba(239,68,68,0.06)" : digit ? "rgba(249,115,22,0.04)" : "var(--card)",
+                  fontSize:28, fontWeight:800,
+                  fontFamily:"monospace",
+                  textAlign:"center",
+                  color: pinValid ? "#047857" : pinInvalid ? "#DC2626" : "var(--text)",
+                  outline:"none",
+                  transition:"all 0.15s ease",
+                  boxSizing:"border-box",
+                }}
+              />
+            );
+          })}
+        </div>
+
+        {/* Verification feedback */}
+        {pinValid && (
+          <div style={{
+            display:"flex", alignItems:"center", justifyContent:"center", gap:6,
+            padding:"8px 12px",
+            background:"rgba(16,185,129,0.08)",
+            borderRadius:10,
+            color:"#047857",
+            fontSize:12, fontWeight:700,
+            marginBottom:8,
+          }}>
+            <Icon name="check_circle" size={14} color="#10B981"/>
+            Code vérifié — Identité confirmée
+          </div>
+        )}
+        {pinInvalid && (
+          <div style={{
+            display:"flex", alignItems:"center", justifyContent:"center", gap:6,
+            padding:"8px 12px",
+            background:"rgba(239,68,68,0.08)",
+            borderRadius:10,
+            color:"#DC2626",
+            fontSize:12, fontWeight:700,
+            marginBottom:8,
+          }}>
+            <Icon name="x_circle" size={14} color="#DC2626"/>
+            Code incorrect{pinAttempts>0?` · ${pinAttempts} tentative${pinAttempts>1?"s":""}`:""}
+          </div>
+        )}
+
+        {/* After 3 failed attempts → suggest alternative */}
+        {pinAttempts >= 3 && (
+          <div style={{
+            padding:"12px",
+            background:"rgba(245,158,11,0.06)",
+            border:"1px solid rgba(245,158,11,0.2)",
+            borderRadius:12,
+            marginBottom:8,
+          }}>
+            <div style={{fontSize:11,fontWeight:700,color:"#B45309",marginBottom:6,display:"flex",alignItems:"center",gap:5}}>
+              <Icon name="alert_triangle" size={12} color="#B45309"/>
+              Plusieurs codes incorrects
+            </div>
+            <div style={{fontSize:11,color:"var(--text)",lineHeight:1.5,marginBottom:8}}>
+              Le client peut consulter son code dans l'app sur la page de suivi de commande. Sinon, utilisez une autre méthode de confirmation.
+            </div>
+            <div style={{display:"flex",gap:6}}>
+              <button onClick={()=>{setMethod("photo");setCode("");setPinAttempts(0);setPinError(false);}} style={{flex:1,padding:"7px 10px",borderRadius:8,border:"1px solid var(--border)",background:"var(--card)",color:"var(--text)",fontSize:11,fontWeight:600,cursor:"pointer",fontFamily:"inherit"}}>
+                Photo à la place
+              </button>
+              <button onClick={()=>{setMethod("signature");setCode("");setPinAttempts(0);setPinError(false);}} style={{flex:1,padding:"7px 10px",borderRadius:8,border:"1px solid var(--border)",background:"var(--card)",color:"var(--text)",fontSize:11,fontWeight:600,cursor:"pointer",fontFamily:"inherit"}}>
+                Signature
+              </button>
+            </div>
+          </div>
+        )}
       </div>}
 
       {method==="photo"&&<div style={{marginTop:14}}>
@@ -143,7 +302,30 @@ function DrConfirmScr({delivery:dl,go,onBack}){
       </div>}
 
       <div style={{paddingTop:24,paddingBottom:16}}>
-        <button className="btn-primary" style={{background:method?"#F97316":"var(--border)",color:method?"var(--card)":"var(--muted)"}} onClick={()=>{if(method&&(!isCash||cashCollected)){setDone(true);setShowCelebration(true);toast.success(isCash?"Paiement collecté — Reversez au vendeur":"Livraison confirmée")}}} disabled={!method||(isCash&&!cashCollected)}><Icon name="check_circle" size={16}/>{" "}Valider la livraison</button>
+        {(() => {
+          // Compute eligibility for validation based on chosen method
+          const methodReady = method === "code" ? pinValid
+                            : method === "photo" ? !!photoTaken
+                            : method === "signature" ? signed
+                            : false;
+          const canValidate = methodReady && (!isCash || cashCollected);
+          return (
+            <button
+              className="btn-primary"
+              style={{background: canValidate ? "#F97316" : "var(--border)", color: canValidate ? "var(--card)" : "var(--muted)"}}
+              onClick={() => {
+                if (canValidate) {
+                  setDone(true);
+                  setShowCelebration(true);
+                  toast.success(isCash ? "Paiement collecté — Reversez au vendeur" : "Livraison confirmée");
+                }
+              }}
+              disabled={!canValidate}
+            >
+              <Icon name="check_circle" size={16}/>{" "}Valider la livraison
+            </button>
+          );
+        })()}
       </div>
     </div>
   </>);

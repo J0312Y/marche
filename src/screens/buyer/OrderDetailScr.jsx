@@ -6,6 +6,7 @@ import { useState } from "react";
 import toast from "../../utils/toast";
 import Icon from "../../components/Icon";
 import { saveMod } from "../../utils/orderMods";
+import { getOrderPin } from "../../utils/deliveryPin";
 
 const STEPS=["Confirmée","En préparation","En livraison","Livrée"];
 
@@ -143,6 +144,52 @@ function OrderDetailScr({order:o,onBack,go}){
         </div>);
       })}
     </div>}
+
+    {/* Delivery PIN — show when order is being prepared or shipped */}
+    {!cancelled && (sc==="ship"||sc==="prep") && (() => {
+      const pin = getOrderPin(o.ref);
+      return (
+        <div style={{
+          background:"linear-gradient(135deg, #F97316 0%, #EA580C 100%)",
+          borderRadius:16,
+          padding:"14px 14px 12px",
+          marginBottom:12,
+          color:"#fff",
+          boxShadow:"0 8px 22px rgba(249,115,22,0.28)",
+          position:"relative",
+          overflow:"hidden",
+        }}>
+          <div style={{position:"absolute",top:-25,right:-25,width:100,height:100,borderRadius:"50%",background:"rgba(255,255,255,0.08)"}}/>
+          <div style={{position:"relative",zIndex:2}}>
+            <div style={{display:"flex",alignItems:"center",gap:8,marginBottom:8}}>
+              <div style={{width:28,height:28,borderRadius:8,background:"rgba(255,255,255,0.22)",display:"flex",alignItems:"center",justifyContent:"center"}}>
+                <Icon name="shield" size={13} color="#fff"/>
+              </div>
+              <div style={{flex:1}}>
+                <div style={{fontSize:11,fontWeight:700,letterSpacing:0.4,opacity:0.95}}>CODE DE LIVRAISON</div>
+                <div style={{fontSize:9,opacity:0.85,marginTop:1}}>Donnez ce code au livreur à l'arrivée</div>
+              </div>
+            </div>
+            <div style={{display:"flex",gap:6,justifyContent:"center",marginBottom:6}}>
+              {pin.split("").map((d,i)=>(
+                <div key={i} style={{
+                  width:44, height:54, borderRadius:11,
+                  background:"rgba(255,255,255,0.96)",
+                  display:"flex",alignItems:"center",justifyContent:"center",
+                  fontSize:26,fontWeight:800,color:"#EA580C",
+                  fontFamily:"monospace",letterSpacing:-1,
+                  boxShadow:"0 3px 10px rgba(0,0,0,0.12)",
+                }}>{d}</div>
+              ))}
+            </div>
+            <div style={{display:"flex",alignItems:"center",justifyContent:"center",gap:5,fontSize:10,opacity:0.92,marginTop:4}}>
+              <Icon name="info" size={10} color="#fff"/>
+              Ne le partagez avec personne d'autre
+            </div>
+          </div>
+        </div>
+      );
+    })()}
 
     {/* Cancelled banner */}
     {cancelled&&<div style={{padding:16,background:"rgba(239,68,68,0.06)",border:"1px solid rgba(239,68,68,0.15)",borderRadius:16,marginBottom:12,display:"flex",alignItems:"center",gap:12}}>

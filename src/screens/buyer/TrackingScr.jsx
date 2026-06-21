@@ -5,6 +5,7 @@ import toast from "../../utils/toast";
 import { DRIVER_PHOTO } from "../../data/images";
 import MapView from "../../components/MapView";
 import Icon from "../../components/Icon";
+import { getOrderPin } from "../../utils/deliveryPin";
 
 const STEPS=[
   {icon:"check_circle",label:"Commande confirmée",time:"14:42",done:true},
@@ -65,6 +66,9 @@ function TrackingScr({onBack,go}){
     </MapView>
 
     <div className="scr" style={{padding:16}}>
+      {/* ═══ DELIVERY PIN CARD ═══ */}
+      <DeliveryPinCard orderRef="#LMK-2026-0214" eta={eta}/>
+
       {/* Live stats bar */}
       <div className="live-stats-bar" style={{margin:"0 0 12px",padding:"12px 14px",background:"linear-gradient(135deg,#1F2937,#374151)",borderRadius:14,color:"#fff",display:"flex",alignItems:"center",justifyContent:"space-around"}}>
         <div style={{textAlign:"center"}}>
@@ -230,3 +234,123 @@ function TrackingScr({onBack,go}){
 }
 
 export default TrackingScr;
+
+// ═══ DELIVERY PIN CARD — Code à donner au livreur ═══
+function DeliveryPinCard({orderRef, eta}){
+  const pin = getOrderPin(orderRef);
+  const [showHelp, setShowHelp] = useState(false);
+  const [copied, setCopied] = useState(false);
+
+  const copyPin = () => {
+    if (navigator.clipboard) {
+      navigator.clipboard.writeText(pin).then(()=>{
+        setCopied(true);
+        toast.success("Code copié");
+        setTimeout(()=>setCopied(false), 2000);
+      });
+    }
+  };
+
+  return (
+    <div style={{
+      background:"linear-gradient(135deg, #F97316 0%, #EA580C 100%)",
+      borderRadius:18,
+      padding:"16px 16px 14px",
+      marginBottom:14,
+      color:"#fff",
+      boxShadow:"0 10px 28px rgba(249,115,22,0.32)",
+      position:"relative",
+      overflow:"hidden",
+    }}>
+      {/* Background pattern */}
+      <div style={{
+        position:"absolute", top:-30, right:-30,
+        width:120, height:120, borderRadius:"50%",
+        background:"rgba(255,255,255,0.08)",
+      }}/>
+      <div style={{
+        position:"absolute", bottom:-40, left:-20,
+        width:90, height:90, borderRadius:"50%",
+        background:"rgba(255,255,255,0.06)",
+      }}/>
+
+      <div style={{position:"relative", zIndex:2}}>
+        {/* Header */}
+        <div style={{display:"flex", alignItems:"center", gap:8, marginBottom:10}}>
+          <div style={{
+            width:30, height:30, borderRadius:9,
+            background:"rgba(255,255,255,0.22)",
+            display:"flex", alignItems:"center", justifyContent:"center",
+          }}>
+            <Icon name="shield" size={14} color="#fff"/>
+          </div>
+          <div style={{flex:1}}>
+            <div style={{fontSize:11, fontWeight:700, letterSpacing:0.3, opacity:0.95}}>CODE DE LIVRAISON</div>
+            <div style={{fontSize:9, opacity:0.85, marginTop:1}}>Donnez-le au livreur à l'arrivée</div>
+          </div>
+          <button onClick={()=>setShowHelp(!showHelp)} style={{
+            width:24, height:24, borderRadius:7,
+            background:"rgba(255,255,255,0.2)",
+            border:"none", cursor:"pointer",
+            display:"flex", alignItems:"center", justifyContent:"center",
+            color:"#fff",
+          }} aria-label="Aide">
+            <Icon name="info" size={11} color="#fff"/>
+          </button>
+        </div>
+
+        {/* PIN display - 4 boxes */}
+        <div style={{display:"flex", gap:8, justifyContent:"center", marginBottom:10}}>
+          {pin.split("").map((digit, i) => (
+            <div key={i} style={{
+              width:50, height:60, borderRadius:12,
+              background:"rgba(255,255,255,0.96)",
+              display:"flex", alignItems:"center", justifyContent:"center",
+              fontSize:30, fontWeight:800, color:"#EA580C",
+              fontFamily:"monospace",
+              boxShadow:"0 4px 12px rgba(0,0,0,0.15), inset 0 -2px 0 rgba(234,88,12,0.15)",
+              letterSpacing:-1,
+            }}>{digit}</div>
+          ))}
+        </div>
+
+        {/* Copy + ETA hint */}
+        <div style={{display:"flex", alignItems:"center", justifyContent:"space-between", gap:8}}>
+          <div style={{fontSize:10, opacity:0.95, display:"flex", alignItems:"center", gap:5}}>
+            <Icon name="clock" size={11} color="#fff"/>
+            Arrivée dans <b>{Math.ceil(eta)} min</b>
+          </div>
+          <button onClick={copyPin} style={{
+            padding:"6px 11px", borderRadius:8,
+            background:"rgba(255,255,255,0.22)",
+            border:"none", cursor:"pointer",
+            color:"#fff", fontSize:10, fontWeight:700,
+            fontFamily:"inherit",
+            display:"flex", alignItems:"center", gap:4,
+          }}>
+            {copied ? <><Icon name="check" size={11} color="#fff"/>Copié</> : <>Copier le code</>}
+          </button>
+        </div>
+
+        {/* Help expansion */}
+        {showHelp && (
+          <div style={{
+            marginTop:10, padding:"10px 12px",
+            background:"rgba(255,255,255,0.16)",
+            borderRadius:10,
+            fontSize:11, lineHeight:1.5,
+            animation:"fadeInFast .2s ease",
+          }}>
+            <div style={{fontWeight:700, marginBottom:5}}>Comment ça marche ?</div>
+            <div style={{opacity:0.92}}>
+              1. Le livreur arrive chez vous<br/>
+              2. Vérifiez que c'est bien votre commande<br/>
+              3. Donnez-lui ces 4 chiffres pour valider la livraison<br/>
+              <b style={{marginTop:4, display:"inline-block"}}>Ne le partagez avec personne d'autre.</b>
+            </div>
+          </div>
+        )}
+      </div>
+    </div>
+  );
+}
