@@ -260,10 +260,27 @@ function OrderDetailScr({order:o,onBack,go}){
 
     <div style={{marginBottom:12}}>
       <div style={{fontSize:14,fontWeight:700,marginBottom:10}}>Articles</div>
-      {o.items.map((item,i)=>{const ph=findPhoto(item);return<div key={i} style={{padding:10,background:"var(--card)",border:"1px solid var(--border)",borderRadius:14,marginBottom:8,fontSize:14,fontWeight:500,display:"flex",alignItems:"center",gap:10}}>
-        {ph?<img src={ph} style={{width:40,height:40,borderRadius:10,objectFit:"cover",flexShrink:0}} alt=""/>:<div style={{width:40,height:40,borderRadius:10,background:"var(--light)",display:"flex",alignItems:"center",justifyContent:"center",flexShrink:0}}><span style={{fontSize:16,opacity:.4}}><Icon name="package" size={18}/></span></div>}
-        <span>{item.replace(/^[^\s]+ /,"")}</span>
-      </div>})}
+      {o.items.map((item,i)=>{
+        const ph=findPhoto(item);
+        const parsed=parseItemStr(item);
+        const linePrice=parsed.qty*estimatedUnitPrice;
+        return(
+          <div key={i} style={{padding:10,background:"var(--card)",border:"1px solid var(--border)",borderRadius:14,marginBottom:8,display:"flex",alignItems:"center",gap:10}}>
+            {ph?<img src={ph} style={{width:40,height:40,borderRadius:10,objectFit:"cover",flexShrink:0}} alt=""/>:<div style={{width:40,height:40,borderRadius:10,background:"var(--light)",display:"flex",alignItems:"center",justifyContent:"center",flexShrink:0}}><span style={{fontSize:16,opacity:.4}}><Icon name="package" size={18}/></span></div>}
+            <div style={{flex:1,minWidth:0}}>
+              <div style={{fontSize:13,fontWeight:600,color:"var(--text)",overflow:"hidden",textOverflow:"ellipsis",whiteSpace:"nowrap"}}>{item.replace(/^[^\s]+ /,"")}</div>
+              <div style={{fontSize:11,color:"var(--muted)",marginTop:2}}>
+                {parsed.qty} × {fmtNum(estimatedUnitPrice)} F
+              </div>
+            </div>
+            <div style={{
+              fontSize:13,fontWeight:700,color:"var(--text)",
+              fontVariantNumeric:"tabular-nums",
+              flexShrink:0,minWidth:62,textAlign:"right"
+            }}>{fmtNum(linePrice)} F</div>
+          </div>
+        );
+      })}
     </div>
 
     {/* Summary */}
