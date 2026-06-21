@@ -73,7 +73,16 @@ function VWalletScr({ go, onBack }) {
   const [payingCommission, setPayingCommission] = useState(false);
   const [paymentDone, setPaymentDone] = useState(false);
   const [showPayModal, setShowPayModal] = useState(false);
-  const [selectedMethod, setSelectedMethod] = useState(null);
+  const [proofFile, setProofFile] = useState(null);
+  const [proofPreview, setProofPreview] = useState(null);
+  const [refCode, setRefCode] = useState("");
+  const [chosenOperator, setChosenOperator] = useState(null); // 'airtel' | 'mtn'
+
+  // Lamuka official MoMo numbers for receiving commission
+  const LAMUKA_MOMO = {
+    airtel: "+242 06 666 06 06",
+    mtn:    "+242 05 555 05 05",
+  };
 
   const data = MOCK_DATA;
   const { thisMonth, today, thisWeek, recentTransactions, pastInvoices } = data;
@@ -86,9 +95,26 @@ function VWalletScr({ go, onBack }) {
   // Net revenue (already received via MoMo)
   const netReceived = thisMonth.grossRevenue - thisMonth.commissionDue;
 
-  const handlePayCommission = () => {
-    if (!selectedMethod) {
-      toast.error("Choisissez un moyen de paiement");
+  const handleProofUpload = (e) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+    if (!file.type.startsWith("image/")) {
+      toast.error("Veuillez uploader une image");
+      return;
+    }
+    setProofFile(file);
+    const reader = new FileReader();
+    reader.onload = (ev) => setProofPreview(ev.target.result);
+    reader.readAsDataURL(file);
+  };
+
+  const handleSubmitProof = () => {
+    if (!proofFile) {
+      toast.error("Uploadez la capture du paiement");
+      return;
+    }
+    if (!refCode || refCode.length < 4) {
+      toast.error("Renseignez le code de référence de la transaction");
       return;
     }
     setPayingCommission(true);
@@ -98,9 +124,20 @@ function VWalletScr({ go, onBack }) {
       setTimeout(() => {
         setShowPayModal(false);
         setPaymentDone(false);
-        toast.success(`Commission de ${fmtNum(thisMonth.commissionDue)} F payée à Lamuka`);
-      }, 1200);
-    }, 1300);
+        setProofFile(null);
+        setProofPreview(null);
+        setRefCode("");
+        setChosenOperator(null);
+        toast.success("Preuve envoyée — Vérification par Lamuka sous 24h");
+      }, 1400);
+    }, 1200);
+  };
+
+  const copyMomo = (num) => {
+    if (navigator.clipboard) {
+      navigator.clipboard.writeText(num.replace(/\s/g, ""));
+      toast.success("Numéro copié");
+    }
   };
 
   return (
@@ -145,7 +182,7 @@ function VWalletScr({ go, onBack }) {
             </div>
             <div style={{ fontSize: 11, opacity: 0.75, marginTop: 4, display: "flex", alignItems: "center", gap: 6 }}>
               <Icon name="package" size={11} color="#fff"/>
-              {thisMonth.ordersCount} commandes encaissées via MoMo
+              {thisMonth.ordersCount} commandes encaissées en cash
             </div>
 
             {/* Mini breakdown */}
@@ -153,7 +190,7 @@ function VWalletScr({ go, onBack }) {
               <div style={{ padding: "8px 10px", background: "rgba(255,255,255,0.08)", borderRadius: 10 }}>
                 <div style={{ fontSize: 9, opacity: 0.7, fontWeight: 500 }}>NET REÇU</div>
                 <div style={{ fontSize: 15, fontWeight: 800, marginTop: 2 }}>{fmtNum(netReceived)} F</div>
-                <div style={{ fontSize: 9, opacity: 0.65, marginTop: 1 }}>déjà dans vos MoMo</div>
+                <div style={{ fontSize: 9, opacity: 0.65, marginTop: 1 }}>en cash via livreurs</div>
               </div>
               <div style={{ padding: "8px 10px", background: "rgba(249,115,22,0.18)", borderRadius: 10, border: "1px solid rgba(249,115,22,0.3)" }}>
                 <div style={{ fontSize: 9, opacity: 0.85, fontWeight: 500 }}>COMMISSION À PAYER</div>
@@ -235,7 +272,7 @@ function VWalletScr({ go, onBack }) {
         }}>
           <Icon name="info" size={14} color="#3B82F6"/>
           <div style={{ fontSize: 11, color: "#1F2937", lineHeight: 1.5, flex: 1 }}>
-            <b style={{ color: "#1D4ED8" }}>Vos clients vous paient directement</b> via Mobile Money. Lamuka facture sa commission une fois par mois.
+            <b style={{ color: "#1D4ED8" }}>Vos clients paient en cash au livreur</b>, qui vous remet l'argent. Lamuka facture sa commission une fois par mois.
           </div>
         </div>
 
@@ -382,8 +419,8 @@ function VWalletScr({ go, onBack }) {
                 <div style={{ width: 64, height: 64, borderRadius: 20, background: "linear-gradient(135deg,#10B981,#059669)", display: "inline-flex", alignItems: "center", justifyContent: "center", marginBottom: 14, boxShadow: "0 8px 24px rgba(16,185,129,0.3)" }}>
                   <Icon name="check" size={32} color="#fff"/>
                 </div>
-                <div style={{ fontSize: 16, fontWeight: 800, color: "var(--text)", marginBottom: 4 }}>Commission payée !</div>
-                <div style={{ fontSize: 12, color: "var(--muted)" }}>{fmtNum(thisMonth.commissionDue)} F · {thisMonth.monthLabel}</div>
+                <div style={{ fontSize: 16, fontWeight: 800, color: "var(--text)", marginBottom: 4 }}>Preuve envoyée !</div>
+                <div style={{ fontSize: 12, color: "var(--muted)" }}>L'équipe Lamuka vérifiera sous 24h</div>
               </div>
             ) : (
               <>
@@ -414,70 +451,184 @@ function VWalletScr({ go, onBack }) {
                   </div>
                 </div>
 
-                {/* Payment method picker */}
-                <div style={{ fontSize: 10, fontWeight: 700, color: "var(--muted)", letterSpacing: 0.5, marginBottom: 6 }}>MOYEN DE PAIEMENT</div>
-                <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 6, marginBottom: 14 }}>
-                  {["airtel", "mtn"].map(m => {
-                    const info = METHOD_INFO[m];
-                    const selected = selectedMethod === m;
-                    return (
-                      <button key={m} onClick={() => setSelectedMethod(m)} style={{
-                        padding: "12px 6px", borderRadius: 11,
-                        border: selected ? `1.5px solid ${info.color}` : "1px solid var(--border)",
-                        background: selected ? `${info.color}10` : "var(--card)",
-                        color: selected ? info.color : "var(--text)",
-                        fontSize: 11, fontWeight: selected ? 700 : 600,
-                        cursor: "pointer", fontFamily: "inherit",
-                        display: "flex", flexDirection: "column", alignItems: "center", gap: 5,
-                      }}>
-                        <div style={{ width: 28, height: 28, borderRadius: 7, background: info.iconBg, display: "flex", alignItems: "center", justifyContent: "center" }}>
-                          <Icon name="coin" size={14} color={info.color}/>
-                        </div>
-                        {info.label}
-                      </button>
-                    );
-                  })}
-                </div>
+                {/* Step 1: Choose operator */}
+                {!chosenOperator && (
+                  <>
+                    <div style={{ fontSize: 10, fontWeight: 700, color: "var(--muted)", letterSpacing: 0.5, marginBottom: 6 }}>
+                      ÉTAPE 1 · CHOISISSEZ VOTRE OPÉRATEUR
+                    </div>
+                    <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 8, marginBottom: 14 }}>
+                      {["airtel", "mtn"].map(m => {
+                        const info = METHOD_INFO[m];
+                        return (
+                          <button key={m} onClick={() => setChosenOperator(m)} style={{
+                            padding: "14px 6px", borderRadius: 11,
+                            border: "1px solid var(--border)",
+                            background: "var(--card)",
+                            color: "var(--text)",
+                            fontSize: 11, fontWeight: 600,
+                            cursor: "pointer", fontFamily: "inherit",
+                            display: "flex", flexDirection: "column", alignItems: "center", gap: 6,
+                          }}>
+                            <div style={{ width: 32, height: 32, borderRadius: 8, background: info.iconBg, display: "flex", alignItems: "center", justifyContent: "center" }}>
+                              <Icon name="coin" size={16} color={info.color}/>
+                            </div>
+                            {info.label}
+                          </button>
+                        );
+                      })}
+                    </div>
+                  </>
+                )}
 
-                <div style={{
-                  padding: "9px 11px", borderRadius: 9,
-                  background: "rgba(59,130,246,0.05)",
-                  border: "1px solid rgba(59,130,246,0.15)",
-                  marginBottom: 14,
-                  display: "flex", alignItems: "flex-start", gap: 7,
-                }}>
-                  <Icon name="info" size={12} color="#3B82F6"/>
-                  <div style={{ fontSize: 10, color: "#1D4ED8", lineHeight: 1.5 }}>
-                    Vous recevrez un SMS de validation de votre opérateur pour confirmer le paiement à Lamuka.
-                  </div>
-                </div>
+                {/* Step 2: Show MoMo number + upload proof */}
+                {chosenOperator && (
+                  <>
+                    {/* Lamuka MoMo number to send to */}
+                    <div style={{
+                      padding: 12, borderRadius: 12,
+                      background: METHOD_INFO[chosenOperator].iconBg,
+                      border: `1px solid ${METHOD_INFO[chosenOperator].color}40`,
+                      marginBottom: 14,
+                    }}>
+                      <div style={{ fontSize: 10, color: METHOD_INFO[chosenOperator].color, fontWeight: 700, letterSpacing: 0.5, marginBottom: 4 }}>
+                        ÉTAPE 2 · ENVOYEZ À CE NUMÉRO LAMUKA
+                      </div>
+                      <div style={{ fontSize: 18, fontWeight: 800, color: METHOD_INFO[chosenOperator].color, fontFamily: "monospace", marginBottom: 6, letterSpacing: -0.3 }}>
+                        {LAMUKA_MOMO[chosenOperator]}
+                      </div>
+                      <button onClick={() => copyMomo(LAMUKA_MOMO[chosenOperator])} style={{
+                        fontSize: 10, padding: "5px 10px",
+                        border: `1px solid ${METHOD_INFO[chosenOperator].color}40`,
+                        background: "var(--card)", borderRadius: 6,
+                        color: METHOD_INFO[chosenOperator].color, fontWeight: 700,
+                        cursor: "pointer", fontFamily: "inherit",
+                        display: "inline-flex", alignItems: "center", gap: 4,
+                      }}>
+                        <Icon name="copy" size={10}/>Copier le numéro
+                      </button>
+                      <div style={{ fontSize: 10, color: "#4B5563", marginTop: 8, lineHeight: 1.5 }}>
+                        Ouvrez votre app <b>{METHOD_INFO[chosenOperator].label}</b>, envoyez <b>{fmtNum(thisMonth.commissionDue)} F</b> à ce numéro, puis revenez ici.
+                      </div>
+                    </div>
+
+                    {/* Reference code input */}
+                    <div style={{ fontSize: 10, fontWeight: 700, color: "var(--muted)", letterSpacing: 0.5, marginBottom: 6 }}>
+                      ÉTAPE 3 · CODE DE RÉFÉRENCE DE LA TRANSACTION
+                    </div>
+                    <input
+                      type="text"
+                      value={refCode}
+                      onChange={(e) => setRefCode(e.target.value.toUpperCase().slice(0, 16))}
+                      placeholder="Ex: TXN98765432"
+                      style={{
+                        width: "100%", padding: "10px 12px",
+                        borderRadius: 10,
+                        border: "1.5px solid var(--border)",
+                        background: "var(--light)",
+                        fontSize: 13, fontWeight: 600,
+                        fontFamily: "monospace",
+                        color: "var(--text)",
+                        outline: "none", boxSizing: "border-box",
+                        marginBottom: 14,
+                      }}
+                    />
+
+                    {/* Screenshot upload */}
+                    <div style={{ fontSize: 10, fontWeight: 700, color: "var(--muted)", letterSpacing: 0.5, marginBottom: 6 }}>
+                      ÉTAPE 4 · CAPTURE DE CONFIRMATION
+                    </div>
+                    <label style={{
+                      display: "block",
+                      padding: proofPreview ? 6 : 18,
+                      borderRadius: 12,
+                      border: `1.5px dashed ${proofPreview ? "#10B981" : "var(--border)"}`,
+                      background: proofPreview ? "rgba(16,185,129,0.04)" : "var(--light)",
+                      cursor: "pointer",
+                      textAlign: "center",
+                      marginBottom: 14,
+                    }}>
+                      <input
+                        type="file"
+                        accept="image/*"
+                        onChange={handleProofUpload}
+                        style={{ display: "none" }}
+                      />
+                      {proofPreview ? (
+                        <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
+                          <img src={proofPreview} alt="preuve" style={{ width: 64, height: 64, objectFit: "cover", borderRadius: 8, flexShrink: 0 }}/>
+                          <div style={{ textAlign: "left", flex: 1 }}>
+                            <div style={{ fontSize: 11, fontWeight: 700, color: "#047857", display: "flex", alignItems: "center", gap: 4 }}>
+                              <Icon name="check_circle" size={12} color="#10B981"/>Capture chargée
+                            </div>
+                            <div style={{ fontSize: 10, color: "var(--muted)", marginTop: 2 }}>
+                              Cliquez pour changer
+                            </div>
+                          </div>
+                        </div>
+                      ) : (
+                        <>
+                          <Icon name="camera" size={22} color="var(--muted)"/>
+                          <div style={{ fontSize: 11, color: "var(--muted)", fontWeight: 600, marginTop: 6 }}>
+                            Uploadez la capture du SMS / écran de confirmation
+                          </div>
+                        </>
+                      )}
+                    </label>
+
+                    {/* Info box */}
+                    <div style={{
+                      padding: "9px 11px", borderRadius: 9,
+                      background: "rgba(59,130,246,0.05)",
+                      border: "1px solid rgba(59,130,246,0.15)",
+                      marginBottom: 14,
+                      display: "flex", alignItems: "flex-start", gap: 7,
+                    }}>
+                      <Icon name="info" size={12} color="#3B82F6"/>
+                      <div style={{ fontSize: 10, color: "#1D4ED8", lineHeight: 1.5 }}>
+                        L'équipe Lamuka vérifiera votre paiement sous <b>24h</b>. Vous serez notifié par push une fois validé.
+                      </div>
+                    </div>
+                  </>
+                )}
 
                 {/* Actions */}
                 <div style={{ display: "flex", gap: 8 }}>
-                  <button onClick={() => !payingCommission && setShowPayModal(false)} disabled={payingCommission} style={{
+                  <button onClick={() => {
+                    if (chosenOperator) {
+                      setChosenOperator(null);
+                      setProofFile(null);
+                      setProofPreview(null);
+                      setRefCode("");
+                    } else {
+                      setShowPayModal(false);
+                    }
+                  }} disabled={payingCommission} style={{
                     flex: 1, padding: "12px 0", borderRadius: 12,
                     border: "1px solid var(--border)", background: "var(--card)",
                     color: "var(--text)", fontSize: 12, fontWeight: 600,
                     cursor: payingCommission ? "not-allowed" : "pointer",
                     fontFamily: "inherit", opacity: payingCommission ? 0.5 : 1,
-                  }}>Annuler</button>
+                  }}>{chosenOperator ? "Retour" : "Annuler"}</button>
+                  {chosenOperator && (
                   <button
-                    onClick={handlePayCommission}
-                    disabled={payingCommission || !selectedMethod}
+                    onClick={handleSubmitProof}
+                    disabled={payingCommission || !proofFile || !refCode}
                     style={{
                       flex: 1.6, padding: "12px 0", borderRadius: 12,
                       border: "none",
-                      background: (!selectedMethod || payingCommission) ? "#E5E7EB" : "linear-gradient(135deg,#F97316,#EA580C)",
-                      color: (!selectedMethod || payingCommission) ? "var(--muted)" : "#fff",
+                      background: (!proofFile || !refCode || payingCommission) ? "#E5E7EB" : "linear-gradient(135deg,#F97316,#EA580C)",
+                      color: (!proofFile || !refCode || payingCommission) ? "var(--muted)" : "#fff",
                       fontSize: 12, fontWeight: 700,
-                      cursor: (!selectedMethod || payingCommission) ? "not-allowed" : "pointer",
+                      cursor: (!proofFile || !refCode || payingCommission) ? "not-allowed" : "pointer",
                       fontFamily: "inherit",
                       display: "flex", alignItems: "center", justifyContent: "center", gap: 6,
-                      boxShadow: (!selectedMethod || payingCommission) ? "none" : "0 4px 14px rgba(249,115,22,0.25)",
+                      boxShadow: (!proofFile || !refCode || payingCommission) ? "none" : "0 4px 14px rgba(249,115,22,0.25)",
                     }}
                   >
-                    {payingCommission ? <><div className="spinner" style={{ width: 13, height: 13 }}/>Paiement...</> : <>Payer {fmtNum(thisMonth.commissionDue)} F</>}
+                    {payingCommission ? <><div className="spinner" style={{ width: 13, height: 13 }}/>Envoi...</> : <>Soumettre la preuve</>}
                   </button>
+                  )}
                 </div>
               </>
             )}

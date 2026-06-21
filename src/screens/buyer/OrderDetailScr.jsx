@@ -123,10 +123,6 @@ function OrderDetailScr({order:o,onBack,go}){
   const hasChanges = modifyItems.some(it => it.qty !== it.origQty) || modifyItems.some(it => it.isNew && it.qty > 0);
 
   const confirmModify=()=>{
-    if(diff>0 && !modifyPayMethod){
-      toast.error("Choisissez un moyen de paiement");
-      return;
-    }
     setModifyConfirming(true);
     setTimeout(()=>{
       // Save modification to shared storage so vendor + driver can see it
@@ -141,9 +137,9 @@ function OrderDetailScr({order:o,onBack,go}){
         modifyFee,
         newTotal,
         diff,
-        paymentMethod: modifyPayMethod,
-        orderStatus: sc, // prep / ship / etc
-        status: "pending", // pending → vendor_ack → driver_ack → complete
+        paymentMethod: "cash",
+        orderStatus: sc,
+        status: "pending",
       });
 
       setModifyConfirming(false);
@@ -533,20 +529,22 @@ function OrderDetailScr({order:o,onBack,go}){
 
           {/* Payment method if extra to pay */}
           {diff>0 && (<>
-            <div style={{fontSize:10,fontWeight:700,color:"var(--muted)",letterSpacing:0.5,marginBottom:6}}>PAYER LE SUPPLÉMENT VIA</div>
-            <div style={{display:"grid",gridTemplateColumns:"1fr 1fr 1fr",gap:6,marginBottom:14}}>
-              {[
-                {id:"airtel",label:"Airtel",color:"#EF4444"},
-                {id:"mtn",label:"MTN",color:"#F59E0B"},
-                {id:"cash",label:"Cash",color:"#10B981"},
-              ].map(m=>{
-                const selected=modifyPayMethod===m.id;
-                return(
-                  <button key={m.id} onClick={()=>setModifyPayMethod(m.id)} style={{padding:"9px 4px",borderRadius:9,border:selected?`1.5px solid ${m.color}`:"1px solid var(--border)",background:selected?`${m.color}10`:"var(--card)",color:selected?m.color:"var(--text)",fontSize:11,fontWeight:selected?700:600,cursor:"pointer",fontFamily:"inherit"}}>
-                    {m.label}
-                  </button>
-                );
-              })}
+            <div style={{
+              padding:"12px",borderRadius:12,
+              background:"linear-gradient(135deg, rgba(16,185,129,0.06), transparent)",
+              border:"1px solid rgba(16,185,129,0.2)",
+              marginBottom:14,
+              display:"flex",alignItems:"center",gap:10,
+            }}>
+              <div style={{width:36,height:36,borderRadius:10,background:"#10B981",display:"flex",alignItems:"center",justifyContent:"center",flexShrink:0}}>
+                <Icon name="cash" size={17} color="#fff"/>
+              </div>
+              <div style={{flex:1}}>
+                <div style={{fontSize:12,fontWeight:700,color:"#047857"}}>Paiement au livreur</div>
+                <div style={{fontSize:10,color:"var(--muted)",marginTop:2}}>
+                  Préparez <b>{fmtNum(diff)} F</b> supplémentaires en cash pour le livreur lors de la livraison.
+                </div>
+              </div>
             </div>
           </>)}
 
@@ -557,13 +555,13 @@ function OrderDetailScr({order:o,onBack,go}){
             </button>
             <button
               onClick={confirmModify}
-              disabled={modifyConfirming || (diff>0 && !modifyPayMethod) || !hasChanges}
+              disabled={modifyConfirming || !hasChanges}
               style={{
                 flex:1.5,padding:"12px 0",borderRadius:12,border:"none",
-                background:(modifyConfirming||(diff>0 && !modifyPayMethod)||!hasChanges)?"#E5E7EB":"#3B82F6",
-                color:(modifyConfirming||(diff>0 && !modifyPayMethod)||!hasChanges)?"var(--muted)":"#fff",
+                background:(modifyConfirming||!hasChanges)?"#E5E7EB":"#3B82F6",
+                color:(modifyConfirming||!hasChanges)?"var(--muted)":"#fff",
                 fontSize:12,fontWeight:700,
-                cursor:(modifyConfirming||(diff>0 && !modifyPayMethod)||!hasChanges)?"not-allowed":"pointer",
+                cursor:(modifyConfirming||!hasChanges)?"not-allowed":"pointer",
                 fontFamily:"inherit",
                 display:"flex",alignItems:"center",justifyContent:"center",gap:6,
               }}

@@ -12,14 +12,14 @@ import Icon from "../../components/Icon";
 
 function CheckoutScr({onBack,onDone,cart=[],clearCart,appliedCoupon,setAppliedCoupon,go}){
   const { gate, GateUI } = useGuestGate(go);
-  const [step,setStep]=useState(0);const [momo,setMomo]=useState("airtel");const [ok,setOk]=useState(false);
+  const [step,setStep]=useState(0);const [momo,setMomo]=useState("cash");const [ok,setOk]=useState(false);
   const [okAnimShown,setOkAnimShown]=useState(false);
   const [ckAddr,setCkAddr]=useState("");
   const [ckPhone,setCkPhone]=useState("064663469");
   const [ckPhoneErr,setCkPhoneErr]=useState("");const [saveAddr,setSaveAddr]=useState(true);
   const [giftCode,setGiftCode]=useState("");
   const [giftApplied,setGiftApplied]=useState(null);const [schedule,setSchedule]=useState("now");const [schedDate,setSchedDate]=useState("");const [schedTime,setSchedTime]=useState("10:00-12:00");
-  const momos=[{k:"airtel",n:"Airtel Money"},{k:"mtn",n:"MTN MoMo"},{k:"kolo",n:"Kolo Pay"},{k:"cash",n:"Paiement à la livraison"}];
+  const momos=[{k:"cash",n:"Paiement à la livraison"}];
   const { VENDORS } = useData();
 
   const getItem=(c)=>c.product||c;
