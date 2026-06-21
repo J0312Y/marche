@@ -2,11 +2,12 @@ import InvoiceView from "../../components/InvoiceView";
 import P from "../../data/products";
 import CreditNoteView from "../../components/CreditNoteView";
 import SuccessAnimation from "../../components/SuccessAnimation";
-import { useState } from "react";
+import { useState, useMemo } from "react";
 import toast from "../../utils/toast";
 import Icon from "../../components/Icon";
 import { saveMod } from "../../utils/orderMods";
 import { getOrderPin } from "../../utils/deliveryPin";
+import { useData } from "../../hooks";
 
 const STEPS=["Confirmée","En préparation","En livraison","Livrée"];
 
@@ -32,22 +33,33 @@ function OrderDetailScr({order:o,onBack,go}){
   const [modifyConfirming,setModifyConfirming]=useState(false);
   const [modifyDone,setModifyDone]=useState(false);
   const [modifyPayMethod,setModifyPayMethod]=useState(null);
+  const [showAddArticle,setShowAddArticle]=useState(false);
+  const [addArticleSearch,setAddArticleSearch]=useState("");
+
+  // Pull vendor products for "add article" feature
+  const { P } = useData();
+  const vendorProducts = useMemo(() => {
+    if (!o.vendor || !P) return [];
+    return P.filter(p => p.vendor === o.vendor).slice(0, 50);
+  }, [o.vendor, P]);
 
   // Can modify if order is active and not yet delivered
   const canModify=!cancelled && (sc==="prep"||sc==="ship"||sc==="confirmed"||sc==="");
 
-  // Parse items: "Pain x3" -> {name:"Pain", qty:3, origQty:3}
+  // Parse items: "Pain x3" -> {name:"Pain", qty:3, origQty:3, price:..., isNew:false}
   const parseItemStr=(str)=>{
     const m=str.match(/^(.+?)\s+x(\d+)\s*$/);
-    if(m) return {name:m[1].trim(), qty:parseInt(m[2],10), origQty:parseInt(m[2],10)};
-    return {name:str.trim(), qty:1, origQty:1};
+    if(m) return {name:m[1].trim(), qty:parseInt(m[2],10), origQty:parseInt(m[2],10), isNew:false};
+    return {name:str.trim(), qty:1, origQty:1, isNew:false};
   };
 
-  // Estimate unit price = total / total units (rough but workable)
+  // Estimate unit price = total / total units (rough but workable for legacy items)
   const totalNum=parseInt(String(o.total||"0").replace(/\s/g,""))||0;
   const itemsParsed=(o.items||[]).map(parseItemStr);
   const totalUnits=itemsParsed.reduce((s,i)=>s+i.origQty,0)||1;
-  const unitPrice=Math.round(totalNum/totalUnits);
+  const estimatedUnitPrice=Math.round(totalNum/totalUnits);
+  // Assign estimated price to each original item
+  const itemsWithPrice = itemsParsed.map(it => ({...it, price: estimatedUnitPrice}));
 
   // Modification fee depends on order status
   const getModifyFee=()=>{
@@ -57,8 +69,10 @@ function OrderDetailScr({order:o,onBack,go}){
   };
 
   const openModify=()=>{
-    setModifyItems(itemsParsed.map(i=>({...i})));
+    setModifyItems(itemsWithPrice.map(i=>({...i})));
     setModifyPayMethod(o.payment||null);
+    setShowAddArticle(false);
+    setAddArticleSearch("");
     setShowModify(true);
   };
 
@@ -70,12 +84,42 @@ function OrderDetailScr({order:o,onBack,go}){
     }));
   };
 
-  // Compute new totals
-  const newSubtotal=modifyItems.reduce((s,it)=>s+(it.qty*unitPrice),0);
+  const addArticleFromProduct=(product)=>{
+    setModifyItems(prev=>{
+      // If already in list, just increment qty
+      const existingIdx = prev.findIndex(it => it.name === product.name);
+      if (existingIdx >= 0) {
+        return prev.map((it, i) => i === existingIdx ? {...it, qty: it.qty + 1} : it);
+      }
+      // Otherwise add as new item
+      return [...prev, {
+        name: product.name,
+        qty: 1,
+        origQty: 0,
+        price: product.price,
+        isNew: true,
+      }];
+    });
+    setShowAddArticle(false);
+    setAddArticleSearch("");
+    toast.success(`${product.name} ajouté`);
+  };
+
+  const filteredVendorProducts = useMemo(() => {
+    if (!addArticleSearch) return vendorProducts;
+    const q = addArticleSearch.toLowerCase();
+    return vendorProducts.filter(p => p.name.toLowerCase().includes(q));
+  }, [vendorProducts, addArticleSearch]);
+
+  // Compute new totals (use each item's individual price)
+  const newSubtotal=modifyItems.reduce((s,it)=>s+(it.qty*(it.price||estimatedUnitPrice)),0);
   const modifyFee=getModifyFee();
   const newTotal=newSubtotal+modifyFee;
   const diff=newTotal-totalNum;
   // Sign: positive = client owes, negative = refund
+
+  // Check if anything changed
+  const hasChanges = modifyItems.some(it => it.qty !== it.origQty) || modifyItems.some(it => it.isNew && it.qty > 0);
 
   const confirmModify=()=>{
     if(diff>0 && !modifyPayMethod){
@@ -297,26 +341,126 @@ function OrderDetailScr({order:o,onBack,go}){
           )}
 
           {/* Items list */}
-          <div style={{fontSize:10,fontWeight:700,color:"var(--muted)",letterSpacing:0.5,marginBottom:6}}>ARTICLES</div>
+          <div style={{display:"flex",justifyContent:"space-between",alignItems:"center",marginBottom:6}}>
+            <div style={{fontSize:10,fontWeight:700,color:"var(--muted)",letterSpacing:0.5}}>ARTICLES</div>
+            {!showAddArticle && vendorProducts.length > 0 && (
+              <button onClick={()=>setShowAddArticle(true)} style={{
+                padding:"4px 9px",borderRadius:7,
+                border:"1px solid rgba(59,130,246,0.3)",background:"rgba(59,130,246,0.06)",
+                color:"#3B82F6",fontSize:10,fontWeight:700,cursor:"pointer",fontFamily:"inherit",
+                display:"flex",alignItems:"center",gap:4
+              }}>
+                <Icon name="plus" size={10} color="#3B82F6"/>Ajouter un article
+              </button>
+            )}
+          </div>
+
+          {/* Add article picker (vendor catalog) */}
+          {showAddArticle && (
+            <div style={{
+              background:"var(--card)",
+              border:"1.5px solid #3B82F6",
+              borderRadius:12,
+              padding:10,
+              marginBottom:10,
+              animation:"fadeInFast .2s ease",
+            }}>
+              <div style={{display:"flex",alignItems:"center",gap:8,marginBottom:8}}>
+                <Icon name="search" size={14} color="var(--muted)"/>
+                <input
+                  type="text"
+                  value={addArticleSearch}
+                  onChange={e => setAddArticleSearch(e.target.value)}
+                  placeholder={`Chercher chez ${o.vendor}...`}
+                  autoFocus
+                  style={{
+                    flex:1,border:"none",background:"transparent",
+                    fontSize:12,color:"var(--text)",fontFamily:"inherit",outline:"none"
+                  }}
+                />
+                <button onClick={()=>{setShowAddArticle(false);setAddArticleSearch("");}} style={{
+                  width:24,height:24,borderRadius:6,
+                  border:"1px solid var(--border)",background:"var(--card)",
+                  cursor:"pointer",display:"flex",alignItems:"center",justifyContent:"center"
+                }}>
+                  <Icon name="close" size={11}/>
+                </button>
+              </div>
+              <div style={{maxHeight:180,overflowY:"auto"}}>
+                {filteredVendorProducts.length === 0 ? (
+                  <div style={{padding:"14px 8px",textAlign:"center",fontSize:11,color:"var(--muted)"}}>
+                    {addArticleSearch ? "Aucun article trouvé" : "Aucun article disponible chez ce vendeur"}
+                  </div>
+                ) : filteredVendorProducts.map(p => {
+                  const alreadyAdded = modifyItems.find(it => it.name === p.name);
+                  return (
+                    <div key={p.id} onClick={()=>addArticleFromProduct(p)} style={{
+                      display:"flex",alignItems:"center",gap:8,
+                      padding:"7px 6px",
+                      borderRadius:8,
+                      cursor:"pointer",
+                      background:alreadyAdded?"rgba(59,130,246,0.04)":"transparent",
+                      transition:"background .1s",
+                    }} onMouseEnter={e=>{if(!alreadyAdded)e.currentTarget.style.background="var(--light)"}} onMouseLeave={e=>{if(!alreadyAdded)e.currentTarget.style.background="transparent"}}>
+                      <div style={{flex:1,minWidth:0}}>
+                        <div style={{fontSize:11,fontWeight:600,color:"var(--text)",overflow:"hidden",textOverflow:"ellipsis",whiteSpace:"nowrap"}}>
+                          {p.name}
+                        </div>
+                        <div style={{fontSize:9,color:"var(--muted)",marginTop:1}}>
+                          {fmtNum(p.price)} F l'unité
+                          {alreadyAdded && <span style={{marginLeft:6,color:"#3B82F6",fontWeight:700}}>· déjà ajouté</span>}
+                        </div>
+                      </div>
+                      <div style={{
+                        width:24,height:24,borderRadius:7,
+                        background:"#3B82F6",
+                        display:"flex",alignItems:"center",justifyContent:"center",
+                        flexShrink:0
+                      }}>
+                        <Icon name="plus" size={12} color="#fff"/>
+                      </div>
+                    </div>
+                  );
+                })}
+              </div>
+            </div>
+          )}
+
+          {/* Modify items list */}
           <div style={{background:"var(--light)",borderRadius:12,padding:10,marginBottom:12}}>
             {modifyItems.map((it,idx)=>{
               const removed=it.qty===0;
               const changed=it.qty!==it.origQty;
+              const lineTotal = it.qty * (it.price || estimatedUnitPrice);
               return(
                 <div key={idx} style={{display:"flex",alignItems:"center",gap:10,padding:"8px 6px",borderBottom:idx<modifyItems.length-1?"1px solid var(--border)":"none",opacity:removed?0.5:1}}>
                   <div style={{flex:1,minWidth:0}}>
-                    <div style={{fontSize:12,fontWeight:600,color:"var(--text)",overflow:"hidden",textOverflow:"ellipsis",whiteSpace:"nowrap",textDecoration:removed?"line-through":"none"}}>{it.name}</div>
+                    <div style={{display:"flex",alignItems:"center",gap:6}}>
+                      <div style={{fontSize:12,fontWeight:600,color:"var(--text)",overflow:"hidden",textOverflow:"ellipsis",whiteSpace:"nowrap",textDecoration:removed?"line-through":"none",flex:1,minWidth:0}}>{it.name}</div>
+                      {changed && (
+                        <span style={{padding:"1px 5px",background:removed?"rgba(239,68,68,0.12)":it.isNew?"rgba(16,185,129,0.12)":"rgba(59,130,246,0.12)",color:removed?"#DC2626":it.isNew?"#10B981":"#3B82F6",borderRadius:3,fontSize:9,fontWeight:700,flexShrink:0}}>
+                          {removed?"SUPPRIMÉ":it.isNew?"NOUVEAU":it.qty>it.origQty?`+${it.qty-it.origQty}`:`-${it.origQty-it.qty}`}
+                        </span>
+                      )}
+                    </div>
                     <div style={{fontSize:10,color:"var(--muted)",marginTop:1}}>
-                      {fmtNum(unitPrice)} F l'unité
-                      {changed&&<span style={{marginLeft:6,padding:"1px 5px",background:removed?"rgba(239,68,68,0.12)":"rgba(59,130,246,0.12)",color:removed?"#DC2626":"#3B82F6",borderRadius:3,fontSize:9,fontWeight:700}}>
-                        {removed?"SUPPRIMÉ":it.qty>it.origQty?`+${it.qty-it.origQty}`:`-${it.origQty-it.qty}`}
-                      </span>}
+                      {fmtNum(it.price || estimatedUnitPrice)} F l'unité
                     </div>
                   </div>
                   <div style={{display:"flex",alignItems:"center",gap:6,flexShrink:0}}>
-                    <button onClick={()=>adjustQty(idx,-1)} disabled={it.qty<=0} style={{width:28,height:28,borderRadius:8,border:"1px solid var(--border)",background:"var(--card)",cursor:it.qty<=0?"not-allowed":"pointer",display:"flex",alignItems:"center",justifyContent:"center",opacity:it.qty<=0?0.4:1,fontFamily:"inherit",fontWeight:700,color:"var(--text)"}}>−</button>
-                    <div style={{width:24,textAlign:"center",fontSize:13,fontWeight:700,color:"var(--text)"}}>{it.qty}</div>
-                    <button onClick={()=>adjustQty(idx,1)} style={{width:28,height:28,borderRadius:8,border:"1px solid var(--border)",background:"var(--card)",cursor:"pointer",display:"flex",alignItems:"center",justifyContent:"center",fontFamily:"inherit",fontWeight:700,color:"var(--text)"}}>+</button>
+                    <button onClick={()=>adjustQty(idx,-1)} disabled={it.qty<=0} style={{width:26,height:26,borderRadius:7,border:"1px solid var(--border)",background:"var(--card)",cursor:it.qty<=0?"not-allowed":"pointer",display:"flex",alignItems:"center",justifyContent:"center",opacity:it.qty<=0?0.4:1,fontFamily:"inherit",fontWeight:700,color:"var(--text)"}}>−</button>
+                    <div style={{width:20,textAlign:"center",fontSize:12,fontWeight:700,color:"var(--text)"}}>{it.qty}</div>
+                    <button onClick={()=>adjustQty(idx,1)} style={{width:26,height:26,borderRadius:7,border:"1px solid var(--border)",background:"var(--card)",cursor:"pointer",display:"flex",alignItems:"center",justifyContent:"center",fontFamily:"inherit",fontWeight:700,color:"var(--text)"}}>+</button>
+                  </div>
+                  {/* Per-item total on the right */}
+                  <div style={{
+                    minWidth:62,textAlign:"right",
+                    fontSize:12,fontWeight:700,
+                    color:removed?"var(--muted)":"var(--text)",
+                    textDecoration:removed?"line-through":"none",
+                    fontVariantNumeric:"tabular-nums",
+                  }}>
+                    {fmtNum(lineTotal)} F
                   </div>
                 </div>
               );
@@ -373,13 +517,13 @@ function OrderDetailScr({order:o,onBack,go}){
             </button>
             <button
               onClick={confirmModify}
-              disabled={modifyConfirming || (diff>0 && !modifyPayMethod) || modifyItems.every((it,i)=>it.qty===it.origQty)}
+              disabled={modifyConfirming || (diff>0 && !modifyPayMethod) || !hasChanges}
               style={{
                 flex:1.5,padding:"12px 0",borderRadius:12,border:"none",
-                background:(modifyConfirming||(diff>0 && !modifyPayMethod)||modifyItems.every((it,i)=>it.qty===it.origQty))?"#E5E7EB":"#3B82F6",
-                color:(modifyConfirming||(diff>0 && !modifyPayMethod)||modifyItems.every((it,i)=>it.qty===it.origQty))?"var(--muted)":"#fff",
+                background:(modifyConfirming||(diff>0 && !modifyPayMethod)||!hasChanges)?"#E5E7EB":"#3B82F6",
+                color:(modifyConfirming||(diff>0 && !modifyPayMethod)||!hasChanges)?"var(--muted)":"#fff",
                 fontSize:12,fontWeight:700,
-                cursor:(modifyConfirming||(diff>0 && !modifyPayMethod)||modifyItems.every((it,i)=>it.qty===it.origQty))?"not-allowed":"pointer",
+                cursor:(modifyConfirming||(diff>0 && !modifyPayMethod)||!hasChanges)?"not-allowed":"pointer",
                 fontFamily:"inherit",
                 display:"flex",alignItems:"center",justifyContent:"center",gap:6,
               }}
