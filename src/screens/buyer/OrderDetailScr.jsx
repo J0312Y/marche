@@ -10,6 +10,7 @@ import { getOrderPin } from "../../utils/deliveryPin";
 import { useData } from "../../hooks";
 
 const STEPS=["Confirmée","En préparation","En livraison","Livrée"];
+const STEP_ICONS=["check_circle","package","truck","gift"];
 
 const findPhoto=(itemStr)=>{const name=itemStr.split(" ").slice(1).join(" ").replace(/ x\d+$/,"");const p=P.find(x=>x.name.includes(name)||name.includes(x.name));return p?.photo||null};
 
@@ -175,18 +176,40 @@ function OrderDetailScr({order:o,onBack,go}){
     {!cancelled&&<div style={{padding:16,background:"var(--card)",border:"1px solid var(--border)",borderRadius:16,marginBottom:12}}>
       {STEPS.map((s,i)=>{
         const done=i<currentStep;const active=i===currentStep-1;
+        const iconColor = done || active ? "#fff" : "var(--muted)";
         return(<div key={s} style={{display:"flex",gap:12,marginBottom:i<3?4:0}}>
           <div style={{display:"flex",flexDirection:"column",alignItems:"center"}}>
-            <div style={{width:26,height:26,borderRadius:"50%",background:done?"#10B981":active?"#F97316":"var(--border)",display:"flex",alignItems:"center",justifyContent:"center",fontSize:11,color:done||active?"var(--card)":"var(--muted)",fontWeight:700,flexShrink:0,boxShadow:active?"0 0 0 4px rgba(249,115,22,0.15)":"none"}}>
-              {done?"":i+1}
+            <div style={{
+              width:32,height:32,borderRadius:"50%",
+              background:done?"#10B981":active?"#F97316":"var(--light)",
+              border: !done && !active ? "1.5px dashed var(--border)" : "none",
+              display:"flex",alignItems:"center",justifyContent:"center",
+              flexShrink:0,
+              boxShadow:active?"0 0 0 4px rgba(249,115,22,0.15)":done?"0 2px 6px rgba(16,185,129,0.2)":"none",
+              transition:"all .2s",
+            }}>
+              {done ? (
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#fff" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round">
+                  <polyline points="20 6 9 17 4 12"/>
+                </svg>
+              ) : (
+                <Icon name={STEP_ICONS[i]} size={15} color={iconColor}/>
+              )}
             </div>
-            {i<3&&<div style={{width:2,height:20,background:done?"#10B981":"var(--border)"}}/>}
+            {i<3&&<div style={{width:2,height:20,background:done?"#10B981":"var(--border)",borderRadius:1}}/>}
           </div>
-          <div style={{paddingTop:3}}>
-            <div style={{fontSize:13,fontWeight:active?700:done?600:400,color:done||active?"var(--text)":"var(--muted)"}}>{s}</div>
+          <div style={{paddingTop:6}}>
+            <div style={{fontSize:13,fontWeight:active?700:done?600:500,color:done||active?"var(--text)":"var(--muted)"}}>{s}</div>
+            {active && (
+              <div style={{fontSize:11,color:"#F97316",fontWeight:600,marginTop:2,display:"flex",alignItems:"center",gap:4}}>
+                <span style={{width:6,height:6,borderRadius:"50%",background:"#F97316",animation:"pulse-dot 1.5s ease-in-out infinite"}}/>
+                En cours
+              </div>
+            )}
           </div>
         </div>);
       })}
+      <style>{`@keyframes pulse-dot{0%,100%{opacity:1;transform:scale(1)}50%{opacity:0.5;transform:scale(1.3)}}`}</style>
     </div>}
 
     {/* Delivery PIN — show when order is being prepared or shipped */}
