@@ -140,7 +140,7 @@ function CartScr({cart,setCart,go,appliedCoupon,setAppliedCoupon}){
         {icon:"",t:"Glisser pour supprimer",d:"Glissez un article vers la gauche pour le retirer du panier"},
         {icon:"",t:"Sauvegarder pour plus tard",d:"Le cœur met de côté sans supprimer du panier"},
         {icon:"handshake",t:"Commander en groupe",d:"Partagez avec vos amis et payez chacun votre part"},
-        {icon:"creditCard",t:"Paiement sécurisé",d:"Airtel, MTN, Orange Money ou cash à la livraison"},
+        {icon:"creditCard",t:"Paiement sécurisé",d:"Airtel Money, MTN MoMo ou cash à la livraison"},
       ].map((it,i)=>(
         <div key={i} style={{display:"flex",gap:12,padding:"10px 0",borderBottom:i<3?"1px solid var(--border)":"none"}}>
           <div style={{fontSize:24}}><Icon name={it.icon} size={20}/></div>
