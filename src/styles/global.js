@@ -3,7 +3,14 @@ const CSS=`
 *{margin:0;padding:0;box-sizing:border-box}
 :root{--bg:#FAF9F6;--card:#fff;--border:#E8E6E1;--text:#191815;--sub:#5E5B53;--muted:#908C82;--light:#F5F4F1;--hover:#F0EFEC}
 .dark{--bg:#111113;--card:#1C1C1E;--border:#2C2C2E;--text:#F5F4F1;--sub:#A1A1A6;--muted:#6B6B70;--light:#2C2C2E;--hover:#3A3A3C}
-.phone{width:393px;height:852px;background:var(--bg);border-radius:47px;overflow:hidden;position:relative;font-family:'Inter',sans-serif;color:var(--text);display:flex;flex-direction:column;box-shadow:0 50px 100px rgba(0,0,0,.25),0 0 0 .5px rgba(255,255,255,.15) inset;border:4px solid #2c2c2e;transform:translateZ(0)}
+.phone{width:393px;height:min(852px,calc(100vh - 20px));max-height:100dvh;background:var(--bg);border-radius:47px;overflow:hidden;position:relative;font-family:'Inter',sans-serif;color:var(--text);display:flex;flex-direction:column;box-shadow:0 50px 100px rgba(0,0,0,.25),0 0 0 .5px rgba(255,255,255,.15) inset;border:4px solid #2c2c2e;transform:translateZ(0)}
+
+/* Real mobile devices: phone simulator becomes fullscreen */
+@media (max-width:800px){
+  .phone{width:100vw;height:100vh;height:100dvh;border-radius:0;border:none;box-shadow:none;max-height:none}
+  .phone-frame{border-radius:0 !important}
+  .phone-frame-bg,.phone-frame-btn{display:none}
+}
 
 select{-webkit-appearance:none;-moz-appearance:none;appearance:none;width:100%;padding:12px 36px 12px 14px;border-radius:14px;border:1px solid var(--border);background:var(--light);color:var(--text);font-size:14px;font-family:inherit;font-weight:500;cursor:pointer;outline:none;transition:border .15s;background-image:url("data:image/svg+xml,%3Csvg width='12' height='12' viewBox='0 0 12 12' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M2.5 4.5L6 8L9.5 4.5' stroke='%236B6B80' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round' fill='none'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 12px center}
 select:focus{border-color:#F97316;box-shadow:0 0 0 3px rgba(249,115,22,0.08)}
@@ -126,7 +133,7 @@ select option{background:var(--card);color:var(--text);padding:10px 14px;font-si
 .det-info{padding:14px;border-radius:14px;border:1px solid var(--border);background:var(--light);display:flex;align-items:center;gap:12px;margin-bottom:10px;cursor:pointer}
 .det-info .dii{font-size:18px}.det-info .dit{flex:1}.det-info .dit h4{font-size:13px;font-weight:600}.det-info .dit p{font-size:11px;color:var(--muted)}
 .det-info .div{font-size:13px;font-weight:700;color:#F97316}
-.det-bar{display:flex;align-items:center;gap:10px;padding:10px 16px;border-top:1px solid var(--border);background:var(--card);flex-shrink:0}
+.det-bar{display:flex;align-items:center;gap:10px;padding:10px 12px;border-top:1px solid var(--border);background:var(--card);flex-shrink:0;box-shadow:0 -4px 12px rgba(0,0,0,0.06);z-index:30}
 .qty{display:flex;align-items:center;border:1px solid var(--border);border-radius:12px;overflow:hidden}
 .qty button{width:40px;height:40px;border:none;background:transparent;font-size:18px;cursor:pointer;display:flex;align-items:center;justify-content:center;color:var(--sub)}
 .qty span{width:36px;text-align:center;font-weight:700;font-size:15px}

@@ -111,23 +111,8 @@ function DetailScr({product:rawP,onBack,onAddCart,go,favs,toggleFav,isFav}){
       // Shadow on folded image
       if (foldShadow) foldShadow.style.opacity = foldProgress * 0.65;
       
-      // Sticky header fade
-      if (header) {
-        const fadeStart = imageHeight * 0.45;
-        const fadeEnd = imageHeight * 0.85;
-        if (scrollY > fadeStart) {
-          const progress = Math.min(1, (scrollY - fadeStart) / (fadeEnd - fadeStart));
-          header.style.background = `rgba(255,255,255,${progress * 0.98})`;
-          header.style.boxShadow = progress > 0.5 ? `0 1px 8px rgba(0,0,0,${progress * 0.08})` : "none";
-          header.style.pointerEvents = progress > 0.5 ? "auto" : "none";
-          if (headerTitle) headerTitle.style.opacity = progress;
-        } else {
-          header.style.background = "rgba(255,255,255,0)";
-          header.style.boxShadow = "none";
-          header.style.pointerEvents = "none";
-          if (headerTitle) headerTitle.style.opacity = 0;
-        }
-      }
+      // Sticky header is now always solid - no fade logic needed
+      // (kept the imgFold/foldShadow logic above for the image animation)
     };
     
     const onScroll = () => {
@@ -191,22 +176,39 @@ function DetailScr({product:rawP,onBack,onAddCart,go,favs,toggleFav,isFav}){
   if(cartAdded)return<SuccessAnimation title="Ajouté au panier !" subtitle={p.name+"×"+qty} hint={"Total : "+fmt(finalPrice*qty+sidesTotalPrice)} duration={1300} onDone={()=>{setCartAdded(false);onBack&&onBack()}}/>;
 
   return(<>
-    {/* ═══ STICKY HEADER (appears when image folds away) ═══ */}
+    {/* ═══ SOLID HEADER — always visible, normal flex flow below status bar ═══ */}
     <div ref={stickyHeaderRef} style={{
-      position:"fixed",top:0,left:0,right:0,zIndex:50,
+      flexShrink:0,
       padding:"10px 12px",display:"flex",alignItems:"center",gap:8,
-      background:"rgba(255,255,255,0)",
-      boxShadow:"none",
-      transition:"background 0.15s ease, box-shadow 0.15s ease",
-      pointerEvents:"none",
-      maxWidth:"100%",
+      background:"var(--card)",
+      borderBottom:"1px solid var(--border)",
+      boxShadow:"0 1px 4px rgba(0,0,0,0.04)",
+      zIndex:50,
     }}>
-      <div style={{width:48}}/>
-      <div ref={stickyTitleRef} style={{flex:1,opacity:0,transition:"opacity 0.15s ease",minWidth:0,padding:"0 4px",textAlign:"center"}}>
+      <button onClick={onBack} style={{
+        width:38,height:38,borderRadius:12,
+        border:"1px solid var(--border)",
+        background:"var(--card)",
+        cursor:"pointer",
+        display:"flex",alignItems:"center",justifyContent:"center",
+        flexShrink:0,
+      }}>
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+          <path d="M19 12H5M12 19l-7-7 7-7"/>
+        </svg>
+      </button>
+      <div ref={stickyTitleRef} style={{flex:1,minWidth:0,padding:"0 4px",textAlign:"center"}}>
         <div style={{fontSize:10,color:"var(--muted)",lineHeight:1.2,whiteSpace:"nowrap",overflow:"hidden",textOverflow:"ellipsis"}}>{p.vendor||"Vendeur"}</div>
         <div style={{fontSize:13,fontWeight:700,color:"var(--text)",whiteSpace:"nowrap",overflow:"hidden",textOverflow:"ellipsis"}}>{p.name}</div>
       </div>
-      <div style={{width:96}}/>
+      <div style={{display:"flex",gap:6,flexShrink:0}}>
+        <button onClick={()=>shareProduct(p)} style={{width:38,height:38,borderRadius:12,border:"1px solid var(--border)",background:"var(--card)",cursor:"pointer",display:"flex",alignItems:"center",justifyContent:"center"}}>
+          <Icon name="share" size={16}/>
+        </button>
+        <button onClick={()=>toggleFav(p.id)} style={{width:38,height:38,borderRadius:12,border:"1px solid var(--border)",background:"var(--card)",cursor:"pointer",display:"flex",alignItems:"center",justifyContent:"center"}}>
+          {isFav(p.id) ? <svg width="16" height="16" viewBox="0 0 24 24" fill="#EF4444"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg> : <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>}
+        </button>
+      </div>
     </div>
 
     <div className="scr" ref={scrRef} style={{perspective:"900px"}}>
@@ -221,14 +223,7 @@ function DetailScr({product:rawP,onBack,onAddCart,go,favs,toggleFav,isFav}){
         {/* Shadow that appears as image folds (gives 3D depth feel) */}
         <div ref={foldShadowRef} style={{position:"absolute",inset:0,background:"linear-gradient(180deg, rgba(0,0,0,0.5) 0%, rgba(0,0,0,0) 50%)",opacity:0,pointerEvents:"none",willChange:"opacity",zIndex:3}}/>
 
-        {/* Top bar overlay (stays in place, doesn't fold) */}
-        <div style={{position:"absolute",top:12,left:12,right:12,display:"flex",justifyContent:"space-between",zIndex:6}}>
-          <BackButton onClick={e=>{e.stopPropagation();onBack()}} />
-          <div style={{display:"flex",gap:8}}>
-            <button onClick={e=>{e.stopPropagation();shareProduct(p)}} style={{width:40,height:40,borderRadius:14,background:"rgba(255,255,255,0.95)",backdropFilter:"blur(12px)",border:"1px solid rgba(255,255,255,0.4)",boxShadow:"0 4px 16px rgba(0,0,0,0.08)",cursor:"pointer",display:"flex",alignItems:"center",justifyContent:"center",fontSize:16}}><Icon name="share" size={16}/></button>
-            <FavButton active={isFav(p.id)} onClick={e=>{e.stopPropagation();toggleFav(p.id)}} />
-          </div>
-        </div>
+        {/* Floating buttons removed — sticky header has back/share/fav always visible */}
 
         {/* Thumbnails floating LEFT */}
         {allPhotos.length>1&&<div style={{position:"absolute",top:60,left:12,display:"flex",flexDirection:"column",gap:8,zIndex:5}}>
@@ -573,7 +568,7 @@ function DetailScr({product:rawP,onBack,onAddCart,go,favs,toggleFav,isFav}){
         })()}
     </div>
 
-    {/* Bottom bar */}
+    {/* Bottom bar — flex-shrink:0 keeps it pinned to bottom of .phone */}
     <div className="det-bar">
       <div className="qty">
         <button onClick={()=>qty>1&&setQty(qty-1)}>−</button>
@@ -590,6 +585,7 @@ function DetailScr({product:rawP,onBack,onAddCart,go,favs,toggleFav,isFav}){
             }catch{}
             setCartAdded(true)}}}><Icon name="package" size={16}/>{" "}Ajouter · {fmt(finalPrice*qty+sidesTotalPrice)}</button>
     </div>
+
 
     {/* ── Alerte Prix Popup ── */}
     {showAlertPopup&&<div onClick={()=>setShowAlertPopup(false)} style={{position:"fixed",inset:0,background:"rgba(0,0,0,.4)",zIndex:150,display:"flex",alignItems:"center",justifyContent:"center",padding:16,animation:"fadeInFast .2s ease"}}>
