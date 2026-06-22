@@ -125,7 +125,7 @@ function CartScr({cart,setCart,go,appliedCoupon,setAppliedCoupon}){
        Vous économisez {fmt(discountAmount+(freeDelivery?del:0))} !
     </div>}
 
-    <button className="btn-primary" style={{marginTop:14}} onClick={()=>gate("checkout", ()=>go("checkout"))}>Passer la commande</button>
+    <div className="bottom-action-bar"><button className="btn-primary" onClick={()=>gate("checkout", ()=>go("checkout"))}>Passer la commande</button></div>
   </div>}
 
   {showTuto&&<div onClick={()=>{setShowTuto(false);try{localStorage.setItem("lk-cart-tutorial","1")}catch{}}} style={{position:"fixed",inset:0,background:"rgba(0,0,0,.7)",zIndex:9999,display:"flex",alignItems:"flex-end"}}>

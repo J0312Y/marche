@@ -27,7 +27,7 @@ function PasswordScr({onBack}){
     <div className="field"><label>Mot de passe actuel <span style={{color:"#EF4444"}}>*</span></label><input type="password" value={pwCurrent} onChange={e=>{setPwCurrent(e.target.value);clrP("current")}} placeholder="••••••••"/>{pwErrors.current&&<div className="err-msg">{pwErrors.current}</div>}</div>
     <div className="field"><label>Nouveau mot de passe <span style={{color:"#EF4444"}}>*</span></label><input type="password" value={pwNew} onChange={e=>{setPwNew(e.target.value);clrP("newpw")}} placeholder="Min. 8 caractères"/>{pwErrors.newpw&&<div className="err-msg">{pwErrors.newpw}</div>}</div>
     <div className="field"><label>Confirmer <span style={{color:"#EF4444"}}>*</span></label><input type="password" value={pwConfirm} onChange={e=>{setPwConfirm(e.target.value);clrP("confirm")}} placeholder="Répéter le mot de passe"/>{pwErrors.confirm&&<div className="err-msg">{pwErrors.confirm}</div>}</div>
-    <button className="btn-primary" style={{marginTop:10}} onClick={()=>{setDone(true);toast.success("Mot de passe modifié")}}>Modifier le mot de passe</button>
+    <div className="bottom-action-bar"><button className="btn-primary" onClick={()=>{setDone(true);toast.success("Mot de passe modifié")}}>Modifier le mot de passe</button></div>
   </div>);
 }
 

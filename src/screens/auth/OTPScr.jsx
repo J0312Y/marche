@@ -230,15 +230,14 @@ function OTPScr({ onDone, provider, onEditNumber }) {
         )}
       </div>
 
-      {/* ═══ VERIFY BUTTON ═══ */}
-      <button
+      {/* ═══ VERIFY BUTTON (sticky bottom) ═══ */}
+      <div className="bottom-action-bar"><button
         onClick={handleVerify}
         disabled={verifying || code.join("").length < 6}
         className="btn-primary"
         style={{
           opacity: verifying || code.join("").length < 6 ? 0.6 : 1,
           cursor: verifying || code.join("").length < 6 ? "not-allowed" : "pointer",
-          marginBottom: 14,
           display: "flex", alignItems: "center", justifyContent: "center", gap: 6,
         }}
       >
@@ -248,7 +247,7 @@ function OTPScr({ onDone, provider, onEditNumber }) {
             Vérification...
           </>
         ) : "Vérifier le code"}
-      </button>
+      </button></div>
 
       {/* ═══ HELP CARD ═══ */}
       <div style={{

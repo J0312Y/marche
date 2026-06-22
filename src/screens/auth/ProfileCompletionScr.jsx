@@ -58,7 +58,7 @@ function ProfileCompletionScr({onDone,provider,setUserName}){
           {errors.phone&&<div className="err-msg">{errors.phone}</div>}
           <div style={{fontSize:10,color:"var(--muted)",marginTop:4}}>Requis pour Kolo Pay, notifications et livraisons</div>
         </div>}
-        <button className="btn-primary" onClick={()=>{if(validate0()){setUserName?.(firstName.trim());setStep(1)}}}>Continuer</button>
+        <div className="bottom-action-bar"><button className="btn-primary" onClick={()=>{if(validate0()){setUserName?.(firstName.trim());setStep(1)}}}>Continuer</button></div>
         <button className="btn-outline" style={{marginTop:8}} onClick={onDone}>Passer pour l'instant</button>
       </>}
 

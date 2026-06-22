@@ -22,7 +22,7 @@ function RateDriverScr({onBack,onDone,driver={}}){
     <p style={{fontSize:14,color:"var(--muted)",marginBottom:8}}>Votre évaluation aide {driverName} et les autres clients.</p>
     <div style={{fontSize:28,color:"#F59E0B",marginBottom:14}}>{"".repeat(rating)}</div>
     {tip>0&&<div style={{padding:"8px 16px",borderRadius:10,background:"rgba(249,115,22,0.04)",color:"#10B981",fontSize:13,fontWeight:600,marginBottom:14}}><Icon name="gift" size={16}/>{" "}Pourboire de {tip.toLocaleString()} FCFA envoyé</div>}
-    <button className="btn-primary" style={{maxWidth:280}} onClick={onDone||onBack}>Retour à l'accueil</button>
+    <div className="bottom-action-bar"><button className="btn-primary" style={{maxWidth:280}} onClick={onDone||onBack}>Retour à l'accueil</button></div>
   </div>);
 
   return(<div className="scr" style={{padding:16}}>

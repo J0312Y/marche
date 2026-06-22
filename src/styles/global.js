@@ -30,6 +30,7 @@ select option{background:var(--card);color:var(--text);padding:10px 14px;font-si
 .appbar button{width:38px;height:38px;border-radius:12px;border:1px solid var(--border);background:var(--card);cursor:pointer;font-size:16px;color:var(--text);display:flex;align-items:center;justify-content:center}
 .appbar h2{flex:1;font-size:17px;font-weight:600;text-align:center}
 .btn-primary{width:100%;padding:12px;border-radius:12px;border:none;background:#F97316;color:#fff;font-size:15px;font-weight:600;cursor:pointer;font-family:inherit;transition:opacity .15s}.btn-primary:hover{opacity:.85}
+.bottom-action-bar{position:sticky;bottom:0;left:0;right:0;background:var(--card);border-top:1px solid var(--border);padding:12px 16px calc(12px + env(safe-area-inset-bottom, 0px));margin:24px -16px 0;z-index:10;box-shadow:0 -2px 10px rgba(0,0,0,0.04)}
 .auth .btn-primary{margin:0 40px;width:calc(100% - 80px)}
 .auth .social-btns{padding:0}
 .auth .divider{margin:20px 0}

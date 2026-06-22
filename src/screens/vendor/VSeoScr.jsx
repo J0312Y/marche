@@ -45,7 +45,7 @@ function VSeoScr({onBack}){
         <div style={{fontSize:11,color:"#006621",marginTop:2}}>lamuka.cg/p/{slug}</div>
         <div style={{fontSize:11,color:"#545454",marginTop:2,lineHeight:1.4}}>{desc||"Aucune description — ajoutez-en une pour un meilleur référencement."}</div>
       </div>
-      <button onClick={save} style={{width:"100%",padding:14,borderRadius:14,border:"none",background:"#F97316",color:"#fff",fontSize:15,fontWeight:700,cursor:"pointer",fontFamily:"inherit"}}>Enregistrer</button>
+      <div className="bottom-action-bar"><button onClick={save} style={{width:"100%",padding:14,borderRadius:14,border:"none",background:"#F97316",color:"#fff",fontSize:15,fontWeight:700,cursor:"pointer",fontFamily:"inherit"}}>Enregistrer</button></div>
     </>:<>
       {/* Score global */}
       <div style={{padding:16,background:"var(--card)",border:"1px solid var(--border)",borderRadius:16,marginBottom:14,textAlign:"center"}}>
