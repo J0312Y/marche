@@ -211,7 +211,7 @@ function DetailScr({product:rawP,onBack,onAddCart,go,favs,toggleFav,isFav}){
       </div>
     </div>
 
-    <div className="scr" ref={scrRef} style={{perspective:"900px"}}>
+    <div className="scr" ref={scrRef} style={{perspective:"900px",paddingBottom:80}}>
       {/* Gallery — full bleed, no rounded corners, 3D FOLD */}
       <div onClick={()=>setZoomOpen(true)} style={{position:"relative",width:"100%",aspectRatio:"1/1",background:"#1a1a1a",overflow:"hidden",cursor:"zoom-in",transformStyle:"preserve-3d"}}>
         

@@ -133,7 +133,7 @@ select option{background:var(--card);color:var(--text);padding:10px 14px;font-si
 .det-info{padding:14px;border-radius:14px;border:1px solid var(--border);background:var(--light);display:flex;align-items:center;gap:12px;margin-bottom:10px;cursor:pointer}
 .det-info .dii{font-size:18px}.det-info .dit{flex:1}.det-info .dit h4{font-size:13px;font-weight:600}.det-info .dit p{font-size:11px;color:var(--muted)}
 .det-info .div{font-size:13px;font-weight:700;color:#F97316}
-.det-bar{display:flex;align-items:center;gap:10px;padding:10px 12px;border-top:1px solid var(--border);background:var(--card);flex-shrink:0;box-shadow:0 -4px 12px rgba(0,0,0,0.06);z-index:30}
+.det-bar{display:flex;align-items:center;gap:10px;padding:10px 12px;border-top:1px solid var(--border);background:var(--card);position:absolute;left:0;right:0;bottom:0;box-shadow:0 -4px 12px rgba(0,0,0,0.06);z-index:30}
 .qty{display:flex;align-items:center;border:1px solid var(--border);border-radius:12px;overflow:hidden}
 .qty button{width:40px;height:40px;border:none;background:transparent;font-size:18px;cursor:pointer;display:flex;align-items:center;justify-content:center;color:var(--sub)}
 .qty span{width:36px;text-align:center;font-weight:700;font-size:15px}
