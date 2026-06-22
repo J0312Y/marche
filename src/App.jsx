@@ -49,7 +49,7 @@ function AppInner() {
   };
 
   return (
-    <div style={{ display: "flex", justifyContent: "center", alignItems: "center", minHeight: "100vh", background: darkMode ? "#000" : "linear-gradient(160deg,#e0ddd8 0%,#c9c5bf 100%)", padding: 16 }}>
+    <div className="app-root" style={{ background: darkMode ? "#000" : "linear-gradient(160deg,#e0ddd8 0%,#c9c5bf 100%)" }}>
       <style>{CSS}</style>
 
       <div className="phone-frame" style={{ position: "relative", borderRadius: 51 }}>

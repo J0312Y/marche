@@ -106,7 +106,8 @@ function DetailScr({product:rawP,onBack,onAddCart,go,favs,toggleFav,isFav}){
       // 3D folding rotation (0 to 70 degrees)
       const foldProgress = Math.min(1, Math.max(0, scrollY / imageHeight));
       const rotateDeg = foldProgress * 70;
-      imgFold.style.transform = `rotateX(-${rotateDeg}deg)`;
+      // Simple opacity fade instead of 3D rotation (perspective removed for sticky to work)
+      imgFold.style.opacity = String(Math.max(0, 1 - foldProgress * 0.5));
       
       // Shadow on folded image
       if (foldShadow) foldShadow.style.opacity = foldProgress * 0.65;
@@ -211,7 +212,7 @@ function DetailScr({product:rawP,onBack,onAddCart,go,favs,toggleFav,isFav}){
       </div>
     </div>
 
-    <div className="scr" ref={scrRef} style={{perspective:"900px",paddingBottom:80}}>
+    <div className="scr" ref={scrRef}>
       {/* Gallery — full bleed, no rounded corners, 3D FOLD */}
       <div onClick={()=>setZoomOpen(true)} style={{position:"relative",width:"100%",aspectRatio:"1/1",background:"#1a1a1a",overflow:"hidden",cursor:"zoom-in",transformStyle:"preserve-3d"}}>
         
@@ -566,24 +567,85 @@ function DetailScr({product:rawP,onBack,onAddCart,go,favs,toggleFav,isFav}){
             </div>
           );
         })()}
-    </div>
 
-    {/* Bottom bar — flex-shrink:0 keeps it pinned to bottom of .phone */}
+    {/* Bottom bar — STICKY at bottom of scroll area, ALWAYS visible */}
     <div className="det-bar">
-      <div className="qty">
-        <button onClick={()=>qty>1&&setQty(qty-1)}>−</button>
-        <span>{qty}</span>
-        <button onClick={()=>setQty(qty+1)}>+</button>
+      {/* Quantity selector */}
+      <div style={{
+        display:"flex",alignItems:"center",
+        border:"1px solid var(--border)",
+        borderRadius:10,
+        height:44,
+        flexShrink:0,
+        background:"var(--card)",
+      }}>
+        <button
+          onClick={()=>qty>1&&setQty(qty-1)}
+          disabled={qty<=1}
+          style={{
+            width:36,height:42,
+            border:"none",background:"transparent",
+            color:qty>1?"var(--text)":"var(--muted)",
+            fontSize:18,fontWeight:500,
+            cursor:qty>1?"pointer":"not-allowed",
+            fontFamily:"inherit",
+            display:"flex",alignItems:"center",justifyContent:"center",
+          }}
+        >−</button>
+        <span style={{
+          minWidth:28,textAlign:"center",
+          fontSize:15,fontWeight:700,
+          color:"var(--text)",
+          fontVariantNumeric:"tabular-nums",
+        }}>{qty}</span>
+        <button
+          onClick={()=>setQty(qty+1)}
+          style={{
+            width:36,height:42,
+            border:"none",background:"transparent",
+            color:"#F97316",
+            fontSize:18,fontWeight:600,
+            cursor:"pointer",
+            fontFamily:"inherit",
+            display:"flex",alignItems:"center",justifyContent:"center",
+          }}
+        >+</button>
       </div>
-      <button className={`add-btn${cartAnim?" cart-bounce":""}`} onClick={()=>{setCartAnim(true);setTimeout(()=>setCartAnim(false),400);{const missing=p.sides?.filter(cat=>cat.required&&!cat.items.some(it=>selectedSides[it.name]));if(missing?.length>0){toast.error("Choisissez : "+missing.map(m=>m.cat).join(", "));return}onAddCart(p,qty,{sides:Object.values(selectedSides),note:specialNote});
-            // First-ever cart add: reset tutorial so it shows
-            try{
-              if(!localStorage.getItem("lk-cart-ever-added")){
-                localStorage.setItem("lk-cart-ever-added","1");
-                localStorage.removeItem("lk-cart-tutorial");
-              }
-            }catch{}
-            setCartAdded(true)}}}><Icon name="package" size={16}/>{" "}Ajouter · {fmt(finalPrice*qty+sidesTotalPrice)}</button>
+
+      {/* Big primary CTA */}
+      <button
+        className={`add-btn-main${cartAnim?" cart-bounce":""}`}
+        onClick={()=>{
+          setCartAnim(true);
+          setTimeout(()=>setCartAnim(false),400);
+          const missing=p.sides?.filter(cat=>cat.required&&!cat.items.some(it=>selectedSides[it.name]));
+          if(missing?.length>0){toast.error("Choisissez : "+missing.map(m=>m.cat).join(", "));return}
+          onAddCart(p,qty,{sides:Object.values(selectedSides),note:specialNote});
+          try{
+            if(!localStorage.getItem("lk-cart-ever-added")){
+              localStorage.setItem("lk-cart-ever-added","1");
+              localStorage.removeItem("lk-cart-tutorial");
+            }
+          }catch{}
+          setCartAdded(true);
+        }}
+        style={{
+          flex:1,height:44,
+          border:"none",
+          borderRadius:11,
+          background:"linear-gradient(135deg,#F97316,#EA580C)",
+          color:"#fff",
+          fontSize:13,fontWeight:800,letterSpacing:-0.2,
+          cursor:"pointer",fontFamily:"inherit",
+          display:"flex",alignItems:"center",justifyContent:"center",gap:7,
+          boxShadow:"0 4px 14px rgba(249,115,22,0.32)",
+          transition:"transform .12s",
+        }}
+      >
+        <Icon name="package" size={15} color="#fff"/>
+        Ajouter · {fmt(finalPrice*qty+sidesTotalPrice)}
+      </button>
+    </div>
     </div>
 
 

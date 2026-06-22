@@ -1,9 +1,13 @@
 const CSS=`
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
 *{margin:0;padding:0;box-sizing:border-box}
+html,body,#root{margin:0;padding:0;height:100%;overflow:hidden;overscroll-behavior:none}
+body{-webkit-tap-highlight-color:transparent}
 :root{--bg:#FAF9F6;--card:#fff;--border:#E8E6E1;--text:#191815;--sub:#5E5B53;--muted:#908C82;--light:#F5F4F1;--hover:#F0EFEC}
 .dark{--bg:#111113;--card:#1C1C1E;--border:#2C2C2E;--text:#F5F4F1;--sub:#A1A1A6;--muted:#6B6B70;--light:#2C2C2E;--hover:#3A3A3C}
-.phone{width:393px;height:min(852px,calc(100vh - 20px));max-height:100dvh;background:var(--bg);border-radius:47px;overflow:hidden;position:relative;font-family:'Inter',sans-serif;color:var(--text);display:flex;flex-direction:column;box-shadow:0 50px 100px rgba(0,0,0,.25),0 0 0 .5px rgba(255,255,255,.15) inset;border:4px solid #2c2c2e;transform:translateZ(0)}
+.app-root{display:flex;justify-content:center;align-items:center;min-height:100vh;min-height:100dvh;padding:16px;box-sizing:border-box}
+@media (max-width:800px){.app-root{padding:0 !important;min-height:100vh;min-height:100dvh}}
+.phone{width:393px;height:min(852px,calc(100vh - 20px));max-height:100dvh;background:var(--bg);border-radius:47px;overflow:hidden;position:relative;font-family:'Inter',sans-serif;color:var(--text);display:flex;flex-direction:column;box-shadow:0 50px 100px rgba(0,0,0,.25),0 0 0 .5px rgba(255,255,255,.15) inset;border:4px solid #2c2c2e}
 
 /* Real mobile devices: phone simulator becomes fullscreen */
 @media (max-width:800px){
@@ -133,7 +137,7 @@ select option{background:var(--card);color:var(--text);padding:10px 14px;font-si
 .det-info{padding:14px;border-radius:14px;border:1px solid var(--border);background:var(--light);display:flex;align-items:center;gap:12px;margin-bottom:10px;cursor:pointer}
 .det-info .dii{font-size:18px}.det-info .dit{flex:1}.det-info .dit h4{font-size:13px;font-weight:600}.det-info .dit p{font-size:11px;color:var(--muted)}
 .det-info .div{font-size:13px;font-weight:700;color:#F97316}
-.det-bar{display:flex;align-items:center;gap:10px;padding:10px 12px;border-top:1px solid var(--border);background:var(--card);position:absolute;left:0;right:0;bottom:0;box-shadow:0 -4px 12px rgba(0,0,0,0.06);z-index:30}
+.det-bar{display:flex;align-items:center;gap:10px;padding:10px 12px 12px;border-top:1px solid var(--border);background:var(--card);position:sticky;bottom:0;left:0;right:0;box-shadow:0 -2px 10px rgba(0,0,0,0.05);z-index:30}
 .qty{display:flex;align-items:center;border:1px solid var(--border);border-radius:12px;overflow:hidden}
 .qty button{width:40px;height:40px;border:none;background:transparent;font-size:18px;cursor:pointer;display:flex;align-items:center;justify-content:center;color:var(--sub)}
 .qty span{width:36px;text-align:center;font-weight:700;font-size:15px}
