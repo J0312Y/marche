@@ -406,7 +406,7 @@ function HomeScr({go,favs,toggleFav,isFav,userName}){
             const dish=P.find(p=>p.vendor===v.name&&p.photo)||P.find(p=>p.type==="restaurant"&&p.photo);
             return(
               <div key={v.id} onClick={()=>go("vendor",v)} style={{minWidth:158,flexShrink:0,background:"var(--card)",border:"1px solid var(--border)",borderRadius:14,overflow:"hidden",cursor:"pointer",boxShadow:"0 2px 8px rgba(0,0,0,0.04)"}}>
-                <div style={{width:"100%",aspectRatio:"16 / 10",position:"relative",overflow:"hidden",background:"var(--light)"}}>
+                <div style={{width:"100%",aspectRatio:"16 / 9",position:"relative",overflow:"hidden",background:"var(--light)"}}>
                   <img src={dish?.photo||v.cover} alt={v.name} style={{width:"100%",height:"100%",objectFit:"cover",objectPosition:"center"}}/>
                   {v.promo&&<span style={{position:"absolute",top:8,left:8,padding:"3px 7px",background:"#EF4444",color:"#fff",borderRadius:5,fontSize:9,fontWeight:800}}>-{v.promo.discount}%</span>}
                   {v.badge==="new"&&<span style={{position:"absolute",top:8,right:8,padding:"3px 7px",background:"#F97316",color:"#fff",borderRadius:5,fontSize:9,fontWeight:800}}>NOUVEAU</span>}
@@ -452,7 +452,7 @@ function HomeScr({go,favs,toggleFav,isFav,userName}){
           const featured=P.find(p=>p.vendor===v.name&&p.photo);
           return(
             <div key={v.id} onClick={()=>go("vendor",v)} style={{minWidth:154,flexShrink:0,background:"var(--card)",border:"1px solid var(--border)",borderRadius:14,overflow:"hidden",cursor:"pointer",boxShadow:"0 2px 8px rgba(0,0,0,0.04)"}}>
-              <div style={{width:"100%",aspectRatio:"16 / 10",position:"relative",overflow:"hidden",background:"var(--light)"}}>
+              <div style={{width:"100%",aspectRatio:"16 / 9",position:"relative",overflow:"hidden",background:"var(--light)"}}>
                 <img src={featured?.photo||v.cover} alt={v.name} style={{width:"100%",height:"100%",objectFit:"cover",objectPosition:"center"}}/>
                 {v.promo&&<span style={{position:"absolute",top:8,left:8,padding:"3px 7px",background:"#EF4444",color:"#fff",borderRadius:5,fontSize:9,fontWeight:800}}>-{v.promo.discount}%</span>}
                 {v.badge==="new"&&<span style={{position:"absolute",top:8,right:8,padding:"3px 7px",background:"#F97316",color:"#fff",borderRadius:5,fontSize:9,fontWeight:800}}>NOUVEAU</span>}
