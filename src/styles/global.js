@@ -1,13 +1,13 @@
 const CSS=`
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
 *{margin:0;padding:0;box-sizing:border-box}
-html,body,#root{margin:0;padding:0;height:100%;overflow:hidden;overscroll-behavior:none}
-body{-webkit-tap-highlight-color:transparent}
+html,body,#root{margin:0;padding:0;min-height:100%}
+body{-webkit-tap-highlight-color:transparent;font-family:'Inter',sans-serif}
 :root{--bg:#FAF9F6;--card:#fff;--border:#E8E6E1;--text:#191815;--sub:#5E5B53;--muted:#908C82;--light:#F5F4F1;--hover:#F0EFEC}
 .dark{--bg:#111113;--card:#1C1C1E;--border:#2C2C2E;--text:#F5F4F1;--sub:#A1A1A6;--muted:#6B6B70;--light:#2C2C2E;--hover:#3A3A3C}
 .app-root{display:flex;justify-content:center;align-items:center;min-height:100vh;min-height:100dvh;padding:16px;box-sizing:border-box}
 @media (max-width:800px){.app-root{padding:0 !important;min-height:100vh;min-height:100dvh}}
-.phone{width:393px;height:min(852px,calc(100vh - 20px));max-height:100dvh;background:var(--bg);border-radius:47px;overflow:hidden;position:relative;font-family:'Inter',sans-serif;color:var(--text);display:flex;flex-direction:column;box-shadow:0 50px 100px rgba(0,0,0,.25),0 0 0 .5px rgba(255,255,255,.15) inset;border:4px solid #2c2c2e}
+.phone{width:393px;height:min(852px,calc(100vh - 20px));max-height:100dvh;background:var(--bg);border-radius:47px;overflow:hidden;position:relative;font-family:'Inter',sans-serif;color:var(--text);display:flex;flex-direction:column;box-shadow:0 50px 100px rgba(0,0,0,.25),0 0 0 .5px rgba(255,255,255,.15) inset;border:4px solid #2c2c2e;transform:translateZ(0)}
 
 /* Real mobile devices: phone simulator becomes fullscreen */
 @media (max-width:800px){
