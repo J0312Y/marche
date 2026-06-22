@@ -6,6 +6,7 @@ import { SkeletonDashboard } from "../../components/Loading";
 import PullToRefresh from "../../components/PullToRefresh";
 import Icon from "../../components/Icon";
 import { fmt } from "../../utils/helpers";
+import toast from "../../utils/toast";
 
 const Svg = {
   bell:<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round"><path d="M18 8a6 6 0 0 0-12 0c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>,
@@ -352,12 +353,12 @@ function VDashboardScr({ go, currentVendor }){
         <div style={{color:"var(--text)"}}>{Svg.catalogue}</div>
         <div style={{fontSize:11, fontWeight:700}}>Catalogue</div>
       </div>
-      <div onClick={()=>go("vPromos")} style={{padding:"14px 8px", background:"var(--card)", border:"1px solid var(--border)", borderRadius:16, cursor:"pointer", display:"flex", flexDirection:"column", alignItems:"center", gap:8, position:"relative"}}>
+      <div onClick={()=>{if(isStarter){toast.error("🔒 Réservé aux abonnements Pro et Enterprise");return}go("vPromos")}} style={{padding:"14px 8px", background:"var(--card)", border:"1px solid var(--border)", borderRadius:16, cursor:"pointer", display:"flex", flexDirection:"column", alignItems:"center", gap:8, position:"relative", opacity:isStarter?0.55:1}}>
         <div style={{color:"#F97316"}}>{Svg.tag}</div>
         <div style={{fontSize:11, fontWeight:700}}>Promotions</div>
         {isStarter&&<span style={{position:"absolute", top:6, right:6, padding:"1px 5px", background:"#F59E0B", color:"#fff", borderRadius:3, fontSize:8, fontWeight:800}}>PRO</span>}
       </div>
-      <div onClick={()=>go("vStats")} style={{padding:"14px 8px", background:"var(--card)", border:"1px solid var(--border)", borderRadius:16, cursor:"pointer", display:"flex", flexDirection:"column", alignItems:"center", gap:8, position:"relative"}}>
+      <div onClick={()=>{if(isStarter){toast.error("🔒 Réservé aux abonnements Pro et Enterprise");return}go("vStats")}} style={{padding:"14px 8px", background:"var(--card)", border:"1px solid var(--border)", borderRadius:16, cursor:"pointer", display:"flex", flexDirection:"column", alignItems:"center", gap:8, position:"relative", opacity:isStarter?0.55:1}}>
         <div style={{color:"#10B981"}}>{Svg.chart}</div>
         <div style={{fontSize:11, fontWeight:700}}>Stats</div>
         {isStarter&&<span style={{position:"absolute", top:6, right:6, padding:"1px 5px", background:"#F59E0B", color:"#fff", borderRadius:3, fontSize:8, fontWeight:800}}>PRO</span>}

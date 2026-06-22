@@ -1,9 +1,13 @@
 import { useState } from "react";
+import { useApp } from "../../context/AppContext";
 import { fmt } from "../../utils/helpers";
 import ShopTeamTab from "./ShopTeamTab";
 import Icon from "../../components/Icon";
+import toast from "../../utils/toast";
 
 function VShopDetailScr({shop:sh,go,onBack}){
+  const { vendorPlan } = useApp();
+  const isPro = (vendorPlan || "starter") !== "starter";
   const [tab,setTab]=useState(0);
   const isActive=sh.status==="active";
   const allCats=["Mode","Accessoires","Beauté","Artisanat","Électronique","Alimentation","Maison","Sport"];
@@ -52,7 +56,7 @@ function VShopDetailScr({shop:sh,go,onBack}){
         </div>)}
 
         <div style={{fontSize:14,fontWeight:700,margin:"16px 0 10px"}}>Actions rapides</div>
-        {[["","Voir les commandes",()=>go("vOrdersList")],["️","Gérer les produits",()=>go("vProducts")],["","Voir les statistiques",()=>go("vStats")]].map(([i,t,fn])=><div key={t} className="menu-item" onClick={fn}><div className="mi-i">{i}</div><span className="mi-t">{t}</span><span className="mi-c">›</span></div>)}
+        {[["","Voir les commandes",()=>go("vOrdersList")],["️","Gérer les produits",()=>go("vProducts")],["","Voir les statistiques",()=>isPro?go("vStats"):toast.error("🔒 Réservé aux abonnements Pro et Enterprise")]].map(([i,t,fn])=><div key={t} className="menu-item" onClick={fn} style={{opacity:t==="Voir les statistiques"&&!isPro?0.55:1}}><div className="mi-i">{i}</div><span className="mi-t">{t}</span>{t==="Voir les statistiques"&&!isPro&&<span style={{marginLeft:"auto",marginRight:8,padding:"1px 6px",background:"#F59E0B",color:"#fff",borderRadius:3,fontSize:9,fontWeight:800}}>PRO</span>}<span className="mi-c">›</span></div>)}
       </div>}
 
       {/* Tab 1: Modifier */}

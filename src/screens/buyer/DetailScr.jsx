@@ -106,8 +106,7 @@ function DetailScr({product:rawP,onBack,onAddCart,go,favs,toggleFav,isFav}){
       // 3D folding rotation (0 to 70 degrees)
       const foldProgress = Math.min(1, Math.max(0, scrollY / imageHeight));
       const rotateDeg = foldProgress * 70;
-      // Simple opacity fade instead of 3D rotation (perspective removed for sticky to work)
-      imgFold.style.opacity = String(Math.max(0, 1 - foldProgress * 0.5));
+      imgFold.style.transform = `rotateX(-${rotateDeg}deg)`;
       
       // Shadow on folded image
       if (foldShadow) foldShadow.style.opacity = foldProgress * 0.65;
@@ -213,8 +212,8 @@ function DetailScr({product:rawP,onBack,onAddCart,go,favs,toggleFav,isFav}){
     </div>
 
     <div className="scr" ref={scrRef}>
-      {/* Gallery — full bleed, no rounded corners, 3D FOLD */}
-      <div onClick={()=>setZoomOpen(true)} style={{position:"relative",width:"100%",aspectRatio:"1/1",background:"#1a1a1a",overflow:"hidden",cursor:"zoom-in",transformStyle:"preserve-3d"}}>
+      {/* Gallery — full bleed, no rounded corners, 3D FOLD (perspective isolated here) */}
+      <div onClick={()=>setZoomOpen(true)} style={{position:"relative",width:"100%",aspectRatio:"1/1",background:"#1a1a1a",overflow:"hidden",cursor:"zoom-in",transformStyle:"preserve-3d",perspective:"900px"}}>
         
         {/* Image content that folds in 3D */}
         <div ref={imgFoldRef} style={{position:"absolute",inset:0,transformOrigin:"top center",backfaceVisibility:"hidden",willChange:"transform"}}>
