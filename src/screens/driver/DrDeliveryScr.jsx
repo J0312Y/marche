@@ -213,8 +213,8 @@ function DrDeliveryScr({delivery:dl,go,onBack}){
         {[["",dl.distance],["⏱️",dl.eta],["",fmt(dl.fee)]].map(([i,v])=><div key={i} style={{flex:1,padding:12,background:"var(--light)",borderRadius:12,textAlign:"center"}}><div style={{fontSize:16}}>{i}</div><div style={{fontSize:12,fontWeight:700,marginTop:2}}>{v}</div></div>)}
       </div>
 
-      {/* Bottom action - inside scroll */}
-      <div style={{paddingTop:20,paddingBottom:16}}>
+      {/* Bottom action - sticky */}
+      <div className="bottom-action-bar">
         {step<3?<><button style={{width:"100%",padding:14,borderRadius:14,border:"none",background:"#F97316",color:"#fff",fontSize:15,fontWeight:700,cursor:"pointer",fontFamily:"inherit"}} onClick={()=>setStep(step+1)}>{stepActions[step]}</button>
           {step>=2&&<button onClick={()=>setShowFail(true)} style={{width:"100%",padding:12,borderRadius:14,border:"1px solid rgba(239,68,68,0.3)",background:"transparent",color:"#EF4444",fontSize:13,fontWeight:600,cursor:"pointer",fontFamily:"inherit",marginTop:8}}><Icon name="x_circle" size={16}/>{" "}Problème de livraison</button>}
         </>
@@ -231,7 +231,7 @@ function DrDeliveryScr({delivery:dl,go,onBack}){
       <p style={{fontSize:13,color:"var(--muted)",textAlign:"center",marginBottom:6}}>Le vendeur et le client ont été notifiés.</p>
       <div style={{padding:12,background:"var(--light)",borderRadius:12,marginBottom:16,fontSize:12,color:"var(--muted)",textAlign:"center"}}>{failReason==="absent"?"Client absent":failReason==="refuse"?"Refus de payer":failReason==="address"?"Adresse introuvable":"Autre problème"}</div>
       <div style={{padding:12,background:"rgba(16,185,129,0.06)",borderRadius:12,marginBottom:20,fontSize:12,textAlign:"center"}}><span style={{color:"#10B981",fontWeight:600}}>+{fmt(1000)} frais de déplacement</span> crédités</div>
-      <button className="btn-primary" onClick={onBack}> Retour au dashboard</button>
+      <div className="bottom-action-bar"><button className="btn-primary" onClick={onBack}> Retour au dashboard</button></div>
     </div>}
 
     {/* Failure modal */}

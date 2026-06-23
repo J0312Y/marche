@@ -38,7 +38,7 @@ function ReturnScr({onBack,order}){
         <input value={refundPhone} onChange={e=>{const v=e.target.value.replace(/[^0-9]/g,"").slice(0,9);setRefundPhone(v)}} placeholder="06X XXX XXX" type="tel" maxLength={11} style={{flex:1,border:"none",background:"transparent",fontSize:14,outline:"none",fontFamily:"inherit",color:"var(--text)"}}/>
       </div>
     </div>}
-    <button className="btn-primary" onClick={submit}> Envoyer la demande</button>
+    <div className="bottom-action-bar"><button className="btn-primary" onClick={submit}> Envoyer la demande</button></div>
   </div>);
 }
 export default ReturnScr;

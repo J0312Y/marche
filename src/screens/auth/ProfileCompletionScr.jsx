@@ -69,7 +69,7 @@ function ProfileCompletionScr({onDone,provider,setUserName}){
         </div>
         <div className={`field${errors.quartier?" err":""}`}><label>Quartier <span style={{color:"#EF4444"}}>*</span></label><input value={quartier} onChange={e=>{setQuartier(e.target.value);clr("quartier")}} placeholder="Ex: Bacongo, Poto-Poto..."/>{errors.quartier&&<div className="err-msg">{errors.quartier}</div>}</div>
         <div className="field"><label>Adresse <span style={{color:"var(--muted)",fontWeight:400}}>(optionnel)</span></label><input value={address} onChange={e=>setAddress(e.target.value)} placeholder="Rue, N°..."/></div>
-        <button className="btn-primary" onClick={()=>{if(validate1()){setUserName?.(firstName.trim());setCompleted(true);setTimeout(onDone,1700)}}}><Icon name="rocket" size={16}/>{" "}Commencer</button>
+        <div className="bottom-action-bar"><button className="btn-primary" onClick={()=>{if(validate1()){setUserName?.(firstName.trim());setCompleted(true);setTimeout(onDone,1700)}}}><Icon name="rocket" size={16}/>{" "}Commencer</button></div>
       </>}
 
       <div style={{display:"flex",justifyContent:"center",gap:6,marginTop:20}}>{[0,1].map(i=><div key={i} style={{width:step===i?24:8,height:8,borderRadius:4,background:step>=i?"#F97316":"var(--border)",transition:"all .3s"}}/>)}</div>

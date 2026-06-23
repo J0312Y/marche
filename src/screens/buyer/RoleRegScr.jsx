@@ -435,8 +435,8 @@ function RoleRegScr({onBack,onDone,forceRole,onPending}){
         <div className="info-box green"><span><Icon name="check_circle" size={18}/></span><span>{role==="vendor"?"En soumettant, vous acceptez les CGV de Lamuka Marketplace.":"Votre demande sera vérifiée sous 24-48h. Vous serez notifié par SMS, email et notification."}</span></div>
       </>}
 
-      {/* ── Button inside scroll ── */}
-      <div style={{paddingTop:24,paddingBottom:16}}>
+      {/* ── Sticky CTA at bottom ── */}
+      <div className="bottom-action-bar">
         <button className="btn-primary" style={{background:color}} onClick={()=>{if(!validateStep())return;if(step<maxStep){setStep(step+1)}else{if(needsPayment&&!payDone){setShowPayment(true)}else{setShowSubmitAnim(true);setTimeout(()=>{setShowSubmitAnim(false);setOk(true)},1700)}}}}>{step===maxStep?(needsPayment&&!payDone?"Payer et soumettre":"Soumettre la demande"):"Continuer"}</button>
       </div>
     </div>

@@ -68,7 +68,7 @@ function DrZonesScr({onBack}){
       </div>
       :<button style={{width:"100%",padding:14,borderRadius:14,border:"2px dashed #F97316",background:"rgba(249,115,22,0.02)",color:"#F97316",fontSize:13,fontWeight:600,cursor:"pointer",fontFamily:"inherit",marginBottom:14}} onClick={()=>setShowAdd(true)}>+ Ajouter une zone de livraison</button>}
 
-      <button className="btn-primary" style={{background:saved?"#10B981":"#F97316"}} onClick={doSave}>{saved?"Zones sauvegardées":"Enregistrer mes zones"}</button>
+      <div className="bottom-action-bar"><button className="btn-primary" style={{background:saved?"#10B981":"#F97316"}} onClick={doSave}>{saved?"Zones sauvegardées":"Enregistrer mes zones"}</button></div>
     </div>
   </div>);
 }

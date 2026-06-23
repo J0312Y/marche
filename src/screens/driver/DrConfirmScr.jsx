@@ -114,7 +114,7 @@ function DrConfirmScr({delivery:dl,go,onBack}){
       {dl.tip>0&&<div style={{fontSize:12,color:"#F59E0B",marginTop:2}}>+ {fmt(dl.tip)} pourboire</div>}
     </div>
 
-    <button className="btn-primary" style={{background:"#10B981"}} onClick={()=>{setCashReversed(true);toast.success("Reversement confirmé — merci !")}}><Icon name="check_circle" size={16}/>{" "}J'ai envoyé {fmt(vendorAmount)} au vendeur</button>
+    <div className="bottom-action-bar"><button className="btn-primary" style={{background:"#10B981"}} onClick={()=>{setCashReversed(true);toast.success("Reversement confirmé — merci !")}}><Icon name="check_circle" size={16}/>{" "}J'ai envoyé {fmt(vendorAmount)} au vendeur</button></div>
     <div style={{textAlign:"center",marginTop:8}}><span style={{fontSize:10,color:"var(--muted)"}}>Le vendeur confirmera la réception dans son app</span></div>
   </div>);
 
@@ -131,7 +131,7 @@ function DrConfirmScr({delivery:dl,go,onBack}){
         <div style={{textAlign:"center"}}><div style={{fontSize:20,fontWeight:700,color:"#F97316"}}>{fmt(dl.fee+dl.tip)}</div><div style={{fontSize:11,color:"var(--muted)"}}>Total gagné</div></div>
       </div>
       <button onClick={()=>go("drRateVendor",{name:dl?.vendor?.name||"Commerce",avatar:dl?.vendor?.avatar||""})} style={{width:"100%",padding:14,borderRadius:14,border:"1px solid var(--border)",background:"var(--card)",fontSize:14,fontWeight:600,cursor:"pointer",fontFamily:"inherit",color:"var(--text)",marginBottom:8}}><Icon name="star_full" size={16}/>{" "}Évaluer le commerce</button>
-      <button className="btn-primary" style={{background:"#F97316"}} onClick={onBack}> Retour au dashboard</button>
+      <div className="bottom-action-bar"><button className="btn-primary" style={{background:"#F97316"}} onClick={onBack}> Retour au dashboard</button></div>
     </div>
   </div>);
 
@@ -301,7 +301,7 @@ function DrConfirmScr({delivery:dl,go,onBack}){
         </div>
       </div>}
 
-      <div style={{paddingTop:24,paddingBottom:16}}>
+      <div className="bottom-action-bar">
         {(() => {
           // Compute eligibility for validation based on chosen method
           const methodReady = method === "code" ? pinValid

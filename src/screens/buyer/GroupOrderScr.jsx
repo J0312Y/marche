@@ -104,7 +104,7 @@ function GroupOrderScr({onBack,go}){
       <div style={{fontSize:12,color:"var(--sub)",lineHeight:1.5}}>Idéal pour les repas entre collègues, les fêtes, ou les commandes familiales. Économisez sur les frais de livraison !</div>
     </div>
 
-    <button className="btn-primary" onClick={()=>{setStep("waiting");share({title:"Commande de groupe Lamuka",text:"Rejoins ma commande de groupe ! Ajoute tes plats",url:link})}}><Icon name="rocket" size={16}/>{" "}Créer un groupe</button>
+    <div className="bottom-action-bar"><button className="btn-primary" onClick={()=>{setStep("waiting");share({title:"Commande de groupe Lamuka",text:"Rejoins ma commande de groupe ! Ajoute tes plats",url:link})}}><Icon name="rocket" size={16}/>{" "}Créer un groupe</button></div>
   </div>);
 
   // ── WAITING ──
@@ -175,7 +175,7 @@ function GroupOrderScr({onBack,go}){
       </div>
     ))}
 
-    <button onClick={()=>setStep("review")} className="btn-primary" style={{marginTop:8}}><Icon name="check_circle" size={16}/>{" "}Finaliser la commande</button>
+    <div className="bottom-action-bar"><button onClick={()=>setStep("review")} className="btn-primary"><Icon name="check_circle" size={16}/>{" "}Finaliser la commande</button></div>
 
     {/* Add item modal */}
     {showAdd&&<div onClick={()=>setShowAdd(false)} style={{position:"fixed",inset:0,background:"rgba(0,0,0,.45)",zIndex:9999,display:"flex",alignItems:"flex-end",animation:"fadeInFast .2s ease"}}>
@@ -289,7 +289,7 @@ function GroupOrderScr({onBack,go}){
       {splitMode==="split"&&joinedCount>1&&<div style={{fontSize:11,color:"var(--muted)",marginTop:6,textAlign:"center"}}>≈ {fmt(Math.round((grandTotal+1500)/joinedCount))} / personne</div>}
     </div>
 
-    <button className="btn-primary" onClick={()=>{setGrpConfirmed(true);setTimeout(onBack,1800)}}><Icon name="package" size={16}/>{" "}Confirmer la commande</button>
+    <div className="bottom-action-bar"><button className="btn-primary" onClick={()=>{setGrpConfirmed(true);setTimeout(onBack,1800)}}><Icon name="package" size={16}/>{" "}Confirmer la commande</button></div>
   {grpConfirmed&&<SuccessAnimation
       title="Commande de groupe confirmée !"
       subtitle={`${joinedCount} participants · ${fmt(grandTotal+1500)}`}

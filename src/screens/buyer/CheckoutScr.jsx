@@ -124,7 +124,7 @@ function CheckoutScr({onBack,onDone,cart=[],clearCart,appliedCoupon,setAppliedCo
           {(discountAmount>0||freeDelivery)&&<div style={{textAlign:"center",fontSize:11,color:"#F59E0B",fontWeight:600,marginTop:4}}><Icon name="sparkle" size={16}/>{" "}Économie : {fmt(discountAmount+(freeDelivery?del:0))}</div>}
         </div></>}
 
-      <div style={{paddingTop:24,paddingBottom:16}}><button className="btn-primary" onClick={()=>{if(step===0&&!validateStep0())return;if(step===1&&momo!=="cash"){const err=validatePayPhone(ckPhone,momo);if(err){setCkPhoneErr(err);return}}if(step===2){if(validateCheckout())gate("checkout",()=>handleConfirm())}else setStep(step+1)}}>{step===2?"Confirmer le paiement":"Continuer"}</button></div>
+      <div className="bottom-action-bar"><button className="btn-primary" onClick={()=>{if(step===0&&!validateStep0())return;if(step===1&&momo!=="cash"){const err=validatePayPhone(ckPhone,momo);if(err){setCkPhoneErr(err);return}}if(step===2){if(validateCheckout())gate("checkout",()=>handleConfirm())}else setStep(step+1)}}>{step===2?"Confirmer le paiement":"Continuer"}</button></div>
     </div>
 
     {ok&&!okAnimShown&&<SuccessAnimation title="Commande confirmée !" subtitle={"Total : "+fmt(total)} hint={`+${window.__lastPointsEarned||Math.floor(total/100)} Lamuka Points gagnés ! `} duration={2000} onDone={()=>setOkAnimShown(true)}/>}

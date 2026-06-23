@@ -139,14 +139,14 @@ function GiftCardScr({onBack,go}){
         {toErr&&<div style={{fontSize:11,color:"#EF4444",marginTop:4}}>{toErr}</div>}
       </div>
       <div className="field"><label>Message <span style={{color:"var(--muted)",fontWeight:400}}>(optionnel)</span></label><input value={msg} onChange={e=>setMsg(e.target.value)} placeholder="Joyeux anniversaire !"/></div>
-      <button className="btn-primary" onClick={send}><Icon name="gift" size={16}/>{" "}Envoyer — {amount?fmt(amount):"..."}</button>
+      <div className="bottom-action-bar"><button className="btn-primary" onClick={send}><Icon name="gift" size={16}/>{" "}Envoyer — {amount?fmt(amount):"..."}</button></div>
     </>}
 
     {/* ── Redeem tab ── */}
     {tab==="redeem"&&<>
       <div style={{textAlign:"center",padding:"20px 0 16px"}}><div style={{fontSize:36,marginBottom:6}}>️</div><h3 style={{fontSize:16,fontWeight:700}}>Utiliser une carte cadeau</h3><p style={{fontSize:12,color:"var(--muted)",marginTop:4}}>Entrez le code reçu par SMS ou message</p></div>
       <div className="field"><label>Code carte cadeau</label><input value={redeemCode} onChange={e=>setRedeemCode(e.target.value.toUpperCase())} placeholder="GIFT-XXXX" style={{textAlign:"center",fontSize:18,fontWeight:700,letterSpacing:2}}/></div>
-      <button className="btn-primary" onClick={redeem}><Icon name="check_circle" size={16}/>{" "}Ajouter à mon compte</button>
+      <div className="bottom-action-bar"><button className="btn-primary" onClick={redeem}><Icon name="check_circle" size={16}/>{" "}Ajouter à mon compte</button></div>
 
       {/* Show wallet */}
       {(()=>{
