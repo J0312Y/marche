@@ -1,6 +1,7 @@
 import { useState } from "react";
 import toast from "../../utils/toast";
 import Icon from "../../components/Icon";
+import { downloadCSV } from "../../utils/download";
 
 function VImportScr({onBack}){
   const [tab,setTab]=useState("import");
@@ -55,12 +56,31 @@ function VImportScr({onBack}){
       <div style={{padding:16,background:"var(--card)",border:"1px solid var(--border)",borderRadius:16,marginBottom:14}}>
         <div style={{fontSize:14,fontWeight:700,marginBottom:4}}>Exporter mes produits</div>
         <div style={{fontSize:12,color:"var(--muted)",marginBottom:12}}>Téléchargez tous vos produits au format CSV</div>
-        <button onClick={()=>toast.success("Export CSV téléchargé ")} style={{width:"100%",padding:12,borderRadius:12,border:"none",background:"#F97316",color:"#fff",fontSize:13,fontWeight:700,cursor:"pointer",fontFamily:"inherit"}}> Exporter en CSV</button>
+        <button onClick={()=>{
+          const today=new Date().toISOString().slice(0,10);
+          // Mock products from current vendor inventory
+          const products=[
+            {SKU:"LMK-P001",Nom:"Boubou Wax Femme",Prix:25000,Stock:15,Catégorie:"Mode",Statut:"Publié"},
+            {SKU:"LMK-P002",Nom:"Poulet DG",Prix:5500,Stock:99,Catégorie:"Restauration",Statut:"Publié"},
+            {SKU:"LMK-P003",Nom:"Poisson Braisé",Prix:3400,Stock:99,Catégorie:"Restauration",Statut:"Publié"},
+          ];
+          downloadCSV(`lamuka-produits-${today}.csv`, products);
+          toast.success(`${products.length} produits exportés`);
+        }} style={{width:"100%",padding:12,borderRadius:12,border:"none",background:"#F97316",color:"#fff",fontSize:13,fontWeight:700,cursor:"pointer",fontFamily:"inherit"}}> Exporter en CSV</button>
       </div>
       <div style={{padding:16,background:"var(--card)",border:"1px solid var(--border)",borderRadius:16}}>
         <div style={{fontSize:14,fontWeight:700,marginBottom:4}}>Exporter les commandes</div>
         <div style={{fontSize:12,color:"var(--muted)",marginBottom:12}}>Historique de toutes vos commandes</div>
-        <button onClick={()=>toast.success("Export commandes téléchargé ")} style={{width:"100%",padding:12,borderRadius:12,border:"1px solid var(--border)",background:"var(--card)",fontSize:13,fontWeight:600,cursor:"pointer",fontFamily:"inherit",color:"var(--text)"}}> Exporter les commandes</button>
+        <button onClick={()=>{
+          const today=new Date().toISOString().slice(0,10);
+          const orders=[
+            {Référence:"LMK-2026-0143",Date:"2026-06-22",Client:"Marie M.",Total:15500,Méthode:"Cash",Statut:"Livré"},
+            {Référence:"LMK-2026-0142",Date:"2026-06-22",Client:"Jean K.",Total:8400,Méthode:"Cash",Statut:"En cours"},
+            {Référence:"LMK-2026-0141",Date:"2026-06-21",Client:"Sarah N.",Total:25000,Méthode:"Cash",Statut:"Livré"},
+          ];
+          downloadCSV(`lamuka-commandes-${today}.csv`, orders);
+          toast.success(`${orders.length} commandes exportées`);
+        }} style={{width:"100%",padding:12,borderRadius:12,border:"1px solid var(--border)",background:"var(--card)",fontSize:13,fontWeight:600,cursor:"pointer",fontFamily:"inherit",color:"var(--text)"}}> Exporter les commandes</button>
       </div>
     </>}
   </div>);

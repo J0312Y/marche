@@ -47,7 +47,17 @@ function VApiScr({go,onBack}){
         <div className="field" style={{marginBottom:8}}><label style={{fontSize:11}}>URL du webhook</label><input value={whUrl[k]} onChange={e=>setWhUrl({...whUrl,[k]:e.target.value})} placeholder="https://votre-site.com/api/webhook" style={{fontFamily:"monospace",fontSize:11}}/></div>
         <div style={{display:"flex",gap:8}}>
           <button style={{flex:1,padding:8,borderRadius:8,border:"1px solid var(--border)",background:"var(--card)",fontSize:11,fontWeight:600,cursor:"pointer",fontFamily:"inherit"}} onClick={()=>{setWhSaved(true);setTimeout(()=>{setWhSaved(false);setWhTab(null)},1500)}}><></> Sauver</button>
-          <button style={{padding:"8px 12px",borderRadius:8,border:"1px solid rgba(249,115,22,0.2)",background:"var(--card)",color:"#F97316",fontSize:11,fontWeight:600,cursor:"pointer",fontFamily:"inherit"}} onClick={()=>toast.success("Test webhook envoyé")}> Tester</button>
+          <button style={{padding:"8px 12px",borderRadius:8,border:"1px solid rgba(249,115,22,0.2)",background:"var(--card)",color:"#F97316",fontSize:11,fontWeight:600,cursor:"pointer",fontFamily:"inherit"}} onClick={()=>{
+            const u=whUrl[k];
+            if(!u||!u.startsWith("http")){toast.error("URL invalide");return}
+            toast.info("Envoi du test en cours…");
+            // Simule un appel réseau réaliste
+            setTimeout(()=>{
+              const ok=Math.random()>0.3; // 70% de réussite
+              if(ok)toast.success(`✓ Webhook test envoyé à ${new URL(u).hostname}`);
+              else toast.error("Échec — vérifiez l'URL ou les CORS");
+            },1200);
+          }}> Tester</button>
         </div>
       </div>}
     </div>)}

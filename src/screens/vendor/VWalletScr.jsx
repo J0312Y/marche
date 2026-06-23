@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import { fmt } from "../../utils/helpers";
 import Icon from "../../components/Icon";
 import toast from "../../utils/toast";
+import { printReceipt } from "../../utils/download";
 
 // ═══════════════════════════════════════════════════════
 //  MOCK DATA — to be replaced by backend later
@@ -383,7 +384,23 @@ function VWalletScr({ go, onBack }) {
                   <div style={{ fontSize: 14, fontWeight: 800, color: "var(--text)", fontVariantNumeric: "tabular-nums" }}>
                     {fmtNum(inv.commission)} F
                   </div>
-                  <button onClick={() => toast.success("Reçu téléchargé")} style={{
+                  <button onClick={() => {
+                    const ok = printReceipt({
+                      title: "Reçu Paiement Commission",
+                      ref: `LMK-COM-${inv.month.replace(/\s/g,"-")}`,
+                      date: fmtDate(inv.paidAt),
+                      vendor: "Mode Afrique",
+                      method: "Mobile Money",
+                      items: [
+                        { name: `Chiffre d'affaires ${inv.month}`, amount: `${fmt(inv.gross)}` },
+                        { name: `Commission Lamuka (10%)`, amount: `${fmt(inv.commission)}` },
+                      ],
+                      total: `${fmt(inv.commission)}`,
+                      note: "Reçu officiel — Conservez-le pour votre comptabilité.",
+                    });
+                    if (ok) toast.success("Reçu prêt — Imprimer ou enregistrer");
+                    else toast.error("Activez les popups pour télécharger");
+                  }} style={{
                     fontSize: 10, color: "#3B82F6", fontWeight: 600,
                     background: "transparent", border: "none", padding: 0, marginTop: 2,
                     cursor: "pointer", fontFamily: "inherit",
