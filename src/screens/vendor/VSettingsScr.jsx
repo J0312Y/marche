@@ -86,7 +86,7 @@ function VSettingsScr({onBack,go}){
         <div className="setting-item" onClick={()=>go("privacy")} style={{cursor:"pointer"}}><span className="si-i"><Icon name="key" size={18}/></span><span className="si-t">Politique de confidentialité</span><span className="mi-c">›</span></div>
       </div>
     </div>
-    <div style={{padding:"0 20px 20px"}}><button className="btn-primary" onClick={()=>toast.success("Paramètres sauvegardés")}> Enregistrer</button></div>
+    <div className="bottom-action-bar"><button className="btn-primary" onClick={()=>toast.success("Paramètres sauvegardés")}> Enregistrer</button></div>
     {cropVsLogo&&<ImageCropper src={cropVsLogo} shape="square" onCancel={()=>setCropVsLogo(null)} onConfirm={cropped=>{setVsLogo(cropped);setCropVsLogo(null);toast.success("Logo mis à jour")}}/>}
   </div>);
 }

@@ -37,7 +37,7 @@ function VUpgradePlanScr({onBack,onUpgrade,currentPlan="starter"}){
         <p style={{fontSize:12,color:"var(--muted)",marginTop:4}}>{tag}</p>
         <div style={{display:"flex",flexWrap:"wrap",gap:6,marginTop:10}}>{f.map(x=><span key={x} style={{padding:"4px 10px",borderRadius:8,background:k==="enterprise"?"rgba(245,158,11,0.06)":"rgba(249,115,22,0.06)",color:k==="enterprise"?"#F59E0B":"#F97316",fontSize:10,fontWeight:600}}> {x}</span>)}</div>
       </div>)}
-      <div style={{paddingTop:24,paddingBottom:16}}><button className="btn-primary" style={{background:plan==="enterprise"?"linear-gradient(135deg,#F59E0B,#D97706)":undefined}} onClick={()=>setShowPay(true)}><Icon name="creditCard" size={16}/>{" "}Passer au plan {plan==="pro"?"Pro":"Enterprise"}</button></div>
+      <div className="bottom-action-bar"><button className="btn-primary" style={{background:plan==="enterprise"?"linear-gradient(135deg,#F59E0B,#D97706)":undefined}} onClick={()=>setShowPay(true)}><Icon name="creditCard" size={16}/>{" "}Passer au plan {plan==="pro"?"Pro":"Enterprise"}</button></div>
     </div>
 
     {showPay&&<div onClick={()=>!paying&&setShowPay(false)} style={{position:"fixed",inset:0,background:"rgba(0,0,0,.45)",zIndex:150,display:"flex",alignItems:"center",justifyContent:"center",padding:16}}>

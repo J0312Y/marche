@@ -81,8 +81,10 @@ function VAssignDriverScr({order:o,onBack,go}){
 
       {/* ── Button inside scroll ── */}
       <div style={{paddingTop:24,paddingBottom:16}}>
-        {step===0&&<button className="btn-primary" style={{opacity:selected?1:0.5}} onClick={()=>selected&&setStep(1)} disabled={!selected}>Continuer{chosen?` avec ${chosen.name}`:""}</button>}
-        {step===1&&<div style={{display:"flex",gap:10}}><button className="btn-outline" style={{flex:1}} onClick={()=>setStep(0)}>← Changer</button><button className="btn-primary" style={{flex:2}} onClick={()=>setStep(2)}><Icon name="check_circle" size={16}/>{" "}Confirmer l'assignation</button></div>}
+        <div className="bottom-action-bar">
+          {step===0&&<button className="btn-primary" style={{opacity:selected?1:0.5}} onClick={()=>selected&&setStep(1)} disabled={!selected}>Continuer{chosen?` avec ${chosen.name}`:""}</button>}
+          {step===1&&<div style={{display:"flex",gap:10}}><button className="btn-outline" style={{flex:1}} onClick={()=>setStep(0)}>← Changer</button><button className="btn-primary" style={{flex:2}} onClick={()=>setStep(2)}><Icon name="check_circle" size={16}/>{" "}Confirmer l'assignation</button></div>}
+        </div>
       </div>
     </div>
   </>);

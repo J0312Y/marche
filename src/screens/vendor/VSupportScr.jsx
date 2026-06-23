@@ -240,7 +240,7 @@ function VSupportScr({go,onBack,vendorPlan}){
               <div className="field"><label>Sujet <span style={{color:"#EF4444"}}>*</span></label><input placeholder="Décrivez brièvement le problème"/></div>
               <div className="field"><label>Message</label><textarea rows={3} value={ticketMsg} onChange={e=>setTicketMsg(e.target.value)} placeholder="Donnez-nous tous les détails pour vous aider au mieux..."/></div>
               <div className="field"><label>Pièce jointe (optionnel)</label><div style={{padding:16,border:"1px dashed #E8E6E1",borderRadius:12,textAlign:"center",color:"var(--muted)",fontSize:12,cursor:"pointer"}}> Cliquez pour joindre un fichier (capture d'écran, document...)</div></div>
-              <button className="btn-primary" style={{background:ticketMsg?"#F97316":"var(--border)",color:ticketMsg?"var(--card)":"var(--muted)"}} onClick={()=>{if(ticketMsg)setContactDone(true)}}> Envoyer le ticket{isEnt?" (prioritaire)":""}</button>
+              <div className="bottom-action-bar"><button className="btn-primary" style={{background:ticketMsg?"#F97316":"var(--border)",color:ticketMsg?"var(--card)":"var(--muted)"}} onClick={()=>{if(ticketMsg)setContactDone(true)}}> Envoyer le ticket{isEnt?" (prioritaire)":""}</button></div>
             </>
           }
         </div>

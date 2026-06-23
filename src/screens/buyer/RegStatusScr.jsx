@@ -90,7 +90,7 @@ function RegStatusScr({onBack,role,plan,vendorStatus,driverStatus}){
       <div style={{fontSize:11,color:"var(--muted)",lineHeight:1.5}}>Si votre demande prend plus de 48h, contactez-nous sur WhatsApp au +242 064 663 469 ou par email à support@lamuka.market</div>
     </div>
 
-    <button className="btn-primary" onClick={onBack}>← Retour</button>
+    <div className="bottom-action-bar"><button className="btn-primary" onClick={onBack}>← Retour</button></div>
   </div>);
 }
 

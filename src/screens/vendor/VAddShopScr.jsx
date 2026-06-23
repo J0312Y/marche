@@ -124,7 +124,7 @@ function VAddShopScr({onBack}){
 
       {/* ── Button always inside scroll area ── */}
       <div style={{paddingTop:24,paddingBottom:16}}>
-        <button className="btn-primary" style={{background:!canNext?"var(--border)":"#F97316",color:!canNext?"var(--muted)":"#fff"}} onClick={advance}>{step===maxStep?"Créer l'établissement":"Continuer"}</button>
+      <div className="bottom-action-bar"><button className="btn-primary" style={{background:!canNext?"var(--border)":"#F97316",color:!canNext?"var(--muted)":"#fff"}} onClick={advance}>{step===maxStep?"Créer l'établissement":"Continuer"}</button></div>
       </div>
 
     </div>

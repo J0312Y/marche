@@ -28,7 +28,7 @@ function VAddDriverScr({onBack}){
       <div className="field"><label>Type de véhicule <span style={{color:"#EF4444"}}>*</span></label><Select value="moto" onChange={()=>{}} options={[{value:"moto",label:"Moto / Scooter"},{value:"voiture",label:"Voiture"},{value:"velo",label:"Vélo"}]}/></div>
       <div className="field"><label>Zone de livraison <span style={{color:"#EF4444"}}>*</span></label><Select value="Brazzaville Sud" onChange={()=>{}} options={["Brazzaville Sud","Brazzaville Centre","Brazzaville Nord","Pointe-Noire"]}/></div>
       <div className="info-box blue" style={{marginTop:10}}><span><Icon name="phone" size={18}/></span><span>Le livreur recevra un SMS d'invitation avec un lien pour créer son compte Lamuka.</span></div>
-      <div style={{paddingTop:24,paddingBottom:16}}><button className="btn-primary" onClick={()=>{setDone(true);validateDrv()&&toast.success("Invitation envoyée au livreur")}}> Envoyer l'invitation</button></div>
+      <div className="bottom-action-bar"><button className="btn-primary" onClick={()=>{setDone(true);validateDrv()&&toast.success("Invitation envoyée au livreur")}}> Envoyer l'invitation</button></div>
     </div>
   </>);
 }

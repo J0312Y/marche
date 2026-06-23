@@ -47,8 +47,8 @@ function AddressesScr({onBack,go}){
       <div className="field"><label>Nom <span style={{color:"#EF4444"}}>*</span></label><input value={adName} onChange={e=>{setAdName(e.target.value);clrA("name")}} placeholder="Ex: Bureau"/>{addrErrors.name&&<div className="err-msg">{addrErrors.name}</div>}</div>
       <div className="field"><label>Adresse <span style={{color:"#EF4444"}}>*</span></label><input value={adAddr} onChange={e=>{setAdAddr(e.target.value);clrA("addr")}} placeholder="Rue, numéro..."/>{addrErrors.addr&&<div className="err-msg">{addrErrors.addr}</div>}</div>
       <div className="field-row"><div className="field"><label>Quartier <span style={{color:"#EF4444"}}>*</span></label><input value={adQuart} onChange={e=>{setAdQuart(e.target.value);clrA("quart")}} placeholder="Bacongo"/>{addrErrors.quart&&<div className="err-msg">{addrErrors.quart}</div>}</div><div className="field"><label>Ville <span style={{color:"#EF4444"}}>*</span></label><input value={adCity} onChange={e=>{setAdCity(e.target.value);clrA("city")}} placeholder="Brazzaville"/>{addrErrors.city&&<div className="err-msg">{addrErrors.city}</div>}</div></div>
-      <div style={{display:"flex",gap:8,marginTop:8}}>
-        <button style={{flex:1,padding:10,borderRadius:10,border:"1px solid var(--border)",background:"var(--card)",fontSize:12,fontWeight:600,cursor:"pointer",fontFamily:"inherit"}} onClick={()=>setAdding(false)}>Annuler</button>
+      <div className="bottom-action-bar" style={{display:"flex",gap:8}}>
+        <button style={{flex:1,padding:12,borderRadius:10,border:"1px solid var(--border)",background:"var(--card)",fontSize:14,fontWeight:600,cursor:"pointer",fontFamily:"inherit"}} onClick={()=>setAdding(false)}>Annuler</button>
         <button className="btn-primary" style={{flex:1}} onClick={()=>{
           const e={};
           if(!adName.trim()) e.name="Nom requis";
