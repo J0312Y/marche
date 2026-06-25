@@ -40,7 +40,6 @@ function AppInner() {
   const driverTabs = [{ icon: "home", label: "Accueil" }, { icon: "package", label: "Livraisons" }, { icon: "wallet", label: "Gains" }, { icon: "bell", label: "Notifs" }, { icon: "user", label: "Profil" }];
   const tabs = mode === "buyer" ? buyerTabs : mode === "vendor" ? vendorTabs : driverTabs;
   const activeTab = mode === "buyer" ? tab : mode === "vendor" ? vTab : dTab;
-  const modeBadge = mode === "vendor" ? { bg: "#F97316", label: "MODE VENDEUR" } : mode === "driver" ? { bg: "#10B981", label: "MODE LIVREUR" } : null;
 
   const renderScreen = () => {
     if (mode === "driver") return <DriverScreens />;
@@ -77,7 +76,6 @@ function AppInner() {
                 <svg width="28" height="13" viewBox="0 0 28 13" fill="none"><rect x=".5" y=".5" width="23" height="12" rx="3.5" stroke={darkMode?"#fff":"#191815"} strokeWidth="1" opacity=".35"/><rect x="2" y="2" width="19.5" height="9" rx="2.5" fill={darkMode?"#fff":"#191815"}/><path d="M25 4.5c.8.4 1.3 1.1 1.3 2s-.5 1.6-1.3 2V4.5z" fill={darkMode?"#fff":"#191815"} opacity=".4"/></svg>
               </div>
             </div>
-            {auth === 5 && modeBadge && <div style={{ textAlign: "center", marginTop: 4 }}><span style={{ padding: "2px 10px", borderRadius: 8, background: modeBadge.bg, color: "#fff", fontSize: 9, fontWeight: 700, letterSpacing: .5 }}>{modeBadge.label}</span></div>}
           </div>
 
           {/* Screen Content */}

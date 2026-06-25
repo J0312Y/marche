@@ -3,6 +3,7 @@ import toast from "../../utils/toast";
 import PayLogo from "../../components/PayLogos";
 import { validatePayPhone, getPhonePlaceholder, isPayPhoneValid } from "../../utils/phoneValidation";
 import Icon from "../../components/Icon";
+import PlanUpgradeCelebration from "../../components/PlanUpgradeCelebration";
 
 function VUpgradePlanScr({onBack,onUpgrade,currentPlan="starter"}){
   const plans=[
@@ -22,7 +23,7 @@ function VUpgradePlanScr({onBack,onUpgrade,currentPlan="starter"}){
   const [payPhoneErr,setPayPhoneErr]=useState("");
   const currentInfo=plans.find(([k])=>k===currentPlan);
 
-  if(done)return(<div className="scr" style={{padding:16,textAlign:"center"}}><div style={{padding:"40px 0"}}><div style={{fontSize:48,marginBottom:10}}><Icon name="sparkle" size={18}/></div><h3 style={{fontSize:18,fontWeight:700}}>Plan mis à jour !</h3><p style={{fontSize:14,fontWeight:700,marginTop:8,color:plan==="enterprise"?"#F59E0B":"#F97316"}}>Plan {plan==="pro"?"Pro":"Enterprise"} activé</p><p style={{fontSize:13,color:"var(--muted)",marginTop:6}}>Toutes les fonctionnalités sont maintenant débloquées.</p><button className="btn-primary" style={{marginTop:20}} onClick={()=>{onUpgrade(plan);onBack()}}><Icon name="check_circle" size={16}/>{" "}Retour à la boutique</button></div></div>);
+  if(done)return<PlanUpgradeCelebration plan={plan} onDone={()=>{onUpgrade(plan);onBack()}}/>;
   return(<><div className="appbar"><button onClick={onBack}>←</button><h2>Changer de plan</h2><div style={{width:38}}/></div>
     <div className="scr" style={{padding:16}}>
       <div style={{textAlign:"center",marginBottom:14}}><div style={{fontSize:48,marginBottom:8}}>⬆️</div><h3 style={{fontSize:18,fontWeight:700}}>Boostez votre commerce</h3><p style={{fontSize:13,color:"var(--muted)"}}>Choisissez le plan qui correspond à vos ambitions</p></div>
