@@ -8,7 +8,8 @@ export const lineQty = (c) => parseInt(c?.quantity ?? c?.qty ?? 1, 10) || 1;
 // unit_price = prix de l'article + suppléments des options (calculé par le serveur, ou localement pour un invité)
 export const linePrice = (c) => parseFloat(c?.unit_price ?? (c?.product || c)?.price) || 0;
 export const lineTotal = (c) => (linePrice(c) + (parseFloat(c?.sidesTotal) || 0)) * lineQty(c);
-export const cartSubtotal = (cart = []) => cart.reduce((s, c) => s + lineTotal(c), 0);
+// Articles devenus indisponibles (retirés, en rupture) : affichés dans le panier mais pas comptés
+export const cartSubtotal = (cart = []) => cart.reduce((s, c) => s + (c.unavailable ? 0 : lineTotal(c)), 0);
 
 /**
  * Coupon appliqué : { code, type: 'percentage'|'fixed'|'free_delivery', value, max_discount }

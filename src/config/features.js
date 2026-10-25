@@ -13,7 +13,7 @@ const FEATURES = {
   rewardsWheel: false,     // Roue de la fortune (gains tirés côté client)
   driverBoost: false,      // Boost payant livreur
   orderModify: false,      // Modification d'une commande après validation
-  reviewPhotos: false,     // Photos jointes aux avis (pas d'upload côté API)
+  reviewPhotos: true,      // Photos jointes aux avis (POST /reviews/photo)
   reportExport: false,     // Export PDF/Excel des rapports vendeur
   loyaltyProgram: false,   // Points fidélité / récompenses (non utilisables, avantages non appliqués)
   qrScan: false,           // Scan QR (renvoyait un produit au hasard)

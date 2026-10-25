@@ -82,6 +82,7 @@ export default function CartScr({ go, onBack, appliedCoupon, setAppliedCoupon, e
   const [closedSheet, setClosedSheet] = useState(false);
   const [busyId, setBusyId] = useState(null);
   const [storeType, setStoreType] = useState(null);
+  const [cf, setCf] = useState("all"); // filtre du panier (comme Taobao) : all | drop | often | off
 
   // Plusieurs boutiques et aucune choisie → « Vos paniers » ; sinon le panier de la boutique
   const groups = cartGroups(allCart);
@@ -90,6 +91,14 @@ export default function CartScr({ go, onBack, appliedCoupon, setAppliedCoupon, e
   const eid = cur?.eid || null;
   const vendor = VENDORS.find((v) => Number(v.id) === eid) || { id: eid, name: cart[0]?.establishment_name, logo: cart[0]?.establishment_logo };
   const subtotal = cartSubtotal(cart);
+  // Prix en baisse depuis l'ajout, achats fréquents, indisponibles
+  const drop = (c) => !c.unavailable && Number(c.added_price) > 0 && Number(c.unit_price) < Number(c.added_price);
+  const often = (c) => Number(c.times_ordered) >= 2;
+  const off = cart.filter((c) => c.unavailable);
+  const FILTERS = [["drop", "Prix en baisse", cart.filter(drop).length], ["often", "Achats fréquents", cart.filter(often).length], ["off", "Indisponibles", off.length]].filter((f) => f[2] > 0);
+  const lines = cf === "drop" ? cart.filter(drop) : cf === "often" ? cart.filter(often) : cf === "off" ? off : cart;
+  useEffect(() => { if (cf !== "all" && !FILTERS.some((f) => f[0] === cf)) setCf("all"); }, [cart.length]); // eslint-disable-line react-hooks/exhaustive-deps
+  const removeOff = async () => { for (const c of off) await setQty(c, 0); };
   const discount = couponDiscount(appliedCoupon, subtotal);
 
   useEffect(() => {
@@ -157,11 +166,16 @@ export default function CartScr({ go, onBack, appliedCoupon, setAppliedCoupon, e
             <div className="cap">Un tampon sur votre carte fidélité</div>
           </div>}
 
-          {cart.map((c) => {
+          {FILTERS.length > 0 && cart.length > 1 && <div className="t-chips" style={{ display: "flex", gap: 8, overflowX: "auto", padding: "10px 14px 2px" }}>
+            <button className={"t-chip" + (cf === "all" ? " on" : "")} style={{ height: 32 }} onClick={() => setCf("all")}>Tout ({cart.length})</button>
+            {FILTERS.map(([k, l, n]) => <button key={k} className={"t-chip" + (cf === k ? " on" : "")} style={{ height: 32 }} onClick={() => setCf(k)}>{l} ({n})</button>)}
+          </div>}
+
+          {lines.map((c) => {
             const q = lineQty(c);
             const opts = optionsLabel(c.options);
             return (
-              <div key={c.id} className="tc-line" style={{ opacity: busyId === c.id ? 0.6 : 1 }}>
+              <div key={c.id} className="tc-line" style={{ opacity: busyId === c.id ? 0.6 : c.unavailable ? 0.55 : 1 }}>
                 <div className="ph">{(c.image || c.thumbnail_url) ? <Img src={c.image || c.thumbnail_url} alt="" style={{ width: "100%", height: "100%" }} /> : <Icon name="bag" size={26} color="var(--t-mut)" />}</div>
                 <div className="info">
                   <div className="nm">{c.name}</div>
@@ -169,6 +183,9 @@ export default function CartScr({ go, onBack, appliedCoupon, setAppliedCoupon, e
                   {opts && <div className="sub">{opts}</div>}
                   {c.note && <div className="sub" style={{ fontStyle: "italic" }}>« {c.note} »</div>}
                   <div className="pr">{fmt(lineTotal(c))}</div>
+                  {c.unavailable && <div style={{ fontSize: 13, color: "#E11D48", fontWeight: 600, marginTop: 4 }}>Indisponible pour le moment</div>}
+                  {drop(c) && <div style={{ fontSize: 13, color: "#0E9F6E", fontWeight: 600, marginTop: 4 }}>Prix en baisse : −{fmt((Number(c.added_price) - Number(c.unit_price)) * q).replace("FCFA", "F")} depuis l'ajout</div>}
+                  {often(c) && <div className="sub">Déjà commandé {c.times_ordered} fois</div>}
                   {c.options_error && <div style={{ fontSize: 13, color: "#E11D48", marginTop: 4 }}>{c.options_error} — retirez et ajoutez à nouveau l'article</div>}
                 </div>
                 <div className="tc-qty">
@@ -176,11 +193,15 @@ export default function CartScr({ go, onBack, appliedCoupon, setAppliedCoupon, e
                     <Icon name={q === 1 ? "trash" : "minus"} size={19} strokeWidth={2.2} />
                   </button>
                   <b>{q}</b>
-                  <button onClick={() => setQty(c, q + 1)} disabled={busyId === c.id || q >= 99} aria-label="Plus"><Icon name="plus" size={20} strokeWidth={2.4} /></button>
+                  <button onClick={() => setQty(c, q + 1)} disabled={busyId === c.id || q >= 99 || c.unavailable} aria-label="Plus"><Icon name="plus" size={20} strokeWidth={2.4} /></button>
                 </div>
               </div>
             );
           })}
+          {off.length > 0 && <div style={{ margin: "10px 14px 0", padding: "10px 12px", borderRadius: 10, background: "#FEF2F2", color: "#B91C1C", fontSize: 14, display: "flex", alignItems: "center", gap: 10 }}>
+            <span style={{ flex: 1 }}>{off.length > 1 ? `${off.length} articles ne sont plus disponibles` : "Un article n'est plus disponible"} : retirez-{off.length > 1 ? "les" : "le"} pour commander.</span>
+            <button className="t-pill-btn" style={{ background: "#fff", color: "#B91C1C", flexShrink: 0 }} disabled={!!busyId} onClick={removeOff}>Retirer</button>
+          </div>}
           <div className="tc-total">
             <div className="row"><span>Sous-total</span><span>{fmt(subtotal)}</span></div>
             {discount > 0 && <div className="row disc"><span>Code {appliedCoupon.code} ({couponLabel(appliedCoupon)})</span><span>-{fmt(discount)}</span></div>}
@@ -201,7 +222,7 @@ export default function CartScr({ go, onBack, appliedCoupon, setAppliedCoupon, e
       <div className="t-bottom sheet">
         <span className="grab" />
         <button className="t-cta ghost tc-add" onClick={() => go("vendor", vendor)}>Ajouter</button>
-        <button className="t-cta tc-go" onClick={() => requireLogin("checkout", () => go("checkout", { eid }))}>
+        <button className="t-cta tc-go" disabled={off.length > 0} onClick={() => requireLogin("checkout", () => go("checkout", { eid }))}>
           <span>Commander</span><span className="p">{fmt(Math.max(0, subtotal - discount)).replace("FCFA", "F")}</span>
         </button>
       </div>

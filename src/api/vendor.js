@@ -27,6 +27,8 @@ const vendor = {
   sections: () => api.get('/vendor/sections'),
   orderSections: (sections) => api.put('/vendor/sections/order', { sections }),
   renameSection: (from, to) => api.put('/vendor/sections/rename', { from, to }),
+  // Photo d'une variante (couleur, modèle…) : url à mettre dans l'option
+  uploadOptionImage: (file) => { const fd = new FormData(); fd.append('image', file); return api.upload('/vendor/uploads/option', fd); },
 
   // Promos
   promos: () => api.get('/vendor/promos'),

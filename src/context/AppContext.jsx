@@ -97,8 +97,16 @@ export function AppProvider({ children }) {
 
   // ── Toast ──
   const [toast, setToast] = useState(null);
-  const [recentlyViewed, setRecentlyViewed] = useState([]);
-  const addRecentlyViewed = useCallback((product) => { setRecentlyViewed(prev => { const filtered = prev.filter(p => p.id !== product.id); return [product, ...filtered].slice(0, 10); }); }, []);
+  // Articles consultés (10 derniers, gardés sur l'appareil) : suggestions de recherche « d'après vos visites »
+  const [recentlyViewed, setRecentlyViewed] = useState(() => { try { return JSON.parse(localStorage.getItem('lk-viewed') || '[]'); } catch { return []; } });
+  const addRecentlyViewed = useCallback((product) => {
+    const light = { id: product.id, name: product.name, cat: product.cat || '', menu_section: product.menu_section || '', photo: product.photo || null, price: product.price, establishmentId: product.establishmentId };
+    setRecentlyViewed(prev => {
+      const next = [light, ...prev.filter(p => p.id !== product.id)].slice(0, 10);
+      try { localStorage.setItem('lk-viewed', JSON.stringify(next)); } catch { /* stockage indisponible */ }
+      return next;
+    });
+  }, []);
   const [seenStories, setSeenStories] = useState([]);
   const markStorySeen = useCallback((vendorId) => { setSeenStories(prev => prev.includes(vendorId) ? prev : [...prev, vendorId]); }, []);
   const [darkMode, setDarkMode] = useState(() => localStorage.getItem('lamuka_dark') === '1');

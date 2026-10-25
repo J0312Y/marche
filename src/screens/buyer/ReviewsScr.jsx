@@ -1,178 +1,173 @@
-import { useState, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useGuestGate } from "../../hooks/useGuestGate";
-import { CHAT_AVATARS } from "../../data/images";
 import toast from "../../utils/toast";
-import { useLoad, useAction } from "../../hooks";
-import { social } from "../../services";
 import reviewsAPI from "../../api/reviews";
 import Icon from "../../components/Icon";
-import FEATURES from "../../config/features";
+import Img from "../../components/Img";
+import ImageViewer from "../../components/t/ImageViewer";
+import { mapReview, reviewTags } from "../../utils/reviews";
+import shrinkPhoto from "../../utils/shrinkPhoto";
 
-function ReviewsScr({product:p,onBack,go}){
+const Stars = ({ n, size = 16 }) => <span style={{ display: "inline-flex", gap: 1 }}>{[1, 2, 3, 4, 5].map((s) => <Icon key={s} name={s <= n ? "star_full" : "star_o"} size={size} color={s <= n ? "#F5A623" : "var(--t-mut)"} />)}</span>;
+
+/** Une carte d'avis : note, étiquettes, texte, photos, réponse de la boutique */
+export function ReviewCard({ r, onPhoto }) {
+  return (
+    <div style={{ padding: "14px 0", borderTop: "1px solid var(--t-line)" }}>
+      <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
+        <b style={{ fontSize: 15 }}>{r.name}</b>
+        {r.verified && <span style={{ fontSize: 12, color: "var(--acc-d)", background: "var(--acc-l)", borderRadius: 6, padding: "2px 6px", fontWeight: 500 }}>Achat vérifié</span>}
+        <span className="t-mut" style={{ marginLeft: "auto" }}>{r.date}</span>
+      </div>
+      <div style={{ marginTop: 4 }}><Stars n={r.rating} size={14} /></div>
+      {r.tags.length > 0 && <div style={{ display: "flex", gap: 6, flexWrap: "wrap", marginTop: 8 }}>{r.tags.map((t) => <span key={t} style={{ fontSize: 12, color: "var(--t-sub)", background: "var(--t-bg2)", borderRadius: 6, padding: "3px 8px" }}>{t}</span>)}</div>}
+      {r.text && <div style={{ fontSize: 15, lineHeight: 1.45, marginTop: 8 }}>{r.text}</div>}
+      {r.photos.length > 0 && <div className="t-chips" style={{ display: "flex", gap: 6, marginTop: 8, overflowX: "auto", padding: 0 }}>
+        {r.photos.map((ph, j) => <button key={ph} onClick={() => onPhoto(r.photos, j)} style={{ border: "none", padding: 0, background: "none", flexShrink: 0 }} aria-label="Agrandir la photo"><Img src={ph} style={{ width: 76, height: 76, borderRadius: 10 }} fit="cover" /></button>)}
+      </div>}
+      {r.reply && <div style={{ marginTop: 10, background: "var(--t-bg2)", borderRadius: 10, padding: "10px 12px", fontSize: 14, lineHeight: 1.45 }}><b>Réponse de la boutique</b><div style={{ marginTop: 2 }}>{r.reply}</div></div>}
+    </div>
+  );
+}
+
+/** Avis d'un article : résumé (note, étiquettes citées, photos des clients), filtres, rédaction avec photos. */
+function ReviewsScr({ product: p, onBack, go }) {
   const { gate, GateUI } = useGuestGate(go);
-  const { data: reviewData } = useLoad(() => social.getArticleReviews(p.id));
-  const REVIEWS = reviewData?.reviews || reviewData || [];
-  
-  const [writing,setWriting]=useState(false);
-  const [userRating,setUserRating]=useState(0);
-  const [userText,setUserText]=useState("");
-  const [userPhotos,setUserPhotos]=useState([]);
-  const [userReviews,setUserReviews]=useState([]);
-  const [submitted,setSubmitted]=useState(false);
-  const [viewImg,setViewImg]=useState(null);
-  const [filter,setFilter]=useState("all"); // all | photos | recent | 5stars
-  const [helpfulVotes,setHelpfulVotes]=useState({});
-  const fileRef=useRef(null);
-  const { run: runReview, loading: reviewSubmitting } = useAction();
+  const [stats, setStats] = useState(null);
+  const [list, setList] = useState([]);
+  const [page, setPage] = useState(1);
+  const [more, setMore] = useState(false);
+  const [loading, setLoading] = useState(true);
+  const [filter, setFilter] = useState("all"); // all | photos | 5 | tag:<étiquette>
+  const [viewer, setViewer] = useState(null); // { photos, start }
 
-  const handlePhotoUpload=(e)=>{
-    const files=Array.from(e.target.files||[]);
-    files.forEach(file=>{
-      if(file.size>5*1024*1024)return;
-      const reader=new FileReader();
-      reader.onload=()=>setUserPhotos(prev=>[...prev,{url:reader.result,name:file.name}]);
-      reader.readAsDataURL(file);
-    });
-    e.target.value="";
+  const [writing, setWriting] = useState(false);
+  const [rating, setRating] = useState(0);
+  const [text, setText] = useState("");
+  const [tags, setTags] = useState([]);
+  const [photos, setPhotos] = useState([]); // [{ url, uploading }]
+  const [busy, setBusy] = useState(false);
+  const fileRef = useRef(null);
+  const TAGS = reviewTags(p.type || p.commerce_type);
+
+  const load = async (pg = 1, f = filter) => {
+    setLoading(true);
+    try {
+      const rows = await reviewsAPI.getByArticle(p.id, pg, f === "photos" ? "photos" : "newest");
+      const mapped = (rows?.reviews || rows || []).map(mapReview);
+      setList((cur) => (pg === 1 ? mapped : [...cur, ...mapped]));
+      setMore(mapped.length >= 20); setPage(pg);
+    } catch { if (pg === 1) setList([]); }
+    setLoading(false);
+  };
+  const loadStats = () => reviewsAPI.getStats(p.id).then(setStats).catch(() => {});
+  useEffect(() => { loadStats(); }, [p.id]);
+  useEffect(() => { load(1, filter); }, [p.id, filter === "photos"]);
+
+  const shown = list.filter((r) => filter === "5" ? r.rating === 5 : filter.startsWith("tag:") ? r.tags.includes(filter.slice(4)) : true);
+  const total = stats?.total ?? Number(p.reviews) ?? 0;
+  const dist = stats?.distribution || {};
+  const avg = total ? [1, 2, 3, 4, 5].reduce((s, k) => s + k * (Number(dist[k]) || 0), 0) / total : 0;
+
+  const addPhotos = async (e) => {
+    const files = Array.from(e.target.files || []).slice(0, 6 - photos.length);
+    e.target.value = "";
+    for (const f of files) {
+      const key = Math.random().toString(36).slice(2);
+      setPhotos((cur) => [...cur, { key, url: URL.createObjectURL(f), uploading: true }]);
+      try {
+        const r = await reviewsAPI.uploadPhoto(await shrinkPhoto(f));
+        setPhotos((cur) => cur.map((x) => (x.key === key ? { key, url: r.url, uploading: false } : x)));
+      } catch (err) {
+        setPhotos((cur) => cur.filter((x) => x.key !== key));
+        toast.error(err?.message || "Photo non envoyée");
+      }
+    }
+  };
+  const reset = () => { setWriting(false); setRating(0); setText(""); setTags([]); setPhotos([]); };
+  const submit = async () => {
+    if (!rating || busy || photos.some((x) => x.uploading)) return;
+    setBusy(true);
+    try {
+      await reviewsAPI.create({ article_id: p.id, rating, comment: text.trim() || null, tags, images: photos.map((x) => x.url) });
+      toast.success("Merci ! Votre avis est publié");
+      reset(); loadStats(); load(1, filter);
+    } catch (err) { toast.error(err?.message || "Impossible de publier l'avis"); }
+    setBusy(false);
   };
 
-  const removePhoto=(idx)=>setUserPhotos(prev=>prev.filter((_,i)=>i!==idx));
-
-  const submitReview=async()=>{
-    if(userRating===0)return;
-    try{
-      await runReview(()=>reviewsAPI.create({article_id:p.id,rating:userRating,comment:userText}));
-    }catch(err){toast.error(err.message||"Impossible de publier l'avis");return;}
-    setUserReviews(r=>[{name:"Moi",rating:userRating,text:userText,date:"Aujourd'hui",avatar:null,photos:[]},...r]);
-    setWriting(false);setUserRating(0);setUserText("");setUserPhotos([]);setSubmitted(true);toast.success("Avis publié avec succès");
-    setTimeout(()=>setSubmitted(false),3000);
-  };
-
-  const allReviewsRaw=[...userReviews,...REVIEWS];
-  const allReviews=(()=>{
-    let list=[...allReviewsRaw];
-    if(filter==="photos")list=list.filter(r=>r.photos&&r.photos.length>0);
-    if(filter==="5stars")list=list.filter(r=>r.rating===5);
-    if(filter==="recent")list=list.slice().sort((a,b)=>{if(a.date==="Aujourd'hui")return -1;if(b.date==="Aujourd'hui")return 1;return 0});
-    return list;
-  })();
-  const handleHelpful=(idx)=>{setHelpfulVotes(p=>({...p,[idx]:!p[idx]}));toast.info(helpfulVotes[idx]?"Vote retiré":"Merci ! ")};
-
-  // Dynamic avg and distribution — recalculates when user adds a review
-  const allRatings=allReviews.map(r=>r.rating);
-  const totalCount=Math.max(allRatings.length, p.reviews||0)+userReviews.length-(allRatings.length>0?allRatings.length:0);
-  const avg=allRatings.length>0?+(allRatings.reduce((s,r)=>s+r,0)/allRatings.length).toFixed(1):p.rating;
-  const dist=[5,4,3,2,1].map(star=>{
-    const count=allRatings.filter(r=>Math.round(r)===star).length;
-    return allRatings.length>0?Math.round((count/allRatings.length)*100):(star===5?60:star===4?25:star===3?10:star===2?3:2);
-  });
-
-  return(<div className="scr" style={{padding:16}}><div className="appbar" style={{padding:0,marginBottom:12}}><button onClick={onBack}>←</button><h2>Avis ({p.reviews+userReviews.length})</h2><div style={{width:38}}/></div>
-    <div style={{textAlign:"center",marginBottom:14}}>
-      <div style={{fontSize:40,fontWeight:700,color:"var(--text)"}}>{avg}</div>
-      <div style={{fontSize:16,color:"#F59E0B",marginBottom:4}}>{"⭐".repeat(Math.floor(avg))}{"☆".repeat(5-Math.floor(avg))}</div>
-      <div style={{fontSize:12,color:"var(--muted)"}}>{p.reviews+userReviews.length} avis vérifiés</div>
-    </div>
-    <div style={{marginBottom:14}}>{dist.map((d,i)=><div key={i} style={{display:"flex",alignItems:"center",gap:8,marginBottom:4}}><span style={{fontSize:12,width:12}}>{5-i}</span><span style={{fontSize:12}}><Icon name="star_full" size={18}/></span><div style={{flex:1,height:6,background:"var(--border)",borderRadius:3,overflow:"hidden"}}><div style={{width:`${d}%`,height:"100%",background:d>0?"#F59E0B":"var(--border)",borderRadius:3,transition:"width .3s"}}/></div><span style={{fontSize:11,color:"var(--muted)",width:30,textAlign:"right"}}>{d}%</span></div>)}</div>
-
-    {/* Write review button / form */}
-    {!writing?<button onClick={()=>gate("review",()=>setWriting(true))} style={{width:"100%",padding:"14px 0",borderRadius:14,border:"2px solid #F97316",background:"rgba(249,115,22,0.04)",cursor:"pointer",fontSize:14,fontWeight:700,color:"#F97316",fontFamily:"inherit",marginBottom:14,display:"flex",alignItems:"center",justifyContent:"center",gap:8}}><Icon name="edit" size={16}/>{" "}Écrire un avis</button>
-
-    :<div style={{padding:16,background:"var(--card)",borderRadius:18,border:"1px solid var(--border)",marginBottom:14,boxShadow:"0 2px 10px rgba(0,0,0,.04)"}}>
-      <div style={{display:"flex",justifyContent:"space-between",alignItems:"center",marginBottom:14}}>
-        <h4 style={{fontSize:15,fontWeight:700}}>Votre avis</h4>
-        <span style={{fontSize:12,color:"var(--muted)",cursor:"pointer"}} onClick={()=>{setWriting(false);setUserRating(0);setUserText("");setUserPhotos([])}}> Annuler</span>
-      </div>
-
-      {/* Star selection */}
-      <div style={{marginBottom:14}}>
-        <div style={{fontSize:12,fontWeight:600,color:"var(--muted)",marginBottom:8}}>Note *</div>
-        <div style={{display:"flex",gap:6}}>
-          {[1,2,3,4,5].map(s=><button key={s} onClick={()=>setUserRating(s)} style={{width:44,height:44,borderRadius:12,border:userRating>=s?"2px solid #F59E0B":"1px solid var(--border)",background:userRating>=s?"rgba(245,158,11,0.08)":"var(--card)",cursor:"pointer",fontSize:20,display:"flex",alignItems:"center",justifyContent:"center",transition:"all .15s"}}><></></button>)}
+  return (
+    <div className="t-scr" style={{ minHeight: "100%", background: "var(--card)" }}>
+      <div className="t-sticky">
+        <div className="t-head">
+          <button className="t-back" onClick={onBack} aria-label="Retour"><Icon name="arrow_left" size={24} /></button>
+          <h1 style={{ overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>Avis{total ? ` (${total})` : ""}</h1>
         </div>
-        {userRating>0&&<div style={{fontSize:12,color:"#F59E0B",fontWeight:600,marginTop:6}}>{["","Mauvais","Passable","Bien","Très bien","Excellent"][userRating]}</div>}
       </div>
+      <div style={{ padding: "0 16px" }}>
+        <div style={{ display: "flex", alignItems: "center", gap: 16, padding: "8px 0 14px" }}>
+          <div style={{ textAlign: "center", minWidth: 84 }}>
+            <div style={{ fontSize: 36, fontWeight: 700, lineHeight: 1 }}>{total ? avg.toFixed(1) : "–"}</div>
+            <div style={{ marginTop: 6 }}><Stars n={Math.round(avg)} size={14} /></div>
+            <div className="t-mut" style={{ marginTop: 4 }}>{total} avis</div>
+          </div>
+          <div style={{ flex: 1 }}>{[5, 4, 3, 2, 1].map((k) => { const n = Number(dist[k]) || 0; return (
+            <div key={k} style={{ display: "flex", alignItems: "center", gap: 8, height: 18 }}>
+              <span className="t-mut" style={{ width: 10 }}>{k}</span>
+              <div style={{ flex: 1, height: 6, background: "var(--t-bg2)", borderRadius: 3, overflow: "hidden" }}><div style={{ width: total ? `${(n / total) * 100}%` : 0, height: "100%", background: "#F5A623" }} /></div>
+            </div>); })}</div>
+        </div>
 
-      {/* Comment */}
-      <div style={{marginBottom:14}}>
-        <div style={{fontSize:12,fontWeight:600,color:"var(--muted)",marginBottom:8}}>Commentaire (optionnel)</div>
-        <textarea value={userText} onChange={e=>setUserText(e.target.value)} placeholder="Partagez votre expérience..." rows={3} style={{width:"100%",padding:12,borderRadius:12,border:"1px solid var(--border)",fontSize:13,fontFamily:"inherit",resize:"vertical",outline:"none",boxSizing:"border-box"}}/>
-      </div>
+        {stats?.photos?.length > 0 && <>
+          <div style={{ fontWeight: 600, margin: "4px 0 8px" }}>Photos des clients</div>
+          <div className="t-chips" style={{ display: "flex", gap: 6, overflowX: "auto", padding: 0, paddingBottom: 6 }}>
+            {stats.photos.map((ph, j) => <button key={ph} onClick={() => setViewer({ photos: stats.photos, start: j })} style={{ border: "none", padding: 0, background: "none", flexShrink: 0 }} aria-label="Agrandir la photo"><Img src={ph} style={{ width: 84, height: 84, borderRadius: 10 }} fit="cover" /></button>)}
+          </div>
+        </>}
 
-      {/* Photo upload */}
-      {FEATURES.reviewPhotos&&(<div style={{marginBottom:14}}>
-        <div style={{fontSize:12,fontWeight:600,color:"var(--muted)",marginBottom:8}}>Photos (optionnel)</div>
-        <div style={{display:"flex",gap:8,flexWrap:"wrap"}}>
-          {userPhotos.map((ph,i)=>(
-            <div key={i} style={{position:"relative",width:68,height:68,borderRadius:12,overflow:"hidden",border:"1px solid var(--border)"}}>
-              <img src={ph.url} alt="" style={{width:"100%",height:"100%",objectFit:"cover"}}/>
-              <button onClick={()=>removePhoto(i)} style={{position:"absolute",top:2,right:2,width:20,height:20,borderRadius:"50%",background:"rgba(0,0,0,.6)",color:"#fff",border:"none",cursor:"pointer",fontSize:10,display:"flex",alignItems:"center",justifyContent:"center"}}></button>
+        {!writing
+          ? <button className="t-cta ghost center" style={{ width: "100%", height: 48, justifyContent: "center", margin: "12px 0" }} onClick={() => gate("review", () => setWriting(true))}><Icon name="edit" size={18} />Écrire un avis</button>
+          : <div className="t-card" style={{ padding: 16, margin: "12px 0", border: "1px solid var(--t-line)", borderRadius: 14 }}>
+            <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}><b style={{ fontSize: 16 }}>Votre avis</b><button className="t-pill-btn" onClick={reset}>Annuler</button></div>
+            <div style={{ display: "flex", gap: 6, marginTop: 12 }}>
+              {[1, 2, 3, 4, 5].map((s) => <button key={s} onClick={() => setRating(s)} aria-label={`${s} étoile${s > 1 ? "s" : ""}`} style={{ border: "none", background: "none", padding: 2, cursor: "pointer" }}><Icon name={s <= rating ? "star_full" : "star_o"} size={32} color={s <= rating ? "#F5A623" : "var(--t-mut)"} /></button>)}
             </div>
-          ))}
-          {userPhotos.length<4&&(
-            <button onClick={()=>fileRef.current?.click()} style={{width:68,height:68,borderRadius:12,border:"2px dashed #E8E6E1",background:"transparent",cursor:"pointer",display:"flex",flexDirection:"column",alignItems:"center",justifyContent:"center",gap:2,color:"var(--muted)",fontSize:10,fontFamily:"inherit"}}>
-              <span style={{fontSize:18}}><Icon name="camera" size={18}/></span>
-              Ajouter
+            {rating > 0 && <div style={{ fontSize: 14, color: "var(--t-sub)", marginTop: 2 }}>{["", "Décevant", "Moyen", "Bien", "Très bien", "Excellent"][rating]}</div>}
+            <div style={{ fontWeight: 600, marginTop: 14 }}>Ce que vous avez aimé</div>
+            <div style={{ display: "flex", gap: 6, flexWrap: "wrap", marginTop: 8 }}>
+              {TAGS.map((t) => <button key={t} className={"t-chip" + (tags.includes(t) ? " on" : "")} style={{ height: 32 }} onClick={() => setTags((cur) => (cur.includes(t) ? cur.filter((x) => x !== t) : [...cur, t]))}>{t}</button>)}
+            </div>
+            <textarea className="t-note" style={{ marginTop: 14 }} maxLength={1000} rows={3} placeholder="Racontez votre expérience (facultatif)" value={text} onChange={(e) => setText(e.target.value)} />
+            <div style={{ fontWeight: 600, marginTop: 14 }}>Photos <span className="t-mut">(facultatif, 6 max)</span></div>
+            <div style={{ display: "flex", gap: 8, flexWrap: "wrap", marginTop: 8 }}>
+              {photos.map((ph) => (
+                <div key={ph.key} style={{ position: "relative", width: 72, height: 72, borderRadius: 10, overflow: "hidden", opacity: ph.uploading ? 0.5 : 1 }}>
+                  <img src={ph.url} alt="" style={{ width: "100%", height: "100%", objectFit: "cover" }} />
+                  {!ph.uploading && <button onClick={() => setPhotos((cur) => cur.filter((x) => x.key !== ph.key))} aria-label="Retirer la photo" style={{ position: "absolute", top: 3, right: 3, width: 22, height: 22, borderRadius: "50%", border: "none", background: "rgba(0,0,0,.6)", display: "flex", alignItems: "center", justifyContent: "center" }}><Icon name="close" size={14} color="#fff" /></button>}
+                </div>
+              ))}
+              {photos.length < 6 && <button onClick={() => fileRef.current?.click()} aria-label="Ajouter une photo" style={{ width: 72, height: 72, borderRadius: 10, border: "1.5px dashed var(--t-line)", background: "var(--t-bg2)", display: "flex", alignItems: "center", justifyContent: "center", cursor: "pointer" }}><Icon name="camera" size={24} color="var(--t-sub)" /></button>}
+            </div>
+            <input ref={fileRef} type="file" accept="image/*" multiple hidden onChange={addPhotos} />
+            <button className="t-cta center" style={{ width: "100%", height: 50, justifyContent: "center", marginTop: 16 }} disabled={!rating || busy || photos.some((x) => x.uploading)} onClick={submit}>
+              {!rating ? "Choisissez une note" : photos.some((x) => x.uploading) ? "Envoi des photos…" : busy ? "Publication…" : "Publier mon avis"}
             </button>
-          )}
+          </div>}
+
+        <div className="t-chips" style={{ display: "flex", gap: 8, overflowX: "auto", padding: "4px 0 10px" }}>
+          {[["all", "Tous"], ["photos", "Avec photos"], ["5", "5 étoiles"]].map(([k, l]) => <button key={k} className={"t-chip" + (filter === k ? " on" : "")} onClick={() => setFilter(k)}>{l}</button>)}
+          {(stats?.tags || []).map((t) => <button key={t.tag} className={"t-chip" + (filter === "tag:" + t.tag ? " on" : "")} onClick={() => setFilter("tag:" + t.tag)}>{t.tag} ({t.count})</button>)}
         </div>
-        <input ref={fileRef} type="file" accept="image/*" multiple style={{display:"none"}} onChange={handlePhotoUpload}/>
-        <div style={{fontSize:11,color:"var(--muted)",marginTop:4}}>Max 4 photos · 5 Mo chacune</div>
-      </div>)}
 
-      {/* Submit */}
-      <button onClick={submitReview} disabled={userRating===0||reviewSubmitting} style={{width:"100%",padding:"12px 0",borderRadius:12,border:"none",background:userRating>0?"#F97316":"var(--border)",color:userRating>0?"var(--card)":"var(--muted)",fontSize:14,fontWeight:700,cursor:userRating>0&&!reviewSubmitting?"pointer":"not-allowed",fontFamily:"inherit",transition:"all .2s"}}>
-        {userRating===0?"Sélectionnez une note":reviewSubmitting?"Publication...":"Publier mon avis"}
-      </button>
-    </div>}
-
-    {/* Success toast */}
-    {submitted&&<div style={{padding:12,background:"rgba(16,185,129,0.08)",border:"1px solid rgba(16,185,129,0.2)",borderRadius:12,marginBottom:14,display:"flex",alignItems:"center",gap:8,fontSize:13,fontWeight:600,color:"#10B981"}}><Icon name="check_circle" size={16}/>{" "}Avis publié avec succès !</div>}
-
-
-    {/* Review filters */}
-    <div className="review-filters hide-scroll" style={{display:"flex",gap:6,padding:"4px 0 12px",overflowX:"auto",scrollbarWidth:"none"}}>
-      {[["all","Tous",allReviewsRaw.length],["photos","Avec photos",allReviewsRaw.filter(r=>r.photos?.length>0).length],["5stars","5 étoiles",allReviewsRaw.filter(r=>r.rating===5).length],["recent","Récents",allReviewsRaw.length]].map(([k,l,n])=>(
-        <button key={k} onClick={()=>setFilter(k)} style={{flexShrink:0,padding:"6px 12px",borderRadius:20,border:filter===k?"2px solid #F97316":"1px solid var(--border)",background:filter===k?"rgba(249,115,22,0.06)":"var(--card)",color:filter===k?"#F97316":"var(--sub)",fontSize:11,fontWeight:600,cursor:"pointer",fontFamily:"inherit"}}>{l} <span style={{opacity:.6}}>({n})</span></button>
-      ))}
+        {shown.map((r) => <ReviewCard key={r.id} r={r} onPhoto={(ph, start) => setViewer({ photos: ph, start })} />)}
+        {!loading && !shown.length && <div className="t-sub" style={{ textAlign: "center", padding: "30px 0" }}>{total ? "Aucun avis pour ce filtre." : "Pas encore d'avis. Soyez le premier à donner le vôtre !"}</div>}
+        {more && !filter.startsWith("tag:") && filter !== "5" && <button className="t-cta ghost center" style={{ width: "100%", height: 44, justifyContent: "center", margin: "8px 0" }} disabled={loading} onClick={() => load(page + 1)}>{loading ? "Chargement…" : "Voir plus d'avis"}</button>}
+        <div style={{ height: 24 }} />
+      </div>
+      {viewer && <ImageViewer photos={viewer.photos} start={viewer.start} onClose={() => setViewer(null)} />}
+      <GateUI />
     </div>
-
-    {/* All reviews */}
-    {allReviews.map((r,i)=><div key={i} className="review-card" style={r.name==="Moi"?{border:"2px solid rgba(249,115,22,0.2)",background:"rgba(249,115,22,0.02)"}:{}}>
-      <div className="review-top">
-        <div className="rav" style={{overflow:"hidden",padding:0}}>{r.avatar?.startsWith("http")?<img src={r.avatar} style={{width:"100%",height:"100%",objectFit:"cover"}} alt=""/>:<img src={CHAT_AVATARS.client} style={{width:"100%",height:"100%",objectFit:"cover"}} alt=""/>}</div>
-        <div style={{flex:1}}><h4 style={{fontSize:14,fontWeight:600,display:"flex",alignItems:"center",gap:6,flexWrap:"wrap"}}>
-          {r.name}
-          {r.name==="Moi"&&<span style={{fontSize:10,color:"#F97316",fontWeight:700}}>VOUS</span>}
-          {r.verified&&<span style={{display:"inline-flex",alignItems:"center",gap:2,fontSize:9,padding:"2px 6px",borderRadius:5,background:"rgba(59,130,246,0.08)",color:"#3B82F6",fontWeight:700}}> Achat vérifié</span>}
-        </h4></div>
-        <span className="rd">{r.date}</span>
-      </div>
-      <div className="review-stars">{"⭐".repeat(r.rating)}{"☆".repeat(5-r.rating)}</div>
-      {r.text&&<div className="review-text">{r.text}</div>}
-      {/* Review photos */}
-      {r.photos&&r.photos.length>0&&(
-        <div style={{display:"flex",gap:6,marginTop:8,flexWrap:"wrap"}}>
-          {r.photos.map((ph,j)=>(
-            <img key={j} src={ph} alt="" onClick={()=>setViewImg(ph)} style={{width:64,height:64,borderRadius:10,objectFit:"cover",cursor:"pointer",border:"1px solid var(--border)"}}/>
-          ))}
-        </div>
-      )}
-      {/* Helpful counter */}
-      <div style={{marginTop:10,paddingTop:8,borderTop:"1px solid var(--border)",display:"flex",justifyContent:"space-between",alignItems:"center"}}>
-        <button onClick={()=>handleHelpful(i)} style={{display:"inline-flex",alignItems:"center",gap:5,padding:"4px 10px",borderRadius:8,border:"1px solid var(--border)",background:helpfulVotes[i]?"rgba(16,185,129,0.08)":"var(--card)",color:helpfulVotes[i]?"#10B981":"var(--sub)",fontSize:11,fontWeight:600,cursor:"pointer",fontFamily:"inherit"}}> Utile {r.helpful?`(${(r.helpful||0)+(helpfulVotes[i]?1:0)})`:""}</button>
-        {r.rating===5&&<span style={{fontSize:10,color:"#10B981",fontWeight:600}}>Recommande ce produit</span>}
-      </div>
-    </div>)}
-
-    {/* Image fullscreen viewer */}
-    {viewImg&&(
-      <div onClick={()=>setViewImg(null)} style={{position:"fixed",inset:0,background:"rgba(0,0,0,.85)",zIndex:100,display:"flex",alignItems:"center",justifyContent:"center",cursor:"pointer",padding:20}}>
-        <img src={viewImg} alt="" style={{maxWidth:"100%",maxHeight:"80vh",borderRadius:12,objectFit:"contain"}}/>
-        <button style={{position:"absolute",top:20,right:20,width:40,height:40,borderRadius:"50%",background:"rgba(255,255,255,.2)",border:"none",color:"#fff",fontSize:20,cursor:"pointer"}} onClick={()=>setViewImg?.(null)}></button>
-      </div>
-    )}
-  <GateUI/></div>);
+  );
 }
 
 export default ReviewsScr;

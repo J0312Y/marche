@@ -29,3 +29,4 @@ export { default as imagesAPI } from './images';
 export { default as buyerAPI } from './buyer';
 export { default as errandsAPI } from './errands';
 export { default as collectionsAPI } from './collections';
+export { default as questionsAPI } from './questions';

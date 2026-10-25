@@ -1,4 +1,4 @@
-import { useMemo, useRef, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import useBackClose from "../../hooks/useBackClose";
 import Img from "../Img";
 import Icon from "../Icon";
@@ -8,12 +8,16 @@ import { fmt } from "../../utils/helpers";
 import { optionsDelta, optionsError } from "../../utils/cartMath";
 import { useApp } from "../../context/AppContext";
 import { shareProduct } from "../../utils/share";
+import ProductReviews from "./ProductReviews";
+import ProductQA from "./ProductQA";
 
 /**
  * Fiche produit plein écran (monte du bas) : options obligatoires / facultatives, consigne, quantité.
  * Le panier ne contient qu'une boutique (comme Toters) : sinon on propose d'en démarrer un nouveau.
+ * Comme Taobao : photo par variante, onglets fixes (Article · Avis · Questions · Similaires).
+ * similar : autres articles du même rayon ; onOpen(article) : ouvrir l'un d'eux ; retail : commerce de détail (questions).
  */
-export default function ProductSheet({ p, onClose, storeName, parked = false, onStore }) {
+export default function ProductSheet({ p, onClose, storeName, parked = false, onStore, similar = [], onOpen, retail = false }) {
   const [more, setMore] = useState(false);
   const longDesc = (p.description || "").length > 130;
   // Contenance (comme Toters : « 500 g », « 1 pièce »)
@@ -23,7 +27,8 @@ export default function ProductSheet({ p, onClose, storeName, parked = false, on
   const wasParked = useRef(false);
   const cls = "t-pd" + (parked ? " parked" : wasParked.current ? " unpark" : "");
   wasParked.current = parked || (wasParked.current && !parked ? true : false);
-  const { addToCart, cart, clearCart, isFav, toggleFav } = useApp();
+  const { addToCart, cart, clearCart, isFav, toggleFav, go, addRecentlyViewed } = useApp();
+  useEffect(() => { addRecentlyViewed?.(p); }, [p.id]); // eslint-disable-line react-hooks/exhaustive-deps
   const groups = p.optionGroups || [];
   const [sel, setSel] = useState([]); // [{group, name}]
   const [qty, setQty] = useState(1);
@@ -34,7 +39,22 @@ export default function ProductSheet({ p, onClose, storeName, parked = false, on
   // Défilement comme Toters : la photo reste en place et s'assombrit, le panneau blanc glisse par-dessus
   const [viewer, setViewer] = useState(false);
   const photos = (p.photos && p.photos.length ? p.photos : [p.photo]).filter(Boolean);
-  const imgRef = useRef(null), dimRef = useRef(null), dim2Ref = useRef(null), topRef = useRef(null), raf = useRef(0);
+  const imgRef = useRef(null), dimRef = useRef(null), dim2Ref = useRef(null), topRef = useRef(null), raf = useRef(0), scRef = useRef(null), tabsRef = useRef(null);
+  // Onglets fixes (comme Taobao) : section active suivie au défilement
+  const secRefs = useRef({});
+  const tabs = [["article", "Article"], ["avis", "Avis"], ...(retail ? [["questions", "Questions"]] : []), ...(similar.length ? [["similaires", "Similaires"]] : [])];
+  const [tab, setTab] = useState("article");
+  const [topH, setTopH] = useState(80);
+  const lockTab = useRef(0);
+  useEffect(() => { if (topRef.current) setTopH(topRef.current.offsetHeight); }, []);
+  // Position d'une section dans la zone qui défile (offsetTop serait relatif au panneau blanc)
+  const posOf = (el, sc) => el.getBoundingClientRect().top - sc.getBoundingClientRect().top + sc.scrollTop;
+  const jump = (k) => {
+    const el = secRefs.current[k], sc = scRef.current;
+    if (!el || !sc) return;
+    setTab(k); lockTab.current = Date.now() + 700; // l'onglet touché reste actif pendant le défilement
+    sc.scrollTo({ top: posOf(el, sc) - topH - (tabsRef.current?.offsetHeight || 44) + 2, behavior: "smooth" });
+  };
   const onScroll = (e) => {
     const sc = e.currentTarget;
     if (raf.current) return;
@@ -45,6 +65,11 @@ export default function ProductSheet({ p, onClose, storeName, parked = false, on
       if (dimRef.current) dimRef.current.style.opacity = o;
       if (dim2Ref.current) dim2Ref.current.style.opacity = o;
       topRef.current?.classList.toggle("solid", y >= H - T - 20);
+      const line = y + T + (tabsRef.current?.offsetHeight || 44) + 8;
+      let cur = "article";
+      for (const [k] of tabs) if (secRefs.current[k] && posOf(secRefs.current[k], sc) <= line) cur = k;
+      if (sc.scrollTop + sc.clientHeight >= sc.scrollHeight - 4) cur = tabs[tabs.length - 1][0]; // bas de page
+      if (Date.now() > lockTab.current) setTab(cur);
     });
   }; // nom de la boutique déjà dans le panier
   const oos = p.stock !== null && p.stock !== undefined && p.stock >= 0 && p.stock <= 0;
@@ -64,6 +89,16 @@ export default function ProductSheet({ p, onClose, storeName, parked = false, on
     });
   };
   const missing = useMemo(() => optionsError(groups, sel), [groups, sel]);
+  // Photo de la variante choisie (couleur, modèle…) à la place de la photo principale
+  const optPhoto = useMemo(() => {
+    for (let i = sel.length - 1; i >= 0; i--) {
+      const g = groups.find((x) => x.key === sel[i].group);
+      const o = g?.options.find((x) => x.name === sel[i].name);
+      if (o?.image) return o.image;
+    }
+    return null;
+  }, [groups, sel]);
+  const mainPhoto = optPhoto || p.photo;
 
   const doAdd = async () => {
     setBusy(true);
@@ -82,7 +117,7 @@ export default function ProductSheet({ p, onClose, storeName, parked = false, on
     <div className={cls}>
       {/* Bande du haut : montre le haut de la photo (assombrie) quand le panneau passe dessous, comme Toters */}
       <div className="t-pd-top" ref={topRef}>
-        <div className="t-pd-band">{p.photo && <img src={p.photo} alt="" />}<i ref={dim2Ref} /></div>
+        <div className="t-pd-band">{mainPhoto && <img src={mainPhoto} alt="" />}<i ref={dim2Ref} /></div>
         <div className="t-store-top">
           <button className="t-round-btn glass" onClick={() => onClose(false)} aria-label="Fermer"><Icon name="close" size={22} /></button>
           <div style={{ display: "flex", gap: 10 }}>
@@ -93,13 +128,17 @@ export default function ProductSheet({ p, onClose, storeName, parked = false, on
         </div>
         <div className="t-pd-title">{p.name}</div>
       </div>
-      <div className="t-scr" style={{ background: "var(--card)" }} onScroll={onScroll}>
+      <div className="t-scr" ref={scRef} style={{ background: "var(--card)" }} onScroll={onScroll}>
         <div className="t-pd-img" ref={imgRef} onClick={() => photos.length && setViewer(true)} role="button" aria-label="Agrandir la photo">
-          {p.photo ? <Img src={p.photo} alt={p.name} style={{ width: "100%", height: "100%" }} />
+          {mainPhoto ? <Img key={mainPhoto} src={mainPhoto} alt={p.name} style={{ width: "100%", height: "100%" }} />
             : <div style={{ width: "100%", height: "100%", display: "flex", alignItems: "center", justifyContent: "center" }}><Icon name="bag" size={64} color="var(--t-mut)" /></div>}
           <div className="t-pd-dim" ref={dimRef} />
         </div>
         <div className="t-pd-sheet">
+          {tabs.length > 1 && <div ref={tabsRef} className="t-tabs" style={{ position: "sticky", top: topH, zIndex: 5, background: "var(--card)", margin: "-4px -16px 12px", padding: "0 8px", borderBottom: "1px solid var(--t-line)" }}>
+            {tabs.map(([k, l]) => <button key={k} className={"t-tab" + (tab === k ? " on" : "")} onClick={() => jump(k)}>{l}</button>)}
+          </div>}
+          <div ref={(el) => (secRefs.current.article = el)} />
           {oos ? <span className="t-oos-b">Rupture de stock</span> : p.old > p.price ? <span className="t-off" style={{ position: "static", display: "inline-block", marginBottom: 10 }}>−{Math.round((1 - p.price / p.old) * 100)} %</span> : null}
           <div style={{ fontSize: 22, fontWeight: 700, lineHeight: 1.25 }}>{p.name}</div>
           {size && <div style={{ fontSize: 14, color: "var(--t-sub)", marginTop: 2 }}>{size}</div>}
@@ -120,7 +159,16 @@ export default function ProductSheet({ p, onClose, storeName, parked = false, on
                     {g.required ? (n > 0 ? "✓ Choisi" : "Obligatoire") : g.type === "multi" && g.max > 0 ? `${g.max} max · Facultatif` : "Facultatif"}
                   </span>
                 </div>
-                {g.options.map((o) => (
+                {/* Variantes avec photo (comme Taobao) : vignettes à toucher, la grande photo suit le choix */}
+                {g.options.some((o) => o.image) ? <div style={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: 8, paddingBottom: 6 }}>
+                  {g.options.map((o) => (
+                    <button key={o.name} onClick={() => toggle(g, o)} aria-pressed={has(g.key, o.name)} style={{ border: has(g.key, o.name) ? "2px solid var(--acc)" : "1px solid var(--t-line)", borderRadius: 10, padding: 0, background: "var(--card)", overflow: "hidden", textAlign: "left", fontFamily: "inherit", cursor: "pointer" }}>
+                      {o.image ? <Img src={o.image} style={{ width: "100%", aspectRatio: "1", display: "block" }} fit="cover" /> : <div style={{ width: "100%", aspectRatio: "1", background: "var(--t-bg2)" }} />}
+                      <div style={{ padding: "6px 8px", fontSize: 13, fontWeight: has(g.key, o.name) ? 600 : 400, color: "var(--t-text)" }}>{o.name}{Number(o.price_delta) > 0 && <div className="t-mut">+ {fmt(o.price_delta)}</div>}</div>
+                    </button>
+                  ))}
+                </div>
+                : g.options.map((o) => (
                   <div key={o.name} className="t-opt" onClick={() => toggle(g, o)} role="button">
                     <div className="l">
                       <div>{o.name}</div>
@@ -138,6 +186,25 @@ export default function ProductSheet({ p, onClose, storeName, parked = false, on
             <div style={{ fontSize: 16, fontWeight: 700, marginBottom: 10 }}>Une consigne particulière ?</div>
             <textarea className="t-note" maxLength={200} placeholder="Dites-le nous ici." value={note} onChange={(e) => setNote(e.target.value)} />
           </div>
+
+          <div ref={(el) => (secRefs.current.avis = el)} style={{ borderTop: "1px solid var(--t-line)", marginTop: 18 }}>
+            <ProductReviews p={p} onAll={() => go("reviews", p)} />
+          </div>
+          {retail && <div ref={(el) => (secRefs.current.questions = el)} style={{ borderTop: "1px solid var(--t-line)", marginTop: 18 }}>
+            <ProductQA p={p} />
+          </div>}
+          {similar.length > 0 && <div ref={(el) => (secRefs.current.similaires = el)} style={{ borderTop: "1px solid var(--t-line)", marginTop: 18 }}>
+            <div className="t-opt-h"><b>Dans le même rayon</b></div>
+            <div className="t-chips" style={{ display: "flex", gap: 10, overflowX: "auto", padding: 0, paddingBottom: 6 }}>
+              {similar.map((x) => (
+                <button key={x.id} onClick={() => onOpen?.(x)} style={{ flexShrink: 0, width: 128, border: "none", background: "none", padding: 0, textAlign: "left", fontFamily: "inherit", cursor: "pointer", color: "var(--t-text)" }}>
+                  <Img src={x.photo} style={{ width: 128, height: 128, borderRadius: 12 }} fit="cover" />
+                  <div style={{ fontSize: 14, marginTop: 6, overflow: "hidden", display: "-webkit-box", WebkitLineClamp: 2, WebkitBoxOrient: "vertical" }}>{x.name}</div>
+                  <div style={{ fontSize: 14, fontWeight: 600, marginTop: 2 }}>{fmt(x.price)}</div>
+                </button>
+              ))}
+            </div>
+          </div>}
           <div style={{ height: 24 }} />
         </div>
       </div>

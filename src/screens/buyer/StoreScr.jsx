@@ -104,6 +104,25 @@ export default function StoreScr({ vendor: v0, openProduct, onBack, go }) {
       .sort((x, y) => late(x.name) - late(y.name) || first(x.list) - first(y.list));
   }, [items]);
   const retail = !isFoodType(v.type || detail?.type);
+  // Badges de confiance (comme Taobao) : ancienneté, clients fidèles, commandes livrées
+  const trust = (() => {
+    const t = detail?.trust; if (!t) return [];
+    const out = [];
+    if (t.since) {
+      const m = Math.floor((Date.now() - new Date(t.since)) / (30.44 * 86400000));
+      if (m >= 12) out.push(["award", `Sur Lamuka depuis ${Math.floor(m / 12)} an${m >= 24 ? "s" : ""}`]);
+      else if (m >= 2) out.push(["award", `Sur Lamuka depuis ${m} mois`]);
+    }
+    if (t.returning_clients >= 3) out.push(["repeat", `${t.returning_clients} clients fidèles`]);
+    if (t.delivered_orders >= 10) out.push(["delivered", `${t.delivered_orders >= 1000 ? Math.floor(t.delivered_orders / 1000) + " k" : t.delivered_orders} commandes livrées`]);
+    if (String(detail.is_verified) === "1") out.push(["shield", "Commerce vérifié"]);
+    return out;
+  })();
+  // « Dans le même rayon » sur la fiche article : mêmes rayon et boutique, photos d'abord
+  const similarTo = (x) => {
+    const k = x.menu_section || x.cat || "Autres";
+    return items.filter((y) => y.id !== x.id && (y.menu_section || y.cat || "Autres") === k).sort((a, b) => !!b.photo - !!a.photo).slice(0, 10);
+  };
   const popular = useMemo(() => [...items].filter((p) => p.photo).sort((a, b) => (b.sold || 0) - (a.sold || 0)).slice(0, 8), [items]);
   // 3 articles les plus vendus : étiquette « Populaire » (comme Toters)
   const popularIds = useMemo(() => new Set([...items].filter((p) => p.sold > 0).sort((a, b) => b.sold - a.sold).slice(0, 3).map((p) => p.id)), [items]);
@@ -279,6 +298,9 @@ export default function StoreScr({ vendor: v0, openProduct, onBack, go }) {
             <div style={{ cursor: "pointer" }} onClick={loadReviews} role="button"><small>Notes et avis</small><b>{v.rating > 0 ? <><Icon name="star_full" size={18} color="var(--acc)" />{Number(v.rating).toFixed(1)}<span style={{ color: "var(--t-mut)", fontWeight: 500, fontSize: 14 }}>({v.reviewsCount || 0})</span></> : <span style={{ color: "var(--acc)" }}>Nouveau</span>}</b></div>
           </div>
         </div>
+        {trust.length > 0 && <div style={{ display: "flex", gap: 6, flexWrap: "wrap", padding: "10px 16px 0" }}>
+          {trust.map(([ic, t]) => <span key={t} style={{ display: "inline-flex", alignItems: "center", gap: 4, fontSize: 13, color: "var(--t-sub)", background: "var(--t-bg2)", borderRadius: 8, padding: "4px 8px" }}><Icon name={ic} size={14} color="var(--acc)" />{t}</span>)}
+        </div>}
 
 
         {/* Fidélité */}
@@ -500,8 +522,8 @@ export default function StoreScr({ vendor: v0, openProduct, onBack, go }) {
 
       {closedSheet && <ClosedSheet st={st} onStay={() => setClosedSheet(false)} onClose={() => setClosedSheet(false)} onLeave={() => { setClosedSheet(false); onBack?.(); }} />}
 
-      {outP && <ProductSheet p={outP} storeName={v.name} parked={entered} onStore={enterStore} onClose={() => onBack?.()} />}
-      {product && <ProductSheet p={product} storeName={v.name} onClose={() => setProduct(null)} />}
+      {outP && <ProductSheet p={outP} storeName={v.name} parked={entered} onStore={enterStore} onClose={() => onBack?.()} retail={retail} similar={similarTo(outP)} onOpen={(x) => { enterStore(); setProduct(x); }} />}
+      {product && <ProductSheet key={product.id} p={product} storeName={v.name} onClose={() => setProduct(null)} retail={retail} similar={similarTo(product)} onOpen={setProduct} />}
 
       {/* Infos boutique (comme Toters) */}
       {info && <Sheet onClose={() => setInfo(false)} title={v.name}>

@@ -1,8 +1,13 @@
+import { useRef, useState } from "react";
 import Icon from "./Icon";
+import toast from "../utils/toast";
+import { vendorAPI } from "../api";
+import shrinkPhoto from "../utils/shrinkPhoto";
 
 /**
  * Éditeur des options d'un article (comme Toters) :
- * groupes [{key, label, type: 'single'|'multi', required, max, options: [{name, price_delta}]}]
+ * groupes [{key, label, type: 'single'|'multi', required, max, options: [{name, price_delta, image?}]}]
+ * image : photo de la variante (couleur, modèle…), montrée en vignette sur la fiche (comme Taobao).
  * Le serveur valide les choix du client et calcule les suppléments à partir de ces données.
  */
 const PRESETS = {
@@ -38,6 +43,18 @@ const pill = (on) => ({ padding: "6px 12px", borderRadius: 10, border: on ? "2px
 
 export default function OptionGroupsEditor({ value = [], onChange, shopType = "restaurant" }) {
   const groups = value;
+  const fileRef = useRef(null);
+  const [target, setTarget] = useState(null); // [groupe, choix] dont on choisit la photo
+  const [uploading, setUploading] = useState(null);
+  const pickPhoto = (i, j) => { setTarget([i, j]); fileRef.current?.click(); };
+  const onFile = async (e) => {
+    const f = e.target.files?.[0]; e.target.value = "";
+    if (!f || !target) return;
+    const [i, j] = target; setUploading(`${i}-${j}`);
+    try { const r = await vendorAPI.uploadOptionImage(await shrinkPhoto(f)); setOpt(i, j, { image: r.url }); }
+    catch (err) { toast.error(err?.message || "Photo non envoyée"); }
+    setUploading(null);
+  };
   const set = (i, patch) => onChange(groups.map((g, k) => (k === i ? { ...g, ...patch } : g)));
   const setOpt = (i, j, patch) => set(i, { options: groups[i].options.map((o, k) => (k === j ? { ...o, ...patch } : o)) });
   const addGroup = (p) => {
@@ -69,6 +86,11 @@ export default function OptionGroupsEditor({ value = [], onChange, shopType = "r
           </div>
           {g.options.map((o, j) => (
             <div key={j} style={{ display: "flex", gap: 8, marginBottom: 6, alignItems: "center" }}>
+              <button onClick={() => (o.image ? setOpt(i, j, { image: undefined }) : pickPhoto(i, j))} aria-label={o.image ? "Retirer la photo du choix" : "Ajouter une photo du choix"} title={o.image ? "Retirer la photo" : "Photo du choix (couleur, modèle…)"}
+                style={{ width: 40, height: 40, borderRadius: 10, border: o.image ? "none" : "1.5px dashed var(--border)", background: "var(--light)", padding: 0, overflow: "hidden", flexShrink: 0, cursor: "pointer", position: "relative", opacity: uploading === `${i}-${j}` ? 0.5 : 1 }}>
+                {o.image ? <><img src={o.image} alt="" style={{ width: "100%", height: "100%", objectFit: "cover" }} /><span style={{ position: "absolute", right: 1, top: 1, background: "rgba(0,0,0,.55)", borderRadius: 6, lineHeight: 0, padding: 1 }}><Icon name="close" size={10} color="#fff" /></span></>
+                  : <Icon name="camera" size={16} color="var(--muted)" />}
+              </button>
               <input style={{ ...inp, flex: 2 }} value={o.name} placeholder="Choix (ex. : Frites)" onChange={(e) => setOpt(i, j, { name: e.target.value })} />
               <div style={{ position: "relative", flex: 1 }}>
                 <input style={{ ...inp, paddingLeft: 22 }} inputMode="numeric" value={o.price_delta || ""} placeholder="0" onChange={(e) => setOpt(i, j, { price_delta: Number(e.target.value.replace(/\D/g, "").slice(0, 6)) || 0 })} />
@@ -78,13 +100,14 @@ export default function OptionGroupsEditor({ value = [], onChange, shopType = "r
             </div>
           ))}
           <button onClick={() => set(i, { options: [...g.options, { name: "", price_delta: 0 }] })} style={{ border: "none", background: "none", color: "#F97316", fontWeight: 700, fontSize: 13, cursor: "pointer", padding: "6px 0", fontFamily: "inherit" }}>+ Ajouter un choix</button>
-          <div style={{ fontSize: 11, color: "var(--muted)" }}>Prix en FCFA ajouté au prix de l'article (laisser vide si gratuit).</div>
+          <div style={{ fontSize: 11, color: "var(--muted)" }}>Prix en FCFA ajouté au prix de l'article (laisser vide si gratuit). Touchez <Icon name="camera" size={11} /> pour la photo d'un choix (couleur, modèle…) : le client la voit en vignette.</div>
         </div>
       ))}
 
       {presets.length > 0 && <div style={{ display: "flex", gap: 6, flexWrap: "wrap", marginBottom: 8 }}>
         {presets.map((p) => <button key={p.label} style={pill(false)} onClick={() => addGroup(p)}>+ {p.label}</button>)}
       </div>}
+      <input ref={fileRef} type="file" accept="image/*" hidden onChange={onFile} />
       <button onClick={() => addGroup()} style={{ width: "100%", padding: 12, borderRadius: 12, border: "1.5px dashed var(--border)", background: "transparent", color: "var(--text)", fontWeight: 700, fontSize: 13, cursor: "pointer", fontFamily: "inherit" }}>+ Nouveau groupe d'options</button>
     </div>
   );
@@ -93,6 +116,6 @@ export default function OptionGroupsEditor({ value = [], onChange, shopType = "r
 /** Nettoie les groupes avant l'envoi (retire les choix vides et les groupes sans choix) */
 export function cleanOptionGroups(groups = []) {
   return groups
-    .map((g) => ({ ...g, label: (g.label || "").trim(), options: (g.options || []).filter((o) => (o.name || "").trim()).map((o) => ({ name: o.name.trim(), price_delta: Math.max(0, Number(o.price_delta) || 0) })) }))
+    .map((g) => ({ ...g, label: (g.label || "").trim(), options: (g.options || []).filter((o) => (o.name || "").trim()).map((o) => ({ name: o.name.trim(), price_delta: Math.max(0, Number(o.price_delta) || 0), ...(o.image ? { image: o.image } : {}) })) }))
     .filter((g) => g.label && g.options.length);
 }
