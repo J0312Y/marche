@@ -54,7 +54,7 @@ export default function BuyerScreens() {
     case "checkout": return <CheckoutScr onBack={back} goHome={goHome} cart={data?.eid ? cart.filter((c) => Number(c.establishment_id) === Number(data.eid)) : cart} eidParam={data?.eid} clearCart={clearCart} appliedCoupon={appliedCoupon} setAppliedCoupon={setAppliedCoupon} go={go} />;
     case "cart": return <CartScr key={"c" + (data?.eid || "")} eid={data?.eid} go={go} onBack={back} appliedCoupon={appliedCoupon} setAppliedCoupon={setAppliedCoupon} />;
     case "coursier": return <Redirect action={() => { setTab(2); setScreen(null); setHistory([]); }} />;
-    case "errand": return <ErrandFormScr type={data?.type} onBack={back} go={go} />;
+    case "errand": return <ErrandFormScr type={data?.type} again={data?.again || null} onBack={back} go={go} />;
     case "errandDetail": return <ErrandDetailScr id={data?.id} onBack={() => { setTab(2); setScreen(null); setHistory([]); }} />;
     case "orders": return <Redirect action={() => { setTab(3); setScreen(null); }} />;
     case "search": return <SearchScr key={"q" + (data?.category?.id || "") + (data?.tab || "")} go={go} onBack={back} defaultTab={data?.tab} category={data?.category} />;

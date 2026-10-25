@@ -430,9 +430,9 @@ const T_CSS = `
 .t-cta span{white-space:nowrap}
 /* Panier — mesures relevées sur Toters (écran 360 px) */
 .t-head h1.tc-h{font-size:20px;font-weight:600;margin-left:-6px}
-.tc-card{background:var(--card);border-radius:12px;margin:17px 16px 0;color:var(--t-text);overflow:hidden}
+.tc-card{background:var(--card);border-radius:16px;margin:17px 16px 0;color:var(--t-text);overflow:hidden}
 .tc-store{display:flex;align-items:center;gap:11px;padding:11px 12px 8px;cursor:pointer}
-.tc-store .nm{flex:1;min-width:0;font-size:19px;font-weight:600;line-height:1.25;letter-spacing:-.2px}
+.tc-store .nm{flex:1;min-width:0;font-size:19px;font-weight:600;line-height:1.25;letter-spacing:-.2px}.tc-store .nm small{display:block;font-size:13px;font-weight:400;color:var(--t-sub);margin-top:1px;letter-spacing:0}
 .tc-store .go{width:32px;height:32px;border-radius:50%;background:var(--t-bg2);display:flex;align-items:center;justify-content:center;flex-shrink:0}
 .tc-intro{margin:14px 16px 0;font-size:14px;color:var(--t-sub)}
 .tc-multi .tc-store{cursor:default}
@@ -455,16 +455,16 @@ const T_CSS = `
 .tc-goal .dot.on{border-color:var(--acc)}
 .tc-goal .lbl{display:flex;justify-content:space-between;font-size:13px;color:var(--t-text);margin-top:6px}
 .tc-goal .cap{font-size:13px;color:var(--t-sub);text-align:right;margin-top:3px}
-.tc-line{display:flex;gap:12px;padding:25px 12px 18px;align-items:flex-start}
-.tc-line .ph{width:61px;height:61px;border-radius:10px;border:1px solid #E8E8EB;background:#fff;overflow:hidden;flex-shrink:0;display:flex;align-items:center;justify-content:center}
+.tc-line{display:flex;gap:12px;margin:10px 12px 0;padding:10px;background:var(--t-bg2);border-radius:12px;align-items:center}
+.tc-line .ph{width:64px;height:64px;border-radius:10px;background:var(--card);overflow:hidden;flex-shrink:0;display:flex;align-items:center;justify-content:center}
 .tc-line .info{flex:1;min-width:0}
-.tc-line .nm{font-size:15px;line-height:1.3}
+.tc-line .nm{font-size:15px;font-weight:600;line-height:1.3}
 .tc-line .sub{font-size:13px;color:var(--t-sub);margin-top:2px;line-height:1.35}
 .tc-line .pr{font-size:15px;font-weight:600;margin-top:4px;white-space:nowrap}
-.tc-qty{display:flex;align-items:center;justify-content:space-between;width:82px;height:32px;border:1px solid #E6E6EA;border-radius:16px;background:#FAFAFB;padding:0 4px;flex-shrink:0;box-sizing:border-box}
+.tc-qty{display:flex;align-items:center;justify-content:space-between;width:82px;height:32px;border:1px solid #E6E6EA;border-radius:16px;background:var(--card);padding:0 4px;flex-shrink:0;box-sizing:border-box}
 .tc-qty button{width:24px;height:30px;border:none;background:none;cursor:pointer;display:flex;align-items:center;justify-content:center;color:var(--t-text);padding:0}
 .tc-qty b{font-size:14px;font-weight:500;min-width:16px;text-align:center}
-.tc-total{border-top:1.5px dashed #DCDDE1;padding:16px 12px 17px}
+.tc-total{border-top:1.5px dashed #DCDDE1;margin-top:14px;padding:16px 12px 17px}
 .tc-total .row{display:flex;justify-content:space-between;align-items:center;font-size:17px;font-weight:600}
 .tc-total .row.disc{font-size:14px;color:#16A34A;margin-top:6px}
 .t-bottom.sheet .tc-add{flex:0 0 100px;justify-content:center;padding:0;border-radius:10px;font-size:17px;font-weight:500}

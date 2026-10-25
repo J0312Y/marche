@@ -79,18 +79,24 @@ function StopSheet({ title, pin, value, saved, mine, me, onSave, onClose }) {
  * Nouvelle course : « send » (envoyer un colis) ou « buy » (faire un achat).
  * Trajet (Récupérer → Livrer) en tête, nature du colis ou liste d'achats, récapitulatif, paiement en espèces.
  */
-export default function ErrandFormScr({ type = "send", onBack, go }) {
+// « Refaire » une course : mêmes lieux, contacts et description
+const fromErrand = (e, k) => ({ lat: e[k + "_lat"] ? Number(e[k + "_lat"]) : null, lng: e[k + "_lng"] ? Number(e[k + "_lng"]) : null, quarter: "", place: e[k + "_address"] || "", name: e[k + "_contact"] || "", phone: String(e[k + "_phone"] || "").replace(/^\+242/, "") });
+
+export default function ErrandFormScr({ type = "send", onBack, go, again = null }) {
   const { showToast, user } = useApp();
   const isBuy = type === "buy";
   const me = { name: [user?.first_name, user?.last_name].filter(Boolean).join(" "), phone: (user?.phone || "").replace(/^\+242/, "") };
   const [saved, setSaved] = useState([]);
-  const [pickup, setPickup] = useState(EMPTY);
-  const [dropoff, setDropoff] = useState({ ...EMPTY, name: me.name, phone: me.phone });
+  const [pickup, setPickup] = useState(again ? fromErrand(again, "pickup") : EMPTY);
+  const [dropoff, setDropoff] = useState(again ? fromErrand(again, "dropoff") : { ...EMPTY, name: me.name, phone: me.phone });
   const [edit, setEdit] = useState(null); // "a" | "b"
-  const [kind, setKind] = useState("");
-  const [desc, setDesc] = useState("");
-  const [store, setStore] = useState("");
-  const [budget, setBudget] = useState("");
+  // « Refaire » un colis : description enregistrée « type — précisions » → type re-sélectionné
+  const againParts = !isBuy && again?.description ? String(again.description).split(" — ") : [];
+  const againKind = againParts.length && KINDS.some(([, l]) => l === againParts[0]) ? againParts[0] : "";
+  const [kind, setKind] = useState(againKind);
+  const [desc, setDesc] = useState(againKind ? againParts.slice(1).join(" — ") : again?.description || "");
+  const [store, setStore] = useState(again?.store_name || "");
+  const [budget, setBudget] = useState(again?.items_budget ? String(Number(again.items_budget)) : "");
   const [quote, setQuote] = useState(null);
   const [busy, setBusy] = useState(false);
 
@@ -99,7 +105,7 @@ export default function ErrandFormScr({ type = "send", onBack, go }) {
       const list = (Array.isArray(r) ? r : r?.addresses || []).filter((a) => a.latitude && zoneOf(Number(a.latitude), Number(a.longitude)));
       setSaved(list);
       const d = list.find((a) => Number(a.is_default) === 1) || list[0];
-      if (d) setDropoff((x) => ({ ...x, ...fromSaved(d) }));
+      if (d && !again) setDropoff((x) => ({ ...x, ...fromSaved(d) }));
     }).catch(() => {});
   }, []);
 

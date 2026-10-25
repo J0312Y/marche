@@ -7,12 +7,16 @@ import { fmt } from "../../utils/helpers";
 import { appInfo } from "../../config/appInfo";
 
 export const ERRAND_STATUS = {
-  pending: { label: "Recherche d'un coursier", color: "#B45309", bg: "#FEF3C7" },
-  assigned: { label: "Coursier en route", color: "#1D4ED8", bg: "#DBEAFE" },
-  picked_up: { label: "En cours de livraison", color: "#7C3AED", bg: "#EDE9FE" },
-  delivered: { label: "Livrée", color: "#15803D", bg: "#DCFCE7" },
-  cancelled: { label: "Annulée", color: "#6B7280", bg: "#F3F4F6" },
+  pending: { label: "Recherche d'un coursier", color: "#B45309", bg: "#FEF3C7", icon: "clock" },
+  assigned: { label: "Coursier en route", color: "#1D4ED8", bg: "#DBEAFE", icon: "bike" },
+  picked_up: { label: "En cours de livraison", color: "#7C3AED", bg: "#EDE9FE", icon: "truck" },
+  delivered: { label: "Livrée", color: "#15803D", bg: "#DCFCE7", icon: "check_circle" },
+  cancelled: { label: "Annulée", color: "#6B7280", bg: "#F3F4F6", icon: "x_circle" },
 };
+const ERRAND_ACTIVE = ["pending", "assigned", "picked_up"];
+const FILTERS = [["all", "Toutes"], ["active", "En cours"], ["delivered", "Livrées"], ["cancelled", "Annulées"]];
+const longDate = (s) => { const d = new Date(String(s).replace(" ", "T")); return isNaN(d) ? "" : `Demandée le ${d.toLocaleDateString("fr-FR", { day: "numeric", month: "long", year: "numeric" })} à ${d.toLocaleTimeString("fr-FR", { hour: "2-digit", minute: "2-digit" })}`; };
+const shortPlace = (s) => String(s || "").split(/\n| · |,/)[0].trim() || "—"; // première partie de l'adresse (repère)
 
 // Illustrations (couleurs Toters : vert + rouge)
 const Scooter = () => (
@@ -42,6 +46,7 @@ export default function CoursierScr({ go }) {
   const { user, requireLogin } = useApp();
   const [info, setInfo] = useState(false);
   const [list, setList] = useState([]);
+  const [filter, setFilter] = useState("all");
 
   useEffect(() => {
     if (!user) { setList([]); return; }
@@ -70,18 +75,47 @@ export default function CoursierScr({ go }) {
       </button>
 
       {list.length > 0 && <>
-        <div className="t-h2" style={{ padding: "12px 16px 10px" }}>Mes courses</div>
-        {list.map((e) => {
+        <div className="t-h2" style={{ padding: "12px 16px 4px" }}>Mes courses</div>
+        <div className="t-chips" style={{ paddingTop: 6 }}>
+          {FILTERS.map(([k, l]) => {
+            const n = k === "all" ? list.length : list.filter((e) => (k === "active" ? ERRAND_ACTIVE.includes(e.status) : e.status === k)).length;
+            return <button key={k} className={"t-chip" + (filter === k ? " on" : "")} style={{ height: 34 }} onClick={() => setFilter(k)}>{l}{n ? ` (${n})` : ""}</button>;
+          })}
+        </div>
+        {list.filter((e) => filter === "all" || (filter === "active" ? ERRAND_ACTIVE.includes(e.status) : e.status === filter)).map((e) => {
           const st = ERRAND_STATUS[e.status] || ERRAND_STATUS.pending;
+          const active = ERRAND_ACTIVE.includes(e.status);
+          const total = Number(e.delivery_fee || 0) + Number(e.items_cost || 0);
           return (
-            <div key={e.id} className="t-card" style={{ margin: "0 16px 12px", padding: 16, cursor: "pointer" }} onClick={() => go("errandDetail", { id: e.id })} role="button">
-              <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
-                <div style={{ width: 44, height: 44, borderRadius: 14, background: "var(--acc-l)", display: "flex", alignItems: "center", justifyContent: "center" }}><Icon name={e.type === "buy" ? "bag" : "bike"} size={22} color="var(--acc)" /></div>
+            <div key={e.id} className="t-card" style={{ margin: "0 16px 12px", padding: 16, borderRadius: 16 }}>
+              <div style={{ display: "flex", alignItems: "flex-start", gap: 10 }}>
                 <div style={{ flex: 1, minWidth: 0 }}>
-                  <div style={{ fontWeight: 700, fontSize: 16, whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis" }}>{e.description}</div>
-                  <div className="t-mut">{e.ref} · {fmt(e.delivery_fee)}</div>
+                  <div style={{ fontWeight: 700, fontSize: 17 }}>#{e.ref}</div>
+                  <div className="t-mut" style={{ marginTop: 2 }}>{longDate(e.created_at)}</div>
                 </div>
-                <span style={{ padding: "5px 10px", borderRadius: 10, background: st.bg, color: st.color, fontSize: 12, fontWeight: 700, whiteSpace: "nowrap" }}>{st.label}</span>
+                <span style={{ display: "inline-flex", alignItems: "center", gap: 5, padding: "5px 10px", borderRadius: 10, background: st.bg, color: st.color, fontSize: 13, fontWeight: 600, flexShrink: 0, maxWidth: "50%" }}>
+                  <Icon name={st.icon} size={14} color={st.color} /><span style={{ overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>{st.label}</span>
+                </span>
+              </div>
+              <div onClick={() => go("errandDetail", { id: e.id })} role="button" style={{ marginTop: 12, padding: 10, background: "var(--t-bg2)", borderRadius: 12, display: "flex", gap: 12, alignItems: "center", cursor: "pointer" }}>
+                <span style={{ width: 64, height: 64, borderRadius: 10, background: "var(--acc-l)", flexShrink: 0, display: "flex", alignItems: "center", justifyContent: "center" }}><Icon name={e.type === "buy" ? "bag" : "bike"} size={28} color="var(--acc)" /></span>
+                <div style={{ flex: 1, minWidth: 0 }}>
+                  <div style={{ fontSize: 15, fontWeight: 600, overflow: "hidden", display: "-webkit-box", WebkitLineClamp: 2, WebkitBoxOrient: "vertical", lineHeight: 1.3 }}>{e.description}</div>
+                  {/* Départ → arrivée : chacun garde sa moitié de ligne (une adresse longue ne cache pas l'autre) */}
+                  <div className="t-mut" style={{ marginTop: 3, display: "flex", gap: 4, minWidth: 0 }}>
+                    <span style={{ flex: "0 1 auto", minWidth: 0, maxWidth: "48%", overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>{e.type === "buy" ? (e.store_name || "Achat") : shortPlace(e.pickup_address)}</span>
+                    <span style={{ flexShrink: 0 }}>→</span>
+                    <span style={{ flex: "0 1 auto", minWidth: 0, maxWidth: "48%", overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>{shortPlace(e.dropoff_address)}</span>
+                  </div>
+                  <div style={{ fontSize: 15, fontWeight: 700, marginTop: 3 }}>{fmt(total)}{e.type === "buy" && !Number(e.items_cost) ? <span className="t-mut" style={{ fontWeight: 400 }}> + achats</span> : null}</div>
+                </div>
+              </div>
+              {e.status === "cancelled" && e.cancel_reason && <div className="t-mut" style={{ marginTop: 10 }}>{e.cancel_reason}</div>}
+              <div style={{ display: "flex", gap: 10, marginTop: 12 }}>
+                {!active && <button className="t-cta ghost center" style={{ flex: 1, height: 44, justifyContent: "center", fontSize: 15, whiteSpace: "nowrap", padding: "0 10px" }} onClick={() => requireLogin("errand", () => go("errand", { type: e.type, again: e }))}>Refaire</button>}
+                <button className="t-cta center" style={{ flex: 1, height: 44, justifyContent: "center", fontSize: 15, whiteSpace: "nowrap", padding: "0 10px" }} onClick={() => go("errandDetail", { id: e.id })}>
+                  {active ? <>Suivre la course <Icon name="arrow_right" size={16} color="#fff" /></> : "Voir le détail"}
+                </button>
               </div>
             </div>
           );

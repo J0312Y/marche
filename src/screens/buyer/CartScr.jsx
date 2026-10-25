@@ -145,7 +145,7 @@ export default function CartScr({ go, onBack, appliedCoupon, setAppliedCoupon, e
           {st && !st.open && <div className="tc-band"><Icon name="moon_closed" size={17} color="#111" /><b>Fermé</b>{st.preorder && <> · Précommande pour {whenLabel(st.opens)}</>}</div>}
           <div className="tc-store" onClick={() => go("vendor", vendor)} role="button">
             <StoreLogo v={vendor} size={47} />
-            <div className="nm">{vendor.name}</div>
+            <div className="nm">{vendor.name}<small>{cart.reduce((s, c) => s + lineQty(c), 0)} article{cart.reduce((s, c) => s + lineQty(c), 0) > 1 ? "s" : ""}</small></div>
             <span className="go"><Icon name="arrow_right" size={20} strokeWidth={2.4} /></span>
           </div>
 

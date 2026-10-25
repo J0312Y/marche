@@ -41,7 +41,7 @@ function ReviewsScr({ product: p, onBack, go }) {
   const [filter, setFilter] = useState("all"); // all | photos | 5 | tag:<étiquette>
   const [viewer, setViewer] = useState(null); // { photos, start }
 
-  const [writing, setWriting] = useState(false);
+  const [writing, setWriting] = useState(!!p.write); // ouvert depuis « Donner mon avis » (Commandes)
   const [rating, setRating] = useState(0);
   const [text, setText] = useState("");
   const [tags, setTags] = useState([]);
@@ -105,6 +105,10 @@ function ReviewsScr({ product: p, onBack, go }) {
         </div>
       </div>
       <div style={{ padding: "0 16px" }}>
+        {p.name && <div style={{ display: "flex", alignItems: "center", gap: 10, padding: "2px 0 10px" }}>
+          {p.photo && <Img src={p.photo} style={{ width: 40, height: 40, borderRadius: 8, flexShrink: 0 }} fit="cover" />}
+          <div style={{ fontSize: 15, fontWeight: 600, overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>{p.name}</div>
+        </div>}
         <div style={{ display: "flex", alignItems: "center", gap: 16, padding: "8px 0 14px" }}>
           <div style={{ textAlign: "center", minWidth: 84 }}>
             <div style={{ fontSize: 36, fontWeight: 700, lineHeight: 1 }}>{total ? avg.toFixed(1) : "–"}</div>

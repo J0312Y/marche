@@ -4,8 +4,8 @@
 import { ordersAPI, paymentsAPI } from '../api';
 
 export default {
-  getAll: async (status, page = 1) => {
-    return ordersAPI.getAll(status, page);
+  getAll: async (status, page = 1, limit = 20) => {
+    return ordersAPI.getAll(status, page, limit);
   },
 
   getDetail: async (id) => {
