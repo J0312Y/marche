@@ -1,143 +1,125 @@
+import { useEffect, useState } from "react";
 import Icon from "../../components/Icon";
-import GuestBlockedView from "../../components/GuestBlockedView";
+import Sheet from "../../components/t/Sheet";
 import { useApp } from "../../context/AppContext";
-import { fmt } from "../../utils/helpers";
-import { getLevel } from "../../data/loyalty";
+import { buyer as buyerSvc } from "../../services";
+import CONTACT, { whatsappLink, telLink } from "../../config/contact";
+import { loyaltyRules } from "../../config/appInfo";
+import AppVersion from "../../components/t/AppVersion";
 
-import PullToRefresh from "../../components/PullToRefresh";
-import toast from "../../utils/toast";
-import t from "../../utils/i18n";
+const Tile = ({ icon, label, onClick, badge }) => (
+  <button className="ta-tile" onClick={onClick}>
+    <span className="ic"><Icon name={icon} size={22} strokeWidth={1.8} color="var(--t-sub)" />{badge && <span className="bd">{badge}</span>}</span>
+    <span className="lb">{label}</span>
+  </button>
+);
+const Li = ({ icon, label, onClick, right, danger }) => (
+  <button className="t-li" onClick={onClick} style={danger ? { color: "#DC2626" } : undefined}>
+    <span className="ic" style={danger ? { background: "#FEE2E2", color: "#DC2626" } : undefined}><Icon name={icon} size={20} color={danger ? "#DC2626" : "var(--t-sub)"} /></span>
+    <span>{label}</span>{right}
+  </button>
+);
 
-import { USER_AVATAR } from "../../data/images";
-function ProfileScr({go,userRole,vendorPlan,vendorStatus,driverStatus,onLogout,onRoleApproved}){
-  const { isGuest, exitGuestToLogin } = useApp();
-  
-  // Guest mode — show pro guest welcome screen
-  if (isGuest) return (
-    <GuestBlockedView
-      icon="user"
-      title="Bienvenue chez Lamuka"
-      subtitle="Vous explorez en mode visiteur. Créez un compte gratuit pour passer des commandes et profiter de tous les avantages."
-      benefits={["Passer commande et payer", "Discuter avec les vendeurs", "Suivre vos livraisons", "Gagner des points fidélité"]}
-      accent="#F97316"
-    />
+/**
+ * Compte « Toters » : invité → Support, Langue, Aide, Connexion ; connecté → profil, points, raccourcis, espaces vendeur / livreur.
+ */
+export default function ProfileScr({ go, userRole, vendorStatus, driverStatus, onLogout }) {
+  const { user, requireLogin, lang, unreadCount } = useApp();
+  const [support, setSupport] = useState(false);
+  const [points, setPoints] = useState(null);
+  const [confirmOut, setConfirmOut] = useState(false);
+  useEffect(() => { if (user) buyerSvc.getLoyalty().then((r) => setPoints(r?.points ?? 0)).catch(() => {}); }, [user]);
+
+  const hasVendor = (userRole === "vendor" || userRole === "both") && vendorStatus === "approved";
+  const hasDriver = (userRole === "driver" || userRole === "both") && driverStatus === "approved";
+  const name = [user?.first_name, user?.last_name].filter(Boolean).join(" ");
+
+  return (
+    <div className="t-scr gray">
+      {!user && <div style={{ height: 64, background: "var(--card)" }} />}
+      {user && <div style={{ background: "var(--card)", padding: "22px 20px 18px", display: "flex", alignItems: "center", gap: 16, cursor: "pointer" }} onClick={() => go("editProfile")} role="button">
+        <div style={{ width: 64, height: 64, borderRadius: 32, background: "var(--acc-l)", display: "flex", alignItems: "center", justifyContent: "center", overflow: "hidden", flexShrink: 0 }}>
+          {user.avatar ? <img src={user.avatar} alt="" style={{ width: "100%", height: "100%", objectFit: "cover" }} /> : <b style={{ fontSize: 20, color: "var(--acc)" }}>{(user.first_name || "?")[0]}</b>}
+        </div>
+        <div style={{ flex: 1, minWidth: 0 }}>
+          <div style={{ fontSize: 21, fontWeight: 700 }}>{name || "Mon compte"}</div>
+          <div className="t-sub" style={{ fontSize: 14 }}>{user.phone}</div>
+        </div>
+        <Icon name="edit" size={20} color="var(--t-mut)" />
+      </div>}
+
+      {user && <div className="t-card" style={{ display: "flex", alignItems: "center", gap: 14, padding: "14px 16px", border: "none", cursor: "pointer" }} onClick={() => go("loyalty")} role="button">
+        <span style={{ width: 40, height: 40, borderRadius: 10, background: "var(--acc-l)", display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0 }}><Icon name="coin" size={22} color="var(--acc)" /></span>
+        <div style={{ flex: 1 }}>
+          <div style={{ fontSize: 16, fontWeight: 600 }}>Mes points</div>
+          <div className="t-sub" style={{ fontSize: 13 }}>{points === null ? "…" : loyaltyRules().min != null && points >= loyaltyRules().min ? `${points} points · ${points} F de réduction` : `${points} points${loyaltyRules().min ? ` · utilisables dès ${loyaltyRules().min}` : ""}`}</div>
+        </div>
+        <Icon name="chevron_right" size={20} color="var(--t-mut)" />
+      </div>}
+
+      <div className="t-group ta-tiles">
+        {user && <Tile icon="heart" label="Favoris" onClick={() => go("wishlist")} />}
+        {user && <Tile icon="map_pin" label="Adresses" onClick={() => go("addresses")} />}
+        <Tile icon="headphones" label="Support" onClick={() => setSupport(true)} />
+        <Tile icon="globe" label="Langue" badge={lang === "en" ? "En" : "Fr"} onClick={() => go("language")} />
+      </div>
+
+      {user && <div className="t-group">
+        <Li icon="list" label="Mes commandes" onClick={() => go("orders")} />
+        <Li icon="bike" label="Mes courses" onClick={() => go("coursier")} />
+        <Li icon="tag" label="Codes promo" onClick={() => go("promos")} />
+        <Li icon="chat" label="Messages" onClick={() => go("chatList")} />
+        <Li icon="bell" label="Notifications" onClick={() => go("notif")} right={unreadCount > 0 ? <span style={{ flex: "0 0 auto", minWidth: 22, textAlign: "center", padding: "2px 8px", borderRadius: 10, background: "var(--acc)", color: "#fff", fontSize: 12, fontWeight: 700 }}>{unreadCount}</span> : null} />
+      </div>}
+
+      {user && <div className="t-group">
+        {hasVendor ? <Li icon="store" label="Espace commerçant" onClick={() => go("switchVendor")} />
+          : ["pending", "suspended"].includes(vendorStatus) ? <Li icon="store" label={vendorStatus === "suspended" ? "Commerce suspendu" : "Demande commerçant en cours"} onClick={() => go("regStatus", { role: "vendor" })} />
+          : <Li icon="store" label="Vendre sur Lamuka" onClick={() => go("vendorReg")} />}
+        {/* Demande refusée : le compte redevient client, on peut refaire une demande depuis le début */}
+        {hasDriver ? <Li icon="truck" label="Espace livreur" onClick={() => go("switchDriver")} />
+          : ["pending", "suspended"].includes(driverStatus) ? <Li icon="truck" label={driverStatus === "suspended" ? "Compte livreur suspendu" : "Demande livreur en cours"} onClick={() => go("regStatus", { role: "driver" })} />
+          : <Li icon="truck" label="Devenir livreur" onClick={() => go("driverReg")} />}
+      </div>}
+
+      <div className="t-group">
+        <div className="gh">Centre d'aide</div>
+        <Li icon="help" label="Questions fréquentes" onClick={() => go("help")} />
+        <Li icon="truck" label="Livraison et retours" onClick={() => go("deliveryPolicy")} />
+        <Li icon="document" label="Mentions légales" onClick={() => go("terms")} />
+        <Li icon="shield" label="Confidentialité" onClick={() => go("privacy")} />
+      </div>
+
+      <div className="t-group">
+        {user ? <>
+          <Li icon="settings" label="Paramètres" onClick={() => go("settings")} />
+          <Li icon="logout" label="Se déconnecter" danger onClick={() => setConfirmOut(true)} />
+        </> : <button className="t-li" onClick={() => requireLogin("login")} style={{ color: "var(--acc)" }}>
+          <span className="ic" style={{ background: "var(--acc-l)" }}><Icon name="logout" size={20} color="var(--acc)" /></span><span style={{ fontWeight: 500 }}>Connexion / Inscription</span>
+        </button>}
+      </div>
+
+      <AppVersion />
+
+      {support && <Sheet onClose={() => setSupport(false)} title="Support">
+        <div style={{ padding: "6px 20px 24px" }}>
+          <p className="t-sub" style={{ fontSize: 14, marginBottom: 12 }}>Une question sur une commande ? Notre équipe vous répond.</p>
+          <a className="t-li" href={whatsappLink("Bonjour Lamuka, j'ai besoin d'aide")} target="_blank" rel="noreferrer" style={{ textDecoration: "none" }}><span className="ic"><Icon name="chat" size={20} color="#16A34A" /></span><span>WhatsApp</span><Icon name="chevron_right" size={18} color="var(--t-mut)" /></a>
+          <a className="t-li" href={telLink()} style={{ textDecoration: "none" }}><span className="ic"><Icon name="phone" size={20} color="var(--acc)" /></span><span>{CONTACT.phoneDisplay}</span><Icon name="chevron_right" size={18} color="var(--t-mut)" /></a>
+          <a className="t-li" href={`mailto:${CONTACT.email}`} style={{ textDecoration: "none" }}><span className="ic"><Icon name="mail" size={20} color="var(--t-sub)" /></span><span>{CONTACT.email}</span><Icon name="chevron_right" size={18} color="var(--t-mut)" /></a>
+        </div>
+      </Sheet>}
+
+      {confirmOut && <Sheet onClose={() => setConfirmOut(false)}>
+        <div style={{ padding: "10px 20px 22px" }}>
+          <div style={{ fontSize: 22, fontWeight: 700, marginBottom: 8 }}>Se déconnecter ?</div>
+          <div className="t-sub" style={{ fontSize: 14, marginBottom: 18 }}>Vous pourrez toujours parcourir les boutiques.</div>
+          <div style={{ display: "flex", gap: 10 }}>
+            <button className="t-cta ghost" onClick={() => setConfirmOut(false)}>Annuler</button>
+            <button className="t-cta center" style={{ background: "#DC2626" }} onClick={() => { setConfirmOut(false); onLogout(); }}>Se déconnecter</button>
+          </div>
+        </div>
+      </Sheet>}
+    </div>
   );
-  
-  const hasVendor=(userRole==="vendor"||userRole==="both")&&vendorStatus==="approved";
-  const hasDriver=(userRole==="driver"||userRole==="both")&&driverStatus==="approved";
-
-  const Section=({title,children})=>(
-    <div style={{margin:"0 20px 14px"}}>
-      <div style={{fontSize:11,fontWeight:700,color:"var(--muted)",textTransform:"uppercase",letterSpacing:1,padding:"0 4px 8px"}}>{title}</div>
-      <div style={{background:"var(--card)",border:"1px solid var(--border)",borderRadius:16,overflow:"hidden"}} className="prof-section">
-        {children}
-      </div>
-    </div>
-  );
-
-  const Item=({icon,label,info,onClick})=>(
-    <div onClick={onClick} style={{display:"flex",alignItems:"center",gap:14,padding:"12px 16px",cursor:"pointer",borderBottom:"1px solid var(--border)"}}>
-      <span style={{width:28,height:28,display:"flex",alignItems:"center",justifyContent:"center",color:"var(--text)",flexShrink:0}}>{icon?<Icon name={icon} size={20}/>:null}</span>
-      <span style={{flex:1,fontSize:14,fontWeight:500,color:"var(--text)"}}>{label}</span>
-      {info&&<span style={{fontSize:12,color:"var(--muted)",fontWeight:500}}>{info}</span>}
-      <svg width="7" height="12" viewBox="0 0 7 12" fill="none" style={{flexShrink:0,opacity:.3}}><path d="M1 1l5 5-5 5" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/></svg>
-    </div>
-  );
-
-  return(<PullToRefresh onRefresh={async()=>{toast.success("Profil actualisé")}}><div className="scr">
-    <div className="appbar"><h2>Mon Profil</h2><div style={{width:38}}/></div>
-
-    {/* ── Avatar + Name ── */}
-    <div onClick={()=>go("editProfile")} style={{margin:"0 20px 16px",display:"flex",alignItems:"center",gap:14,cursor:"pointer"}}>
-      <div style={{width:56,height:56,borderRadius:18,overflow:"hidden",flexShrink:0,border:"2px solid var(--border)"}}>
-        <img src={USER_AVATAR} style={{width:"100%",height:"100%",objectFit:"cover"}} alt=""/>
-      </div>
-      <div style={{flex:1}}>
-        <div style={{fontSize:18,fontWeight:700}}>Joeldy Tsina</div>
-        <div style={{fontSize:12,color:"var(--muted)",marginTop:1}}>+242 064 663 469</div>
-      </div>
-      <span style={{color:"var(--muted)",fontSize:13}}><Icon name="edit" size={18}/></span>
-    </div>
-
-    {/* ── Pending status ── */}
-
-    {/* ── CTA vendeur/livreur ── */}
-    {vendorStatus==="pending"&&<div style={{margin:"0 20px 10px",padding:14,background:"rgba(245,158,11,0.06)",border:"1px solid rgba(245,158,11,0.2)",borderRadius:16,cursor:"pointer"}} onClick={()=>go("regStatus")}>
-      <div style={{display:"flex",alignItems:"center",gap:10}}><span style={{fontSize:24}}>⏳</span><div style={{flex:1}}><div style={{fontSize:14,fontWeight:700,color:"#F59E0B"}}>Demande commerçant en attente</div><div style={{fontSize:12,color:"var(--muted)",marginTop:2}}>Vérification sous 24-48h</div></div><span style={{color:"#F59E0B",fontSize:12,fontWeight:600}}>Voir statut →</span></div>
-    </div>}
-    {driverStatus==="pending"&&<div style={{margin:"0 20px 10px",padding:14,background:"rgba(245,158,11,0.06)",border:"1px solid rgba(245,158,11,0.2)",borderRadius:16,cursor:"pointer"}} onClick={()=>go("regStatus")}>
-      <div style={{display:"flex",alignItems:"center",gap:10}}><span style={{fontSize:24}}>⏳</span><div style={{flex:1}}><div style={{fontSize:14,fontWeight:700,color:"#F59E0B"}}>Demande livreur en attente</div><div style={{fontSize:12,color:"var(--muted)",marginTop:2}}>Vérification sous 24-48h</div></div><span style={{color:"#F59E0B",fontSize:12,fontWeight:600}}>Voir statut →</span></div>
-    </div>}
-    {vendorStatus!=="pending"&&driverStatus!=="pending"&&!hasVendor&&!hasDriver&&<div onClick={()=>go("roleReg")} style={{margin:"0 20px 14px",padding:16,background:"linear-gradient(135deg,#1a1a2e,#16213e)",borderRadius:18,display:"flex",alignItems:"center",gap:14,cursor:"pointer",boxShadow:"0 4px 16px rgba(0,0,0,.12)"}}>
-      <div style={{width:48,height:48,borderRadius:14,background:"linear-gradient(135deg,#F97316,#FB923C)",display:"flex",alignItems:"center",justifyContent:"center",fontSize:24,flexShrink:0}}><Icon name="rocket" size={18}/></div>
-      <div style={{flex:1}}><div style={{fontSize:15,fontWeight:700,color:"#fff"}}>{t("profile.become_seller")}</div><div style={{fontSize:11,color:"rgba(255,255,255,.5)",marginTop:3}}>Ouvrez votre restaurant, boutique, pharmacie...</div></div>
-      <span style={{color:"rgba(255,255,255,.3)",fontSize:18}}>›</span>
-    </div>}
-    {hasVendor&&<div onClick={()=>go("switchVendor")} style={{margin:"0 20px 14px",padding:14,background:"var(--card)",border:"1px solid var(--border)",borderLeft:"4px solid #F97316",borderRadius:16,display:"flex",alignItems:"center",gap:12,cursor:"pointer"}}>
-      <span style={{fontSize:24}}><Icon name="store" size={18}/></span>
-      <div style={{flex:1}}><div style={{fontSize:14,fontWeight:700}}>Espace Commerçant</div><div style={{fontSize:11,color:"var(--muted)",marginTop:2}}>Plan {vendorPlan==="starter"?"Starter":vendorPlan==="pro"?"Pro":"Enterprise"}</div></div>
-      <span style={{color:"var(--muted)"}}>›</span>
-    </div>}
-    {hasDriver&&<div onClick={()=>go("switchDriver")} style={{margin:"0 20px 14px",padding:14,background:"var(--card)",border:"1px solid var(--border)",borderLeft:"4px solid #F97316",borderRadius:16,display:"flex",alignItems:"center",gap:12,cursor:"pointer"}}>
-      <span style={{fontSize:24}}><Icon name="truck" size={18}/></span>
-      <div style={{flex:1}}><div style={{fontSize:14,fontWeight:700}}>Espace Livreur</div><div style={{fontSize:11,color:"var(--muted)",marginTop:2}}>Gérer mes livraisons</div></div>
-      <span style={{color:"var(--muted)"}}>›</span>
-    </div>}
-
-    {/* Lamuka Points hero card */}
-    {(()=>{const lp=(()=>{try{return JSON.parse(localStorage.getItem("lk-loyalty")||"{}")}catch{return{}}})();const pts=lp.points??2450;const lvl=getLevel(lp.lifetimePoints??8200);return(
-    <div className="lamuka-points-card" onClick={()=>go("loyalty")} style={{margin:"0 16px 14px",padding:16,background:`linear-gradient(135deg, ${lvl.color}22 0%, ${lvl.color}08 100%)`,border:`2px solid ${lvl.color}33`,borderRadius:16,cursor:"pointer",display:"flex",alignItems:"center",gap:12}}>
-      <div style={{fontSize:32}}><Icon name={lvl.icon} size={20}/></div>
-      <div style={{flex:1}}>
-        <div style={{fontSize:10,color:lvl.color,fontWeight:800,letterSpacing:.5}}>NIVEAU {lvl.name.toUpperCase()}</div>
-        <div style={{fontSize:20,fontWeight:800,color:lvl.color,marginTop:2}}>{pts.toLocaleString()} pts</div>
-        <div style={{fontSize:11,color:"var(--muted)"}}>≈ {fmt(pts)} de réduction</div>
-      </div>
-      <span style={{fontSize:18,color:"var(--muted)"}}>›</span>
-    </div>
-    )})()}
-
-    {/* ══════ SECTIONS ══════ */}
-
-    <Section title="Mes achats">
-      <Item icon="package" label={t("profile.orders")} info="3" onClick={()=>go("orders")}/>
-      <Item icon="repeat" label="Abonnements" info="2 actifs" onClick={()=>go("subscriptions")}/>
-      <Item icon="heart" label={t("profile.favorites")} info="5" onClick={()=>go("wishlist")}/>
-      <Item icon="creditCard" label={t("profile.payment_history")} info="7" onClick={()=>go("paymentHistory")}/>
-    </Section>
-
-    <Section title="Mon compte">
-      <Item icon="star_full" label="Fidélité" info="3 450 pts" onClick={()=>go("loyalty")}/>
-      <Item icon="tag" label="Mes promos" info="6 codes" onClick={()=>go("promos")}/>
-      <Item icon="gift" label="Parrainage" info="4 000 F gagnés" onClick={()=>go("referral")}/>
-      <Item icon="creditCard" label="Cartes cadeaux" onClick={()=>go("giftCard")}/>
-    </Section>
-
-    <Section title="️ Outils">
-      <Item icon="chat" label={t("profile.messages")} info="2" onClick={()=>go("chatList")}/>
-      <Item icon="location" label={t("profile.addresses")} info="2" onClick={()=>go("addresses")}/>
-      <Item icon="bell" label={t("profile.notifications")} info="3" onClick={()=>go("notif")}/>
-      <Item icon="trendUp" label={t("profile.price_alerts")} info="3" onClick={()=>go("priceAlerts")}/>
-    </Section>
-
-    <Section title="Découvrir">
-      <Item icon="handshake" label={t("profile.group_buys")} info="3 offres" onClick={()=>go("groupBuy")}/>
-      <Item icon="chart_pie" label={t("profile.stats")} onClick={()=>go("myStats")}/>
-      <Item icon="target" label={t("profile.rewards")} info="Roue, missions" onClick={()=>go("gamification")}/>
-      <Item icon="headphones" label={t("profile.assistant")} onClick={()=>go("chatBot")}/>
-      <Item icon="help" label="Centre d'aide" info="FAQ" onClick={()=>go("help")}/>
-      <Item icon="truck" label="Livraison & Retours" onClick={()=>go("deliveryPolicy")}/>
-      <Item icon="info" label="À propos" onClick={()=>go("about")}/>
-      <Item icon="qrcode" label={t("profile.qr_scan")} onClick={()=>go("qrScan")}/>
-
-    </Section>
-
-    {/* ── Footer ── */}
-    <div style={{display:"flex",gap:10,margin:"4px 20px 20px"}}>
-      <button onClick={()=>go("settings")} style={{flex:1,padding:12,borderRadius:14,border:"1px solid var(--border)",background:"var(--card)",fontSize:13,fontWeight:600,cursor:"pointer",fontFamily:"inherit",color:"var(--text)"}}>{t("profile.settings")}</button>
-      <button onClick={onLogout} style={{flex:1,padding:12,borderRadius:14,border:"1px solid rgba(239,68,68,0.2)",background:"transparent",color:"#EF4444",fontSize:13,fontWeight:600,cursor:"pointer",fontFamily:"inherit"}}>{t("profile.logout")}</button>
-    </div>
-  </div></PullToRefresh>);
 }
-
-export default ProfileScr;

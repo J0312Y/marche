@@ -1,19 +1,14 @@
 export { default as HomeScr } from './HomeScr';
 export { default as SearchScr } from './SearchScr';
 export { default as DetailScr } from './DetailScr';
-export { default as GalleryScr } from './GalleryScr';
 export { default as CompareScr } from './CompareScr';
 export { default as ReviewsScr } from './ReviewsScr';
-export { default as RestoListScr } from './RestoListScr';
 export { default as AllProductsScr } from './AllProductsScr';
-export { default as CategoriesScr } from './CategoriesScr';
 export { default as FlashScr } from './FlashScr';
-export { default as NearbyScr } from './NearbyScr';
 export { default as CouponsScr } from './CouponsScr';
 export { default as CartScr } from './CartScr';
 export { default as CheckoutScr } from './CheckoutScr';
 export { default as OrdersScr } from './OrdersScr';
-export { default as OrderDetailScr } from './OrderDetailScr';
 export { default as TrackingScr } from './TrackingScr';
 export { default as ChatScr } from './ChatScr';
 export { default as ChatListScr } from './ChatListScr';
@@ -24,35 +19,23 @@ export { default as ProfileScr } from './ProfileScr';
 export { default as EditProfileScr } from './EditProfileScr';
 export { default as AddressesScr } from './AddressesScr';
 export { default as LanguageScr } from './LanguageScr';
-export { default as CurrencyScr } from './CurrencyScr';
 export { default as PasswordScr } from './PasswordScr';
-export { default as RechargeScr } from './RechargeScr';
-export { default as WithdrawScr } from './WithdrawScr';
 export { default as VendorScr } from './VendorScr';
 export { default as RoleRegScr } from './RoleRegScr';
 export { default as RegStatusScr } from './RegStatusScr';
 
-export { default as PaymentHistoryScr } from './PaymentHistoryScr';
 export { default as RateDriverScr } from './RateDriverScr';
-export { default as ReferralScr } from './ReferralScr';
 export { default as LoyaltyScr } from './LoyaltyScr';
-export { default as ReturnScr } from './ReturnScr';
-export { default as GiftCardScr } from './GiftCardScr';
-export { default as QRScanScr } from './QRScanScr';
-export { default as ChatBotScr } from './ChatBotScr';
-export { default as PriceAlertScr } from './PriceAlertScr';
-export { default as GroupBuyScr } from "./GroupBuyScr";
 
-export { default as MyStatsScr } from './MyStatsScr';
 
-export { default as BecomeSellerScr } from './BecomeSellerScr';
 
-export { default as ImageSearchScr } from './ImageSearchScr';
 
-export { default as GamificationScr } from './GamificationScr';
 
-export { default as LiveWatchScr } from './LiveWatchScr';
 
-export { default as GroupOrderScr } from "./GroupOrderScr";
-export { default as SubscriptionsScr } from "./SubscriptionsScr";
 export { default as PromosScr } from "./PromosScr";
+
+// Écrans « Toters »
+export { default as StoreScr } from "./StoreScr";
+export { default as CoursierScr } from "./CoursierScr";
+export { default as ErrandFormScr } from "./ErrandFormScr";
+export { default as ErrandDetailScr } from "./ErrandDetailScr";

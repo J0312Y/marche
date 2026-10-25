@@ -2,9 +2,11 @@ import { useState, useRef } from "react";
 import { useGuestGate } from "../../hooks/useGuestGate";
 import { CHAT_AVATARS } from "../../data/images";
 import toast from "../../utils/toast";
-import { useLoad } from "../../hooks";
+import { useLoad, useAction } from "../../hooks";
 import { social } from "../../services";
+import reviewsAPI from "../../api/reviews";
 import Icon from "../../components/Icon";
+import FEATURES from "../../config/features";
 
 function ReviewsScr({product:p,onBack,go}){
   const { gate, GateUI } = useGuestGate(go);
@@ -21,6 +23,7 @@ function ReviewsScr({product:p,onBack,go}){
   const [filter,setFilter]=useState("all"); // all | photos | recent | 5stars
   const [helpfulVotes,setHelpfulVotes]=useState({});
   const fileRef=useRef(null);
+  const { run: runReview, loading: reviewSubmitting } = useAction();
 
   const handlePhotoUpload=(e)=>{
     const files=Array.from(e.target.files||[]);
@@ -35,9 +38,12 @@ function ReviewsScr({product:p,onBack,go}){
 
   const removePhoto=(idx)=>setUserPhotos(prev=>prev.filter((_,i)=>i!==idx));
 
-  const submitReview=()=>{
+  const submitReview=async()=>{
     if(userRating===0)return;
-    setUserReviews(r=>[{name:"Moi",rating:userRating,text:userText,date:"Aujourd'hui",avatar:"https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=80&h=80&fit=crop&crop=face",photos:userPhotos.map(p=>p.url)},...r]);
+    try{
+      await runReview(()=>reviewsAPI.create({article_id:p.id,rating:userRating,comment:userText}));
+    }catch(err){toast.error(err.message||"Impossible de publier l'avis");return;}
+    setUserReviews(r=>[{name:"Moi",rating:userRating,text:userText,date:"Aujourd'hui",avatar:null,photos:[]},...r]);
     setWriting(false);setUserRating(0);setUserText("");setUserPhotos([]);setSubmitted(true);toast.success("Avis publié avec succès");
     setTimeout(()=>setSubmitted(false),3000);
   };
@@ -94,7 +100,7 @@ function ReviewsScr({product:p,onBack,go}){
       </div>
 
       {/* Photo upload */}
-      <div style={{marginBottom:14}}>
+      {FEATURES.reviewPhotos&&(<div style={{marginBottom:14}}>
         <div style={{fontSize:12,fontWeight:600,color:"var(--muted)",marginBottom:8}}>Photos (optionnel)</div>
         <div style={{display:"flex",gap:8,flexWrap:"wrap"}}>
           {userPhotos.map((ph,i)=>(
@@ -112,11 +118,11 @@ function ReviewsScr({product:p,onBack,go}){
         </div>
         <input ref={fileRef} type="file" accept="image/*" multiple style={{display:"none"}} onChange={handlePhotoUpload}/>
         <div style={{fontSize:11,color:"var(--muted)",marginTop:4}}>Max 4 photos · 5 Mo chacune</div>
-      </div>
+      </div>)}
 
       {/* Submit */}
-      <button onClick={submitReview} disabled={userRating===0} style={{width:"100%",padding:"12px 0",borderRadius:12,border:"none",background:userRating>0?"#F97316":"var(--border)",color:userRating>0?"var(--card)":"var(--muted)",fontSize:14,fontWeight:700,cursor:userRating>0?"pointer":"not-allowed",fontFamily:"inherit",transition:"all .2s"}}>
-        {userRating===0?"Sélectionnez une note":"Publier mon avis"}
+      <button onClick={submitReview} disabled={userRating===0||reviewSubmitting} style={{width:"100%",padding:"12px 0",borderRadius:12,border:"none",background:userRating>0?"#F97316":"var(--border)",color:userRating>0?"var(--card)":"var(--muted)",fontSize:14,fontWeight:700,cursor:userRating>0&&!reviewSubmitting?"pointer":"not-allowed",fontFamily:"inherit",transition:"all .2s"}}>
+        {userRating===0?"Sélectionnez une note":reviewSubmitting?"Publication...":"Publier mon avis"}
       </button>
     </div>}
 

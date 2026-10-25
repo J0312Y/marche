@@ -1,10 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="ic_launcher_background">#FFFFFF</color>
-    <string name="app_name">lamuka-market</string>
+    <color name="ic_launcher_background">#00B492</color>
+    <string name="app_name">Lamuka Market</string>
+    <string name="capacitor_background_geolocation_notification_channel_name">Suivi de course</string>
     <string name="custom_url_scheme">com.lamuka.app</string>
+    <string name="gcm_defaultSenderId" translatable="false">584695648621</string>
+    <string name="google_api_key" translatable="false">AIzaSyD_aormC-fOLaCQuQLgZEzKl4ne9VNio_Q</string>
+    <string name="google_app_id" translatable="false">1:584695648621:android:707c625e59fadf6ebdca64</string>
+    <string name="google_crash_reporting_api_key" translatable="false">AIzaSyD_aormC-fOLaCQuQLgZEzKl4ne9VNio_Q</string>
+    <string name="google_storage_bucket" translatable="false">lamuka-market.firebasestorage.app</string>
     <string name="package_name">com.lamuka.app</string>
-    <string name="title_activity_main">lamuka-market</string>
+    <string name="project_id" translatable="false">lamuka-market</string>
+    <string name="title_activity_main">Lamuka Market</string>
     <style name="AppTheme" parent="Theme.AppCompat.Light.DarkActionBar">
         
         <item name="colorPrimary">@color/colorPrimary</item>
@@ -17,6 +24,9 @@
         <item name="android:background">@null</item>
     </style>
     <style name="AppTheme.NoActionBarLaunch" parent="Theme.SplashScreen">
-        <item name="android:background">@drawable/splash</item>
+        <item name="windowSplashScreenBackground">@color/ic_launcher_background</item>
+        <item name="windowSplashScreenAnimatedIcon">@mipmap/ic_launcher_foreground</item>
+        <item name="postSplashScreenTheme">@style/AppTheme.NoActionBar</item>
+        <item name="android:background">@color/ic_launcher_background</item>
     </style>
 </resources>

@@ -1,7 +1,6 @@
 export { default as DrDashboardScr } from './DrDashboardScr';
 export { default as DrDeliveryScr } from './DrDeliveryScr';
 export { default as DrConfirmScr } from './DrConfirmScr';
-export { default as DrNavigationScr } from './DrNavigationScr';
 export { default as DrChatVendorScr } from './DrChatVendorScr';
 export { default as DrChatClientScr } from './DrChatClientScr';
 export { default as DrHistoryScr } from './DrHistoryScr';
@@ -12,13 +11,10 @@ export { default as DrVehicleScr } from './DrVehicleScr';
 export { default as DrZonesScr } from './DrZonesScr';
 export { default as DrStatsScr } from './DrStatsScr';
 export { default as DrSettingsScr } from './DrSettingsScr';
-export { default as DrHelpScr } from './DrHelpScr';
 
-export { default as DrChecklistScr } from './DrChecklistScr';
 
 export { default as DrRateVendorScr } from './DrRateVendorScr';
 
 export { default as DrDocumentsScr } from './DrDocumentsScr';
 
-export { default as DrBriefingScr } from "./DrBriefingScr";
 export { default as DrDeliveriesScr } from './DrDeliveriesScr';

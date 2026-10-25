@@ -1,0 +1,13 @@
+{
+  "appId": "com.lamuka.app",
+  "appName": "Lamuka Market",
+  "webDir": "dist",
+  "server": {
+    "androidScheme": "http"
+  },
+  "plugins": {
+    "SystemBars": {
+      "style": "LIGHT"
+    }
+  }
+}

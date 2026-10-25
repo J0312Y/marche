@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "584695648621",
+    "project_id": "lamuka-market",
+    "storage_bucket": "lamuka-market.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:584695648621:android:707c625e59fadf6ebdca64",
+        "android_client_info": {
+          "package_name": "com.lamuka.app"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyD_aormC-fOLaCQuQLgZEzKl4ne9VNio_Q"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

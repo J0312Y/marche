@@ -1,6 +1,8 @@
 import { useState } from "react";
 import toast from "../../utils/toast";
 import Icon from "../../components/Icon";
+import usersAPI from "../../api/users";
+import { useAction } from "../../hooks/useData";
 
 function PasswordScr({onBack}){
   const [pwCurrent,setPwCurrent]=useState("");
@@ -20,6 +22,7 @@ function PasswordScr({onBack}){
     return true;
   };
   const [done,setDone]=useState(false);
+  const { run, loading: saving } = useAction();
   if(done)return(<div className="scr" style={{padding:16}}><div className="appbar" style={{padding:0,marginBottom:12}}><button onClick={onBack}>←</button><h2>Mot de passe</h2><div style={{width:38}}/></div>
     <div style={{textAlign:"center",padding:"40px 0"}}><div style={{fontSize:48,marginBottom:10}}><Icon name="check_circle" size={18}/></div><h3 style={{fontSize:18,fontWeight:700}}>Mot de passe modifié</h3><p style={{fontSize:13,color:"var(--muted)",marginTop:6}}>Votre mot de passe a été mis à jour avec succès.</p><button className="btn-primary" style={{marginTop:20}} onClick={onBack}>OK</button></div>
   </div>);
@@ -27,7 +30,7 @@ function PasswordScr({onBack}){
     <div className="field"><label>Mot de passe actuel <span style={{color:"#EF4444"}}>*</span></label><input type="password" value={pwCurrent} onChange={e=>{setPwCurrent(e.target.value);clrP("current")}} placeholder="••••••••"/>{pwErrors.current&&<div className="err-msg">{pwErrors.current}</div>}</div>
     <div className="field"><label>Nouveau mot de passe <span style={{color:"#EF4444"}}>*</span></label><input type="password" value={pwNew} onChange={e=>{setPwNew(e.target.value);clrP("newpw")}} placeholder="Min. 8 caractères"/>{pwErrors.newpw&&<div className="err-msg">{pwErrors.newpw}</div>}</div>
     <div className="field"><label>Confirmer <span style={{color:"#EF4444"}}>*</span></label><input type="password" value={pwConfirm} onChange={e=>{setPwConfirm(e.target.value);clrP("confirm")}} placeholder="Répéter le mot de passe"/>{pwErrors.confirm&&<div className="err-msg">{pwErrors.confirm}</div>}</div>
-    <div className="bottom-action-bar"><button className="btn-primary" onClick={()=>{setDone(true);toast.success("Mot de passe modifié")}}>Modifier le mot de passe</button></div>
+    <div className="bottom-action-bar"><button className="btn-primary" disabled={saving} onClick={async()=>{if(!validatePw())return;try{await run(()=>usersAPI.changePassword(pwCurrent,pwNew));setDone(true);toast.success("Mot de passe modifié");}catch(e){toast.error(e.message||"Erreur lors du changement de mot de passe");}}}>{saving?"Envoi...":"Modifier le mot de passe"}</button></div>
   </div>);
 }
 

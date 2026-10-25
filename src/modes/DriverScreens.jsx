@@ -3,14 +3,8 @@
  * Utilise useApp() au lieu de props
  */
 import { useApp } from "../context/AppContext";
-import {
-  DrDashboardScr, DrDeliveryScr, DrBriefingScr, DrConfirmScr, DrNavigationScr,
-  DrChatVendorScr, DrChatClientScr, DrHistoryScr, DrDeliveriesScr, DrWalletScr,
-  DrNotifScr, DrProfileScr, DrVehicleScr, DrZonesScr, DrChecklistScr, DrRateVendorScr,
-  DrStatsScr, DrSettingsScr, DrHelpScr, DrDocumentsScr
-} from "../screens/driver";
-import { WithdrawScr, PasswordScr } from "../screens/buyer";
-import ChatBotScr from "../screens/common/ChatBotScr";
+import { DrDashboardScr, DrDeliveryScr, DrConfirmScr, DrChatVendorScr, DrChatClientScr, DrHistoryScr, DrDeliveriesScr, DrWalletScr, DrNotifScr, DrProfileScr, DrVehicleScr, DrZonesScr, DrRateVendorScr, DrStatsScr, DrSettingsScr, DrDocumentsScr } from "../screens/driver";
+import { PasswordScr } from "../screens/buyer";
 import { SettingsScr, HelpScr, AboutScr, TermsScr, PrivacyScr } from "../screens/common";
 import Icon from "../components/Icon";
 
@@ -29,25 +23,21 @@ export default function DriverScreens() {
   const back = pop;
 
   switch (type) {
-    case "drBriefing": return <DrBriefingScr delivery={data} go={go} onBack={back} />;
     case "drDelivery": return <DrDeliveryScr delivery={data} go={go} onBack={back} />;
     case "drConfirm": return <DrConfirmScr delivery={data} go={go} onBack={() => { setScreen(null); setDTab(0); setHistory([]); }} />;
-    case "drNavigation": return <DrNavigationScr delivery={data} go={go} onBack={back} />;
     case "drChatVendor": return <DrChatVendorScr delivery={data} onBack={back} />;
     case "drChatClient": return <DrChatClientScr delivery={data} onBack={back} />;
     case "drHistory": return <DrHistoryScr onBack={back} />;
     case "drWallet": return <DrWalletScr go={go} onBack={back} />;
-    case "drWithdraw": return <WithdrawScr onBack={back} mode="driver" />;
     case "drNotif": return <DrNotifScr onBack={back} />;
-    case "drVehicle": return <DrVehicleScr onBack={back} />;
-    case "drChecklist": return <DrChecklistScr onBack={back} delivery={data} onConfirm={()=>{}} />;
+    case "drVehicle": return <DrVehicleScr onBack={back} go={go} />;
     case "drRateVendor": return <DrRateVendorScr onBack={back} vendor={data} />;
     case "drZones": return <DrZonesScr onBack={back} />;
     case "drStats": return <DrStatsScr onBack={back} />;
     case "drSettings": return <DrSettingsScr onBack={back} go={go} />;
-    case "drChatBot": return <ChatBotScr onBack={back} mode="driver" />;
+
     case "drDocuments": return <DrDocumentsScr onBack={back} />;
-    case "drHelp": return <DrHelpScr onBack={back} />;
+    case "drHelp": return <HelpScr onBack={back} audience="driver" />;
     case "password": return <PasswordScr onBack={back} />;
     case "terms": return <TermsScr onBack={back} />;
     case "privacy": return <PrivacyScr onBack={back} />;

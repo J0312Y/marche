@@ -1,281 +1,240 @@
-import { useState } from "react";
-import FilterSheet from "../../components/FilterSheet";
-import toast from "../../utils/toast";
-import Img from "../../components/Img";
+import { useEffect, useMemo, useRef, useState } from "react";
 import Icon from "../../components/Icon";
+import Img from "../../components/Img";
+import Sheet from "../../components/t/Sheet";
+import HeaderCart from "../../components/t/HeaderCart";
+import { StoreLogo } from "../../components/t/StoreCard";
 import { useData } from "../../hooks";
-import { fmt, getVendorPromo } from "../../utils/helpers";
+import { collectionsAPI } from "../../api";
+import { fmt } from "../../utils/helpers";
+import { storeStatus, etaLabel } from "../../utils/storeStatus";
+import VERTICALS from "../../config/verticals";
+import TYPE_LABEL from "../../config/storeTypes";
+import useBackClose from "../../hooks/useBackClose";
 
-// Normalize string for matching (lowercase, no accents, strip plurals)
-const normalize = (s) => (s || "")
-  .toString()
-  .toLowerCase()
-  .normalize("NFD")
-  .replace(/[\u0300-\u036f]/g, "")
-  .replace(/s$/, ""); // remove trailing plural s
+const RECENT_KEY = "lk-recent-searches";
+const norm = (s) => String(s || "").toLowerCase().normalize("NFD").replace(/[̀-ͯ]/g, "");
+const readRecent = () => { try { return JSON.parse(localStorage.getItem(RECENT_KEY) || "[]"); } catch { return []; } };
 
-function SearchScr({ go, onBack, fromTab, favs, toggleFav, isFav, defaultTab }) {
+const KINDS = [{ id: "all", label: "Tout" }, ...VERTICALS.filter((v) => v.id !== "all" && v.id !== "coursier")];
+const SORTS = [{ id: "reco", label: "Recommandé", icon: "smile" }, { id: "popular", label: "Populaire", icon: "heart" }, { id: "rating", label: "Note", icon: "star_o" }];
+// Tranches de prix des articles (FCFA)
+const PRICES = [{ id: "low", label: "Petit prix", ok: (p) => p < 2000 }, { id: "mid", label: "Prix moyen", ok: (p) => p >= 2000 && p <= 8000 }, { id: "high", label: "Haut de gamme", ok: (p) => p > 8000 }];
+// Fonds pastel des collections (comme Toters)
+const PASTELS = ["#CDEFE6", "#F6D9B5", "#D9D2F6", "#C9E7F6", "#DCEBCB", "#F6CFD3", "#D5DADF", "#F2E6B8"];
+
+/**
+ * Recherche « Toters » : recherches récentes + collections, puis résultats en deux onglets Boutiques / Articles,
+ * filtres par univers, tri et filtres (feuille).
+ * data : { category } (catégorie ronde de l'accueil) ou { tab: 'items' }
+ */
+export default function SearchScr({ go, onBack, defaultTab, category, fromTab }) {
   const { P, VENDORS, CATS } = useData();
   const [q, setQ] = useState("");
-  const [selectedCatId, setSelectedCatId] = useState("all"); // "all" or category id
-  const [showFilter, setShowFilter] = useState(false);
-  const [filters, setFilters] = useState({});
-  const [sortBy, setSortBy] = useState("popular");
-  const [tab, setTab] = useState(defaultTab || "products");
-  const [searchHistory, setSearchHistory] = useState(() => {
-    try { return JSON.parse(localStorage.getItem("lk-search-history") || "[]") } catch { return [] }
-  });
+  const [tab, setTab] = useState(defaultTab === "items" || category ? "items" : "stores");
+  const [coll, setColl] = useState(category ? { title: category.name, category_id: Number(category.id) } : null);
+  const [collections, setCollections] = useState([]);
+  const [recent, setRecent] = useState(readRecent);
+  const [kind, setKind] = useState("all");
+  const [sort, setSort] = useState("reco");
+  const [price, setPrice] = useState(null);
+  const [cats, setCats] = useState([]);
+  const [filterOpen, setFilterOpen] = useState(false);
+  const inputRef = useRef(null);
 
-  const addToHistory = (query) => {
-    if (!query.trim()) return;
-    const newH = [query, ...searchHistory.filter(h => h.toLowerCase() !== query.toLowerCase())].slice(0, 10);
-    setSearchHistory(newH);
-    try { localStorage.setItem("lk-search-history", JSON.stringify(newH)) } catch {}
+  useEffect(() => { collectionsAPI.getAll().then((r) => setCollections(r?.collections || [])).catch(() => {}); }, []);
+
+  const vendorOf = (p) => VENDORS.find((v) => Number(v.id) === Number(p.establishmentId));
+  // Catégories du filtre : seulement celles qui ont des articles, et sans doublon de nom (« Pâtisserie » / « Pâtisseries »)
+  const filterCats = useMemo(() => {
+    const used = new Set(P.map((p) => Number(p.category_id)));
+    const m = new Map();
+    CATS.filter((c) => used.has(Number(c.id))).forEach((c) => {
+      const k = norm(c.name).trim().replace(/s$/, "");
+      if (!m.has(k)) m.set(k, { ...c, ids: [Number(c.id)] });
+      else { const g = m.get(k); g.ids.push(Number(c.id)); if (!g.photo && c.photo) g.photo = c.photo; }
+    });
+    return [...m.values()].sort((a, b) => a.name.localeCompare(b.name, "fr"));
+  }, [P, CATS]);
+  const term = norm(q.trim());
+  const filtering = price || cats.length > 0 || sort !== "reco";
+
+  const results = useMemo(() => {
+    if (!term && !coll && !filtering) return null;
+    let items = P, stores = VENDORS;
+    if (coll) {
+      if (coll.category_id) items = items.filter((p) => Number(p.category_id) === Number(coll.category_id));
+      if (coll.commerce_type) { items = items.filter((p) => p.type === coll.commerce_type); stores = stores.filter((v) => v.type === coll.commerce_type); }
+      if (coll.keyword) { const k = norm(coll.keyword); items = items.filter((p) => norm(p.name + " " + p.description + " " + p.cat).includes(k)); }
+      if (coll.category_id || coll.keyword) { const ids = new Set(items.map((p) => Number(p.establishmentId))); stores = stores.filter((v) => ids.has(Number(v.id))); }
+    }
+    if (term) {
+      items = items.filter((p) => norm(p.name + " " + (p.description || "") + " " + p.cat + " " + p.vendor).includes(term));
+      const ids = new Set(items.map((p) => Number(p.establishmentId)));
+      stores = stores.filter((v) => norm(v.name + " " + (v.description || "") + " " + v.type).includes(term) || ids.has(Number(v.id)));
+    }
+    if (kind !== "all") { stores = stores.filter((v) => v.type === kind); items = items.filter((p) => vendorOf(p)?.type === kind); }
+    // Prix / catégories : s'appliquent aux articles, et aux boutiques qui en proposent
+    if (price || cats.length) {
+      const pr = PRICES.find((x) => x.id === price);
+      items = items.filter((p) => (!pr || pr.ok(Number(p.price) || 0)) && (!cats.length || cats.includes(Number(p.category_id))));
+      const ids = new Set(items.map((p) => Number(p.establishmentId)));
+      stores = stores.filter((v) => ids.has(Number(v.id)));
+    }
+    const open = (v) => (v?.isOpenNow !== false ? 1 : 0);
+    if (sort === "popular") {
+      items = [...items].sort((a, b) => (b.sold || 0) - (a.sold || 0));
+      stores = [...stores].sort((a, b) => (b.products || 0) - (a.products || 0));
+    } else if (sort === "rating") {
+      items = [...items].sort((a, b) => (vendorOf(b)?.rating || 0) - (vendorOf(a)?.rating || 0));
+      stores = [...stores].sort((a, b) => (b.rating || 0) - (a.rating || 0));
+    } else {
+      items = [...items].sort((a, b) => open(vendorOf(b)) - open(vendorOf(a)) || (b.sold || 0) - (a.sold || 0));
+      stores = [...stores].sort((a, b) => open(b) - open(a) || (b.rating || 0) - (a.rating || 0));
+    }
+    return { items, stores };
+  }, [term, coll, kind, sort, price, cats, P, VENDORS]); // eslint-disable-line react-hooks/exhaustive-deps
+
+  const remember = (s) => {
+    const v = s.trim(); if (v.length < 2) return;
+    const next = [v, ...recent.filter((x) => norm(x) !== norm(v))].slice(0, 8);
+    setRecent(next); try { localStorage.setItem(RECENT_KEY, JSON.stringify(next)); } catch {}
   };
-  const removeFromHistory = (query) => {
-    const newH = searchHistory.filter(h => h !== query);
-    setSearchHistory(newH);
-    try { localStorage.setItem("lk-search-history", JSON.stringify(newH)) } catch {}
-  };
+  const openStore = (v) => { remember(q); go("vendor", v); };
+  const openItem = (p) => { remember(q); go("detail", p); };
+  const reset = () => { setQ(""); setColl(null); setKind("all"); setSort("reco"); setPrice(null); setCats([]); };
 
-  const activeFilterCount = Object.values(filters).filter(v => v && v !== 0 && v !== "popular").length;
-  const ql = q.toLowerCase();
-  const isSearching = q.trim().length > 0;
-
-  // Apply filters
-  const applyFilters = (list) => {
-    let r = [...list];
-    if (filters.priceMin) r = r.filter(p => p.price >= filters.priceMin);
-    if (filters.priceMax) r = r.filter(p => p.price <= filters.priceMax);
-    if (filters.minRating) r = r.filter(p => p.rating >= filters.minRating);
-    if (filters.onlyPromo) r = r.filter(p => p.old && p.old > p.price);
-    return r;
-  };
-
-  // Search results
-  const qn = normalize(q);
-  const searchResults = applyFilters(P.filter(p =>
-    normalize(p.name).includes(qn) ||
-    normalize(p.cat).includes(qn) ||
-    normalize(p.desc || "").includes(qn) ||
-    normalize(p.vendor).includes(qn)
-  )).sort((a, b) =>
-    sortBy === "priceAsc" ? a.price - b.price :
-    sortBy === "priceDesc" ? b.price - a.price :
-    sortBy === "rating" ? b.rating - a.rating :
-    b.reviews - a.reviews
-  );
-  const vendorResults = VENDORS.filter(v =>
-    normalize(v.name).includes(qn) || normalize(v.desc || "").includes(qn)
-  );
-
-  const isAllSelected = selectedCatId === "all";
-  const selectedCat = isAllSelected ? { id: "all", name: "Toutes catégories", icon: "", count: P.length, photo: "https://images.unsplash.com/photo-1607082348824-0a96f2a4b9da?w=400&h=200&fit=crop", subs: null } : (CATS.find(c => c.id === selectedCatId) || CATS[0]);
-  const catProducts = applyFilters(isAllSelected ? P : P.filter(p => p.cat === selectedCat.name));
+  // Collections : celles du serveur, sinon les catégories du catalogue
+  const shownColls = collections.length ? collections : CATS.map((c) => ({ id: "c" + c.id, title: c.name, image: c.photo, category_id: c.id }));
+  // Bouton retour Android : depuis des résultats de l'onglet Recherche, on revient à la recherche vide (comme Toters)
+  useBackClose(!!fromTab && !!(results || coll), reset);
+  const count = results ? (tab === "stores" ? results.stores.length : results.items.length) : 0;
+  const showBack = (!fromTab || coll || results) && !(category && !onBack);
 
   return (
-    <div className="scr" style={{ padding: 0, display: "flex", flexDirection: "column" }}>
-
-      {/* Top search bar */}
-      <div style={{ padding: "12px 14px", background: "var(--card)", display: "flex", alignItems: "center", gap: 7, borderBottom: "1px solid var(--border)" }}>
-        {!fromTab && <button onClick={onBack} style={{ width: 32, height: 32, border: "none", background: "transparent", cursor: "pointer", display: "flex", alignItems: "center", justifyContent: "center" }}><Icon name="arrow_left" size={20} /></button>}
-        <div style={{ flex: 1, height: 40, background: "var(--light)", border: "1.5px solid #F97316", borderRadius: 22, display: "flex", alignItems: "center", padding: "0 14px", gap: 8 }}>
-          <Icon name="search" size={16} color="var(--muted)" />
-          <input
-            value={q}
-            onChange={e => setQ(e.target.value)}
-            onKeyDown={e => { if (e.key === "Enter") addToHistory(q) }}
-            placeholder="Rechercher un produit..."
-            style={{ flex: 1, border: 0, background: "transparent", outline: 0, fontSize: 14, fontFamily: "inherit", color: "var(--text)" }}
-          />
-          <span onClick={() => go("qrScan")} style={{ cursor: "pointer", display: "flex", alignItems: "center", color: "var(--muted)" }}><Icon name="camera" size={18} /></span>
+    <div style={{ flex: 1, display: "flex", flexDirection: "column", minHeight: 0, background: "var(--card)" }}>
+      <div className="ts-head">
+        {showBack && <button className="t-back" onClick={() => { if (fromTab && (results || coll)) { reset(); return; } if (coll && !category) { setColl(null); return; } onBack ? onBack() : reset(); }} aria-label="Retour"><Icon name="arrow_left" size={24} /></button>}
+        <div className="ts-box" onClick={() => inputRef.current?.focus()}>
+          <Icon name="search" size={24} strokeWidth={2.2} color="var(--t-text)" />
+          <input ref={inputRef} placeholder={coll ? `Rechercher dans ${coll.title}` : "Boutique ou article…"} value={q}
+            onChange={(e) => setQ(e.target.value)}
+            onKeyDown={(e) => { if (e.key === "Enter") { remember(q); e.currentTarget.blur(); } }} />
+          {q && <button className="ts-clear" onClick={(e) => { e.stopPropagation(); setQ(""); inputRef.current?.focus(); }} aria-label="Effacer"><Icon name="close" size={16} strokeWidth={2.6} /></button>}
+          <button className={"ts-filter" + (filtering ? " on" : "")} onClick={(e) => { e.stopPropagation(); setFilterOpen(true); }} aria-label="Trier et filtrer"><Icon name="sliders" size={24} strokeWidth={1.8} /></button>
         </div>
-        <button onClick={() => setShowFilter(true)} style={{ width: 40, height: 40, borderRadius: 10, border: "1px solid var(--border)", background: "var(--card)", cursor: "pointer", position: "relative", display: "flex", alignItems: "center", justifyContent: "center" }}>
-          <Icon name="filter" size={18} />
-          {activeFilterCount > 0 && <span style={{ position: "absolute", top: -4, right: -4, width: 16, height: 16, borderRadius: 8, background: "#F97316", color: "#fff", fontSize: 9, fontWeight: 700, display: "flex", alignItems: "center", justifyContent: "center", border: "2px solid #fff" }}>{activeFilterCount}</span>}
-        </button>
+        <HeaderCart />
       </div>
 
-      {/* Sort & filters bar (when searching) */}
-      {isSearching && (
-        <div style={{ display: "flex", gap: 6, padding: "8px 14px", overflowX: "auto", scrollbarWidth: "none", background: "var(--card)", borderBottom: "1px solid var(--border)" }}>
-          {[["popular", "Populaires"], ["rating", "Mieux notés"], ["priceAsc", "Prix ↑"], ["priceDesc", "Prix ↓"]].map(([k, l]) => (
-            <button key={k} onClick={() => setSortBy(k)} style={{ flexShrink: 0, padding: "6px 12px", borderRadius: 16, border: sortBy === k ? "2px solid #F97316" : "1px solid var(--border)", background: sortBy === k ? "rgba(249,115,22,0.06)" : "var(--card)", fontSize: 11, fontWeight: 600, color: sortBy === k ? "#F97316" : "var(--muted)", cursor: "pointer", fontFamily: "inherit" }}>{l}</button>
-          ))}
+      {results && <>
+        <div className="t-seg ts-seg">
+          <button className={tab === "stores" ? "on" : ""} onClick={() => setTab("stores")}>Boutiques</button>
+          <button className={tab === "items" ? "on" : ""} onClick={() => setTab("items")}>Articles</button>
         </div>
-      )}
+      </>}
 
-      {/* SEARCH MODE */}
-      {isSearching ? (
-        <div style={{ flex: 1, overflowY: "auto", padding: "12px 0", scrollbarWidth: "none" }} className="hide-scroll">
-          {/* Tabs */}
-          <div style={{ display: "flex", gap: 18, padding: "0 16px 12px", borderBottom: "1px solid var(--border)", marginBottom: 12 }}>
-            <button onClick={() => setTab("products")} style={{ padding: "6px 0", border: "none", background: "transparent", fontSize: 13, fontWeight: 700, color: tab === "products" ? "#F97316" : "var(--muted)", borderBottom: tab === "products" ? "2px solid #F97316" : "2px solid transparent", cursor: "pointer", fontFamily: "inherit" }}>Produits ({searchResults.length})</button>
-            <button onClick={() => setTab("vendors")} style={{ padding: "6px 0", border: "none", background: "transparent", fontSize: 13, fontWeight: 700, color: tab === "vendors" ? "#F97316" : "var(--muted)", borderBottom: tab === "vendors" ? "2px solid #F97316" : "2px solid transparent", cursor: "pointer", fontFamily: "inherit" }}>Boutiques ({vendorResults.length})</button>
-          </div>
-
-          {tab === "products" ? (
-            searchResults.length > 0 ? (
-              <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 10, padding: "0 16px" }}>
-                {searchResults.map(p => {
-                  const vp = getVendorPromo(p, VENDORS);
-                  const price = vp ? vp.promoPrice : p.price;
-                  return (
-                    <div key={p.id} onClick={() => go("detail", p)} style={{ cursor: "pointer" }}>
-                      <div style={{ aspectRatio: "1 / 1", borderRadius: 12, overflow: "hidden", background: "var(--light)", position: "relative" }}>
-                        <Img src={p.photo} emoji={p.img} style={{ width: "100%", height: "100%" }} fit="cover" />
-                        {p.old && <span style={{ position: "absolute", top: 6, left: 6, padding: "2px 6px", borderRadius: 5, background: "#EF4444", color: "#fff", fontSize: 9, fontWeight: 800 }}>-{Math.round((1 - p.price / p.old) * 100)}%</span>}
-                        <span onClick={e => { e.stopPropagation(); toggleFav(p.id) }} style={{ position: "absolute", top: 6, right: 6, width: 26, height: 26, borderRadius: "50%", background: "rgba(255,255,255,0.95)", display: "flex", alignItems: "center", justifyContent: "center", fontSize: 13, color: isFav(p.id) ? "#EF4444" : "var(--muted)", cursor: "pointer" }}>{isFav(p.id) ? <svg width="14" height="14" viewBox="0 0 24 24" fill="#EF4444"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg> : <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#6B7280" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>}</span>
-                      </div>
-                      <div style={{ fontSize: 12, fontWeight: 600, marginTop: 6, overflow: "hidden", display: "-webkit-box", WebkitLineClamp: 2, WebkitBoxOrient: "vertical", lineHeight: 1.3, minHeight: 31 }}>{p.name}</div>
-                      <div style={{ fontSize: 10, color: "var(--muted)", marginTop: 2, overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>{p.vendor}</div>
-                      <div style={{ display: "flex", alignItems: "baseline", gap: 4, marginTop: 3 }}>
-                        <span style={{ fontSize: 13, fontWeight: 800, color: "#F97316" }}>{fmt(price)}</span>
-                        {p.old && <span style={{ fontSize: 10, color: "var(--muted)", textDecoration: "line-through" }}>{fmt(p.old)}</span>}
-                      </div>
-                      <div style={{ fontSize: 10, color: "#F59E0B", marginTop: 2 }}><Icon name="star_full" size={16}/>{" "}{p.rating} ({p.reviews})</div>
-                    </div>
-                  );
-                })}
-              </div>
-            ) : (
-              <div style={{ padding: "60px 20px", textAlign: "center" }}>
-                <div style={{ marginBottom: 12, opacity: .3, display: "flex", justifyContent: "center" }}><Icon name="search" size={48} color="var(--muted)"/></div>
-                <div style={{ fontSize: 14, color: "var(--muted)" }}>Aucun produit pour "{q}"</div>
-              </div>
-            )
-          ) : (
-            vendorResults.length > 0 ? (
-              <div style={{ padding: "0 16px" }}>
-                {vendorResults.map(v => (
-                  <div key={v.id} onClick={() => go("vendor", v)} style={{ display: "flex", alignItems: "center", gap: 12, padding: "12px 0", cursor: "pointer", borderBottom: "1px solid var(--border)" }}>
-                    <div style={{ width: 50, height: 50, borderRadius: 14, overflow: "hidden", background: "var(--light)", flexShrink: 0 }}>
-                      {v.logo ? <img src={v.logo} alt="" style={{ width: "100%", height: "100%", objectFit: "cover", objectPosition: "center" }} /> : <div style={{ width: "100%", height: "100%", display: "flex", alignItems: "center", justifyContent: "center", fontSize: 22 }}>{v.avatar || ""}</div>}
-                    </div>
-                    <div style={{ flex: 1, minWidth: 0 }}>
-                      <div style={{ fontSize: 14, fontWeight: 700, overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>{v.name}</div>
-                      <div style={{ fontSize: 11, color: "var(--muted)", marginTop: 2, overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}><Icon name="star_full" size={16}/>{" "}{v.rating} · {v.type} · {v.eta || "30 min"}</div>
-                    </div>
-                    <Icon name="chevron_right" size={18} color="var(--muted)" />
-                  </div>
-                ))}
-              </div>
-            ) : (
-              <div style={{ padding: "60px 20px", textAlign: "center" }}>
-                <div style={{ marginBottom: 12, opacity: .3, display: "flex", justifyContent: "center" }}><Icon name="store" size={48} color="var(--muted)"/></div>
-                <div style={{ fontSize: 14, color: "var(--muted)" }}>Aucune boutique pour "{q}"</div>
-              </div>
-            )
-          )}
-        </div>
-      ) : (
-        /* BROWSE MODE — sidebar + content */
-        <div style={{ flex: 1, display: "flex", overflow: "hidden" }}>
-          <div style={{ width: 78, background: "var(--light)", overflowY: "auto", flexShrink: 0, scrollbarWidth: "none" }} className="hide-scroll">
-            {/* "Toutes" as first item */}
-            {(() => {
-              const active = selectedCatId === "all";
-              return (
-                <div onClick={() => setSelectedCatId("all")} style={{ padding: "16px 8px", fontSize: 11.5, fontWeight: active ? 700 : 600, color: active ? "#F97316" : "var(--text)", cursor: "pointer", textAlign: "center", background: active ? "var(--card)" : "transparent", borderLeft: active ? "3px solid #F97316" : "3px solid transparent" }}>
-                  Toutes
-                </div>
-              );
-            })()}
-            {CATS.map(c => {
-              const active = c.id === selectedCatId;
-              return (
-                <div key={c.id} onClick={() => setSelectedCatId(c.id)} style={{ padding: "16px 8px", fontSize: 11.5, fontWeight: active ? 700 : 500, color: active ? "#F97316" : "var(--text)", cursor: "pointer", textAlign: "center", background: active ? "var(--card)" : "transparent", borderLeft: active ? "3px solid #F97316" : "3px solid transparent" }}>
-                  {c.name}
-                </div>
-              );
-            })}
-          </div>
-
-          <div style={{ flex: 1, overflowY: "auto", overflowX: "hidden", background: "var(--card)", padding: "12px 12px 30px", scrollbarWidth: "none", boxSizing: "border-box", minWidth: 0 }} className="hide-scroll">
-            {/* Category banner */}
-            <div style={{ borderRadius: 12, overflow: "hidden", marginBottom: 14, position: "relative", aspectRatio: "16 / 8" }}>
-              <img src={selectedCat.photo} alt="" style={{ width: "100%", height: "100%", objectFit: "cover", objectPosition: "center" }} />
-              <div style={{ position: "absolute", inset: 0, background: "linear-gradient(to right, rgba(0,0,0,0.5) 0%, rgba(0,0,0,0.1) 70%)", padding: 14, display: "flex", alignItems: "center" }}>
-                <div>
-                  <div style={{ fontSize: 16, fontWeight: 800, color: "#fff", letterSpacing: -.3 }}>{selectedCat.name}</div>
-                  <div style={{ fontSize: 10, color: "rgba(255,255,255,0.85)", marginTop: 2 }}>{catProducts.length} produits disponibles</div>
-                </div>
-              </div>
+      <div className="t-scr">
+        {!results && <>
+          {recent.length > 0 && <>
+            <div className="ts-h">Recherches récentes</div>
+            <div className="ts-recent">
+              {recent.map((r) => <button key={r} onClick={() => { setQ(r); remember(r); }}>{r}</button>)}
             </div>
-
-            {/* Sub-categories OR All categories grid */}
-            {isAllSelected ? (
-              <>
-                <div style={{ fontSize: 13, fontWeight: 800, marginBottom: 10 }}>Toutes les catégories</div>
-                <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr 1fr", gap: 6, marginBottom: 18 }}>
-                  {CATS.map(c => (
-                    <div key={c.id} onClick={() => setSelectedCatId(c.id)} style={{ textAlign: "center", cursor: "pointer" }}>
-                      <div style={{ width: "100%", aspectRatio: "1 / 1", borderRadius: 10, overflow: "hidden", background: "var(--light)" }}>
-                        <img src={c.photo} alt="" style={{ width: "100%", height: "100%", objectFit: "cover", objectPosition: "center" }} />
-                      </div>
-                      <div style={{ fontSize: 10.5, fontWeight: 600, marginTop: 5, color: "var(--text)", lineHeight: 1.25, display: "-webkit-box", WebkitLineClamp: 2, WebkitBoxOrient: "vertical", overflow: "hidden", minHeight: 26 }}>{c.name}</div>
-                    </div>
-                  ))}
+          </>}
+          <div className="ts-h" style={{ marginTop: recent.length ? 30 : 18 }}>Collections</div>
+          <div className="ts-coll">
+            {shownColls.map((c, i) => (
+              <button key={c.id} onClick={() => { setColl({ title: c.title, category_id: c.category_id ? Number(c.category_id) : null, keyword: c.keyword, commerce_type: c.commerce_type }); setTab(c.commerce_type && !c.category_id && !c.keyword ? "stores" : "items"); }}>
+                <div className="pill" style={{ background: c.color && c.color !== "#FFF1E6" ? c.color : PASTELS[i % PASTELS.length] }}>
+                  {c.image && <span className="pic"><Img src={c.image} alt="" style={{ width: "100%", height: "100%" }} /></span>}
                 </div>
-              </>
-            ) : selectedCat.subs && (
-              <>
-                <div style={{ fontSize: 13, fontWeight: 800, marginBottom: 10 }}>Catégories populaires</div>
-                <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr 1fr", gap: 6, marginBottom: 18 }}>
-                  {selectedCat.subs.map((s, i) => (
-                    <div key={i} onClick={() => setQ(s.name)} style={{ textAlign: "center", cursor: "pointer" }}>
-                      <div style={{ width: "100%", aspectRatio: "1 / 1", borderRadius: 10, overflow: "hidden", background: "var(--light)" }}>
-                        <img src={s.photo} alt="" style={{ width: "100%", height: "100%", objectFit: "cover", objectPosition: "center" }} />
-                      </div>
-                      <div style={{ fontSize: 10.5, fontWeight: 600, marginTop: 5, color: "var(--text)", lineHeight: 1.25, display: "-webkit-box", WebkitLineClamp: 2, WebkitBoxOrient: "vertical", overflow: "hidden", minHeight: 26 }}>{s.name}</div>
-                    </div>
-                  ))}
-                </div>
-              </>
-            )}
-
-            {/* Products */}
-            {catProducts.length > 0 ? (
-              <>
-                <div style={{ fontSize: 13, fontWeight: 800, marginBottom: 10, display: "flex", justifyContent: "space-between" }}>
-                  <span>Recommandé ({catProducts.length})</span>
-                  {activeFilterCount > 0 && <span style={{ fontSize: 11, color: "#F97316", fontWeight: 600 }}>{activeFilterCount} filtre{activeFilterCount > 1 ? "s" : ""}</span>}
-                </div>
-                <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 10 }}>
-                  {catProducts.map(p => {
-                    const vp = getVendorPromo(p, VENDORS);
-                    const price = vp ? vp.promoPrice : p.price;
-                    return (
-                      <div key={p.id} onClick={() => go("detail", p)} style={{ cursor: "pointer" }}>
-                        <div style={{ aspectRatio: "1 / 1", borderRadius: 12, overflow: "hidden", background: "var(--light)", position: "relative" }}>
-                          <Img src={p.photo} emoji={p.img} style={{ width: "100%", height: "100%" }} fit="cover" />
-                          {p.old && <span style={{ position: "absolute", top: 6, left: 6, padding: "2px 6px", borderRadius: 5, background: "#EF4444", color: "#fff", fontSize: 9, fontWeight: 800 }}>-{Math.round((1 - p.price / p.old) * 100)}%</span>}
-                          <span onClick={e => { e.stopPropagation(); toggleFav(p.id) }} style={{ position: "absolute", top: 6, right: 6, width: 24, height: 24, borderRadius: "50%", background: "rgba(255,255,255,0.95)", display: "flex", alignItems: "center", justifyContent: "center", fontSize: 12, color: isFav(p.id) ? "#EF4444" : "var(--muted)", cursor: "pointer" }}>{isFav(p.id) ? <svg width="14" height="14" viewBox="0 0 24 24" fill="#EF4444"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg> : <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#6B7280" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>}</span>
-                        </div>
-                        <div style={{ fontSize: 11.5, fontWeight: 600, marginTop: 6, overflow: "hidden", display: "-webkit-box", WebkitLineClamp: 2, WebkitBoxOrient: "vertical", lineHeight: 1.3, minHeight: 30 }}>{p.name}</div>
-                        <div style={{ display: "flex", alignItems: "baseline", gap: 4, marginTop: 4 }}>
-                          <span style={{ fontSize: 13, fontWeight: 800, color: "#F97316" }}>{fmt(price)}</span>
-                          {p.reviews && <span style={{ fontSize: 9, color: "var(--muted)" }}>{p.reviews}+ vendus</span>}
-                        </div>
-                      </div>
-                    );
-                  })}
-                </div>
-              </>
-            ) : (
-              <div style={{ padding: "40px 20px", textAlign: "center" }}>
-                <div style={{ marginBottom: 10, opacity: .3, display: "flex", justifyContent: "center" }}><Icon name="package" size={40} color="var(--muted)"/></div>
-                <div style={{ fontSize: 13, color: "var(--muted)" }}>Aucun produit dans cette catégorie</div>
-              </div>
-            )}
+                <b>{c.title}</b>
+              </button>
+            ))}
           </div>
-        </div>
-      )}
+        </>}
 
-      {/* Filter sheet */}
-      {showFilter && <FilterSheet filters={filters} setFilters={setFilters} onClose={() => setShowFilter(false)} />}
+        {results && <>
+          {coll && <div style={{ padding: "14px 16px 0", fontSize: 20, fontWeight: 600 }}>{coll.title}</div>}
+          <div className="ts-kinds">
+            {KINDS.map((k) => <button key={k.id} className={kind === k.id ? "on" : ""} onClick={() => setKind(k.id)}>{k.label}</button>)}
+          </div>
+          <div className="ts-count">{count} résultat{count > 1 ? "s" : ""}{q.trim() ? ` pour « ${q.trim()} »` : ""}</div>
+        </>}
+
+        {results && tab === "stores" && (results.stores.length === 0
+          ? <div className="t-empty"><div className="ic"><Icon name="store" size={34} /></div><b>Aucune boutique trouvée</b><p>Essayez un autre mot.</p></div>
+          : results.stores.map((v) => {
+            const st = storeStatus(v);
+            return (
+              <div key={v.id} className="ts-store" onClick={() => openStore(v)} role="button">
+                <span className="logo"><StoreLogo v={v} size={56} /></span>
+                <div style={{ flex: 1, minWidth: 0 }}>
+                  <div className="nm">{v.name}</div>
+                  <div className="sub">{[TYPE_LABEL[v.type], st.open ? etaLabel(v) : null].filter(Boolean).join(" • ")}</div>
+                  <div className="rt">{v.rating > 0 ? <><Icon name="star_full" size={18} color="var(--acc)" />{Number(v.rating).toFixed(1)}</> : <span style={{ color: "var(--acc)", fontWeight: 600 }}>Nouveau</span>}</div>
+                  {!st.open && <span className="closed">{st.preorder ? "Précommande" : "Fermé actuellement"}</span>}
+                </div>
+              </div>
+            );
+          }))}
+
+        {results && tab === "items" && (results.items.length === 0
+          ? <div className="t-empty"><div className="ic"><Icon name="bag" size={34} /></div><b>Aucun article trouvé</b><p>Vérifiez l'orthographe ou cherchez une boutique.</p></div>
+          : results.items.map((p) => {
+            const v = vendorOf(p);
+            const st = storeStatus(v);
+            const oos = p.stock !== null && p.stock !== undefined && p.stock >= 0 && p.stock <= 0;
+            return (
+              <div key={p.id} className="ts-item" onClick={() => openItem(p)} role="button">
+                <div style={{ flex: 1, minWidth: 0 }}>
+                  <div className="nm">{p.name}</div>
+                  <div className="pr">{fmt(p.price)}{p.old > p.price && <s>{fmt(p.old)}</s>}</div>
+                  <div className="sub">{p.vendor}{p.cat ? ` • Dans ${p.cat}` : ""}</div>
+                  {(!st.open || oos) && <span className="closed">{oos ? "Rupture de stock" : "Fermé actuellement"}</span>}
+                </div>
+                <div className="ph">{p.photo ? <Img src={p.photo} alt="" style={{ width: "100%", height: "100%" }} /> : <Icon name="bag" size={28} color="var(--t-mut)" />}</div>
+              </div>
+            );
+          }))}
+        <div style={{ height: 40 }} />
+      </div>
+
+      {filterOpen && <FilterSheet sort={sort} price={price} cats={cats} CATS={filterCats} onClose={() => setFilterOpen(false)}
+        onApply={(f) => { setSort(f.sort); setPrice(f.price); setCats(f.cats); setFilterOpen(false); }} />}
     </div>
   );
 }
 
-export default SearchScr;
+/** Feuille « Trier par / Filtrer par / Catégories » (comme Toters) */
+function FilterSheet({ sort: s0, price: p0, cats: c0, CATS, onClose, onApply }) {
+  const [sort, setSort] = useState(s0);
+  const [price, setPrice] = useState(p0);
+  const [cats, setCats] = useState(c0);
+  // Une ligne peut regrouper plusieurs catégories du même nom (ids)
+  const toggleCat = (ids) => setCats((c) => (ids.some((x) => c.includes(x)) ? c.filter((x) => !ids.includes(x)) : [...c, ...ids]));
+  return (
+    <Sheet onClose={onClose} maxHeight="94%">
+      <div className="ts-filters">
+        <h3>Trier par</h3>
+        {SORTS.map((o) => (
+          <button key={o.id} className="ts-row" onClick={() => setSort(o.id)}>
+            <Icon name={o.icon} size={26} strokeWidth={1.6} /><span>{o.label}</span><i className={"radio" + (sort === o.id ? " on" : "")} />
+          </button>
+        ))}
+        <h3>Filtrer par</h3>
+        <div className="chips">
+          {PRICES.map((o) => <button key={o.id} className={price === o.id ? "on" : ""} onClick={() => setPrice(price === o.id ? null : o.id)}>{o.label}</button>)}
+        </div>
+        {CATS.length > 0 && <h3>Catégories</h3>}
+        {CATS.map((c) => (
+          <button key={c.id} className="ts-row" onClick={() => toggleCat(c.ids || [Number(c.id)])}>
+            <span className="cimg">{c.photo ? <Img src={c.photo} alt="" style={{ width: "100%", height: "100%" }} /> : <Icon name="bag" size={22} color="var(--t-mut)" />}</span>
+            <span>{c.name}</span><i className={"box" + ((c.ids || [Number(c.id)]).some((x) => cats.includes(x)) ? " on" : "")} />
+          </button>
+        ))}
+      </div>
+      <div className="ts-apply"><button className="t-cta center" onClick={() => onApply({ sort, price, cats })}>Appliquer</button></div>
+    </Sheet>
+  );
+}

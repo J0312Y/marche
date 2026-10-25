@@ -1,14 +1,27 @@
 import Select from "../../components/Select";
 import { useState } from "react";
 import Icon from "../../components/Icon";
+import { useLoad, useAction } from "../../hooks/useData";
+import vendorService from "../../services/vendorService";
+import toast from "../../utils/toast";
+
 
 function ShopTeamTab(){
-  const initMembers=[
-    {id:"m1",name:"Joeldy Tsina",role:"Propriétaire",email:"joeldytsina94@gmail.com",photo:"https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=80&h=80&fit=crop&crop=face",color:"#F97316"},
-    {id:"m2",name:"Marie Loubaki",role:"Manager",email:"marie.l@email.com",photo:"https://images.unsplash.com/photo-1531123897727-8f129e1688ce?w=80&h=80&fit=crop&crop=face",color:"#10B981"},
-    {id:"m3",name:"Paul Nkaya",role:"Employé",email:"paul.n@email.com",photo:"https://images.unsplash.com/photo-1506277886164-e25aa3f4ef7f?w=80&h=80&fit=crop&crop=face",color:"#F59E0B"}
-  ];
-  const [members,setMembers]=useState(initMembers);
+  const { data: teamData, setData: setTeamData } = useLoad(() => vendorService.getTeam());
+  const { run } = useAction();
+  const ROLE_LABEL = { manager: "Manager", employee: "Employé", cashier: "Caissier" };
+  const ROLE_API = { "Manager": "manager", "Employé": "employee", "Caissier": "cashier" };
+  // API : establishment_team + infos utilisateur
+  const members = (Array.isArray(teamData) ? teamData : []).map(m => m.name ? m : ({
+    id: m.id,
+    name: [m.first_name, m.last_name].filter(Boolean).join(" ") || "Membre",
+    role: ROLE_LABEL[m.role] || m.role,
+    email: m.phone || "",
+    status: m.status,
+    avatar: m.avatar,
+    color: m.role === "manager" ? "#10B981" : "#F59E0B",
+  }));
+  const setMembers = (updater) => setTeamData(typeof updater === "function" ? (prev => updater((prev || []))) : () => updater);
   const [showInvite,setShowInvite]=useState(false);
   const [invName,setInvName]=useState("");
   const [invEmail,setInvEmail]=useState("");
@@ -16,12 +29,23 @@ function ShopTeamTab(){
   const [showRemove,setShowRemove]=useState(null);
   const [invited,setInvited]=useState(false);
 
-  const removeMember=id=>{ setMembers(members.filter(m=>m.id!==id)); setShowRemove(null); };
-  const doInvite=()=>{
-    if(!invName||!invEmail)return;
-    setMembers([...members,{id:"m"+Date.now(),name:invName,role:invRole,email:invEmail,avatar:invName[0].toUpperCase(),color:invRole==="Manager"?"#10B981":"#F59E0B"}]);
-    setInvName("");setInvEmail("");setInvRole("Employé");setInvited(true);
-    setTimeout(()=>{setInvited(false);setShowInvite(false)},2000);
+  const removeMember=async(id)=>{
+    try {
+      await run(()=>vendorService.removeMember(id));
+      setMembers(prev=>(prev||[]).filter(m=>m.id!==id));
+      setShowRemove(null);
+    } catch { toast.error("Erreur lors du retrait"); }
+  };
+  const doInvite=async()=>{
+    const phone=invEmail.replace(/\D/g,"").replace(/^242/,"");
+    if(!invName||phone.length!==9){toast.error("Indiquez le nom et un numéro à 9 chiffres");return;}
+    try {
+      await run(()=>vendorService.inviteMember("+242"+phone,ROLE_API[invRole]||"employee"));
+      const newMember={id:"new-"+Date.now(),name:invName,role:invRole,email:"+242"+phone,status:"invited",color:invRole==="Manager"?"#10B981":"#F59E0B"};
+      setMembers(prev=>[...(prev||[]),newMember]);
+      setInvName("");setInvEmail("");setInvRole("Employé");setInvited(true);
+      setTimeout(()=>{setInvited(false);setShowInvite(false)},2000);
+    } catch (err) { toast.error(err.message||"Erreur lors de l'invitation"); }
   };
   const roleColor=r=>r==="Propriétaire"?"#F97316":r==="Manager"?"#10B981":"#F59E0B";
 
@@ -30,7 +54,7 @@ function ShopTeamTab(){
 
     {members.map(m=><div key={m.id} style={{padding:14,background:showRemove===m.id?"rgba(239,68,68,0.02)":"var(--card)",border:showRemove===m.id?"1px solid rgba(239,68,68,0.3)":"1px solid var(--border)",borderRadius:14,marginBottom:10,transition:"all .2s"}}>
       <div style={{display:"flex",alignItems:"center",gap:12}}>
-        <div style={{width:42,height:42,borderRadius:12,background:m.color,color:"#fff",display:"flex",alignItems:"center",justifyContent:"center",fontSize:16,fontWeight:700,flexShrink:0}}>m.photo?<img src={m.photo} style={{width:"100%",height:"100%",objectFit:"cover",borderRadius:"inherit"}} alt=""/>:m.avatar</div>
+        <div style={{width:42,height:42,borderRadius:12,background:m.color,color:"#fff",display:"flex",alignItems:"center",justifyContent:"center",fontSize:16,fontWeight:700,flexShrink:0}}>{m.avatar?<img src={m.avatar} style={{width:"100%",height:"100%",objectFit:"cover",borderRadius:"inherit"}} alt=""/>:m.name.charAt(0).toUpperCase()}</div>
         <div style={{flex:1}}>
           <div style={{fontSize:14,fontWeight:600}}>{m.name}</div>
           <div style={{fontSize:11,color:"var(--muted)"}}>{m.email}</div>
@@ -53,7 +77,7 @@ function ShopTeamTab(){
     {showInvite?<div style={{padding:16,background:"var(--card)",border:"2px solid #F97316",borderRadius:16,marginBottom:14}}>
       <h4 style={{fontSize:14,fontWeight:700,marginBottom:12}}> Inviter un collaborateur</h4>
       <div className="field"><label>Nom complet</label><input value={invName} onChange={e=>setInvName(e.target.value)} placeholder="Ex: Sarah Mouanda"/></div>
-      <div className="field"><label>Email</label><input value={invEmail} onChange={e=>setInvEmail(e.target.value)} placeholder="sarah@email.com" type="email"/></div>
+      <div className="field"><label>Téléphone (compte Lamuka)</label><input value={invEmail} onChange={e=>setInvEmail(e.target.value.replace(/[^0-9]/g,"").slice(0,9))} placeholder="06X XXX XXX" type="tel" inputMode="numeric"/></div>
       <div className="field"><label>Rôle</label>
         <div style={{display:"flex",gap:8}}>
           {["Manager","Employé"].map(r=><button key={r} onClick={()=>setInvRole(r)} style={{flex:1,padding:10,borderRadius:10,border:invRole===r?"2px solid #F97316":"1px solid var(--border)",background:invRole===r?"rgba(249,115,22,0.04)":"var(--card)",fontSize:12,fontWeight:600,cursor:"pointer",fontFamily:"inherit",color:invRole===r?"#F97316":"var(--muted)"}}>{r}</button>)}

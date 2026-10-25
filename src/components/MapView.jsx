@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 import Icon from "./Icon";
+import { addBasemap } from "../utils/basemap";
 
 /**
  * Reusable real map component - loads Leaflet from CDN (no npm install needed)
@@ -10,11 +11,14 @@ function MapView({
   markers=[],
   route=null,
   routeColor="#F97316",
+  routeDashed=true,      // false : itinéraire réel (trait plein bordé de blanc)
   driverPos=null,
   style={},
   className="",
   children,
-  onMapReady
+  onMapReady,
+  controls=true,
+  interactive=true
 }){
   const ref=useRef(null);
   const mapRef=useRef(null);
@@ -62,9 +66,9 @@ function MapView({
     if(!ready||!ref.current||mapRef.current||!window.L) return;
     const L=window.L;
 
-    const map=L.map(ref.current,{center,zoom,zoomControl:false,attributionControl:false});
-    L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",{maxZoom:19}).addTo(map);
-    L.control.zoom({position:"bottomright"}).addTo(map);
+    const map=L.map(ref.current,{center,zoom,zoomControl:false,attributionControl:false,...(interactive?{}:{dragging:false,touchZoom:false,doubleClickZoom:false,scrollWheelZoom:false,boxZoom:false,keyboard:false,tap:false})});
+    addBasemap(map); // fond clair et sobre (tuiles vectorielles hébergées avec l'app)
+    if(controls) L.control.zoom({position:"bottomright"}).addTo(map);
     mapRef.current=map;
     onMapReady?.(map);
 
@@ -83,7 +87,8 @@ function MapView({
     markersRef.current.forEach(m=>m.remove());
     markersRef.current=[];
     markers.forEach(m=>{
-      const icon=m.emoji?L.divIcon({
+      // m.html : épingle dessinée (pastille, carré…) centrée sur le point
+      const icon=m.html?L.divIcon({html:m.html,iconSize:[m.size||22,m.size||22],iconAnchor:[(m.size||22)/2,(m.size||22)/2],className:""}):m.emoji?L.divIcon({
         html:`<div style="font-size:${m.size||28}px;filter:drop-shadow(0 2px 4px rgba(0,0,0,.3));text-align:center;line-height:1">${m.emoji}</div>`,
         iconSize:[40,40],iconAnchor:[20,40],className:"",
       }):undefined;
@@ -99,11 +104,15 @@ function MapView({
     if(!mapRef.current||!window.L) return;
     if(routeRef.current) routeRef.current.remove();
     if(route&&route.length>1){
-      routeRef.current=window.L.polyline(route.map(r=>[r.lat,r.lng]),{
-        color:routeColor,weight:5,opacity:0.8,dashArray:"12 8",
-      }).addTo(mapRef.current);
+      const ll=route.map(r=>[r.lat,r.lng]);
+      routeRef.current=routeDashed
+        ? window.L.polyline(ll,{color:routeColor,weight:5,opacity:0.8,dashArray:"12 8"}).addTo(mapRef.current)
+        : window.L.layerGroup([
+            window.L.polyline(ll,{color:"#ffffff",weight:9,opacity:0.95,lineCap:"round",lineJoin:"round"}),
+            window.L.polyline(ll,{color:routeColor,weight:5,opacity:1,lineCap:"round",lineJoin:"round"}),
+          ]).addTo(mapRef.current);
     }
-  },[route,routeColor,ready]);
+  },[route,routeColor,routeDashed,ready]);
 
   // Update driver position
   useEffect(()=>{
@@ -114,7 +123,7 @@ function MapView({
     }
     const L=window.L;
     const icon=L.divIcon({
-      html:`<div style="width:44px;height:44px;border-radius:50%;background:#10B981;border:4px solid #fff;box-shadow:0 4px 16px rgba(16,185,129,.4);display:flex;align-items:center;justify-content:center;font-size:20px"><Icon name="truck" size={18}/></div>`,
+      html:`<div style="width:44px;height:44px;border-radius:50%;background:#10B981;border:4px solid #fff;box-shadow:0 4px 16px rgba(16,185,129,.4);display:flex;align-items:center;justify-content:center;font-size:22px">🛵</div>`,
       iconSize:[44,44],iconAnchor:[22,22],className:"",
     });
     if(driverRef.current){

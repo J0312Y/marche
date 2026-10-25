@@ -1,8 +1,8 @@
 1<?xml version="1.0" encoding="utf-8"?>
 2<manifest xmlns:android="http://schemas.android.com/apk/res/android"
 3    package="com.lamuka.app"
-4    android:versionCode="1"
-5    android:versionName="1.0" >
+4    android:versionCode="20"
+5    android:versionName="1.0.19" >
 6
 7    <uses-sdk
 8        android:minSdkVersion="24"
@@ -11,144 +11,418 @@
 11    <!-- Permissions -->
 12
 13    <uses-permission android:name="android.permission.INTERNET" />
-13-->D:\lamuka-market\android\app\src\main\AndroidManifest.xml:40:5-67
-13-->D:\lamuka-market\android\app\src\main\AndroidManifest.xml:40:22-64
-14
-15    <permission
-15-->[androidx.core:core:1.17.0] C:\Users\joeld\.gradle\caches\8.14.3\transforms\11094a199bb7945826b161d8a9c17beb\transformed\core-1.17.0\AndroidManifest.xml:22:5-24:47
-16        android:name="com.lamuka.app.DYNAMIC_RECEIVER_NOT_EXPORTED_PERMISSION"
-16-->[androidx.core:core:1.17.0] C:\Users\joeld\.gradle\caches\8.14.3\transforms\11094a199bb7945826b161d8a9c17beb\transformed\core-1.17.0\AndroidManifest.xml:23:9-81
-17        android:protectionLevel="signature" />
-17-->[androidx.core:core:1.17.0] C:\Users\joeld\.gradle\caches\8.14.3\transforms\11094a199bb7945826b161d8a9c17beb\transformed\core-1.17.0\AndroidManifest.xml:24:9-44
-18
-19    <uses-permission android:name="com.lamuka.app.DYNAMIC_RECEIVER_NOT_EXPORTED_PERMISSION" />
-19-->[androidx.core:core:1.17.0] C:\Users\joeld\.gradle\caches\8.14.3\transforms\11094a199bb7945826b161d8a9c17beb\transformed\core-1.17.0\AndroidManifest.xml:26:5-97
-19-->[androidx.core:core:1.17.0] C:\Users\joeld\.gradle\caches\8.14.3\transforms\11094a199bb7945826b161d8a9c17beb\transformed\core-1.17.0\AndroidManifest.xml:26:22-94
+13-->D:\lamuka-market\android\app\src\main\AndroidManifest.xml:42:5-67
+13-->D:\lamuka-market\android\app\src\main\AndroidManifest.xml:42:22-64
+14    <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
+14-->D:\lamuka-market\android\app\src\main\AndroidManifest.xml:43:5-77
+14-->D:\lamuka-market\android\app\src\main\AndroidManifest.xml:43:22-74
+15    <!-- Suivi GPS du livreur -->
+16    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+16-->D:\lamuka-market\android\app\src\main\AndroidManifest.xml:45:5-81
+16-->D:\lamuka-market\android\app\src\main\AndroidManifest.xml:45:22-78
+17    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+17-->D:\lamuka-market\android\app\src\main\AndroidManifest.xml:46:5-79
+17-->D:\lamuka-market\android\app\src\main\AndroidManifest.xml:46:22-76
+18    <!-- Photos produits / profil -->
+19    <uses-permission android:name="android.permission.CAMERA" />
+19-->D:\lamuka-market\android\app\src\main\AndroidManifest.xml:48:5-65
+19-->D:\lamuka-market\android\app\src\main\AndroidManifest.xml:48:22-62
 20
-21    <application
-21-->D:\lamuka-market\android\app\src\main\AndroidManifest.xml:4:5-36:19
-22        android:allowBackup="true"
-22-->D:\lamuka-market\android\app\src\main\AndroidManifest.xml:5:9-35
-23        android:appComponentFactory="androidx.core.app.CoreComponentFactory"
-23-->[androidx.core:core:1.17.0] C:\Users\joeld\.gradle\caches\8.14.3\transforms\11094a199bb7945826b161d8a9c17beb\transformed\core-1.17.0\AndroidManifest.xml:28:18-86
-24        android:extractNativeLibs="false"
-25        android:icon="@mipmap/ic_launcher"
-25-->D:\lamuka-market\android\app\src\main\AndroidManifest.xml:6:9-43
-26        android:label="@string/app_name"
-26-->D:\lamuka-market\android\app\src\main\AndroidManifest.xml:7:9-41
-27        android:roundIcon="@mipmap/ic_launcher_round"
-27-->D:\lamuka-market\android\app\src\main\AndroidManifest.xml:8:9-54
-28        android:supportsRtl="true"
-28-->D:\lamuka-market\android\app\src\main\AndroidManifest.xml:9:9-35
-29        android:theme="@style/AppTheme" >
-29-->D:\lamuka-market\android\app\src\main\AndroidManifest.xml:10:9-40
-30        <activity
-30-->D:\lamuka-market\android\app\src\main\AndroidManifest.xml:12:9-25:20
-31            android:name="com.lamuka.app.MainActivity"
-31-->D:\lamuka-market\android\app\src\main\AndroidManifest.xml:14:13-41
-32            android:configChanges="orientation|keyboardHidden|keyboard|screenSize|locale|smallestScreenSize|screenLayout|uiMode|navigation|density"
-32-->D:\lamuka-market\android\app\src\main\AndroidManifest.xml:13:13-148
-33            android:exported="true"
-33-->D:\lamuka-market\android\app\src\main\AndroidManifest.xml:18:13-36
-34            android:label="@string/title_activity_main"
-34-->D:\lamuka-market\android\app\src\main\AndroidManifest.xml:15:13-56
-35            android:launchMode="singleTask"
-35-->D:\lamuka-market\android\app\src\main\AndroidManifest.xml:17:13-44
-36            android:theme="@style/AppTheme.NoActionBarLaunch" >
-36-->D:\lamuka-market\android\app\src\main\AndroidManifest.xml:16:13-62
-37            <intent-filter>
-37-->D:\lamuka-market\android\app\src\main\AndroidManifest.xml:20:13-23:29
-38                <action android:name="android.intent.action.MAIN" />
-38-->D:\lamuka-market\android\app\src\main\AndroidManifest.xml:21:17-69
-38-->D:\lamuka-market\android\app\src\main\AndroidManifest.xml:21:25-66
+21    <uses-feature
+21-->D:\lamuka-market\android\app\src\main\AndroidManifest.xml:49:5-91
+22        android:name="android.hardware.location.gps"
+22-->D:\lamuka-market\android\app\src\main\AndroidManifest.xml:49:19-63
+23        android:required="true" />
+23-->D:\lamuka-market\android\app\src\main\AndroidManifest.xml:49:64-88
+24    <uses-feature
+24-->D:\lamuka-market\android\app\src\main\AndroidManifest.xml:50:5-85
+25        android:name="android.hardware.camera"
+25-->D:\lamuka-market\android\app\src\main\AndroidManifest.xml:50:19-57
+26        android:required="false" />
+26-->D:\lamuka-market\android\app\src\main\AndroidManifest.xml:50:58-82
+27
+28    <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
+28-->[:capacitor-community-background-geolocation] D:\lamuka-market\node_modules\@capacitor-community\background-geolocation\android\build\intermediates\merged_manifest\release\processReleaseManifest\AndroidManifest.xml:9:5-77
+28-->[:capacitor-community-background-geolocation] D:\lamuka-market\node_modules\@capacitor-community\background-geolocation\android\build\intermediates\merged_manifest\release\processReleaseManifest\AndroidManifest.xml:9:22-74
+29    <!--
+30    Android SDK 34+ additionally requires the FOREGROUND_SERVICE_LOCATION
+31    runtime permission to start a foreground service of type "location".
+32    -->
+33    <uses-permission android:name="android.permission.FOREGROUND_SERVICE_LOCATION" />
+33-->[:capacitor-community-background-geolocation] D:\lamuka-market\node_modules\@capacitor-community\background-geolocation\android\build\intermediates\merged_manifest\release\processReleaseManifest\AndroidManifest.xml:14:5-86
+33-->[:capacitor-community-background-geolocation] D:\lamuka-market\node_modules\@capacitor-community\background-geolocation\android\build\intermediates\merged_manifest\release\processReleaseManifest\AndroidManifest.xml:14:22-83
+34    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
+34-->[:capacitor-local-notifications] D:\lamuka-market\node_modules\@capacitor\local-notifications\android\build\intermediates\merged_manifest\release\processReleaseManifest\AndroidManifest.xml:7:5-81
+34-->[:capacitor-local-notifications] D:\lamuka-market\node_modules\@capacitor\local-notifications\android\build\intermediates\merged_manifest\release\processReleaseManifest\AndroidManifest.xml:7:22-78
+35    <uses-permission android:name="android.permission.WAKE_LOCK" />
+35-->[:capacitor-local-notifications] D:\lamuka-market\node_modules\@capacitor\local-notifications\android\build\intermediates\merged_manifest\release\processReleaseManifest\AndroidManifest.xml:8:5-68
+35-->[:capacitor-local-notifications] D:\lamuka-market\node_modules\@capacitor\local-notifications\android\build\intermediates\merged_manifest\release\processReleaseManifest\AndroidManifest.xml:8:22-65
+36    <uses-permission android:name="android.permission.SCHEDULE_EXACT_ALARM" />
+36-->[:capacitor-local-notifications] D:\lamuka-market\node_modules\@capacitor\local-notifications\android\build\intermediates\merged_manifest\release\processReleaseManifest\AndroidManifest.xml:10:5-79
+36-->[:capacitor-local-notifications] D:\lamuka-market\node_modules\@capacitor\local-notifications\android\build\intermediates\merged_manifest\release\processReleaseManifest\AndroidManifest.xml:10:22-76
+37    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" /> <!-- Required by older versions of Google Play services to create IID tokens -->
+37-->[com.google.firebase:firebase-messaging:25.0.1] C:\Users\joeld\.gradle\caches\8.14.3\transforms\fee7827030cf30b9c64fc7d59fae02bb\transformed\firebase-messaging-25.0.1\AndroidManifest.xml:22:5-79
+37-->[com.google.firebase:firebase-messaging:25.0.1] C:\Users\joeld\.gradle\caches\8.14.3\transforms\fee7827030cf30b9c64fc7d59fae02bb\transformed\firebase-messaging-25.0.1\AndroidManifest.xml:22:22-76
+38    <uses-permission android:name="com.google.android.c2dm.permission.RECEIVE" />
+38-->[com.google.firebase:firebase-messaging:25.0.1] C:\Users\joeld\.gradle\caches\8.14.3\transforms\fee7827030cf30b9c64fc7d59fae02bb\transformed\firebase-messaging-25.0.1\AndroidManifest.xml:26:5-82
+38-->[com.google.firebase:firebase-messaging:25.0.1] C:\Users\joeld\.gradle\caches\8.14.3\transforms\fee7827030cf30b9c64fc7d59fae02bb\transformed\firebase-messaging-25.0.1\AndroidManifest.xml:26:22-79
 39
-40                <category android:name="android.intent.category.LAUNCHER" />
-40-->D:\lamuka-market\android\app\src\main\AndroidManifest.xml:22:17-77
-40-->D:\lamuka-market\android\app\src\main\AndroidManifest.xml:22:27-74
-41            </intent-filter>
-42        </activity>
+40    <permission
+40-->[androidx.core:core:1.17.0] C:\Users\joeld\.gradle\caches\8.14.3\transforms\11094a199bb7945826b161d8a9c17beb\transformed\core-1.17.0\AndroidManifest.xml:22:5-24:47
+41        android:name="com.lamuka.app.DYNAMIC_RECEIVER_NOT_EXPORTED_PERMISSION"
+41-->[androidx.core:core:1.17.0] C:\Users\joeld\.gradle\caches\8.14.3\transforms\11094a199bb7945826b161d8a9c17beb\transformed\core-1.17.0\AndroidManifest.xml:23:9-81
+42        android:protectionLevel="signature" />
+42-->[androidx.core:core:1.17.0] C:\Users\joeld\.gradle\caches\8.14.3\transforms\11094a199bb7945826b161d8a9c17beb\transformed\core-1.17.0\AndroidManifest.xml:24:9-44
 43
-44        <provider
-45            android:name="androidx.core.content.FileProvider"
-45-->D:\lamuka-market\android\app\src\main\AndroidManifest.xml:28:13-62
-46            android:authorities="com.lamuka.app.fileprovider"
-46-->D:\lamuka-market\android\app\src\main\AndroidManifest.xml:29:13-64
-47            android:exported="false"
-47-->D:\lamuka-market\android\app\src\main\AndroidManifest.xml:30:13-37
-48            android:grantUriPermissions="true" >
-48-->D:\lamuka-market\android\app\src\main\AndroidManifest.xml:31:13-47
-49            <meta-data
-49-->D:\lamuka-market\android\app\src\main\AndroidManifest.xml:32:13-34:64
-50                android:name="android.support.FILE_PROVIDER_PATHS"
-50-->D:\lamuka-market\android\app\src\main\AndroidManifest.xml:33:17-67
-51                android:resource="@xml/file_paths" />
-51-->D:\lamuka-market\android\app\src\main\AndroidManifest.xml:34:17-51
-52        </provider>
-53        <provider
-53-->[androidx.emoji2:emoji2:1.3.0] C:\Users\joeld\.gradle\caches\8.14.3\transforms\353d69426d62513a7e19e841051a3a44\transformed\emoji2-1.3.0\AndroidManifest.xml:24:9-32:20
-54            android:name="androidx.startup.InitializationProvider"
-54-->[androidx.emoji2:emoji2:1.3.0] C:\Users\joeld\.gradle\caches\8.14.3\transforms\353d69426d62513a7e19e841051a3a44\transformed\emoji2-1.3.0\AndroidManifest.xml:25:13-67
-55            android:authorities="com.lamuka.app.androidx-startup"
-55-->[androidx.emoji2:emoji2:1.3.0] C:\Users\joeld\.gradle\caches\8.14.3\transforms\353d69426d62513a7e19e841051a3a44\transformed\emoji2-1.3.0\AndroidManifest.xml:26:13-68
-56            android:exported="false" >
-56-->[androidx.emoji2:emoji2:1.3.0] C:\Users\joeld\.gradle\caches\8.14.3\transforms\353d69426d62513a7e19e841051a3a44\transformed\emoji2-1.3.0\AndroidManifest.xml:27:13-37
-57            <meta-data
-57-->[androidx.emoji2:emoji2:1.3.0] C:\Users\joeld\.gradle\caches\8.14.3\transforms\353d69426d62513a7e19e841051a3a44\transformed\emoji2-1.3.0\AndroidManifest.xml:29:13-31:52
-58                android:name="androidx.emoji2.text.EmojiCompatInitializer"
-58-->[androidx.emoji2:emoji2:1.3.0] C:\Users\joeld\.gradle\caches\8.14.3\transforms\353d69426d62513a7e19e841051a3a44\transformed\emoji2-1.3.0\AndroidManifest.xml:30:17-75
-59                android:value="androidx.startup" />
-59-->[androidx.emoji2:emoji2:1.3.0] C:\Users\joeld\.gradle\caches\8.14.3\transforms\353d69426d62513a7e19e841051a3a44\transformed\emoji2-1.3.0\AndroidManifest.xml:31:17-49
-60            <meta-data
-60-->[androidx.lifecycle:lifecycle-process:2.6.2] C:\Users\joeld\.gradle\caches\8.14.3\transforms\14a3b51da1167f75215e7e32d2231e74\transformed\lifecycle-process-2.6.2\AndroidManifest.xml:29:13-31:52
-61                android:name="androidx.lifecycle.ProcessLifecycleInitializer"
-61-->[androidx.lifecycle:lifecycle-process:2.6.2] C:\Users\joeld\.gradle\caches\8.14.3\transforms\14a3b51da1167f75215e7e32d2231e74\transformed\lifecycle-process-2.6.2\AndroidManifest.xml:30:17-78
-62                android:value="androidx.startup" />
-62-->[androidx.lifecycle:lifecycle-process:2.6.2] C:\Users\joeld\.gradle\caches\8.14.3\transforms\14a3b51da1167f75215e7e32d2231e74\transformed\lifecycle-process-2.6.2\AndroidManifest.xml:31:17-49
-63            <meta-data
-63-->[androidx.profileinstaller:profileinstaller:1.4.0] C:\Users\joeld\.gradle\caches\8.14.3\transforms\f95ab50c54d3211c648684c462933e30\transformed\profileinstaller-1.4.0\AndroidManifest.xml:29:13-31:52
-64                android:name="androidx.profileinstaller.ProfileInstallerInitializer"
-64-->[androidx.profileinstaller:profileinstaller:1.4.0] C:\Users\joeld\.gradle\caches\8.14.3\transforms\f95ab50c54d3211c648684c462933e30\transformed\profileinstaller-1.4.0\AndroidManifest.xml:30:17-85
-65                android:value="androidx.startup" />
-65-->[androidx.profileinstaller:profileinstaller:1.4.0] C:\Users\joeld\.gradle\caches\8.14.3\transforms\f95ab50c54d3211c648684c462933e30\transformed\profileinstaller-1.4.0\AndroidManifest.xml:31:17-49
-66        </provider>
-67
-68        <receiver
-68-->[androidx.profileinstaller:profileinstaller:1.4.0] C:\Users\joeld\.gradle\caches\8.14.3\transforms\f95ab50c54d3211c648684c462933e30\transformed\profileinstaller-1.4.0\AndroidManifest.xml:34:9-52:20
-69            android:name="androidx.profileinstaller.ProfileInstallReceiver"
-69-->[androidx.profileinstaller:profileinstaller:1.4.0] C:\Users\joeld\.gradle\caches\8.14.3\transforms\f95ab50c54d3211c648684c462933e30\transformed\profileinstaller-1.4.0\AndroidManifest.xml:35:13-76
-70            android:directBootAware="false"
-70-->[androidx.profileinstaller:profileinstaller:1.4.0] C:\Users\joeld\.gradle\caches\8.14.3\transforms\f95ab50c54d3211c648684c462933e30\transformed\profileinstaller-1.4.0\AndroidManifest.xml:36:13-44
-71            android:enabled="true"
-71-->[androidx.profileinstaller:profileinstaller:1.4.0] C:\Users\joeld\.gradle\caches\8.14.3\transforms\f95ab50c54d3211c648684c462933e30\transformed\profileinstaller-1.4.0\AndroidManifest.xml:37:13-35
-72            android:exported="true"
-72-->[androidx.profileinstaller:profileinstaller:1.4.0] C:\Users\joeld\.gradle\caches\8.14.3\transforms\f95ab50c54d3211c648684c462933e30\transformed\profileinstaller-1.4.0\AndroidManifest.xml:38:13-36
-73            android:permission="android.permission.DUMP" >
-73-->[androidx.profileinstaller:profileinstaller:1.4.0] C:\Users\joeld\.gradle\caches\8.14.3\transforms\f95ab50c54d3211c648684c462933e30\transformed\profileinstaller-1.4.0\AndroidManifest.xml:39:13-57
-74            <intent-filter>
-74-->[androidx.profileinstaller:profileinstaller:1.4.0] C:\Users\joeld\.gradle\caches\8.14.3\transforms\f95ab50c54d3211c648684c462933e30\transformed\profileinstaller-1.4.0\AndroidManifest.xml:40:13-42:29
-75                <action android:name="androidx.profileinstaller.action.INSTALL_PROFILE" />
-75-->[androidx.profileinstaller:profileinstaller:1.4.0] C:\Users\joeld\.gradle\caches\8.14.3\transforms\f95ab50c54d3211c648684c462933e30\transformed\profileinstaller-1.4.0\AndroidManifest.xml:41:17-91
-75-->[androidx.profileinstaller:profileinstaller:1.4.0] C:\Users\joeld\.gradle\caches\8.14.3\transforms\f95ab50c54d3211c648684c462933e30\transformed\profileinstaller-1.4.0\AndroidManifest.xml:41:25-88
-76            </intent-filter>
-77            <intent-filter>
-77-->[androidx.profileinstaller:profileinstaller:1.4.0] C:\Users\joeld\.gradle\caches\8.14.3\transforms\f95ab50c54d3211c648684c462933e30\transformed\profileinstaller-1.4.0\AndroidManifest.xml:43:13-45:29
-78                <action android:name="androidx.profileinstaller.action.SKIP_FILE" />
-78-->[androidx.profileinstaller:profileinstaller:1.4.0] C:\Users\joeld\.gradle\caches\8.14.3\transforms\f95ab50c54d3211c648684c462933e30\transformed\profileinstaller-1.4.0\AndroidManifest.xml:44:17-85
-78-->[androidx.profileinstaller:profileinstaller:1.4.0] C:\Users\joeld\.gradle\caches\8.14.3\transforms\f95ab50c54d3211c648684c462933e30\transformed\profileinstaller-1.4.0\AndroidManifest.xml:44:25-82
-79            </intent-filter>
-80            <intent-filter>
-80-->[androidx.profileinstaller:profileinstaller:1.4.0] C:\Users\joeld\.gradle\caches\8.14.3\transforms\f95ab50c54d3211c648684c462933e30\transformed\profileinstaller-1.4.0\AndroidManifest.xml:46:13-48:29
-81                <action android:name="androidx.profileinstaller.action.SAVE_PROFILE" />
-81-->[androidx.profileinstaller:profileinstaller:1.4.0] C:\Users\joeld\.gradle\caches\8.14.3\transforms\f95ab50c54d3211c648684c462933e30\transformed\profileinstaller-1.4.0\AndroidManifest.xml:47:17-88
-81-->[androidx.profileinstaller:profileinstaller:1.4.0] C:\Users\joeld\.gradle\caches\8.14.3\transforms\f95ab50c54d3211c648684c462933e30\transformed\profileinstaller-1.4.0\AndroidManifest.xml:47:25-85
-82            </intent-filter>
-83            <intent-filter>
-83-->[androidx.profileinstaller:profileinstaller:1.4.0] C:\Users\joeld\.gradle\caches\8.14.3\transforms\f95ab50c54d3211c648684c462933e30\transformed\profileinstaller-1.4.0\AndroidManifest.xml:49:13-51:29
-84                <action android:name="androidx.profileinstaller.action.BENCHMARK_OPERATION" />
-84-->[androidx.profileinstaller:profileinstaller:1.4.0] C:\Users\joeld\.gradle\caches\8.14.3\transforms\f95ab50c54d3211c648684c462933e30\transformed\profileinstaller-1.4.0\AndroidManifest.xml:50:17-95
-84-->[androidx.profileinstaller:profileinstaller:1.4.0] C:\Users\joeld\.gradle\caches\8.14.3\transforms\f95ab50c54d3211c648684c462933e30\transformed\profileinstaller-1.4.0\AndroidManifest.xml:50:25-92
-85            </intent-filter>
-86        </receiver>
-87    </application>
-88
-89</manifest>
+44    <uses-permission android:name="com.lamuka.app.DYNAMIC_RECEIVER_NOT_EXPORTED_PERMISSION" />
+44-->[androidx.core:core:1.17.0] C:\Users\joeld\.gradle\caches\8.14.3\transforms\11094a199bb7945826b161d8a9c17beb\transformed\core-1.17.0\AndroidManifest.xml:26:5-97
+44-->[androidx.core:core:1.17.0] C:\Users\joeld\.gradle\caches\8.14.3\transforms\11094a199bb7945826b161d8a9c17beb\transformed\core-1.17.0\AndroidManifest.xml:26:22-94
+45
+46    <application
+46-->D:\lamuka-market\android\app\src\main\AndroidManifest.xml:4:5-38:19
+47        android:allowBackup="true"
+47-->D:\lamuka-market\android\app\src\main\AndroidManifest.xml:5:9-35
+48        android:appComponentFactory="androidx.core.app.CoreComponentFactory"
+48-->[androidx.core:core:1.17.0] C:\Users\joeld\.gradle\caches\8.14.3\transforms\11094a199bb7945826b161d8a9c17beb\transformed\core-1.17.0\AndroidManifest.xml:28:18-86
+49        android:extractNativeLibs="false"
+50        android:icon="@mipmap/ic_launcher"
+50-->D:\lamuka-market\android\app\src\main\AndroidManifest.xml:7:9-43
+51        android:label="@string/app_name"
+51-->D:\lamuka-market\android\app\src\main\AndroidManifest.xml:8:9-41
+52        android:roundIcon="@mipmap/ic_launcher_round"
+52-->D:\lamuka-market\android\app\src\main\AndroidManifest.xml:9:9-54
+53        android:supportsRtl="true"
+53-->D:\lamuka-market\android\app\src\main\AndroidManifest.xml:10:9-35
+54        android:theme="@style/AppTheme"
+54-->D:\lamuka-market\android\app\src\main\AndroidManifest.xml:11:9-40
+55        android:usesCleartextTraffic="false" >
+55-->D:\lamuka-market\android\app\src\main\AndroidManifest.xml:6:9-45
+56        <activity
+56-->D:\lamuka-market\android\app\src\main\AndroidManifest.xml:13:9-27:20
+57            android:name="com.lamuka.app.MainActivity"
+57-->D:\lamuka-market\android\app\src\main\AndroidManifest.xml:15:13-41
+58            android:configChanges="orientation|keyboardHidden|keyboard|screenSize|locale|smallestScreenSize|screenLayout|uiMode|navigation|density"
+58-->D:\lamuka-market\android\app\src\main\AndroidManifest.xml:14:13-148
+59            android:exported="true"
+59-->D:\lamuka-market\android\app\src\main\AndroidManifest.xml:20:13-36
+60            android:label="@string/title_activity_main"
+60-->D:\lamuka-market\android\app\src\main\AndroidManifest.xml:17:13-56
+61            android:launchMode="singleTask"
+61-->D:\lamuka-market\android\app\src\main\AndroidManifest.xml:19:13-44
+62            android:screenOrientation="portrait"
+62-->D:\lamuka-market\android\app\src\main\AndroidManifest.xml:16:13-49
+63            android:theme="@style/AppTheme.NoActionBarLaunch" >
+63-->D:\lamuka-market\android\app\src\main\AndroidManifest.xml:18:13-62
+64            <intent-filter>
+64-->D:\lamuka-market\android\app\src\main\AndroidManifest.xml:22:13-25:29
+65                <action android:name="android.intent.action.MAIN" />
+65-->D:\lamuka-market\android\app\src\main\AndroidManifest.xml:23:17-69
+65-->D:\lamuka-market\android\app\src\main\AndroidManifest.xml:23:25-66
+66
+67                <category android:name="android.intent.category.LAUNCHER" />
+67-->D:\lamuka-market\android\app\src\main\AndroidManifest.xml:24:17-77
+67-->D:\lamuka-market\android\app\src\main\AndroidManifest.xml:24:27-74
+68            </intent-filter>
+69        </activity>
+70
+71        <provider
+72            android:name="androidx.core.content.FileProvider"
+72-->D:\lamuka-market\android\app\src\main\AndroidManifest.xml:30:13-62
+73            android:authorities="com.lamuka.app.fileprovider"
+73-->D:\lamuka-market\android\app\src\main\AndroidManifest.xml:31:13-64
+74            android:exported="false"
+74-->D:\lamuka-market\android\app\src\main\AndroidManifest.xml:32:13-37
+75            android:grantUriPermissions="true" >
+75-->D:\lamuka-market\android\app\src\main\AndroidManifest.xml:33:13-47
+76            <meta-data
+76-->D:\lamuka-market\android\app\src\main\AndroidManifest.xml:34:13-36:64
+77                android:name="android.support.FILE_PROVIDER_PATHS"
+77-->D:\lamuka-market\android\app\src\main\AndroidManifest.xml:35:17-67
+78                android:resource="@xml/file_paths" />
+78-->D:\lamuka-market\android\app\src\main\AndroidManifest.xml:36:17-51
+79        </provider>
+80
+81        <service
+81-->[:capacitor-community-background-geolocation] D:\lamuka-market\node_modules\@capacitor-community\background-geolocation\android\build\intermediates\merged_manifest\release\processReleaseManifest\AndroidManifest.xml:24:9-28:56
+82            android:name="com.equimaps.capacitor_background_geolocation.BackgroundGeolocationService"
+82-->[:capacitor-community-background-geolocation] D:\lamuka-market\node_modules\@capacitor-community\background-geolocation\android\build\intermediates\merged_manifest\release\processReleaseManifest\AndroidManifest.xml:25:13-102
+83            android:enabled="true"
+83-->[:capacitor-community-background-geolocation] D:\lamuka-market\node_modules\@capacitor-community\background-geolocation\android\build\intermediates\merged_manifest\release\processReleaseManifest\AndroidManifest.xml:26:13-35
+84            android:exported="true"
+84-->[:capacitor-community-background-geolocation] D:\lamuka-market\node_modules\@capacitor-community\background-geolocation\android\build\intermediates\merged_manifest\release\processReleaseManifest\AndroidManifest.xml:27:13-36
+85            android:foregroundServiceType="location" />
+85-->[:capacitor-community-background-geolocation] D:\lamuka-market\node_modules\@capacitor-community\background-geolocation\android\build\intermediates\merged_manifest\release\processReleaseManifest\AndroidManifest.xml:28:13-53
+86
+87        <receiver android:name="com.capacitorjs.plugins.localnotifications.TimedNotificationPublisher" />
+87-->[:capacitor-local-notifications] D:\lamuka-market\node_modules\@capacitor\local-notifications\android\build\intermediates\merged_manifest\release\processReleaseManifest\AndroidManifest.xml:13:9-106
+87-->[:capacitor-local-notifications] D:\lamuka-market\node_modules\@capacitor\local-notifications\android\build\intermediates\merged_manifest\release\processReleaseManifest\AndroidManifest.xml:13:19-103
+88        <receiver android:name="com.capacitorjs.plugins.localnotifications.NotificationDismissReceiver" />
+88-->[:capacitor-local-notifications] D:\lamuka-market\node_modules\@capacitor\local-notifications\android\build\intermediates\merged_manifest\release\processReleaseManifest\AndroidManifest.xml:14:9-107
+88-->[:capacitor-local-notifications] D:\lamuka-market\node_modules\@capacitor\local-notifications\android\build\intermediates\merged_manifest\release\processReleaseManifest\AndroidManifest.xml:14:19-104
+89        <receiver
+89-->[:capacitor-local-notifications] D:\lamuka-market\node_modules\@capacitor\local-notifications\android\build\intermediates\merged_manifest\release\processReleaseManifest\AndroidManifest.xml:15:9-24:20
+90            android:name="com.capacitorjs.plugins.localnotifications.LocalNotificationRestoreReceiver"
+90-->[:capacitor-local-notifications] D:\lamuka-market\node_modules\@capacitor\local-notifications\android\build\intermediates\merged_manifest\release\processReleaseManifest\AndroidManifest.xml:16:13-103
+91            android:directBootAware="true"
+91-->[:capacitor-local-notifications] D:\lamuka-market\node_modules\@capacitor\local-notifications\android\build\intermediates\merged_manifest\release\processReleaseManifest\AndroidManifest.xml:17:13-43
+92            android:exported="false" >
+92-->[:capacitor-local-notifications] D:\lamuka-market\node_modules\@capacitor\local-notifications\android\build\intermediates\merged_manifest\release\processReleaseManifest\AndroidManifest.xml:18:13-37
+93            <intent-filter>
+93-->[:capacitor-local-notifications] D:\lamuka-market\node_modules\@capacitor\local-notifications\android\build\intermediates\merged_manifest\release\processReleaseManifest\AndroidManifest.xml:19:13-23:29
+94                <action android:name="android.intent.action.LOCKED_BOOT_COMPLETED" />
+94-->[:capacitor-local-notifications] D:\lamuka-market\node_modules\@capacitor\local-notifications\android\build\intermediates\merged_manifest\release\processReleaseManifest\AndroidManifest.xml:20:17-86
+94-->[:capacitor-local-notifications] D:\lamuka-market\node_modules\@capacitor\local-notifications\android\build\intermediates\merged_manifest\release\processReleaseManifest\AndroidManifest.xml:20:25-83
+95                <action android:name="android.intent.action.BOOT_COMPLETED" />
+95-->[:capacitor-local-notifications] D:\lamuka-market\node_modules\@capacitor\local-notifications\android\build\intermediates\merged_manifest\release\processReleaseManifest\AndroidManifest.xml:21:17-79
+95-->[:capacitor-local-notifications] D:\lamuka-market\node_modules\@capacitor\local-notifications\android\build\intermediates\merged_manifest\release\processReleaseManifest\AndroidManifest.xml:21:25-76
+96                <action android:name="android.intent.action.QUICKBOOT_POWERON" />
+96-->[:capacitor-local-notifications] D:\lamuka-market\node_modules\@capacitor\local-notifications\android\build\intermediates\merged_manifest\release\processReleaseManifest\AndroidManifest.xml:22:17-82
+96-->[:capacitor-local-notifications] D:\lamuka-market\node_modules\@capacitor\local-notifications\android\build\intermediates\merged_manifest\release\processReleaseManifest\AndroidManifest.xml:22:25-79
+97            </intent-filter>
+98        </receiver>
+99
+100        <provider
+100-->[:capacitor-local-notifications] D:\lamuka-market\node_modules\@capacitor\local-notifications\android\build\intermediates\merged_manifest\release\processReleaseManifest\AndroidManifest.xml:26:9-34:20
+101            android:name="com.capacitorjs.plugins.localnotifications.LocalNotificationsAssetProvider"
+101-->[:capacitor-local-notifications] D:\lamuka-market\node_modules\@capacitor\local-notifications\android\build\intermediates\merged_manifest\release\processReleaseManifest\AndroidManifest.xml:27:13-102
+102            android:authorities="com.lamuka.app.localnotifications.fileprovider"
+102-->[:capacitor-local-notifications] D:\lamuka-market\node_modules\@capacitor\local-notifications\android\build\intermediates\merged_manifest\release\processReleaseManifest\AndroidManifest.xml:28:13-83
+103            android:exported="false"
+103-->[:capacitor-local-notifications] D:\lamuka-market\node_modules\@capacitor\local-notifications\android\build\intermediates\merged_manifest\release\processReleaseManifest\AndroidManifest.xml:29:13-37
+104            android:grantUriPermissions="true" >
+104-->[:capacitor-local-notifications] D:\lamuka-market\node_modules\@capacitor\local-notifications\android\build\intermediates\merged_manifest\release\processReleaseManifest\AndroidManifest.xml:30:13-47
+105            <meta-data
+105-->D:\lamuka-market\android\app\src\main\AndroidManifest.xml:34:13-36:64
+106                android:name="android.support.FILE_PROVIDER_PATHS"
+106-->D:\lamuka-market\android\app\src\main\AndroidManifest.xml:35:17-67
+107                android:resource="@xml/localnotifications_provider_paths" />
+107-->D:\lamuka-market\android\app\src\main\AndroidManifest.xml:36:17-51
+108        </provider>
+109
+110        <service
+110-->[:capacitor-push-notifications] D:\lamuka-market\node_modules\@capacitor\push-notifications\android\build\intermediates\merged_manifest\release\processReleaseManifest\AndroidManifest.xml:8:9-14:19
+111            android:name="com.capacitorjs.plugins.pushnotifications.MessagingService"
+111-->[:capacitor-push-notifications] D:\lamuka-market\node_modules\@capacitor\push-notifications\android\build\intermediates\merged_manifest\release\processReleaseManifest\AndroidManifest.xml:9:13-86
+112            android:exported="false" >
+112-->[:capacitor-push-notifications] D:\lamuka-market\node_modules\@capacitor\push-notifications\android\build\intermediates\merged_manifest\release\processReleaseManifest\AndroidManifest.xml:10:13-37
+113            <intent-filter>
+113-->[:capacitor-push-notifications] D:\lamuka-market\node_modules\@capacitor\push-notifications\android\build\intermediates\merged_manifest\release\processReleaseManifest\AndroidManifest.xml:11:13-13:29
+114                <action android:name="com.google.firebase.MESSAGING_EVENT" />
+114-->[:capacitor-push-notifications] D:\lamuka-market\node_modules\@capacitor\push-notifications\android\build\intermediates\merged_manifest\release\processReleaseManifest\AndroidManifest.xml:12:17-78
+114-->[:capacitor-push-notifications] D:\lamuka-market\node_modules\@capacitor\push-notifications\android\build\intermediates\merged_manifest\release\processReleaseManifest\AndroidManifest.xml:12:25-75
+115            </intent-filter>
+116        </service>
+117
+118        <receiver
+118-->[com.google.firebase:firebase-messaging:25.0.1] C:\Users\joeld\.gradle\caches\8.14.3\transforms\fee7827030cf30b9c64fc7d59fae02bb\transformed\firebase-messaging-25.0.1\AndroidManifest.xml:29:9-40:20
+119            android:name="com.google.firebase.iid.FirebaseInstanceIdReceiver"
+119-->[com.google.firebase:firebase-messaging:25.0.1] C:\Users\joeld\.gradle\caches\8.14.3\transforms\fee7827030cf30b9c64fc7d59fae02bb\transformed\firebase-messaging-25.0.1\AndroidManifest.xml:30:13-78
+120            android:exported="true"
+120-->[com.google.firebase:firebase-messaging:25.0.1] C:\Users\joeld\.gradle\caches\8.14.3\transforms\fee7827030cf30b9c64fc7d59fae02bb\transformed\firebase-messaging-25.0.1\AndroidManifest.xml:31:13-36
+121            android:permission="com.google.android.c2dm.permission.SEND" >
+121-->[com.google.firebase:firebase-messaging:25.0.1] C:\Users\joeld\.gradle\caches\8.14.3\transforms\fee7827030cf30b9c64fc7d59fae02bb\transformed\firebase-messaging-25.0.1\AndroidManifest.xml:32:13-73
+122            <intent-filter>
+122-->[com.google.firebase:firebase-messaging:25.0.1] C:\Users\joeld\.gradle\caches\8.14.3\transforms\fee7827030cf30b9c64fc7d59fae02bb\transformed\firebase-messaging-25.0.1\AndroidManifest.xml:33:13-35:29
+123                <action android:name="com.google.android.c2dm.intent.RECEIVE" />
+123-->[com.google.firebase:firebase-messaging:25.0.1] C:\Users\joeld\.gradle\caches\8.14.3\transforms\fee7827030cf30b9c64fc7d59fae02bb\transformed\firebase-messaging-25.0.1\AndroidManifest.xml:34:17-81
+123-->[com.google.firebase:firebase-messaging:25.0.1] C:\Users\joeld\.gradle\caches\8.14.3\transforms\fee7827030cf30b9c64fc7d59fae02bb\transformed\firebase-messaging-25.0.1\AndroidManifest.xml:34:25-78
+124            </intent-filter>
+125
+126            <meta-data
+126-->[com.google.firebase:firebase-messaging:25.0.1] C:\Users\joeld\.gradle\caches\8.14.3\transforms\fee7827030cf30b9c64fc7d59fae02bb\transformed\firebase-messaging-25.0.1\AndroidManifest.xml:37:13-39:40
+127                android:name="com.google.android.gms.cloudmessaging.FINISHED_AFTER_HANDLED"
+127-->[com.google.firebase:firebase-messaging:25.0.1] C:\Users\joeld\.gradle\caches\8.14.3\transforms\fee7827030cf30b9c64fc7d59fae02bb\transformed\firebase-messaging-25.0.1\AndroidManifest.xml:38:17-92
+128                android:value="true" />
+128-->[com.google.firebase:firebase-messaging:25.0.1] C:\Users\joeld\.gradle\caches\8.14.3\transforms\fee7827030cf30b9c64fc7d59fae02bb\transformed\firebase-messaging-25.0.1\AndroidManifest.xml:39:17-37
+129        </receiver>
+130        <!--
+131             FirebaseMessagingService performs security checks at runtime,
+132             but set to not exported to explicitly avoid allowing another app to call it.
+133        -->
+134        <service
+134-->[com.google.firebase:firebase-messaging:25.0.1] C:\Users\joeld\.gradle\caches\8.14.3\transforms\fee7827030cf30b9c64fc7d59fae02bb\transformed\firebase-messaging-25.0.1\AndroidManifest.xml:46:9-53:19
+135            android:name="com.google.firebase.messaging.FirebaseMessagingService"
+135-->[com.google.firebase:firebase-messaging:25.0.1] C:\Users\joeld\.gradle\caches\8.14.3\transforms\fee7827030cf30b9c64fc7d59fae02bb\transformed\firebase-messaging-25.0.1\AndroidManifest.xml:47:13-82
+136            android:directBootAware="true"
+136-->[com.google.firebase:firebase-messaging:25.0.1] C:\Users\joeld\.gradle\caches\8.14.3\transforms\fee7827030cf30b9c64fc7d59fae02bb\transformed\firebase-messaging-25.0.1\AndroidManifest.xml:48:13-43
+137            android:exported="false" >
+137-->[com.google.firebase:firebase-messaging:25.0.1] C:\Users\joeld\.gradle\caches\8.14.3\transforms\fee7827030cf30b9c64fc7d59fae02bb\transformed\firebase-messaging-25.0.1\AndroidManifest.xml:49:13-37
+138            <intent-filter android:priority="-500" >
+138-->[:capacitor-push-notifications] D:\lamuka-market\node_modules\@capacitor\push-notifications\android\build\intermediates\merged_manifest\release\processReleaseManifest\AndroidManifest.xml:11:13-13:29
+139                <action android:name="com.google.firebase.MESSAGING_EVENT" />
+139-->[:capacitor-push-notifications] D:\lamuka-market\node_modules\@capacitor\push-notifications\android\build\intermediates\merged_manifest\release\processReleaseManifest\AndroidManifest.xml:12:17-78
+139-->[:capacitor-push-notifications] D:\lamuka-market\node_modules\@capacitor\push-notifications\android\build\intermediates\merged_manifest\release\processReleaseManifest\AndroidManifest.xml:12:25-75
+140            </intent-filter>
+141        </service>
+142        <service
+142-->[com.google.firebase:firebase-messaging:25.0.1] C:\Users\joeld\.gradle\caches\8.14.3\transforms\fee7827030cf30b9c64fc7d59fae02bb\transformed\firebase-messaging-25.0.1\AndroidManifest.xml:54:9-63:19
+143            android:name="com.google.firebase.components.ComponentDiscoveryService"
+143-->[com.google.firebase:firebase-messaging:25.0.1] C:\Users\joeld\.gradle\caches\8.14.3\transforms\fee7827030cf30b9c64fc7d59fae02bb\transformed\firebase-messaging-25.0.1\AndroidManifest.xml:55:13-84
+144            android:directBootAware="true"
+144-->[com.google.firebase:firebase-common:22.0.1] C:\Users\joeld\.gradle\caches\8.14.3\transforms\cb546919c09df4bb1e2d2127157bcaa2\transformed\firebase-common-22.0.1\AndroidManifest.xml:32:13-43
+145            android:exported="false" >
+145-->[com.google.firebase:firebase-messaging:25.0.1] C:\Users\joeld\.gradle\caches\8.14.3\transforms\fee7827030cf30b9c64fc7d59fae02bb\transformed\firebase-messaging-25.0.1\AndroidManifest.xml:56:13-37
+146            <meta-data
+146-->[com.google.firebase:firebase-messaging:25.0.1] C:\Users\joeld\.gradle\caches\8.14.3\transforms\fee7827030cf30b9c64fc7d59fae02bb\transformed\firebase-messaging-25.0.1\AndroidManifest.xml:57:13-59:85
+147                android:name="com.google.firebase.components:com.google.firebase.messaging.FirebaseMessagingKtxRegistrar"
+147-->[com.google.firebase:firebase-messaging:25.0.1] C:\Users\joeld\.gradle\caches\8.14.3\transforms\fee7827030cf30b9c64fc7d59fae02bb\transformed\firebase-messaging-25.0.1\AndroidManifest.xml:58:17-122
+148                android:value="com.google.firebase.components.ComponentRegistrar" />
+148-->[com.google.firebase:firebase-messaging:25.0.1] C:\Users\joeld\.gradle\caches\8.14.3\transforms\fee7827030cf30b9c64fc7d59fae02bb\transformed\firebase-messaging-25.0.1\AndroidManifest.xml:59:17-82
+149            <meta-data
+149-->[com.google.firebase:firebase-messaging:25.0.1] C:\Users\joeld\.gradle\caches\8.14.3\transforms\fee7827030cf30b9c64fc7d59fae02bb\transformed\firebase-messaging-25.0.1\AndroidManifest.xml:60:13-62:85
+150                android:name="com.google.firebase.components:com.google.firebase.messaging.FirebaseMessagingRegistrar"
+150-->[com.google.firebase:firebase-messaging:25.0.1] C:\Users\joeld\.gradle\caches\8.14.3\transforms\fee7827030cf30b9c64fc7d59fae02bb\transformed\firebase-messaging-25.0.1\AndroidManifest.xml:61:17-119
+151                android:value="com.google.firebase.components.ComponentRegistrar" />
+151-->[com.google.firebase:firebase-messaging:25.0.1] C:\Users\joeld\.gradle\caches\8.14.3\transforms\fee7827030cf30b9c64fc7d59fae02bb\transformed\firebase-messaging-25.0.1\AndroidManifest.xml:62:17-82
+152            <meta-data
+152-->[com.google.firebase:firebase-installations:18.0.0] C:\Users\joeld\.gradle\caches\8.14.3\transforms\df907beae055c1d2434697ac5cd0594d\transformed\firebase-installations-18.0.0\AndroidManifest.xml:15:13-17:85
+153                android:name="com.google.firebase.components:com.google.firebase.installations.FirebaseInstallationsKtxRegistrar"
+153-->[com.google.firebase:firebase-installations:18.0.0] C:\Users\joeld\.gradle\caches\8.14.3\transforms\df907beae055c1d2434697ac5cd0594d\transformed\firebase-installations-18.0.0\AndroidManifest.xml:16:17-130
+154                android:value="com.google.firebase.components.ComponentRegistrar" />
+154-->[com.google.firebase:firebase-installations:18.0.0] C:\Users\joeld\.gradle\caches\8.14.3\transforms\df907beae055c1d2434697ac5cd0594d\transformed\firebase-installations-18.0.0\AndroidManifest.xml:17:17-82
+155            <meta-data
+155-->[com.google.firebase:firebase-installations:18.0.0] C:\Users\joeld\.gradle\caches\8.14.3\transforms\df907beae055c1d2434697ac5cd0594d\transformed\firebase-installations-18.0.0\AndroidManifest.xml:18:13-20:85
+156                android:name="com.google.firebase.components:com.google.firebase.installations.FirebaseInstallationsRegistrar"
+156-->[com.google.firebase:firebase-installations:18.0.0] C:\Users\joeld\.gradle\caches\8.14.3\transforms\df907beae055c1d2434697ac5cd0594d\transformed\firebase-installations-18.0.0\AndroidManifest.xml:19:17-127
+157                android:value="com.google.firebase.components.ComponentRegistrar" />
+157-->[com.google.firebase:firebase-installations:18.0.0] C:\Users\joeld\.gradle\caches\8.14.3\transforms\df907beae055c1d2434697ac5cd0594d\transformed\firebase-installations-18.0.0\AndroidManifest.xml:20:17-82
+158            <meta-data
+158-->[com.google.firebase:firebase-common:22.0.1] C:\Users\joeld\.gradle\caches\8.14.3\transforms\cb546919c09df4bb1e2d2127157bcaa2\transformed\firebase-common-22.0.1\AndroidManifest.xml:35:13-37:85
+159                android:name="com.google.firebase.components:com.google.firebase.FirebaseCommonKtxRegistrar"
+159-->[com.google.firebase:firebase-common:22.0.1] C:\Users\joeld\.gradle\caches\8.14.3\transforms\cb546919c09df4bb1e2d2127157bcaa2\transformed\firebase-common-22.0.1\AndroidManifest.xml:36:17-109
+160                android:value="com.google.firebase.components.ComponentRegistrar" />
+160-->[com.google.firebase:firebase-common:22.0.1] C:\Users\joeld\.gradle\caches\8.14.3\transforms\cb546919c09df4bb1e2d2127157bcaa2\transformed\firebase-common-22.0.1\AndroidManifest.xml:37:17-82
+161            <meta-data
+161-->[com.google.firebase:firebase-datatransport:18.2.0] C:\Users\joeld\.gradle\caches\8.14.3\transforms\37804962654ec3e9f031e2012e83e63f\transformed\firebase-datatransport-18.2.0\AndroidManifest.xml:25:13-27:85
+162                android:name="com.google.firebase.components:com.google.firebase.datatransport.TransportRegistrar"
+162-->[com.google.firebase:firebase-datatransport:18.2.0] C:\Users\joeld\.gradle\caches\8.14.3\transforms\37804962654ec3e9f031e2012e83e63f\transformed\firebase-datatransport-18.2.0\AndroidManifest.xml:26:17-115
+163                android:value="com.google.firebase.components.ComponentRegistrar" />
+163-->[com.google.firebase:firebase-datatransport:18.2.0] C:\Users\joeld\.gradle\caches\8.14.3\transforms\37804962654ec3e9f031e2012e83e63f\transformed\firebase-datatransport-18.2.0\AndroidManifest.xml:27:17-82
+164        </service>
+165
+166        <activity
+166-->[com.google.android.gms:play-services-base:18.1.0] C:\Users\joeld\.gradle\caches\8.14.3\transforms\4aef5d6dbfa2eab3e0cf75d9b9b7eb7a\transformed\play-services-base-18.1.0\AndroidManifest.xml:20:9-22:45
+167            android:name="com.google.android.gms.common.api.GoogleApiActivity"
+167-->[com.google.android.gms:play-services-base:18.1.0] C:\Users\joeld\.gradle\caches\8.14.3\transforms\4aef5d6dbfa2eab3e0cf75d9b9b7eb7a\transformed\play-services-base-18.1.0\AndroidManifest.xml:20:19-85
+168            android:exported="false"
+168-->[com.google.android.gms:play-services-base:18.1.0] C:\Users\joeld\.gradle\caches\8.14.3\transforms\4aef5d6dbfa2eab3e0cf75d9b9b7eb7a\transformed\play-services-base-18.1.0\AndroidManifest.xml:22:19-43
+169            android:theme="@android:style/Theme.Translucent.NoTitleBar" />
+169-->[com.google.android.gms:play-services-base:18.1.0] C:\Users\joeld\.gradle\caches\8.14.3\transforms\4aef5d6dbfa2eab3e0cf75d9b9b7eb7a\transformed\play-services-base-18.1.0\AndroidManifest.xml:21:19-78
+170
+171        <provider
+171-->[com.google.firebase:firebase-common:22.0.1] C:\Users\joeld\.gradle\caches\8.14.3\transforms\cb546919c09df4bb1e2d2127157bcaa2\transformed\firebase-common-22.0.1\AndroidManifest.xml:23:9-28:39
+172            android:name="com.google.firebase.provider.FirebaseInitProvider"
+172-->[com.google.firebase:firebase-common:22.0.1] C:\Users\joeld\.gradle\caches\8.14.3\transforms\cb546919c09df4bb1e2d2127157bcaa2\transformed\firebase-common-22.0.1\AndroidManifest.xml:24:13-77
+173            android:authorities="com.lamuka.app.firebaseinitprovider"
+173-->[com.google.firebase:firebase-common:22.0.1] C:\Users\joeld\.gradle\caches\8.14.3\transforms\cb546919c09df4bb1e2d2127157bcaa2\transformed\firebase-common-22.0.1\AndroidManifest.xml:25:13-72
+174            android:directBootAware="true"
+174-->[com.google.firebase:firebase-common:22.0.1] C:\Users\joeld\.gradle\caches\8.14.3\transforms\cb546919c09df4bb1e2d2127157bcaa2\transformed\firebase-common-22.0.1\AndroidManifest.xml:26:13-43
+175            android:exported="false"
+175-->[com.google.firebase:firebase-common:22.0.1] C:\Users\joeld\.gradle\caches\8.14.3\transforms\cb546919c09df4bb1e2d2127157bcaa2\transformed\firebase-common-22.0.1\AndroidManifest.xml:27:13-37
+176            android:initOrder="100" />
+176-->[com.google.firebase:firebase-common:22.0.1] C:\Users\joeld\.gradle\caches\8.14.3\transforms\cb546919c09df4bb1e2d2127157bcaa2\transformed\firebase-common-22.0.1\AndroidManifest.xml:28:13-36
+177        <provider
+177-->[androidx.emoji2:emoji2:1.3.0] C:\Users\joeld\.gradle\caches\8.14.3\transforms\353d69426d62513a7e19e841051a3a44\transformed\emoji2-1.3.0\AndroidManifest.xml:24:9-32:20
+178            android:name="androidx.startup.InitializationProvider"
+178-->[androidx.emoji2:emoji2:1.3.0] C:\Users\joeld\.gradle\caches\8.14.3\transforms\353d69426d62513a7e19e841051a3a44\transformed\emoji2-1.3.0\AndroidManifest.xml:25:13-67
+179            android:authorities="com.lamuka.app.androidx-startup"
+179-->[androidx.emoji2:emoji2:1.3.0] C:\Users\joeld\.gradle\caches\8.14.3\transforms\353d69426d62513a7e19e841051a3a44\transformed\emoji2-1.3.0\AndroidManifest.xml:26:13-68
+180            android:exported="false" >
+180-->[androidx.emoji2:emoji2:1.3.0] C:\Users\joeld\.gradle\caches\8.14.3\transforms\353d69426d62513a7e19e841051a3a44\transformed\emoji2-1.3.0\AndroidManifest.xml:27:13-37
+181            <meta-data
+181-->[androidx.emoji2:emoji2:1.3.0] C:\Users\joeld\.gradle\caches\8.14.3\transforms\353d69426d62513a7e19e841051a3a44\transformed\emoji2-1.3.0\AndroidManifest.xml:29:13-31:52
+182                android:name="androidx.emoji2.text.EmojiCompatInitializer"
+182-->[androidx.emoji2:emoji2:1.3.0] C:\Users\joeld\.gradle\caches\8.14.3\transforms\353d69426d62513a7e19e841051a3a44\transformed\emoji2-1.3.0\AndroidManifest.xml:30:17-75
+183                android:value="androidx.startup" />
+183-->[androidx.emoji2:emoji2:1.3.0] C:\Users\joeld\.gradle\caches\8.14.3\transforms\353d69426d62513a7e19e841051a3a44\transformed\emoji2-1.3.0\AndroidManifest.xml:31:17-49
+184            <meta-data
+184-->[androidx.lifecycle:lifecycle-process:2.6.2] C:\Users\joeld\.gradle\caches\8.14.3\transforms\14a3b51da1167f75215e7e32d2231e74\transformed\lifecycle-process-2.6.2\AndroidManifest.xml:29:13-31:52
+185                android:name="androidx.lifecycle.ProcessLifecycleInitializer"
+185-->[androidx.lifecycle:lifecycle-process:2.6.2] C:\Users\joeld\.gradle\caches\8.14.3\transforms\14a3b51da1167f75215e7e32d2231e74\transformed\lifecycle-process-2.6.2\AndroidManifest.xml:30:17-78
+186                android:value="androidx.startup" />
+186-->[androidx.lifecycle:lifecycle-process:2.6.2] C:\Users\joeld\.gradle\caches\8.14.3\transforms\14a3b51da1167f75215e7e32d2231e74\transformed\lifecycle-process-2.6.2\AndroidManifest.xml:31:17-49
+187            <meta-data
+187-->[androidx.profileinstaller:profileinstaller:1.4.0] C:\Users\joeld\.gradle\caches\8.14.3\transforms\f95ab50c54d3211c648684c462933e30\transformed\profileinstaller-1.4.0\AndroidManifest.xml:29:13-31:52
+188                android:name="androidx.profileinstaller.ProfileInstallerInitializer"
+188-->[androidx.profileinstaller:profileinstaller:1.4.0] C:\Users\joeld\.gradle\caches\8.14.3\transforms\f95ab50c54d3211c648684c462933e30\transformed\profileinstaller-1.4.0\AndroidManifest.xml:30:17-85
+189                android:value="androidx.startup" />
+189-->[androidx.profileinstaller:profileinstaller:1.4.0] C:\Users\joeld\.gradle\caches\8.14.3\transforms\f95ab50c54d3211c648684c462933e30\transformed\profileinstaller-1.4.0\AndroidManifest.xml:31:17-49
+190        </provider>
+191
+192        <meta-data
+192-->[com.google.android.gms:play-services-basement:18.3.0] C:\Users\joeld\.gradle\caches\8.14.3\transforms\114baedee36b8bdac268f5386a7e6897\transformed\play-services-basement-18.3.0\AndroidManifest.xml:21:9-23:69
+193            android:name="com.google.android.gms.version"
+193-->[com.google.android.gms:play-services-basement:18.3.0] C:\Users\joeld\.gradle\caches\8.14.3\transforms\114baedee36b8bdac268f5386a7e6897\transformed\play-services-basement-18.3.0\AndroidManifest.xml:22:13-58
+194            android:value="@integer/google_play_services_version" />
+194-->[com.google.android.gms:play-services-basement:18.3.0] C:\Users\joeld\.gradle\caches\8.14.3\transforms\114baedee36b8bdac268f5386a7e6897\transformed\play-services-basement-18.3.0\AndroidManifest.xml:23:13-66
+195
+196        <receiver
+196-->[androidx.profileinstaller:profileinstaller:1.4.0] C:\Users\joeld\.gradle\caches\8.14.3\transforms\f95ab50c54d3211c648684c462933e30\transformed\profileinstaller-1.4.0\AndroidManifest.xml:34:9-52:20
+197            android:name="androidx.profileinstaller.ProfileInstallReceiver"
+197-->[androidx.profileinstaller:profileinstaller:1.4.0] C:\Users\joeld\.gradle\caches\8.14.3\transforms\f95ab50c54d3211c648684c462933e30\transformed\profileinstaller-1.4.0\AndroidManifest.xml:35:13-76
+198            android:directBootAware="false"
+198-->[androidx.profileinstaller:profileinstaller:1.4.0] C:\Users\joeld\.gradle\caches\8.14.3\transforms\f95ab50c54d3211c648684c462933e30\transformed\profileinstaller-1.4.0\AndroidManifest.xml:36:13-44
+199            android:enabled="true"
+199-->[androidx.profileinstaller:profileinstaller:1.4.0] C:\Users\joeld\.gradle\caches\8.14.3\transforms\f95ab50c54d3211c648684c462933e30\transformed\profileinstaller-1.4.0\AndroidManifest.xml:37:13-35
+200            android:exported="true"
+200-->[androidx.profileinstaller:profileinstaller:1.4.0] C:\Users\joeld\.gradle\caches\8.14.3\transforms\f95ab50c54d3211c648684c462933e30\transformed\profileinstaller-1.4.0\AndroidManifest.xml:38:13-36
+201            android:permission="android.permission.DUMP" >
+201-->[androidx.profileinstaller:profileinstaller:1.4.0] C:\Users\joeld\.gradle\caches\8.14.3\transforms\f95ab50c54d3211c648684c462933e30\transformed\profileinstaller-1.4.0\AndroidManifest.xml:39:13-57
+202            <intent-filter>
+202-->[androidx.profileinstaller:profileinstaller:1.4.0] C:\Users\joeld\.gradle\caches\8.14.3\transforms\f95ab50c54d3211c648684c462933e30\transformed\profileinstaller-1.4.0\AndroidManifest.xml:40:13-42:29
+203                <action android:name="androidx.profileinstaller.action.INSTALL_PROFILE" />
+203-->[androidx.profileinstaller:profileinstaller:1.4.0] C:\Users\joeld\.gradle\caches\8.14.3\transforms\f95ab50c54d3211c648684c462933e30\transformed\profileinstaller-1.4.0\AndroidManifest.xml:41:17-91
+203-->[androidx.profileinstaller:profileinstaller:1.4.0] C:\Users\joeld\.gradle\caches\8.14.3\transforms\f95ab50c54d3211c648684c462933e30\transformed\profileinstaller-1.4.0\AndroidManifest.xml:41:25-88
+204            </intent-filter>
+205            <intent-filter>
+205-->[androidx.profileinstaller:profileinstaller:1.4.0] C:\Users\joeld\.gradle\caches\8.14.3\transforms\f95ab50c54d3211c648684c462933e30\transformed\profileinstaller-1.4.0\AndroidManifest.xml:43:13-45:29
+206                <action android:name="androidx.profileinstaller.action.SKIP_FILE" />
+206-->[androidx.profileinstaller:profileinstaller:1.4.0] C:\Users\joeld\.gradle\caches\8.14.3\transforms\f95ab50c54d3211c648684c462933e30\transformed\profileinstaller-1.4.0\AndroidManifest.xml:44:17-85
+206-->[androidx.profileinstaller:profileinstaller:1.4.0] C:\Users\joeld\.gradle\caches\8.14.3\transforms\f95ab50c54d3211c648684c462933e30\transformed\profileinstaller-1.4.0\AndroidManifest.xml:44:25-82
+207            </intent-filter>
+208            <intent-filter>
+208-->[androidx.profileinstaller:profileinstaller:1.4.0] C:\Users\joeld\.gradle\caches\8.14.3\transforms\f95ab50c54d3211c648684c462933e30\transformed\profileinstaller-1.4.0\AndroidManifest.xml:46:13-48:29
+209                <action android:name="androidx.profileinstaller.action.SAVE_PROFILE" />
+209-->[androidx.profileinstaller:profileinstaller:1.4.0] C:\Users\joeld\.gradle\caches\8.14.3\transforms\f95ab50c54d3211c648684c462933e30\transformed\profileinstaller-1.4.0\AndroidManifest.xml:47:17-88
+209-->[androidx.profileinstaller:profileinstaller:1.4.0] C:\Users\joeld\.gradle\caches\8.14.3\transforms\f95ab50c54d3211c648684c462933e30\transformed\profileinstaller-1.4.0\AndroidManifest.xml:47:25-85
+210            </intent-filter>
+211            <intent-filter>
+211-->[androidx.profileinstaller:profileinstaller:1.4.0] C:\Users\joeld\.gradle\caches\8.14.3\transforms\f95ab50c54d3211c648684c462933e30\transformed\profileinstaller-1.4.0\AndroidManifest.xml:49:13-51:29
+212                <action android:name="androidx.profileinstaller.action.BENCHMARK_OPERATION" />
+212-->[androidx.profileinstaller:profileinstaller:1.4.0] C:\Users\joeld\.gradle\caches\8.14.3\transforms\f95ab50c54d3211c648684c462933e30\transformed\profileinstaller-1.4.0\AndroidManifest.xml:50:17-95
+212-->[androidx.profileinstaller:profileinstaller:1.4.0] C:\Users\joeld\.gradle\caches\8.14.3\transforms\f95ab50c54d3211c648684c462933e30\transformed\profileinstaller-1.4.0\AndroidManifest.xml:50:25-92
+213            </intent-filter>
+214        </receiver>
+215
+216        <service
+216-->[com.google.android.datatransport:transport-backend-cct:3.1.9] C:\Users\joeld\.gradle\caches\8.14.3\transforms\ea620a6b5afc7c5e432bbec109041d91\transformed\transport-backend-cct-3.1.9\AndroidManifest.xml:28:9-34:19
+217            android:name="com.google.android.datatransport.runtime.backends.TransportBackendDiscovery"
+217-->[com.google.android.datatransport:transport-backend-cct:3.1.9] C:\Users\joeld\.gradle\caches\8.14.3\transforms\ea620a6b5afc7c5e432bbec109041d91\transformed\transport-backend-cct-3.1.9\AndroidManifest.xml:29:13-103
+218            android:exported="false" >
+218-->[com.google.android.datatransport:transport-backend-cct:3.1.9] C:\Users\joeld\.gradle\caches\8.14.3\transforms\ea620a6b5afc7c5e432bbec109041d91\transformed\transport-backend-cct-3.1.9\AndroidManifest.xml:30:13-37
+219            <meta-data
+219-->[com.google.android.datatransport:transport-backend-cct:3.1.9] C:\Users\joeld\.gradle\caches\8.14.3\transforms\ea620a6b5afc7c5e432bbec109041d91\transformed\transport-backend-cct-3.1.9\AndroidManifest.xml:31:13-33:39
+220                android:name="backend:com.google.android.datatransport.cct.CctBackendFactory"
+220-->[com.google.android.datatransport:transport-backend-cct:3.1.9] C:\Users\joeld\.gradle\caches\8.14.3\transforms\ea620a6b5afc7c5e432bbec109041d91\transformed\transport-backend-cct-3.1.9\AndroidManifest.xml:32:17-94
+221                android:value="cct" />
+221-->[com.google.android.datatransport:transport-backend-cct:3.1.9] C:\Users\joeld\.gradle\caches\8.14.3\transforms\ea620a6b5afc7c5e432bbec109041d91\transformed\transport-backend-cct-3.1.9\AndroidManifest.xml:33:17-36
+222        </service>
+223        <service
+223-->[com.google.android.datatransport:transport-runtime:3.1.9] C:\Users\joeld\.gradle\caches\8.14.3\transforms\1491c73c5d15eb22051217da9a2fb39c\transformed\transport-runtime-3.1.9\AndroidManifest.xml:26:9-30:19
+224            android:name="com.google.android.datatransport.runtime.scheduling.jobscheduling.JobInfoSchedulerService"
+224-->[com.google.android.datatransport:transport-runtime:3.1.9] C:\Users\joeld\.gradle\caches\8.14.3\transforms\1491c73c5d15eb22051217da9a2fb39c\transformed\transport-runtime-3.1.9\AndroidManifest.xml:27:13-117
+225            android:exported="false"
+225-->[com.google.android.datatransport:transport-runtime:3.1.9] C:\Users\joeld\.gradle\caches\8.14.3\transforms\1491c73c5d15eb22051217da9a2fb39c\transformed\transport-runtime-3.1.9\AndroidManifest.xml:28:13-37
+226            android:permission="android.permission.BIND_JOB_SERVICE" >
+226-->[com.google.android.datatransport:transport-runtime:3.1.9] C:\Users\joeld\.gradle\caches\8.14.3\transforms\1491c73c5d15eb22051217da9a2fb39c\transformed\transport-runtime-3.1.9\AndroidManifest.xml:29:13-69
+227        </service>
+228
+229        <receiver
+229-->[com.google.android.datatransport:transport-runtime:3.1.9] C:\Users\joeld\.gradle\caches\8.14.3\transforms\1491c73c5d15eb22051217da9a2fb39c\transformed\transport-runtime-3.1.9\AndroidManifest.xml:32:9-34:40
+230            android:name="com.google.android.datatransport.runtime.scheduling.jobscheduling.AlarmManagerSchedulerBroadcastReceiver"
+230-->[com.google.android.datatransport:transport-runtime:3.1.9] C:\Users\joeld\.gradle\caches\8.14.3\transforms\1491c73c5d15eb22051217da9a2fb39c\transformed\transport-runtime-3.1.9\AndroidManifest.xml:33:13-132
+231            android:exported="false" />
+231-->[com.google.android.datatransport:transport-runtime:3.1.9] C:\Users\joeld\.gradle\caches\8.14.3\transforms\1491c73c5d15eb22051217da9a2fb39c\transformed\transport-runtime-3.1.9\AndroidManifest.xml:34:13-37
+232    </application>
+233
+234</manifest>

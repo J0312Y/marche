@@ -8,46 +8,26 @@ import { useApp } from "../../context/AppContext";
 import { shareProduct } from "../../utils/share";
 import toast from "../../utils/toast";
 import SuccessAnimation from "../../components/SuccessAnimation";
-import P from "../../data/products";
+import FEATURES from "../../config/features";
+import { deliveryCity } from "../../utils/zone";
 
 // Generate specs based on product type
+// Caractéristiques réelles uniquement (saisies par le vendeur) — rien n'est inventé
 const getSpecs=(p)=>{
-  if(p.type==="restaurant"||p.type==="patisserie") return [
-    ["⏱️","Temps de préparation",p.eta||"30-45 min"],
-    ["utensils", "Cuisine",p.type==="patisserie"?"Pâtisserie artisanale":"Congolaise traditionnelle"],
-    ["utensils", "Portions","1 personne"],
-    ["fire", "Service","Chaud, prêt à déguster"],
-    ["info", "Allergènes","Peut contenir des traces de gluten, arachides"],
-  ];
-  if(p.type==="pharmacie") return [
-    ["pill", "Forme","Comprimé / Gélule"],
-    ["pill", "Dosage",p.name.match(/\d+mg/)?p.name.match(/\d+mg/)[0]:"Standard"],
-    ["package", "Conditionnement",p.name.match(/x\d+/)?p.name.match(/x\d+/)[0]:"Boîte"],
-    ["shield", "Ordonnance","Non requise"],
-    ["clock", "Péremption","2027"],
-  ];
-  if(p.cat==="Électronique") return [
-    ["tag", "Marque",p.name.includes("Samsung")?"Samsung":p.name.includes("iPhone")?"Apple":"Générique"],
-    ["package", "Stockage","128 GB"],
-    ["lightning", "Batterie","5000 mAh"],
-    ["globe", "Réseau","4G / 5G"],
-    ["package", "Poids","195g"],
-    ["shield", "Garantie","12 mois"],
-  ];
-  if(p.cat==="Mode") return [
-    ["package", "Tailles disponibles","S, M, L, XL"],
-    ["sparkle", "Couleurs","Multicolore / Wax"],
-    ["package", "Matière",p.name.includes("Cuir")?"Cuir véritable":"100% Coton Wax"],
-    ["","Fabrication","Artisanat congolais"],
-    ["","Entretien","Lavage à 30°C"],
-  ];
-  return [
-    ["package", "Conditionnement","Standard"],
-    ["package", "Dimensions","Variable"],
-    ["package", "Poids","Variable"],
-    ["shield", "Garantie","Selon vendeur"],
-  ];
+  const rows=[];
+  if(p.cat) rows.push(["tag","Catégorie",p.cat]);
+  let attrs=p.attributes||p.variants;
+  if(typeof attrs==="string"){try{attrs=JSON.parse(attrs)}catch{attrs=null}}
+  if(Array.isArray(attrs)) attrs.forEach(v=>{
+    const opts=(v.options||v.values||[]).map(o=>o.name||o).filter(Boolean);
+    if(v.label&&opts.length) rows.push(["package",v.label,opts.join(", ")]);
+  });
+  if(p.unit) rows.push(["package","Unité",p.unit]);
+  const stock=parseInt(p.stock);
+  if(!isNaN(stock)&&stock>=0) rows.push(["clock","Stock",stock>0?stock+" disponible"+(stock>1?"s":""):"Rupture"]);
+  return rows;
 };
+
 
 // Track recently viewed products
 const trackRecentlyViewed = (productId) => {
@@ -61,6 +41,7 @@ const trackRecentlyViewed = (productId) => {
 
 function DetailScr({product:rawP,onBack,onAddCart,go,favs,toggleFav,isFav}){
   // Lookup full product from catalog (for sides, photos, etc.)
+  const { P, VENDORS: _VENDORS } = useData();
   const fullProduct = P.find(x=>x.id===rawP?.id);
   const p = fullProduct ? {...fullProduct,...rawP} : rawP;
   const [qty,setQty]=useState(1);
@@ -161,13 +142,10 @@ function DetailScr({product:rawP,onBack,onAddCart,go,favs,toggleFav,isFav}){
   const [groupJoined,setGroupJoined]=useState(false);
   const [showQA,setShowQA]=useState(false);
   const [qaText,setQaText]=useState("");
-  const [qas,setQas]=useState([
-    {q:"Est-ce que ce produit est disponible ?",a:"Oui, en stock et prêt à être expédié !",by:"Vendeur",date:"10 Fév"},
-    {q:"Livraison possible à Pointe-Noire ?",a:"Oui, livraison sous 3-5 jours à Pointe-Noire.",by:"Vendeur",date:"8 Fév"},
-  ]);
+  const [qas,setQas]=useState([]);
   const [activeTab,setActiveTab]=useState("desc");
   const [showSpecs,setShowSpecs]=useState(false);
-  const { VENDORS } = useData();
+  const VENDORS = _VENDORS;
   const specs=getSpecs(p);
   const vendor=VENDORS.find(v=>v.name===p.vendor);
   const vp=getVendorPromo(p,VENDORS);
@@ -242,23 +220,17 @@ function DetailScr({product:rawP,onBack,onAddCart,go,favs,toggleFav,isFav}){
       {/* Content card that overlaps the image with top-only rounded corners */}
       <div style={{background:"var(--card)",borderRadius:"24px 24px 0 0",marginTop:-24,position:"relative",zIndex:7,boxShadow:"0 -2px 12px rgba(0,0,0,0.04)",paddingTop:8}}>
 
-          {/* FOMO badges — urgency + social proof */}
+          {/* Badges basés sur des données réelles uniquement (stock, note) */}
     {(()=>{
-      const seed=(p.id||"").split("").reduce((a,c)=>a+c.charCodeAt(0),0);
-      const viewers=8+(seed%18);
-      const stock=2+(seed%6);
-      const soldToday=3+(seed%12);
-      const hasLowStock=seed%3===0;
-      const hasHotProduct=p.rating>=4.5||(seed%5===0);
+      const stock=parseInt(p.stock);
+      const lowStock=stock>0&&stock<=5;
+      const topRated=p.rating>=4.5&&p.reviews>=5;
+      if(!lowStock&&!topRated&&stock!==0) return null;
       return(
-        <div className="fomo-badges" style={{display:"flex",gap:6,padding:"12px 16px 0",flexWrap:"wrap",overflowX:"auto"}}>
-          <div style={{display:"flex",alignItems:"center",gap:5,padding:"5px 10px",borderRadius:8,background:"rgba(239,68,68,0.08)",fontSize:11,fontWeight:600,color:"#EF4444",whiteSpace:"nowrap"}}>
-            <span style={{width:6,height:6,borderRadius:3,background:"#EF4444",animation:"pulse 1.5s infinite"}}/>
-             {viewers} personnes regardent
-          </div>
-          {hasLowStock&&<div style={{padding:"5px 10px",borderRadius:8,background:"rgba(245,158,11,0.08)",fontSize:11,fontWeight:600,color:"#F59E0B",whiteSpace:"nowrap"}}><Icon name="lightning" size={16}/>{" "}Plus que {stock} en stock !</div>}
-          <div style={{padding:"5px 10px",borderRadius:8,background:"rgba(16,185,129,0.08)",fontSize:11,fontWeight:600,color:"#10B981",whiteSpace:"nowrap"}}> Vendu {soldToday}× aujourd'hui</div>
-          {hasHotProduct&&<div style={{padding:"5px 10px",borderRadius:8,background:"rgba(249,115,22,0.08)",fontSize:11,fontWeight:600,color:"#F97316",whiteSpace:"nowrap"}}><Icon name="crown" size={16}/>{" "}Best-seller</div>}
+        <div className="fomo-badges" style={{display:"flex",gap:6,padding:"12px 16px 0",flexWrap:"wrap"}}>
+          {stock===0&&<div style={{padding:"5px 10px",borderRadius:8,background:"rgba(239,68,68,0.08)",fontSize:11,fontWeight:600,color:"#EF4444",whiteSpace:"nowrap"}}>Rupture de stock</div>}
+          {lowStock&&<div style={{padding:"5px 10px",borderRadius:8,background:"rgba(245,158,11,0.08)",fontSize:11,fontWeight:600,color:"#F59E0B",whiteSpace:"nowrap"}}><Icon name="lightning" size={14}/>{" "}Plus que {stock} en stock</div>}
+          {topRated&&<div style={{padding:"5px 10px",borderRadius:8,background:"rgba(249,115,22,0.08)",fontSize:11,fontWeight:600,color:"#F97316",whiteSpace:"nowrap"}}><Icon name="crown" size={14}/>{" "}Très bien noté</div>}
         </div>
       );
     })()}
@@ -303,14 +275,13 @@ function DetailScr({product:rawP,onBack,onAddCart,go,favs,toggleFav,isFav}){
         <div style={{display:"flex",alignItems:"center",gap:8,padding:"10px 14px",background:"rgba(249,115,22,0.04)",borderRadius:12,marginBottom:10,border:"1px solid rgba(249,115,22,0.12)"}}>
           <span style={{fontSize:18}}><Icon name="truck" size={18}/></span>
           <div style={{flex:1}}>
-            <div style={{fontSize:12,fontWeight:700,color:"#F97316"}}>Livraison estimée : {p.eta||"1-3 jours"}</div>
-            <div style={{fontSize:10,color:"var(--muted)"}}>À Brazzaville · {p.type==="restaurant"||p.type==="patisserie"?"Préparation incluse":"Expédition sous 24h"}</div>
+            <div style={{fontSize:12,fontWeight:700,color:"#F97316"}}>Livraison à {deliveryCity()}{p.eta?" · "+p.eta:""}</div>
+            <div style={{fontSize:10,color:"var(--muted)"}}>Frais calculés selon la distance, confirmés avant de commander</div>
           </div>
         </div>
         {/* Restaurant-specific: min order + delivery fee */}
-        {(()=>{const v=VENDORS?.find(x=>x.name===p.vendor);return v&&(v.minOrder||v.deliveryFee!==undefined)?<div style={{display:"flex",gap:6,marginBottom:10,flexWrap:"wrap"}}>
+        {(()=>{const v=VENDORS?.find(x=>x.name===p.vendor);return v&&(v.minOrder||v.isOpen!==undefined)?<div style={{display:"flex",gap:6,marginBottom:10,flexWrap:"wrap"}}>
           {v.isOpen!==undefined&&<span style={{padding:"4px 10px",borderRadius:8,background:v.isOpen?"rgba(16,185,129,0.06)":"rgba(239,68,68,0.06)",color:v.isOpen?"#10B981":"#EF4444",fontSize:11,fontWeight:600}}>{v.isOpen?"Ouvert":"Fermé"}{v.hours?" · "+v.hours:""}</span>}
-          {v.deliveryFee!==undefined&&<span style={{padding:"4px 10px",borderRadius:8,background:"var(--light)",fontSize:11,fontWeight:600}}><Icon name="truck" size={16}/>{" "}{v.deliveryFee===0?"Gratuit":fmt(v.deliveryFee)}</span>}
           {v.minOrder&&<span style={{padding:"4px 10px",borderRadius:8,background:"var(--light)",fontSize:11,fontWeight:600}}>Min. {fmt(v.minOrder)}</span>}
         </div>:null})()}
 
@@ -337,7 +308,7 @@ function DetailScr({product:rawP,onBack,onAddCart,go,favs,toggleFav,isFav}){
 
           {/* Allergens */}
           {p.allergens&&<div style={{display:"flex",gap:6,marginBottom:8,flexWrap:"wrap"}}>
-            {p.allergens.map(a=><span key={a} style={{padding:"3px 8px",borderRadius:6,background:"rgba(245,158,11,0.08)",color:"#F59E0B",fontSize:10,fontWeight:600}}>️ Contient : {a}</span>)}
+            {p.allergens.map(a=><span key={a} style={{padding:"3px 8px",borderRadius:6,background:"rgba(245,158,11,0.08)",color:"#F59E0B",fontSize:10,fontWeight:600}}>Contient : {a}</span>)}
           </div>}
 
           {p.sides.map((cat,ci)=>{
@@ -401,18 +372,18 @@ function DetailScr({product:rawP,onBack,onAddCart,go,favs,toggleFav,isFav}){
         </div>}
 
         {/* Price alert + Group buy */}
-        <div style={{display:"flex",gap:8,marginBottom:10}}>
+        {FEATURES.priceAlerts&&(<div style={{display:"flex",gap:8,marginBottom:10}}>
           <button onClick={()=>{if(priceAlert){setPriceAlert(false);toast.success("Alerte retirée")}else{setShowAlertPopup(true)}}} style={{flex:1,padding:"8px 0",borderRadius:10,border:priceAlert?"1px solid #F59E0B":"1px solid var(--border)",background:priceAlert?"rgba(245,158,11,0.06)":"var(--card)",fontSize:11,fontWeight:600,cursor:"pointer",fontFamily:"inherit",color:priceAlert?"#F59E0B":"var(--text)",display:"flex",alignItems:"center",justifyContent:"center",gap:4}}>
             {priceAlert?"Alerte active":"Alerte prix"}
           </button>
           <button onClick={()=>setShowGroupPopup(true)} style={{flex:1,padding:"8px 0",borderRadius:10,border:"1px solid var(--border)",background:"var(--card)",fontSize:11,fontWeight:600,cursor:"pointer",fontFamily:"inherit",color:"var(--text)",display:"flex",alignItems:"center",justifyContent:"center",gap:4}}>
              Achat groupé -20%
           </button>
-        </div>
+        </div>)}
 
         {/* Tab bar */}
         <div style={{display:"flex",gap:0,marginBottom:12,background:"var(--light)",borderRadius:12,padding:3}}>
-          {[["desc","Description"],["specs","Specs"],["info","Infos"],["qa","Q&A"]].map(([k,l])=>(
+          {[["desc","Description"],...(specs.length?[["specs","Caractéristiques"]]:[]),["info","Infos"],...(FEATURES.vendorQA?[["qa","Q&A"]]:[])].map(([k,l])=>(
             <button key={k} onClick={()=>setActiveTab(k)} style={{flex:1,padding:"9px 0",borderRadius:10,border:"none",background:activeTab===k?"var(--card)":"transparent",color:activeTab===k?"var(--text)":"var(--muted)",fontSize:11,fontWeight:activeTab===k?700:500,cursor:"pointer",fontFamily:"inherit",boxShadow:activeTab===k?"0 1px 4px rgba(0,0,0,.06)":"none",transition:"all .2s"}}>{l}</button>
           ))}
         </div>
@@ -420,12 +391,6 @@ function DetailScr({product:rawP,onBack,onAddCart,go,favs,toggleFav,isFav}){
         {/* Description tab */}
         {activeTab==="desc"&&<>
           <p style={{fontSize:14,color:"var(--sub)",lineHeight:1.7,marginBottom:12}}>{p.desc}</p>
-          {p.type==="restaurant"&&<p style={{fontSize:13,color:"var(--muted)",lineHeight:1.6,marginBottom:12}}>
-            Plat préparé à la commande avec des ingrédients frais du marché. Servi chaud avec accompagnements traditionnels. Idéal pour un déjeuner ou dîner en famille.
-          </p>}
-          {p.type==="boutique"&&<p style={{fontSize:13,color:"var(--muted)",lineHeight:1.6,marginBottom:12}}>
-            Produit vérifié et garanti authentique par le vendeur. Emballage soigné pour la livraison. Retour possible sous 7 jours si le produit ne correspond pas.
-          </p>}
         </>}
 
         {/* Specs tab */}
@@ -444,34 +409,33 @@ function DetailScr({product:rawP,onBack,onAddCart,go,favs,toggleFav,isFav}){
           <div className="det-info" style={{marginBottom:8}}>
             <span className="dii"><Icon name="truck" size={18}/></span>
             <div className="dit">
-              <h4>Livraison à Brazzaville</h4>
-              <p>1-3 jours · À partir de 1 500 FCFA</p>
-              <p style={{fontSize:11,color:"#F59E0B",marginTop:2}}>Gratuite à partir de 50 000 FCFA</p>
+              <h4>Livraison à {deliveryCity()}</h4>
+              <p>Frais calculés selon la distance, affichés avant de commander</p>
             </div>
           </div>
           <div className="det-info" style={{marginBottom:8}}>
             <span className="dii"><Icon name="phone" size={18}/></span>
             <div className="dit">
-              <h4>Paiement Mobile Money</h4>
-              <p>Airtel Money, MTN MoMo, Kolo Pay</p>
+              <h4>Paiement à la livraison</h4>
+              <p>Réglez en espèces à la réception de votre commande</p>
             </div>
           </div>
           <div className="det-info" style={{marginBottom:8}}>
-            <span className="dii"></span>
+            <span className="dii"><Icon name="repeat" size={18}/></span>
             <div className="dit">
               <h4>Politique de retour</h4>
-              <p>{p.type==="restaurant"||p.type==="patisserie"?"Non remboursable (produit alimentaire)":"Retour gratuit sous 7 jours"}</p>
+              <p>{p.type==="restaurant"||p.type==="patisserie"?"Non remboursable (produit alimentaire)":"Problème avec un article : signalez-le depuis la commande"}</p>
             </div>
           </div>
           <div className="det-info" style={{marginBottom:8}} onClick={()=>go("compare",p)}>
-            <span className="dii">️</span>
+            <span className="dii"><Icon name="chart_pie" size={18}/></span>
             <div className="dit">
               <h4>Comparer ce produit</h4>
               <p>Voir côte à côte avec un autre</p>
             </div>
             <span style={{color:"#F97316",fontSize:14}}>→</span>
           </div>
-          <div className="det-info" onClick={()=>go("chatVendor",{vendorName:p.vendor,vendorAvatar:p.va})}>
+          <div className="det-info" onClick={()=>go("chatVendor",{vendorName:p.vendor,establishment_id:p.establishment_id})}>
             <span className="dii"><Icon name="chat" size={18}/></span>
             <div className="dit">
               <h4>Contacter le vendeur</h4>
@@ -513,7 +477,7 @@ function DetailScr({product:rawP,onBack,onAddCart,go,favs,toggleFav,isFav}){
 
 
         {/* QR Code produit — réellement scannable */}
-        <div style={{margin:"14px 16px",padding:14,background:"var(--card)",border:"1px solid var(--border)",borderRadius:14,display:"flex",alignItems:"center",gap:14}}>
+        {FEATURES.qrScan&&(<div style={{margin:"14px 16px",padding:14,background:"var(--card)",border:"1px solid var(--border)",borderRadius:14,display:"flex",alignItems:"center",gap:14}}>
           {/* Real QR code from qrserver API */}
           <div style={{width:88,height:88,background:"#fff",borderRadius:10,padding:6,flexShrink:0,border:"1px solid var(--border)"}}>
             <img src={`https://api.qrserver.com/v1/create-qr-code/?size=160x160&margin=0&data=${encodeURIComponent("LMK-PROD-"+p.id)}`} alt={"QR code "+p.name} style={{width:"100%",height:"100%",display:"block"}}/>
@@ -527,11 +491,11 @@ function DetailScr({product:rawP,onBack,onAddCart,go,favs,toggleFav,isFav}){
               <button onClick={()=>setShowQRModal(true)} style={{padding:"5px 10px",fontSize:10,fontWeight:700,border:"1px solid #F97316",background:"rgba(249,115,22,0.06)",color:"#F97316",borderRadius:6,cursor:"pointer",fontFamily:"inherit",display:"flex",alignItems:"center",gap:4}}><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="#F97316" strokeWidth="2.4" strokeLinecap="round" strokeLinejoin="round"><polyline points="15 3 21 3 21 9"/><polyline points="9 21 3 21 3 15"/><line x1="21" y1="3" x2="14" y2="10"/><line x1="3" y1="21" x2="10" y2="14"/></svg>Agrandir</button>
             </div>
           </div>
-        </div>
+        </div>)}
 
         {/* "Pourrait vous intéresser" — related products */}
         {(()=>{
-          const related=P.filter(x=>x.id!==p.id&&(x.cat===p.cat||x.vendor===p.vendor||Math.abs(x.price-p.price)<p.price*0.4)).slice(0,8);
+          const related=(P||[]).filter(x=>x.id!==p.id&&(x.cat===p.cat||x.vendor===p.vendor||Math.abs(x.price-p.price)<p.price*0.4)).slice(0,8);
           if(related.length===0)return null;
           return(
             <div style={{padding:"16px 0 8px"}}>
@@ -722,7 +686,7 @@ function DetailScr({product:rawP,onBack,onAddCart,go,favs,toggleFav,isFav}){
           <div style={{fontSize:12,fontWeight:700,fontFamily:"monospace",textAlign:"center",marginTop:8,padding:"8px 12px",background:"#F5F5F7",borderRadius:8,color:"#1A1F2E"}}>LMK-PROD-{p.id}</div>
           <div style={{display:"flex",gap:8,marginTop:14}}>
             <button onClick={()=>{const code="LMK-PROD-"+p.id;navigator.clipboard?.writeText(code).then(()=>toast.success("📋 Code copié"))}} style={{flex:1,padding:"10px 12px",fontSize:12,fontWeight:700,border:"1px solid #EDEDF0",background:"#fff",color:"#1A1F2E",borderRadius:10,cursor:"pointer",fontFamily:"inherit"}}>Copier le code</button>
-            <button onClick={()=>{if(navigator.share){navigator.share({title:p.name,text:"Voici "+p.name+" sur Lamuka : LMK-PROD-"+p.id,url:window.location.href}).catch(()=>{})}else{const code="LMK-PROD-"+p.id;navigator.clipboard?.writeText(code).then(()=>toast.success("Code copié — partage non disponible"))}}} style={{flex:1,padding:"10px 12px",fontSize:12,fontWeight:700,border:"none",background:"#F97316",color:"#fff",borderRadius:10,cursor:"pointer",fontFamily:"inherit"}}>Partager</button>
+            <button onClick={()=>shareProduct(p)} style={{flex:1,padding:"10px 12px",fontSize:12,fontWeight:700,border:"none",background:"#F97316",color:"#fff",borderRadius:10,cursor:"pointer",fontFamily:"inherit"}}>Partager</button>
           </div>
         </div>
       </div>

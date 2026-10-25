@@ -1,170 +1,102 @@
-import { useState } from "react";
-import { useApp } from "../../context/AppContext";
+import { useEffect, useState } from "react";
 import Icon from "../../components/Icon";
-import GuestBlockedView from "../../components/GuestBlockedView";
-import toast from "../../utils/toast";
-import { LEVELS, STREAK_REWARDS, getLevel, getNextLevel } from "../../data/loyalty";
+import { StoreLogo } from "../../components/t/StoreCard";
+import { buyer as buyerSvc } from "../../services";
 import { fmt } from "../../utils/helpers";
-import CountUp from "../../components/CountUp";
-import SuccessAnimation from "../../components/SuccessAnimation";
+import { useAppInfo, loyaltyRules } from "../../config/appInfo";
 
-function LoyaltyScr({ onBack, go }) {
-  const { isGuest, exitGuestToLogin } = useApp();
-  if (isGuest) return (<GuestBlockedView
-      icon="star_full"
-      title="Gagnez des points fidélité"
-      subtitle="Connectez-vous pour cumuler des points à chaque achat et débloquer des récompenses."
-      benefits={["Points à chaque achat", "Réductions exclusives", "Cadeaux gratuits"]}
-      accent="#F59E0B"
-      onGoHome={()=>onBack&&onBack()}
-    />);
+const fmtDate = (d) => {
+  const t = d ? new Date(String(d).replace(" ", "T")) : null;
+  return t && !isNaN(t) ? t.toLocaleDateString("fr-FR", { day: "numeric", month: "short" }) : "";
+};
 
-  // Read from localStorage or default
-  const [loyalty, setLoyalty] = useState(() => {
-    try {
-      return JSON.parse(localStorage.getItem("lk-loyalty") || "{}");
-    } catch { return {}; }
-  });
-  const points = loyalty.points ?? 2450;
-  const lifetime = loyalty.lifetimePoints ?? 8200;
-  const streak = loyalty.streakDays ?? 4;
-  const lastCheckIn = loyalty.lastCheckIn;
+/**
+ * Mes points : solde (règles réglées dans le panneau : montant pour 1 point, seuil d'utilisation ; 1 point = 1 F),
+ * cartes à tampons des boutiques, points gagnés.
+ */
+export default function LoyaltyScr({ onBack, go }) {
+  const [d, setD] = useState(null);
+  const rules = loyaltyRules(useAppInfo());
+  const MIN_USE = rules.min || 0;
+  useEffect(() => { buyerSvc.getLoyalty().then(setD).catch(() => setD({ points: 0, punch_cards: [], history: [] })); }, []);
 
-  const level = getLevel(lifetime);
-  const next = getNextLevel(lifetime);
-  const isMaxLevel = next.id === level.id;
-  const progress = isMaxLevel ? 100 : Math.round(((lifetime - level.min) / (next.min - level.min)) * 100);
-
-  const [showClaim, setShowClaim] = useState(false);
-  const [claimedAmount, setClaimedAmount] = useState(0);
-
-  const today = new Date().toDateString();
-  const canCheckIn = lastCheckIn !== today;
-
-  const handleCheckIn = () => {
-    const day = (streak % 7);
-    const reward = STREAK_REWARDS[day];
-    const newLoyalty = {
-      points: points + reward,
-      lifetimePoints: lifetime + reward,
-      streakDays: streak + 1,
-      lastCheckIn: today,
-    };
-    setLoyalty(newLoyalty);
-    localStorage.setItem("lk-loyalty", JSON.stringify(newLoyalty));
-    setClaimedAmount(reward);
-    setShowClaim(true);
-  };
-
-  if (showClaim) return <SuccessAnimation
-    title={`+${claimedAmount} points !`}
-    subtitle={`Jour ${streak + 1} du streak `}
-    hint="Continuez demain pour gagner plus"
-    duration={2000}
-    onDone={() => setShowClaim(false)}
-  />;
+  const pts = d?.points || 0;
+  const usable = pts >= MIN_USE;
+  const cards = d?.punch_cards || [];
+  const history = d?.history || [];
 
   return (
-    <div className="scr" style={{ paddingBottom: 80 }}>
-      {/* Header */}
-      <div style={{ padding: "16px", display: "flex", alignItems: "center", gap: 10 }}>
-        <button onClick={()=>onBack&&onBack()} style={{ width: 38, height: 38, borderRadius: 12, background: "var(--card)", border: "1px solid var(--border)", cursor: "pointer", fontSize: 14 }}>←</button>
-        <h2 style={{ fontSize: 18, fontWeight: 800, flex: 1 }}>Lamuka Points</h2>
-      </div>
-
-      {/* Hero card with level + points */}
-      <div style={{ margin: "0 16px 14px", padding: 20, background: `linear-gradient(135deg, ${level.color}22 0%, ${level.color}08 100%)`, border: `2px solid ${level.color}33`, borderRadius: 20, position: "relative", overflow: "hidden" }}>
-        <div style={{ position: "absolute", top: -20, right: -20, fontSize: 100, opacity: .15 }}><Icon name={level.icon} size={20}/></div>
-        <div style={{ position: "relative" }}>
-          <div style={{ fontSize: 10, color: level.color, fontWeight: 800, letterSpacing: 1, marginBottom: 4 }}>NIVEAU {level.name.toUpperCase()}</div>
-          <div style={{ display: "flex", alignItems: "baseline", gap: 6, marginBottom: 4 }}>
-            <span style={{ fontSize: 36, fontWeight: 800, color: level.color }}>
-              <CountUp to={points} duration={1500} />
-            </span>
-            <span style={{ fontSize: 14, fontWeight: 700, color: "var(--sub)" }}>points</span>
+    <div style={{ flex: 1, display: "flex", flexDirection: "column", minHeight: 0, background: "var(--t-bg2)" }}>
+      <div className="t-head" style={{ background: "var(--card)" }}><button className="t-back" onClick={onBack} aria-label="Retour"><Icon name="arrow_left" size={24} /></button><h1>Mes points</h1></div>
+      <div className="t-scr gray">
+        <div className="t-card tk-box" style={{ padding: 20 }}>
+          <div className="t-sub" style={{ fontSize: 14 }}>Solde</div>
+          <div style={{ display: "flex", alignItems: "baseline", gap: 8, margin: "2px 0 6px" }}>
+            <span style={{ fontSize: 34, fontWeight: 700, letterSpacing: -1 }}>{d ? pts.toLocaleString("fr-FR") : "…"}</span>
+            <span style={{ fontSize: 16, color: "var(--t-sub)" }}>points</span>
           </div>
-          <div style={{ fontSize: 12, color: "var(--muted)", marginBottom: 16 }}>≈ {fmt(points)} de réduction</div>
-
-          {/* Progress to next level */}
-          {!isMaxLevel && <div>
-            <div style={{ display: "flex", justifyContent: "space-between", fontSize: 11, marginBottom: 6 }}>
-              <span style={{ color: "var(--muted)" }}>{lifetime} / {next.min} pts vers</span>
-              <span style={{ color: next.color, fontWeight: 700 }}><Icon name={next.icon} size={20}/> {next.name}</span>
-            </div>
-            <div style={{ height: 8, background: "rgba(0,0,0,.06)", borderRadius: 4, overflow: "hidden" }}>
-              <div style={{ width: `${progress}%`, height: "100%", background: `linear-gradient(90deg, ${level.color}, ${next.color})`, borderRadius: 4, transition: "width 1s ease" }} />
-            </div>
-          </div>}
-        </div>
-      </div>
-
-      {/* Daily check-in */}
-      <div style={{ margin: "0 16px 14px", padding: 16, background: "var(--card)", border: "1px solid var(--border)", borderRadius: 16 }}>
-        <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 12 }}>
-          <div>
-            <div style={{ fontSize: 14, fontWeight: 700, display: "flex", alignItems: "center", gap: 6 }}><Icon name="fire" size={16}/>{" "}Connexion quotidienne</div>
-            <div style={{ fontSize: 11, color: "var(--muted)", marginTop: 2 }}>Streak : {streak} jour{streak > 1 ? "s" : ""}</div>
-          </div>
-          {canCheckIn ? (
-            <button onClick={handleCheckIn} style={{ padding: "8px 16px", borderRadius: 10, border: "none", background: "#F97316", color: "#fff", fontSize: 12, fontWeight: 700, cursor: "pointer", fontFamily: "inherit" }}>Récupérer</button>
-          ) : (
-            <span style={{ padding: "8px 12px", borderRadius: 10, background: "rgba(16,185,129,0.08)", color: "#10B981", fontSize: 11, fontWeight: 700 }}> Reçu</span>
-          )}
-        </div>
-        {/* 7-day calendar */}
-        <div style={{ display: "grid", gridTemplateColumns: "repeat(7,1fr)", gap: 4 }}>
-          {STREAK_REWARDS.map((reward, i) => {
-            const completed = i < (streak % 7);
-            const isToday = i === (streak % 7);
-            return (
-              <div key={i} style={{
-                padding: "8px 4px", borderRadius: 10, textAlign: "center",
-                background: completed ? "rgba(16,185,129,0.08)" : isToday ? "rgba(249,115,22,0.08)" : "var(--light)",
-                border: isToday ? "2px solid #F97316" : "1px solid transparent",
-              }}>
-                <div style={{ fontSize: 8, fontWeight: 700, color: "var(--muted)", marginBottom: 2 }}>J{i + 1}</div>
-                <div style={{ display: "inline-flex", alignItems: "center" }}>{completed ? <Icon name="check_circle" size={16} color="#10B981"/> : reward >= 1000 ? <Icon name="gift" size={16} color="#F97316"/> : <Icon name="star_full" size={16} color="#F59E0B"/>}</div>
-                <div style={{ fontSize: 8, fontWeight: 700, color: completed ? "#10B981" : isToday ? "#F97316" : "var(--muted)", marginTop: 2 }}>+{reward}</div>
+          {d && (usable
+            ? <div style={{ fontSize: 14 }}>Soit <b>{fmt(pts)}</b> de réduction, à utiliser au moment de payer.</div>
+            : <>
+              <div style={{ height: 6, borderRadius: 3, background: "var(--t-bg2)", overflow: "hidden", margin: "10px 0 8px" }}>
+                <div style={{ height: "100%", width: (pts / MIN_USE) * 100 + "%", background: "var(--acc)", borderRadius: 3 }} />
               </div>
-            );
-          })}
+              <div className="t-sub" style={{ fontSize: 14 }}>Encore {MIN_USE - pts} points pour les utiliser.</div>
+            </>)}
         </div>
-      </div>
 
-      {/* Use points CTA */}
-      <div style={{ margin: "0 16px 14px", padding: 16, background: "linear-gradient(135deg,#F97316,#EA580C)", borderRadius: 16, color: "#fff", display: "flex", alignItems: "center", gap: 12 }}>
-        <span style={{ fontSize: 28 }}><Icon name="wallet" size={18}/></span>
-        <div style={{ flex: 1 }}>
-          <div style={{ fontSize: 14, fontWeight: 700 }}>Utiliser mes points</div>
-          <div style={{ fontSize: 11, opacity: .85, marginTop: 2 }}>Réduction au prochain achat</div>
+        <div className="t-card tk-box">
+          <div className="tk-h">Comment ça marche</div>
+          {[
+            ["Commandez", rules.per ? `1 point pour chaque tranche de ${fmt(rules.per)} d'articles, crédité à la livraison.` : "Des points à chaque commande, crédités à la livraison."],
+            ["Cumulez", `Dès ${MIN_USE} points, activez « Utiliser mes points » au paiement.`],
+            ["Économisez", `1 point = ${fmt(rules.value)} de réduction sur votre commande.`],
+          ].map(([t, s], i) => (
+            <div key={t} style={{ display: "flex", gap: 12, padding: "8px 0" }}>
+              <span style={{ width: 26, height: 26, borderRadius: 13, flexShrink: 0, background: "var(--t-bg2)", fontSize: 13, fontWeight: 700, display: "flex", alignItems: "center", justifyContent: "center" }}>{i + 1}</span>
+              <span style={{ fontSize: 14, lineHeight: 1.45 }}><b style={{ fontWeight: 600 }}>{t}</b><span className="t-sub" style={{ display: "block" }}>{s}</span></span>
+            </div>
+          ))}
         </div>
-        <span style={{ fontSize: 20 }}>›</span>
-      </div>
 
-      {/* Levels overview */}
-      <div style={{ margin: "0 16px 14px" }}>
-        <div style={{ fontSize: 13, fontWeight: 700, marginBottom: 8, padding: "0 4px" }}><Icon name="chart_pie" size={16}/>{" "}Tous les niveaux</div>
-        {LEVELS.map(l => {
-          const isCurrent = l.id === level.id;
-          return (
-            <div key={l.id} style={{ padding: 14, background: isCurrent ? `${l.color}08` : "var(--card)", border: `1px solid ${isCurrent ? l.color + "33" : "var(--border)"}`, borderRadius: 14, marginBottom: 6, display: "flex", gap: 12 }}>
-              <div style={{ fontSize: 28 }}><Icon name={l.icon} size={20}/></div>
-              <div style={{ flex: 1 }}>
-                <div style={{ fontSize: 14, fontWeight: 700, color: isCurrent ? l.color : "var(--text)", display: "flex", alignItems: "center", gap: 6 }}>
-                  {l.name}
-                  {isCurrent && <span style={{ fontSize: 9, padding: "2px 6px", borderRadius: 4, background: l.color, color: "#fff", fontWeight: 700 }}>ACTUEL</span>}
+        <div className="t-card tk-box">
+          <div className="tk-h" style={{ marginBottom: 4 }}>Cartes à tampons</div>
+          {cards.length === 0
+            ? <>
+              <div className="t-sub" style={{ fontSize: 14, lineHeight: 1.5 }}>Certaines boutiques offrent une réduction après plusieurs commandes. Vos cartes apparaîtront ici dès votre premier tampon.</div>
+              <button className="t-pill-btn" style={{ marginTop: 12 }} onClick={() => go("search")}>Voir les boutiques</button>
+            </>
+            : cards.map((c) => {
+              const n = Number(c.punches), req = Number(c.punches_required), ready = Number(c.rewards_available) > 0;
+              return (
+                <div key={c.establishment_id} style={{ padding: "12px 0", borderTop: "1px solid var(--t-line)", cursor: "pointer" }} onClick={() => go("vendor", { id: Number(c.establishment_id), name: c.name })} role="button">
+                  <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
+                    <StoreLogo v={{ name: c.name, logo: c.avatar }} size={40} />
+                    <div style={{ flex: 1, minWidth: 0 }}>
+                      <div style={{ fontWeight: 600, fontSize: 15 }}>{c.name}</div>
+                      <div className="t-sub" style={{ fontSize: 13 }}>{ready ? `${fmt(c.reward_amount)} offerts sur votre prochaine commande` : `${n}/${req} · ${fmt(c.reward_amount)} offerts à la carte pleine`}</div>
+                    </div>
+                    <Icon name="chevron_right" size={18} color="var(--t-mut)" />
+                  </div>
+                  <div style={{ display: "flex", gap: 4, marginTop: 10 }}>
+                    {Array.from({ length: req }).map((_, i) => <span key={i} style={{ flex: 1, height: 6, borderRadius: 3, background: ready || i < n ? "var(--acc)" : "var(--t-bg2)" }} />)}
+                  </div>
                 </div>
-                <div style={{ fontSize: 10, color: "var(--muted)", marginTop: 2 }}>À partir de {l.min.toLocaleString()} pts</div>
-                <ul style={{ marginTop: 6, paddingLeft: 18, fontSize: 11, color: "var(--sub)" }}>
-                  {l.perks.map((p, i) => <li key={i} style={{ marginBottom: 2 }}>{p}</li>)}
-                </ul>
-              </div>
+              );
+            })}
+        </div>
+
+        {history.length > 0 && <div className="t-card tk-box">
+          <div className="tk-h" style={{ marginBottom: 4 }}>Points gagnés</div>
+          {history.map((h) => (
+            <div key={h.ref} className="t-row" style={{ padding: "10px 0", borderTop: "1px solid var(--t-line)" }}>
+              <span style={{ minWidth: 0 }}><span style={{ display: "block", fontSize: 15 }}>{h.name}</span><span className="t-sub" style={{ fontSize: 13 }}>{fmtDate(h.delivered_at)} · commande {fmt(h.subtotal)}</span></span>
+              <b style={{ color: "var(--acc-d)" }}>+{h.points}</b>
             </div>
-          );
-        })}
+          ))}
+        </div>}
+        <div style={{ height: 16 }} />
       </div>
     </div>
   );
 }
-
-export default LoyaltyScr;

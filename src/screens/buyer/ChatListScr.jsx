@@ -1,32 +1,23 @@
-import { useLoad } from "../../hooks";
 import { useApp } from "../../context/AppContext";
-import Icon from "../../components/Icon";
 import GuestBlockedView from "../../components/GuestBlockedView";
-import PullToRefresh from "../../components/PullToRefresh";
-import toast from "../../utils/toast";
-import { CHAT_AVATARS } from "../../data/images";
-import { social } from "../../services";
-import { SkeletonList } from "../../components/Loading";
+import ConversationList from "../../components/ConversationList";
+import Icon from "../../components/Icon";
 
 function ChatListScr({go,onBack}){
-  const { isGuest, exitGuestToLogin, setTab } = useApp();
+  const { isGuest, setTab, setScreen } = useApp();
   if (isGuest) return (<GuestBlockedView
       icon="chat"
       title="Discutez avec les vendeurs"
       subtitle="Connectez-vous pour poser vos questions aux vendeurs et suivre vos conversations."
       benefits={["Messages avec vendeurs", "Support livreurs", "Historique sauvegardé"]}
       accent="#10B981"
-      onGoHome={()=>setAppTab(0)}
+      onGoHome={()=>{setScreen(null);setTab(0)}}
     />);
 
-  const { data: CHATS, loading } = useLoad(() => social.getConversations());
-  return(<PullToRefresh onRefresh={async()=>{toast.success("Messages actualisés")}}><div className="scr"><div className="appbar"><button onClick={()=>onBack&&onBack()}>←</button><h2>Messages</h2><div style={{width:38}}/></div>
-    {loading?<SkeletonList count={4}/>:(CHATS||[]).map(c=><div key={c.id} className="chat-list-item" onClick={()=>go("chatDriver")}>
-      <div className="cl-av" style={{overflow:"hidden",padding:0}}><img src={c.avatar||CHAT_AVATARS[c.type||"client"]} style={{width:"100%",height:"100%",objectFit:"cover"}} alt=""/></div>
-      <div className="cl-info"><h4>{c.name}</h4><p>{c.lastMsg}</p></div>
-      <div className="cl-meta"><span>{c.time}</span>{c.unread>0&&<div className="cl-badge">{c.unread}</div>}</div>
-    </div>)}
-  </div></PullToRefresh>);
+  return(<div className="t-scr gray" style={{ minHeight: "100%" }}>
+    <div className="t-head">{onBack && <button className="t-back" onClick={onBack} aria-label="Retour"><Icon name="arrow_left" size={24} /></button>}<h1>Messages</h1></div>
+    <ConversationList onOpen={(c)=>c.type==="client_vendor"?go("chatVendor",{convId:c.convId,name:c.name,avatar:c.photo}):go("chatDriver",{convId:c.convId,name:c.name,avatar:c.photo})} emptyText="Aucune conversation. Contactez une boutique depuis une fiche produit."/>
+  </div>);
 }
 
 export default ChatListScr;

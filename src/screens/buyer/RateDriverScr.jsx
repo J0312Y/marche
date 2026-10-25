@@ -1,70 +1,82 @@
 import { useState } from "react";
 import toast from "../../utils/toast";
-import { DRIVER_PHOTO } from "../../data/images";
 import Icon from "../../components/Icon";
+import driverReviewsAPI from "../../api/driverReviews";
+import { useAction } from "../../hooks/useData";
+import FEATURES from "../../config/features";
+import { appInfo } from "../../config/appInfo";
 
-function RateDriverScr({onBack,onDone,driver={}}){
-  const [rating,setRating]=useState(0);
-  const [tip,setTip]=useState(0);
-  const [comment,setComment]=useState("");
-  const [done,setDone]=useState(false);
-  const driverName=driver?.name||"Patrick Moukala";
+const LABELS = ["", "Mauvaise", "Passable", "Bien", "Très bien", "Excellente"];
 
-  const submit=()=>{
-    if(rating===0)return;
+/**
+ * Note du livreur après une livraison (POST /driver-reviews, une seule fois par livraison).
+ * Le pourboire passe par le portefeuille : proposé seulement quand le Mobile Money est actif.
+ */
+function RateDriverScr({ onBack, onDone, driver = {} }) {
+  const [rating, setRating] = useState(driver?.rating || 0);
+  const [tip, setTip] = useState(0);
+  const [comment, setComment] = useState("");
+  const [done, setDone] = useState(false);
+  const name = driver?.name || "votre livreur";
+  const { run, loading } = useAction();
+
+  const submit = async () => {
+    if (!rating) return;
+    try { await run(() => driverReviewsAPI.create(driver?.deliveryId, rating, comment.trim() || undefined, tip > 0 ? tip : undefined)); }
+    catch (err) { toast.error(err.message || "Impossible d'envoyer la note"); return; }
     setDone(true);
-    toast.success("Merci pour votre évaluation !");
   };
 
-  if(done) return(<div className="scr" style={{padding:16,display:"flex",flexDirection:"column",alignItems:"center",justifyContent:"center",textAlign:"center",height:"100%"}}>
-    <div style={{fontSize:64,marginBottom:14}}><Icon name="sparkle" size={18}/></div>
-    <h2 style={{fontSize:20,fontWeight:700,marginBottom:6}}>Merci !</h2>
-    <p style={{fontSize:14,color:"var(--muted)",marginBottom:8}}>Votre évaluation aide {driverName} et les autres clients.</p>
-    <div style={{fontSize:28,color:"#F59E0B",marginBottom:14}}>{"".repeat(rating)}</div>
-    {tip>0&&<div style={{padding:"8px 16px",borderRadius:10,background:"rgba(249,115,22,0.04)",color:"#10B981",fontSize:13,fontWeight:600,marginBottom:14}}><Icon name="gift" size={16}/>{" "}Pourboire de {tip.toLocaleString()} FCFA envoyé</div>}
-    <div className="bottom-action-bar"><button className="btn-primary" style={{maxWidth:280}} onClick={onDone||onBack}>Retour à l'accueil</button></div>
-  </div>);
-
-  return(<div className="scr" style={{padding:16}}>
-    <div className="appbar" style={{padding:0,marginBottom:14}}><button onClick={onBack}>←</button><h2>Évaluer la livraison</h2><div style={{width:38}}/></div>
-
-    {/* Driver card */}
-    <div style={{textAlign:"center",marginBottom:20}}>
-      <div style={{width:64,height:64,borderRadius:20,background:"linear-gradient(135deg,#10B981,#059669)",display:"flex",alignItems:"center",justifyContent:"center",fontSize:30,margin:"0 auto 10px",overflow:"hidden"}}><img src={DRIVER_PHOTO} style={{width:"100%",height:"100%",objectFit:"cover"}} alt=""/></div>
-      <h3 style={{fontSize:17,fontWeight:700}}>{driverName}</h3>
-      <p style={{fontSize:12,color:"var(--muted)"}}><Icon name="truck" size={16}/>{" "}Honda PCX · BZ-4521</p>
-    </div>
-
-    {/* Rating */}
-    <div style={{textAlign:"center",marginBottom:20}}>
-      <div style={{fontSize:14,fontWeight:600,marginBottom:10}}>Comment était la livraison ?</div>
-      <div style={{display:"flex",justifyContent:"center",gap:8}}>
-        {[1,2,3,4,5].map(s=>(
-          <button key={s} onClick={()=>setRating(s)} style={{width:48,height:48,borderRadius:14,border:rating>=s?"2px solid #F59E0B":"1px solid var(--border)",background:rating>=s?"rgba(245,158,11,0.08)":"var(--card)",cursor:"pointer",fontSize:22,display:"flex",alignItems:"center",justifyContent:"center",transition:"all .15s"}}><></></button>
-        ))}
+  if (done) return (
+    <div className="t-scr gray" style={{ minHeight: "100%", display: "flex", flexDirection: "column" }}>
+      <div style={{ flex: 1, display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", padding: "40px 24px", textAlign: "center" }}>
+        <span style={{ width: 84, height: 84, borderRadius: 42, background: "var(--acc-l)", display: "flex", alignItems: "center", justifyContent: "center" }}><Icon name="check" size={40} color="var(--acc)" /></span>
+        <div style={{ fontSize: 22, fontWeight: 700, marginTop: 18 }}>Merci !</div>
+        <div className="t-sub" style={{ fontSize: 15, marginTop: 6 }}>Votre note aide {name} et les autres clients.</div>
       </div>
-      {rating>0&&<div style={{fontSize:13,color:"#F59E0B",fontWeight:600,marginTop:8}}>{["","Mauvais ","Passable ","Bien ","Très bien ","Excellent "][rating]}</div>}
+      <div className="t-bottom"><button className="t-cta center" onClick={onDone || onBack}><span>Retour à l'accueil</span></button></div>
     </div>
+  );
 
-    {/* Tip */}
-    <div style={{marginBottom:14}}>
-      <div style={{fontSize:13,fontWeight:600,marginBottom:8}}><Icon name="gift" size={16}/>{" "}Laisser un pourboire (optionnel)</div>
-      <div style={{display:"flex",gap:8}}>
-        {[0,200,500,1000].map(t=>(
-          <button key={t} onClick={()=>setTip(t)} style={{flex:1,padding:"10px 0",borderRadius:12,border:tip===t?"2px solid #10B981":"1px solid var(--border)",background:tip===t?"rgba(16,185,129,0.06)":"var(--card)",color:tip===t?"#10B981":"var(--sub)",fontSize:12,fontWeight:700,cursor:"pointer",fontFamily:"inherit"}}>{t===0?"Aucun":`${t} F`}</button>
-        ))}
+  return (
+    <div className="t-scr gray" style={{ minHeight: "100%", display: "flex", flexDirection: "column" }}>
+      <div className="t-head">
+        <button className="t-back" onClick={onBack} aria-label="Retour"><Icon name="arrow_left" size={24} /></button>
+        <h1>Noter la livraison</h1>
+      </div>
+      <div style={{ flex: 1 }}>
+        <div className="t-card tk-box" style={{ textAlign: "center", padding: "24px 16px" }}>
+          <span className="tk-av" style={{ width: 64, height: 64, fontSize: 24, margin: "0 auto" }}>{name.charAt(0).toUpperCase()}</span>
+          <div style={{ fontSize: 18, fontWeight: 700, marginTop: 10 }}>{name}</div>
+          <div className="t-sub" style={{ marginTop: 2 }}>Comment s'est passée la livraison ?</div>
+          <div style={{ display: "flex", justifyContent: "center", gap: 6, marginTop: 16 }}>
+            {[1, 2, 3, 4, 5].map((s) => (
+              <button key={s} onClick={() => setRating(s)} aria-label={`${s} étoile${s > 1 ? "s" : ""}`} aria-pressed={rating >= s}
+                style={{ width: 48, height: 48, border: "none", background: "none", cursor: "pointer", display: "flex", alignItems: "center", justifyContent: "center", padding: 0 }}>
+                <Icon name="star_full" size={38} color={rating >= s ? "#F5A524" : "#D5D7DD"} />
+              </button>
+            ))}
+          </div>
+          <div style={{ height: 22, marginTop: 6, fontWeight: 600, color: "var(--t-text)" }}>{LABELS[rating]}</div>
+        </div>
+
+        {FEATURES.mobileMoney && <div className="t-card tk-box">
+          <div className="tk-h">Pourboire (facultatif)</div>
+          <div style={{ display: "flex", gap: 8 }}>
+            {(appInfo()?.delivery?.tips || []).map((t) => <button key={t} className={"t-chip" + (tip === t ? " on" : "")} style={{ flex: 1, justifyContent: "center" }} onClick={() => setTip(t)}>{t ? `${t} F` : "Aucun"}</button>)}
+          </div>
+        </div>}
+
+        <div className="t-card tk-box">
+          <div className="tk-h">Un commentaire ? <span className="t-mut" style={{ fontWeight: 400 }}>(facultatif)</span></div>
+          <textarea className="t-note" style={{ minHeight: 84 }} maxLength={500} value={comment} onChange={(e) => setComment(e.target.value)} placeholder="Ponctualité, amabilité, état de la commande…" />
+        </div>
+      </div>
+      <div className="t-bottom">
+        <button className="t-cta center" disabled={!rating || loading} onClick={submit}><span>{!rating ? "Choisissez une note" : loading ? "Envoi…" : "Envoyer ma note"}</span></button>
       </div>
     </div>
-
-    {/* Comment */}
-    <div style={{marginBottom:20}}>
-      <div style={{fontSize:13,fontWeight:600,marginBottom:8}}><Icon name="chat" size={16}/>{" "}Commentaire (optionnel)</div>
-      <textarea value={comment} onChange={e=>setComment(e.target.value)} placeholder="Le livreur était ponctuel et sympa..." rows={3} style={{width:"100%",padding:12,borderRadius:12,border:"1px solid var(--border)",background:"var(--light)",fontSize:13,fontFamily:"inherit",outline:"none",resize:"vertical",boxSizing:"border-box"}}/>
-    </div>
-
-    <button onClick={submit} disabled={rating===0} style={{width:"100%",padding:14,borderRadius:14,border:"none",background:rating>0?"#F97316":"var(--border)",color:rating>0?"var(--card)":"var(--muted)",fontSize:15,fontWeight:700,cursor:rating>0?"pointer":"not-allowed",fontFamily:"inherit"}}>
-      {rating===0?"Sélectionnez une note":"Envoyer l'évaluation"}
-    </button>
-  </div>);
+  );
 }
+
 export default RateDriverScr;

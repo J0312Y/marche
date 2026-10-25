@@ -59,11 +59,6 @@ const REASONS = {
     desc: "Votre solde, cartes et historique de paiement nécessitent un compte.",
     icon: "wallet",
   },
-  follow: {
-    title: "Connectez-vous pour suivre",
-    desc: "Suivez vos boutiques préférées et recevez leurs nouveautés.",
-    icon: "user",
-  },
   vendor: {
     title: "Connectez-vous pour vendre",
     desc: "Pour ouvrir une boutique sur Lamuka, créez d'abord votre compte.",

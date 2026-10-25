@@ -1,40 +1,18 @@
-import { useState, useCallback } from "react";
+import { useCallback } from "react";
 import { useApp } from "../context/AppContext";
-import GuestPrompt from "../components/GuestPrompt";
 
 /**
- * useGuestGate — hook to gate actions behind authentication.
- * 
- * Usage:
+ * useGuestGate — exécute une action seulement si l'utilisateur est connecté.
+ * Invité : la feuille de connexion s'ouvre, puis l'action est lancée une fois connecté (comme Toters).
+ *
  *   const { gate, GateUI } = useGuestGate(go);
- *   
- *   <button onClick={() => gate("checkout", () => doCheckout())}>Order</button>
- *   <GateUI/>
+ *   <button onClick={() => gate("checkout", () => doCheckout())}>Commander</button>
+ *   <GateUI/>   (conservé pour compatibilité : n'affiche plus rien)
  */
-export function useGuestGate(go) {
-  const { isGuest, exitGuestToLogin } = useApp();
-  const [prompt, setPrompt] = useState(null);
-
-  // gate("reason", callback) — runs callback if authenticated, else shows prompt
-  const gate = useCallback((reason, callback) => {
-    if (isGuest) {
-      setPrompt({ reason, callback });
-    } else {
-      callback?.();
-    }
-  }, [isGuest]);
-
-  const handleLogin = useCallback(() => {
-    setPrompt(null);
-    exitGuestToLogin();
-  }, [exitGuestToLogin]);
-
-  const close = useCallback(() => setPrompt(null), []);
-
-  const GateUI = useCallback(() => prompt ? (
-    <GuestPrompt reason={prompt.reason} onClose={close} onLogin={handleLogin} />
-  ) : null, [prompt, close, handleLogin]);
-
+export function useGuestGate() {
+  const { isGuest, requireLogin } = useApp();
+  const gate = useCallback((reason, callback) => requireLogin(reason, callback), [requireLogin]);
+  const GateUI = useCallback(() => null, []);
   return { gate, GateUI, isGuest };
 }
 

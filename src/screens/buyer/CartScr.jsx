@@ -1,160 +1,210 @@
-import { useState } from "react";
-import { useGuestGate } from "../../hooks/useGuestGate";
-import toast from "../../utils/toast";
-import { fmt, getVendorPromo } from "../../utils/helpers";
-import Img from "../../components/Img";
-import { useData } from "../../hooks";
+import { useEffect, useState } from "react";
 import Icon from "../../components/Icon";
+import Img from "../../components/Img";
+import { StoreLogo } from "../../components/t/StoreCard";
+import ClosedSheet from "../../components/t/ClosedSheet";
+import Sheet from "../../components/t/Sheet";
+import { storeStatus, whenLabel } from "../../utils/storeStatus";
+import { useApp } from "../../context/AppContext";
+import { useData } from "../../hooks";
+import { establishmentsAPI } from "../../api";
+import { fmt } from "../../utils/helpers";
+import { cartSubtotal, lineQty, lineTotal, optionsLabel, couponDiscount, couponLabel } from "../../utils/cartMath";
 
-// Cart onboarding tutorial - shows only on first cart open
-const showCartTutorial = () => {
-  try { return !localStorage.getItem("lk-cart-tutorial"); } catch { return false; }
+export const NO_CUTLERY_KEY = "lk-no-cutlery";
+
+/**
+ * Panier « Toters » : une boutique, progression vers la carte à tampons, lignes avec quantité,
+ * puis « Commander » (connexion demandée à ce moment-là). Couverts et code promo : écran de paiement.
+ */
+/** Paniers ouverts, un par boutique (articles regroupés par boutique, dans l'ordre d'ajout) */
+export const cartGroups = (cart) => {
+  const m = new Map();
+  cart.forEach((c) => {
+    const id = Number(c.establishment_id) || 0;
+    if (!m.has(id)) m.set(id, { eid: id, name: c.establishment_name, logo: c.establishment_logo || c.establishment_avatar, items: [] });
+    m.get(id).items.push(c);
+  });
+  return [...m.values()];
 };
 
-function CartScr({cart,setCart,go,appliedCoupon,setAppliedCoupon}){
-  const { gate, GateUI } = useGuestGate(go);
-  const [showTuto,setShowTuto]=useState(showCartTutorial());
-  const [swipeX,setSwipeX]=useState({});
-  const [swipeStart,setSwipeStart]=useState(null);
-  const [swipeActive,setSwipeActive]=useState(null);
-  const removeItem=(i)=>{const n=[...cart];n.splice(i,1);setCart(n);try{toast.info("️ Article retiré")}catch{}};
+/** « Vos paniers » (Toters « Your Carts ») : une carte par boutique, ajouter des articles, voir le panier, supprimer */
+function CartsList({ groups, go, onBack }) {
+  const { updateCartQty } = useApp();
   const { VENDORS } = useData();
-  const getItem=(c)=>c.product||c;
-  const getPrice=(c)=>{const p=getItem(c);const vp=getVendorPromo(p,VENDORS);return vp?vp.promoPrice:(p.price||0)};
-  const sub=cart.reduce((s,c)=>s+(getPrice(c)+(c.sidesTotal||0))*(c.qty||1),0);
-  const del=2500;
-
-  // Calculate discount
-  const discountAmount=appliedCoupon?(appliedCoupon.free?0:Math.round(sub*appliedCoupon.discount/100)):0;
-  const freeDelivery=appliedCoupon?.free||false;
-  const finalDelivery=freeDelivery?0:del;
-  const total=sub-discountAmount+finalDelivery;
-
-  const updQty=(i,d)=>{const n=[...cart];n[i].qty=(n[i].qty||1)+d;if(n[i].qty<1)n.splice(i,1);setCart(n)};
-
-  return(<><div className="scr" style={{padding:16}}>
-    <div className="appbar" style={{padding:0,marginBottom:12}}><h2>Panier ({cart.length})</h2></div>
-    {cart.length===0?<div style={{textAlign:"center",padding:"60px 0"}}><div style={{width:72,height:72,borderRadius:20,background:"rgba(249,115,22,0.08)",display:"flex",alignItems:"center",justifyContent:"center",margin:"0 auto"}}><svg width="40" height="40" viewBox="0 0 64 64" fill="none"><path d="M16 16h5l6 26h16l6-20H24" stroke="#F97316" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round" opacity=".4"/><circle cx="28" cy="50" r="3" fill="#F97316" opacity=".4"/><circle cx="42" cy="50" r="3" fill="#F97316" opacity=".4"/></svg></div><h3 style={{marginTop:14,fontSize:18,fontWeight:700}}>Votre panier est vide</h3><p style={{fontSize:13,color:"var(--muted)",marginTop:6}}>Découvrez nos produits</p></div>
-    :cart.map((c,i)=>{const p=getItem(c);const vp=getVendorPromo(p,VENDORS);const price=vp?vp.promoPrice:(p.price||0);
-    return(
-      <div key={i} style={{position:"relative",marginBottom:10,overflow:"hidden",borderRadius:16}}>
-        {/* Red delete background revealed when swiping */}
-        <div style={{position:"absolute",inset:0,background:"#EF4444",display:"flex",alignItems:"center",justifyContent:"flex-end",paddingRight:24,color:"#fff",fontWeight:700,fontSize:13,gap:8,borderRadius:16}}>
-          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#fff" strokeWidth="2.4" strokeLinecap="round" strokeLinejoin="round"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-2 14a2 2 0 0 1-2 2H9a2 2 0 0 1-2-2L5 6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></svg>
-          Supprimer
-        </div>
-        {/* Foreground item — translates left on touch */}
-        <div className="cart-item" style={{margin:0,position:"relative",background:"var(--card)",borderRadius:16,transform:`translateX(${swipeX[i]||0}px)`,transition:swipeActive===i?"none":"transform .25s ease"}}
-          onTouchStart={e=>{setSwipeStart(e.touches[0].clientX);setSwipeActive(i)}}
-          onTouchMove={e=>{if(swipeStart==null)return;const dx=e.touches[0].clientX-swipeStart;if(dx<0)setSwipeX(p=>({...p,[i]:Math.max(dx,-120)}))}}
-          onTouchEnd={()=>{const x=swipeX[i]||0;if(x<-80){removeItem(i);setSwipeX(p=>({...p,[i]:0}))}else{setSwipeX(p=>({...p,[i]:0}))}setSwipeStart(null);setSwipeActive(null)}}
-          onMouseDown={e=>{setSwipeStart(e.clientX);setSwipeActive(i)}}
-          onMouseMove={e=>{if(swipeStart==null||swipeActive!==i)return;const dx=e.clientX-swipeStart;if(dx<0)setSwipeX(p=>({...p,[i]:Math.max(dx,-120)}))}}
-          onMouseUp={()=>{const x=swipeX[i]||0;if(x<-80){removeItem(i);setSwipeX(p=>({...p,[i]:0}))}else{setSwipeX(p=>({...p,[i]:0}))}setSwipeStart(null);setSwipeActive(null)}}
-          onMouseLeave={()=>{if(swipeActive===i){setSwipeX(p=>({...p,[i]:0}));setSwipeStart(null);setSwipeActive(null)}}}>
-        <div className="cart-img"><Img src={p.photo} emoji={p.img} style={{width:"100%",height:"100%",borderRadius:12}} fit="cover"/></div>
-        <div className="cart-info">
-          <h4>{p.name}</h4>
-          {c.sides&&c.sides.length>0&&<div style={{fontSize:10,color:"#F97316",marginTop:1}}>{c.sides.map(s=>s.name+(s.qty>1?"×"+s.qty:"")).join(", ")}</div>}
-          <div className="cv">{p.vendor||""}{vp&&<span style={{marginLeft:6,fontSize:10,color:"#10B981",fontWeight:600}}><Icon name="tag" size={16}/>{" "}-{vp.promoDiscount}%</span>}</div>
-          <div className="cart-bot">
-            <span className="cp">{fmt((price+(c.sidesTotal||0))*(c.qty||1))}{vp&&<span style={{marginLeft:4,fontSize:10,color:"var(--muted)",textDecoration:"line-through"}}>{fmt(p.price*(c.qty||1))}</span>}</span>
-            <div className="qty"><button onClick={()=>updQty(i,-1)}>−</button><span>{c.qty||1}</span><button onClick={()=>updQty(i,1)}>+</button></div>
-          </div>
-        </div>
-        </div>
-      </div>)})}
-
-    <div onClick={()=>go("groupOrder")} style={{padding:12,background:"rgba(249,115,22,0.04)",border:"1px solid rgba(249,115,22,0.12)",borderRadius:14,marginBottom:10,display:"flex",alignItems:"center",gap:10,cursor:"pointer"}}>
-      <span style={{fontSize:20}}><Icon name="handshake" size={18}/></span>
-      <div style={{flex:1}}><div style={{fontSize:13,fontWeight:600}}>Commander en groupe</div><div style={{fontSize:11,color:"var(--muted)"}}>Invitez vos amis à ajouter leurs plats</div></div>
-      <span style={{color:"#F97316",fontSize:12,fontWeight:600}}>→</span>
-    </div>
-
-    {/* Coupon section */}
-    {cart.length>0&&<div style={{marginTop:10}}>
-      {appliedCoupon?(
-        <div style={{padding:14,background:"rgba(249,115,22,0.04)",border:"2px solid #10B981",borderRadius:16,display:"flex",alignItems:"center",justifyContent:"space-between"}}>
-          <div style={{display:"flex",alignItems:"center",gap:10}}>
-            <span style={{fontSize:20}}><Icon name="tag" size={18}/></span>
-            <div>
-              <div style={{fontSize:13,fontWeight:700,color:"#F97316"}}>{appliedCoupon.code}</div>
-              <div style={{fontSize:11,color:"var(--muted)"}}>
-                {appliedCoupon.free?"Livraison gratuite":`-${appliedCoupon.discount}% = -${fmt(discountAmount)}`}
+  const [menu, setMenu] = useState(null); // groupe dont le menu « … » est ouvert
+  const [busy, setBusy] = useState(false);
+  const remove = async (g) => { setBusy(true); for (const c of g.items) await updateCartQty(c.id, 0); setBusy(false); setMenu(null); };
+  return (
+    <div style={{ flex: 1, display: "flex", flexDirection: "column", minHeight: 0, background: "var(--t-bg2)" }}>
+      <div className="t-head"><button className="t-back" onClick={onBack} aria-label="Retour"><Icon name="arrow_left" size={24} /></button><h1 className="tc-h">Vos paniers</h1></div>
+      <div className="t-scr gray">
+        <div className="tc-intro">Un panier par boutique : commandez-les séparément, chacun avec son livreur.</div>
+        {groups.map((g) => {
+          const v = VENDORS.find((x) => Number(x.id) === g.eid) || { id: g.eid, name: g.name, logo: g.logo };
+          return (
+            <div key={g.eid} className="tc-card tc-multi">
+              <div className="tc-store">
+                <StoreLogo v={v} size={47} />
+                <div className="nm">{v.name}<small>{g.items.reduce((s, c) => s + lineQty(c), 0)} article{g.items.reduce((s, c) => s + lineQty(c), 0) > 1 ? "s" : ""}</small></div>
+                <button className="go" onClick={() => setMenu(g)} aria-label="Plus d'options"><Icon name="more_h" size={20} /></button>
+              </div>
+              <div className="tc-thumbs">
+                {g.items.slice(0, 5).map((c) => <span key={c.id} className="th">{(c.image || c.thumbnail_url) ? <Img src={c.image || c.thumbnail_url} alt="" style={{ width: "100%", height: "100%" }} /> : <Icon name="bag" size={20} color="var(--t-mut)" />}{lineQty(c) > 1 && <b>{lineQty(c)}</b>}</span>)}
+                {g.items.length > 5 && <span className="th more">+{g.items.length - 5}</span>}
+              </div>
+              <div className="tc-sum">{fmt(cartSubtotal(g.items))}</div>
+              <div className="tc-acts">
+                <button className="t-cta ghost center" onClick={() => go("vendor", v)}>Ajouter des articles</button>
+                <button className="t-cta center" onClick={() => go("cart", { eid: g.eid })}>Voir le panier</button>
               </div>
             </div>
-          </div>
-          <div style={{display:"flex",gap:6}}>
-            <button onClick={()=>go("coupons")} style={{padding:"6px 10px",borderRadius:8,border:"1px solid var(--border)",background:"var(--card)",fontSize:11,fontWeight:600,cursor:"pointer",fontFamily:"inherit"}}>Changer</button>
-            <button onClick={()=>setAppliedCoupon(null)} style={{padding:"6px 10px",borderRadius:8,border:"1px solid rgba(239,68,68,0.3)",background:"transparent",color:"#EF4444",fontSize:11,fontWeight:600,cursor:"pointer",fontFamily:"inherit"}}></button>
-          </div>
-        </div>
-      ):(
-        <div className="coupon" style={{cursor:"pointer"}} onClick={()=>go("coupons")}>
-          <div className="coupon-left" style={{width:50,fontSize:16}}><Icon name="tag" size={18}/></div>
-          <div className="coupon-right">
-            <h4 style={{fontSize:13}}>Ajouter un code promo</h4>
-            <p>Coupons disponibles</p>
-          </div>
-          <span style={{color:"#F97316",fontWeight:700,fontSize:18}}>›</span>
-        </div>
-      )}
-    </div>}
-  </div>
-
-  {cart.length>0&&<div className="cart-summary">
-    <div className="cs-row"><span>Sous-total</span><b>{fmt(sub)}</b></div>
-
-    {/* Discount line */}
-    {discountAmount>0&&<div className="cs-row" style={{color:"#10B981"}}>
-      <span><Icon name="tag" size={16}/>{" "}Réduction ({appliedCoupon.code})</span>
-      <b>-{fmt(discountAmount)}</b>
-    </div>}
-
-    <div className="cs-row">
-      <span>Livraison</span>
-      <b style={freeDelivery?{textDecoration:"line-through",color:"var(--muted)"}:{}}>
-        {fmt(del)}
-      </b>
-      {freeDelivery&&<span style={{color:"#F59E0B",fontWeight:700,fontSize:12,marginLeft:6}}>GRATUIT</span>}
-    </div>
-
-    <div className="cs-row tot"><span>Total</span><span className="ctp">{fmt(total)}</span></div>
-
-    {(discountAmount>0||freeDelivery)&&<div style={{textAlign:"center",fontSize:11,color:"#10B981",fontWeight:600,marginTop:4}}>
-       Vous économisez {fmt(discountAmount+(freeDelivery?del:0))} !
-    </div>}
-
-    <div className="bottom-action-bar"><button className="btn-primary" onClick={()=>gate("checkout", ()=>go("checkout"))}>Passer la commande</button></div>
-  </div>}
-
-  {showTuto&&<div onClick={()=>{setShowTuto(false);try{localStorage.setItem("lk-cart-tutorial","1")}catch{}}} style={{position:"fixed",inset:0,background:"rgba(0,0,0,.7)",zIndex:9999,display:"flex",alignItems:"flex-end"}}>
-    <div onClick={e=>e.stopPropagation()} style={{width:"100%",maxWidth:500,margin:"0 auto",background:"var(--card)",borderRadius:"24px 24px 0 0",padding:24}}>
-      <div style={{width:36,height:4,borderRadius:2,background:"var(--border)",margin:"0 auto 16px"}}/>
-      <div style={{textAlign:"center",marginBottom:18}}>
-        <div style={{fontSize:48,marginBottom:8}}><Icon name="cart" size={18}/></div>
-        <h3 style={{fontSize:18,fontWeight:800,marginBottom:4}}>Bienvenue dans votre panier !</h3>
-        <p style={{fontSize:12,color:"var(--muted)"}}>Quelques astuces rapides</p>
+          );
+        })}
+        <div style={{ height: 24 }} />
       </div>
-      {[
-        {icon:"",t:"Glisser pour supprimer",d:"Glissez un article vers la gauche pour le retirer du panier"},
-        {icon:"",t:"Sauvegarder pour plus tard",d:"Le cœur met de côté sans supprimer du panier"},
-        {icon:"handshake",t:"Commander en groupe",d:"Partagez avec vos amis et payez chacun votre part"},
-        {icon:"creditCard",t:"Paiement sécurisé",d:"Airtel Money, MTN MoMo ou cash à la livraison"},
-      ].map((it,i)=>(
-        <div key={i} style={{display:"flex",gap:12,padding:"10px 0",borderBottom:i<3?"1px solid var(--border)":"none"}}>
-          <div style={{fontSize:24}}><Icon name={it.icon} size={20}/></div>
-          <div>
-            <div style={{fontSize:13,fontWeight:700}}>{it.t}</div>
-            <div style={{fontSize:11,color:"var(--muted)",marginTop:2}}>{it.d}</div>
-          </div>
+      {menu && <Sheet onClose={() => !busy && setMenu(null)}>
+        <div style={{ padding: "6px 20px 22px" }}>
+          <div style={{ fontSize: 20, fontWeight: 700, marginBottom: 6 }}>{menu.name}</div>
+          <button className="t-li" onClick={() => { setMenu(null); go("vendor", { id: menu.eid, name: menu.name }); }}><span className="ic"><Icon name="plus" size={20} color="var(--acc)" /></span><span>Ajouter des articles</span></button>
+          <button className="t-li" disabled={busy} onClick={() => remove(menu)} style={{ color: "#DC2626" }}><span className="ic" style={{ background: "#FEE2E2" }}><Icon name="trash" size={20} color="#DC2626" /></span><span>{busy ? "Suppression…" : "Supprimer ce panier"}</span></button>
         </div>
-      ))}
-      <button onClick={()=>{setShowTuto(false);try{localStorage.setItem("lk-cart-tutorial","1")}catch{}}} style={{width:"100%",marginTop:18,padding:14,borderRadius:14,border:"none",background:"#F97316",color:"#fff",fontSize:14,fontWeight:700,cursor:"pointer",fontFamily:"inherit"}}>J'ai compris <Icon name="sparkle" size={16}/></button>
+      </Sheet>}
     </div>
-  </div>}
-  <GateUI/>
-  </>);
+  );
 }
 
-export default CartScr;
+export default function CartScr({ go, onBack, appliedCoupon, setAppliedCoupon, eid: eidProp }) {
+  const { cart: allCart, updateCartQty, requireLogin } = useApp();
+  const { VENDORS } = useData();
+  const [card, setCard] = useState(null);
+  const [st, setSt] = useState(null); // ouverture de la boutique
+  const [closedSheet, setClosedSheet] = useState(false);
+  const [busyId, setBusyId] = useState(null);
+  const [storeType, setStoreType] = useState(null);
+
+  // Plusieurs boutiques et aucune choisie → « Vos paniers » ; sinon le panier de la boutique
+  const groups = cartGroups(allCart);
+  const cur = groups.find((g) => g.eid === Number(eidProp)) || (groups.length === 1 ? groups[0] : null);
+  const cart = cur ? cur.items : [];
+  const eid = cur?.eid || null;
+  const vendor = VENDORS.find((v) => Number(v.id) === eid) || { id: eid, name: cart[0]?.establishment_name, logo: cart[0]?.establishment_logo };
+  const subtotal = cartSubtotal(cart);
+  const discount = couponDiscount(appliedCoupon, subtotal);
+
+  useEffect(() => {
+    if (!eid) return;
+    establishmentsAPI.getDetail(eid).then((r) => {
+      const e = r?.establishment;
+      setCard(e?.punch_card || null);
+      setStoreType(e?.type || null);
+      // Achat repris alors que la boutique est fermée : on prévient tout de suite (comme Toters)
+      const s2 = storeStatus(e ? { isOpenNow: e.is_open_now, opensAt: e.opens_at } : null);
+      setSt(s2);
+    }).catch(() => {});
+  }, [eid]);
+
+  const setQty = async (c, q) => { setBusyId(c.id); await updateCartQty(c.id, q); setBusyId(null); };
+  // « Pas de couverts » (restauration) : dans le panier comme Toters, envoyé avec la commande
+  const [noCutlery, setNoCutlery] = useState(() => { try { return sessionStorage.getItem(NO_CUTLERY_KEY) === "1"; } catch { return false; } });
+  useEffect(() => { try { sessionStorage.setItem(NO_CUTLERY_KEY, noCutlery ? "1" : "0"); } catch { /* stockage indisponible */ } }, [noCutlery]);
+  const isFood = ["restaurant", "patisserie"].includes(vendor?.type || storeType);
+
+  if (!cur && groups.length > 1) return <CartsList groups={groups} go={go} onBack={onBack} />;
+  if (!cart.length) return (
+    <div style={{ flex: 1, display: "flex", flexDirection: "column", background: "var(--card)" }}>
+      <div className="t-head"><button className="t-back" onClick={onBack} aria-label="Retour"><Icon name="arrow_left" size={24} /></button><h1>Mon panier</h1></div>
+      <div className="t-empty" style={{ flex: 1 }}>
+        <div className="ic"><Icon name="bag" size={38} /></div>
+        <b>Votre panier est vide</b>
+        <p>Parcourez les boutiques et ajoutez vos articles préférés.</p>
+        <button className="t-cta center" style={{ flex: "0 0 auto", width: 220, marginTop: 10 }} onClick={onBack}>Découvrir</button>
+      </div>
+    </div>
+  );
+
+  // Progression vers le tampon : de 0 au minimum de la carte
+  const goal = card?.min_spend || 0;
+  const pct = goal ? Math.min(100, (subtotal / goal) * 100) : 0;
+  const reward = card?.rewards_available > 0;
+
+  return (
+    <div style={{ flex: 1, display: "flex", flexDirection: "column", minHeight: 0, background: "var(--t-bg2)" }}>
+      <div className="t-head"><button className="t-back" onClick={onBack} aria-label="Retour"><Icon name="arrow_left" size={24} /></button><h1 className="tc-h">Mon panier</h1></div>
+      <div className="t-scr gray">
+        <div className={"tc-card" + (st && !st.open ? " closed" : "")}>
+          {st && !st.open && <div className="tc-band"><Icon name="moon_closed" size={17} color="#111" /><b>Fermé</b>{st.preorder && <> · Précommande pour {whenLabel(st.opens)}</>}</div>}
+          <div className="tc-store" onClick={() => go("vendor", vendor)} role="button">
+            <StoreLogo v={vendor} size={47} />
+            <div className="nm">{vendor.name}</div>
+            <span className="go"><Icon name="arrow_right" size={20} strokeWidth={2.4} /></span>
+          </div>
+
+
+          {card && <div className="tc-goal">
+            <div className="gmsg">
+              <Icon name="award" size={26} color="var(--acc)" />
+              <span>{reward ? <>Récompense de {fmt(card.reward_amount).replace("FCFA", "F")} appliquée</>
+                : subtotal >= goal ? <>Cette commande vous rapporte un tampon</>
+                : <>Dépensez {fmt(goal).replace("FCFA", "F")}, gagnez un tampon</>}</span>
+            </div>
+            <div className="bar">
+              <i className="dot on" />
+              <span className="trk"><span style={{ width: pct + "%" }} /></span>
+              <i className={"dot" + (subtotal >= goal ? " on" : "")} />
+            </div>
+            <div className="lbl"><span>0 F</span><span>{fmt(goal).replace("FCFA", "F")}</span></div>
+            <div className="cap">Un tampon sur votre carte fidélité</div>
+          </div>}
+
+          {cart.map((c) => {
+            const q = lineQty(c);
+            const opts = optionsLabel(c.options);
+            return (
+              <div key={c.id} className="tc-line" style={{ opacity: busyId === c.id ? 0.6 : 1 }}>
+                <div className="ph">{(c.image || c.thumbnail_url) ? <Img src={c.image || c.thumbnail_url} alt="" style={{ width: "100%", height: "100%" }} /> : <Icon name="bag" size={26} color="var(--t-mut)" />}</div>
+                <div className="info">
+                  <div className="nm">{c.name}</div>
+                  {c.size_label && <div className="sub">{c.size_label}</div>}
+                  {opts && <div className="sub">{opts}</div>}
+                  {c.note && <div className="sub" style={{ fontStyle: "italic" }}>« {c.note} »</div>}
+                  <div className="pr">{fmt(lineTotal(c))}</div>
+                  {c.options_error && <div style={{ fontSize: 13, color: "#E11D48", marginTop: 4 }}>{c.options_error} — retirez et ajoutez à nouveau l'article</div>}
+                </div>
+                <div className="tc-qty">
+                  <button onClick={() => setQty(c, q - 1)} disabled={busyId === c.id} aria-label={q === 1 ? "Retirer" : "Moins"}>
+                    <Icon name={q === 1 ? "trash" : "minus"} size={19} strokeWidth={2.2} />
+                  </button>
+                  <b>{q}</b>
+                  <button onClick={() => setQty(c, q + 1)} disabled={busyId === c.id || q >= 99} aria-label="Plus"><Icon name="plus" size={20} strokeWidth={2.4} /></button>
+                </div>
+              </div>
+            );
+          })}
+          <div className="tc-total">
+            <div className="row"><span>Sous-total</span><span>{fmt(subtotal)}</span></div>
+            {discount > 0 && <div className="row disc"><span>Code {appliedCoupon.code} ({couponLabel(appliedCoupon)})</span><span>-{fmt(discount)}</span></div>}
+          </div>
+        </div>
+        {isFood && <div className="tc-card" style={{ display: "flex", alignItems: "center", gap: 12, padding: "16px 14px", cursor: "pointer" }} onClick={() => setNoCutlery((x) => !x)} role="switch" aria-checked={noCutlery} aria-label="Pas de couverts">
+          <Icon name="utensils" size={22} color="var(--t-text)" />
+          <span style={{ flex: 1, fontSize: 16, fontWeight: 600 }}>Pas de couverts, merci</span>
+          <span className={"t-toggle" + (noCutlery ? " on" : "")} aria-hidden="true" />
+        </div>}
+        <div style={{ height: 24 }} />
+      </div>
+
+      {closedSheet && st && <ClosedSheet st={st} stayLabel="Programmer ma commande" onClose={() => setClosedSheet(false)}
+        onStay={() => { setClosedSheet(false); requireLogin("checkout", () => go("checkout", { eid })); }}
+        onLeave={() => { setClosedSheet(false); onBack?.(); }} />}
+
+      <div className="t-bottom sheet">
+        <span className="grab" />
+        <button className="t-cta ghost tc-add" onClick={() => go("vendor", vendor)}>Ajouter</button>
+        <button className="t-cta tc-go" onClick={() => requireLogin("checkout", () => go("checkout", { eid }))}>
+          <span>Commander</span><span className="p">{fmt(Math.max(0, subtotal - discount)).replace("FCFA", "F")}</span>
+        </button>
+      </div>
+    </div>
+  );
+}

@@ -1,5 +1,6 @@
-const CSS=`
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+import T_CSS from "./toters";
+const BASE_CSS=`
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Noto+Sans:wght@400;500;600;700;800&display=swap');
 *{margin:0;padding:0;box-sizing:border-box}
 html,body,#root{margin:0;padding:0;min-height:100%}
 body{-webkit-tap-highlight-color:transparent;font-family:'Inter',sans-serif}
@@ -9,11 +10,17 @@ body{-webkit-tap-highlight-color:transparent;font-family:'Inter',sans-serif}
 @media (max-width:800px){.app-root{padding:0 !important;min-height:100vh;min-height:100dvh}}
 .phone{width:393px;height:min(852px,calc(100vh - 20px));max-height:100dvh;background:var(--bg);border-radius:47px;overflow:hidden;position:relative;font-family:'Inter',sans-serif;color:var(--text);display:flex;flex-direction:column;box-shadow:0 50px 100px rgba(0,0,0,.25),0 0 0 .5px rgba(255,255,255,.15) inset;border:4px solid #2c2c2e;transform:translateZ(0)}
 
+html,body{touch-action:manipulation;-webkit-text-size-adjust:100%;text-size-adjust:100%}
 /* Real mobile devices: phone simulator becomes fullscreen */
 @media (max-width:800px){
   .phone{width:100vw;height:100vh;height:100dvh;border-radius:0;border:none;box-shadow:none;max-height:none}
   .phone-frame{border-radius:0 !important}
   .phone-frame-bg,.phone-frame-btn{display:none}
+  /* Sur un vrai téléphone : pas de fausse barre d'état ni de faux indicateur, on respecte les zones système */
+  .mock-statusbar,.mock-homebar{display:none !important}
+  .phone{padding-top:env(safe-area-inset-top, 0px);background:var(--card)}
+  /* Pages boutique : la photo passe sous la barre d'état (comme Toters) */
+  .phone.bleed{padding-top:0}
 }
 
 select{-webkit-appearance:none;-moz-appearance:none;appearance:none;width:100%;padding:12px 36px 12px 14px;border-radius:14px;border:1px solid var(--border);background:var(--light);color:var(--text);font-size:14px;font-family:inherit;font-weight:500;cursor:pointer;outline:none;transition:border .15s;background-image:url("data:image/svg+xml,%3Csvg width='12' height='12' viewBox='0 0 12 12' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M2.5 4.5L6 8L9.5 4.5' stroke='%236B6B80' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round' fill='none'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 12px center}
@@ -23,7 +30,7 @@ select option{background:var(--card);color:var(--text);padding:10px 14px;font-si
 .dark select{background-image:url("data:image/svg+xml,%3Csvg width='12' height='12' viewBox='0 0 12 12' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M2.5 4.5L6 8L9.5 4.5' stroke='%23A1A1A6' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round' fill='none'/%3E%3C/svg%3E")}
 
 .scr{flex:1;overflow-y:auto;overflow-x:hidden;background:var(--bg);-webkit-overflow-scrolling:touch}.scr::-webkit-scrollbar{display:none}
-.bnav{display:flex;align-items:flex-end;justify-content:space-around;padding:4px 8px 14px;background:var(--card);border-top:1px solid var(--border);flex-shrink:0;position:relative}
+.bnav{display:flex;align-items:flex-end;justify-content:space-around;padding:4px 8px calc(14px + env(safe-area-inset-bottom, 0px));background:var(--card);border-top:1px solid var(--border);flex-shrink:0;position:relative}
 .bni{display:flex;flex-direction:column;align-items:center;gap:3px;padding:8px 14px;border-radius:14px;border:none;background:transparent;cursor:pointer;font-family:inherit;transition:all .25s cubic-bezier(.4,0,.2,1);font-size:10px;color:var(--muted);font-weight:500}
 .bni.on{background:rgba(249,115,22,0.1);color:#F97316;transform:translateY(-1px)}.bni:active{transform:scale(.9)}.bni .bico{font-size:20px;line-height:1;transition:transform .2s}.bni.on .bico{transform:scale(1.1)}
 .appbar{display:flex;align-items:center;padding:6px 16px;gap:10px;flex-shrink:0}
@@ -212,16 +219,16 @@ select option{background:var(--card);color:var(--text);padding:10px 14px;font-si
 .chat-head{display:flex;align-items:center;gap:12px;padding:12px 20px;border-bottom:1px solid var(--border);flex-shrink:0;background:var(--card)}
 .chat-head .ch-av{width:40px;height:40px;border-radius:12px;background:linear-gradient(135deg,#F97316,#FB923C);display:flex;align-items:center;justify-content:center;font-size:20px}
 .chat-head .ch-info{flex:1}.chat-head .ch-info h4{font-size:14px;font-weight:600}.chat-head .ch-info p{font-size:11px;color:#F97316}
-.chat-head .ch-call{width:36px;height:36px;border-radius:10px;background:#F97316;border:none;color:#fff;cursor:pointer;font-size:16px;display:flex;align-items:center;justify-content:center}
+.chat-head .ch-call{width:36px;height:36px;border-radius:10px;background:var(--acc);border:none;color:#fff;cursor:pointer;font-size:16px;display:flex;align-items:center;justify-content:center}
 .chat-body{flex:1;overflow-y:auto;padding:16px 20px;display:flex;flex-direction:column;gap:10px}.chat-body::-webkit-scrollbar{display:none}
 .msg{max-width:78%;padding:12px 16px;border-radius:18px;font-size:13px;line-height:1.5;animation:msgin .25s ease}
 @keyframes msgin{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:translateY(0)}}
 .msg.bot{align-self:flex-start;background:var(--light);border:1px solid var(--border);border-bottom-left-radius:6px}
-.msg.user{align-self:flex-end;background:#F97316;color:#fff;border-bottom-right-radius:6px}
+.msg.user{align-self:flex-end;background:var(--acc);color:#fff;border-bottom-right-radius:6px}
 .msg-time{font-size:10px;color:var(--muted);margin-top:4px}.msg.user .msg-time{color:rgba(255,255,255,.6)}
 .chat-input{display:flex;align-items:center;gap:8px;padding:8px 12px;border-top:1px solid var(--border);background:var(--card);flex-shrink:0}
 .chat-input input{flex:1;padding:12px 16px;border-radius:24px;border:1px solid var(--border);background:var(--light);color:var(--text);font-size:13px;font-family:inherit;outline:none;color:var(--text)}.chat-input input:focus{border-color:#F97316}
-.chat-input button{width:42px;height:42px;border-radius:50%;background:#F97316;border:none;color:#fff;cursor:pointer;font-size:16px;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.chat-input button{width:42px;height:42px;border-radius:50%;background:var(--acc);border:none;color:#fff;cursor:pointer;font-size:16px;display:flex;align-items:center;justify-content:center;flex-shrink:0}
 .chat-attach{width:42px;height:42px;border-radius:50%;background:var(--light);border:1px solid var(--border);cursor:pointer;font-size:16px;display:flex;align-items:center;justify-content:center;flex-shrink:0}
 .chat-list-item{display:flex;align-items:center;gap:14px;padding:14px 20px;border-bottom:1px solid var(--border);cursor:pointer;transition:background .15s}.chat-list-item:hover{background:var(--light)}
 .chat-list-item .cl-av{width:48px;height:48px;border-radius:14px;background:var(--light);display:flex;align-items:center;justify-content:center;font-size:24px;flex-shrink:0}
@@ -769,5 +776,7 @@ input,textarea,select{font-size:16px !important}
   50% { opacity: 0.4; transform: scale(1.3); }
 }
 `;
+
+const CSS = BASE_CSS + T_CSS;
 
 export default CSS;

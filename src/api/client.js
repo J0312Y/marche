@@ -3,7 +3,7 @@
  * HTTP client avec gestion JWT automatique
  */
 
-const BASE_URL = import.meta.env.VITE_API_URL || 'http://localhost:8888/lamuka-api/api/v1';
+const BASE_URL = import.meta.env.VITE_API_URL || 'http://localhost/lamuka-api/api/v1';
 
 let _token = localStorage.getItem('lmk_token') || null;
 let _onAuthExpired = null;
@@ -28,7 +28,15 @@ async function request(method, path, body = null, options = {}) {
 
   try {
     const res = await fetch(url, config);
-    const json = await res.json();
+    let json;
+    try {
+      json = await res.json();
+    } catch (parseErr) {
+      const text = 'Réponse serveur invalide';
+      const e = new Error(text);
+      e.status = res.status;
+      throw e;
+    }
     if (!res.ok) {
       if (res.status === 401 && _token) { setToken(null); _onAuthExpired?.(); }
       const err = new Error(json.message || 'Erreur serveur');
@@ -38,6 +46,7 @@ async function request(method, path, body = null, options = {}) {
     return json.data !== undefined ? json.data : json;
   } catch (err) {
     if (err.status) throw err;
+    console.error('API Error:', method, path, err);
     const netErr = new Error('Connexion impossible. Vérifiez votre réseau.');
     netErr.status = 0;
     throw netErr;

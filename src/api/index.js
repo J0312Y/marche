@@ -26,3 +26,6 @@ export { default as driverReviewsAPI } from './driverReviews';
 export { default as vendorAPI } from './vendor';
 export { default as driverAPI } from './driver';
 export { default as imagesAPI } from './images';
+export { default as buyerAPI } from './buyer';
+export { default as errandsAPI } from './errands';
+export { default as collectionsAPI } from './collections';

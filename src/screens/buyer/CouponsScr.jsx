@@ -5,17 +5,19 @@ import { user as userSvc } from "../../services";
 import { fmt, getVendorPromo } from "../../utils/helpers";
 import { SkeletonCards } from "../../components/Loading";
 import Icon from "../../components/Icon";
+import { cartSubtotal, couponLabel } from "../../utils/cartMath";
 
 function CouponsScr({onBack,cart=[],appliedCoupon,onApply}){
   const [manualCode,setManualCode]=useState("");
   const [error,setError]=useState("");
   const [verifying,setVerifying]=useState(null);
-  const { data: COUPONS, loading } = useLoad(() => userSvc.getCoupons());
+  const { data: rawCoupons, loading } = useLoad(() => userSvc.getCoupons());
+  // Coupons de l'API (code, type, value, min_order, expires_at…) → affichage
+  const normalize=(c)=>({...c,desc:c.description||couponLabel(c),min:parseFloat(c.min_order)||0,free:c.type==="free_delivery",expires:c.expires_at?new Date(String(c.expires_at).replace(" ","T")).toLocaleDateString("fr-FR",{day:"numeric",month:"short",year:"numeric"}):"—"});
+  const COUPONS=(Array.isArray(rawCoupons)?rawCoupons:rawCoupons?.coupons||[]).map(normalize);
   const { VENDORS } = useData();
 
-  const getItem=(c)=>c.product||c;
-  const getPrice=(c)=>{const p=getItem(c);const vp=getVendorPromo(p,VENDORS);return vp?vp.promoPrice:(p.price||0)};
-  const subtotal=cart.reduce((s,c)=>s+getPrice(c)*(c.qty||1),0);
+  const subtotal=cartSubtotal(cart);
 
   const applyCoupon=async(coupon)=>{
     setError("");setVerifying(coupon.code);
@@ -32,7 +34,7 @@ function CouponsScr({onBack,cart=[],appliedCoupon,onApply}){
     setError("");setVerifying(manualCode);
     try{
       const result=await userSvc.verifyCoupon(manualCode.trim().toUpperCase(),subtotal);
-      const coupon=(COUPONS||[]).find(c=>c.code===manualCode.trim().toUpperCase())||{code:manualCode.trim().toUpperCase(),discount:result.discount,free:result.free_delivery,desc:`${result.discount}% de réduction`};
+      const coupon=result?.coupon?normalize(result.coupon):(COUPONS||[]).find(c=>c.code===manualCode.trim().toUpperCase());
       onApply(coupon);toast.success("Code promo appliqué");
     }catch(err){
       setError(err.message||"Code invalide");
@@ -50,7 +52,7 @@ function CouponsScr({onBack,cart=[],appliedCoupon,onApply}){
         <span style={{fontSize:22}}><Icon name="check_circle" size={18}/></span>
         <div>
           <div style={{fontSize:13,fontWeight:700,color:"#F97316"}}>Code appliqué : {appliedCoupon.code}</div>
-          <div style={{fontSize:12,color:"var(--muted)"}}>{appliedCoupon.free?"Livraison gratuite":`-${appliedCoupon.discount}% de réduction`}</div>
+          <div style={{fontSize:12,color:"var(--muted)"}}>{couponLabel(appliedCoupon)}</div>
         </div>
       </div>
       <button onClick={removeCoupon} style={{padding:"6px 12px",borderRadius:8,border:"1px solid rgba(239,68,68,0.3)",background:"transparent",color:"#EF4444",fontSize:11,fontWeight:600,cursor:"pointer",fontFamily:"inherit"}}>Retirer</button>
@@ -66,7 +68,7 @@ function CouponsScr({onBack,cart=[],appliedCoupon,onApply}){
 
     {/* Error */}
     {error&&<div style={{padding:10,background:"rgba(239,68,68,0.06)",border:"1px solid rgba(239,68,68,0.15)",borderRadius:10,marginBottom:14,fontSize:12,fontWeight:600,color:"#EF4444",display:"flex",alignItems:"center",gap:6}}>
-      ️ {error}
+       {error}
     </div>}
 
     {/* Available coupons */}
@@ -80,7 +82,7 @@ function CouponsScr({onBack,cart=[],appliedCoupon,onApply}){
           {/* Left badge */}
           <div style={{width:56,minHeight:56,borderRadius:12,background:c.free?"linear-gradient(135deg,#10B981,#059669)":"linear-gradient(135deg,#F97316,#FB923C)",display:"flex",flexDirection:"column",alignItems:"center",justifyContent:"center",color:"#fff",flexShrink:0}}>
             {c.free?<><span style={{fontSize:16}}><Icon name="truck" size={18}/></span><span style={{fontSize:9,fontWeight:600}}>GRATUIT</span></>
-            :<><span style={{fontSize:20,fontWeight:800}}>{c.discount}%</span><span style={{fontSize:9,fontWeight:600}}>REMISE</span></>}
+            :<><span style={{fontSize:16,fontWeight:800}}>{couponLabel(c)}</span><span style={{fontSize:9,fontWeight:600}}>REMISE</span></>}
           </div>
 
           {/* Info */}

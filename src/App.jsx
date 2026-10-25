@@ -1,9 +1,15 @@
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
+import { App as CapApp } from "@capacitor/app";
+import { Capacitor } from "@capacitor/core";
+import { handleBackInStack } from "./hooks/useBackClose";
+import FirstRun from "./components/t/FirstRun";
+import { loadZones, getDeliverTo, zoneOf } from "./utils/zone";
+import { useAppInfo } from "./config/appInfo";
 import CSS from "./styles/global";
 import t from "./utils/i18n";
 import Icon from "./components/Icon";
 import { AppProvider, useApp } from "./context/AppContext";
-import { SplashScr, OnboardingScr, LoginScr, OTPScr, ProfileCompletionScr } from "./screens/auth";
+import { SplashScr } from "./screens/auth";
 import ShareSheet from "./components/ShareSheet";
 import PushBanner, { triggerPush } from "./components/PushBanner";
 import OfflineBanner from "./components/OfflineBanner";
@@ -12,32 +18,68 @@ import { NoNetwork, ServerError } from "./components/ErrorStates";
 import ErrorBoundary from "./components/ErrorBoundary";
 import { registerGlobalErrors } from "./utils/errorHandler";
 import LoadingSpinner from "./components/ui/LoadingSpinner";
+import LoginSheet from "./components/t/LoginSheet";
+import UpdatePrompt from "./components/t/UpdatePrompt";
+import NavIcon from "./components/t/NavIcon";
 
 import BuyerScreens from "./modes/BuyerScreens";
 import VendorScreens from "./modes/VendorScreens";
 import DriverScreens from "./modes/DriverScreens";
 
 function AppInner() {
+  useAppInfo(); // informations du panneau (coordonnées, règles, FAQ) : l'app se redessine quand elles arrivent
   // Register global error handlers (network, offline, uncaught)
   if (typeof window !== "undefined") registerGlobalErrors();
 
   const {
-    authStep, setAuthStep, socialProvider, setSocialProvider, isNewUser, setIsNewUser,
+    authStep, setAuthStep, socialProvider, setSocialProvider, isNewUser, setIsNewUser, pendingPhone, setPendingPhone,
     mode, tab, setTab, vTab, setVTab, dTab, setDTab,
-    screen, setScreen, setHistory, go,
+    screen, setScreen, setHistory, go, pop,
     cart, cartCount, hasVendor, hasDriver,
     login, completeProfile, toast, darkMode, setUserName, lang,
     isGuest, continueAsGuest, guestPromptReason, closeGuestPrompt, exitGuestToLogin,
   } = useApp();
 
-  /* ── Auth step mapping: splash=0, onboarding=1, login=2, otp=3, profile=4, ready=5 ── */
-  const auth = authStep === 'splash' ? 0 : authStep === 'onboarding' ? 1 : authStep === 'login' ? 2
-    : authStep === 'otp' ? 3 : authStep === 'profile' ? 4 : authStep === 'ready' ? 5 : authStep === 'loading' ? -1 : 0;
+  /* ── Étapes : splash=0, ready=5, loading=-1 (la connexion se fait dans LoginSheet, sans quitter l'écran) ── */
+  const auth = authStep === 'splash' ? 0
+    : authStep === 'ready' ? 5 : authStep === 'loading' ? -1 : 0;
 
   const showNav = !screen && auth === 5;
-  const buyerTabs = [{ icon: "home", label: t("nav.home") }, { icon: "search", label: t("nav.search") }, { icon: "cart", label: t("nav.cart") }, { icon: "package", label: t("nav.orders") }, { icon: "user", label: t("nav.profile") }];
-  const vendorTabs = [{ icon: "dashboard", label: "Dashboard" }, { icon: "package", label: "Commandes" }, { icon: "plus", label: "Ajouter" }, { icon: "chat", label: "Messages" }, { icon: "store", label: "Commerce" }];
-  const driverTabs = [{ icon: "home", label: "Accueil" }, { icon: "package", label: "Livraisons" }, { icon: "wallet", label: "Gains" }, { icon: "bell", label: "Notifs" }, { icon: "user", label: "Profil" }];
+
+  // Premier lancement comme Toters : introduction → notifications → localisation → choisir un lieu.
+  // Plus tard : si aucun lieu desservi n'est choisi (invité), on redemande le lieu.
+  const [firstRun, setFirstRun] = useState(null); // null (inconnu) | "intro" | "select" | false
+  useEffect(() => {
+    if (auth !== 5 || mode !== "buyer" || firstRun !== null) return;
+    Promise.resolve(loadZones()).finally(() => {
+      let seen = false; try { seen = localStorage.getItem("lk-onb-done") === "1"; } catch {}
+      const dt = getDeliverTo();
+      const valid = dt?.lat != null && zoneOf(Number(dt.lat), Number(dt.lng));
+      setFirstRun(!seen ? "intro" : !valid && isGuest ? "select" : false);
+    });
+  }, [auth, mode, isGuest, firstRun]);
+
+  // Bouton retour Android (comme Toters) : ferme la feuille ouverte, sinon écran précédent, sinon onglet Accueil, sinon quitte
+  const nav = useRef({});
+  nav.current = { screen, mode, tab, vTab, dTab, pop, setTab, setVTab, setDTab };
+  useEffect(() => {
+    if (!Capacitor.isNativePlatform()) return;
+    const resume = CapApp.addListener("resume", () => { loadZones(true); });
+    const sub = CapApp.addListener("backButton", () => {
+      const n = nav.current;
+      if (handleBackInStack()) return;
+      if (n.screen) { n.pop(); return; }
+      if (n.mode === "buyer" && n.tab !== 0) { n.setTab(0); return; }
+      if (n.mode === "vendor" && n.vTab !== 0) { n.setVTab(0); return; }
+      if (n.mode === "driver" && n.dTab !== 0) { n.setDTab(0); return; }
+      CapApp.exitApp();
+    });
+    return () => { sub.then((s) => s.remove()); resume.then((s) => s.remove()); };
+  }, []);
+  // Comme Toters : Accueil · Recherche · Coursier · Commandes · Compte (le panier est une barre flottante)
+  const buyerTabs = [{ icon: "home", label: "Accueil" }, { icon: "search", label: "Recherche" }, { icon: "bowtie", label: "Coursier" }, { icon: "orders", label: "Commandes" }, { icon: "account", label: "Compte" }];
+  const vendorTabs = [{ icon: "home", label: "Accueil" }, { icon: "orders", label: "Commandes" }, { icon: "package", label: "Catalogue" }, { icon: "chat", label: "Messages" }, { icon: "store", label: "Commerce" }];
+  const driverTabs = [{ icon: "home", label: "Accueil" }, { icon: "orders", label: "Livraisons" }, { icon: "wallet", label: "Gains" }, { icon: "bell", label: "Notifications" }, { icon: "account", label: "Profil" }];
   const tabs = mode === "buyer" ? buyerTabs : mode === "vendor" ? vendorTabs : driverTabs;
   const activeTab = mode === "buyer" ? tab : mode === "vendor" ? vTab : dTab;
 
@@ -58,12 +100,11 @@ function AppInner() {
         <div className="phone-frame-btn" style={{ position: "absolute", left: -3, top: 226, width: 4, height: 38, background: "linear-gradient(180deg,#7a7874,#5a5855,#7a7874)", borderRadius: "3px 0 0 3px", boxShadow: "-1px 0 2px rgba(0,0,0,.3)" }} />
         <div className="phone-frame-btn" style={{ position: "absolute", right: -3, top: 195, width: 4, height: 72, background: "linear-gradient(180deg,#7a7874,#5a5855,#7a7874)", borderRadius: "0 3px 3px 0", boxShadow: "1px 0 2px rgba(0,0,0,.3)" }} />
 
-        <div className={`phone${darkMode?" dark":""}`}>
+        <div className={`phone${darkMode?" dark":""}${mode === "buyer" && auth === 5 && (screen?.type === "vendor" || (screen?.type === "detail" && (screen.data?.establishmentId || screen.data?.establishment_id))) ? " bleed" : ""}`}>
           {/* Banners and overlays — INSIDE phone, position absolute relative to .phone */}
           <OfflineBanner/>
-          {guestPromptReason && <GuestPrompt reason={guestPromptReason} onClose={closeGuestPrompt} onLogin={()=>{closeGuestPrompt();exitGuestToLogin();}}/>}
-          {/* Status Bar + Dynamic Island */}
-          <div style={{ position: "relative", padding: "10px 22px 4px", flexShrink: 0, background: "transparent", zIndex: 20 }}>
+          {/* Barre d'état simulée (maquette sur ordinateur uniquement — masquée sur un vrai téléphone) */}
+          <div className="mock-statusbar" style={{ position: "relative", padding: "10px 22px 4px", flexShrink: 0, background: "transparent", zIndex: 20 }}>
             <div style={{ position: "absolute", top: 12, left: "50%", transform: "translateX(-50%)", width: 124, height: 36, background: "#000", borderRadius: 20, zIndex: 30, display: "flex", alignItems: "center", justifyContent: "center", boxShadow: "0 1px 3px rgba(0,0,0,.15) inset" }}>
               <div style={{ width: 12, height: 12, borderRadius: "50%", background: "radial-gradient(circle at 40% 35%,#1c1c3a,#0a0a14)", border: "1.5px solid #1a1a2e", marginLeft: 36 }} />
             </div>
@@ -80,41 +121,29 @@ function AppInner() {
 
           {/* Screen Content */}
           {auth === -1 ? <LoadingSpinner />
-            : auth === 0 ? <SplashScr onDone={() => setAuthStep('login')} />
-            : auth === 1 ? <OnboardingScr onDone={() => setAuthStep('ready')} />
-            : auth === 2 ? <LoginScr onDone={(signup) => { setIsNewUser(!!signup); setAuthStep('otp'); }} onSocial={(p, signup) => { setSocialProvider(p); setIsNewUser(!!signup); setAuthStep('otp'); }} onGuest={() => { continueAsGuest(); setAuthStep('ready'); }} />
-            : auth === 3 ? <OTPScr provider={socialProvider} onDone={() => setAuthStep(isNewUser ? 'profile' : 'ready')} onEditNumber={() => setAuthStep('login')} />
-            : auth === 4 ? <ProfileCompletionScr provider={socialProvider} setUserName={setUserName} onDone={() => setAuthStep('onboarding')} />
+            : auth === 0 ? <SplashScr onDone={() => { continueAsGuest(); setAuthStep('ready'); }} />
             : <>
               {renderScreen()}
 
-              {showNav && <div className="bnav">{tabs.map((t, i) => {
-                const isCart = mode === "buyer" && i === 2;
-                const isActive = activeTab === i;
-                if (isCart) return (
-                  <button key={i} onClick={() => { setTab(i); setScreen(null); setHistory([]); }} style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 2, border: "none", background: "transparent", cursor: "pointer", fontFamily: "inherit", marginTop: -28, position: "relative", zIndex: 10 }}>
-                    <div style={{ width: 56, height: 56, borderRadius: 28, background: isActive ? "linear-gradient(135deg,#F97316,#EA580C)" : "linear-gradient(135deg,#F97316,#FDBA74)", display: "flex", alignItems: "center", justifyContent: "center", fontSize: 24, boxShadow: isActive ? "0 6px 20px rgba(249,115,22,.45)" : "0 4px 14px rgba(249,115,22,.3)", border: "4px solid var(--card)", transition: "all .2s", position: "relative" }}>
-                      <Icon name="cart" size={24} color="#fff"/>
-                      {cartCount > 0 && <span style={{ position: "absolute", top: -4, right: -4, background: "#EF4444", color: "#fff", fontSize: 9, fontWeight: 700, borderRadius: 10, padding: "1px 5px", minWidth: 16, textAlign: "center", animation: "badgePop .3s ease" }} key={cartCount}>{cartCount}</span>}
-                    </div>
-                    <span style={{ fontSize: 9, fontWeight: 600, color: isActive ? "#F97316" : "var(--muted)", marginTop: 1 }}>{isActive && t.label}</span>
-                  </button>
-                );
-                return (
-                  <button key={i} className={`bni ${isActive ? "on" : ""}`} onClick={() => { mode === "buyer" ? setTab(i) : mode === "vendor" ? setVTab(i) : setDTab(i); setScreen(null); setHistory([]); }}>
-                    <span className="bico"><Icon name={t.icon} size={20} color={isActive?"#F97316":"var(--muted)"}/></span>{isActive && t.label}
-                  </button>
-                );
-              })}</div>}
+              {showNav && <nav className="t-nav">{tabs.map((t, i) => (
+                <button key={i} className={activeTab === i ? "on" : ""} onClick={() => { mode === "driver" ? setDTab(i) : mode === "vendor" ? setVTab(i) : setTab(i); setScreen(null); setHistory([]); }}>
+                  {["home", "search", "bowtie", "orders", "account"].includes(t.icon) ? <NavIcon name={t.icon} active={activeTab === i} /> : <Icon name={t.icon} size={24} strokeWidth={1.8} color={activeTab === i ? "var(--acc)" : "var(--t-sub)"} />}
+                  {t.label}
+                </button>
+              ))}</nav>}
             </>}
 
+          {auth === 5 && mode === "buyer" && firstRun && <FirstRun skipIntro={firstRun === "select"} onDone={() => setFirstRun(false)} />}
+
           {/* Toast */}
+          <LoginSheet/>
+          {auth === 5 && !firstRun && <UpdatePrompt/>}
           <PushBanner/>
           <ShareSheet/>
           {toast && <div style={{ position: "absolute", bottom: 80, left: 16, right: 16, padding: "14px 18px", borderRadius: 16, background: toast.type === 'error' ? '#EF4444' : toast.type === 'info' ? '#F97316' : '#10B981', color: "#fff", fontSize: 13, fontWeight: 600, textAlign: "center", zIndex: 999, boxShadow: "0 8px 30px rgba(0,0,0,.2)", display: "flex", alignItems: "center", justifyContent: "center", gap: 8, animation: "toastIn .35s cubic-bezier(.4,0,.2,1)" }}><Icon name={toast.type === 'error' ? 'x_circle' : toast.type === 'info' ? 'info' : 'check_circle'} size={18} color="#fff"/>{toast.message}</div>}
 
-          {/* Home Indicator */}
-          <div style={{ flexShrink: 0, display: "flex", justifyContent: "center", paddingBottom: 4, paddingTop: 2, background: "transparent" }}>
+          {/* Indicateur d'accueil simulé (maquette sur ordinateur uniquement) */}
+          <div className="mock-homebar" style={{ flexShrink: 0, display: "flex", justifyContent: "center", paddingBottom: 4, paddingTop: 2, background: "transparent" }}>
             <div style={{ width: 134, height: 5, borderRadius: 100, background: darkMode ? "#fff" : "#191815", opacity: .2 }} />
           </div>
         </div>

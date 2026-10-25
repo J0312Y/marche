@@ -1,31 +1,47 @@
 /**
- * Default images — real Unsplash photos for avatars, logos, vehicles
+ * Images par défaut — illustrations neutres (SVG en ligne, aucune dépendance réseau).
+ * Utilisées uniquement quand l'utilisateur / la boutique n'a pas encore d'image.
+ * Ne jamais mettre ici de photo de personne réelle : elle apparaîtrait comme celle de l'utilisateur.
  */
 
+const svg = (body, bg = "#FFF1E6", viewBox = "0 0 100 100") =>
+  "data:image/svg+xml;charset=utf-8," +
+  encodeURIComponent(`<svg xmlns="http://www.w3.org/2000/svg" viewBox="${viewBox}" preserveAspectRatio="xMidYMid slice"><rect width="100%" height="100%" fill="${bg}"/>${body}</svg>`);
+
+const ORANGE = "#F97316";
+const SOFT = "#FDBA74";
+
+// Silhouette générique (personne)
+const PERSON = `<circle cx="50" cy="38" r="17" fill="${SOFT}"/><path d="M18 92c0-19 14-32 32-32s32 13 32 32z" fill="${SOFT}"/>`;
+// Boutique
+const STORE = `<path d="M24 40h52l-4-14H28z" fill="${ORANGE}"/><rect x="28" y="40" width="44" height="34" rx="3" fill="${SOFT}"/><rect x="44" y="54" width="12" height="20" fill="${ORANGE}"/>`;
+// Livreur (deux-roues)
+const SCOOTER = `<circle cx="30" cy="68" r="10" fill="none" stroke="${ORANGE}" stroke-width="5"/><circle cx="72" cy="68" r="10" fill="none" stroke="${ORANGE}" stroke-width="5"/><path d="M30 68h24l10-24h10" fill="none" stroke="${ORANGE}" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"/><rect x="34" y="40" width="20" height="16" rx="3" fill="${SOFT}"/>`;
+
 // App branding
-export const LAMUKA_LOGO = "https://images.unsplash.com/photo-1472851294608-062f824d29cc?w=200&h=200&fit=crop"; // shopping bags
+export const LAMUKA_LOGO = "/icon-192.png";
 
-// User avatars
-export const USER_AVATAR = "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=200&h=200&fit=crop&crop=face"; // young african man
-export const USER_AVATAR_FEMALE = "https://images.unsplash.com/photo-1531123897727-8f129e1688ce?w=200&h=200&fit=crop&crop=face"; // african woman
+// Utilisateurs
+export const USER_AVATAR = svg(PERSON);
+export const USER_AVATAR_FEMALE = USER_AVATAR;
 
-// Driver
-export const DRIVER_PHOTO = "https://images.unsplash.com/photo-1506277886164-e25aa3f4ef7f?w=200&h=200&fit=crop&crop=face"; // delivery guy
-export const VEHICLE_PHOTO = "https://images.unsplash.com/photo-1558618666-fcd25c85f82e?w=400&h=300&fit=crop"; // motorcycle
+// Livreur
+export const DRIVER_PHOTO = svg(PERSON, "#FFEDD5");
+export const VEHICLE_PHOTO = svg(SCOOTER, "#FFF7ED", "0 0 100 100");
 
-// Vendor
-export const VENDOR_COVER = "https://images.unsplash.com/photo-1556742049-0cfed4f6a45d?w=600&h=200&fit=crop"; // shop cover
-export const DRIVER_COVER = "https://images.unsplash.com/photo-1558618666-fcd25c85f82e?w=600&h=200&fit=crop"; // delivery cover
-export const VENDOR_LOGO_DEFAULT = "https://images.unsplash.com/photo-1441986300917-64674bd600d8?w=200&h=200&fit=crop"; // shop front
+// Boutique
+export const VENDOR_LOGO_DEFAULT = svg(STORE);
+export const VENDOR_COVER = svg(`<rect width="100%" height="100%" fill="url(#g)"/><defs><linearGradient id="g" x1="0" x2="1"><stop offset="0" stop-color="#F97316"/><stop offset="1" stop-color="#FDBA74"/></linearGradient></defs>`, "#F97316", "0 0 300 100");
+export const DRIVER_COVER = VENDOR_COVER;
 
-// Chat avatars
+// Avatars de conversation (par rôle)
 export const CHAT_AVATARS = {
-  client: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=100&h=100&fit=crop&crop=face",
-  driver: "https://images.unsplash.com/photo-1506277886164-e25aa3f4ef7f?w=100&h=100&fit=crop&crop=face",
-  vendor: "https://images.unsplash.com/photo-1441986300917-64674bd600d8?w=100&h=100&fit=crop",
-  femme1: "https://images.unsplash.com/photo-1531123897727-8f129e1688ce?w=100&h=100&fit=crop&crop=face",
-  homme1: "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=100&h=100&fit=crop&crop=face",
-  femme2: "https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=100&h=100&fit=crop&crop=face",
+  client: USER_AVATAR,
+  driver: DRIVER_PHOTO,
+  vendor: VENDOR_LOGO_DEFAULT,
+  femme1: USER_AVATAR,
+  homme1: USER_AVATAR,
+  femme2: USER_AVATAR,
 };
 
 export default { LAMUKA_LOGO, USER_AVATAR, DRIVER_PHOTO, VEHICLE_PHOTO, VENDOR_LOGO_DEFAULT, VENDOR_COVER, DRIVER_COVER, CHAT_AVATARS };

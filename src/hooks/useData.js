@@ -10,6 +10,21 @@
  */
 import { useState, useEffect, useCallback, createContext, useContext } from 'react';
 import { catalog, vendor, driver, social, user as userSvc, order as orderSvc } from '../services';
+import { articlesAPI, establishmentsAPI } from '../api';
+
+// Charge toutes les pages d'une liste paginée (l'API renvoie 20 éléments par défaut).
+// Sans cela, les articles au-delà des 20 premiers étaient introuvables dans l'app.
+async function fetchAllPages(fetchPage, key, maxPages = 20) {
+  const all = [];
+  for (let page = 1; page <= maxPages; page++) {
+    const res = await fetchPage({ page, limit: 50 });
+    const items = Array.isArray(res) ? res : (res?.[key] || []);
+    all.push(...items);
+    const p = res?.pagination;
+    if (!p || !p.has_more || items.length === 0) break;
+  }
+  return all;
+}
 
 // ── Cache global partagé entre instances du hook ──
 const cache = {
@@ -25,20 +40,91 @@ function notifyListeners() {
   cache.listeners.forEach(fn => fn({}));
 }
 
+// Map API article fields to frontend format
+function mapArticle(a) {
+  if (!a || a.photo) return a; // already mapped or mock
+  return {
+    ...a,
+    photo: a.image || a.thumbnail_url || null,
+    photos: a.images ? a.images.map(i => i.url || i) : (a.image ? [a.image] : []),
+    img: a.icon || '',
+    cat: a.category_name || a.cat || '',
+    vendor: a.establishment_name || a.vendor || '',
+    va: a.establishment_type || '',
+    type: a.commerce_type || a.type || '',
+    rating: parseFloat(a.avg_rating || a.rating || 0),
+    reviews: parseInt(a.total_reviews || a.reviews || 0, 10),
+    price: parseFloat(a.price || 0),
+    old: a.old_price ? parseFloat(a.old_price) : (a.compare_price ? parseFloat(a.compare_price) : (a.old ? parseFloat(a.old) : null)),
+    tags: a.tags ? (typeof a.tags === 'string' ? a.tags.split(',').map(t => t.trim()) : a.tags) : [],
+    optionGroups: Array.isArray(a.option_groups) ? a.option_groups : [],
+    establishmentId: a.establishment_id ? Number(a.establishment_id) : null,
+    stock: a.stock === null || a.stock === undefined ? null : Number(a.stock),
+    sold: parseInt(a.total_sold || 0, 10),
+  };
+}
+
+// Map API establishment fields to frontend format
+function mapVendor(v) {
+  if (!v || v.logo !== undefined) return v; // already mapped or mock
+  return {
+    ...v,
+    logo: v.avatar || null,
+    cover: v.cover_image || null,
+    loc: v.address || v.city || '',
+    rating: parseFloat(v.rating || 0),
+    products: parseInt(v.total_orders || 0, 10),
+    followers: parseInt(v.followers_count || 0, 10),
+    verified: v.is_verified === '1' || v.is_verified === true,
+    isOpen: v.is_open === '1' || v.is_open === true,
+    eta: v.eta_min && v.eta_max ? `${v.eta_min} - ${v.eta_max} min` : null,
+    // Ouvert maintenant d'après les horaires (calculé par le serveur) ; sinon interrupteur du vendeur
+    isOpenNow: v.is_open_now !== undefined ? !!v.is_open_now : (v.is_open === '1' || v.is_open === true),
+    opensAt: v.opens_at || null,
+    punchCard: v.punch_card || null,
+    offersCount: parseInt(v.offers_count || 0, 10),
+    reviewsCount: parseInt(v.total_reviews || 0, 10),
+    createdAt: v.created_at || null,
+    minOrder: parseFloat(v.min_order || 0),
+    deliveryFee: parseFloat(v.delivery_fee || 0),
+    freeDelivery: v.free_delivery === '1' || v.free_delivery === 1 || v.free_delivery === true,
+  };
+}
+
+// Map API category fields to frontend format
+function mapCategory(c) {
+  if (!c || c.photo !== undefined) return c;
+  return {
+    ...c,
+    photo: c.image || null,
+    count: parseInt(c.article_count || 0, 10),
+  };
+}
+
 async function loadCatalog() {
   if (cache.loaded || cache.loading) return;
   cache.loading = true;
   notifyListeners();
 
   try {
-    const [cats, prodResult, vendors] = await Promise.all([
+    const [cats, rawProducts, rawVendors] = await Promise.all([
       catalog.getCategories(),
-      catalog.searchArticles({}),
-      catalog.getEstablishments({}),
+      fetchAllPages((f) => articlesAPI.search(f), 'articles'),
+      fetchAllPages((f) => establishmentsAPI.getAll(f), 'establishments'),
     ]);
-    cache.cats = cats || [];
-    cache.products = prodResult?.articles || prodResult || [];
-    cache.vendors = vendors || [];
+    const rawCats = cats || [];
+    cache.cats = rawCats.map(mapCategory);
+    cache.products = rawProducts.map(mapArticle);
+    cache.vendors = rawVendors.map(mapVendor);
+    // Plus forte réduction de chaque boutique (badge « −20 % » sur sa carte)
+    const off = {};
+    cache.products.forEach((p) => {
+      if (p.old > p.price && p.establishmentId) {
+        const pct = Math.round((1 - p.price / p.old) * 100);
+        off[p.establishmentId] = Math.max(off[p.establishmentId] || 0, pct);
+      }
+    });
+    cache.vendors.forEach((v) => { v.maxOff = off[Number(v.id)] || 0; });
     cache.loaded = true;
   } catch (err) {
     console.error('useData: failed to load catalog', err);

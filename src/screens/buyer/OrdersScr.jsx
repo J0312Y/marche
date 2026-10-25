@@ -1,117 +1,123 @@
-import { useState } from "react";
-import { useApp } from "../../context/AppContext";
+import { useCallback, useEffect, useState } from "react";
 import Icon from "../../components/Icon";
-import GuestBlockedView from "../../components/GuestBlockedView";
-import toast from "../../utils/toast";
-import P from "../../data/products";
-import PullToRefresh from "../../components/PullToRefresh";
+import Sheet from "../../components/t/Sheet";
+import { StoreLogo } from "../../components/t/StoreCard";
+import { useApp } from "../../context/AppContext";
+import { order as orderSvc } from "../../services";
+import { fmt } from "../../utils/helpers";
 
-const findPhoto=(itemStr)=>{const name=itemStr.split(" ").slice(1).join(" ").replace(/ x\d+$/,"");const p=P.find(x=>x.name.includes(name)||name.includes(x.name));return p?.photo||null};
+export const ORDER_STATUS = {
+  pending: { label: "En attente", color: "#B45309", bg: "#FEF3C7" },
+  confirmed: { label: "Acceptée", color: "#1D4ED8", bg: "#DBEAFE" },
+  preparing: { label: "En préparation", color: "#1D4ED8", bg: "#DBEAFE" },
+  ready: { label: "Prête", color: "#7C3AED", bg: "#EDE9FE" },
+  assigned: { label: "Livreur assigné", color: "#7C3AED", bg: "#EDE9FE" },
+  picked_up: { label: "En route", color: "#C2410C", bg: "#FFEDD5" },
+  delivering: { label: "En route", color: "#C2410C", bg: "#FFEDD5" },
+  delivered: { label: "Livrée", color: "#15803D", bg: "#DCFCE7" },
+  cancelled: { label: "Annulée", color: "#6B7280", bg: "#F3F4F6" },
+  refunded: { label: "Remboursée", color: "#6B7280", bg: "#F3F4F6" },
+};
+const ACTIVE = ["pending", "confirmed", "preparing", "ready", "assigned", "picked_up", "delivering"];
+const parseOpts = (o) => { try { return typeof o === "string" ? JSON.parse(o) : o || []; } catch { return []; } };
+const dateLabel = (s) => { const d = new Date(String(s).replace(" ", "T")); return isNaN(d) ? "" : d.toLocaleDateString("fr-FR", { day: "numeric", month: "short" }) + " · " + d.toLocaleTimeString("fr-FR", { hour: "2-digit", minute: "2-digit" }); };
 
-function OrdersScr({go}){
-  const { isGuest, exitGuestToLogin, setTab: setAppTab } = useApp();
-  if (isGuest) return (<GuestBlockedView
-      icon="package"
-      title="Suivez vos commandes"
-      subtitle="Créez un compte pour suivre vos commandes en temps réel et consulter votre historique."
-      benefits={["Suivi de livraison en direct", "Historique complet", "Notifications de statut"]}
-      accent="#F97316"
-      onGoHome={()=>setAppTab(0)}
-    />);
+/**
+ * Commandes « Toters » : invité → invitation à se connecter ; sinon en cours / passées, avec « Commander à nouveau ».
+ */
+export default function OrdersScr({ go }) {
+  const { user, requireLogin, cart, clearCart, addToCart, showToast } = useApp();
+  const [orders, setOrders] = useState(null);
+  const [again, setAgain] = useState(null);
+  const [busy, setBusy] = useState(false);
 
-  const [orders,setOrders]=useState([
-    {ref:"#LMK-2026-0214",date:"14 Fév 2026",status:"En livraison",sc:"ship",total:"231 500",vendor:"Tech Congo",items:["Galaxy A54","Panier Bio x3"],prog:[1,1,1,0]},
-    {ref:"#LMK-2026-0210",date:"10 Fév 2026",status:"Livré",sc:"done",total:"42 000",vendor:"Mode Afrique",items:["Sac Cuir"],prog:[1,1,1,1]},
-    {ref:"#LMK-2026-0205",date:"5 Fév 2026",status:"Livré",sc:"done",total:"18 000",vendor:"Mode Afrique",items:["Chemise Bogolan"],prog:[1,1,1,1]},
-    {ref:"#LMK-2026-0201",date:"1 Fév 2026",status:"En préparation",sc:"prep",total:"5 500",vendor:"Chez Mama Ngudi",items:["Poulet DG"],prog:[1,1,0,0],payment:"cash"},
-    {ref:"#LMK-2026-0198",date:"28 Jan 2026",status:"Annulée",sc:"cancel",total:"15 000",vendor:"Tech Congo",items:["Écouteurs Bluetooth"],prog:[1,0,0,0],payment:"mtn"},
-    {ref:"#GRP-4521",date:"15 Fév 2026",status:"En livraison",sc:"ship",total:"39 000",vendor:"Chez Mama Ngudi",items:["Poulet DG x2","Poisson Braisé","Gâteau F.N. x2"],prog:[1,1,1,0],payment:"airtel",isGroup:true,groupMembers:["Joeldy","Marie K.","Patrick M."],groupSides:[{name:"Coca-Cola",qty:2},{name:"Frites",qty:1},{name:"Piment fort",qty:1}]},
-    {ref:"#GRP-3817",date:"10 Fév 2026",status:"Livré",sc:"done",total:"22 500",vendor:"Le Braiseur du Congo",items:["Poisson Braisé x3","Bière Ngok x3"],prog:[1,1,1,1],payment:"mtn",isGroup:true,groupMembers:["Joeldy","David T."]},
-  ]);
-  const [cancelConfirm,setCancelConfirm]=useState(null);
-  const [reorderConfirm,setReorderConfirm]=useState(null);
+  const load = useCallback(() => {
+    if (!user) return;
+    orderSvc.getAll().then((r) => setOrders(Array.isArray(r) ? r : r?.orders || [])).catch(() => setOrders([]));
+  }, [user]);
+  useEffect(() => { load(); }, [load]);
+  useEffect(() => { if (!user) return; const t = setInterval(load, 30000); return () => clearInterval(t); }, [user, load]);
 
-  const cancelOrder=(ref)=>{
-    setOrders(prev=>prev.map(o=>o.ref===ref?{...o,status:"Annulée",sc:"cancel"}:o));
-    setCancelConfirm(null);
-    toast.success("Commande annulée — Remboursement sous 24-48h ");
-  };
-
-  const reorder=(o)=>{
-    const newRef="#LMK-2026-"+String(Math.floor(Math.random()*9000+1000));
-    const newOrder={...o,ref:newRef,date:new Date().toLocaleDateString("fr-FR",{day:"numeric",month:"short",year:"numeric"}),status:"En préparation",sc:"prep",prog:[1,1,0,0]};
-    setOrders(prev=>[newOrder,...prev]);
-    setReorderConfirm(null);
-    toast.success("Commande recréée ! Confirmez le paiement ️");
-    // Navigate to checkout with the reorder
-    setTimeout(()=>go("orderDetail",newOrder),300);
-  };
-
-  const [tab,setTab]=useState("active");
-  const active=orders.filter(o=>o.sc==="ship"||o.sc==="prep");
-  const done=orders.filter(o=>o.sc==="done");
-  const cancelled=orders.filter(o=>o.sc==="cancel");
-  const shown=tab==="active"?active:tab==="done"?done:cancelled;
-
-  return(<><PullToRefresh onRefresh={async()=>{toast.success("Commandes actualisées")}}><div className="scr" style={{padding:16}}>
-    <div className="appbar" style={{padding:0,marginBottom:10}}><h2>Mes commandes ({orders.length})</h2></div>
-
-    {/* Tabs */}
-    <div style={{display:"flex",gap:0,marginBottom:12,background:"var(--light)",borderRadius:12,padding:3}}>
-      {[["active","En cours",active.length],["done","Livrées",done.length],["cancelled","Annulées",cancelled.length]].map(([k,l,c])=>(
-        <button key={k} onClick={()=>setTab(k)} style={{flex:1,padding:"8px 0",borderRadius:10,border:"none",background:tab===k?"var(--card)":"transparent",color:tab===k?"var(--text)":"var(--muted)",fontSize:11,fontWeight:tab===k?700:500,cursor:"pointer",fontFamily:"inherit",boxShadow:tab===k?"0 1px 4px rgba(0,0,0,.06)":"none"}}>{l} ({c})</button>
-      ))}
+  if (!user) return (
+    <div className="t-scr">
+      <div className="t-head"><h1>Commandes</h1></div>
+      <div className="t-empty" style={{ paddingTop: 120 }}>
+        <div className="ic"><Icon name="list" size={38} /></div>
+        <b>Commandes</b>
+        <p>Connectez-vous pour voir vos commandes</p>
+        <button className="t-pill-btn" style={{ marginTop: 8, padding: "14px 30px", fontSize: 16 }} onClick={() => requireLogin("orders")}>Connexion</button>
+      </div>
     </div>
+  );
 
-    {shown.length===0&&<div style={{textAlign:"center",padding:"40px 0"}}><div style={{fontSize:36,marginBottom:8}}>{tab==="active" ? <Icon name="package" size={32} color="var(--muted)"/> : tab==="done" ? <Icon name="check_circle" size={32} color="var(--muted)"/> : <Icon name="x_circle" size={32} color="var(--muted)"/>}</div><div style={{fontSize:13,color:"var(--muted)"}}>Aucune commande {tab==="active"?"en cours":tab==="done"?"livrée":"annulée"}</div></div>}
+  const reorder = async (o) => {
+    setBusy(true);
+    if (cart.length && Number(cart[0].establishment_id) !== Number(o.establishment_id)) await clearCart();
+    let n = 0;
+    for (const it of o.items || []) {
+      if (!it.article_id) continue;
+      const ok = await addToCart({ id: Number(it.article_id), name: it.article_name, price: it.article_price, establishmentId: Number(o.establishment_id) }, Number(it.quantity) || 1,
+        { options: parseOpts(it.options).map((x) => ({ group: x.group, name: x.name })), note: it.note || "" });
+      if (ok) n++;
+    }
+    setBusy(false); setAgain(null);
+    if (n) go("cart"); else showToast("Ces articles ne sont plus disponibles", "error");
+  };
 
-    {shown.map(o=><div key={o.ref} className="ocard" onClick={()=>go("orderDetail",o)}>
-      <div className="ocard-h"><h4>{o.ref}</h4><div style={{display:"flex",gap:4,alignItems:"center"}}>{o.isGroup&&<span style={{padding:"2px 6px",borderRadius:5,background:"rgba(59,130,246,0.08)",color:"#3B82F6",fontSize:9,fontWeight:700}}><Icon name="handshake" size={18}/></span>}{o.payment==="cash"&&<span style={{padding:"2px 6px",borderRadius:5,background:"rgba(245,158,11,0.08)",color:"#F59E0B",fontSize:9,fontWeight:700}}><Icon name="wallet" size={18}/></span>}<span className={`ost ${o.sc}`}>{o.status}</span></div></div>
-      <div className="odate">{o.date}</div>
-      <div style={{display:"flex",gap:4,flexWrap:"wrap",marginBottom:10}}>{o.items.map((it,i)=>{const ph=findPhoto(it);return<div key={i} style={{display:"flex",alignItems:"center",gap:4,padding:"3px 8px 3px 3px",background:"var(--light)",borderRadius:8,fontSize:11}}>{ph?<img src={ph} style={{width:20,height:20,borderRadius:5,objectFit:"cover",flexShrink:0}} alt=""/>:<div style={{width:20,height:20,borderRadius:5,background:"var(--border)",flexShrink:0}}/>}<span>{it.replace(/^[^\s]+ /,"")}</span></div>})}</div>
-      <div style={{display:"flex",justifyContent:"space-between",alignItems:"center"}}>
-        <span style={{fontSize:15,fontWeight:700,color:"#F97316"}}>{o.total} FCFA</span>
-        <div style={{display:"flex",gap:6}}>
-          {o.sc==="ship"&&<button style={{padding:"6px 12px",borderRadius:8,background:"rgba(249,115,22,0.08)",fontSize:11,fontWeight:600,color:"#F97316",cursor:"pointer",border:"none",fontFamily:"inherit"}} onClick={e=>{e.stopPropagation();go("tracking")}}><Icon name="location" size={16}/>{" "}Suivre</button>}
-          {o.sc==="done"&&<button style={{padding:"6px 12px",borderRadius:8,background:"rgba(16,185,129,0.08)",fontSize:11,fontWeight:600,color:"#10B981",cursor:"pointer",border:"1px solid rgba(249,115,22,0.15)",fontFamily:"inherit"}} onClick={e=>{e.stopPropagation();setReorderConfirm(o)}}> Recommander</button>}
-          {(o.sc==="ship"||o.sc==="prep")&&<button style={{padding:"6px 12px",borderRadius:8,background:"rgba(239,68,68,0.06)",fontSize:11,fontWeight:600,color:"#EF4444",cursor:"pointer",border:"1px solid rgba(239,68,68,0.15)",fontFamily:"inherit"}} onClick={e=>{e.stopPropagation();setCancelConfirm(o)}}> Annuler</button>}
+  const active = (orders || []).filter((o) => ACTIVE.includes(o.status));
+  const past = (orders || []).filter((o) => !ACTIVE.includes(o.status));
+
+  const Card = ({ o }) => {
+    const st = ORDER_STATUS[o.status] || ORDER_STATUS.pending;
+    const isActive = ACTIVE.includes(o.status);
+    const items = o.items || [];
+    return (
+      <div className="t-card" style={{ margin: "0 16px 12px", padding: 16, cursor: "pointer" }} onClick={() => go("tracking", { id: o.id })} role="button">
+        <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
+          <StoreLogo v={{ name: o.establishment_name, logo: o.establishment_avatar }} size={50} />
+          <div style={{ flex: 1, minWidth: 0 }}>
+            <div style={{ fontWeight: 700, fontSize: 16, whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis" }}>{o.establishment_name}</div>
+            <div className="t-mut">{dateLabel(o.created_at)}</div>
+          </div>
+          <span style={{ padding: "5px 10px", borderRadius: 10, background: st.bg, color: st.color, fontSize: 12, fontWeight: 700 }}>{st.label}</span>
+        </div>
+        <div style={{ fontSize: 14, color: "var(--t-sub)", margin: "12px 0 10px", lineHeight: 1.45 }}>
+          {items.slice(0, 3).map((it) => `${it.quantity} × ${it.article_name}`).join(", ")}{items.length > 3 ? ` et ${items.length - 3} autre(s)` : ""}
+        </div>
+        {o.scheduled_for && isActive && <div style={{ fontSize: 13, color: "var(--acc-d)", fontWeight: 700, marginBottom: 8 }}>Programmée : {dateLabel(o.scheduled_for)}</div>}
+        <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between" }}>
+          <b style={{ fontSize: 16 }}>{fmt(o.total)}</b>
+          {isActive ? <span style={{ color: "var(--acc)", fontWeight: 700, fontSize: 14, display: "flex", alignItems: "center", gap: 4 }}>Suivre <Icon name="arrow_right" size={16} color="var(--acc)" /></span>
+            : o.status === "delivered" && <button className="t-pill-btn" style={{ color: "var(--acc)" }} onClick={(e) => { e.stopPropagation(); setAgain(o); }}><Icon name="repeat" size={14} color="var(--acc)" /> Commander à nouveau</button>}
         </div>
       </div>
-    </div>)}</div>
-    </PullToRefresh>
+    );
+  };
 
-    {/* Cancel modal */}
-    {cancelConfirm&&<div style={{position:"fixed",inset:0,background:"rgba(0,0,0,.4)",zIndex:100,display:"flex",alignItems:"center",justifyContent:"center",padding:20}} onClick={()=>setCancelConfirm(null)}>
-      <div style={{background:"var(--card)",borderRadius:20,padding:24,maxWidth:340,width:"100%",textAlign:"center"}} onClick={e=>e.stopPropagation()}>
-        <div style={{fontSize:40,marginBottom:10}}>️</div>
-        <h3 style={{fontSize:17,fontWeight:700,marginBottom:6}}>Annuler la commande ?</h3>
-        <p style={{fontSize:13,color:"var(--muted)",marginBottom:14}}>{cancelConfirm.ref} — {cancelConfirm.total} FCFA<br/>Remboursement sous 24-48h.</p>
-        <div style={{display:"flex",gap:10}}>
-          <button onClick={()=>setCancelConfirm(null)} style={{flex:1,padding:12,borderRadius:12,border:"1px solid var(--border)",background:"var(--card)",fontSize:13,fontWeight:600,cursor:"pointer",fontFamily:"inherit"}}>Non</button>
-          <button onClick={()=>cancelOrder(cancelConfirm.ref)} style={{flex:1,padding:12,borderRadius:12,border:"none",background:"#EF4444",color:"#fff",fontSize:13,fontWeight:700,cursor:"pointer",fontFamily:"inherit"}}>Oui, annuler</button>
-        </div>
-      </div>
-    </div>}
+  return (
+    <div className="t-scr gray">
+      <div className="t-head" style={{ background: "var(--card)" }}><h1>Commandes</h1></div>
+      {orders === null && <div className="t-empty"><span className="spinner" style={{ borderColor: "var(--t-line)", borderTopColor: "var(--acc)", width: 28, height: 28 }} /></div>}
+      {orders && orders.length === 0 && <div className="t-empty" style={{ paddingTop: 100 }}>
+        <div className="ic"><Icon name="list" size={38} /></div><b>Pas encore de commande</b><p>Vos commandes apparaîtront ici.</p>
+      </div>}
+      {active.length > 0 && <><div className="t-h2" style={{ padding: "16px 16px 10px" }}>En cours</div>{active.map((o) => <Card key={o.id} o={o} />)}</>}
+      {past.length > 0 && <><div className="t-h2" style={{ padding: "16px 16px 10px" }}>Passées</div>{past.map((o) => <Card key={o.id} o={o} />)}</>}
+      <div style={{ height: 30 }} />
 
-    {/* Reorder modal */}
-    {reorderConfirm&&<div style={{position:"fixed",inset:0,background:"rgba(0,0,0,.4)",zIndex:100,display:"flex",alignItems:"center",justifyContent:"center",padding:20}} onClick={()=>setReorderConfirm(null)}>
-      <div style={{background:"var(--card)",borderRadius:20,padding:24,maxWidth:340,width:"100%",textAlign:"center"}} onClick={e=>e.stopPropagation()}>
-        <div style={{fontSize:40,marginBottom:10}}></div>
-        <h3 style={{fontSize:17,fontWeight:700,marginBottom:6}}>Recommander ?</h3>
-        <p style={{fontSize:13,color:"var(--muted)",marginBottom:8}}>Les mêmes articles seront ajoutés :</p>
-        <div style={{textAlign:"left",marginBottom:14}}>
-          {reorderConfirm.items.map((item,i)=><div key={i} style={{padding:"6px 0",fontSize:13,borderBottom:i<reorderConfirm.items.length-1?"1px solid var(--border)":"none"}}>{item}</div>)}
-          <div style={{display:"flex",justifyContent:"space-between",paddingTop:8,fontWeight:700,fontSize:14}}>
-            <span>Total</span><span style={{color:"#F97316"}}>{reorderConfirm.total} FCFA</span>
+      {again && <Sheet onClose={() => !busy && setAgain(null)}>
+        <div style={{ padding: "10px 20px 22px" }}>
+          <div style={{ fontSize: 22, fontWeight: 700, marginBottom: 8 }}>Commander à nouveau ?</div>
+          <div style={{ fontSize: 14, color: "var(--t-sub)", lineHeight: 1.5, marginBottom: 18 }}>
+            Les articles de cette commande chez <b style={{ color: "var(--t-text)" }}>{again.establishment_name}</b> seront ajoutés à votre panier, aux prix actuels.
+            {cart.length > 0 && Number(cart[0].establishment_id) !== Number(again.establishment_id) && " Votre panier actuel sera vidé."}
+          </div>
+          <div style={{ display: "flex", gap: 10 }}>
+            <button className="t-cta ghost" onClick={() => setAgain(null)} disabled={busy}>Annuler</button>
+            <button className="t-cta center" onClick={() => reorder(again)} disabled={busy}>{busy ? "Ajout…" : "Ajouter au panier"}</button>
           </div>
         </div>
-        <div style={{display:"flex",gap:10}}>
-          <button onClick={()=>setReorderConfirm(null)} style={{flex:1,padding:12,borderRadius:12,border:"1px solid var(--border)",background:"var(--card)",fontSize:13,fontWeight:600,cursor:"pointer",fontFamily:"inherit"}}>Annuler</button>
-          <button onClick={()=>reorder(reorderConfirm)} style={{flex:1,padding:12,borderRadius:12,border:"none",background:"#F97316",color:"#fff",fontSize:13,fontWeight:700,cursor:"pointer",fontFamily:"inherit"}}><Icon name="package" size={16}/>{" "}Commander</button>
-        </div>
-      </div>
-    </div>}
-  </>);
+      </Sheet>}
+    </div>
+  );
 }
-
-export default OrdersScr;

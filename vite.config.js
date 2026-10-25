@@ -5,7 +5,13 @@ export default defineConfig({
   plugins: [react()],
   server: {
     port: 3000,
-    open: true
+    open: true,
+    proxy: {
+      '/lamuka-api': {
+        target: 'http://localhost',
+        changeOrigin: true,
+      }
+    }
   },
   build: {
     outDir: 'dist',

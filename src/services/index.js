@@ -15,4 +15,5 @@ export { default as social } from './socialService';
 export { default as user } from './userService';
 export { default as vendor } from './vendorService';
 export { default as driver } from './driverService';
-export { USE_MOCK, API_URL } from './config';
+export { default as buyer } from './buyerService';
+export { API_URL } from './config';

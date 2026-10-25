@@ -100,7 +100,7 @@ function ImageCropper({ src, onConfirm, onCancel, shape = "square" }) {
 
       {/* Guide */}
       <div style={{ color: "rgba(255,255,255,.45)", fontSize: 11, marginTop: 8 }}>
-        ️ Glissez pour repositionner
+         Glissez pour repositionner
       </div>
 
       {/* Zoom */}

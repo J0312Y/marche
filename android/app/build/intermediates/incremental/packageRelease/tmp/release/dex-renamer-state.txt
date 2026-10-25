@@ -1,4 +1,7 @@
-#Mon Mar 02 00:13:18 WAT 2026
+#Sun Oct 25 18:18:48 WAT 2026
 base.0=D\:\\lamuka-market\\android\\app\\build\\intermediates\\dex\\release\\mergeDexRelease\\classes.dex
-renamed.0=classes.dex
+base.1=D\:\\lamuka-market\\android\\app\\build\\intermediates\\dex\\release\\mergeDexRelease\\classes2.dex
 path.0=classes.dex
+path.1=classes2.dex
+renamed.0=classes.dex
+renamed.1=classes2.dex

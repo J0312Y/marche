@@ -25,3 +25,10 @@ export function validatePayPhone(phone, method) {
 export function isPayPhoneValid(phone, method) {
   return validatePayPhone(phone, method) === null;
 }
+
+/** Affichage d'un numéro congolais : +242069839701 ou 069839701 → 06 983 97 01 (autres formats inchangés) */
+export function fmtPhone(p) {
+  if (!p) return "";
+  const d = String(p).replace(/\s/g, "").replace(/^\+?242/, "");
+  return /^0\d{8}$/.test(d) ? d.replace(/^(\d{2})(\d{3})(\d{2})(\d{2})$/, "$1 $2 $3 $4") : String(p);
+}

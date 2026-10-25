@@ -1,32 +1,34 @@
 import { useState } from "react";
-import { D_STATS } from "../../data/driverData";
-import { fmt } from "../../utils/helpers";
+import { useLoad } from "../../hooks";
 import Icon from "../../components/Icon";
+import { fmt } from "../../utils/helpers";
+import driver from "../../services/driverService";
 
+// Statistiques réelles du livreur (API /driver/stats : livraisons terminées et gains)
 function DrStatsScr({onBack}){
   const [period,setPeriod]=useState("week");
-  const d=D_STATS[period];
-  const chartData=[85,120,95,160,140,110,180];
-  const maxBar=Math.max(...chartData);
-  return(<div className="scr" style={{paddingBottom:20}}><div className="appbar"><button onClick={onBack}>←</button><h2>Statistiques</h2><div style={{width:38}}/></div>
-    <div className="vd-period">{[["today","Jour"],["week","Semaine"],["month","Mois"]].map(([k,l])=><button key={k} className={period===k?"on":""} onClick={()=>setPeriod(k)}>{l}</button>)}</div>
-    <div className="vd-stats">
-      <div className="vd-stat"><div className="vs-icon"><Icon name="package" size={18}/></div><div className="vs-val">{d.deliveries}</div><div className="vs-lbl">Livraisons</div><div className="vs-trend up">↑ 15%</div></div>
-      <div className="vd-stat"><div className="vs-icon"><Icon name="wallet" size={18}/></div><div className="vs-val">{fmt(d.earned)}</div><div className="vs-lbl">Gagné</div><div className="vs-trend up">↑ 23%</div></div>
-      <div className="vd-stat"><div className="vs-icon"></div><div className="vs-val">{d.distance} km</div><div className="vs-lbl">Distance</div></div>
-      <div className="vd-stat"><div className="vs-icon">⏱️</div><div className="vs-val">{d.hours}h</div><div className="vs-lbl">En ligne</div></div>
-    </div>
-    <div className="vd-chart"><h4>Livraisons par jour</h4><div className="chart-bars">{chartData.map((v,i)=><div key={i} className="chart-bar" style={{height:`${(v/maxBar)*100}%`,background:"linear-gradient(180deg,#F97316,#EA580C)"}}><div className="cb-tip">{v} FCFA</div></div>)}</div><div className="chart-labels">{["Lun","Mar","Mer","Jeu","Ven","Sam","Dim"].map(d=><span key={d}>{d}</span>)}</div></div>
-    <div style={{padding:"0 16px"}}><div style={{padding:16,background:"var(--card)",border:"1px solid var(--border)",borderRadius:16}}>
-      <div style={{fontSize:14,fontWeight:700,marginBottom:12}}>Performance</div>
-      {[{label:"Taux d'acceptation",val:"92%",pct:92,color:"#F97316"},{label:"Livraisons à temps",val:"88%",pct:88,color:"#F97316"},{label:"Satisfaction client",val:"4.8/5",pct:96,color:"#F59E0B"}].map(s=><div key={s.label} style={{marginBottom:12}}>
-        <div style={{display:"flex",justifyContent:"space-between",fontSize:12,marginBottom:4}}><span style={{fontWeight:600}}>{s.label}</span><span style={{color:"var(--muted)"}}>{s.val}</span></div>
-        <div style={{height:6,background:"var(--border)",borderRadius:3,overflow:"hidden"}}><div style={{width:`${s.pct}%`,height:"100%",background:s.color,borderRadius:3}}/></div>
-      </div>)}
-    </div></div>
+  const { data: statsData, loading, error } = useLoad(() => driver.getStats(period), [period]);
+  const s = statsData?.stats || {};
+  const profile = statsData?.driver || {};
+  const deliveries = parseInt(s.total_deliveries) || 0;
+  const earned = parseFloat(s.total_earned) || 0;
+  const avg = parseFloat(s.avg_earning) || 0;
+  const rating = parseFloat(profile.avg_rating) || 0;
+
+  return(<div className="scr" style={{padding:16}}>
+    <div className="appbar" style={{padding:0,marginBottom:12}}><button onClick={onBack}>←</button><h2>Statistiques</h2><div style={{width:38}}/></div>
+    <div style={{display:"flex",gap:6,marginBottom:14}}>{[["today","Aujourd'hui"],["week","Semaine"],["month","Mois"]].map(([k,l])=><button key={k} onClick={()=>setPeriod(k)} style={{flex:1,padding:10,borderRadius:12,border:period===k?"2px solid #F97316":"1px solid var(--border)",background:period===k?"rgba(249,115,22,0.04)":"var(--card)",color:period===k?"#F97316":"var(--text)",fontSize:13,fontWeight:600,cursor:"pointer",fontFamily:"inherit"}}>{l}</button>)}</div>
+
+    {loading ? <div style={{display:"flex",justifyContent:"center",padding:40}}><div className="spinner"/></div> : <>
+      {error&&<div className="info-box yellow" style={{marginBottom:12}}><span><Icon name="info" size={16}/></span><span style={{fontSize:12}}>{error}</span></div>}
+      <div style={{display:"grid",gridTemplateColumns:"1fr 1fr",gap:10,marginBottom:14}}>
+        {[["package",deliveries,"Livraisons"],["money",fmt(earned),"Gains"],["coin",fmt(avg),"Gain moyen / course"],["star_full",rating?rating.toFixed(1)+" / 5":"—","Note moyenne"]].map(([ic,v,l])=>
+          <div key={l} style={{padding:14,background:"var(--card)",border:"1px solid var(--border)",borderRadius:14,textAlign:"center"}}>
+            <Icon name={ic} size={18}/><div style={{fontSize:18,fontWeight:700,marginTop:4}}>{v}</div><div style={{fontSize:11,color:"var(--muted)"}}>{l}</div>
+          </div>)}
+      </div>
+      <div style={{fontSize:12,color:"var(--muted)",textAlign:"center"}}>Total depuis l'inscription : {parseInt(profile.total_deliveries)||0} livraison{(parseInt(profile.total_deliveries)||0)>1?"s":""}</div>
+    </>}
   </div>);
 }
-
-/* D14 ── DRIVER SETTINGS ── */
-
 export default DrStatsScr;

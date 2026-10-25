@@ -1,25 +1,40 @@
 import { useState } from "react";
-import { useLoad } from "../../hooks";
+import { useLoad, useAction } from "../../hooks";
 import { vendor } from "../../services";
 import { SkeletonList } from "../../components/Loading";
-import { CHAT_AVATARS } from "../../data/images";
 import toast from "../../utils/toast";
 import Icon from "../../components/Icon";
 
+// API → modèle de l'écran
+const fromApi = (r) => r.client !== undefined ? r : ({
+  id: r.id,
+  client: [r.first_name, r.last_name].filter(Boolean).join(" ") || "Client",
+  avatar: r.avatar || null,
+  date: r.created_at ? new Date(r.created_at).toLocaleDateString("fr-FR",{day:"numeric",month:"short",year:"numeric"}) : "",
+  rating: parseInt(r.rating) || 0,
+  text: r.comment || "",
+  product: r.article_name || "",
+  reply: r.vendor_reply || "",
+  replied: !!r.vendor_reply,
+});
+
 function VReviewsScr({onBack}){
   const { data, loading } = useLoad(() => vendor.getReviews());
-  const raw = data?.reviews || data || [];
+  const raw = (data?.reviews || data || []).map(fromApi);
   const [reviews,setReviews]=useState(null);
   const [replyingTo,setReplyingTo]=useState(null);
   const [replyText,setReplyText]=useState("");
   const [filter,setFilter]=useState("all");
+  const { run } = useAction();
 
   const items=reviews||raw;
   const avg=items.length>0?(items.reduce((s,r)=>s+r.rating,0)/items.length).toFixed(1):"0";
   const filtered=filter==="all"?items:filter==="unreplied"?items.filter(r=>!r.replied):items.filter(r=>r.replied);
 
-  const submitReply=(idx)=>{
+  const submitReply=async(idx)=>{
     if(!replyText.trim())return;
+    const reviewItem=(reviews||raw)[idx];
+    try{await run(()=>vendor.replyReview(reviewItem.id,replyText.trim()));}catch(err){toast.error(err.message||"Impossible de publier la réponse");return;}
     const updated=(reviews||raw).map((r,i)=>i===idx?{...r,replied:true,reply:replyText.trim()}:r);
     setReviews(updated);
     setReplyingTo(null);
@@ -58,7 +73,7 @@ function VReviewsScr({onBack}){
           {/* Header */}
           <div style={{display:"flex",alignItems:"center",justifyContent:"space-between",marginBottom:8}}>
             <div style={{display:"flex",alignItems:"center",gap:8}}>
-              <div style={{width:32,height:32,borderRadius:10,overflow:"hidden"}}><img src={CHAT_AVATARS[["client","femme1","homme1","femme2"][i%4]]} style={{width:"100%",height:"100%",objectFit:"cover"}} alt=""/></div>
+              <div style={{width:32,height:32,borderRadius:10,overflow:"hidden",background:"rgba(249,115,22,0.1)",display:"flex",alignItems:"center",justifyContent:"center",color:"#F97316",fontWeight:700,fontSize:13}}>{r.avatar?<img src={r.avatar} style={{width:"100%",height:"100%",objectFit:"cover"}} alt=""/>:r.client.charAt(0).toUpperCase()}</div>
               <div>
                 <b style={{fontSize:13}}>{r.client}</b>
                 <div style={{fontSize:10,color:"var(--muted)"}}>{r.date}</div>
@@ -69,7 +84,7 @@ function VReviewsScr({onBack}){
 
           {/* Review text */}
           <div style={{fontSize:12,color:"var(--sub)",lineHeight:1.5,marginBottom:6}}>{r.text}</div>
-          <div style={{fontSize:11,color:"var(--muted)",display:"flex",alignItems:"center",gap:4}}><Icon name="package" size={16}/>{" "}{r.product}</div>
+          {r.product&&<div style={{fontSize:11,color:"var(--muted)",display:"flex",alignItems:"center",gap:4}}><Icon name="package" size={16}/>{" "}{r.product}</div>}
 
           {/* Existing reply */}
           {r.replied&&r.reply&&(

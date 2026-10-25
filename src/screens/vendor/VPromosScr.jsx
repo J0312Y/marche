@@ -1,11 +1,39 @@
 import Select from "../../components/Select";
 import DatePicker from "../../components/DatePicker";
 import { useState } from "react";
-import { useLoad } from "../../hooks";
+import { useLoad, useAction } from "../../hooks";
 import { vendor } from "../../services";
 import { SkeletonCards } from "../../components/Loading";
 import toast from "../../utils/toast";
 import Icon from "../../components/Icon";
+
+const fmtDay = (d) => d ? new Date(d).toLocaleDateString("fr-FR",{day:"numeric",month:"short"}) : "—";
+
+// API (table coupons) → modèle de l'écran
+const fromApi = (c) => {
+  const endDate = c.expires_at ? String(c.expires_at).slice(0,10) : "";
+  const startDate = c.starts_at ? String(c.starts_at).slice(0,10) : "";
+  const expired = endDate && new Date(c.expires_at) < new Date();
+  return {
+    id: c.id, code: c.code, name: c.description || c.code,
+    discount: parseInt(c.value) || 0, type: c.type === "fixed" ? "F" : "%",
+    min: parseInt(c.min_order) || 0, used: parseInt(c.used_count) || 0,
+    startDate, endDate, start: fmtDay(startDate || c.created_at), end: fmtDay(endDate),
+    active: String(c.is_active) === "1" && !expired,
+  };
+};
+
+// Modèle de l'écran → API
+const toApi = (p) => ({
+  code: (p.code || p.name.replace(/[^a-zA-Z0-9]/g, "").slice(0, 12) + p.discount).toUpperCase(),
+  type: p.type === "F" ? "fixed" : "percentage",
+  value: p.discount,
+  description: p.name,
+  min_order: p.min || 0,
+  starts_at: p.startDate || null,
+  expires_at: p.endDate + " 23:59:59",
+  is_active: p.active ? 1 : 0,
+});
 
 function VPromosScr({go,onBack}){
   const { data: rawPromos, loading } = useLoad(() => vendor.getPromos());
@@ -13,33 +41,47 @@ function VPromosScr({go,onBack}){
   const [tab,setTab]=useState("active");
   const [editPromo,setEditPromo]=useState(null);
   const [deleteConfirm,setDeleteConfirm]=useState(null);
+  const { run } = useAction();
 
-  const items=promos||(rawPromos||[]);
+  const items=promos||(rawPromos||[]).map(fromApi);
   const activePromos=items.filter(p=>p.active);
   const inactivePromos=items.filter(p=>!p.active);
   const shown=tab==="active"?activePromos:inactivePromos;
 
-  const togglePromo=(id)=>{
+  const togglePromo=async(id)=>{
+    const current=items.find(p=>p.id===id);
+    try{await run(()=>vendor.updatePromo(id,{is_active:current.active?0:1}));}
+    catch(err){toast.error(err.message||"Impossible de modifier la promotion");return;}
     const updated=items.map(p=>p.id===id?{...p,active:!p.active}:p);
     setPromos(updated);
     const promo=updated.find(p=>p.id===id);
     toast.success(promo.active?"Promotion activée":"Promotion désactivée ⏸️");
   };
 
-  const deletePromo=(id)=>{
+  const deletePromo=async(id)=>{
+    try{await run(()=>vendor.deletePromo(id));}catch(err){toast.error(err.message||"Impossible de supprimer la promotion");return;}
     setPromos(items.filter(p=>p.id!==id));
     setDeleteConfirm(null);
-    toast.success("Promotion supprimée ️");
+    toast.success("Promotion supprimée ");
   };
 
-  const saveEdit=()=>{
+  const saveEdit=async()=>{
     if(!editPromo)return;
+    if(!editPromo.discount||editPromo.discount<=0){toast.error("Indiquez le montant de la réduction");return;}
+    if(!editPromo.endDate){toast.error("Choisissez une date de fin");return;}
+    const payload=toApi(editPromo);
+    const saved={...editPromo,code:payload.code,start:fmtDay(editPromo.startDate||new Date()),end:fmtDay(editPromo.endDate)};
     const exists=items.find(p=>p.id===editPromo.id);
     if(exists){
-      setPromos(items.map(p=>p.id===editPromo.id?editPromo:p));
+      try{await run(()=>vendor.updatePromo(editPromo.id,payload));}
+      catch(err){toast.error(err.message||"Impossible de modifier la promotion");return;}
+      setPromos(items.map(p=>p.id===editPromo.id?saved:p));
       toast.success("Promotion modifiée");
     }else{
-      setPromos([{...editPromo,id:"pr"+Date.now(),used:0},...items]);
+      let created;
+      try{created=await run(()=>vendor.createPromo(payload));}
+      catch(err){toast.error(err.message||"Impossible de créer la promotion");return;}
+      setPromos([{...saved,id:created?.id,used:0},...items]);
       toast.success("Promotion créée");
     }
     setEditPromo(null);
@@ -49,7 +91,7 @@ function VPromosScr({go,onBack}){
     <div className="appbar" style={{padding:0,marginBottom:10}}>
       <button onClick={onBack}>←</button>
       <h2>Promotions ({items.length})</h2>
-      <button onClick={()=>setEditPromo({name:"",discount:20,type:"%",code:"",products:"Tous les articles",start:"",end:"",active:true,min:0})} style={{fontSize:20}}>+</button>
+      <button onClick={()=>setEditPromo({name:"",discount:20,type:"%",code:"",startDate:"",endDate:"",active:true,min:0})} style={{fontSize:20}}>+</button>
     </div>
 
     {loading?<SkeletonCards count={2}/>:<>
@@ -79,13 +121,13 @@ function VPromosScr({go,onBack}){
           </div>
 
           {/* Details */}
-          <div style={{fontSize:12,color:"var(--sub)",marginBottom:4}}><Icon name="package" size={16}/>{" "}{p.products}</div>
+          {p.min>0&&<div style={{fontSize:12,color:"var(--sub)",marginBottom:4}}><Icon name="cart" size={14}/>{" "}Dès {p.min.toLocaleString("fr-FR")} F d'achat</div>}
           <div style={{fontSize:11,color:"var(--muted)",marginBottom:8}}> Du {p.start} au {p.end} · {p.used} utilisations</div>
 
           {/* Actions */}
           <div style={{display:"flex",gap:8}}>
             <button onClick={()=>setEditPromo({...p})} style={{flex:1,padding:"8px 0",borderRadius:10,border:"1px solid var(--border)",background:"var(--card)",fontSize:11,fontWeight:600,cursor:"pointer",fontFamily:"inherit",display:"flex",alignItems:"center",justifyContent:"center",gap:4}}><Icon name="edit" size={16}/>{" "}Modifier</button>
-            <button onClick={()=>setDeleteConfirm(p)} style={{padding:"8px 14px",borderRadius:10,border:"1px solid rgba(239,68,68,0.2)",background:"transparent",color:"#EF4444",fontSize:11,fontWeight:600,cursor:"pointer",fontFamily:"inherit"}}>️</button>
+            <button onClick={()=>setDeleteConfirm(p)} style={{padding:"8px 14px",borderRadius:10,border:"1px solid rgba(239,68,68,0.2)",background:"transparent",color:"#EF4444",fontSize:11,fontWeight:600,cursor:"pointer",fontFamily:"inherit"}}></button>
           </div>
         </div>
       ))}
@@ -104,12 +146,15 @@ function VPromosScr({go,onBack}){
           <div className="field"><label>Réduction <span style={{color:"#EF4444"}}>*</span></label><input type="number" value={editPromo.discount} onChange={e=>setEditPromo({...editPromo,discount:parseInt(e.target.value)||0})} placeholder="20"/></div>
           <div className="field"><label>Code (opt.)</label><input value={editPromo.code||""} onChange={e=>setEditPromo({...editPromo,code:e.target.value.toUpperCase()})} placeholder="PROMO20"/></div>
         </div>
-        <div className="field"><label>Produits concernés</label>
-          <Select value={editPromo.products} onChange={v=>setEditPromo({...editPromo,products:v})} options={["Tous les articles","Premier achat","Mode uniquement","Électronique"]}/>
+        <div className="field-row">
+          <div className="field"><label>Type</label>
+            <Select value={editPromo.type==="F"?"Montant (F)":"Pourcentage (%)"} onChange={v=>setEditPromo({...editPromo,type:v.startsWith("Montant")?"F":"%"})} options={["Pourcentage (%)","Montant (F)"]}/>
+          </div>
+          <div className="field"><label>Achat minimum (F)</label><input type="number" value={editPromo.min||""} onChange={e=>setEditPromo({...editPromo,min:parseInt(e.target.value)||0})} placeholder="0"/></div>
         </div>
         <div className="field-row">
           <div className="field"><label>Date début</label><DatePicker value={editPromo.startDate||""} onChange={v=>setEditPromo({...editPromo,startDate:v,start:new Date(v).toLocaleDateString("fr-FR",{day:"numeric",month:"short"})})}/></div>
-          <div className="field"><label>Date fin</label><DatePicker value={editPromo.endDate||""} onChange={v=>setEditPromo({...editPromo,endDate:v,end:new Date(v).toLocaleDateString("fr-FR",{day:"numeric",month:"short"})})}/></div>
+          <div className="field"><label>Date fin <span style={{color:"#EF4444"}}>*</span></label><DatePicker value={editPromo.endDate||""} onChange={v=>setEditPromo({...editPromo,endDate:v,end:new Date(v).toLocaleDateString("fr-FR",{day:"numeric",month:"short"})})}/></div>
         </div>
 
         {/* Active toggle */}
@@ -127,7 +172,7 @@ function VPromosScr({go,onBack}){
     {/* Delete confirm */}
     {deleteConfirm&&<div style={{position:"fixed",inset:0,background:"rgba(0,0,0,.4)",zIndex:100,display:"flex",alignItems:"center",justifyContent:"center",padding:20}} onClick={()=>setDeleteConfirm(null)}>
       <div style={{background:"var(--card)",borderRadius:20,padding:24,maxWidth:340,width:"100%",textAlign:"center"}} onClick={e=>e.stopPropagation()}>
-        <div style={{fontSize:40,marginBottom:10}}>️</div>
+        <div style={{fontSize:40,marginBottom:10}}><Icon name="trash" size={34} color="#EF4444"/></div>
         <h3 style={{fontSize:17,fontWeight:700,marginBottom:6}}>Supprimer la promo ?</h3>
         <p style={{fontSize:13,color:"var(--muted)",marginBottom:14}}>"{deleteConfirm.name}" sera supprimée définitivement.</p>
         <div style={{display:"flex",gap:10}}>

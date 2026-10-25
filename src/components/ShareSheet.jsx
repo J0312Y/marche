@@ -91,7 +91,7 @@ function ShareSheet() {
       ),
     },
     {
-      label: "Copier le lien",
+      label: "Copier",
       bg: "#6B7280",
       action: copyLink,
       icon: (
@@ -110,7 +110,7 @@ function ShareSheet() {
     }}>
       <div onClick={e => e.stopPropagation()} style={{
         width: "100%", background: "var(--card)", borderRadius: "20px 20px 0 0",
-        padding: "12px 16px 24px", animation: "shareUp .25s ease",
+        padding: "10px 16px max(12px, env(safe-area-inset-bottom))", animation: "shareUp .25s ease",
       }}>
         {/* Handle */}
         <div style={{ width: 36, height: 4, borderRadius: 2, background: "var(--border)", margin: "0 auto 14px" }} />
@@ -122,20 +122,20 @@ function ShareSheet() {
         </div>
 
         {/* Share options */}
-        <div style={{ display: "flex", justifyContent: "space-around", marginBottom: 14 }}>
+        <div style={{ display: "grid", gridTemplateColumns: `repeat(${options.length}, 1fr)`, columnGap: 6, marginBottom: 12 }}>
           {options.map(o => (
-            <div key={o.label} onClick={o.action} style={{ textAlign: "center", cursor: "pointer", padding: "6px 0" }}>
+            <div key={o.label} onClick={o.action} style={{ textAlign: "center", cursor: "pointer", padding: "4px 0", minWidth: 0 }}>
               <div style={{
-                width: 52, height: 52, borderRadius: 16,
+                width: 46, height: 46, borderRadius: 14,
                 background: o.bg,
                 display: "flex", alignItems: "center", justifyContent: "center",
-                marginBottom: 8, margin: "0 auto 8px",
+                margin: "0 auto 6px",
                 transition: "transform .1s",
                 boxShadow: `0 4px 12px ${o.bg}40`,
               }}>
                 {o.icon}
               </div>
-              <div style={{ fontSize: 10, fontWeight: 600, color: "var(--sub)" }}>{o.label}</div>
+              <div style={{ fontSize: 10, fontWeight: 600, color: "var(--sub)", overflow: "hidden", whiteSpace: "nowrap", textOverflow: "ellipsis" }}>{o.label}</div>
             </div>
           ))}
         </div>

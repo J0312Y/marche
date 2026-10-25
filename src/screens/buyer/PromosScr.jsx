@@ -1,10 +1,15 @@
 import { useState } from "react";
+import { useApp } from "../../context/AppContext";
 import toast from "../../utils/toast";
 import { fmt } from "../../utils/helpers";
-import COUPONS from "../../data/coupons";
+import { useLoad } from "../../hooks/useData";
+import user from "../../services/userService";
 import Icon from "../../components/Icon";
 
 function PromosScr({ onBack, go }) {
+  const { userName } = useApp();
+  const { data, loading } = useLoad(() => user.getCoupons());
+  const COUPONS = data || [];
   const [copied, setCopied] = useState(null);
   const [filter, setFilter] = useState("all"); // all | personal | active
 
@@ -35,7 +40,7 @@ function PromosScr({ onBack, go }) {
         <div style={{ margin: "0 16px 14px", padding: 18, background: "linear-gradient(135deg,#F97316,#EC4899)", borderRadius: 18, color: "#fff", textAlign: "center" }}>
           <div style={{ fontSize: 36, marginBottom: 6 }}><Icon name="gift" size={18}/></div>
           <div style={{ fontSize: 22, fontWeight: 800 }}>{personalCount} promo{personalCount > 1 ? "s" : ""} pour vous</div>
-          <div style={{ fontSize: 12, opacity: .9, marginTop: 4 }}>Codes exclusifs réservés à Joeldy</div>
+          <div style={{ fontSize: 12, opacity: .9, marginTop: 4 }}>Codes exclusifs réservés {userName ? `à ${userName.split(" ")[0]}` : "pour vous"}</div>
         </div>
       )}
 

@@ -1,15 +1,32 @@
 import { useState } from "react";
 import toast from "../../utils/toast";
 import Icon from "../../components/Icon";
+import { useAction } from "../../hooks/useData";
+import driverService from "../../services/driverService";
 
-function DrRateVendorScr({onBack,vendor}){
-  const v=vendor||{name:"Mode Afrique",avatar:""};
+function DrRateVendorScr({onBack,vendor,delivery}){
+  const v=vendor||{name:"—",avatar:""};
   const [rating,setRating]=useState(0);
   const [tags,setTags]=useState([]);
   const [comment,setComment]=useState("");
+  const { run: runRate, loading: submitting } = useAction();
 
   const TAG_OPTIONS=["Rapide","Colis bien emballé","Agréable","Attente trop longue","Colis mal emballé","Difficile à trouver"];
   const toggleTag=(t)=>setTags(p=>p.includes(t)?p.filter(x=>x!==t):[...p,t]);
+
+  const handleSubmit = async () => {
+    try {
+      const deliveryId = delivery?.id;
+      const fullComment = tags.length > 0 ? `${tags.join(", ")}${comment ? " — " + comment : ""}` : comment;
+      if (deliveryId) {
+        await runRate(() => driverService.rateVendor(deliveryId, rating, fullComment));
+      }
+      toast.success("Merci pour votre évaluation");
+      setTimeout(onBack, 800);
+    } catch {
+      toast.error("Erreur lors de l'envoi de l'évaluation");
+    }
+  };
 
   return(<div className="scr" style={{padding:16,paddingBottom:20}}>
     <div className="appbar" style={{padding:0,marginBottom:12}}><button onClick={onBack}>←</button><h2>Évaluer le commerce</h2><div style={{width:38}}/></div>
@@ -41,7 +58,7 @@ function DrRateVendorScr({onBack,vendor}){
         <textarea rows={3} value={comment} onChange={e=>setComment(e.target.value)} placeholder="Détails sur votre expérience..." style={{width:"100%",padding:10,borderRadius:12,border:"1px solid var(--border)",background:"var(--light)",fontSize:13,fontFamily:"inherit",color:"var(--text)",resize:"none",outline:"none"}}/>
       </div>
 
-      <button onClick={()=>{toast.success("Merci pour votre évaluation");setTimeout(onBack,800)}} style={{width:"100%",padding:14,borderRadius:14,border:"none",background:"#F97316",color:"#fff",fontSize:15,fontWeight:700,cursor:"pointer",fontFamily:"inherit",marginTop:8}}>Envoyer l'évaluation</button>
+      <button onClick={handleSubmit} disabled={submitting} style={{width:"100%",padding:14,borderRadius:14,border:"none",background:submitting?"var(--border)":"#F97316",color:submitting?"var(--muted)":"#fff",fontSize:15,fontWeight:700,cursor:submitting?"not-allowed":"pointer",fontFamily:"inherit",marginTop:8}}>{submitting?"Envoi...":"Envoyer l'évaluation"}</button>
     </>}
   </div>);
 }

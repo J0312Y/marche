@@ -1,137 +1,317 @@
-import DatePicker from "../../components/DatePicker";
-import { useState } from "react";
-import Select from "../../components/Select";
-import toast from "../../utils/toast";
-import { useGuestGate } from "../../hooks/useGuestGate";
-import SuccessAnimation from "../../components/SuccessAnimation";
-import PayLogo from "../../components/PayLogos";
-import { validatePayPhone, getPhonePlaceholder } from "../../utils/phoneValidation";
-import { fmt, getVendorPromo } from "../../utils/helpers";
-import { useData } from "../../hooks";
+import { useEffect, useMemo, useState } from "react";
 import Icon from "../../components/Icon";
+import Sheet from "../../components/t/Sheet";
+import LocationPicker from "../../components/t/LocationPicker";
+import AddressForm from "../../components/t/AddressForm";
+import { zoneOf, getDeliverTo, setDeliverTo, outOfZoneText } from "../../utils/zone";
+import { StoreLogo } from "../../components/t/StoreCard";
+import { useApp } from "../../context/AppContext";
+import { useData } from "../../hooks";
+import { addressesAPI, establishmentsAPI, errandsAPI } from "../../api";
+import { order as orderService, buyer as buyerSvc } from "../../services";
+import { fmt } from "../../utils/helpers";
+import { cartSubtotal, couponDiscount, lineQty, lineTotal, optionsLabel } from "../../utils/cartMath";
+import { parseDate, toApiDate, etaLabel } from "../../utils/storeStatus";
+import { NO_CUTLERY_KEY } from "./CartScr";
+import { useAppInfo, loyaltyRules } from "../../config/appInfo";
 
-function CheckoutScr({onBack,onDone,cart=[],clearCart,appliedCoupon,setAppliedCoupon,go}){
-  const { gate, GateUI } = useGuestGate(go);
-  const [step,setStep]=useState(0);const [momo,setMomo]=useState("cash");const [ok,setOk]=useState(false);
-  const [okAnimShown,setOkAnimShown]=useState(false);
-  const [ckAddr,setCkAddr]=useState("");
-  const [ckPhone,setCkPhone]=useState("064663469");
-  const [ckPhoneErr,setCkPhoneErr]=useState("");const [saveAddr,setSaveAddr]=useState(true);
-  const [giftCode,setGiftCode]=useState("");
-  const [giftApplied,setGiftApplied]=useState(null);const [schedule,setSchedule]=useState("now");const [schedDate,setSchedDate]=useState("");const [schedTime,setSchedTime]=useState("10:00-12:00");
-  const momos=[{k:"cash",n:"Paiement à la livraison"}];
-  const { VENDORS } = useData();
+const DAYS = ["Dim.", "Lun.", "Mar.", "Mer.", "Jeu.", "Ven.", "Sam."];
+const pad = (n) => String(n).padStart(2, "0");
 
-  const getItem=(c)=>c.product||c;
-  const getPrice=(c)=>{const p=getItem(c);const vp=getVendorPromo(p,VENDORS);return vp?vp.promoPrice:(p.price||0)};
-  const sub=cart.reduce((s,c)=>s+(getPrice(c)+(c.sidesTotal||0))*(c.qty||1),0)||228500;
-  const del=2500;
-  const discountAmount=appliedCoupon?(appliedCoupon.free?0:Math.round(sub*appliedCoupon.discount/100)):0;
-  const freeDelivery=appliedCoupon?.free||false;
-  const finalDelivery=freeDelivery?0:del;
-  const giftDeduct=giftApplied?Math.min(giftApplied.remaining,sub-discountAmount+finalDelivery):0;
-  const total=Math.max(0,sub-discountAmount+finalDelivery-giftDeduct);
-
-  const validateStep0=()=>{
-    if(!ckAddr.trim()&&step===0){toast.error("Entrez votre adresse de livraison");return false}
-    return true;
-  };
-  const validateCheckout=()=>{if(!momo){toast.error("Choisissez un moyen de paiement");return false}return true};
-  const handleConfirm=()=>{
-    /* Award Lamuka Points: 1 point per 100 F */
-    try{
-      const earned=Math.floor(total/100);
-      const lp=JSON.parse(localStorage.getItem("lk-loyalty")||"{}");
-      const newLp={
-        points:(lp.points??2450)+earned,
-        lifetimePoints:(lp.lifetimePoints??8200)+earned,
-        streakDays:lp.streakDays??4,
-        lastCheckIn:lp.lastCheckIn,
-      };
-      localStorage.setItem("lk-loyalty",JSON.stringify(newLp));
-      window.__lastPointsEarned=earned;
-    }catch{}
-    setOk(true);setOkAnimShown(false);if(saveAddr)toast.info("Adresse sauvegardée");
-    if(setAppliedCoupon) setAppliedCoupon(null);
-    if(clearCart) clearCart();
-  };
-
-  return(<>
-    <div className="appbar"><button onClick={()=>step>0?setStep(step-1):onBack?.()}>←</button><h2>Paiement</h2><div style={{width:38}}/></div>
-    <div className="steps">{["Adresse","Paiement","Confirmer"].map((s,i)=><div key={s} style={{display:"contents"}}>{i>0&&<div className={`sline ${step>=i?"on":""}`}/>}<div className="step-col"><div className={`sdot ${step>i?"on":step>=i?"on":""}`}>{step>i ? <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#fff" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round"><polyline points="20 6 9 17 4 12"/></svg> : i+1}</div><div className={`slbl ${step>=i?"on":""}`}>{s}<GateUI/></div></div></div>)}</div>
-    <div className="scr" style={{padding:16}}>
-      {step===0&&<><h3 style={{fontSize:18,fontWeight:700,marginBottom:14}}>Adresse de livraison</h3>
-        <div className="field"><label>Nom complet <span style={{color:"#EF4444"}}>*</span></label><input defaultValue="Joeldy Tsina"/></div>
-        <div className="field"><label>Téléphone <span style={{color:"#EF4444"}}>*</span></label><div style={{display:"flex",gap:8,alignItems:"center"}}><span style={{fontSize:13,fontWeight:600,flexShrink:0}}>+242</span><input value={ckPhone} onChange={e=>{const v=e.target.value.replace(/[^0-9]/g,"").slice(0,9);setCkPhone(v);setCkPhoneErr("")}} placeholder="06X XXX XXX" type="tel" maxLength={11}/></div>{ckPhoneErr&&<div className="err-msg">{ckPhoneErr}</div>}</div>
-        <div className="field"><label>Adresse <span style={{color:"#EF4444"}}>*</span></label><input value={ckAddr} onChange={e=>setCkAddr(e.target.value)} placeholder="Quartier, Rue, N°"/></div>
-        <div className="field-row"><div className="field"><label>Ville <span style={{color:"#EF4444"}}>*</span></label><input defaultValue="Brazzaville"/></div><div className="field"><label>Pays</label><input defaultValue="Congo "/></div></div>
-        <div style={{marginTop:12,fontSize:13,fontWeight:700,marginBottom:8}}> Quand livrer ?</div>
-        <div style={{display:"flex",gap:6,marginBottom:8}}>
-          {[["now","Maintenant"],["later","Programmer"]].map(([k,l])=><button key={k} onClick={()=>setSchedule(k)} style={{flex:1,padding:10,borderRadius:12,border:schedule===k?"2px solid #F97316":"1px solid var(--border)",background:schedule===k?"rgba(249,115,22,0.06)":"var(--card)",fontSize:12,fontWeight:schedule===k?700:500,color:schedule===k?"#F97316":"var(--text)",cursor:"pointer",fontFamily:"inherit"}}>{l}</button>)}
-        </div>
-        {schedule==="later"&&<div className="field-row"><div className="field"><label>Date</label><DatePicker value={schedDate} onChange={setSchedDate}/></div><div className="field"><label>Créneau</label><Select value={schedTime} onChange={setSchedTime} options={["08:00-10:00","10:00-12:00","12:00-14:00","14:00-16:00","16:00-18:00","18:00-20:00"]}/></div></div>}
-        <div style={{display:"flex",alignItems:"center",gap:8,marginTop:4}}><div className={`toggle ${saveAddr?"on":""}`} onClick={()=>setSaveAddr(!saveAddr)} style={{transform:"scale(.8)"}}/><span style={{fontSize:12,color:"var(--muted)"}}>Sauvegarder cette adresse</span></div></>}
-
-      {step===1&&<><h3 style={{fontSize:18,fontWeight:700,marginBottom:6}}>Mode de paiement</h3><p style={{fontSize:13,color:"var(--muted)",marginBottom:14}}>Choisissez comment payer</p>
-        {momos.map(m=><div key={m.k} className={`momo ${momo===m.k?"on":""}`} onClick={()=>setMomo(m.k)}><span className="me"><PayLogo method={m.k} size={22}/></span><span className="mn">{m.n}</span>{momo===m.k&&<span className="mc"></span>}</div>)}
-        {momo==="cash"?<div style={{marginTop:14,padding:14,background:"rgba(59,130,246,0.06)",borderRadius:14,fontSize:12,color:"var(--muted)",lineHeight:1.6}}>
-          <div style={{fontWeight:700,color:"var(--text)",marginBottom:4}}><Icon name="wallet" size={16}/>{" "}Paiement en espèces</div>
-          Payez directement au livreur à la réception de votre commande. Le montant exact sera demandé — préparez la monnaie si possible.
-        </div>
-        :<div className="field" style={{marginTop:18}}><label>Numéro <span style={{color:"#EF4444"}}>*</span></label><div style={{display:"flex",gap:8,alignItems:"center"}}><span style={{fontSize:13,fontWeight:600,flexShrink:0}}>+242</span><input value={ckPhone} onChange={e=>{const v=e.target.value.replace(/[^0-9]/g,"").slice(0,9);setCkPhone(v);setCkPhoneErr("")}} placeholder="06X XXX XXX" type="tel" maxLength={11}/></div>{ckPhoneErr&&<div className="err-msg">{ckPhoneErr}</div>}</div>}
-      </>}
-
-      {step===2&&<><h3 style={{fontSize:18,fontWeight:700,marginBottom:14}}>Résumé</h3>
-        <div className="confirm-card" style={{cursor:"pointer"}} onClick={()=>setStep(0)}><span className="cci"><Icon name="location" size={18}/></span><div className="ccb"><small>Livraison {schedule==="later"?`· ${schedDate} ${schedTime}`:""}</small><p>Brazzaville, Congo </p></div><span className="cce" style={{color:"#F97316",fontWeight:600}}><Icon name="edit" size={18}/></span></div>
-        <div className="confirm-card" style={{cursor:"pointer"}} onClick={()=>setStep(1)}><span className="cci"><></></span><div className="ccb"><small>Paiement</small><p>{momos.find(m=>m.k===momo)?.n}</p></div><span className="cce" style={{color:"#F97316",fontWeight:600}}><Icon name="edit" size={18}/></span></div>
-
-        {/* Applied coupon */}
-        {/* Gift card code input */}
-        <div style={{padding:14,background:"var(--card)",border:"1px solid var(--border)",borderRadius:14,marginBottom:10}}>
-          <div style={{fontSize:12,fontWeight:600,marginBottom:6}}><Icon name="gift" size={16}/>{" "}Code carte cadeau / promo</div>
-          {giftApplied?<div style={{display:"flex",justifyContent:"space-between",alignItems:"center"}}>
-            <div><span style={{fontFamily:"monospace",fontWeight:700,fontSize:13}}>{giftApplied.code}</span><span style={{fontSize:11,color:"#10B981",marginLeft:6}}>-{fmt(giftDeduct)}</span></div>
-            <button onClick={()=>setGiftApplied(null)} style={{padding:"3px 8px",borderRadius:6,border:"1px solid var(--border)",background:"var(--card)",fontSize:10,cursor:"pointer",fontFamily:"inherit",color:"var(--muted)"}}></button>
-          </div>
-          :<div style={{display:"flex",gap:6}}>
-            <input value={giftCode} onChange={e=>setGiftCode(e.target.value.toUpperCase())} placeholder="GIFT-XXXX" style={{flex:1,padding:"8px 10px",borderRadius:8,border:"1px solid var(--border)",background:"var(--light)",fontSize:13,fontWeight:600,fontFamily:"monospace",letterSpacing:1,textTransform:"uppercase"}}/>
-            <button onClick={()=>{
-              if(!giftCode.trim()){toast.error("Entrez un code");return}
-              const codes=JSON.parse(localStorage.getItem("lk-gift-wallet")||"[]");
-              const found=codes.find(c=>c.code.toLowerCase()===giftCode.trim().toLowerCase());
-              if(found&&found.remaining>0){setGiftApplied(found);toast.success("-"+fmt(found.remaining)+" appliqués !")}
-              else{
-                const allCodes=JSON.parse(localStorage.getItem("lk-gift-codes")||"[]");
-                const direct=allCodes.find(c=>c.code.toLowerCase()===giftCode.trim().toLowerCase());
-                if(direct&&direct.remaining>0){setGiftApplied(direct);toast.success("-"+fmt(direct.remaining)+" appliqués !")}
-                else{toast.error("Code invalide ou expiré")}
-              }
-              setGiftCode("")
-            }} style={{padding:"8px 14px",borderRadius:8,border:"none",background:"#F97316",color:"#fff",fontSize:12,fontWeight:700,cursor:"pointer",fontFamily:"inherit"}}>OK</button>
-          </div>}
-        </div>
-        {appliedCoupon&&<div className="confirm-card" style={{background:"rgba(249,115,22,0.04)",border:"1px solid rgba(249,115,22,0.15)"}}><span className="cci"><Icon name="tag" size={18}/></span><div className="ccb"><small>Code promo</small><p style={{color:"#F97316",fontWeight:600}}>{appliedCoupon.code} — {appliedCoupon.free?"Livraison gratuite":`-${appliedCoupon.discount}%`}</p></div></div>}
-
-        <div style={{marginTop:16}}>
-          <div className="cs-row"><span>Sous-total</span><b>{fmt(sub)}</b></div>
-          {discountAmount>0&&<div className="cs-row" style={{color:"#F59E0B"}}><span><Icon name="tag" size={16}/>{" "}{appliedCoupon.code} (-{appliedCoupon.discount}%)</span><b>-{fmt(discountAmount)}</b></div>}
-          <div className="cs-row">
-            <span>Livraison</span>
-            {freeDelivery?<span><b style={{textDecoration:"line-through",color:"var(--muted)"}}>{fmt(del)}</b><b style={{color:"#F59E0B",marginLeft:6}}>GRATUIT</b></span>:<b>{fmt(del)}</b>}
-          </div>
-          {giftDeduct>0&&<div className="cs-row" style={{color:"#10B981"}}><span><Icon name="gift" size={16}/>{" "}Carte cadeau</span><b>-{fmt(giftDeduct)}</b></div>}
-          <div className="cs-row tot"><span>Total</span><span className="ctp">{fmt(total)}</span></div>
-          {(discountAmount>0||freeDelivery)&&<div style={{textAlign:"center",fontSize:11,color:"#F59E0B",fontWeight:600,marginTop:4}}><Icon name="sparkle" size={16}/>{" "}Économie : {fmt(discountAmount+(freeDelivery?del:0))}</div>}
-        </div></>}
-
-      <div className="bottom-action-bar"><button className="btn-primary" onClick={()=>{if(step===0&&!validateStep0())return;if(step===1&&momo!=="cash"){const err=validatePayPhone(ckPhone,momo);if(err){setCkPhoneErr(err);return}}if(step===2){if(validateCheckout())gate("checkout",()=>handleConfirm())}else setStep(step+1)}}>{step===2?"Confirmer le paiement":"Continuer"}</button></div>
-    </div>
-
-    {ok&&!okAnimShown&&<SuccessAnimation title="Commande confirmée !" subtitle={"Total : "+fmt(total)} hint={`+${window.__lastPointsEarned||Math.floor(total/100)} Lamuka Points gagnés ! `} duration={2000} onDone={()=>setOkAnimShown(true)}/>}
-    {ok&&okAnimShown&&<div className="success-modal"><div className="success-box bounce-in"><div className="si"><Icon name="check_circle" size={18}/></div><h2>Commande confirmée !</h2><p>{momo==="cash"?"Préparez le montant exact pour le livreur.":"Vérifiez votre téléphone pour le paiement."}</p><div className="ref">#LMK-2026-0214</div>
-      {appliedCoupon&&<div style={{fontSize:12,color:"#F97316",fontWeight:600,marginTop:8}}><Icon name="tag" size={16}/>{" "}Code {appliedCoupon.code} appliqué</div>}
-      <button className="btn-primary" onClick={onDone}>Retour à l'accueil</button></div></div>}
-  </>);
+/** Créneaux de 30 min sur 7 jours, dans les horaires de la boutique (à partir de maintenant + 45 min) */
+function buildSlots(hours) {
+  const out = [];
+  const start = new Date(Date.now() + 45 * 60000);
+  for (let d = 0; d < 7; d++) {
+    const day = new Date(); day.setDate(day.getDate() + d); day.setHours(0, 0, 0, 0);
+    const h = hours.find((x) => Number(x.day) === day.getDay());
+    let open = 8 * 60, close = 21 * 60;
+    if (hours.length) {
+      if (!h || Number(h.is_closed)) continue;
+      const [oh, om] = String(h.open_time).split(":").map(Number);
+      const [ch, cm] = String(h.close_time).split(":").map(Number);
+      open = oh * 60 + om; close = ch * 60 + cm; if (close <= open) close = 24 * 60 - 30;
+    }
+    const times = [];
+    for (let m = Math.ceil(open / 30) * 30 + 30; m <= close - 15; m += 30) {
+      const t = new Date(day); t.setMinutes(m);
+      if (t >= start) times.push(t);
+    }
+    if (times.length) out.push({ day, times });
+  }
+  return out;
 }
+const dayLabel = (d) => {
+  const t = new Date(); t.setHours(0, 0, 0, 0);
+  const diff = Math.round((d - t) / 86400000);
+  return diff === 0 ? "Aujourd'hui" : diff === 1 ? "Demain" : `${DAYS[d.getDay()]} ${d.getDate()}`;
+};
+const timeLabel = (t) => `${pad(t.getHours())}:${pad(t.getMinutes())}`;
 
-export default CheckoutScr;
+/**
+ * Paiement « Toters » sur une seule page : adresse, heure (maintenant / programmée), espèces,
+ * consigne au livreur, récapitulatif avec les vrais frais de livraison, puis confirmation.
+ */
+// Bloc de la page de paiement — déclaré hors du composant : sinon il est recréé à chaque frappe
+// et la note pour le livreur perd la saisie après chaque lettre.
+const Section = ({ icon, title, children, action, onClick }) => (
+  <div className="t-card" style={{ padding: 18, margin: "12px 16px" }} onClick={onClick} role={onClick ? "button" : undefined}>
+    <div style={{ display: "flex", alignItems: "center", gap: 12, marginBottom: children ? 12 : 0 }}>
+      <Icon name={icon} size={22} color="var(--acc)" />
+      <span style={{ flex: 1, fontSize: 16, fontWeight: 700 }}>{title}</span>
+      {action}
+    </div>
+    {children}
+  </div>
+);
+
+export default function CheckoutScr({ onBack, cart: cartProp = [], eidParam, clearCart, appliedCoupon, setAppliedCoupon, go, goHome }) { // eslint-disable-line no-unused-vars
+  const { showToast, reloadCart } = useApp();
+  const { VENDORS } = useData();
+  const [cartSnap, setCartSnap] = useState(null); // panier figé après la commande
+  const cart = cartSnap || cartProp;
+  const eid = Number(cart[0]?.establishment_id) || null;
+  const vendor = VENDORS.find((v) => Number(v.id) === eid) || { id: eid, name: cart[0]?.establishment_name };
+
+  const [store, setStore] = useState(null);
+  const [hours, setHours] = useState([]);
+  const [addrs, setAddrs] = useState(null);
+  const [addrId, setAddrId] = useState(null);
+  const [addrSheet, setAddrSheet] = useState(false);
+  const [pick, setPick] = useState(null); // { start, fixId } : carte ouverte (nouvelle adresse ou adresse à replacer)
+  const [spot, setSpot] = useState(null); // lieu choisi → détails de l'adresse
+  const [when, setWhen] = useState("now"); // now | later
+  const [slot, setSlot] = useState(null);
+  const [slotSheet, setSlotSheet] = useState(false);
+  const [dayIdx, setDayIdx] = useState(0);
+  const [note, setNote] = useState("");
+  const [fee, setFee] = useState(null);
+  const [busy, setBusy] = useState(false);
+  const [done, setDone] = useState(null); // { id, ref, total }
+  const [points, setPoints] = useState(0);
+  const [usePoints, setUsePoints] = useState(false);
+  const info = useAppInfo();
+  const minPts = loyaltyRules(info).min; // seuil réglé dans le panneau
+  const canUsePts = minPts != null && points >= minPts;
+  const baseFee = Number(info?.delivery?.base_fee) || null; // frais de base (repli sans position)
+  // « Pas de couverts » se choisit dans le panier (comme Toters) ; repris ici pour la commande
+  const [noCutlery] = useState(() => { try { return sessionStorage.getItem(NO_CUTLERY_KEY) === "1"; } catch { return false; } });
+
+  useEffect(() => {
+    if (!eid) return;
+    establishmentsAPI.getDetail(eid).then((r) => { setStore(r?.establishment || null); setHours(r?.hours || []); }).catch(() => {});
+  }, [eid]);
+  useEffect(() => { buyerSvc.getLoyalty().then((r) => setPoints(Number(r?.points) || 0)).catch(() => {}); }, []);
+  useEffect(() => {
+    addressesAPI.getAll().then((r) => {
+      const list = Array.isArray(r) ? r : r?.addresses || [];
+      setAddrs(list);
+      const dt = getDeliverTo();
+      const d = (dt?.addressId && list.find((a) => Number(a.id) === Number(dt.addressId))) || list.find((a) => Number(a.is_default) === 1) || list[0];
+      if (d) setAddrId(Number(d.id));
+      else if (dt?.lat && zoneOf(Number(dt.lat), Number(dt.lng))) setSpot({ lat: Number(dt.lat), lng: Number(dt.lng), quarter: dt.quarter, zone: zoneOf(Number(dt.lat), Number(dt.lng)) }); // lieu choisi en invité → détails
+      else setPick({ start: dt || null });
+    }).catch(() => setAddrs([]));
+  }, []);
+
+  const closed = store && store.is_open_now === false;
+  const slots = useMemo(() => buildSlots(hours), [hours]);
+  useEffect(() => { // boutique fermée → commande programmée obligatoire, premier créneau proposé
+    if (!closed || slot) return;
+    setWhen("later");
+    const opens = parseDate(store?.opens_at);
+    const first = slots.flatMap((s) => s.times).find((t) => !opens || t >= opens);
+    if (first) setSlot(first);
+  }, [closed, slots]); // eslint-disable-line react-hooks/exhaustive-deps
+
+  const addr = addrs?.find((a) => Number(a.id) === addrId);
+  const addrOk = addr && addr.latitude && zoneOf(Number(addr.latitude), Number(addr.longitude));
+  const reloadAddrs = async (selectId) => {
+    const list = await addressesAPI.getAll();
+    setAddrs(Array.isArray(list) ? list : list?.addresses || []);
+    if (selectId) setAddrId(Number(selectId));
+  };
+  // Frais réels : même calcul que le serveur (distance boutique → adresse et frais de la ville) ; frais de base sans position
+  // Livraison offerte par la boutique : 0 F pour le client (le serveur applique la même règle)
+  const freeDel = String(store?.free_delivery) === "1";
+  useEffect(() => {
+    if (!store) return;
+    if (freeDel) { setFee(0); return; }
+    const ok = addr?.latitude && addr?.longitude && store.latitude && store.longitude;
+    if (!ok) { setFee(baseFee); return; }
+    errandsAPI.quote({ pickup_lat: store.latitude, pickup_lng: store.longitude, dropoff_lat: addr.latitude, dropoff_lng: addr.longitude })
+      .then((r) => setFee(Number(r?.fee) || baseFee)).catch(() => setFee(baseFee));
+  }, [store, addr, freeDel, baseFee]);
+
+  const subtotal = cartSubtotal(cart);
+  const discount = couponDiscount(appliedCoupon, subtotal);
+  const reward = store?.punch_card?.rewards_available > 0 ? Math.min(store.punch_card.reward_amount, subtotal - discount) : 0;
+  const pointsOff = usePoints && canUsePts ? Math.min(points, Math.max(0, subtotal - discount - reward)) : 0;
+  const total = Math.max(0, subtotal - discount - reward - pointsOff) + (fee || 0);
+
+
+  const place = async () => {
+    if (!addrId) { setAddrSheet(true); return; }
+    if (!addrOk) { setPick({ start: addr?.latitude ? { lat: Number(addr.latitude), lng: Number(addr.longitude) } : null, fixId: addrId }); return; }
+    if (when === "later" && !slot) { setSlotSheet(true); return; }
+    setBusy(true);
+    try {
+      const r = await orderService.create({
+        payment_method: "cash",
+        address_id: addrId,
+        coupon_code: appliedCoupon?.code || undefined,
+        note: note.trim() || undefined,
+        scheduled_for: when === "later" && slot ? toApiDate(slot) : undefined,
+        no_cutlery: noCutlery || undefined,
+        use_points: pointsOff > 0 || undefined,
+        establishment_id: eid || undefined, // seul le panier de cette boutique est commandé ; les autres restent
+      });
+      const id = r?.order_ids?.[0];
+      let ref = "", realTotal = total;
+      try { const d = await orderService.getDetail(id); ref = d?.order?.ref || ""; realTotal = Number(d?.order?.total) || total; } catch {}
+      setCartSnap(cartProp);
+      setDone({ id, ref, total: realTotal });
+      setAppliedCoupon?.(null);
+      try { sessionStorage.removeItem(NO_CUTLERY_KEY); } catch {}
+      await reloadCart(); // le serveur n'a retiré que les articles de cette boutique
+    } catch (e) {
+      showToast(e.message || "Erreur lors de la commande", "error");
+      reloadCart();
+    }
+    setBusy(false);
+  };
+
+  if (done) return (
+    <div style={{ flex: 1, display: "flex", flexDirection: "column", background: "var(--card)" }}>
+      <div className="t-empty" style={{ flex: 1 }}>
+        <div className="ic" style={{ background: "var(--acc-l)", width: 110, height: 110, borderRadius: 55 }}><Icon name="check" size={56} color="var(--acc)" strokeWidth={3} /></div>
+        <b style={{ fontSize: 20 }}>Commande confirmée !</b>
+        <p>{when === "later" && slot ? `Livraison prévue ${dayLabel(new Date(slot.getFullYear(), slot.getMonth(), slot.getDate())).toLowerCase()} à ${timeLabel(slot)}.` : `${vendor.name} prépare votre commande.`}<br />Préparez <b style={{ color: "var(--t-text)" }}>{fmt(done.total)}</b> en espèces pour le livreur.</p>
+        {done.ref && <div style={{ marginTop: 6, padding: "8px 16px", borderRadius: 12, background: "var(--t-bg2)", fontWeight: 700, fontSize: 16, letterSpacing: 0.5 }}>#{done.ref}</div>}
+      </div>
+      <div className="t-bottom" style={{ flexDirection: "column", alignItems: "stretch", gap: 10 }}>
+        <button className="t-cta center" style={{ flex: "0 0 56px" }} onClick={() => go("tracking", { id: done.id })}>Suivre ma commande</button>
+        <button className="t-cta ghost center" style={{ flex: "0 0 56px", justifyContent: "center" }} onClick={goHome}>Retour à l'accueil</button>
+      </div>
+    </div>
+  );
+
+  return (
+    <div style={{ flex: 1, display: "flex", flexDirection: "column", minHeight: 0, background: "var(--t-bg2)" }}>
+      <div className="t-head"><button className="t-back" onClick={onBack} aria-label="Retour"><Icon name="arrow_left" size={24} /></button><h1>Paiement</h1></div>
+      <div className="t-scr gray">
+        <Section icon="map_pin" title="Adresse de livraison" action={<button className="t-pill-btn" onClick={() => setAddrSheet(true)}>{addr ? "Changer" : "Ajouter"}</button>}>
+          {addr ? <div>
+            <div style={{ fontSize: 16, fontWeight: 700 }}>{addr.label || addr.quarter || "Adresse"}</div>
+            <div className="t-sub" style={{ fontSize: 14, marginTop: 2 }}>{[addr.address, addr.quarter, addr.city].filter(Boolean).join(", ")}</div>
+            {addr.instructions && <div className="t-mut" style={{ marginTop: 4 }}>Repère : {addr.instructions}</div>}
+            {!addrOk && <div style={{ marginTop: 8, fontSize: 13, color: "#E5484D", fontWeight: 600 }}>{addr.latitude ? outOfZoneText() : "Placez cette adresse sur la carte pour commander."} <span style={{ color: "var(--acc)", cursor: "pointer" }} onClick={() => setPick({ start: addr.latitude ? { lat: Number(addr.latitude), lng: Number(addr.longitude) } : null, fixId: addr.id })}>Placer sur la carte</span></div>}
+          </div> : <div className="t-sub">{addrs === null ? "Chargement…" : "Ajoutez l'adresse où livrer."}</div>}
+        </Section>
+
+        <Section icon="clock" title="Heure de livraison">
+          <div style={{ display: "flex", gap: 10 }}>
+            <button className={"t-chip" + (when === "now" ? " on" : "")} style={{ flex: 1, justifyContent: "center", opacity: closed ? 0.45 : 1 }} disabled={closed} onClick={() => setWhen("now")}>Dès que possible</button>
+            <button className={"t-chip" + (when === "later" ? " on" : "")} style={{ flex: 1, justifyContent: "center" }} onClick={() => { setWhen("later"); setSlotSheet(true); }}>Programmer</button>
+          </div>
+          <div className="t-sub" style={{ marginTop: 10, fontSize: 14 }}>
+            {when === "now" ? <>Livraison estimée : <b style={{ color: "var(--t-text)" }}>{etaLabel(vendor)}</b></>
+              : slot ? <>Livraison prévue : <b style={{ color: "var(--t-text)" }}>{dayLabel(new Date(slot.getFullYear(), slot.getMonth(), slot.getDate()))} à {timeLabel(slot)}</b> · <span style={{ color: "var(--acc)", fontWeight: 700, cursor: "pointer" }} onClick={() => setSlotSheet(true)}>Modifier</span></>
+              : "Choisissez un créneau"}
+          </div>
+          {closed && <div style={{ marginTop: 8, fontSize: 13, color: "#B45309" }}>{vendor.name} est fermé : votre commande sera préparée à l'heure choisie.</div>}
+        </Section>
+
+        <Section icon="cash" title="Paiement">
+          <div style={{ display: "flex", alignItems: "center", gap: 12, padding: "12px 14px", borderRadius: 14, border: "1.5px solid var(--acc)", background: "var(--acc-l)" }}>
+            <span style={{ flex: 1, fontSize: 16, fontWeight: 600 }}>Espèces à la livraison</span>
+            <span className="t-radio on" />
+          </div>
+        </Section>
+
+        {points > 0 && <div className="t-card" style={{ padding: 18, margin: "12px 16px", display: "flex", alignItems: "center", gap: 12 }}>
+          <Icon name="gift" size={22} color="var(--acc)" />
+          <div style={{ flex: 1 }}>
+            <div style={{ fontSize: 16, fontWeight: 700 }}>Utiliser mes points</div>
+            <div className="t-sub" style={{ fontSize: 13 }}>{canUsePts ? `${points} points = ${fmt(points)} de réduction` : `${points} points${minPts ? ` · utilisables dès ${minPts}` : ""}`}</div>
+          </div>
+          <button className={"t-toggle" + (usePoints && canUsePts ? " on" : "")} disabled={!canUsePts} style={{ opacity: canUsePts ? 1 : 0.4 }} onClick={() => setUsePoints((x) => !x)} aria-label="Utiliser mes points" aria-pressed={usePoints} />
+        </div>}
+
+        <Section icon="tag" title={appliedCoupon ? `Code ${appliedCoupon.code} appliqué` : "Ajouter un code promo"} onClick={appliedCoupon ? undefined : () => go("coupons")}
+          action={appliedCoupon ? <button className="t-pill-btn" onClick={() => setAppliedCoupon?.(null)}>Retirer</button> : <Icon name="chevron_right" size={20} color="var(--t-mut)" />} />
+
+
+        <Section icon="chat" title="Note pour le livreur">
+          <textarea className="t-note" style={{ minHeight: 76 }} maxLength={250} placeholder="Ex. : appelez en arrivant, portail bleu…" value={note} onChange={(e) => setNote(e.target.value)} />
+        </Section>
+
+        <div className="t-card" style={{ padding: 18, margin: "12px 16px" }}>
+          <div style={{ display: "flex", alignItems: "center", gap: 12, marginBottom: 12 }}>
+            <StoreLogo v={vendor} size={40} />
+            <span style={{ flex: 1, fontSize: 16, fontWeight: 700 }}>{vendor.name}</span>
+          </div>
+          {cart.map((c) => (
+            <div key={c.id} className="t-row" style={{ alignItems: "flex-start", gap: 10 }}>
+              <span style={{ flex: 1 }}>{lineQty(c)} × {c.name}{c.options?.length ? <span className="t-mut" style={{ display: "block" }}>{optionsLabel(c.options)}</span> : null}</span>
+              <span>{fmt(lineTotal(c))}</span>
+            </div>
+          ))}
+          <div style={{ borderTop: "1px solid var(--t-line)", margin: "10px 0" }} />
+          <div className="t-row"><span className="t-sub">Sous-total</span><span>{fmt(subtotal)}</span></div>
+          <div className="t-row"><span className="t-sub">Livraison</span><span style={freeDel ? { color: "#16A34A", fontWeight: 600 } : undefined}>{fee === null ? "…" : freeDel ? "Offerte" : fmt(fee)}</span></div>
+          {discount > 0 && <div className="t-row" style={{ color: "#16A34A" }}><span>Code {appliedCoupon.code}</span><span>-{fmt(discount)}</span></div>}
+          {reward > 0 && <div className="t-row" style={{ color: "#16A34A" }}><span>Carte fidélité</span><span>-{fmt(reward)}</span></div>}
+          {pointsOff > 0 && <div className="t-row" style={{ color: "#16A34A" }}><span>Points ({pointsOff})</span><span>-{fmt(pointsOff)}</span></div>}
+          {noCutlery && <div className="t-row"><span className="t-sub">Sans couverts</span><Icon name="check" size={18} color="#16A34A" /></div>}
+          <div className="t-row" style={{ fontSize: 19, fontWeight: 700, marginTop: 6 }}><span>Total</span><span>{fmt(total)}</span></div>
+        </div>
+        <div style={{ height: 20 }} />
+      </div>
+      <div className="t-bottom">
+        <button className="t-cta" disabled={busy || fee === null || !cart.length} onClick={place}>
+          <span>{busy ? "Envoi…" : "Confirmer la commande"}</span><span>{fmt(total)}</span>
+        </button>
+      </div>
+
+      {addrSheet && <Sheet onClose={() => addrs?.length && setAddrSheet(false)} title="Adresse de livraison">
+        <div style={{ padding: "8px 20px 24px" }}>
+          {addrs?.map((a) => (
+            <div key={a.id} className="t-opt" onClick={() => { setAddrId(Number(a.id)); setAddrSheet(false); }} role="button" style={{ borderBottom: "1px solid var(--t-line)" }}>
+              <Icon name="map_pin" size={20} color="var(--t-sub)" />
+              <div className="l"><div style={{ fontWeight: 600 }}>{a.label || a.quarter}</div><small style={!(a.latitude && zoneOf(Number(a.latitude), Number(a.longitude))) ? { color: "#E5484D" } : undefined}>{a.latitude && zoneOf(Number(a.latitude), Number(a.longitude)) ? [a.address, a.quarter].filter(Boolean).join(", ") : a.latitude ? "Hors zone de livraison" : "À placer sur la carte"}</small></div>
+              <span className={"t-radio" + (Number(a.id) === addrId ? " on" : "")} />
+            </div>
+          ))}
+          <button className="t-opt" onClick={() => { setAddrSheet(false); setPick({ start: getDeliverTo() }); }} style={{ width: "100%", border: "none", background: "none", fontFamily: "inherit", textAlign: "left", padding: "14px 0" }}>
+            <Icon name="plus" size={20} color="var(--acc)" /><div className="l"><div style={{ fontWeight: 600, color: "var(--acc)" }}>Ajouter une adresse</div><small>Choisir sur la carte</small></div>
+          </button>
+        </div>
+      </Sheet>}
+
+      {pick && <LocationPicker initial={pick.start} onClose={() => setPick(null)} onConfirm={async (p) => {
+        if (pick.fixId) { // adresse existante replacée sur la carte
+          try { await addressesAPI.update(pick.fixId, { latitude: p.lat, longitude: p.lng, quarter: p.quarter }); await reloadAddrs(pick.fixId); setPick(null); showToast("Adresse mise à jour"); }
+          catch (e) { showToast(e.message || "Impossible de mettre à jour l'adresse", "error"); }
+        } else { setPick(null); setSpot(p); }
+      }} />}
+      {spot && !pick && <AddressForm spot={spot} makeDefault={!addrs?.length} onClose={() => setSpot(null)} onMove={() => setPick({ start: spot })}
+        onSaved={async (a) => { setSpot(null); setDeliverTo({ lat: a.latitude, lng: a.longitude, quarter: a.quarter, label: a.label, addressId: a.id }); await reloadAddrs(a.id); }} />}
+
+      {slotSheet && <Sheet onClose={() => setSlotSheet(false)} title="Programmer la livraison">
+        <div style={{ padding: "8px 0 20px" }}>
+          {slots.length === 0 ? <div className="t-sub" style={{ padding: "8px 20px" }}>Aucun créneau disponible cette semaine.</div> : <>
+            <div className="t-chips">
+              {slots.map((s, i) => <button key={i} className={"t-chip" + (i === dayIdx ? " on" : "")} onClick={() => setDayIdx(i)}>{dayLabel(s.day)}</button>)}
+            </div>
+            <div style={{ display: "grid", gridTemplateColumns: "repeat(3,1fr)", gap: 10, padding: "4px 20px", maxHeight: 280, overflowY: "auto" }}>
+              {(slots[dayIdx] || slots[0]).times.map((t) => (
+                <button key={t.getTime()} className={"t-chip" + (slot && slot.getTime() === t.getTime() ? " on" : "")} style={{ justifyContent: "center" }} onClick={() => { setSlot(t); setWhen("later"); setSlotSheet(false); }}>{timeLabel(t)}</button>
+              ))}
+            </div>
+          </>}
+        </div>
+      </Sheet>}
+    </div>
+  );
+}

@@ -7,7 +7,7 @@ import Icon from "../../components/Icon";
 import { fmt, disc } from "../../utils/helpers";
 
 function AllProductsScr({go,onBack,favs,toggleFav,isFav}){
-  const { P } = useData();
+  const { P, reload } = useData();
   const [sort,setSort]=useState("popular");
   const [showFilter,setShowFilter]=useState(false);
   const [priceRange,setPriceRange]=useState([0,500000]);
@@ -30,7 +30,7 @@ function AllProductsScr({go,onBack,favs,toggleFav,isFav}){
   const resetFilters=()=>{setPriceRange([0,500000]);setSelCats([]);setSelTypes([]);setOnlyPromo(false);setOnlyInStock(true)};
   const activeFilters=(selCats.length>0?1:0)+(selTypes.length>0?1:0)+(onlyPromo?1:0)+(priceRange[0]>0||priceRange[1]<500000?1:0);
 
-  return(<PullToRefresh onRefresh={async()=>{toast.success("Produits actualisés")}}><div className="scr"><div className="appbar"><button onClick={onBack}>←</button><h2>Tous les articles <span style={{fontSize:12,color:"var(--muted)",fontWeight:500}}>({sorted.length})</span></h2>
+  return(<PullToRefresh onRefresh={async()=>{await reload();}}><div className="scr"><div className="appbar"><button onClick={onBack}>←</button><h2>Tous les articles <span style={{fontSize:12,color:"var(--muted)",fontWeight:500}}>({sorted.length})</span></h2>
     <button onClick={()=>setShowFilter(true)} style={{position:"relative",background:"none",border:"none",cursor:"pointer",padding:4,display:"flex",alignItems:"center",justifyContent:"center"}}><Icon name="filter" size={20}/>{activeFilters>0&&<span style={{position:"absolute",top:-2,right:-2,width:16,height:16,borderRadius:8,background:"#F97316",color:"#fff",fontSize:9,fontWeight:700,display:"flex",alignItems:"center",justifyContent:"center"}}>{activeFilters}</span>}</button>
   </div>
 
@@ -58,7 +58,7 @@ function AllProductsScr({go,onBack,favs,toggleFav,isFav}){
     {showFilter&&<div onClick={()=>setShowFilter(false)} style={{position:"fixed",inset:0,background:"rgba(0,0,0,.45)",zIndex:9999,display:"flex",alignItems:"flex-end",animation:"fadeInFast .2s ease"}}>
       <div onClick={e=>e.stopPropagation()} style={{width:"100%",maxWidth:500,margin:"0 auto",background:"var(--card)",borderRadius:"20px 20px 0 0",padding:20,maxHeight:"80vh",overflowY:"auto",animation:"slideUp .3s cubic-bezier(.4,0,.2,1)"}}>
         <div style={{display:"flex",justifyContent:"space-between",alignItems:"center",marginBottom:16}}>
-          <h3 style={{fontSize:18,fontWeight:700}}>️ Filtres</h3>
+          <h3 style={{fontSize:18,fontWeight:700}}>Filtres</h3>
           <button onClick={()=>setShowFilter(false)} style={{background:"none",border:"none",fontSize:20,cursor:"pointer",color:"var(--muted)"}}></button>
         </div>
 

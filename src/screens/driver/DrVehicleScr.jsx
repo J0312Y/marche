@@ -1,23 +1,43 @@
-import toast from "../../utils/toast";
-
-import Select from "../../components/Select";
-
-import { VEHICLE_PHOTO } from "../../data/images";
+import { useEffect, useState } from "react";
 import Icon from "../../components/Icon";
-function DrVehicleScr({onBack}){
-  return(<div className="scr" style={{padding:16}}><div className="appbar" style={{padding:0,marginBottom:12}}><button onClick={onBack}>←</button><h2>Mon véhicule</h2><div style={{width:38}}/></div>
-    <div style={{textAlign:"center",marginBottom:14}}><div style={{width:120,height:80,borderRadius:16,overflow:"hidden",margin:"0 auto 8px"}}><img src={VEHICLE_PHOTO} style={{width:"100%",height:"100%",objectFit:"cover"}} alt=""/></div><h3 style={{fontSize:20,fontWeight:700}}>Honda PCX</h3><p style={{fontSize:13,color:"var(--muted)"}}>Plaque : BZ-4521</p></div>
-    <div className="field"><label>Type de véhicule <span style={{color:"#EF4444"}}>*</span></label><Select value="moto" onChange={()=>{}} options={[{value:"moto",label:"Moto / Scooter"},{value:"voiture",label:"Voiture"},{value:"velo",label:"Vélo"}]}/></div>
-    <div className="field-row"><div className="field"><label>Marque <span style={{color:"#EF4444"}}>*</span></label><input defaultValue="Honda PCX"/></div><div className="field"><label>Année <span style={{color:"#EF4444"}}>*</span></label><input defaultValue="2022"/></div></div>
-    <div className="field-row"><div className="field"><label>Plaque <span style={{color:"#EF4444"}}>*</span></label><input defaultValue="BZ-4521"/></div><div className="field"><label>Couleur <span style={{color:"#EF4444"}}>*</span></label><input defaultValue="Noir"/></div></div>
-    <div style={{fontSize:14,fontWeight:700,margin:"14px 0 10px"}}>Documents</div>
-    {[["","Permis de conduire","Valide jusqu'au 12/2027",""],["","Carte grise","BZ-4521",""],["️","Assurance","AXA Congo · Exp. 06/2026",""]].map(([i,t,d,s])=><div key={t} style={{display:"flex",alignItems:"center",gap:12,padding:12,background:"var(--card)",border:"1px solid var(--border)",borderRadius:14,marginBottom:8}}>
-      <span style={{fontSize:22}}>{i}</span><div style={{flex:1}}><div style={{fontSize:13,fontWeight:600}}>{t}</div><div style={{fontSize:11,color:"var(--muted)"}}>{d}</div></div><span style={{fontSize:14}}>{s}</span>
-    </div>)}
-    <div className="bottom-action-bar"><button className="btn-primary" onClick={()=>toast.success("Véhicule mis à jour")}> Enregistrer</button></div>
-  </div>);
+import toast from "../../utils/toast";
+import driverService from "../../services/driverService";
+
+const TYPES = [["moto", "Moto"], ["voiture", "Voiture"], ["velo", "Vélo"], ["pied", "À pied"]];
+
+/** Mon véhicule : champs du profil livreur (vehicle_type, vehicle_brand, vehicle_plate) */
+export default function DrVehicleScr({ onBack, go }) {
+  const [v, setV] = useState(null);
+  const [f, setF] = useState({ vehicle_type: "moto", vehicle_brand: "", vehicle_plate: "" });
+  const [busy, setBusy] = useState(false);
+  useEffect(() => {
+    driverService.getVehicle().then((r) => { setV(r || {}); setF({ vehicle_type: r?.vehicle_type || "moto", vehicle_brand: r?.vehicle_brand || "", vehicle_plate: r?.vehicle_plate || "" }); }).catch(() => setV({}));
+  }, []);
+  const motor = f.vehicle_type === "moto" || f.vehicle_type === "voiture";
+  const save = async () => {
+    setBusy(true);
+    try { await driverService.updateVehicle({ ...f, vehicle_plate: motor ? f.vehicle_plate.trim() : "" }); toast.success("Véhicule enregistré"); }
+    catch (e) { toast.error(e?.message || "Enregistrement impossible"); }
+    setBusy(false);
+  };
+  const input = { width: "100%", height: 48, borderRadius: 12, border: "1px solid var(--t-line)", padding: "0 14px", fontSize: 16, background: "var(--card)", color: "var(--t-text)", fontFamily: "inherit" };
+  return (
+    <div style={{ flex: 1, display: "flex", flexDirection: "column", minHeight: 0, background: "var(--t-bg2)" }}>
+      <div className="t-head" style={{ background: "var(--card)" }}><button className="t-back" onClick={onBack} aria-label="Retour"><Icon name="arrow_left" size={24} /></button><h1>Mon véhicule</h1></div>
+      <div className="t-scr gray">
+        {v === null ? <div style={{ display: "flex", justifyContent: "center", padding: 30 }}><div className="spinner" /></div> : <>
+          <div className="t-card tk-box">
+            <div className="tk-h">Moyen de transport</div>
+            <div style={{ display: "flex", flexWrap: "wrap", gap: 8, marginTop: 6 }}>{TYPES.map(([k, l]) => <button key={k} className={"t-chip" + (f.vehicle_type === k ? " on" : "")} onClick={() => setF({ ...f, vehicle_type: k })}>{l}</button>)}</div>
+            {f.vehicle_type !== "pied" && <label style={{ display: "block", marginTop: 16 }}><span className="t-sub" style={{ fontSize: 14 }}>Marque et modèle</span><input style={{ ...input, marginTop: 6 }} value={f.vehicle_brand} maxLength={80} onChange={(e) => setF({ ...f, vehicle_brand: e.target.value })} placeholder="Ex. : Haojue HJ125" /></label>}
+            {motor && <label style={{ display: "block", marginTop: 12 }}><span className="t-sub" style={{ fontSize: 14 }}>Plaque d'immatriculation</span><input style={{ ...input, marginTop: 6, textTransform: "uppercase" }} value={f.vehicle_plate} maxLength={20} onChange={(e) => setF({ ...f, vehicle_plate: e.target.value.toUpperCase() })} /></label>}
+          </div>
+          <div className="t-card tk-box" onClick={() => go?.("drDocuments")} role="button" style={{ display: "flex", alignItems: "center", gap: 12, cursor: "pointer" }}>
+            <Icon name="document" size={22} color="var(--acc-d)" /><span style={{ flex: 1 }}><b style={{ fontWeight: 600, display: "block" }}>Mes documents</b><span className="t-sub" style={{ fontSize: 13 }}>Pièce d'identité, permis, carte grise</span></span><Icon name="chevron_right" size={18} color="var(--t-mut)" />
+          </div>
+          <div style={{ padding: "4px 16px 20px" }}><button className="t-cta center" disabled={busy} onClick={save}><span>{busy ? "Enregistrement…" : "Enregistrer"}</span></button></div>
+        </>}
+      </div>
+    </div>
+  );
 }
-
-/* D12 ── DRIVER ZONES ── */
-
-export default DrVehicleScr;

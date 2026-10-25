@@ -1,511 +1,174 @@
-import { useState } from "react";
-import Select from "../../components/Select";
-import ImageCropper from "../../components/ImageCropper";
-import { useData } from "../../hooks";
-import toast from "../../utils/toast";
-import SuccessAnimation from "../../components/SuccessAnimation";
-import PayLogo from "../../components/PayLogos";
-import { validatePayPhone, getPhonePlaceholder, isPayPhoneValid } from "../../utils/phoneValidation";
-import { triggerPush } from "../../components/PushBanner";
+import { useEffect, useState } from "react";
 import Icon from "../../components/Icon";
+import { useApp } from "../../context/AppContext";
+import { vendor as vendorService, driver as driverService } from "../../services";
+import { TYPE_LABEL } from "../../config/storeTypes";
+import { loadZones, quarterNames, citiesText } from "../../utils/zone";
+import { fmtPhone } from "../../utils/phoneValidation";
+import api from "../../api/client";
 
-function RoleRegScr({onBack,onDone,forceRole,onPending}){
-  const { CATS } = useData();
-  const [role,setRole]=useState(forceRole||null); // "vendor" | "driver"
-  const [step,setStep]=useState(forceRole?0:-1);
-  const [rolePhone,setRolePhone]=useState("");
-  const [rolePhoneErr,setRolePhoneErr]=useState("");
-  const [plan,setPlan]=useState("starter");
-  const [regErrors,setRegErrors]=useState({});
-  const [hasLogo,setHasLogo]=useState(false);
-  const [hasVehPhoto,setHasVehPhoto]=useState(false);
-  // Form fields (proper React state)
-  const [fName,setFName]=useState("Joeldy Tsina");
-  const [fEmail,setFEmail]=useState("joeldytsina94@gmail.com");
-  const [fShopName,setFShopName]=useState("");
-  const [fShopDesc,setFShopDesc]=useState("");
-  const [fVehMarque,setFVehMarque]=useState("");
-  const [fVehAnnee,setFVehAnnee]=useState("");
-  const [fVehPlaque,setFVehPlaque]=useState("");
-  const [fVehType,setFVehType]=useState("moto");
-  const [fVille,setFVille]=useState("Brazzaville");
-  const [fVehCouleur,setFVehCouleur]=useState("");
-  const [fOpenTime,setFOpenTime]=useState("08:00");
-  const [fCloseTime,setFCloseTime]=useState("20:00");
-  const [fOpenDays,setFOpenDays]=useState(["Lun","Mar","Mer","Jeu","Ven","Sam"]);
-  const [fQuartier,setFQuartier]=useState("");
-  const [selZones,setSelZones]=useState(["Brazzaville Sud","Centre-ville"]);
-  const [cropLogSrc,setCropLogSrc]=useState(null);
-  
-  const clrR=(k)=>setRegErrors(p=>{const n={...p};delete n[k];return n});
-  const validateStep=()=>{
-    if(role==="vendor"&&step===0){
-      const e={};
-      if(!fName.trim()) e.name="Nom requis";
-      if(!fEmail.trim()) e.email="Email requis";
-      if(rolePhone.replace(/\s/g,"").length!==9) e.phone="Le numéro doit contenir 9 chiffres";
-      else if(!rolePhone.startsWith("04")&&!rolePhone.startsWith("05")&&!rolePhone.startsWith("06")) e.phone="Le numéro doit commencer par 04, 05 ou 06";
-      if(!fVille.trim()) e.ville="Ville requise";
-      if(!fQuartier.trim()) e.quartier="Quartier requis";
-      setRegErrors(e);
-      if(Object.keys(e).length){toast.error(Object.values(e)[0]);return false}
+const TYPE_ICON = {
+  restaurant: "utensils", patisserie: "cupcake", supermarche: "cart", pharmacie: "pill", boutique: "store",
+  service: "tool", fleurs: "gift", beaute: "sparkle", auto: "car", gaz: "flame", maison: "home",
+};
+const VEHICLES = [["moto", "Moto", "bike"], ["voiture", "Voiture", "car"], ["velo", "Vélo", "bicycle"], ["pied", "À pied", "user"]];
+
+/**
+ * Inscription commerçant (role="vendor") ou livreur (role="driver").
+ * Un seul écran, uniquement les informations enregistrées par le serveur ;
+ * le nom et le téléphone viennent du compte. La demande reste « en attente » jusqu'à validation.
+ */
+export default function RoleRegScr({ role = "vendor", onBack, onPending, go }) {
+  const { user, showToast } = useApp();
+  const isVendor = role === "vendor";
+  const name = [user?.first_name, user?.last_name].filter(Boolean).join(" ");
+
+  // Commerce
+  const [type, setType] = useState("");
+  const [shop, setShop] = useState("");
+  const [desc, setDesc] = useState("");
+  // Livreur
+  const [vehicle, setVehicle] = useState("moto");
+  const [brand, setBrand] = useState("");
+  const [plate, setPlate] = useState("");
+  const [zones, setZones] = useState([]);
+  const [quarters, setQuarters] = useState(quarterNames);
+
+  const [err, setErr] = useState("");
+  const [busy, setBusy] = useState(false);
+  // Demande précédente refusée : on rappelle le motif (la nouvelle demande repart de zéro, pièces comprises)
+  const [refused, setRefused] = useState(null);
+  useEffect(() => {
+    api.get(`/registrations/documents?role=${role}`).then((r) => { if (r?.status === "rejected") setRefused(r.review_note || "Dossier incomplet"); }).catch(() => {});
+  }, [role]);
+
+  useEffect(() => {
+    if (isVendor) return;
+    loadZones();
+    const upd = () => setQuarters(quarterNames());
+    window.addEventListener("lk-zones", upd);
+    return () => window.removeEventListener("lk-zones", upd);
+  }, [isVendor]);
+
+  const motorized = vehicle === "moto" || vehicle === "voiture";
+  const toggleZone = (z) => { setZones((p) => (p.includes(z) ? p.filter((x) => x !== z) : [...p, z])); setErr(""); };
+
+  const check = () => {
+    if (isVendor) {
+      if (!type) return "Choisissez le type de commerce";
+      if (shop.trim().length < 2) return "Indiquez le nom du commerce";
+    } else {
+      if (motorized && !plate.trim()) return "Indiquez la plaque d'immatriculation";
+      if (!zones.length) return "Choisissez au moins un quartier";
     }
-    if(role==="driver"&&step===0){
-      const e={};
-      if(!fName.trim()) e.name="Nom requis";
-      if(!fEmail.trim()) e.email="Email requis";
-      if(rolePhone.replace(/\s/g,"").length!==9) e.phone="Le numéro doit contenir 9 chiffres";
-      else if(!rolePhone.startsWith("04")&&!rolePhone.startsWith("05")&&!rolePhone.startsWith("06")) e.phone="Le numéro doit commencer par 04, 05 ou 06";
-      if(!fVille.trim()) e.ville="Ville requise";
-      if(!fQuartier.trim()) e.quartier="Quartier requis";
-      setRegErrors(e);
-      if(Object.keys(e).length){toast.error(Object.values(e)[0]);return false}
-    }
-    if(role==="vendor"&&step===1){
-      const e={};
-      const types=["boutique","restaurant","patisserie","supermarche","pharmacie","service"];
-      if(!selCats.some(c=>types.includes(c))) e.type="Choisissez un type de commerce";
-      if(!fShopName.trim()) e.shopName="Nom de l'établissement requis";
-      if(!hasLogo) e.logo="Logo / Photo obligatoire";
-      if(!fShopDesc.trim()) e.desc="Description obligatoire";
-      setRegErrors(e);
-      if(Object.keys(e).length){toast.error(Object.values(e)[0]);return false}
-    }
-    if(role==="driver"&&step===1){
-      const e={};
-      if(!fVehMarque.trim()) e.marque="Marque requise";
-      if(!fVehAnnee.trim()) e.annee="Année requise";
-      if(!fVehPlaque.trim()) e.plaque="Plaque requise";
-      if(!hasVehPhoto) e.vehPhoto="Photo du véhicule obligatoire";
-      if(selZones.length===0) e.zones="Sélectionnez au moins 1 zone de livraison";
-      setRegErrors(e);
-      if(Object.keys(e).length){toast.error("Remplissez les champs obligatoires");return false}
-    }
-    if(step===2){
-      if(role==="vendor"){
-        const missing=[];
-        if(!docs.id) missing.push("Pièce d'identité");
-        if(!docs.photo) missing.push("Photo de l'établissement");
-        if(missing.length){toast.error("Documents requis : "+missing.join(", "));return false}
-      }
-      if(role==="driver"){
-        const missing=[];
-        if(!docs.id) missing.push("Pièce d'identité");
-        if(!docs.permit) missing.push("Permis de conduire");
-        if(!docs.id) missing.push("Pièce d'identité");
-        if(!docs.permit) missing.push("Permis de conduire");
-        if(!docs.vehicle) missing.push("Photo du véhicule");
-        if(missing.length){toast.error("Documents requis : "+missing.join(", "));return false}
-      }
-    }
-    return true;
+    return "";
   };
-  const [selCats,setSC]=useState([]);
-  const [docs,setDocs]=useState({});
-  const [ok,setOk]=useState(false);
-  const [showSubmitAnim,setShowSubmitAnim]=useState(false);
-  const [showPayment,setShowPayment]=useState(false);
-  const [payMethod,setPayMethod]=useState("airtel");
-  const [payPhone,setPayPhone]=useState("");
-  const [paying,setPaying]=useState(false);
-  const [payDone,setPayDone]=useState(false);
-  const [payPhoneErr,setPayPhoneErr]=useState("");
-  const needsPayment = role==="vendor" ? plan!=="starter" : true;
-  const payAmount = role==="vendor" ? (plan==="pro"?15000:45000) : 5000;
-  const payLabel = role==="vendor" ? (plan==="pro"?"Plan Pro — 1er mois":"Plan Enterprise — 1er mois") : "Frais d'inscription livreur";
-  
-  const processPayment = () => {
-    const err=validatePayPhone(payPhone,payMethod);
-    if(err){setPayPhoneErr(err);return;}
-    setPaying(true);
-    setTimeout(()=>{
-      setPaying(false);
-      setPayDone(true);
-      setTimeout(()=>{setShowPayment(false);setShowSubmitAnim(true);setTimeout(()=>{setShowSubmitAnim(false);setOk(true)},1700)},1500);
-    },3000);
+  const ready = !check();
+
+  const submit = async () => {
+    const e = check();
+    if (e) { setErr(e); return; }
+    setBusy(true);
+    try {
+      if (isVendor) await vendorService.register(shop.trim(), type, "starter", desc.trim() || undefined);
+      else await driverService.register({
+        vehicle_type: vehicle,
+        vehicle_brand: motorized ? brand.trim() || null : null,
+        vehicle_plate: motorized ? plate.trim().toUpperCase() : null,
+        zones,
+      });
+      onPending?.(role);
+      go("regStatus", { role, sent: true, replace: true });
+    } catch (x) {
+      setErr(x.message || "La demande n'a pas pu être envoyée");
+      showToast?.(x.message || "Erreur", "error");
+    }
+    setBusy(false);
   };
 
-  const toggleCat=c=>setSC(p=>p.includes(c)?p.filter(x=>x!==c):[...p,c]);
-
-  const vendorSteps=["Infos","Établissement","Documents","Plan","Résumé"];
-  const driverSteps=["Infos","Véhicule","Documents","Tarifs","Résumé"];
-  const steps=role==="vendor"?vendorSteps:driverSteps;
-  const maxStep=steps.length-1;
-
-  // Success screen
-  // Image croppers
-  const applyLogoCrop=(cropped)=>{
-    const el=document.getElementById("vu-preview");
-    if(el){el.textContent="";el.style.overflow="hidden";const img=document.createElement("img");img.src=cropped;img.style.cssText="width:100%;height:100%;object-fit:cover;border-radius:12px";el.appendChild(img)}
-    setHasLogo(true);setCropLogSrc(null);toast.success("Logo ajouté");
-  };
-
-
-  if(showSubmitAnim)return<SuccessAnimation title="Demande envoyée !" subtitle={role==="vendor"?"Votre commerce sera vérifié sous 24h":"Votre dossier sera vérifié sous 24h"} hint="Vous recevrez une notification" duration={0}/>;
-
-  if(ok)return(<div style={{display:"flex",flexDirection:"column",height:"100%",justifyContent:"center",animation:"fadeIn .3s ease"}}><div style={{textAlign:"center",padding:"40px 20px"}}>
-    <div style={{width:80,height:80,borderRadius:"50%",background:"rgba(249,115,22,0.08)",display:"flex",alignItems:"center",justifyContent:"center",margin:"0 auto 20px",fontSize:40}}></div>
-    <h2 style={{fontSize:20,fontWeight:700,marginBottom:8}}>Demande envoyée !</h2>
-    <p style={{fontSize:14,color:"var(--sub)",lineHeight:1.6}}>Votre demande d'inscription en tant que <b>{role==="vendor"?"commerçant":"livreur"}</b> a bien été reçue.</p>
-
-    {/* Ref number */}
-    <div style={{margin:"16px auto",padding:"10px 20px",background:"var(--light)",borderRadius:12,display:"inline-block"}}>
-      <div style={{fontSize:10,color:"var(--muted)"}}>Numéro de suivi</div>
-      <div style={{fontSize:16,fontWeight:800,color:"#F97316",letterSpacing:1}}>#{role==="vendor"?"VND":"DRV"}-2026-{String(Math.floor(Math.random()*9000+1000))}</div>
-    </div>
-
-    {role==="vendor"&&<div style={{padding:10,background:"rgba(249,115,22,0.04)",borderRadius:12,fontSize:12,color:"#F97316",fontWeight:600,marginBottom:10}}>Plan choisi : {plan==="starter"?"Starter (Gratuit)":plan==="pro"?"Pro (15 000 F/mois)":"Enterprise (45 000 F/mois)"}</div>}
-
-    {/* Timeline */}
-    <div style={{textAlign:"left",maxWidth:300,margin:"16px auto",padding:16,background:"var(--card)",border:"1px solid var(--border)",borderRadius:16}}>
-      <div style={{fontSize:13,fontWeight:700,marginBottom:12}}><Icon name="document" size={16}/>{" "}Prochaines étapes</div>
-      {[
-        ["check_circle","Demande soumise","Maintenant","done"],
-        ["clock","Vérification en cours","Notre équipe examine vos documents","pending"],
-        ["bell","Notification de validation","Sous 24-48h par SMS et in-app","waiting"],
-        [role==="vendor"?"store":"truck",role==="vendor"?"Accès mode vendeur":"Accès mode livreur","Après validation","waiting"],
-      ].map(([ic,title,desc,status],i)=>(
-        <div key={i} style={{display:"flex",gap:10,marginBottom:i<3?12:0,position:"relative"}}>
-          {i<3&&<div style={{position:"absolute",left:13,top:28,width:2,height:16,background:status==="done"?"#10B981":"var(--border)"}}/>}
-          <div style={{width:28,height:28,borderRadius:8,background:status==="done"?"rgba(16,185,129,0.1)":status==="pending"?"rgba(249,115,22,0.1)":"var(--light)",display:"flex",alignItems:"center",justifyContent:"center",flexShrink:0,color:status==="done"?"#10B981":status==="pending"?"#F97316":"var(--muted)"}}><Icon name={ic} size={14}/></div>
-          <div>
-            <div style={{fontSize:12,fontWeight:600,color:status==="done"?"#10B981":status==="pending"?"#F97316":"var(--muted)"}}>{title}</div>
-            <div style={{fontSize:10,color:"var(--muted)"}}>{desc}</div>
-          </div>
-        </div>
-      ))}
-    </div>
-
-    <p style={{fontSize:11,color:"var(--muted)",lineHeight:1.5,marginTop:8}}><Icon name="phone" size={16}/>{" "}Vous recevrez un SMS au <b>+242 {rolePhone.slice(0,3)} XXX {rolePhone.slice(6)}</b> dès validation.<br/>Vous pouvez continuer à acheter en attendant.</p>
-
-    <div style={{maxWidth:300,margin:"16px auto 0",display:"flex",flexDirection:"column",gap:8}}>
-      <button className="btn-primary" onClick={()=>{toast.success("Demande enregistrée ! Vous serez notifié sous 24-48h ");
-        setTimeout(()=>triggerPush("Votre demande de "+(role==="vendor"?"commerçant":"livreur")+" est en cours de vérification. Réponse sous 24-48h."),3000);
-        if(onPending) onPending(role);
-        setTimeout(()=>{
-          triggerPush("Félicitations ! Votre demande de "+(role==="vendor"?"commerçant":"livreur")+" a été approuvée ! Accédez à votre espace dans le Profil.");
-          if(onDone) onDone(role, role==="vendor"?plan:"driver");
-        },60000);
-        onBack()}}>↩ Retour au marketplace</button>
-    </div>
-  </div></div>);
-
-  // Role selection
-  if(step===-1)return(<div style={{display:"flex",flexDirection:"column",height:"100%"}}><div className="appbar"><button onClick={onBack}>←</button><h2>Rejoindre Lamuka</h2><div style={{width:38}}/></div>
-    <div className="scr" style={{padding:16}}>
-      <p style={{fontSize:14,color:"var(--sub)",marginBottom:14,lineHeight:1.6}}>Choisissez le rôle que vous souhaitez ajouter à votre compte :</p>
-      <div onClick={()=>{setRole("vendor");setStep(0);setDocs({id:false,rccm:false,photo:false})}} style={{padding:16,background:"var(--card)",border:"2px solid var(--border)",borderRadius:20,marginBottom:14,cursor:"pointer",transition:"all .2s"}}>
-        <div style={{display:"flex",alignItems:"center",gap:14,marginBottom:10}}><div style={{width:56,height:56,borderRadius:16,background:"linear-gradient(135deg,#F97316,#FB923C)",display:"flex",alignItems:"center",justifyContent:"center",fontSize:28}}><Icon name="store" size={18}/></div><div><h3 style={{fontSize:18,fontWeight:700}}>Commerçant</h3><p style={{fontSize:12,color:"var(--muted)"}}>Ouvrez votre commerce sur Lamuka</p></div></div>
-        <div style={{fontSize:12,color:"var(--sub)",lineHeight:1.6}}>Restaurant, boutique, pâtisserie, supermarché, pharmacie ou service — vendez et recevez des commandes.</div>
-        <div style={{display:"flex",gap:6,marginTop:10,flexWrap:"wrap"}}>{["Resto","Boutique","Pâtisserie","Supermarché","Pharma","Service"].map(f=><span key={f} style={{padding:"4px 10px",borderRadius:8,background:"rgba(249,115,22,0.06)",color:"#F97316",fontSize:10,fontWeight:600}}>{f}</span>)}</div>
+  return (
+    <div style={{ flex: 1, display: "flex", flexDirection: "column", minHeight: 0, background: "var(--t-bg2)" }}>
+      <div className="t-head" style={{ background: "var(--card)" }}>
+        <button className="t-back" onClick={onBack} aria-label="Retour"><Icon name="arrow_left" size={24} /></button>
+        <h1>{isVendor ? "Vendre sur Lamuka" : "Livrer avec Lamuka"}</h1>
       </div>
-      <div onClick={()=>{setRole("driver");setStep(0);setDocs({id:false,permit:false,vehicle:false})}} style={{padding:16,background:"var(--card)",border:"2px solid var(--border)",borderRadius:20,cursor:"pointer",transition:"all .2s"}}>
-        <div style={{display:"flex",alignItems:"center",gap:14,marginBottom:10}}><div style={{width:56,height:56,borderRadius:16,background:"linear-gradient(135deg,#10B981,#059669)",display:"flex",alignItems:"center",justifyContent:"center",fontSize:28}}><Icon name="truck" size={18}/></div><div><h3 style={{fontSize:18,fontWeight:700}}>Livreur</h3><p style={{fontSize:12,color:"var(--muted)"}}>Livrez et gagnez de l'argent</p></div></div>
-        <div style={{fontSize:12,color:"var(--sub)",lineHeight:1.6}}>Effectuez des livraisons dans votre zone. Choisissez vos horaires, suivez vos gains en temps réel.</div>
-        <div style={{display:"flex",gap:6,marginTop:10,flexWrap:"wrap"}}>{["Horaires flexibles","Gains en temps réel","GPS intégré","Pourboires"].map(f=><span key={f} style={{padding:"4px 10px",borderRadius:8,background:"rgba(249,115,22,0.04)",color:"#10B981",fontSize:10,fontWeight:600}}>{f}</span>)}</div>
-      </div>
-    </div>
-  </div>);
 
-  // Multi-step form
-  const color=role==="vendor"?"#F97316":"#10B981";
+      <div className="t-scr gray">
+        {refused && <div className="tk-note" style={{ margin: "14px 16px 0", alignItems: "flex-start" }}><Icon name="info" size={16} color="var(--acc-d)" />
+          <span><b>Votre demande précédente a été refusée</b> : {refused}. Vous pouvez la refaire ci-dessous ; il faudra renvoyer vos pièces.</span></div>}
+        <p className="tk-hint" style={{ margin: "16px 20px 4px", color: "var(--t-sub)" }}>
+          {isVendor
+            ? `Recevez des commandes des clients${citiesText() ? " de " + citiesText() : ""}. Lamuka s'occupe de la livraison.`
+            : "Livrez les commandes et les courses près de chez vous, aux heures qui vous conviennent."}
+        </p>
 
-  return(<>
-    <div className="appbar"><button onClick={()=>step>0?setStep(step-1):forceRole?onBack():setStep(-1)}>←</button><h2>{role==="vendor"?"Devenir Commerçant":"Devenir Livreur"}</h2><div style={{width:38}}/></div>
-    <div className="vr-steps">{steps.map((s,i)=><div key={s} style={{display:"contents"}}>{i>0&&<div className={`vr-line ${step>=i?"on":""}`} style={step>=i?{background:color}:{}}/>}<div className="step-col"><div className={`vr-dot ${step>i?"done":step>=i?"on":""}`} style={step>=i?{background:color,color:"#fff"}:{}}>{step>i ? <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#fff" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round"><polyline points="20 6 9 17 4 12"/></svg> : i+1}</div><div className={`vr-lbl ${step>=i?"on":""}`}>{s}</div></div></div>)}</div>
-    <div className="scr" style={{padding:16}}>
-
-      {/* STEP 0: Infos personnelles (both) */}
-      {step===0&&<><h3 style={{fontSize:16,fontWeight:700,marginBottom:14}}>Informations personnelles</h3>
-        <div className="field"><label>Nom complet <span style={{color:"#EF4444"}}>*</span></label><input value={fName} onChange={e=>{setFName(e.target.value);clrR("name")}} placeholder="Joeldy Tsina"/>{regErrors.name&&<div className="err-msg">{regErrors.name}</div>}</div>
-        <div className="field"><label>Email <span style={{color:"#EF4444"}}>*</span></label><input value={fEmail} onChange={e=>{setFEmail(e.target.value);clrR("email")}} placeholder="joeldytsina94@gmail.com" type="email"/>{regErrors.email&&<div className="err-msg">{regErrors.email}</div>}</div>
-        <div className="field"><label>Téléphone <span style={{color:"#EF4444"}}>*</span></label><div style={{display:"flex",gap:8,alignItems:"center"}}><span style={{fontSize:13,fontWeight:600,flexShrink:0}}>+242</span><input value={rolePhone} onChange={e=>{const v=e.target.value.replace(/[^0-9]/g,"").slice(0,9);setRolePhone(v);setRolePhoneErr("");clrR("phone")}} placeholder="06X XXX XXX" type="tel" maxLength={11}/></div>{(rolePhoneErr||regErrors.phone)&&<div className="err-msg">{rolePhoneErr||regErrors.phone}</div>}</div>
-        <div className="field-row"><div className="field"><label>Ville <span style={{color:"#EF4444"}}>*</span></label><input value={fVille} onChange={e=>{setFVille(e.target.value);clrR("ville")}} placeholder="Brazzaville"/>{regErrors.ville&&<div className="err-msg">{regErrors.ville}</div>}</div><div className="field"><label>Quartier <span style={{color:"#EF4444"}}>*</span></label><input value={fQuartier} onChange={e=>{setFQuartier(e.target.value);clrR("quartier")}} placeholder="Bacongo"/>{regErrors.quartier&&<div className="err-msg">{regErrors.quartier}</div>}</div></div>
-      </>}
-
-      {/* STEP 1 VENDOR: Établissement */}
-      {step===1&&role==="vendor"&&<><h3 style={{fontSize:16,fontWeight:700,marginBottom:14}}>Votre Établissement</h3>
-        <label style={{display:"block",fontSize:12,fontWeight:600,color:"var(--sub)",marginBottom:8}}>Type de commerce <span style={{color:"#EF4444"}}>*</span></label>
-        <div style={{display:"grid",gridTemplateColumns:"1fr 1fr 1fr",gap:8,marginBottom:14}}>
-          {[["store","Boutique","boutique"],["utensils","Restaurant","restaurant"],["cupcake","Pâtisserie","patisserie"],["cart","Supermarché","supermarche"],["pill","Pharmacie","pharmacie"],["tool","Service","service"]].map(([icon,label,val])=>{const sel=selCats.includes(val);return<div key={val} onClick={(e)=>{e.stopPropagation();setSC(p=>{const types=["boutique","restaurant","patisserie","supermarche","pharmacie","service"];const filtered=p.filter(x=>!types.includes(x));return sel?filtered:[...filtered,val]});}} style={{padding:"14px 8px",borderRadius:14,border:sel?"2px solid #F97316":"2px solid var(--border)",background:sel?"rgba(249,115,22,0.08)":"var(--card)",cursor:"pointer",textAlign:"center",transition:"all .15s",position:"relative",WebkitTapHighlightColor:"transparent",userSelect:"none"}}>
-            {sel&&<div style={{position:"absolute",top:6,right:6,width:18,height:18,borderRadius:"50%",background:"#F97316",display:"flex",alignItems:"center",justifyContent:"center",color:"#fff"}}><Icon name="check" size={12} color="#fff"/></div>}
-            <div style={{display:"flex",justifyContent:"center",alignItems:"center",marginBottom:6,color:sel?"#F97316":"var(--text)"}}><Icon name={icon} size={26} color={sel?"#F97316":"var(--text)"}/></div>
-            <div style={{fontSize:11,fontWeight:700,color:sel?"#F97316":"var(--sub)"}}>{label}</div>
-          </div>})}
-        </div>
-        <div className="vr-upload" onClick={()=>document.getElementById("reg-upload")?.click()} style={{cursor:"pointer"}}><div className="vu-icon" id="vu-preview" style={{color:"var(--muted)"}}><svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg></div><b>Logo / Photo <span style={{color:"#EF4444",fontWeight:400}}>*</span></b><p>PNG, JPG · Max 2MB</p><input id="reg-upload" type="file" accept="image/*" style={{display:"none"}} onChange={e=>{const f=e.target.files?.[0];if(f){const r=new FileReader();r.onload=()=>setCropLogSrc(r.result);r.readAsDataURL(f);e.target.value=""}}}/></div>
-        <div className="field"><label>Nom de l'établissement <span style={{color:"#EF4444"}}>*</span></label><input value={fShopName} onChange={e=>{setFShopName(e.target.value);clrR("shopName")}} placeholder="Ex: Chez Mama Ngudi, Congo Tech..."/>{regErrors.shopName&&<div className="err-msg">{regErrors.shopName}</div>}</div>
-        <div className="field"><label>Description <span style={{color:"#EF4444"}}>*</span></label><textarea value={fShopDesc} onChange={e=>{setFShopDesc(e.target.value);clrR("desc")}} placeholder="Votre activité, spécialités..." rows={3} style={{resize:"none"}}/>{regErrors.desc&&<div className="err-msg">{regErrors.desc}</div>}</div>
-        {/* Horaires — restos, pâtisseries, pharmacies, supermarchés */}
-        {["restaurant","patisserie","pharmacie","supermarche"].some(t=>selCats.includes(t))&&<div style={{marginTop:10,marginBottom:14}}>
-          <div style={{fontSize:14,fontWeight:700,marginBottom:8,display:"flex",alignItems:"center",gap:6}}><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="12" r="9"/><polyline points="12 7 12 12 15 14"/></svg>Horaires d'ouverture</div>
-          <div className="field-row">
-            <div className="field"><label>Ouverture</label><input type="time" value={fOpenTime} onChange={e=>setFOpenTime(e.target.value)} style={{padding:12}}/></div>
-            <div className="field"><label>Fermeture</label><input type="time" value={fCloseTime} onChange={e=>setFCloseTime(e.target.value)} style={{padding:12}}/></div>
-          </div>
-          <div style={{fontSize:12,fontWeight:700,marginBottom:6}}>Jours d'ouverture</div>
-          <div style={{display:"flex",gap:4,flexWrap:"wrap"}}>
-            {["Lun","Mar","Mer","Jeu","Ven","Sam","Dim"].map(d=>{const sel=fOpenDays.includes(d);return(
-              <button key={d} onClick={()=>setFOpenDays(p=>sel?p.filter(x=>x!==d):[...p,d])} style={{padding:"6px 10px",borderRadius:8,border:sel?"2px solid "+color:"1px solid var(--border)",background:sel?"rgba(249,115,22,0.06)":"var(--card)",color:sel?color:"var(--muted)",fontSize:11,fontWeight:sel?700:500,cursor:"pointer",fontFamily:"inherit"}}>{d}</button>
-            )})}
-          </div>
-          <div style={{marginTop:8,padding:8,background:"rgba(249,115,22,0.04)",borderRadius:8,fontSize:11,color:"var(--sub)",display:"flex",alignItems:"center",gap:6}}><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="12" r="9"/><polyline points="12 7 12 12 15 14"/></svg>{fOpenDays.join(", ")} · {fOpenTime} — {fCloseTime}</div>
-        </div>}
-
-        <label style={{display:"block",fontSize:12,fontWeight:600,color:"var(--sub)",margin:"14px 0 8px"}}>Sous-catégories</label>
-        <div style={{display:"grid",gridTemplateColumns:"1fr 1fr 1fr",gap:8}}>{CATS.map(c=>{const sel=selCats.includes(c.name);return(
-          <div key={c.id} onClick={()=>toggleCat(c.name)} style={{padding:8,borderRadius:14,border:sel?"2px solid #F97316":"2px solid var(--border)",background:sel?"rgba(249,115,22,0.08)":"var(--card)",cursor:"pointer",textAlign:"center",position:"relative",transition:"all .15s",WebkitTapHighlightColor:"transparent"}}>
-            {sel&&<div style={{position:"absolute",top:6,right:6,width:18,height:18,borderRadius:"50%",background:"#F97316",display:"flex",alignItems:"center",justifyContent:"center",zIndex:2}}><Icon name="check" size={12} color="#fff"/></div>}
-            <div style={{width:"100%",aspectRatio:"1 / 1",borderRadius:10,overflow:"hidden",background:"var(--light)",marginBottom:6}}>
-              {c.photo ? <img src={c.photo} alt={c.name} style={{width:"100%",height:"100%",objectFit:"cover"}}/> : <div style={{width:"100%",height:"100%",display:"flex",alignItems:"center",justifyContent:"center",color:"var(--muted)"}}><Icon name="package" size={24}/></div>}
-            </div>
-            <div style={{fontSize:10,fontWeight:700,color:sel?"#F97316":"var(--sub)",lineHeight:1.2}}>{c.name}</div>
-          </div>
-        )})}</div>
-      </>}
-
-      {/* STEP 1 DRIVER: Véhicule */}
-      {step===1&&role==="driver"&&<><h3 style={{fontSize:16,fontWeight:700,marginBottom:14}}>Votre Véhicule</h3>
-        <div style={{marginBottom:14}}>
-          <label style={{display:"block",fontSize:12,fontWeight:600,color:"var(--sub)",marginBottom:8}}>Type de véhicule <span style={{color:"#EF4444"}}>*</span></label>
-          <div style={{display:"grid",gridTemplateColumns:"1fr 1fr 1fr",gap:8}}>
-            {[["truck","Moto","moto"],["car","Voiture","voiture"],["activity","Vélo","velo"]].map(([icon,label,val])=>{const sel=fVehType===val;return(
-              <div key={val} onClick={()=>setFVehType(val)} style={{padding:"14px 8px",borderRadius:14,border:sel?"2px solid #10B981":"2px solid var(--border)",background:sel?"rgba(16,185,129,0.08)":"var(--card)",cursor:"pointer",textAlign:"center",transition:"all .15s",position:"relative",WebkitTapHighlightColor:"transparent",userSelect:"none"}}>
-                {sel&&<div style={{position:"absolute",top:6,right:6,width:18,height:18,borderRadius:"50%",background:"#10B981",display:"flex",alignItems:"center",justifyContent:"center"}}><Icon name="check" size={12} color="#fff"/></div>}
-                <div style={{display:"flex",justifyContent:"center",alignItems:"center",marginBottom:6,color:sel?"#10B981":"var(--text)"}}><Icon name={icon} size={26} color={sel?"#10B981":"var(--text)"}/></div>
-                <div style={{fontSize:11,fontWeight:700,color:sel?"#10B981":"var(--sub)"}}>{label}</div>
-              </div>
-            )})}
-          </div>
-        </div>
-        <div className="field-row"><div className="field"><label>Marque <span style={{color:"#EF4444"}}>*</span></label><input value={fVehMarque} onChange={e=>{setFVehMarque(e.target.value);clrR("marque")}} placeholder="Honda PCX"/>{regErrors.marque&&<div className="err-msg">{regErrors.marque}</div>}</div><div className="field"><label>Année <span style={{color:"#EF4444"}}>*</span></label><input value={fVehAnnee} onChange={e=>{setFVehAnnee(e.target.value);clrR("annee")}} placeholder="2023"/>{regErrors.annee&&<div className="err-msg">{regErrors.annee}</div>}</div></div>
-        <div className="field-row"><div className="field"><label>Plaque <span style={{color:"#EF4444"}}>*</span></label><input value={fVehPlaque} onChange={e=>{setFVehPlaque(e.target.value);clrR("plaque")}} placeholder="BZ-4521"/>{regErrors.plaque&&<div className="err-msg">{regErrors.plaque}</div>}</div><div className="field"><label>Couleur <span style={{color:"#EF4444"}}>*</span></label><input value={fVehCouleur} onChange={e=>setFVehCouleur(e.target.value)} placeholder="Noir"/></div></div>
-        {/* Vehicle photo */}
-        <div style={{marginTop:10,marginBottom:14}}>
-          <label style={{display:"block",fontSize:12,fontWeight:600,color:"var(--sub,#5E5B53)",marginBottom:6}}>Photo du véhicule <span style={{color:"#EF4444"}}>*</span></label>
-          <div id="drv-veh-wrap" onClick={()=>document.getElementById("drv-veh-upload")?.click()} style={{width:"100%",height:120,borderRadius:16,border:"2px dashed var(--border,#E8E6E1)",background:"var(--light,#F5F4F1)",display:"flex",flexDirection:"column",alignItems:"center",justifyContent:"center",cursor:"pointer",overflow:"hidden"}}>
-            <div id="drv-veh-preview" style={{fontSize:32,marginBottom:4}}><Icon name="truck" size={18}/></div>
-            <span style={{fontSize:11,color:"var(--muted,#908C82)"}}>Cliquez pour ajouter une photo</span>
-          </div>
-          <input id="drv-veh-upload" type="file" accept="image/*" style={{display:"none"}} onChange={e=>{
-            const f=e.target.files?.[0];if(!f)return;
-            const reader=new FileReader();
-            reader.onload=()=>{
-              const wrap=document.getElementById("drv-veh-wrap");
-              if(wrap){wrap.innerHTML="";wrap.style.border="none";wrap.style.padding="0";
-              const img=document.createElement("img");img.src=reader.result;img.style.cssText="width:100%;height:100%;object-fit:cover;object-position:center;border-radius:14px";
-              wrap.appendChild(img)}
-              setHasVehPhoto(true);toast.success("Photo véhicule ajoutée");
-            };
-            reader.readAsDataURL(f);e.target.value="";
-          }}/>
-        </div>
-        <div style={{fontSize:14,fontWeight:700,margin:"0 0 10px"}}>Zones de livraison</div>
-        <div style={{display:"flex",gap:6,flexWrap:"wrap"}}>{["Brazzaville Sud","Centre-ville","Brazzaville Nord","Poto-Poto","Ouenzé","Talangaï","Bacongo","Makélékélé","Pointe-Noire"].map(z=>{const sel=selZones.includes(z);return<span key={z} onClick={()=>setSelZones(p=>sel?p.filter(x=>x!==z):[...p,z])} style={{padding:"8px 14px",borderRadius:10,border:sel?"2px solid "+color:"1px solid var(--border)",background:sel?"rgba(249,115,22,0.06)":"var(--card)",color:sel?color:"var(--text)",fontSize:12,cursor:"pointer",fontFamily:"inherit",fontWeight:sel?700:500}}>{sel?" ":""}{z}</span>})}</div>
-        {selZones.length===0&&<div style={{fontSize:11,color:"#EF4444",marginTop:4}}>Sélectionnez au moins 1 zone</div>}
-      </>}
-
-      {/* STEP 2: Documents (different per role) */}
-      {step===2&&<><h3 style={{fontSize:16,fontWeight:700,marginBottom:6}}>Documents requis</h3>
-        <p style={{fontSize:12,color:"var(--muted)",lineHeight:1.5,marginBottom:14}}>Uploadez vos documents pour vérification. Formats acceptés : JPG, PNG, PDF. Max 5 MB par fichier.</p>
-        {(role==="vendor"?
-          [["user","Pièce d'identité","Carte nationale ou passeport (obligatoire)","id","image/*,.pdf"],["document","RCCM / Patente","Registre de commerce (optionnel)","rccm","image/*,.pdf"],["store","Photo de l'établissement","Votre espace de vente (obligatoire)","photo","image/*"]]
-          :[["user","Pièce d'identité","Carte nationale ou passeport (obligatoire)","id","image/*,.pdf"],["key","Permis de conduire","Obligatoire pour moto/voiture","permit","image/*,.pdf"],["car","Photo du véhicule","Vue claire du véhicule (obligatoire)","vehicle","image/*"]]
-        ).map(([icon,title,desc,key,accept])=>(
-          <div key={key} style={{padding:14,background:"var(--card,#fff)",border:docs[key]?"2px solid "+color:"1px solid var(--border,#E8E6E1)",borderRadius:16,marginBottom:10,position:"relative"}}>
-            <input id={`doc-${key}`} type="file" accept={accept} style={{display:"none"}} onChange={e=>{
-              const f=e.target.files?.[0];
-              if(!f)return;
-              if(f.size>5*1024*1024){toast.error("Fichier trop lourd (max 5 MB)");return}
-              const reader=new FileReader();
-              reader.onload=()=>{setDocs(prev=>({...prev,[key]:{name:f.name,size:(f.size/1024).toFixed(0),type:f.type,preview:f.type.startsWith("image/")?reader.result:null}}))};
-              reader.readAsDataURL(f);
-              toast.success("Document uploadé");
-              e.target.value="";
-            }}/>
-
-            {!docs[key]?(
-              <div onClick={()=>document.getElementById(`doc-${key}`)?.click()} style={{cursor:"pointer",display:"flex",alignItems:"center",gap:12}}>
-                <div style={{width:48,height:48,borderRadius:14,background:role==="vendor"?"rgba(249,115,22,0.06)":"rgba(16,185,129,0.06)",display:"flex",alignItems:"center",justifyContent:"center",flexShrink:0,color:role==="vendor"?"#F97316":"#10B981"}}><Icon name={icon} size={24}/></div>
-                <div style={{flex:1}}>
-                  <div style={{fontSize:13,fontWeight:700}}>{title}</div>
-                  <div style={{fontSize:11,color:"var(--muted,#908C82)",marginTop:2}}>{desc}</div>
-                </div>
-                <div style={{padding:"8px 14px",borderRadius:10,border:`1px dashed ${color}`,color:color,fontSize:11,fontWeight:600,flexShrink:0,display:"flex",alignItems:"center",gap:4}}><Icon name="plus" size={12} color={color}/>Upload</div>
-              </div>
-            ):(
-              <div>
-                <div style={{display:"flex",alignItems:"center",gap:12}}>
-                  {/* Preview thumbnail */}
-                  {docs[key].preview?(
-                    <div style={{width:48,height:48,borderRadius:14,overflow:"hidden",flexShrink:0,border:"1px solid var(--border,#E8E6E1)"}}>
-                      <img src={docs[key].preview} style={{width:"100%",height:"100%",objectFit:"cover"}} alt=""/>
-                    </div>
-                  ):(
-                    <div style={{width:48,height:48,borderRadius:14,background:"rgba(249,115,22,0.04)",display:"flex",alignItems:"center",justifyContent:"center",flexShrink:0,color:"#F97316"}}><Icon name="document" size={22}/></div>
-                  )}
-                  <div style={{flex:1,minWidth:0}}>
-                    <div style={{fontSize:13,fontWeight:700,color:"#10B981",display:"flex",alignItems:"center",gap:4}}><Icon name="check_circle" size={16}/>{" "}{title}</div>
-                    <div style={{fontSize:11,color:"var(--muted,#908C82)",marginTop:2,overflow:"hidden",whiteSpace:"nowrap",textOverflow:"ellipsis"}}>{docs[key].name} · {docs[key].size} KB</div>
-                  </div>
-                  <div style={{display:"flex",flexDirection:"column",gap:4,flexShrink:0}}>
-                    <button onClick={()=>document.getElementById(`doc-${key}`)?.click()} style={{padding:"5px 10px",borderRadius:8,border:"1px solid var(--border,#E8E6E1)",background:"var(--card,#fff)",fontSize:10,fontWeight:600,cursor:"pointer",fontFamily:"inherit",color:"var(--text,#191815)"}}> Changer</button>
-                    <button onClick={()=>setDocs(prev=>({...prev,[key]:false}))} style={{padding:"5px 10px",borderRadius:8,border:"1px solid rgba(239,68,68,.15)",background:"transparent",fontSize:10,fontWeight:600,cursor:"pointer",fontFamily:"inherit",color:"#EF4444"}}> Retirer</button>
-                  </div>
-                </div>
-              </div>
-            )}
-          </div>
-        ))}
-        {/* Progress indicator */}
-        <div style={{padding:12,background:"var(--light,#F5F4F1)",borderRadius:12,display:"flex",alignItems:"center",gap:10,marginTop:4}}>
-          <div style={{flex:1}}>
-            <div style={{display:"flex",justifyContent:"space-between",fontSize:11,marginBottom:4}}>
-              <span style={{fontWeight:600}}>Documents uploadés</span>
-              <span style={{color:color,fontWeight:700}}>{Object.values(docs).filter(v=>v&&v!==true&&v!==false).length}/{role==="vendor"?3:3}</span>
-            </div>
-            <div style={{height:4,background:"var(--border,#E8E6E1)",borderRadius:2,overflow:"hidden"}}>
-              <div style={{width:`${(Object.values(docs).filter(v=>v&&v!==true&&v!==false).length/(role==="vendor"?3:3))*100}%`,height:"100%",background:color,borderRadius:2,transition:"width .3s"}}/>
+        {isVendor ? <>
+          <div className="t-card tk-box">
+            <div className="tk-h">Type de commerce</div>
+            <div className="tk-kinds">
+              {Object.entries(TYPE_LABEL).map(([k, label]) => (
+                <button key={k} className={type === k ? "on" : ""} onClick={() => { setType(k); setErr(""); }}>
+                  <Icon name={TYPE_ICON[k] || "store"} size={24} color={type === k ? "var(--acc)" : "var(--t-text)"} /><span>{label}</span>
+                </button>
+              ))}
             </div>
           </div>
-        </div>
-      </>}
-
-      {/* STEP 3 DRIVER: Tarifs & Commission */}
-      {step===3&&role==="driver"&&<><h3 style={{fontSize:16,fontWeight:700,marginBottom:14}}>Tarifs & Commission</h3>
-        {/* Registration fee */}
-        <div style={{padding:16,background:"linear-gradient(135deg,rgba(16,185,129,0.06),rgba(16,185,129,0.02))",border:"1px solid rgba(249,115,22,0.15)",borderRadius:16,marginBottom:14}}>
-          <div style={{display:"flex",alignItems:"center",gap:10,marginBottom:10}}>
-            <div style={{width:40,height:40,borderRadius:12,background:"#10B981",display:"flex",alignItems:"center",justifyContent:"center",color:"#fff",fontSize:18}}><Icon name="document" size={18}/></div>
-            <div><div style={{fontSize:14,fontWeight:700}}>Frais d'inscription</div><div style={{fontSize:11,color:"var(--muted)"}}>Paiement unique — couvre la vérification</div></div>
+          <div className="t-card tk-box">
+            <div className="t-field"><label>Nom du commerce</label>
+              <input className="t-input" placeholder="Ex. : Chez Mama Ngudi" autoCapitalize="words" maxLength={80} value={shop} onChange={(e) => { setShop(e.target.value); setErr(""); }} /></div>
+            <div className="t-field" style={{ marginBottom: 0 }}><label>Ce que vous vendez <span className="t-mut" style={{ fontWeight: 400 }}>(facultatif)</span></label>
+              <textarea className="t-note" maxLength={500} placeholder="Vos spécialités, vos produits phares…" value={desc} onChange={(e) => setDesc(e.target.value)} /></div>
           </div>
-          <div style={{fontSize:28,fontWeight:800,color:"#10B981",textAlign:"center",margin:"8px 0"}}>5 000 FCFA</div>
-          <div style={{fontSize:11,color:"var(--sub)",textAlign:"center",lineHeight:1.5}}>Payable par Airtel Money ou MTN MoMo après validation du dossier</div>
-        </div>
-        {/* Commission */}
-        <div style={{padding:16,background:"var(--card)",border:"1px solid var(--border)",borderRadius:16,marginBottom:14}}>
-          <div style={{fontSize:14,fontWeight:700,marginBottom:10}}>Commission par livraison</div>
-          <div style={{display:"flex",justifyContent:"space-between",padding:"10px 0",borderBottom:"1px solid var(--border)"}}>
-            <span style={{fontSize:13}}>Frais de livraison perçu</span><b style={{fontSize:13}}>100%</b>
+        </> : <>
+          <div className="t-card tk-box">
+            <div className="tk-h">Comment livrez-vous ?</div>
+            <div className="tk-kinds" style={{ gridTemplateColumns: "repeat(4,1fr)" }}>
+              {VEHICLES.map(([k, label, ic]) => (
+                <button key={k} className={vehicle === k ? "on" : ""} onClick={() => { setVehicle(k); setErr(""); }}>
+                  <Icon name={ic} size={24} color={vehicle === k ? "var(--acc)" : "var(--t-text)"} /><span>{label}</span>
+                </button>
+              ))}
+            </div>
+            {motorized && <div className="tk-two" style={{ marginTop: 14 }}>
+              <div className="t-field" style={{ marginBottom: 0 }}><label>Marque</label>
+                <input className="t-input" placeholder={vehicle === "moto" ? "Ex. : Haojue" : "Ex. : Toyota"} maxLength={40} value={brand} onChange={(e) => setBrand(e.target.value)} /></div>
+              <div className="t-field" style={{ marginBottom: 0 }}><label>Plaque</label>
+                <input className="t-input" placeholder="Ex. : 123-AB-4" autoCapitalize="characters" maxLength={15} value={plate} onChange={(e) => { setPlate(e.target.value); setErr(""); }} /></div>
+            </div>}
           </div>
-          <div style={{display:"flex",justifyContent:"space-between",padding:"10px 0",borderBottom:"1px solid var(--border)"}}>
-            <span style={{fontSize:13,color:"#EF4444"}}>Commission Lamuka</span><b style={{fontSize:13,color:"#EF4444"}}>-15%</b>
-          </div>
-          <div style={{display:"flex",justifyContent:"space-between",padding:"10px 0"}}>
-            <span style={{fontSize:13,fontWeight:700}}>Vous gardez</span><b style={{fontSize:15,color:"#10B981"}}>85%</b>
-          </div>
-          <div style={{marginTop:8,padding:10,background:"var(--light)",borderRadius:10,fontSize:11,color:"var(--sub)",lineHeight:1.5}}>
-            Exemple : Livraison à 2 500 F → Commission 375 F → Vous recevez <b style={{color:"#10B981"}}>2 125 FCFA</b> + pourboire client
-          </div>
-        </div>
-        {/* Boost option */}
-        <div style={{padding:16,background:"var(--card)",border:"1px solid var(--border)",borderRadius:16}}>
-          <div style={{display:"flex",alignItems:"center",gap:10,marginBottom:8}}>
-            <span style={{fontSize:20}}><Icon name="rocket" size={18}/></span>
-            <div style={{flex:1}}><div style={{fontSize:14,fontWeight:700}}>Boost (Optionnel)</div><div style={{fontSize:11,color:"var(--muted)"}}>Recevez les commandes en priorité</div></div>
-            <div style={{padding:"4px 10px",borderRadius:8,background:"rgba(245,158,11,0.08)",color:"#F59E0B",fontSize:12,fontWeight:700}}>1 000 F/jour</div>
-          </div>
-          <div style={{fontSize:11,color:"var(--sub)",lineHeight:1.5}}>Activable à tout moment depuis votre tableau de bord. Les livreurs boostés reçoivent les commandes avant les autres dans leur zone.</div>
-        </div>
-      </>}
-
-      {/* STEP 3 VENDOR: Plan (only vendor) */}
-      {step===3&&role==="vendor"&&<><h3 style={{fontSize:16,fontWeight:700,marginBottom:14}}>Choisir un plan</h3>
-        {[["starter","Starter","Gratuit","Pour démarrer",["10 articles max","8% commission","Support email","Stats basiques"]],
-          ["pro","Pro","15 000 FCFA/mois","Articles illimités",["Articles illimités","4% commission","Analytics avancés","Badge vérifié ","Support prioritaire"]],
-          ["enterprise","Enterprise","45 000 FCFA/mois","Multi-établissements",["Multi-établissements","2% commission","API complète","Site web personnalisé","Manager dédié","Dashboard personnalisé"]]
-        ].map(([k,n,pr,d,f])=><div key={k} className={`vr-plan ${plan===k?"on":""}`} onClick={()=>setPlan(k)} style={plan===k?{borderColor:color}:{}}>
-          <h4>{n}<span>{pr}</span></h4><p>{d}</p>
-          <div className="vrf">{f.map(x=><span key={x}> {x}</span>)}</div>
-          {k==="starter"&&<div className="info-box yellow" style={{margin:"8px 0 0",padding:"6px 10px"}}><span style={{fontSize:12}}><Icon name="info" size={18}/></span><span style={{fontSize:11}}>Limitations : 10 articles, pas d'analytics avancés, pas de badge</span></div>}
-        </div>)}
-      </>}
-
-      {/* LAST STEP: Résumé */}
-      {step===maxStep&&<><h3 style={{fontSize:16,fontWeight:700,marginBottom:14}}>Résumé</h3>
-        <div style={{padding:16,background:"var(--card)",border:"1px solid var(--border)",borderRadius:16,marginBottom:14}}>
-          {[["Rôle",role==="vendor"?"Commerçant":"Livreur"],
-            ["Nom",fName||"—"],
-            ...(role==="vendor"?[["Établissement",fShopName||"—"],["Type",{boutique:"Boutique",restaurant:"Restaurant",patisserie:"Pâtisserie",supermarche:"Supermarché",pharmacie:"Pharmacie",service:"Service"}[selCats.find(c=>["boutique","restaurant","patisserie","supermarche","pharmacie","service"].includes(c))]||"—"]]:[["Véhicule",(fVehType==="moto"?"Moto":fVehType==="voiture"?"Voiture":fVehType==="velo"?"Vélo":"")+" "+fVehMarque],["Plaque",fVehPlaque||"—"],["Inscription","5 000 FCFA (unique)"],["Commission","15% par livraison"],["Zones",selZones.join(", ")||"—"]]),
-            ...(["restaurant","patisserie","pharmacie","supermarche"].some(t=>selCats.includes(t))?[["Horaires",fOpenDays.join(", ")+" · "+fOpenTime+"—"+fCloseTime]]:[]),
-            ["Documents",`${Object.values(docs).filter(v=>v&&v!==true&&v!==false).length}/${Object.keys(docs).length}`],
-            ...(role==="vendor"?[["Plan",plan==="starter"?"Starter (Gratuit)":plan==="pro"?"Pro (15k/mois)":"Enterprise (45k/mois)"]]:[])]
-          .map(([l,v])=><div key={l} className="vs-row"><span>{l}</span><b>{v}</b></div>)}
-        </div>
-        <div className="info-box green"><span><Icon name="check_circle" size={18}/></span><span>{role==="vendor"?"En soumettant, vous acceptez les CGV de Lamuka Marketplace.":"Votre demande sera vérifiée sous 24-48h. Vous serez notifié par SMS, email et notification."}</span></div>
-      </>}
-
-      {/* ── Sticky CTA at bottom ── */}
-      <div className="bottom-action-bar">
-        <button className="btn-primary" style={{background:color}} onClick={()=>{if(!validateStep())return;if(step<maxStep){setStep(step+1)}else{if(needsPayment&&!payDone){setShowPayment(true)}else{setShowSubmitAnim(true);setTimeout(()=>{setShowSubmitAnim(false);setOk(true)},1700)}}}}>{step===maxStep?(needsPayment&&!payDone?"Payer et soumettre":"Soumettre la demande"):"Continuer"}</button>
-      </div>
-    </div>
-
-    {/* ── Payment Modal ── */}
-    {showPayment&&<div onClick={()=>!paying&&setShowPayment(false)} style={{position:"fixed",inset:0,background:"rgba(0,0,0,.45)",zIndex:150,display:"flex",alignItems:"center",justifyContent:"center",padding:16,animation:"fadeInFast .2s ease"}}>
-      <div onClick={e=>e.stopPropagation()} style={{width:"100%",maxWidth:340,background:"var(--card)",borderRadius:20,padding:20,maxHeight:"85vh",overflowY:"auto",animation:"scaleIn .25s cubic-bezier(.4,0,.2,1)"}}>
-        
-        {payDone?<div style={{textAlign:"center",padding:"20px 0"}}>
-          <div style={{fontSize:48,marginBottom:12}}><Icon name="check_circle" size={18}/></div>
-          <h3 style={{fontSize:18,fontWeight:700}}>Paiement confirmé !</h3>
-          <p style={{fontSize:13,color:"var(--muted)",marginTop:4}}>{payAmount.toLocaleString("fr-FR")} FCFA reçu via {payMethod==="airtel"?"Airtel Money":payMethod==="mtn"?"MTN MoMo":"Kolo Pay"}</p>
-        </div>:<>
-          <div style={{textAlign:"center",marginBottom:16}}>
-            <div style={{fontSize:32,marginBottom:8}}><Icon name="creditCard" size={18}/></div>
-            <h3 style={{fontSize:16,fontWeight:700}}>Paiement requis</h3>
-            <p style={{fontSize:12,color:"var(--muted)",marginTop:4}}>{payLabel}</p>
-          </div>
-
-          {/* Amount */}
-          <div style={{padding:16,background:"var(--light)",borderRadius:14,textAlign:"center",marginBottom:16}}>
-            <div style={{fontSize:10,color:"var(--muted)"}}>Montant à payer</div>
-            <div style={{fontSize:28,fontWeight:800,color:"#F97316"}}>{payAmount.toLocaleString("fr-FR")} F</div>
-            {role==="vendor"&&<div style={{fontSize:10,color:"var(--muted)",marginTop:2}}>Renouvelé chaque mois · Annulable à tout moment</div>}
-            {role==="driver"&&<div style={{fontSize:10,color:"var(--muted)",marginTop:2}}>Paiement unique · Non remboursable</div>}
-          </div>
-
-          {/* Payment method */}
-          <div style={{fontSize:13,fontWeight:700,marginBottom:8}}>Mode de paiement</div>
-          <div style={{display:"flex",gap:6,marginBottom:14}}>
-            {[["airtel","Airtel Money"],["mtn","MTN MoMo"],["kolo","Kolo Pay"]].map(([k,n])=>(
-              <div key={k} onClick={()=>{setPayMethod(k);setPayPhoneErr("")}} style={{flex:1,padding:"10px 4px",textAlign:"center",borderRadius:12,border:payMethod===k?"2px solid #F97316":"1px solid var(--border)",background:payMethod===k?"rgba(249,115,22,0.06)":"var(--card)",cursor:"pointer"}}>
-                <div style={{display:"flex",justifyContent:"center"}}><PayLogo method={k} size={28}/></div>
-                <div style={{fontSize:10,fontWeight:600,marginTop:2}}>{n}</div>
-              </div>
-            ))}
-          </div>
-
-          {/* Phone */}
-          <div style={{fontSize:13,fontWeight:700,marginBottom:6}}>Numéro de paiement</div>
-          <div style={{display:"flex",alignItems:"center",gap:8,padding:"10px 12px",border:"1px solid var(--border)",borderRadius:12,background:"var(--light)",marginBottom:16}}>
-            <span style={{fontSize:13,fontWeight:600,flexShrink:0}}>+242</span>
-            <input value={payPhone} onChange={e=>{const v=e.target.value.replace(/[^0-9]/g,"").slice(0,9);setPayPhone(v);setPayPhoneErr("")}} placeholder={getPhonePlaceholder(payMethod)} type="tel" maxLength={11} style={{flex:1,border:"none",background:"transparent",fontSize:14,outline:"none",fontFamily:"inherit",color:"var(--text)"}}/>
-          </div>
-          {payPhoneErr&&<div style={{fontSize:11,color:"#EF4444",marginTop:4}}>{payPhoneErr}</div>}
-
-          {/* Info */}
-          <div style={{padding:10,background:"rgba(59,130,246,0.06)",borderRadius:10,fontSize:11,color:"var(--muted)",marginBottom:14,lineHeight:1.5}}>
-             Un message de confirmation sera envoyé sur votre téléphone. Validez le paiement depuis l'app {payMethod==="airtel"?"Airtel Money":payMethod==="mtn"?"MTN MoMo":"Kolo Pay"}.
-          </div>
-
-          {/* Buttons */}
-          <div style={{display:"flex",gap:8}}>
-            <button onClick={()=>setShowPayment(false)} disabled={paying} style={{flex:1,padding:12,borderRadius:12,border:"1px solid var(--border)",background:"var(--card)",fontSize:13,fontWeight:600,cursor:"pointer",fontFamily:"inherit",color:"var(--text)"}}>Annuler</button>
-            <button onClick={processPayment} disabled={paying||!isPayPhoneValid(payPhone,payMethod)} style={{flex:1,padding:12,borderRadius:12,border:"none",background:isPayPhoneValid(payPhone,payMethod)?"#F97316":"var(--border)",color:isPayPhoneValid(payPhone,payMethod)?"#fff":"var(--muted)",fontSize:13,fontWeight:700,cursor:isPayPhoneValid(payPhone,payMethod)?"pointer":"not-allowed",fontFamily:"inherit"}}>
-              {paying?"⏳ Validation...":"Payer "+payAmount.toLocaleString("fr-FR")+"F"}
-            </button>
+          <div className="t-card tk-box">
+            <div className="tk-h" style={{ marginBottom: 4 }}>Où voulez-vous livrer ?</div>
+            <div className="t-sub" style={{ fontSize: 13, marginBottom: 12 }}>Vous recevrez en priorité les livraisons de ces quartiers.</div>
+            <div style={{ display: "flex", flexWrap: "wrap", gap: 8 }}>
+              {quarters.map((z) => (
+                <button key={z} className={"t-chip" + (zones.includes(z) ? " on" : "")} onClick={() => toggleZone(z)}>
+                  {zones.includes(z) && <Icon name="check" size={14} color="var(--acc-d)" />}{z}
+                </button>
+              ))}
+            </div>
           </div>
         </>}
+
+        <div className="t-card tk-box">
+          <div className="tk-h">Vos coordonnées</div>
+          <div className="t-row"><span className="t-sub">Nom</span><span>{name || "—"}</span></div>
+          <div className="t-row"><span className="t-sub">Téléphone</span><span>{fmtPhone(user?.phone) || "—"}</span></div>
+          <button className="t-pill-btn" style={{ marginTop: 8 }} onClick={() => go("editProfile")}>Modifier</button>
+          <div className="tk-note"><Icon name="info" size={16} color="var(--acc-d)" />
+            <span>{isVendor
+              ? "Étape suivante : photographier votre pièce d'identité (recto et verso) et votre commerce. L'équipe Lamuka vérifie ensuite votre dossier."
+              : `Étape suivante : photographier votre pièce d'identité (recto et verso), une photo de vous${motorized ? " et votre permis de conduire" : ""}. L'équipe Lamuka vérifie ensuite votre dossier.`}</span>
+          </div>
+        </div>
+        <div style={{ height: 8 }} />
       </div>
-    </div>}
-    {cropLogSrc&&<ImageCropper src={cropLogSrc} shape="square" onCancel={()=>setCropLogSrc(null)} onConfirm={applyLogoCrop}/>}
-  </>);
+
+      <div className="t-bottom" style={{ flexDirection: "column", alignItems: "stretch", gap: 8 }}>
+        {err && <div style={{ color: "#E11D48", fontSize: 13 }}>{err}</div>}
+        <button className="t-cta center" disabled={busy} style={{ flex: "0 0 auto", width: "100%", ...(!ready ? { opacity: .55 } : null) }} onClick={submit}>
+          <span>{busy ? "Envoi…" : "Continuer : mes pièces"}</span>
+        </button>
+      </div>
+    </div>
+  );
 }
-
-/* ═══════════════════════════════
-   VENDOR SCREENS (15)
-   ═══════════════════════════════ */
-
-/* V1 ── VENDOR DASHBOARD ── */
-
-export default RoleRegScr;

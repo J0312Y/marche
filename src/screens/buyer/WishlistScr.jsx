@@ -1,35 +1,37 @@
+import { useState } from "react";
 import { useData } from "../../hooks";
 import { useApp } from "../../context/AppContext";
+import useFollowed from "../../hooks/useFollowed";
 import Icon from "../../components/Icon";
-import GuestBlockedView from "../../components/GuestBlockedView";
-import PullToRefresh from "../../components/PullToRefresh";
-import toast from "../../utils/toast";
-import Img from "../../components/Img";
-import { fmt } from "../../utils/helpers";
+import StoreCard from "../../components/t/StoreCard";
+import ProductCard from "../../components/t/ProductCard";
 
-function WishlistScr({go,onBack,favs,toggleFav}){
-  const { isGuest, exitGuestToLogin, setTab } = useApp();
-  if (isGuest) return (<GuestBlockedView
-      icon="heart"
-      title="Sauvegardez vos favoris"
-      subtitle="Connectez-vous pour enregistrer vos articles préférés et les retrouver sur tous vos appareils."
-      benefits={["Articles préférés sauvegardés", "Alertes baisse de prix", "Synchronisé partout"]}
-      accent="#EF4444"
-      onGoHome={()=>setAppTab(0)}
-    />);
+/**
+ * Favoris : boutiques (cœur sur les cartes) et articles.
+ */
+export default function WishlistScr({ go, onBack }) {
+  const { P, VENDORS } = useData();
+  const { favs } = useApp();
+  const { isFollowed, toggle } = useFollowed();
+  const [tab, setTab] = useState("stores");
+  const stores = VENDORS.filter((v) => isFollowed(v.id));
+  const items = P.filter((p) => favs.includes(p.id));
 
-  const { P } = useData();
-  const items=P.filter(p=>favs.includes(p.id));
-  return(<PullToRefresh onRefresh={async()=>{toast.success("Favoris actualisés ")}}><div className="scr" style={{padding:16}}><div className="appbar" style={{padding:0,marginBottom:12}}><button onClick={()=>onBack&&onBack()}>←</button><h2>Mes favoris ({items.length})</h2><div style={{width:38}}/></div>
-    {items.length===0?<div style={{textAlign:"center",padding:"60px 20px"}}><div style={{fontSize:64,animation:"emptyBounce 2s ease-in-out infinite",marginBottom:10}}></div><h3 style={{fontSize:16,fontWeight:700}}>Aucun favori</h3><p style={{fontSize:13,color:"var(--muted)",marginTop:4}}>Appuyez sur  pour ajouter des articles ici</p></div>
-    :items.map(p=><div key={p.id} className="wish-item">
-      <div className="wish-img"><Img src={p.photo} emoji={p.img} style={{width:"100%",height:"100%"}} fit="cover"/></div>
-      <div className="wish-info"><h4>{p.name}</h4><div className="wv">{p.va} {p.vendor}</div><div className="wp">{fmt(p.price)}</div><div className="wr"><Icon name="star_full" size={16}/>{" "}{p.rating}</div></div>
-      <div className="wish-actions"><button onClick={()=>go("detail",p)}><Icon name="package" size={18}/></button><button onClick={()=>toggleFav(p.id)}>️</button></div>
-    </div>)}
-  </div></PullToRefresh>);
+  return (
+    <div style={{ flex: 1, display: "flex", flexDirection: "column", minHeight: 0, background: "var(--card)" }}>
+      <div className="t-head"><button className="t-back" onClick={onBack} aria-label="Retour"><Icon name="arrow_left" size={24} /></button><h1>Favoris</h1></div>
+      <div className="t-seg">
+        <button className={tab === "stores" ? "on" : ""} onClick={() => setTab("stores")}>Boutiques ({stores.length})</button>
+        <button className={tab === "items" ? "on" : ""} onClick={() => setTab("items")}>Articles ({items.length})</button>
+      </div>
+      <div className="t-scr" style={{ paddingTop: 16 }}>
+        {tab === "stores" && (stores.length ? stores.map((v) => <StoreCard key={v.id} v={v} onOpen={(x) => go("vendor", x)} fav onFav={toggle} />)
+          : <div className="t-empty"><div className="ic"><Icon name="heart" size={34} /></div><b>Aucune boutique favorite</b><p>Touchez le cœur d'une boutique pour la retrouver ici.</p></div>)}
+        {tab === "items" && (items.length ? <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 16, padding: "0 16px" }}>
+          {items.map((p) => <ProductCard key={p.id} p={p} width="100%" onOpen={(x) => go("detail", x)} />)}
+        </div> : <div className="t-empty"><div className="ic"><Icon name="heart" size={34} /></div><b>Aucun article favori</b><p>Touchez le cœur sur la fiche d'un article.</p></div>)}
+        <div style={{ height: 30 }} />
+      </div>
+    </div>
+  );
 }
-
-/* 23 ── NOTIFICATIONS ── */
-
-export default WishlistScr;

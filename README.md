@@ -64,7 +64,7 @@ useEffect(() => { api.get('/products').then(r => setProducts(r.data)) }, []);
 - `authService.js` — Phone+OTP, Social login
 - `productService.js` — CRUD articles
 - `orderService.js` — Commandes
-- `paymentService.js` — Airtel Money, MTN MoMo, Kolo Pay
+1- `paymentService.js` — Airtel Money, MTN MoMo, Kolo Pay
 - `chatService.js` — WebSocket temps réel
 
 ## 📞 Contact

@@ -1,0 +1,9 @@
+<?xml version='1.0' encoding='utf-8'?>
+<resources>
+    <string name="app_name">Lamuka Market</string>
+    <string name="title_activity_main">Lamuka Market</string>
+    <string name="package_name">com.lamuka.app</string>
+    <string name="custom_url_scheme">com.lamuka.app</string>
+    <!-- Notification permanente pendant une course (suivi du livreur en arrière-plan) -->
+    <string name="capacitor_background_geolocation_notification_channel_name">Suivi de course</string>
+</resources>

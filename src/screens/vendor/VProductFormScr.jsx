@@ -2,41 +2,42 @@ import { useState, useRef } from "react";
 import Select from "../../components/Select";
 import Img from "../../components/Img";
 import PhotoGuide from "../../components/PhotoGuide";
-import VariantEditor from "../../components/VariantEditor";
+import OptionGroupsEditor, { cleanOptionGroups } from "../../components/OptionGroupsEditor";
 import { analyzeImage, enhanceImage, cropImage, generateVariants } from "../../utils/imageProcessor";
-import CATS from "../../data/categories";
+import { useLoad } from "../../hooks/useData";
+import catalog from "../../services/catalogService";
 import { vendor } from "../../services";
 import toast from "../../utils/toast";
 import Icon from "../../components/Icon";
 
-function VProductFormScr({product:p,onBack,shopType="boutique"}){
+function VProductFormScr({product:p,onBack,shopType="restaurant"}){
   const isEdit=!!p;
+
+  // ── Categories from API ──
+  const { data: catsData } = useLoad(() => catalog.getCategories());
+  const ALL_CATS = catsData || [];
+  // Type de commerce (restaurant, boutique…) pour proposer les bons modèles d'options
+  const { data: settingsData } = useLoad(() => vendor.getSettings());
+  const storeType = settingsData?.establishment?.type || shopType;
+  // Seules les catégories de son type de commerce (gérées par Lamuka dans le panneau d'administration)
+  const CATS = storeType ? ALL_CATS.filter((c) => !c.commerce_type || c.commerce_type === storeType || c.commerce_type === "all") : ALL_CATS;
+  // Sections déjà utilisées par le commerce (« Entrées », « Boissons »…) proposées en un geste
+  const { data: myArticles } = useLoad(() => vendor.getArticles());
+  const mySections = [...new Set((myArticles || []).map((a) => a.menu_section).filter(Boolean))];
 
   // ── Form fields (controlled) ──
   const [name,setName]=useState(isEdit?p.name:"");
-  const [description,setDescription]=useState(isEdit?"Robe en wax africain, coupe moderne, tailles S-XL":"");
+  const [description,setDescription]=useState(isEdit?(p.description||""):"");
   const [price,setPrice]=useState(isEdit?String(p.price):"");
-  const [oldPrice,setOldPrice]=useState("");
-  const [selectedCat,setSelectedCat]=useState(isEdit?p.cat:"");
-  const [stock,setStock]=useState(isEdit?String(p.stock):"");
-  const [tags,setTags]=useState(isEdit?"Mode, Wax, Africain":"");
-  const [weight,setWeight]=useState("250");
-  const [active,setActive]=useState(isEdit?p.active:true);
-  const [articleVariants,setArticleVariants]=useState(()=>{
-    // En mode édition, charger les variantes existantes
-    if(isEdit&&p.variants&&p.variants.length>0){
-      return p.variants.map(v=>({
-        key:v.key,
-        label:v.label,
-        values:(v.options||[]).map(o=>({
-          name:o.name,
-          stock:o.stock!==null&&o.stock!==undefined?String(o.stock):"",
-          price_delta:o.price_delta?String(o.price_delta):"",
-        }))
-      }));
-    }
-    return [];
-  });
+  const [oldPrice,setOldPrice]=useState(isEdit&&Number(p.old_price||p.old)>0?String(p.old_price||p.old):"");
+  const [selectedCat,setSelectedCat]=useState(isEdit?(p.category_name||p.cat||""):"");
+  const [section,setSection]=useState(isEdit?(p.menu_section||""):"");
+  // Stock : vide = illimité (stocké -1 sur le serveur), 0 = rupture
+  const [stock,setStock]=useState(isEdit&&p.stock!==null&&p.stock!==undefined&&Number(p.stock)>=0?String(p.stock):"");
+  const [tags,setTags]=useState(()=>{if(!isEdit)return "";try{const t=typeof p.tags==="string"?JSON.parse(p.tags):p.tags;return Array.isArray(t)?t.join(", "):"";}catch{return "";}});
+  const [weight,setWeight]=useState(isEdit&&p.weight?String(p.weight):"");
+  const [active,setActive]=useState(isEdit?(p.is_active===undefined?p.active!==false:Number(p.is_active)===1):true);
+  const [optionGroups,setOptionGroups]=useState(()=>isEdit&&Array.isArray(p.option_groups)?p.option_groups.map(g=>({...g,options:g.options.map(o=>({...o}))})):[]);
 
   // ── UI state ──
   const [showDelete,setShowDelete]=useState(false);
@@ -48,14 +49,7 @@ function VProductFormScr({product:p,onBack,shopType="boutique"}){
   // ── Photo management ──
   const fileRef=useRef(null);
 
-      {/* Sizes */}
-      <div className="field"><label>Tailles <span style={{color:"var(--muted)",fontWeight:400}}>(optionnel)</span></label><input placeholder="S, M, L, XL" defaultValue={isEdit&&p.sizes?p.sizes.join(", "):""}/></div>
-      {/* Colors */}
-      <div className="field"><label>Couleurs <span style={{color:"var(--muted)",fontWeight:400}}>(optionnel)</span></label><input placeholder="Rouge, Bleu, Noir" defaultValue={isEdit&&p.colors?p.colors.join(", "):""}/></div>
-      {/* Variants */}
-      <div className="field"><label>Variantes (optionnel)</label><input placeholder="Costume, Chemise, Robe..." defaultValue={isEdit&&p.variants?p.variants.join(", "):""}/></div>
-      {/* Delivery time */}
-      <div className="field"><label>Délai de livraison <span style={{color:"#EF4444"}}>*</span></label><Select value={isEdit&&p.eta?p.eta:"1-2 jours"} onChange={()=>{}} options={["30 min","1h","20-30 min","30-45 min","1-2 jours","2-3 jours","3-5 jours"]}/></div>
+
 
   const [photos,setPhotos]=useState(isEdit&&p.photo?[{url:p.photo,emoji:p.img,status:"existing"}]:[]);
   const [editingIdx,setEditingIdx]=useState(null);
@@ -84,20 +78,13 @@ function VProductFormScr({product:p,onBack,shopType="boutique"}){
       description:description.trim(),
       price:Number(price),
       old_price:oldPrice?Number(oldPrice):null,
-      category:selectedCat,
-      stock:stock?Number(stock):-1,
+      category_id:(CATS.find(c=>c.name===selectedCat)||{}).id||null,
+      menu_section:section.trim()||null,
+      stock:stock!==""?Math.max(0,Number(stock)):-1,
       tags:tags.split(",").map(t=>t.trim()).filter(Boolean),
       weight:weight?Number(weight):null,
       is_active:active?1:0,
-      variants:articleVariants.filter(v=>v.values.length>0).map(v=>({
-        key:v.key,
-        label:v.label,
-        options:v.values.map(val=>({
-          name:val.name,
-          stock:val.stock?Number(val.stock):null,
-          price_delta:val.price_delta?Number(val.price_delta):0,
-        }))
-      })),
+      variants:cleanOptionGroups(optionGroups),
     };
 
     try{
@@ -108,16 +95,20 @@ function VProductFormScr({product:p,onBack,shopType="boutique"}){
         result=await vendor.createArticle(articleData);
       }
 
-      // Upload des photos si nouvelles
-      if(result?.id){
+      // Upload des nouvelles photos (création : id renvoyé par l'API ; modification : id existant)
+      const articleId=isEdit?p.id:result?.id;
+      let failedPhotos=0;
+      if(articleId){
         const newPhotos=photos.filter(ph=>ph.status==="ready"&&ph.file);
         for(const ph of newPhotos){
-          try{ await vendor.uploadImage(result.id, ph.file); }catch(e){ console.warn("Photo upload failed:",e); }
+          try{ await vendor.uploadImage(articleId, ph.file); }catch{ failedPhotos++; }
         }
       }
 
       setSubmitting(false);
-      setSuccess(true);toast.success(isEdit?"Article modifié avec succès":"Article ajouté avec succès");
+      setSuccess(true);
+      if(failedPhotos>0) toast.error("Article enregistré, mais "+failedPhotos+" photo(s) n'ont pas pu être envoyée(s). Réessayez depuis la modification.");
+      else toast.success(isEdit?"Article modifié avec succès":"Article ajouté avec succès");
       setTimeout(()=>onBack(),1500);
     }catch(err){
       setSubmitting(false);
@@ -148,7 +139,8 @@ function VProductFormScr({product:p,onBack,shopType="boutique"}){
       const imgVariants=await generateVariants(croppedFile);
       setPhotos(prev=>[...prev,{url:finalUrl,file:croppedFile,analysis,variants:imgVariants,enhanced,status:"ready"}]);
       setEditingIdx(photos.length);
-    ;toast.success(product?"Article modifié":"Article créé")}catch(err){toast.error("Erreur: "+err.message);}
+      toast.success("Photo ajoutée");
+    }catch(err){toast.error("Impossible de traiter la photo : "+err.message);}
     setProcessing(false);
   };
 
@@ -174,13 +166,13 @@ function VProductFormScr({product:p,onBack,shopType="boutique"}){
   if(success) return(
     <div className="scr" style={{display:"flex",flexDirection:"column",alignItems:"center",justifyContent:"center",padding:40,textAlign:"center"}}>
       <div style={{width:80,height:80,borderRadius:40,background:"rgba(16,185,129,0.1)",display:"flex",alignItems:"center",justifyContent:"center",marginBottom:14,animation:"fadeIn .3s ease"}}>
-        <span style={{fontSize:40}}><Icon name="check_circle" size={18}/></span>
+        <Icon name="check_circle" size={40} color="#10B981"/>
       </div>
       <h2 style={{fontSize:20,fontWeight:700,marginBottom:8}}>{isEdit?"Article modifié !":"Article ajouté !"}</h2>
       <p style={{fontSize:13,color:"var(--muted)"}}>{name} — {Number(price).toLocaleString()} FCFA</p>
-      {articleVariants.filter(v=>v.values.length>0).length>0&&(
+      {cleanOptionGroups(optionGroups).length>0&&(
         <p style={{fontSize:12,color:"#F97316",marginTop:4}}>
-          {articleVariants.filter(v=>v.values.length>0).map(v=>`${v.values.length} ${v.label.toLowerCase()}`).join(" · ")}
+          {cleanOptionGroups(optionGroups).map(g=>`${g.label} (${g.options.length})`).join(" · ")}
         </p>
       )}
       <p style={{fontSize:11,color:"var(--muted)",marginTop:16}}>Retour à la liste...</p>
@@ -229,11 +221,11 @@ function VProductFormScr({product:p,onBack,shopType="boutique"}){
           <div style={{width:`${editPhoto.analysis.score}%`,height:"100%",borderRadius:3,background:editPhoto.analysis.color,transition:"width .5s ease"}}/>
         </div>
         {editPhoto.analysis.issues.length>0&&<div style={{marginBottom:10}}>
-          {editPhoto.analysis.issues.map((issue,i)=><div key={i} style={{display:"flex",alignItems:"center",gap:6,padding:"3px 0",fontSize:11,color:issue.severity==="error"?"#EF4444":"#F59E0B"}}><span>{issue.severity==="error"?"️":""}</span>{issue.msg}</div>)}
+          {editPhoto.analysis.issues.map((issue,i)=><div key={i} style={{display:"flex",alignItems:"center",gap:6,padding:"3px 0",fontSize:11,color:issue.severity==="error"?"#EF4444":"#F59E0B"}}><span>{issue.severity==="error"?"":""}</span>{issue.msg}</div>)}
         </div>}
       </>}
       <div style={{display:"flex",gap:8}}>
-        <button disabled={enhancing||!editPhoto.file} onClick={()=>doEnhance(editingIdx,{brightness:15})} style={{flex:1,padding:"8px 0",borderRadius:10,border:"1px solid var(--border)",background:"var(--card)",fontSize:11,fontWeight:600,cursor:"pointer",fontFamily:"inherit",opacity:enhancing?.5:1}}>️ Éclaircir</button>
+        <button disabled={enhancing||!editPhoto.file} onClick={()=>doEnhance(editingIdx,{brightness:15})} style={{flex:1,padding:"8px 0",borderRadius:10,border:"1px solid var(--border)",background:"var(--card)",fontSize:11,fontWeight:600,cursor:"pointer",fontFamily:"inherit",opacity:enhancing?.5:1}}>Éclaircir</button>
         <button disabled={enhancing||!editPhoto.file} onClick={()=>doEnhance(editingIdx,{contrast:15})} style={{flex:1,padding:"8px 0",borderRadius:10,border:"1px solid var(--border)",background:"var(--card)",fontSize:11,fontWeight:600,cursor:"pointer",fontFamily:"inherit",opacity:enhancing?.5:1}}> Contraste</button>
         <button disabled={enhancing||!editPhoto.file} onClick={()=>doEnhance(editingIdx,{brightness:10,contrast:10,sharpen:true})} style={{flex:1,padding:"8px 0",borderRadius:10,border:"none",background:"#F97316",color:"#fff",fontSize:11,fontWeight:600,cursor:"pointer",fontFamily:"inherit",opacity:enhancing?.5:1}}><Icon name="sparkle" size={16}/>{" "}Auto</button>
       </div>
@@ -287,12 +279,17 @@ function VProductFormScr({product:p,onBack,shopType="boutique"}){
         />
         {errMsg("cat")}
       </div>
-      <div className="field"><label>Stock <span style={{color:"var(--muted)",fontWeight:400}}>(optionnel, 0 = illimité)</span></label><input type="number" value={stock} onChange={e=>setStock(e.target.value)} placeholder="0 = illimité"/></div>
+      <div className="field"><label>Stock <span style={{color:"var(--muted)",fontWeight:400}}>(vide = illimité, 0 = rupture)</span></label><input type="number" min="0" value={stock} onChange={e=>setStock(e.target.value)} placeholder="Illimité"/></div>
+    </div>
+    <div className="field">
+      <label>Section dans votre commerce <span style={{color:"var(--muted)",fontWeight:400}}>(optionnel)</span></label>
+      <input value={section} maxLength={80} onChange={e=>setSection(e.target.value)} placeholder="Ex. : Entrées, Plats, Boissons, Promos de la semaine…"/>
+      {mySections.length>0&&<div style={{display:"flex",gap:6,flexWrap:"wrap",marginTop:8}}>{mySections.map(s=><button key={s} type="button" className={"t-chip"+(section===s?" on":"")} style={{height:32}} onClick={()=>setSection(s)}>{s}</button>)}</div>}
+      <div style={{fontSize:12,color:"var(--muted)",marginTop:6}}>Organise votre page : vos clients voient vos articles rangés par section. La catégorie, elle, sert à vous trouver dans la recherche et sur l'accueil.</div>
     </div>
 
-    {/* ═══ VARIANTS ═══ */}
-    <div style={{margin:"16px 0 10px"}}><div style={{fontSize:11,color:"var(--muted)",marginBottom:8}}><Icon name="info" size={16}/>{" "}Chaque variante peut avoir son propre stock et SKU</div>
-        <VariantEditor shopType={shopType} category={selectedCat} value={articleVariants} onChange={setArticleVariants}/></div>
+    {/* ═══ OPTIONS (accompagnements, suppléments, tailles…) ═══ */}
+    <div style={{margin:"16px 0 14px"}}><OptionGroupsEditor shopType={storeType} value={optionGroups} onChange={setOptionGroups}/></div>
 
     <div className="field"><label>Tags <span style={{color:"var(--muted)",fontWeight:400}}>(optionnel)</span></label><input value={tags} onChange={e=>setTags(e.target.value)} placeholder="Séparer par des virgules"/></div>
     <div className="field"><label>Poids <span style={{color:"var(--muted)",fontWeight:400}}>(optionnel, en grammes)</span></label><input type="number" value={weight} onChange={e=>setWeight(e.target.value)} placeholder="Pour calcul livraison"/></div>
@@ -301,7 +298,7 @@ function VProductFormScr({product:p,onBack,shopType="boutique"}){
 
     {/* Error summary */}
     {Object.keys(errors).length>0&&<div style={{padding:10,background:"rgba(239,68,68,0.04)",border:"1px solid rgba(239,68,68,0.12)",borderRadius:12,marginBottom:12}}>
-      <div style={{fontSize:12,fontWeight:600,color:"#EF4444"}}>️ Corrigez les erreurs ci-dessus</div>
+      <div style={{fontSize:12,fontWeight:600,color:"#EF4444"}}>Corrigez les erreurs ci-dessus</div>
       <div style={{fontSize:11,color:"var(--sub)",marginTop:2}}>{Object.values(errors).join(" · ")}</div>
     </div>}
 
@@ -311,13 +308,13 @@ function VProductFormScr({product:p,onBack,shopType="boutique"}){
         :(isEdit?"Enregistrer les modifications":"Ajouter l'article")}
     </button></div>
 
-    {isEdit&&!showDelete&&<button className="btn-outline" style={{color:"#EF4444",borderColor:"rgba(239,68,68,.3)"}} onClick={()=>setShowDelete(true)}>️ Supprimer cet article</button>}
+    {isEdit&&!showDelete&&<button className="btn-outline" style={{color:"#EF4444",borderColor:"rgba(239,68,68,.3)"}} onClick={()=>setShowDelete(true)}>Supprimer cet article</button>}
     {isEdit&&showDelete&&<div style={{padding:16,background:"rgba(239,68,68,0.04)",border:"1px solid rgba(239,68,68,0.15)",borderRadius:16}}>
-      <div style={{fontSize:14,fontWeight:700,color:"#EF4444",marginBottom:6}}>️ Supprimer "{p.name}" ?</div>
+      <div style={{fontSize:14,fontWeight:700,color:"#EF4444",marginBottom:6}}>Supprimer "{p.name}" ?</div>
       <p style={{fontSize:12,color:"var(--sub)",marginBottom:12}}>Cette action est irréversible.</p>
       <div style={{display:"flex",gap:10}}>
         <button style={{flex:1,padding:12,borderRadius:12,border:"1px solid var(--border)",background:"var(--card)",fontSize:13,fontWeight:600,cursor:"pointer",fontFamily:"inherit"}} onClick={()=>setShowDelete(false)}>Annuler</button>
-        <button style={{flex:1,padding:12,borderRadius:12,border:"none",background:"#EF4444",color:"#fff",fontSize:13,fontWeight:600,cursor:"pointer",fontFamily:"inherit"}} onClick={onBack}>️ Confirmer</button>
+        <button style={{flex:1,padding:12,borderRadius:12,border:"none",background:"#EF4444",color:"#fff",fontSize:13,fontWeight:600,cursor:"pointer",fontFamily:"inherit"}} disabled={submitting} onClick={async()=>{setSubmitting(true);try{await vendor.deleteArticle(p.id);toast.success("Article supprimé");onBack();}catch(e){toast.error(e.message||"Suppression impossible");setSubmitting(false);}}}>Confirmer</button>
       </div>
     </div>}
 

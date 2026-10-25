@@ -37,12 +37,12 @@ function PushBanner() {
       boxShadow: "0 4px 20px rgba(0,0,0,.12)",
     }}>
       <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
-        <div style={{ width: 36, height: 36, borderRadius: 10, background: "rgba(249,115,22,0.08)", display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0, color: "#F97316" }}>
-          {data.icon ? <Icon name={data.icon} size={20}/> : <Icon name="bell" size={20}/>}
+        <div style={{ width: 40, height: 40, borderRadius: 12, background: "var(--acc-l)", display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0, color: "var(--acc)" }}>
+          <Icon name="bell" size={20} color="var(--acc)" />
         </div>
         <div style={{ flex: 1, minWidth: 0 }}>
-          <div style={{ fontSize: 13, fontWeight: 700, overflow: "hidden", whiteSpace: "nowrap", textOverflow: "ellipsis" }}>{data.title}</div>
-          <div style={{ fontSize: 11, color: "var(--muted)", overflow: "hidden", whiteSpace: "nowrap", textOverflow: "ellipsis" }}>{data.body}</div>
+          <div style={{ fontSize: 15, fontWeight: 700, overflow: "hidden", whiteSpace: "nowrap", textOverflow: "ellipsis" }}>{data.title}</div>
+          <div style={{ fontSize: 13, color: "var(--t-sub)", overflow: "hidden", whiteSpace: "nowrap", textOverflow: "ellipsis" }}>{data.body}</div>
         </div>
         <span style={{ fontSize: 10, color: "var(--muted)", flexShrink: 0 }}>maintenant</span>
       </div>

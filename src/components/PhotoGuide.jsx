@@ -19,7 +19,7 @@ const TIPS = [
     title: "Lumière naturelle",
     good: "Photo près d'une fenêtre, lumière douce",
     bad: "Flash direct, ombres dures, photo sombre",
-    icon: "️",
+    icon: "",
     goodEx: "",
     badEx: "",
     detail: "Photographiez près d'une fenêtre le jour. Évitez le flash du téléphone qui crée des reflets. La lumière naturelle donne les meilleurs résultats.",
