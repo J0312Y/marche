@@ -1,4 +1,4 @@
-import { useState, useRef } from "react";
+import { useEffect, useState, useRef } from "react";
 import Select from "../../components/Select";
 import Img from "../../components/Img";
 import PhotoGuide from "../../components/PhotoGuide";
@@ -7,6 +7,7 @@ import { analyzeImage, enhanceImage, cropImage, generateVariants } from "../../u
 import { useLoad } from "../../hooks/useData";
 import catalog from "../../services/catalogService";
 import { vendor } from "../../services";
+import { imagesAPI } from "../../api";
 import toast from "../../utils/toast";
 import Icon from "../../components/Icon";
 
@@ -52,6 +53,16 @@ function VProductFormScr({product:p,onBack,shopType="restaurant"}){
 
 
   const [photos,setPhotos]=useState(isEdit&&p.photo?[{url:p.photo,emoji:p.img,status:"existing"}]:[]);
+  // Modification : toute la galerie de l'article (pas seulement la photo principale) ; photos retirées supprimées à l'enregistrement
+  const [removedIds,setRemovedIds]=useState([]);
+  useEffect(()=>{
+    if(!isEdit||!p?.id) return;
+    imagesAPI.list(p.id).then(r=>{
+      const imgs=(r?.images||[]).map(im=>({url:im.image_url||im.medium_url,imageId:Number(im.id),status:"existing"}));
+      if(imgs.length) setPhotos(imgs);
+    }).catch(()=>{});
+  },[isEdit,p?.id]);
+  const movePhotoFirst=(idx)=>setPhotos(prev=>[prev[idx],...prev.filter((_,i)=>i!==idx)]);
   const [editingIdx,setEditingIdx]=useState(null);
   const [processing,setProcessing]=useState(false);
   const [enhancing,setEnhancing]=useState(false);
@@ -99,10 +110,16 @@ function VProductFormScr({product:p,onBack,shopType="restaurant"}){
       const articleId=isEdit?p.id:result?.id;
       let failedPhotos=0;
       if(articleId){
-        const newPhotos=photos.filter(ph=>ph.status==="ready"&&ph.file);
-        for(const ph of newPhotos){
-          try{ await vendor.uploadImage(articleId, ph.file); }catch{ failedPhotos++; }
+        for(const id of removedIds){ try{ await imagesAPI.delete(id); }catch{ /* déjà supprimée */ } }
+        // Envoi des nouvelles photos puis ordre final de la galerie (la première = photo principale de l'article)
+        const ids=[];
+        for(const ph of photos){
+          if(ph.imageId){ ids.push(ph.imageId); continue; }
+          if(ph.status==="ready"&&ph.file){
+            try{ const r=await vendor.uploadImage(articleId, ph.file); if(r?.id) ids.push(Number(r.id)); }catch{ failedPhotos++; }
+          }
         }
+        if(ids.length>1){ try{ await imagesAPI.reorder(articleId, ids); }catch{ /* ordre d'envoi conservé */ } }
       }
 
       setSubmitting(false);
@@ -152,6 +169,7 @@ function VProductFormScr({product:p,onBack,shopType="restaurant"}){
   };
 
   const removePhoto=(idx)=>{
+    const ph=photos[idx]; if(ph?.imageId) setRemovedIds(r=>[...r,ph.imageId]);
     setPhotos(prev=>prev.filter((_,i)=>i!==idx));
     if(editingIdx===idx) setEditingIdx(null);
     else if(editingIdx>idx) setEditingIdx(editingIdx-1);
@@ -195,7 +213,8 @@ function VProductFormScr({product:p,onBack,shopType="restaurant"}){
           {ph.url?<img src={ph.url} style={{width:"100%",height:"100%",objectFit:"cover"}} alt=""/>:<Img emoji={ph.emoji} style={{width:"100%",height:"100%"}} fit="cover"/>}
           <button onClick={e=>{e.stopPropagation();removePhoto(i)}} style={{position:"absolute",top:-2,right:-2,width:20,height:20,borderRadius:"50%",background:"#EF4444",color:"#fff",border:"none",fontSize:10,cursor:"pointer",display:"flex",alignItems:"center",justifyContent:"center"}}></button>
           {ph.analysis&&<div style={{position:"absolute",bottom:4,left:4,width:8,height:8,borderRadius:4,background:ph.analysis.color,boxShadow:`0 0 4px ${ph.analysis.color}`}}/>}
-          {i===0&&<div style={{position:"absolute",bottom:4,right:4,padding:"1px 5px",borderRadius:4,background:"#F97316",color:"#fff",fontSize:8,fontWeight:700}}>MAIN</div>}
+          {i===0&&<div style={{position:"absolute",bottom:4,right:4,padding:"1px 5px",borderRadius:4,background:"#F97316",color:"#fff",fontSize:8,fontWeight:700}}>PRINCIPALE</div>}
+          {i>0&&<button onClick={e=>{e.stopPropagation();movePhotoFirst(i)}} aria-label="Mettre en photo principale" title="Mettre en photo principale" style={{position:"absolute",bottom:4,right:4,padding:"1px 5px",borderRadius:4,background:"rgba(0,0,0,.6)",color:"#fff",fontSize:8,fontWeight:700,border:"none",cursor:"pointer"}}>EN 1ʳᵉ</button>}
         </div>
       ))}
       {photos.length<6&&(

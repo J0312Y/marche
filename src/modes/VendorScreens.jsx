@@ -7,6 +7,7 @@ import { VDashboardScr, VOrdersScr, VOrderDetailScr, VProductsScr, VProductFormS
 import VStatementsScr from "../screens/vendor/VStatementsScr";
 import VDriversScr from "../screens/vendor/VDriversScr";
 import VSectionsScr from "../screens/vendor/VSectionsScr";
+import VQuestionsScr from "../screens/vendor/VQuestionsScr";
 
 import { SettingsScr, HelpScr, AboutScr, TermsScr, PrivacyScr } from "../screens/common";
 import Icon from "../components/Icon";
@@ -30,6 +31,7 @@ export default function VendorScreens() {
     case "vOrdersList": return <VOrdersScr go={go} onBack={back} />;
     case "vProducts": return <VProductsScr go={go} onBack={back} />;
     case "vSections": return <VSectionsScr onBack={back} />;
+    case "vQuestions": return <VQuestionsScr onBack={back} />;
     case "vAddProduct": return <VProductFormScr onBack={back} />;
     case "vEditProduct": return <VProductFormScr product={data} onBack={back} />;
     case "vStats": return <VAnalyticsScr onBack={back} />; // statistiques réelles (ouvert à tous les plans)

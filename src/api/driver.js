@@ -30,6 +30,7 @@ const driver = {
 
   // Wallet
   wallet: () => api.get('/driver/wallet'),
+  cash: () => api.get('/driver/cash'), // espèces encaissées, sa part, déjà remis, reste à remettre à Lamuka
   withdraw: (amount, method, phone_number) => api.post('/driver/wallet/withdraw', { amount, method, phone_number }),
   submitSubscriptionProof: (formData) => api.upload('/driver/wallet/proof', formData),
 

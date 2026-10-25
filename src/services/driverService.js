@@ -71,6 +71,10 @@ export default {
     return driverAPI.wallet();
   },
 
+  getCash: async () => {
+    return driverAPI.cash();
+  },
+
   driverWithdraw: async (amount, method, phone) => {
     return driverAPI.withdraw(amount, method, phone);
   },

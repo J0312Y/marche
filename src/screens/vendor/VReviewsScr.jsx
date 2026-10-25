@@ -4,6 +4,7 @@ import { vendor } from "../../services";
 import { SkeletonList } from "../../components/Loading";
 import toast from "../../utils/toast";
 import Icon from "../../components/Icon";
+import ImageViewer from "../../components/t/ImageViewer";
 
 // API → modèle de l'écran
 const fromApi = (r) => r.client !== undefined ? r : ({
@@ -16,6 +17,9 @@ const fromApi = (r) => r.client !== undefined ? r : ({
   product: r.article_name || "",
   reply: r.vendor_reply || "",
   replied: !!r.vendor_reply,
+  photos: Array.isArray(r.images) ? r.images : [],
+  tags: Array.isArray(r.tags) ? r.tags : [],
+  verified: Number(r.is_verified_purchase) === 1,
 });
 
 function VReviewsScr({onBack}){
@@ -25,6 +29,7 @@ function VReviewsScr({onBack}){
   const [replyingTo,setReplyingTo]=useState(null);
   const [replyText,setReplyText]=useState("");
   const [filter,setFilter]=useState("all");
+  const [viewer,setViewer]=useState(null); // photos d'un avis en grand
   const { run } = useAction();
 
   const items=reviews||raw;
@@ -83,7 +88,12 @@ function VReviewsScr({onBack}){
           </div>
 
           {/* Review text */}
+          {(r.verified||r.tags.length>0)&&<div style={{display:"flex",gap:4,flexWrap:"wrap",marginBottom:6}}>
+            {r.verified&&<span style={{fontSize:10,padding:"2px 6px",borderRadius:5,background:"var(--acc-l)",color:"var(--acc-d)",fontWeight:700}}>Achat vérifié</span>}
+            {r.tags.map(t=><span key={t} style={{fontSize:10,padding:"2px 6px",borderRadius:5,background:"var(--light)",color:"var(--sub)"}}>{t}</span>)}
+          </div>}
           <div style={{fontSize:12,color:"var(--sub)",lineHeight:1.5,marginBottom:6}}>{r.text}</div>
+          {r.photos.length>0&&<div style={{display:"flex",gap:6,flexWrap:"wrap",marginBottom:6}}>{r.photos.map((ph,j)=><img key={ph} src={ph} alt="" onClick={()=>setViewer({photos:r.photos,start:j})} style={{width:56,height:56,borderRadius:10,objectFit:"cover",cursor:"pointer",border:"1px solid var(--border)"}}/>)}</div>}
           {r.product&&<div style={{fontSize:11,color:"var(--muted)",display:"flex",alignItems:"center",gap:4}}><Icon name="package" size={16}/>{" "}{r.product}</div>}
 
           {/* Existing reply */}
@@ -109,6 +119,7 @@ function VReviewsScr({onBack}){
         </div>);
       })}
     </>}
+    {viewer&&<ImageViewer photos={viewer.photos} start={viewer.start} onClose={()=>setViewer(null)}/>}
   </div>);
 }
 

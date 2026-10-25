@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { Star } from "lucide-react";
 import api from "../api";
-import { usePaged, useAction, PageHead, Toolbar, Tabs, Table, Pager, Badge, Modal, Btn, Field, fmt, dt, fullName } from "../ui";
+import { usePaged, useAction, PageHead, Toolbar, Tabs, Table, Pager, Badge, Modal, Btn, Field, Confirm, fmt, dt, fullName, phone } from "../ui";
 
 const ART_REASONS = ["Contenu inapproprié", "Produit interdit à la vente", "Photo ou description trompeuse", "Prix manifestement erroné", "Doublon d'un autre article"];
 const REV_REASONS = ["Propos injurieux ou haineux", "Données personnelles (téléphone, adresse)", "Publicité ou spam", "Sans rapport avec la commande"];
@@ -66,7 +66,7 @@ function ReviewsTab() {
       </Toolbar>
       <Table rows={rows} loading={loading} error={error} empty="Aucun avis." cols={[
         { k: "r", label: "Note", w: 96, render: (r) => <Stars n={Number(r.rating)} /> },
-        { k: "c", label: "Avis", render: (r) => <>{r.comment ? <span className="pre">{r.comment}</span> : <span className="muted">(note sans commentaire)</span>}{r.vendor_reply && <small className="block">Réponse du commerce : {r.vendor_reply}</small>}{r.moderation_note && <small className="block bad">Masqué : {r.moderation_note}</small>}</> },
+        { k: "c", label: "Avis", render: (r) => <>{r.comment ? <span className="pre">{r.comment}</span> : <span className="muted">(note sans commentaire)</span>}{r.tags?.length > 0 && <small className="block muted">{r.tags.join(" · ")}</small>}{r.images?.length > 0 && <span className="rev-photos">{r.images.map((u) => <a key={u} href={u} target="_blank" rel="noreferrer" title="Ouvrir la photo"><img src={u} alt="" /></a>)}</span>}{r.vendor_reply && <small className="block">Réponse du commerce : {r.vendor_reply}</small>}{r.moderation_note && <small className="block bad">Masqué : {r.moderation_note}</small>}</> },
         { k: "on", label: "Sur", render: (r) => <>{r.establishment_name || "—"}{r.article_name && <small className="block">{r.article_name}</small>}</> },
         { k: "by", label: "Client", render: (r) => <>{fullName(r.first_name, r.last_name)}<small className="block">{dt(r.created_at)}{String(r.is_verified_purchase) === "1" ? " · commande vérifiée" : ""}</small></> },
         { k: "x", label: "", right: true, render: (r) => r.status === "rejected"
@@ -81,15 +81,45 @@ function ReviewsTab() {
   );
 }
 
+/** « Demandez aux acheteurs » : retirer une question ou une réponse déplacée */
+function QuestionsTab() {
+  const [q, setQ] = useState("");
+  const { rows, total, page, setPage, limit, loading, error, reload } = usePaged("/admin/questions", "questions", { search: q });
+  const { run, busy } = useAction();
+  const [del, setDel] = useState(null); // { kind: 'q'|'a', item }
+  const remove = async () => {
+    const ok = del.kind === "q" ? await run(() => api.del(`/admin/questions/${del.item.id}`), "Question retirée") : await run(() => api.del(`/admin/answers/${del.item.id}`), "Réponse retirée");
+    if (ok) { setDel(null); reload(); }
+  };
+  return (
+    <>
+      <Toolbar search={q} onSearch={setQ} placeholder="Question, réponse, article ou commerce…" />
+      <Table rows={rows} loading={loading} error={error} empty="Aucune question." cols={[
+        { k: "q", label: "Question et réponses", render: (x) => <>
+          <b className="pre">{x.question}</b><small className="block muted">{fullName(x.first_name, x.last_name)} · {phone(x.phone)} · {dt(x.created_at)}</small>
+          {x.answers.map((a) => <div key={a.id} className="qa-answer">
+            <span className="pre">{a.answer}</span>
+            <small className="block muted">{a.role === "vendor" ? "La boutique" : "Client ayant acheté"} · {fullName(a.first_name, a.last_name)} · {dt(a.created_at)} · <button className="link bad" onClick={() => setDel({ kind: "a", item: a })}>Retirer</button></small>
+          </div>)}
+        </> },
+        { k: "art", label: "Article", render: (x) => <>{x.article_name}<small className="block">{x.establishment_name}</small></> },
+        { k: "act", label: "", w: 110, render: (x) => <Btn kind="ghost" size="sm" onClick={() => setDel({ kind: "q", item: x })}>Retirer</Btn> },
+      ]} />
+      <Pager page={page} total={total} limit={limit} setPage={setPage} />
+      {del && <Confirm danger title={del.kind === "q" ? "Retirer cette question ?" : "Retirer cette réponse ?"} text={del.kind === "q" ? "La question et toutes ses réponses disparaissent de l'application." : "La réponse disparaît de l'application."} confirm="Retirer" busy={busy} onCancel={() => setDel(null)} onConfirm={remove} />}
+    </>
+  );
+}
+
 export default function Moderation() {
-  const [tab, setTab] = useState(() => (window.location.hash.includes("avis") ? "reviews" : "articles"));
+  const [tab, setTab] = useState(() => (window.location.hash.includes("avis") ? "reviews" : window.location.hash.includes("questions") ? "questions" : "articles"));
   return (
     <div className="page">
-      <PageHead title="Modération" sub="Retirer un article ou masquer un avis qui ne respecte pas les règles de Lamuka" />
+      <PageHead title="Modération" sub="Retirer un article, masquer un avis ou retirer une question qui ne respecte pas les règles de Lamuka" />
       <div className="seg page-seg">
-        {[["articles", "Articles des commerces"], ["reviews", "Avis des clients"]].map(([k, l]) => <button key={k} className={tab === k ? "on" : ""} onClick={() => setTab(k)}>{l}</button>)}
+        {[["articles", "Articles des commerces"], ["reviews", "Avis des clients"], ["questions", "Questions"]].map(([k, l]) => <button key={k} className={tab === k ? "on" : ""} onClick={() => setTab(k)}>{l}</button>)}
       </div>
-      {tab === "articles" ? <ArticlesTab /> : <ReviewsTab />}
+      {tab === "articles" ? <ArticlesTab /> : tab === "reviews" ? <ReviewsTab /> : <QuestionsTab />}
     </div>
   );
 }

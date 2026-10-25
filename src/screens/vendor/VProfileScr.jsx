@@ -81,6 +81,7 @@ function VProfileScr({ go, onSwitch, onLogout }) {
           <Row icon="bike" label="Mes livreurs" sub="Vos livreurs de confiance" onClick={() => go("vDrivers")} />
           <Row icon="user" label="Mes clients" onClick={() => go("vClients")} />
           <Row icon="star_full" label="Avis clients" onClick={() => go("vReviews")} />
+          <Row icon="chat" label="Questions des clients" sub="Sur vos articles" onClick={() => go("vQuestions")} />
         </div>
 
         <div className="tk-h" style={{ margin: "22px 16px 0" }}>Réglages</div>

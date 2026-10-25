@@ -17,6 +17,7 @@ function DrWalletScr({ go, onBack }) {
   const { data: walletData, loading, error } = useLoad(() => driver.getWallet());
   const { data: statsData } = useLoad(() => driver.getStats(period), [period]);
   const { data: historyData } = useLoad(() => driver.getHistory());
+  const { data: cash } = useLoad(() => driver.getCash()); // espèces à remettre à Lamuka
 
   const balance = parseFloat(walletData?.wallet?.balance) || 0;
   const transactions = walletData?.transactions || [];
@@ -46,7 +47,18 @@ function DrWalletScr({ go, onBack }) {
         <Icon name="wallet" size={20} />
       </div>
 
-      <div className="info-box blue" style={{ marginBottom: 14 }}><span><Icon name="info" size={16} /></span><span style={{ fontSize: 11 }}>Pour une commande payée en espèces, vous encaissez le montant auprès du client et reversez au vendeur la part qui lui revient (montant de la commande moins vos frais de livraison).</span></div>
+      {cash && (cash.collected > 0 || cash.remitted > 0) && <div style={{ padding: 14, background: "var(--card)", border: "1px solid var(--border)", borderRadius: 14, marginBottom: 12 }}>
+        <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+          <div><div style={{ fontSize: 11, color: "var(--muted)" }}>Espèces à remettre à Lamuka</div><div style={{ fontSize: 22, fontWeight: 800, color: cash.balance > 0 ? "#B45309" : "#10B981" }}>{fmt(Math.max(0, cash.balance))}</div></div>
+          <Icon name="cash" size={22} />
+        </div>
+        <div style={{ fontSize: 12, color: "var(--muted)", marginTop: 8, lineHeight: 1.6 }}>
+          Encaissé auprès des clients : <b>{fmt(cash.collected)}</b><br />Votre part (livraisons) : <b>− {fmt(cash.earnings)}</b><br />Déjà remis : <b>− {fmt(cash.remitted)}</b>
+        </div>
+        {cash.history?.length > 0 && <div style={{ fontSize: 11, color: "var(--muted)", marginTop: 6 }}>Dernière remise : {fmt(cash.history[0].amount)} le {fmtDate(cash.history[0].created_at)}</div>}
+      </div>}
+
+      <div className="info-box blue" style={{ marginBottom: 14 }}><span><Icon name="info" size={16} /></span><span style={{ fontSize: 11 }}>Pour une commande payée en espèces, vous encaissez le montant total auprès du client. Vous gardez vos frais de livraison et remettez le reste à Lamuka, qui paie ensuite la boutique.</span></div>
 
       <div style={{ fontSize: 14, fontWeight: 700, margin: "6px 0 8px" }}>Dernières courses</div>
       {history.length === 0 && <div style={{ textAlign: "center", padding: "20px 10px", color: "var(--muted)", fontSize: 13 }}>Aucune course terminée pour l'instant.</div>}

@@ -25,6 +25,10 @@ const vendor = {
 
   // Rayons (articles.menu_section)
   sections: () => api.get('/vendor/sections'),
+  // Versements de Lamuka (paiement à la livraison) et questions des clients
+  settlements: () => api.get('/vendor/settlements'),
+  questions: (unanswered) => api.get('/vendor/questions' + (unanswered ? '?unanswered=1' : '')),
+  answerQuestion: (id, answer) => api.post(`/vendor/questions/${id}/answer`, { answer }),
   orderSections: (sections) => api.put('/vendor/sections/order', { sections }),
   renameSection: (from, to) => api.put('/vendor/sections/rename', { from, to }),
   // Photo d'une variante (couleur, modèle…) : url à mettre dans l'option
